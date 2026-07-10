@@ -1,0 +1,2 @@
+{"ts":"2026-07-10T09:24:32.847Z","event":"tool_failure","tool":"Bash","error":"Exit code 1\ncp: invest_kg/output/invest_kg_viewer.html: No such file or directory","input_keys":["command","timeout","description"]}
+{"ts":"2026-07-10T09:25:23.240Z","event":"tool_failure","tool":"Bash","error":"Exit code 1\n(eval):cd:1: no such file or directory: deploy-gh-pages","input_keys":["command","timeout","description"]}
