@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日智能晨报 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text-primary: #1a1f36;
+  --text-secondary: #64748d;
+  --accent: #533afd;
+  --navy: #061b31;
+  --up: #dc2626;
+  --down: #16a34a;
+  --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+  --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+  --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+  --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+  --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+  --tag-gray-bg: #f3f4f6; --tag-gray-text: #374151;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+  width: 220px; min-width: 220px; background: #0d253d; color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; }
+.nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-sub.active { color: #8b9cf7; font-weight: 500; }
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.topbar-search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; }
+.topbar-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text-primary); }
+.topbar-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+/* Content */
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+/* Tab Navigation */
+.tab-nav { display: flex; gap: 0; background: #fff; border-bottom: 1px solid var(--border); margin-bottom: 16px; border-radius: 8px 8px 0 0; padding: 0 16px; }
+.tab-btn { padding: 12px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+/* Cards */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.card-title { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.card-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+/* Stat Grid */
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+.stat-value { font-size: 22px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+.stat-change { font-size: 12px; font-weight: 600; margin-top: 2px; }
+/* Tags */
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; line-height: 1.5; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.tag-gray { background: var(--tag-gray-bg); color: var(--tag-gray-text); }
+/* Hotspot Cards */
+.hotspot-card { position: relative; border-left: 3px solid var(--accent); background: #fafafe; border-radius: 8px; padding: 18px 20px 18px 56px; margin-bottom: 14px; transition: all 0.2s; }
+.hotspot-card:hover { box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; transform: translateY(-1px); }
+.hotspot-num { position: absolute; top: 8px; left: 12px; font-size: 28px; font-weight: 800; color: rgba(83,58,253,0.12); }
+.hotspot-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.hotspot-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.hotspot-section { margin-bottom: 8px; }
+.hotspot-section-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+.hotspot-section-text { font-size: 12px; color: var(--text-primary); line-height: 1.6; }
+/* Announcement */
+.ann-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
+.ann-item:last-child { border-bottom: none; }
+.ann-badge { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.ann-content { flex: 1; }
+.ann-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+.ann-source { font-size: 10px; color: var(--text-secondary); }
+/* Track List */
+.track-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+.track-item:last-child { border-bottom: none; }
+.track-checkbox { width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--border); cursor: pointer; flex-shrink: 0; }
+.track-text { flex: 1; font-size: 12px; color: var(--text-primary); }
+.track-type { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+/* Date Picker */
+.date-picker { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-size: 13px; color: var(--text-primary); cursor: pointer; }
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: all 0.15s; border: none; font-family: inherit; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 4px 12px; font-size: 11px; border-radius: 4px; }
+/* Chart Box */
+.chart-box { width: 100%; height: 260px; }
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid var(--border); letter-spacing: 0.3px; background: #fafbfc; }
+.data-table td { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; }
+.data-table tbody tr:hover { background: #f8fafc; }
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+/* US Market Summary */
+.us-summary-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.us-summary-title { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+.us-summary-item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; }
+.us-summary-label { color: var(--text-secondary); }
+.us-summary-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+/* Macro data */
+.macro-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+.macro-item:last-child { border-bottom: none; }
+.macro-flag { font-size: 18px; }
+.macro-content { flex: 1; }
+.macro-title { font-size: 12px; font-weight: 500; }
+.macro-desc { font-size: 10px; color: var(--text-secondary); }
+.macro-tag { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+/* Header Section */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--navy); }
+.version-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.version-badge.evening { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.version-badge.morning { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+/* ====== IFRAME EMBED MODE: hide sidebar & topbar ====== */
+body.in-iframe .sidebar,
+body.in-iframe .topbar { display: none !important; }
+body.in-iframe .main { margin-left: 0 !important; width: 100% !important; }
+body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">🧠 5Factor <span>AI</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">市场</div>
+    <div class="nav-item"><span class="icon">📊</span> 市场总览</div>
+    <div class="nav-item"><span class="icon">🔍</span> 个股行情</div>
+    <div class="nav-item"><span class="icon">🌍</span> 全球市场</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">内容</div>
+    <div class="nav-item active"><span class="icon">📰</span> 每日晨报</div>
+    <div class="nav-sub active">收盘版</div>
+    <div class="nav-sub">晨间版</div>
+    <div class="nav-item"><span class="icon">🗣️</span> KOL观点</div>
+    <div class="nav-item"><span class="icon">📑</span> 内容管理</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">选股</div>
+    <div class="nav-item"><span class="icon">⭐</span> 评分榜单</div>
+    <div class="nav-item"><span class="icon">🔬</span> 个股深度</div>
+    <div class="nav-item"><span class="icon">💼</span> 模拟交易</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">知识</div>
+    <div class="nav-item"><span class="icon">🔗</span> 产业链图谱</div>
+    <div class="nav-item"><span class="icon">📚</span> 知识库</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">AI</div>
+    <div class="nav-item"><span class="icon">🤖</span> AI投研对话</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-search">
+      <span style="color:var(--text-secondary);font-size:12px;">🔍</span>
+      <input type="text" placeholder="搜索股票、概念、研报...">
+    </div>
+    <div class="topbar-user">
+      <span style="font-size:18px;">🔔</span>
+      <div class="topbar-avatar">U</div>
+      <span>用户</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">每日智能晨报</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">2026年1月16日（周四） · 由 8 个 Skill 自动聚合生成</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="date-picker">
+          <span>📅</span>
+          <span>2026-01-16</span>
+          <span style="color:var(--text-secondary);">▼</span>
+        </div>
+        <button class="btn btn-primary btn-sm">📤 导出PDF</button>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('evening')">📋 收盘版</button>
+      <button class="tab-btn" onclick="switchTab('morning')">🌅 晨间版</button>
+    </div>
+
+    <!-- ==================== 收盘版 Tab ==================== -->
+    <div id="evening" class="tab-panel active">
+      <!-- 市场概览 -->
+      <div class="card">
+        <div class="card-title">📊 市场概览</div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">上证指数</div>
+            <div class="stat-value" style="color:var(--up);">3,452.18</div>
+            <div class="stat-change" style="color:var(--up);">+28.35 +0.83%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">深证成指</div>
+            <div class="stat-value" style="color:var(--up);">11,234.56</div>
+            <div class="stat-change" style="color:var(--up);">+89.12 +0.80%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">创业板指</div>
+            <div class="stat-value" style="color:var(--up);">2,187.43</div>
+            <div class="stat-change" style="color:var(--up);">+18.76 +0.86%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">科创50</div>
+            <div class="stat-value" style="color:var(--up);">1,023.56</div>
+            <div class="stat-change" style="color:var(--up);">+12.34 +1.22%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">两市成交额</div>
+            <div class="stat-value" style="color:var(--text-primary);">1.28万亿</div>
+            <div class="stat-change" style="color:var(--up);">+8.5% 放量</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="card-subtitle">涨跌分布</div>
+            <div id="chartUpDown" class="chart-box" style="height:180px;"></div>
+          </div>
+          <div>
+            <div class="card-subtitle">板块资金净流入 TOP5</div>
+            <div id="chartSectorFlow" class="chart-box" style="height:180px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10大热点 -->
+      <div class="card-title" style="margin-top:24px;">🔥 今日十大热点</div>
+
+      <!-- Hotspot 1 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">01</div>
+        <div class="hotspot-title">AI算力芯片禁令升级，国产替代加速</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-red">政策驱动</span>
+          <span class="tag tag-purple">持续性：数周</span>
+          <span class="tag tag-yellow">⚠️ 风险：政策反复</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">美国商务部最新出口管制清单将14nm以下先进制程设备纳入限制范围，直接影响国内3家在建晶圆厂设备交付。市场迅速反应，国产设备/材料/EDA替代逻辑强化。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：半导体设备（刻蚀/薄膜/量测）→ 中游：晶圆代工（成熟制程扩产）→ 下游：AI芯片设计（IP自主化）</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：北方华创</span>
+            <span class="tag tag-green">弹性：中微公司</span>
+            <span class="tag tag-gray">概念：华大九天</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 2 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">02</div>
+        <div class="hotspot-title">碳酸锂价格触底反弹，锂电产业链回暖</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-green">业绩驱动</span>
+          <span class="tag tag-purple">持续性：数月</span>
+          <span class="tag tag-yellow">⚠️ 风险：需求不及预期</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">电池级碳酸锂价格从7.5万元/吨回升至8.2万元/吨，连续两周上涨。澳洲锂矿减产+国内新能源车市占率突破40%形成供需共振。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：锂矿/盐湖提锂 → 中游：正极材料/电解液 → 下游：动力电池/储能电池</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：宁德时代</span>
+            <span class="tag tag-green">弹性：天齐锂业</span>
+            <span class="tag tag-gray">概念：融捷股份</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 3 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">03</div>
+        <div class="hotspot-title">CPO（共封装光学）技术 breakthrough，光模块升级</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-blue">事件驱动</span>
+          <span class="tag tag-purple">持续性：数周</span>
+          <span class="tag tag-yellow">⚠️ 风险：量产延迟</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">台积电在北美技术研讨会上展示CPO封装方案，可将光模块功耗降低30%、带宽密度提升8倍。英伟达/博通同步发布CPO技术路线图，1.6T光模块需求前置。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：光芯片/硅光 → 中游：光模块封装 → 下游：AI服务器/交换机</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：中际旭创</span>
+            <span class="tag tag-green">弹性：新易盛</span>
+            <span class="tag tag-gray">概念：天孚通信</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 4 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">04</div>
+        <div class="hotspot-title">低空经济政策密集出台，eVTOL适航认证提速</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-red">政策驱动</span>
+          <span class="tag tag-purple">持续性：数月</span>
+          <span class="tag tag-yellow">⚠️ 风险：空域管理瓶颈</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">民航局发布《低空经济适航审定标准（征求意见稿）》，明确eVTOL适航路径。深圳/合肥/成都三地试点城市空域开放范围扩大，亿航智能获全球首张eVTOL适航证。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：碳纤维/电机/电池 → 中游：飞控/导航/机体 → 下游：运营/培训/空管</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：亿航智能</span>
+            <span class="tag tag-green">弹性：万丰奥威</span>
+            <span class="tag tag-gray">概念：中信海直</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 5 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">05</div>
+        <div class="hotspot-title">存储芯片涨价潮蔓延，HBM供不应求</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-green">业绩驱动</span>
+          <span class="tag tag-purple">持续性：数周</span>
+          <span class="tag tag-yellow">⚠️ 风险：产能释放</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">SK海力士和三星电子宣布HBM3E产能已被2026年Q2订单锁定，现货价格较合约价溢价40%。AI服务器厂商（戴尔/超微）加大囤货力度。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：DRAM颗粒/TSV设备 → 中游：HBM封装（CoWoS）→ 下游：GPU/AI服务器</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：SK海力士</span>
+            <span class="tag tag-green">弹性：美光科技</span>
+            <span class="tag tag-gray">概念：通富微电</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 6-10 condensed -->
+      <div class="grid-2">
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:13px;">06 机器人Figure-02量产在即</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-blue">事件驱动</span>
+            <span class="tag tag-purple">数周</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:11px;">Figure AI宣布与宝马合作产线落地，人形机器人零部件（谐波减速器/力矩传感器）供应商直接受益。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:13px;">07 高股息策略继续跑赢</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-green">业绩驱动</span>
+            <span class="tag tag-purple">数月</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:11px;">险资/社保持续增配高股息标的，银行/煤炭/电力板块近一月平均涨幅+5.2%，显著跑赢大盘。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:13px;">08 光伏组件出口数据回暖</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-green">业绩驱动</span>
+            <span class="tag tag-purple">数月</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:11px;">12月光伏组件出口量环比增长18%，欧洲库存去化完成。一体化龙头开工率回升至70%以上。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:13px;">09 国产大飞机C919订单突破</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-red">政策驱动</span>
+            <span class="tag tag-purple">数月</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:11px;">东航增订100架C919，总订单超300架。航空钛合金/复合材料/航电系统供应商订单能见度提升。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:13px;">10 数据要素政策落地</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-red">政策驱动</span>
+            <span class="tag tag-purple">数周</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:11px;">国家数据局发布《数据要素市场化配置改革总体方案》，数据确权/交易/定价框架确立。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px; border-left-color:var(--border);">
+          <div class="hotspot-title" style="font-size:13px;">…</div>
+          <div class="hotspot-section-text" style="font-size:11px;color:var(--text-secondary);">更多热点在完整版中查看</div>
+        </div>
+      </div>
+
+      <!-- Announcements + Tomorrow Track -->
+      <div class="grid-2" style="margin-top:24px;">
+        <div class="card">
+          <div class="card-title">📢 盘后公告摘要</div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--up);"></div>
+            <div class="ann-content">
+              <div class="ann-title">宁德时代：2025年度净利润预增 15%-25%</div>
+              <div class="ann-source">来源：深交所公告 · 16:32</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--up);"></div>
+            <div class="ann-content">
+              <div class="ann-title">北方华创：中标某晶圆厂刻蚀设备订单，金额约12亿元</div>
+              <div class="ann-source">来源：上交所公告 · 16:15</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--accent);"></div>
+            <div class="ann-content">
+              <div class="ann-title">中际旭创：控股股东拟减持不超过2%股份</div>
+              <div class="ann-source">来源：深交所公告 · 15:58</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--tag-blue-text);"></div>
+            <div class="ann-content">
+              <div class="ann-title">隆基绿能：与某央企签订50GW组件长单供应协议</div>
+              <div class="ann-source">来源：公司公告 · 15:20</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--tag-yellow-text);"></div>
+            <div class="ann-content">
+              <div class="ann-title">国家数据局：发布数据要素市场化配置改革总体方案</div>
+              <div class="ann-source">来源：政府公告 · 14:00</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📌 明日跟踪清单</div>
+          <div class="track-item">
+            <div class="track-checkbox" style="background:var(--tag-green-bg);border-color:var(--tag-green-text);">✓</div>
+            <div class="track-text">政策推进：关注数据要素改革配套细则发布时间</div>
+            <span class="track-type tag-gray">政策</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">公告后续：宁德时代业绩预告机构解读与评级调整</div>
+            <span class="track-type tag-blue">公告</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">财报日历：明日披露——迈瑞医疗、立讯精密、海康威视</div>
+            <span class="track-type tag-yellow">财报</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox" style="background:var(--tag-green-bg);border-color:var(--tag-green-text);">✓</div>
+            <div class="track-text">资金异动：北向资金连续5日净流入半导体板块</div>
+            <span class="track-type tag-purple">资金</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">海外联动：美国12月CPI数据发布（北京时间21:30）</div>
+            <span class="track-type tag-red">海外</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">技术关键位：上证指数3450支撑位/3500压力位</div>
+            <span class="track-type tag-gray">技术</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 晨间版 Tab ==================== -->
+    <div id="morning" class="tab-panel">
+      <!-- 隔夜美股 -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span class="version-badge morning">🌙 隔夜美股</span>
+          <span style="font-size:12px;color:var(--text-secondary);">2026-01-16 收盘</span>
+        </div>
+        <div class="grid-4">
+          <div class="stat-card">
+            <div class="stat-label">道琼斯</div>
+            <div class="stat-value" style="color:var(--up);">42,678.12</div>
+            <div class="stat-change" style="color:var(--up);">+332.45 +0.78%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">标普500</div>
+            <div class="stat-value" style="color:var(--up);">5,724.56</div>
+            <div class="stat-change" style="color:var(--up);">+45.66 +0.80%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">纳斯达克</div>
+            <div class="stat-value" style="color:var(--up);">18,999.99</div>
+            <div class="stat-change" style="color:var(--up);">+234.56 +1.25%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">VIX恐慌指数</div>
+            <div class="stat-value" style="color:var(--down);">14.32</div>
+            <div class="stat-change" style="color:var(--down);">-1.28 -8.2%</div>
+          </div>
+        </div>
+        <div class="card-subtitle" style="margin-top:12px;">板块表现</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag tag-green">半导体 +2.8%</span>
+          <span class="tag tag-green">AI算力 +2.5%</span>
+          <span class="tag tag-green">云计算 +1.9%</span>
+          <span class="tag tag-red">能源 -0.6%</span>
+          <span class="tag tag-red">公用事业 -0.3%</span>
+        </div>
+        <div class="card-subtitle" style="margin-top:12px;">市场主线</div>
+        <div style="font-size:12px;color:var(--text-primary);line-height:1.7;">
+          1. <strong>英伟达再创新高</strong>：CEO黄仁勋CES演讲发布RTX 50系列显卡+GB300 AI服务器路线图，股价涨+3.2%至$139.75，市值突破$3.4万亿。<br>
+          2. <strong>台积电ADR涨+1.8%</strong>：CPO封装技术展示获机构看好，高盛上调目标价至$200。<br>
+          3. <strong>AI应用层爆发</strong>：Palantir/Adobe/Salesforce等AI软件股集体上涨，AI Agent落地预期升温。
+        </div>
+      </div>
+
+      <!-- 隔夜欧股 + 宏观 -->
+      <div class="grid-2">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <span class="version-badge morning">🇪🇺 隔夜欧股</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">英国富时100</span>
+            <span class="us-summary-value" style="color:var(--up);">8,234.56 +0.69%</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">德国DAX</span>
+            <span class="us-summary-value" style="color:var(--up);">20,123.45 +0.90%</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">法国CAC40</span>
+            <span class="us-summary-value" style="color:var(--up);">7,654.32 +0.60%</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">斯托克600</span>
+            <span class="us-summary-value" style="color:var(--up);">512.34 +0.55%</span>
+          </div>
+          <div class="card-subtitle" style="margin-top:10px;">市场主线</div>
+          <div style="font-size:12px;color:var(--text-primary);line-height:1.6;">
+            欧洲央行管委暗示3月可能降息，欧股全线收涨。奢侈品板块（LVMH/爱马仕）反弹，能源股受油价下跌拖累小幅收跌。
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <span class="version-badge morning">📈 宏观数据新增</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag">🇺🇸</span>
+            <div class="macro-content">
+              <div class="macro-title">美国12月PPI同比 +3.3%</div>
+              <div class="macro-desc">高于预期+3.0%，前值+3.0%</div>
+            </div>
+            <span class="macro-tag tag-red">通胀压力</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag">🇺🇸</span>
+            <div class="macro-content">
+              <div class="macro-title">美国初请失业金 21.5万</div>
+              <div class="macro-desc">高于预期21.0万，前值20.8万</div>
+            </div>
+            <span class="macro-tag tag-yellow">就业放缓</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag">🇨🇳</span>
+            <div class="macro-content">
+              <div class="macro-title">中国12月出口同比 +10.7%</div>
+              <div class="macro-desc">高于预期+7.5%，前值+6.7%</div>
+            </div>
+            <span class="macro-tag tag-green">超预期</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag">🇪🇺</span>
+            <div class="macro-content">
+              <div class="macro-title">欧元区11月工业产出 -0.6%</div>
+              <div class="macro-desc">低于预期-0.2%，前值-0.1%</div>
+            </div>
+            <span class="macro-tag tag-red">走弱</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 今日关注清单 -->
+      <div class="card">
+        <div class="card-title">🎯 今日关注清单</div>
+        <div class="grid-2">
+          <div>
+            <div class="card-subtitle">A股市场</div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">关注AI芯片禁令升级后的国产替代板块持续性（半导体设备/材料/EDA）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">碳酸锂价格反弹对锂电产业链的带动效应（宁德时代/天齐锂业）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">CPO技术突破对光模块板块的催化（中际旭创/新易盛）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">低空经济政策试点城市进展（亿航智能/万丰奥威）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">数据要素改革配套细则落地预期（数据要素概念股）</div>
+            </div>
+          </div>
+          <div>
+            <div class="card-subtitle">海外市场</div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">美国12月CPI数据（21:30）——若超预期可能引发市场波动</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">英伟达GB300服务器供应链进展（CoWoS/光模块/PCB）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">美联储多位官员讲话（关注降息预期指引）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">中东地缘局势对油价的影响（布油能否守住$80）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">日本央行行长讲话（加息预期升温）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(tab).classList.add('active');
+}
+
+// ECharts — 涨跌分布
+setTimeout(() => {
+  const chart1 = echarts.init(document.getElementById('chartUpDown'));
+  chart1.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: 50, right: 20, top: 10, bottom: 25 },
+    xAxis: { type: 'category', data: ['涨停', '>7%', '5-7%', '3-5%', '1-3%', '0-1%', '平', '-0-1%', '-1-3%', '-3-5%', '-5-7%', '<-7%', '跌停'], axisLabel: { fontSize: 10, color: '#64748d' }, axisLine: { lineStyle: { color: '#e5e7eb' } } },
+    yAxis: { type: 'value', axisLabel: { fontSize: 10, color: '#64748d' }, splitLine: { lineStyle: { color: '#f3f4f6' } } },
+    series: [{
+      type: 'bar', barWidth: '60%',
+      data: [
+        { value: 45, itemStyle: { color: '#dc2626' } },
+        { value: 128, itemStyle: { color: '#ef4444' } },
+        { value: 215, itemStyle: { color: '#f87171' } },
+        { value: 456, itemStyle: { color: '#fca5a5' } },
+        { value: 892, itemStyle: { color: '#fecaca' } },
+        { value: 1024, itemStyle: { color: '#fee2e2' } },
+        { value: 180, itemStyle: { color: '#94a3b8' } },
+        { value: 987, itemStyle: { color: '#bbf7d0' } },
+        { value: 654, itemStyle: { color: '#86efac' } },
+        { value: 321, itemStyle: { color: '#4ade80' } },
+        { value: 156, itemStyle: { color: '#22c55e' } },
+        { value: 67, itemStyle: { color: '#16a34a' } },
+        { value: 12, itemStyle: { color: '#15803d' } }
+      ]
+    }]
+  });
+
+  // ECharts — 板块资金流向
+  const chart2 = echarts.init(document.getElementById('chartSectorFlow'));
+  chart2.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: 90, right: 30, top: 10, bottom: 25 },
+    xAxis: { type: 'value', axisLabel: { fontSize: 10, color: '#64748d', formatter: '{value}亿' }, splitLine: { lineStyle: { color: '#f3f4f6' } } },
+    yAxis: { type: 'category', data: ['电力', '银行', '医药', '汽车', '半导体'], axisLabel: { fontSize: 11, color: '#1a1f36' }, axisLine: { lineStyle: { color: '#e5e7eb' } } },
+    series: [{
+      type: 'bar', barWidth: '50%',
+      data: [
+        { value: -12.5, itemStyle: { color: '#16a34a' } },
+        { value: -8.3, itemStyle: { color: '#16a34a' } },
+        { value: 15.6, itemStyle: { color: '#dc2626' } },
+        { value: 28.4, itemStyle: { color: '#dc2626' } },
+        { value: 45.2, itemStyle: { color: '#dc2626' } }
+      ],
+      label: { show: true, position: 'right', fontSize: 10, color: '#64748d', formatter: '{c}亿' }
+    }]
+  });
+}, 300);
+</script>
+
+
+<script>
+/* iframe embed detection: hide own sidebar & topbar when inside index.html */
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+})();
+</script>
+</body>
+</html>

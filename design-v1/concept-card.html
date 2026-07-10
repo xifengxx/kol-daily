@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概念卡片 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text-secondary: #6b7280; --accent: #533afd;
+  --navy: #061b31; --up: #dc2626; --down: #16a34a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; }
+.nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-sub.active { color: #8b9cf7; font-weight: 500; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text); }
+.search input::placeholder { color: var(--text-secondary); }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--navy); letter-spacing: -0.3px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.tag-green { background: rgba(34,197,94,0.12); color: #16a34a; }
+.tag-blue { background: rgba(59,130,246,0.12); color: #2563eb; }
+.tag-yellow { background: rgba(245,158,11,0.12); color: #b45309; }
+.tag-red { background: rgba(239,68,68,0.12); color: #dc2626; }
+.tag-purple { background: rgba(139,92,246,0.12); color: #7c3aed; }
+.tag-gray { background: #f3f4f6; color: #64748d; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-transform: uppercase; font-size: 10px; color: var(--text-secondary); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--border); background: #fafbfc; letter-spacing: 0.5px; }
+.data-table td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; }
+.data-table tbody tr:hover { background: #f8f9fc; }
+.concept-section { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+.concept-section .concept-heading { font-weight: 700; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; }
+.cs-purple { border-left: 4px solid #8b5cf6; }
+.cs-blue { border-left: 4px solid #3b82f6; }
+.cs-green { border-left: 4px solid #16a34a; }
+.cs-orange { border-left: 4px solid #f59e0b; }
+.cs-red { border-left: 4px solid #dc2626; }
+.cs-teal { border-left: 4px solid #14b8a6; }
+.cs-indigo { border-left: 4px solid #6366f1; }
+.cs-pink { border-left: 4px solid #ec4899; }
+.cs-cyan { border-left: 4px solid #06b6d4; }
+.cs-lime { border-left: 4px solid #84cc16; }
+.cs-amber { border-left: 4px solid #f59e0b; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 500; margin-left: 4px; }
+.badge-high { background: #dcfce7; color: #166534; }
+.badge-mid { background: #fef3c7; color: #92400e; }
+.badge-low { background: #fee2e2; color: #991b1b; }
+.input-search { width: 100%; padding: 12px 18px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; background: var(--card); outline: none; transition: border-color 0.15s; }
+.input-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,58,253,0.1); }
+.input-search::placeholder { color: #94a3b8; }
+.concept-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+.concept-mini { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; cursor: pointer; transition: all 0.15s; }
+.concept-mini:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(83,58,253,0.08); }
+.concept-mini-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.concept-mini-desc { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5<span>Factor</span> AI</div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon">📊</span> 行情与数据</div>
+    <div class="nav-item"><span class="icon">📰</span> 内容与信息</div>
+    <div class="nav-item"><span class="icon">🎯</span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon">🔗</span> 产业链与知识</div>
+    <div class="nav-sub">产业链全景</div>
+    <div class="nav-sub">赛道详情</div>
+    <div class="nav-sub">个股深度</div>
+    <div class="nav-sub active">概念卡片</div>
+    <div class="nav-sub">知识库</div>
+    <div class="nav-item"><span class="icon">🤖</span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon">👥</span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="搜索概念（如：CPO、HBM、CoWoS、低空经济）...">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h1 style="font-size:24px; font-weight:600; color:var(--navy); letter-spacing:-0.5px;">概念卡片</h1>
+        <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">金融知识科普 F2.3 · 11模块结构化卡片 · 寓言提示法理解抽象概念</p>
+      </div>
+    </div>
+
+    <!-- Search + Hot Tags -->
+    <div class="card" style="margin-bottom:16px; padding: 20px 24px;">
+      <input class="input-search" placeholder="输入概念名称搜索（如：HBM、CPO、CoWoS、低空经济、固态电池...）">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+        <span style="font-size:12px; color:var(--text-secondary); margin-right:4px;">热门概念:</span>
+        <span class="tag tag-purple">HBM</span>
+        <span class="tag tag-blue">CPO</span>
+        <span class="tag tag-green">CoWoS</span>
+        <span class="tag tag-yellow">低空经济</span>
+        <span class="tag tag-red">固态电池</span>
+        <span class="tag tag-gray">光模块</span>
+        <span class="tag tag-gray">AI Agent</span>
+        <span class="tag tag-gray">eVTOL</span>
+        <span class="tag tag-gray">人形机器人</span>
+        <span class="tag tag-gray">量子计算</span>
+      </div>
+    </div>
+
+    <!-- Mini concept grid -->
+    <div class="concept-grid">
+      <div class="concept-mini">
+        <div class="concept-mini-title">HBM</div>
+        <div class="concept-mini-desc">高带宽存储 · AI GPU瓶颈组件</div>
+        <span class="tag tag-green">🔥 高热</span>
+      </div>
+      <div class="concept-mini">
+        <div class="concept-mini-title">CPO</div>
+        <div class="concept-mini-desc">共封装光学 · 光模块下一代</div>
+        <span class="tag tag-blue"> trending</span>
+      </div>
+      <div class="concept-mini">
+        <div class="concept-mini-title">CoWoS</div>
+        <div class="concept-mini-desc">台积电2.5D封装 · HBM必需</div>
+        <span class="tag tag-green">🔥 高热</span>
+      </div>
+      <div class="concept-mini">
+        <div class="concept-mini-title">低空经济</div>
+        <div class="concept-mini-desc">eVTOL + 空管 + 运营</div>
+        <span class="tag tag-yellow">政策驱动</span>
+      </div>
+      <div class="concept-mini">
+        <div class="concept-mini-title">固态电池</div>
+        <div class="concept-mini-desc">下一代动力电池 · 半固态过渡</div>
+        <span class="tag tag-yellow"> trending</span>
+      </div>
+      <div class="concept-mini">
+        <div class="concept-mini-title">光模块</div>
+        <div class="concept-mini-desc">800G/1.6T · AI数据中心互联</div>
+        <span class="tag tag-blue">景气上行</span>
+      </div>
+      <div class="concept-mini">
+        <div class="concept-mini-title">AI Agent</div>
+        <div class="concept-mini-desc">自主智能体 · 下一代AI应用</div>
+        <span class="tag tag-purple">早期</span>
+      </div>
+      <div class="concept-mini">
+        <div class="concept-mini-title">eVTOL</div>
+        <div class="concept-mini-desc">电动垂直起降飞行器</div>
+        <span class="tag tag-yellow">政策驱动</span>
+      </div>
+    </div>
+
+    <!-- Concept Card: HBM -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <div style="font-size:20px; font-weight:700; color:var(--navy);">HBM · 高带宽存储</div>
+          <div style="font-size:12px; color:var(--text-secondary);">High Bandwidth Memory · 半导体存储技术</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <span class="tag tag-green">置信度: 高</span>
+          <span class="tag tag-blue">知识库已收录</span>
+        </div>
+      </div>
+
+      <!-- 1. One sentence -->
+      <div class="concept-section cs-purple">
+        <div class="concept-heading">🎯 一句话解释</div>
+        <div style="font-size:13px; color:var(--text); line-height:1.6;">
+          HBM是一种将多个DRAM芯片垂直堆叠、通过硅通孔(TSV)技术连接、封装在GPU旁边的新型存储器，专为大模型AI训练所需的海量数据吞吐而设计。与传统DDR内存相比，HBM通过增加数据通道宽度（1024-bit vs 64-bit）和堆叠层数，实现了数量级提升的内存带宽。
+        </div>
+      </div>
+
+      <!-- 2. Life analogy -->
+      <div class="concept-section cs-blue">
+        <div class="concept-heading">🧸 生活类比（寓言提示法）</div>
+        <div style="font-size:13px; color:var(--text); line-height:1.6; margin-bottom:8px;">
+          <strong>快递驿站升级版</strong>：传统DRAM就像「快递站只开1个窗口，包裹一次只能搬一个」，HBM就像「把3个快递站垂直叠成一栋12层大楼，每层都有收发窗口同时运作」。GPU是「收货卡车」，传统方式卡车要排队等货，HBM让卡车直接开进装卸区，同时从12层楼装卸，速度提升24倍。
+        </div>
+        <table class="data-table" style="font-size:11px; margin-top:8px;">
+          <tr><th>现实元素</th><th>类比对象</th><th>说明</th></tr>
+          <tr><td>DRAM颗粒</td><td>快递包裹</td><td>存储的基本数据单元</td></tr>
+          <tr><td>TSV硅通孔</td><td>连接各层的电梯</td><td>垂直方向的快速通道</td></tr>
+          <tr><td>GPU</td><td>收货卡车</td><td>需要快速获取数据</td></tr>
+          <tr><td>带宽提升</td><td>窗口数量从1→12</td><td>1024-bit vs 64-bit</td></tr>
+          <tr><td>堆叠层数</td><td>楼层数量</td><td>HBM3E 12层 → HBM4 16层</td></tr>
+        </table>
+      </div>
+
+      <!-- 3. Professional definition -->
+      <div class="concept-section cs-green">
+        <div class="concept-heading">📐 专业定义</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+          <div><strong>全称:</strong> High Bandwidth Memory（高带宽存储器），由AMD和SK海力士于2013年联合提出，HBM2E后由JEDEC标准化</div>
+          <div><strong>技术核心:</strong> TSV（Through-Silicon Via）硅通孔 + 3D堆叠 + 1024-bit宽总线接口</div>
+          <div><strong>带宽:</strong> HBM3E 达 1.2 TB/s（对比：DDR5 仅 ~50 GB/s，差距约24倍；GDDR6X ~100 GB/s，差距12倍）</div>
+          <div><strong>容量:</strong> 单堆叠 24GB-36GB，GPU搭载4-8堆叠可达 192GB（B200）</div>
+          <div><strong>功耗:</strong> 每GB带宽功耗比GDDR低60%，能效比优异</div>
+          <div><strong>标准演进:</strong> HBM2 (2016) → HBM2E (2018) → HBM3 (2022) → HBM3E (2024) → HBM4 (2026)</div>
+          <div><strong>供应商格局:</strong> SK海力士（52%份额）、三星电子（38%）、美光科技（10%），CR3=100%寡头垄断</div>
+        </div>
+      </div>
+
+      <!-- 4. Market attention -->
+      <div class="concept-section cs-orange">
+        <div class="concept-heading">🔥 市场关注原因（5维度分析）</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+          <div><strong>1. 政策维度:</strong> 美国CHIPS法案限制对华先进存储出口（HBM2E及以上），国产替代成为国家战略。中国大基金三期3000亿重点投向存储。</div>
+          <div><strong>2. 业绩维度:</strong> SK海力士2024年HBM收入同比增长320%，占公司总营收35%（2022年仅5%）。美光2024年HBM产能已满至2025年。</div>
+          <div><strong>3. 事件维度:</strong> NVIDIA B200 GPU每台搭载8颗HBM3E（192GB），H200搭载6颗（144GB），需求与GPU出货量刚性绑定。NVIDIA GTC 2026将发布Rubin架构，HBM4需求提前锁定。</div>
+          <div><strong>4. 情绪维度:</strong> AI算力军备竞赛中，HBM被华尔街称为「AI时代的石油」，类比2010年代智能手机中的NAND Flash。</div>
+          <div><strong>5. 产业链维度:</strong> 上游硅料涨价→晶圆成本上升→HBM颗粒涨价→GPU BOM成本增加→AI服务器涨价→云厂商capex增加→终端AI应用成本传导。全链条涨价信号明确。</div>
+        </div>
+      </div>
+
+      <!-- 5. Chain position -->
+      <div class="concept-section cs-teal">
+        <div class="concept-heading">🔗 产业链位置</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+          <div><strong>上游（原材料与设备）:</strong> 硅晶圆（信越化学/环球晶圆/沪硅产业）→ 电子特气（林德/空气化工/南大光电）→ 光刻胶（JSR/东京应化/彤程新材）→ TSV设备（应用材料/泛林/中微公司）</div>
+          <div><strong>中游（制造与封装）:</strong> DRAM存储颗粒制造（SK海力士/三星/美光/长鑫存储）→ TSV堆叠与封装（台积电CoWoS/Amkor/通富微电/深科技）</div>
+          <div><strong>下游（应用）:</strong> AI GPU（NVIDIA/AMD/Intel）→ AI服务器（Dell/SMCI/浪潮/工业富联）→ 云计算平台（Azure/AWS/GCP/阿里云）→ 终端AI应用（ChatGPT/Midjourney/企业AI）</div>
+          <div><strong>产业链定位:</strong> AI算力产业链 <strong>L2 设备与零部件</strong>，是GPU的瓶颈组件。没有HBM，GPU无法发挥算力，属于「卡脖子」环节。</div>
+        </div>
+      </div>
+
+      <!-- 6. Related stocks -->
+      <div class="concept-section cs-indigo">
+        <div class="concept-heading">🏢 相关公司与标的（4级分类）</div>
+        <table class="data-table" style="font-size:11px;">
+          <tr><th>级别</th><th>公司</th><th>代码</th><th>角色</th><th>营收关联度</th></tr>
+          <tr><td><span class="tag tag-green">龙头</span></td><td>SK海力士</td><td>000660.KS</td><td>HBM3E全球首发，NVIDIA主力供应商</td><td>HBM占营收35%</td></tr>
+          <tr><td><span class="tag tag-green">龙头</span></td><td>三星电子</td><td>005930.KS</td><td>HBM3量产中，HBM3E追赶</td><td>HBM占营收12%</td></tr>
+          <tr><td><span class="tag tag-blue">二线</span></td><td>美光科技</td><td>MU</td><td>HBM3E追赶，2025年产能释放</td><td>HBM目标占营收20%</td></tr>
+          <tr><td><span class="tag tag-yellow">弹性</span></td><td>通富微电</td><td>002156.SZ</td><td>AMD封测核心，HBM封测国产替代</td><td>AMD占营收60%</td></tr>
+          <tr><td><span class="tag tag-yellow">弹性</span></td><td>深科技</td><td>000021.SZ</td><td>存储封测，沛顿科技DRAM封测</td><td>存储封测占营收40%</td></tr>
+          <tr><td><span class="tag tag-gray">概念</span></td><td>长鑫存储</td><td>未上市</td><td>国产DRAM追赶，HBM布局早期</td><td>N/A</td></tr>
+          <tr><td><span class="tag tag-gray">概念</span></td><td>长江存储</td><td>未上市</td><td>NAND闪存龙头，HBM技术储备</td><td>N/A</td></tr>
+          <tr><td><span class="tag tag-gray">设备</span></td><td>应用材料</td><td>AMAT</td><td>TSV沉积设备龙头</td><td>HBM相关占营收8%</td></tr>
+        </table>
+      </div>
+
+      <!-- 7. Investment focus -->
+      <div class="concept-section cs-pink">
+        <div class="concept-heading">💡 投资关注焦点</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+          <div>• <strong>HBM技术迭代节奏:</strong> HBM3E → HBM4 的量产时间窗口（2025Q4-2026），HBM4将采用16层堆叠、2nm逻辑芯片</div>
+          <div>• <strong>产能瓶颈:</strong> CoWoS封装产能（台积电）是否成为HBM交付的硬约束。台积电2025年CoWoS产能预计翻倍但仍供不应求</div>
+          <div>• <strong>国产替代:</strong> 长鑫存储HBM技术进展、通富微电/深科技封测良率提升速度。国产HBM2预计2025年流片</div>
+          <div>• <strong>ASP变化:</strong> HBM均价每季度环比变化（当前HBM3E约$150-200/GB，HBM4预计$250+/GB）</div>
+          <div>• <strong>客户结构:</strong> NVIDIA GPU出货量（B200/H200）与HBM配比的弹性关系。每颗B200需要8颗HBM3E</div>
+          <div>• <strong>竞争格局:</strong> 三星/美光追赶进度，SK海力士份额能否维持50%+</div>
+        </div>
+      </div>
+
+      <!-- 8. Risk warning -->
+      <div class="concept-section cs-red">
+        <div class="concept-heading">⚠️ 风险警示</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+          <div>• <strong>技术替代风险:</strong> CXL（Compute Express Link）内存互联技术可能在中长期（2027+）替代部分HBM需求，实现内存池化共享</div>
+          <div>• <strong>周期风险:</strong> 存储行业强周期性（3-4年周期），AI需求若放缓（如大模型训练需求饱和），HBM可能面临产能过剩</div>
+          <div>• <strong>地缘政治风险:</strong> 美对华出口管制升级可能影响中国HBM供应链，同时加速中国国产替代（双刃剑）</div>
+          <div>• <strong>竞争格局恶化:</strong> 三星/美光追赶加速，SK海力士份额可能从52%下滑至40%区间</div>
+          <div>• <strong>估值风险:</strong> HBM概念股（如通富微电）2024-2025年已大幅上涨100%+，需警惕追高风险。建议关注估值合理的二线标的</div>
+          <div>• <strong>技术迭代风险:</strong> HBM4若延迟（从2026推至2027），可能影响相关公司业绩兑现节奏</div>
+        </div>
+      </div>
+
+      <!-- 9. Real vs fake -->
+      <div class="concept-section cs-cyan">
+        <div class="concept-heading">🔍 真逻辑 vs 纯炒作鉴别（8维度）</div>
+        <table class="data-table" style="font-size:11px;">
+          <tr><th>鉴别维度</th><th>真逻辑 ✅</th><th>纯炒作 ❌</th></tr>
+          <tr><td>技术壁垒</td><td>拥有TSV/3D堆叠专利，技术门槛极高</td><td>只是普通DRAM封装，无核心技术</td></tr>
+          <tr><td>客户验证</td><td>通过NVIDIA/AMD/Intel官方认证</td><td>宣称送样但无实际订单</td></tr>
+          <tr><td>产能</td><td>有实际产能和良率数据（>80%）</td><td>只有PPT规划，无产线</td></tr>
+          <tr><td>收入占比</td><td>HBM相关收入占比>20%</td><td>HBM收入占比<5%，蹭概念</td></tr>
+          <tr><td>技术代差</td><td>与行业龙头差距<2代（如HBM2 vs HBM3E）</td><td>与龙头差距>3代（如DDR4 vs HBM3E）</td></tr>
+          <tr><td>供应链</td><td>进入NVIDIA/AMD供应链名单</td><td>仅供应低端客户或非AI客户</td></tr>
+          <tr><td>毛利率</td><td>HBM业务毛利率>40%</td><td>毛利率<20%（实际非HBM业务）</td></tr>
+          <tr><td>专利</td><td>拥有核心TSV/堆叠专利（>50项）</td><td>无自主知识产权，依赖授权</td></tr>
+        </table>
+      </div>
+
+      <!-- 10. Tracking indicators -->
+      <div class="concept-section cs-lime">
+        <div class="concept-heading">📊 追踪指标（高频→低频）</div>
+        <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+          <div><strong>高频指标（每周/每月）:</strong></div>
+          <div>• HBM现货价格（DRAMexchange报价）</div>
+          <div>• NVIDIA GPU出货指引（Omdia/techinsights）</div>
+          <div>• 相关标的股价与成交量异动</div>
+          <div><strong>中频指标（每季度）:</strong></div>
+          <div>• SK海力士/三星/美光财报HBM收入占比和ASP</div>
+          <div>• 台积电CoWoS产能利用率与资本支出</div>
+          <div>• 中国存储厂商（长鑫/长江）技术进展公告</div>
+          <div><strong>低频指标（每年/事件驱动）:</strong></div>
+          <div>• JEDEC HBM标准更新（HBM4/HBM4E时间表）</div>
+          <div>• 技术路线图（堆叠层数、带宽目标）</div>
+          <div>• 重大事件: NVIDIA GTC、三星/美光技术日、中国大基金投资动态</div>
+        </div>
+      </div>
+
+      <!-- 11. Related concepts -->
+      <div class="concept-section cs-amber">
+        <div class="concept-heading">🔗 关联概念</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="tag tag-blue">CoWoS封装</span>
+          <span class="tag tag-blue">AI GPU</span>
+          <span class="tag tag-blue">存储周期</span>
+          <span class="tag tag-blue">CXL</span>
+          <span class="tag tag-blue">硅通孔(TSV)</span>
+          <span class="tag tag-blue">3D堆叠</span>
+          <span class="tag tag-blue">AI服务器</span>
+          <span class="tag tag-blue">国产替代</span>
+          <span class="tag tag-blue">半导体设备</span>
+          <span class="tag tag-blue">晶圆代工</span>
+          <span class="tag tag-blue">信创</span>
+          <span class="tag tag-blue">大基金</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CPO Concept Preview -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <div style="font-size:18px; font-weight:700; color:var(--navy);">CPO · 共封装光学</div>
+          <div style="font-size:12px; color:var(--text-secondary);">Co-Packaged Optics · 光通信下一代技术</div>
+        </div>
+        <span class="tag tag-blue">展开查看完整卡片 →</span>
+      </div>
+      <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+        一句话：CPO是将光学引擎（激光器、调制器）与交换芯片（如博通Tomahawk）封装在同一基板上，取代传统可插拔光模块的技术方案。功耗降低30%、带宽密度提升5倍，是AI数据中心800G/1.6T互联的终极方案。
+      </div>
+    </div>
+
+    <!-- CoWoS Concept Preview -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <div style="font-size:18px; font-weight:700; color:var(--navy);">CoWoS · 台积电2.5D封装</div>
+          <div style="font-size:12px; color:var(--text-secondary);">Chip on Wafer on Substrate · 先进封装技术</div>
+        </div>
+        <span class="tag tag-blue">展开查看完整卡片 →</span>
+      </div>
+      <div style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+        一句话：CoWoS是台积电专有的2.5D封装技术，将多个芯片（逻辑芯片+HBM）通过硅中介层互联封装在一起，是NVIDIA H100/B200 GPU的必需工艺。当前产能供不应求，被视为AI芯片的「封装瓶颈」。
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

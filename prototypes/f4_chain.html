@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产业链与知识子系统 - F2 原型</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --text: #1a1f36;
+    --text-secondary: #6b7280;
+    --accent: #533afd;
+    --navy: #061b31;
+    --up: #dc2626;
+    --down: #16a34a;
+    --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+    --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+    --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+    --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+    --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── Top Navigation ── */
+  .top-bar {
+    background: var(--navy);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    height: 52px;
+    gap: 8px;
+  }
+  .top-bar .logo {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    margin-right: 24px;
+    white-space: nowrap;
+  }
+  .top-bar .logo span { color: var(--accent); }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    height: 100%;
+    align-items: flex-end;
+    padding-bottom: 0;
+  }
+  .nav-tab {
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  .nav-tab.active {
+    color: #fff;
+    background: var(--bg);
+    font-weight: 600;
+  }
+
+  /* ── Main Content ── */
+  .main-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 24px 40px;
+  }
+  .tab-page { display: none; }
+  .tab-page.active { display: block; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  /* Stat Cards */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-card .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-card .stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Industry Switcher */
+  .industry-switcher {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .industry-btn {
+    padding: 7px 18px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--card);
+    cursor: pointer;
+    font-size: 12px;
+    font-family: inherit;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+  }
+  .industry-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .industry-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  /* Tables */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .data-table th {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .data-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .data-table tbody tr:hover { background: #f8f9fc; }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+  .tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+  .tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+  .tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+  .tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 7px 18px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    border: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 4px 12px; font-size: 11px; }
+
+  /* Back Link */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  /* Page 2 sector label */
+  .sector-label {
+    display: inline-block;
+    background: var(--tag-purple-bg);
+    color: var(--tag-purple-text);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+
+  /* Price Conduction */
+  .conduction-flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .conduction-step {
+    padding: 6px 14px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+  }
+  .conduction-arrow {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+  .progress-step {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 11px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+  .progress-step.done { background: #dcfce7; color: #166534; }
+  .progress-step.active { background: var(--accent); color: #fff; }
+
+  /* Rating Cards Grid */
+  .rating-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .rating-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .rating-card .rating-score {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .rating-card .rating-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* School buttons */
+  .school-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .school-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .school-card .school-name {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .school-card .school-result {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .school-card .school-note {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  /* Expandable Section */
+  .expand-section {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: var(--card);
+    overflow: hidden;
+  }
+  .expand-header {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .expand-header:hover { background: #f8f9fc; }
+  .expand-body { padding: 0 16px 16px; display: none; }
+  .expand-section.open .expand-body { display: block; }
+  .expand-arrow {
+    transition: transform 0.2s;
+    color: var(--text-secondary);
+  }
+  .expand-section.open .expand-arrow { transform: rotate(180deg); }
+
+  /* Concept Card Sections */
+  .concept-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .concept-section .concept-icon { font-size: 18px; margin-right: 8px; }
+  .concept-section .concept-heading {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Colors for concept sections */
+  .cs-purple { border-left: 4px solid #8b5cf6; }
+  .cs-blue { border-left: 4px solid #3b82f6; }
+  .cs-green { border-left: 4px solid #16a34a; }
+  .cs-orange { border-left: 4px solid #f59e0b; }
+  .cs-red { border-left: 4px solid #dc2626; }
+  .cs-teal { border-left: 4px solid #14b8a6; }
+
+  /* Directory tree */
+  .dir-tree {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'SF Mono', 'Menlo', 'Consolas', monospace;
+    font-size: 12px;
+    line-height: 2;
+  }
+  .dir-tree .dir { color: var(--accent); font-weight: 600; }
+  .dir-tree .file { color: var(--text-secondary); }
+  .dir-tree .indent-1 { padding-left: 20px; }
+  .dir-tree .indent-2 { padding-left: 40px; }
+  .dir-tree .indent-3 { padding-left: 60px; }
+
+  /* Review engine */
+  .review-bar {
+    display: flex;
+    height: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .review-bar .rb-confirm { background: #16a34a; color: #fff; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+  .review-bar .rb-partial { background: #f59e0b; color: #fff; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+  .review-bar .rb-false { background: #dc2626; color: #fff; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+  .review-bar .rb-pending { background: #d1d5db; color: #6b7280; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+
+  /* Search bar */
+  .search-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .search-bar input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: inherit;
+    background: var(--card);
+  }
+  .search-bar input:focus { outline: none; border-color: var(--accent); }
+
+  /* Check list */
+  .check-list { list-style: none; padding: 0; }
+  .check-list li {
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .check-icon { font-size: 14px; flex-shrink: 0; }
+
+  .flex-between { display: flex; justify-content: space-between; align-items: center; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-12 { margin-bottom: 12px; }
+  .gap-8 { gap: 8px; }
+  .gap-12 { gap: 12px; }
+  .text-up { color: var(--up); }
+  .text-down { color: var(--down); }
+  .text-secondary { color: var(--text-secondary); }
+  .text-xs { font-size: 11px; }
+  .font-bold { font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .stat-grid { grid-template-columns: repeat(3, 1fr); }
+    .rating-grid { grid-template-columns: repeat(2, 1fr); }
+    .school-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ TOP NAVIGATION ════ -->
+<div class="top-bar">
+  <div class="logo">5<span>Factor</span> AI</div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" data-tab="tab-chain">产业链全景</button>
+    <button class="nav-tab" data-tab="tab-sector">赛道详情</button>
+    <button class="nav-tab" data-tab="tab-stock">个股深度</button>
+    <button class="nav-tab" data-tab="tab-concept">概念卡片</button>
+    <button class="nav-tab" data-tab="tab-knowledge">知识库</button>
+  </div>
+</div>
+
+<div class="main-content">
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PAGE 1: 产业链全景 -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="tab-page active" id="tab-chain">
+
+    <!-- Industry Switcher -->
+    <div class="industry-switcher" id="industrySwitcher">
+      <button class="industry-btn active" data-industry="ai">AI算力</button>
+      <button class="industry-btn" data-industry="semi">半导体</button>
+      <button class="industry-btn" data-industry="nev">新能源车</button>
+      <button class="industry-btn" data-industry="pv">光伏储能</button>
+      <button class="industry-btn" data-industry="robot">机器人</button>
+      <button class="industry-btn" data-industry="evtol">低空经济</button>
+    </div>
+
+    <!-- View Switcher -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;" id="viewSwitcher">
+      <button class="industry-btn active" data-view="treemap">全景Treemap</button>
+      <button class="industry-btn" data-view="graph">关系网络</button>
+      <button class="industry-btn" data-view="sankey">价值链流转</button>
+      <button class="industry-btn" data-view="causal">因果传导</button>
+    </div>
+
+    <!-- ECharts Views -->
+    <div class="card view-chart" id="view-treemap" style="padding:8px;">
+      <div id="treemapChart" style="width:100%;height:500px;"></div>
+    </div>
+    <div class="card view-chart" id="view-graph" style="padding:8px;">
+      <div id="graphChart" style="width:100%;height:500px;"></div>
+    </div>
+    <div class="card view-chart" id="view-sankey" style="padding:8px;">
+      <div id="sankeyChart" style="width:100%;height:500px;"></div>
+    </div>
+    <div class="card view-chart" id="view-causal" style="padding:8px;">
+      <div id="causalChart" style="width:100%;height:500px;"></div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">2+4</div>
+        <div class="stat-label">产业 (已有+新增)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">74</div>
+        <div class="stat-label">赛道 (AI 40+半34)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">447</div>
+        <div class="stat-label">公司 (AI 278+半169)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">571</div>
+        <div class="stat-label">股票 (AI 366+半205)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">518</div>
+        <div class="stat-label">关系 (10种类型)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">41</div>
+        <div class="stat-label">因果传导链</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PAGE 2: 赛道详情 (GPU) -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="tab-page" id="tab-sector">
+    <div class="back-link" id="backToTreemap">
+      ← 返回产业链全景
+    </div>
+
+    <div class="card-title mb-8">
+      GPU 赛道详情
+      <span class="sector-label">L3 核心产品与集成 · AI算力</span>
+    </div>
+
+    <!-- Candlestick Chart -->
+    <div class="card" style="padding:8px;">
+      <div id="candlestickChart" style="width:100%;height:360px;"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <!-- Sector Fundamentals -->
+      <div class="card">
+        <div class="card-title">赛道基本面</div>
+        <table class="data-table">
+          <tr><td style="color:var(--text-secondary)">TAM (2026E)</td><td class="font-bold">$130B</td></tr>
+          <tr><td style="color:var(--text-secondary)">CAGR</td><td class="font-bold">40%</td></tr>
+          <tr><td style="color:var(--text-secondary)">利润率区间</td><td class="font-bold">55% - 65%</td></tr>
+          <tr><td style="color:var(--text-secondary)">AI服务器成本占比</td><td class="font-bold">~55%</td></tr>
+          <tr><td style="color:var(--text-secondary)">利润池占比</td><td class="font-bold">~45%</td></tr>
+        </table>
+      </div>
+
+      <!-- Competition Landscape -->
+      <div class="card">
+        <div class="card-title">竞争格局</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>厂商</th><th>份额</th><th>核心壁垒</th><th>中国厂商</th><th>差距</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-bold">NVIDIA</td>
+              <td>>80%</td>
+              <td>CUDA锁定 / NVLink / Blackwell→Rubin 1年迭代</td>
+              <td>—</td>
+              <td><span class="tag tag-red">基准</span></td>
+            </tr>
+            <tr>
+              <td>AMD</td>
+              <td>~12%</td>
+              <td>ROCm生态 / MI300→MI400 Chiplet架构</td>
+              <td>—</td>
+              <td><span class="tag tag-yellow">2-3年代差</span></td>
+            </tr>
+            <tr>
+              <td>Intel</td>
+              <td><3%</td>
+              <td>Falcon Shores / OneAPI生态</td>
+              <td>—</td>
+              <td><span class="tag tag-yellow">3-5年代差</span></td>
+            </tr>
+            <tr>
+              <td class="font-bold">华为昇腾</td>
+              <td>—</td>
+              <td>Ascend 910B / 政府运营商AI训练</td>
+              <td>华为</td>
+              <td><span class="tag tag-yellow">硬件70-80% · 软件>5年</span></td>
+            </tr>
+            <tr>
+              <td>寒武纪</td>
+              <td>—</td>
+              <td>思元MLU / 云端推理芯片</td>
+              <td>688256</td>
+              <td><span class="tag tag-yellow">3-5年代差</span></td>
+            </tr>
+            <tr>
+              <td>海光信息</td>
+              <td>—</td>
+              <td>深算DCU / 兼容ROCm生态</td>
+              <td>688041</td>
+              <td><span class="tag tag-yellow">3-5年代差</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Core Stocks -->
+    <div class="card">
+      <div class="card-title">核心标的</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>代码</th><th>名称</th><th>评分</th><th>分类</th><th style="text-align:right">操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="font-bold">NVDA</td>
+            <td>NVIDIA (GPU架构设计)</td>
+            <td><span class="tag tag-green">92.4</span></td>
+            <td><span class="tag tag-purple">龙头 · rev 95%</span></td>
+            <td style="text-align:right">
+              <button class="btn btn-sm btn-outline score-btn" data-stock="NVDA">评分</button>
+              <button class="btn btn-sm btn-primary analyze-btn" data-stock="NVDA">分析</button>
+            </td>
+          </tr>
+          <tr>
+            <td>AMD</td>
+            <td>AMD (GPU架构设计)</td>
+            <td><span class="tag tag-blue">83.8</span></td>
+            <td><span class="tag tag-blue">二线弹性 · rev 40%</span></td>
+            <td style="text-align:right">
+              <button class="btn btn-sm btn-outline score-btn" data-stock="AMD">评分</button>
+              <button class="btn btn-sm btn-primary analyze-btn" data-stock="AMD">分析</button>
+            </td>
+          </tr>
+          <tr>
+            <td>INTC</td>
+            <td>Intel (GPU架构设计)</td>
+            <td><span class="tag tag-yellow">65.2</span></td>
+            <td><span class="tag tag-blue">二线弹性 · rev 10%</span></td>
+            <td style="text-align:right">
+              <button class="btn btn-sm btn-outline score-btn" data-stock="INTC">评分</button>
+              <button class="btn btn-sm btn-primary analyze-btn" data-stock="INTC">分析</button>
+            </td>
+          </tr>
+          <tr>
+            <td>TSM</td>
+            <td>TSMC (GPU制造代工)</td>
+            <td><span class="tag tag-green">88.1</span></td>
+            <td><span class="tag tag-purple">龙头 · rev 20%</span></td>
+            <td style="text-align:right">
+              <button class="btn btn-sm btn-outline score-btn" data-stock="TSM">评分</button>
+              <button class="btn btn-sm btn-primary analyze-btn" data-stock="TSM">分析</button>
+            </td>
+          </tr>
+          <tr>
+            <td>300474</td>
+            <td>景嘉微 (GPU架构设计)</td>
+            <td><span class="tag tag-yellow">58.4</span></td>
+            <td><span class="tag tag-yellow">概念股 · rev 60%</span></td>
+            <td style="text-align:right">
+              <button class="btn btn-sm btn-outline score-btn" data-stock="景嘉微">评分</button>
+              <button class="btn btn-sm btn-primary analyze-btn" data-stock="景嘉微">分析</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Price Conduction Flow -->
+    <div class="card">
+      <div class="card-title">价格传导</div>
+      <div class="conduction-flow">
+        <span class="conduction-step">HBM涨价</span>
+        <span class="conduction-arrow">→</span>
+        <span class="conduction-step">GPU成本上升</span>
+        <span class="conduction-arrow">→</span>
+        <span class="conduction-step">AI服务器涨价</span>
+        <span class="conduction-arrow">→</span>
+        <span class="conduction-step">云服务涨价</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PAGE 3: 个股深度分析 (NVDA) -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="tab-page" id="tab-stock">
+    <div class="card-title mb-8">NVDA · NVIDIA Corporation</div>
+
+    <!-- 4-Stage Progress -->
+    <div class="progress-bar">
+      <div class="progress-step done">✓ S1 业务透视</div>
+      <div class="progress-step done">✓ S2 财务诊断</div>
+      <div class="progress-step active">◎ S3 风险排查</div>
+      <div class="progress-step">○ S4 横向对比</div>
+    </div>
+
+    <!-- Composite Rating -->
+    <div class="rating-grid">
+      <div class="rating-card">
+        <div class="rating-score">22/25</div>
+        <div class="rating-label">商业模式</div>
+      </div>
+      <div class="rating-card">
+        <div class="rating-score" style="color:#16a34a;">A级</div>
+        <div class="rating-label">财务健康</div>
+      </div>
+      <div class="rating-card">
+        <div class="rating-score">5/5</div>
+        <div class="rating-label">护城河</div>
+      </div>
+      <div class="rating-card">
+        <div class="rating-score">8.5/10</div>
+        <div class="rating-label">综合评分</div>
+      </div>
+    </div>
+
+    <!-- Multi-School Analysis -->
+    <div class="school-grid">
+      <div class="school-card">
+        <div class="school-name"><span class="tag tag-blue">价值派</span> DCF估值</div>
+        <div class="school-result text-up">$158</div>
+        <div class="school-note">较现价+8% · 公允价值</div>
+      </div>
+      <div class="school-card">
+        <div class="school-name"><span class="tag tag-purple">趋势派</span> 动量分析</div>
+        <div class="school-result text-up">+1.8 偏多</div>
+        <div class="school-note">均线多头排列 · MACD金叉</div>
+      </div>
+      <div class="school-card">
+        <div class="school-name"><span class="tag tag-green">成长派</span> TAM渗透率</div>
+        <div class="school-result text-up">15% 渗透率</div>
+        <div class="school-note">AI算力TAM $400B· 远期空间大</div>
+      </div>
+    </div>
+
+    <!-- Cross-validation -->
+    <div class="card" style="border-left:4px solid var(--accent);">
+      <div class="card-title" style="color:var(--accent);">交叉验证结论</div>
+      <p style="font-size:14px;font-weight:600;">基本面 + 技术面双支持，估值偏高是主要矛盾</p>
+      <p class="text-secondary text-xs mt-8">DCF估值$158略高于现价$146，技术面偏多但RSI接近70，成长故事确定性强但需关注竞争格局变化。建议核心仓位持有，不宜追高。</p>
+    </div>
+
+    <!-- Expandable Stage Details -->
+    <div class="expand-section open">
+      <div class="expand-header" onclick="this.parentElement.classList.toggle('open')">
+        <span><span class="tag tag-green">S1</span> 业务透视 — AI算力核心供应商，GPU市占率82%</span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="expand-body">
+        <p class="text-secondary text-xs mb-8">收入结构: 数据中心 78% | 游戏 12% | 专业可视化 5% | 汽车 5% | OEM 1%</p>
+        <p class="text-secondary text-xs mb-8">核心产品: H100/H200/B200/B300 GPU, CUDA平台, NVLink/NVSwitch互联, DGX SuperPOD系统</p>
+        <p class="text-secondary text-xs">关键客户: Microsoft, Meta, Amazon, Google, Oracle — 前5大客户占营收~45% (FY2026 10-K)</p>
+      </div>
+    </div>
+
+    <div class="expand-section">
+      <div class="expand-header" onclick="this.parentElement.classList.toggle('open')">
+        <span><span class="tag tag-green">S2</span> 财务诊断 — 营收$130B(+126% YoY), 毛利率78%</span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="expand-body">
+        <p class="text-secondary text-xs mb-8">FY2026E: 营收$130B | 净利润$78B | FCF $65B | ROE 145%</p>
+        <p class="text-secondary text-xs mb-8">毛利率78% (vs 行业均值55%)，净利率60%，研发费用率13%</p>
+        <p class="text-secondary text-xs">现金及等价物$38B，总负债$12B，负债率极低，财务健康度A级</p>
+      </div>
+    </div>
+
+    <div class="expand-section">
+      <div class="expand-header" onclick="this.parentElement.classList.toggle('open')">
+        <span><span class="tag tag-yellow">S3</span> 风险排查 — 客户集中度、出口管制、竞争加剧</span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="expand-body">
+        <p class="text-secondary text-xs mb-8">风险1 (高): 中国出口管制升级 — 对华营收占比~17%，若全面禁售影响显著</p>
+        <p class="text-secondary text-xs mb-8">风险2 (中): 大客户自研芯片 — Google TPU/AWS Trainium长期替代风险</p>
+        <p class="text-secondary text-xs">风险3 (中): 估值收缩 — 当前P/E 32x，若增速放缓至50%以下可能杀估值至20x</p>
+      </div>
+    </div>
+
+    <div class="expand-section">
+      <div class="expand-header" onclick="this.parentElement.classList.toggle('open')">
+        <span><span class="tag tag-blue">S4</span> 横向对比 — vs AMD/INTC/AVGO 综合维度评分</span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="expand-body">
+        <p class="text-secondary text-xs mb-8">商业模式: NVDA 22/25 > AVGO 20/25 > AMD 18/25 > INTC 12/25</p>
+        <p class="text-secondary text-xs mb-8">护城河: NVDA 5/5 > AVGO 4/5 > AMD 3/5 > INTC 2/5</p>
+        <p class="text-secondary text-xs">估值性价比: AMD P/E 22x > AVGO P/E 28x > NVDA P/E 32x (成长性排序相反)</p>
+      </div>
+    </div>
+
+    <!-- ECharts Radar for stock assessment -->
+    <div class="card" style="padding:8px;">
+      <div id="radarChart" style="width:100%;height:380px;"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PAGE 4: 概念卡片 (CPO) -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="tab-page" id="tab-concept">
+    <div class="card-title mb-12">概念卡片</div>
+
+    <div class="search-bar">
+      <input type="text" id="conceptSearch" placeholder="搜索概念... (如 CPO, HBM, CoWoS, 硅光子)" value="CPO">
+      <button class="btn btn-primary" onclick="searchConcept()">搜索</button>
+    </div>
+
+    <!-- Concept Card: CPO -->
+    <div id="conceptCard">
+      <!-- Section 1: One sentence -->
+      <div class="concept-section cs-purple">
+        <div class="concept-heading">
+          <span class="concept-icon">💡</span> 一句话
+        </div>
+        <p style="font-size:14px;font-weight:600;">把光模块直接"焊"在芯片旁边，用光代替电来传输数据</p>
+        <p class="text-secondary text-xs mt-8">Co-Packaged Optics (CPO) — 将光学引擎与交换芯片/GPU封装在同一基板上，省去传统可插拔光模块的电信号走线损耗</p>
+      </div>
+
+      <!-- Section 2: Life analogy -->
+      <div class="concept-section cs-blue">
+        <div class="concept-heading">
+          <span class="concept-icon">🏠</span> 生活类比
+        </div>
+        <p>以前快递到了要去小区门口驿站取（传统光模块在面板），现在快递驿站直接搬进了你们小区的单元楼，走路距离从500米缩短到5米。</p>
+        <p class="text-xs text-secondary mt-8">传统方案: 交换芯片 → PCB走线(5-10cm) → 可插拔光模块 → 光纤<br>CPO方案: 交换芯片 + 光学引擎(共封装) → 光纤 (走线<1cm)</p>
+      </div>
+
+      <!-- Section 3: Industry chain position -->
+      <div class="concept-section cs-green">
+        <div class="concept-heading">
+          <span class="concept-icon">🏭</span> 产业链位置
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span class="tag tag-blue">L1 原材料</span>
+          <span>→</span>
+          <span class="tag tag-purple">L2 设备/器件</span>
+          <span>→</span>
+          <span class="tag tag-green" style="font-size:13px;font-weight:700;">光模块 → CPO</span>
+          <span>→</span>
+          <span class="tag tag-yellow">L3 系统集成</span>
+          <span>→</span>
+          <span class="tag tag-red">L4 应用</span>
+        </div>
+        <p class="text-xs text-secondary mt-12">CPO属于L2设备层的"下一代光互连"方向，从可插拔光模块(800G/1.6T)演进到共封装，是AI数据中心高带宽低功耗的关键技术路径</p>
+      </div>
+
+      <!-- Section 4: Related stocks -->
+      <div class="concept-section cs-orange">
+        <div class="concept-heading">
+          <span class="concept-icon">🏢</span> 相关标的
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>层级</th><th>公司</th><th>关联度</th><th>说明</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="tag tag-red">核心</span></td>
+              <td class="font-bold">中际旭创</td>
+              <td>★★★★★</td>
+              <td>800G/1.6T光模块龙头，与Broadcom合作CPO研发</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-red">核心</span></td>
+              <td class="font-bold">Coherent</td>
+              <td>★★★★★</td>
+              <td>VCSEL+硅光技术，CPO光学引擎核心供应商</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-yellow">直接</span></td>
+              <td>天孚通信</td>
+              <td>★★★★</td>
+              <td>光器件精密制造，CPO封装关键环节</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-yellow">直接</span></td>
+              <td>新易盛</td>
+              <td>★★★★</td>
+              <td>400G/800G光模块，CPO技术储备</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-blue">间接</span></td>
+              <td>Broadcom</td>
+              <td>★★★</td>
+              <td>交换机芯片+CPO共封装方案</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-blue">间接</span></td>
+              <td>TSMC</td>
+              <td>★★★</td>
+              <td>先进封装CoWoS为CPO提供封装平台</td>
+            </tr>
+            <tr>
+              <td><span class="tag" style="background:#f3f4f6;">概念</span></td>
+              <td>部分A股标的</td>
+              <td>★★</td>
+              <td>有CPO概念但无实质营收</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Section 5: Real logic vs hype -->
+      <div class="concept-section cs-teal">
+        <div class="concept-heading">
+          <span class="concept-icon">🔍</span> 真逻辑 vs 炒作 — 8维检查清单
+        </div>
+        <ul class="check-list">
+          <li><span class="check-icon">✅</span> 技术可行性: Broadcom已量产CPO交换机(Bailey)，2026-2027渗透率加速</li>
+          <li><span class="check-icon">✅</span> 市场需求: AI集群带宽需求年增3x，传统光模块功耗/密度逼近极限</li>
+          <li><span class="check-icon">✅</span> 产业链成熟度: TSMC CoWoS/SiPh平台成熟，封装环节ready</li>
+          <li><span class="check-icon">⚠️</span> 量产节奏: 目前CPO渗透率<3%，预计2028年达15-20%，不是爆发式而是渐进式</li>
+          <li><span class="check-icon">⚠️</span> 标准之争: OIF vs CPO联盟标准尚未统一，生态碎片化风险</li>
+          <li><span class="check-icon">❌</span> 国内兑现度: 多数A股CPO概念公司无CPO实质营收，2-3年内难以贡献利润</li>
+          <li><span class="check-icon">❌</span> 成本经济性: CPO方案当前成本比可插拔方案高2-3x，需上量后降本</li>
+          <li><span class="check-icon">⚠️</span> 维护性: 共封装后光模块不可拆卸，故障更换需换整板，运维模式待验证</li>
+        </ul>
+      </div>
+
+      <!-- Section 6: Risk warning -->
+      <div class="concept-section cs-red">
+        <div class="concept-heading">
+          <span class="concept-icon">⚠️</span> 风险警示
+        </div>
+        <ul class="check-list">
+          <li><span class="check-icon">🔴</span> <strong>概念炒作风险:</strong> 个别A股CPO概念股营收与CPO无实质关联，谨防"蹭热点"</li>
+          <li><span class="check-icon">🔴</span> <strong>技术路线替代:</strong> LPO(线性驱动可插拔光学)可能延迟CPO大规模应用窗口</li>
+          <li><span class="check-icon">🟡</span> <strong>客户集中度:</strong> CPO首批客户为Hyperscaler(Meta/MSFT/GOOG)，订单波动大</li>
+          <li><span class="check-icon">🟡</span> <strong>估值溢价:</strong> CPO概念板块平均P/E 45x，显著高于通信设备行业均值25x</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PAGE 5: 知识库 -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="tab-page" id="tab-knowledge">
+    <div class="card-title mb-12">知识库</div>
+
+    <!-- Stat Cards -->
+    <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
+      <div class="stat-card">
+        <div class="stat-value">447</div>
+        <div class="stat-label">文件 (58+389)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">74</div>
+        <div class="stat-label">赛道卡片</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">15</div>
+        <div class="stat-label">分析报告</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">42</div>
+        <div class="stat-label">待验证判断</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <!-- Directory Tree -->
+      <div class="card">
+        <div class="card-title">知识结构</div>
+        <div class="dir-tree">
+          <div class="dir">📁 产业链知识库/</div>
+          <div class="dir indent-1">├── 📁 AI算力/</div>
+          <div class="dir indent-2">│   ├── 📁 GPU/</div>
+          <div class="file indent-3">│   │   ├── 📄 市场规模_2026E.md</div>
+          <div class="file indent-3">│   │   ├── 📄 竞争格局_NVDA_AMD.md</div>
+          <div class="file indent-3">│   │   └── 📄 CUDA生态壁垒分析.md</div>
+          <div class="dir indent-2">│   ├── 📁 HBM/</div>
+          <div class="file indent-3">│   │   ├── 📄 HBM3E技术路线.md</div>
+          <div class="file indent-3">│   │   └── 📄 SK海力士vs三星.md</div>
+          <div class="dir indent-2">│   └── 📁 光模块/</div>
+          <div class="file indent-3">│       ├── 📄 CPO技术白皮书.md</div>
+          <div class="file indent-3">│       └── 📄 中际旭创深度.md</div>
+          <div class="dir indent-1">├── 📁 半导体/</div>
+          <div class="dir indent-2">│   ├── 📁 制造/</div>
+          <div class="file indent-3">│   │   └── 📄 TSMC先进制程路线图.md</div>
+          <div class="dir indent-2">│   └── 📁 设备/</div>
+          <div class="file indent-3">│       └── 📄 ASML光刻机垄断分析.md</div>
+          <div class="dir indent-1">├── 📁 新能源车/</div>
+          <div class="file indent-2">│   ├── 📄 动力电池产业链.md</div>
+          <div class="file indent-2">│   └── 📄 智能驾驶芯片对比.md</div>
+          <div class="dir indent-1">└── 📁 光伏储能/</div>
+          <div class="file indent-2">    ├── 📄 TOPCon_vs_HJT.md</div>
+          <div class="file indent-2">    └── 📄 逆变器竞争格局.md</div>
+        </div>
+      </div>
+
+      <!-- Review Engine -->
+      <div class="card">
+        <div class="card-title">判断复核引擎</div>
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px;">
+          <div class="stat-card">
+            <div class="stat-value">186</div>
+            <div class="stat-label">条判断</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:#16a34a;">69</div>
+            <div class="stat-label">确认</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:#dc2626;">39</div>
+            <div class="stat-label">证伪</div>
+          </div>
+        </div>
+        <div class="review-bar" style="width:100%;">
+          <div class="rb-confirm" style="width:37%;">确认 37%</div>
+          <div class="rb-partial" style="width:32%;">部分 32%</div>
+          <div class="rb-false" style="width:21%;">证伪 21%</div>
+          <div class="rb-pending" style="width:10%;">待验 10%</div>
+        </div>
+
+        <div class="card-title mt-12">常见错误模式</div>
+        <table class="data-table">
+          <thead><tr><th>错误类型</th><th>频次</th><th>示例</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="tag tag-red">线性外推</span></td>
+              <td>23次</td>
+              <td class="text-xs text-secondary">"GPU增速保持126%" — 忽略基数效应和周期</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-yellow">确认偏误</span></td>
+              <td>18次</td>
+              <td class="text-xs text-secondary">只收集支持CPO的资料，忽略LPO替代</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-yellow">概念炒作</span></td>
+              <td>15次</td>
+              <td class="text-xs text-secondary">A股CPO概念股无实质营收被吹成核心标的</td>
+            </tr>
+            <tr>
+              <td><span class="tag tag-blue">幸存者偏差</span></td>
+              <td>11次</td>
+              <td class="text-xs text-secondary">只分析成功案例，忽略失败竞争者的教训</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ECharts Sunburst for knowledge structure -->
+    <div class="card" style="padding:8px;">
+      <div class="card-title">知识覆盖度热力图</div>
+      <div id="sunburstChart" style="width:100%;height:400px;"></div>
+    </div>
+  </div>
+
+</div><!-- /main-content -->
+
+<!-- ════ SCRIPTS ════ -->
+<script>
+// ── Tab Switching ──
+document.getElementById('navTabs').addEventListener('click', function(e) {
+  const tab = e.target.closest('.nav-tab');
+  if (!tab) return;
+
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+
+  const targetId = tab.dataset.tab;
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.getElementById(targetId).classList.add('active');
+
+  // Resize ECharts on tab switch
+  setTimeout(resizeAllCharts, 100);
+});
+
+// Back to treemap from sector
+document.getElementById('backToTreemap').addEventListener('click', function() {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.nav-tab[data-tab="tab-chain"]').classList.add('active');
+  document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-chain').classList.add('active');
+  setTimeout(resizeAllCharts, 100);
+});
+
+// Analyze button → switches to stock tab
+document.addEventListener('click', function(e) {
+  const analyzeBtn = e.target.closest('.analyze-btn');
+  if (analyzeBtn) {
+    const stock = analyzeBtn.dataset.stock;
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.nav-tab[data-tab="tab-stock"]').classList.add('active');
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-stock').classList.add('active');
+    setTimeout(resizeAllCharts, 100);
+  }
+});
+
+// Concept search
+function searchConcept() {
+  const q = document.getElementById('conceptSearch').value.trim();
+  if (q) {
+    alert('搜索概念: ' + q + '\n(原型演示 — 仅展示CPO概念卡片)');
+  }
+}
+
+// ── ECharts Initialization ──
+var treemapChart = echarts.init(document.getElementById('treemapChart'));
+var graphChart = echarts.init(document.getElementById('graphChart'));
+var sankeyChart = echarts.init(document.getElementById('sankeyChart'));
+var causalChart = echarts.init(document.getElementById('causalChart'));
+var currentView = 'treemap';
+var currentIndustry = 'ai';
+
+// Hide non-active views after init (so charts got proper dimensions)
+document.getElementById('view-graph').style.display = 'none';
+document.getElementById('view-sankey').style.display = 'none';
+document.getElementById('view-causal').style.display = 'none';
+
+function getTreemapOption(industry) {
+  var data = treemapData[industry] || treemapData.ai;
+  return {
+    tooltip: { formatter: function(info) { return '<strong>' + info.name + '</strong><br/>TAM: $' + info.value + 'B<br/><small>点击查看赛道详情</small>'; } },
+    series: [{
+      type: 'treemap', width: '100%', height: '100%', roam: false, nodeClick: false,
+      breadcrumb: { show: true, height: 28, bottom: 0 },
+      label: { show: true, formatter: function(p) { return p.name + '\n$' + p.value + 'B'; }, fontSize: 10, fontWeight: 'bold', color: '#fff', textShadowBlur: 2, textShadowColor: 'rgba(0,0,0,0.5)' },
+      upperLabel: { show: true, height: 25, fontSize: 11, color: '#6b7280' },
+      itemStyle: { borderColor: '#fff', borderWidth: 2 },
+      levels: [{ colorSaturation: [0.35, 0.5] }, { colorSaturation: [0.3, 0.6] }],
+      data: data
+    }]
+  };
+}
+
+// ── Graph View (关系网络) ──
+var allSegmentNames = {};
+function buildSegmentNameMap() {
+  for (var ind in treemapData) {
+    treemapData[ind].forEach(function(s) { allSegmentNames[s.name] = true; });
+  }
+}
+// Called after treemapData is defined below
+
+function getGraphOption(industry) {
+  var segments = treemapData[industry] || treemapData.ai;
+  var nodes = segments.map(function(s) {
+    var sz = Math.max(12, Math.min(50, s.value * 0.4));
+    return { name: s.name, symbolSize: sz, itemStyle: s.itemStyle };
+  });
+  // Build edges from supplies_to + competes_with real data
+  var edgeMap = {};
+  var suppliesEdges = suppliesData[industry] || [];
+  var competesEdges = competesData[industry] || [];
+  suppliesEdges.forEach(function(e) {
+    var key = e.source + '|||' + e.target;
+    if (allSegmentNames[e.source] && allSegmentNames[e.target] && !edgeMap[key]) {
+      edgeMap[key] = { source: e.source, target: e.target, lineStyle: { color: '#60a5fa', curveness: 0.2, width: 1.5 } };
+    }
+  });
+  competesEdges.forEach(function(e) {
+    var key = e.source + '|||' + e.target;
+    if (allSegmentNames[e.source] && allSegmentNames[e.target] && !edgeMap[key]) {
+      edgeMap[key] = { source: e.source, target: e.target, lineStyle: { color: '#dc2626', curveness: 0.3, width: 1, type: 'dashed' } };
+    }
+  });
+  return {
+    tooltip: { formatter: function(p) { return p.dataType === 'node' ? '<b>' + p.name + '</b>' : p.source + ' → ' + p.target; } },
+    series: [{
+      type: 'graph', layout: 'force', roam: true, draggable: true,
+      force: { repulsion: 300, edgeLength: [80, 250], gravity: 0.1 },
+      data: nodes, edges: Object.values(edgeMap),
+      label: { show: true, fontSize: 9, color: '#1a1f36', formatter: function(p) { return p.name.length > 8 ? p.name.slice(0,8)+'…' : p.name; } },
+      emphasis: { focus: 'adjacency', lineStyle: { width: 3 } }
+    }]
+  };
+}
+
+// ── Sankey View (价值链流转) ──
+function getSankeyOption(industry) {
+  var edges = suppliesData[industry] || [];
+  var nodeSet = {};
+  var links = [];
+  edges.forEach(function(e) {
+    if (allSegmentNames[e.source] && allSegmentNames[e.target]) {
+      nodeSet[e.source] = true; nodeSet[e.target] = true;
+      links.push({ source: e.source, target: e.target, value: 5 });
+    }
+  });
+  var nodes = Object.keys(nodeSet).map(function(n) { return { name: n }; });
+  return {
+    tooltip: { trigger: 'item', triggerOn: 'mousemove' },
+    series: [{
+      type: 'sankey', emphasis: { focus: 'adjacency' },
+      nodeWidth: 18, nodeGap: 10, layoutIterations: 32,
+      data: nodes, links: links,
+      label: { fontSize: 10, color: '#1a1f36', position: 'right' },
+      lineStyle: { color: 'gradient', curveness: 0.5 }
+    }]
+  };
+}
+
+// ── Causal View (因果传导) ──
+function getCausalOption(industry) {
+  var edges = causalData[industry] || [];
+  var nodeSet = {};
+  var graphEdges = [];
+  edges.forEach(function(e) {
+    if (allSegmentNames[e.source] && allSegmentNames[e.target]) {
+      nodeSet[e.source] = true; nodeSet[e.target] = true;
+      graphEdges.push({ source: e.source, target: e.target, lineStyle: { color: '#f59e0b', width: 2.5, curveness: 0.2 }, label: { show: true, formatter: '传导', fontSize: 8, color: '#92400e' } });
+    }
+  });
+  var nodes = Object.keys(nodeSet).map(function(n) { return { name: n, symbolSize: 24, itemStyle: { color: '#fef9e7', borderColor: '#f59e0b', borderWidth: 2 } }; });
+  return {
+    tooltip: { formatter: function(p) { return p.dataType === 'node' ? '<b>' + p.name + '</b>' : '<b>' + p.source + '</b> → <b>' + p.target + '</b>'; } },
+    series: [{
+      type: 'graph', layout: 'force', roam: true,
+      force: { repulsion: 500, edgeLength: [120, 350], gravity: 0.06 },
+      data: nodes, edges: graphEdges,
+      label: { show: true, fontSize: 10, color: '#1a1f36', formatter: function(p) { return p.name.length > 10 ? p.name.slice(0,10)+'…' : p.name; } },
+      emphasis: { focus: 'adjacency', lineStyle: { width: 5 } }
+    }]
+  };
+}
+
+// ── View Switching ──
+document.getElementById('viewSwitcher').addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-view]');
+  if (!btn) return;
+  var view = btn.dataset.view;
+  currentView = view;
+  document.querySelectorAll('#viewSwitcher [data-view]').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+
+  // Hide all views
+  document.querySelectorAll('.view-chart').forEach(function(c) { c.style.display = 'none'; });
+  // Show target
+  document.getElementById('view-' + view).style.display = '';
+
+  // Render the selected chart
+  if (view === 'treemap') {
+    treemapChart.resize();
+  } else if (view === 'graph') {
+    graphChart.setOption(getGraphOption(currentIndustry), true);
+    graphChart.resize();
+  } else if (view === 'sankey') {
+    sankeyChart.setOption(getSankeyOption(currentIndustry), true);
+    sankeyChart.resize();
+  } else if (view === 'causal') {
+    causalChart.setOption(getCausalOption(currentIndustry), true);
+    causalChart.resize();
+  }
+});
+
+// ── Treemap click → navigate to sector detail ──
+// Init after data is loaded below
+
+// ── Industry Switcher (updates all views) ──
+document.getElementById('industrySwitcher').addEventListener('click', function(e) {
+  var btn = e.target.closest('.industry-btn');
+  if (!btn) return;
+  document.querySelectorAll('#industrySwitcher .industry-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  currentIndustry = btn.dataset.industry;
+  treemapChart.setOption(getTreemapOption(currentIndustry), true);
+  if (currentView === 'graph' && graphChart) graphChart.setOption(getGraphOption(currentIndustry), true);
+  if (currentView === 'sankey' && sankeyChart) sankeyChart.setOption(getSankeyOption(currentIndustry), true);
+  if (currentView === 'causal' && causalChart) causalChart.setOption(getCausalOption(currentIndustry), true);
+});
+
+// View switcher overrides industry switcher events
+document.getElementById('viewSwitcher').addEventListener('click', function(e) {
+  e.stopPropagation();
+});
+
+// ── Treemap Data (from invest_kg.db, 40 AI + 34 Semi + 4 mock chains) ──
+var treemapData = {
+  ai: [
+    { name: '云计算IaaS', value: 420, itemStyle: { color: '#fb923c' } },
+    { name: 'AI服务器', value: 220, itemStyle: { color: '#4ade80' } },
+    { name: '晶圆代工(先进制程)', value: 170, itemStyle: { color: '#60a5fa' } },
+    { name: 'GPU', value: 130, itemStyle: { color: '#4ade80' } },
+    { name: 'AI推理API服务', value: 106, itemStyle: { color: '#fb923c' } },
+    { name: '数据中心IDC', value: 83, itemStyle: { color: '#fb923c' } },
+    { name: 'AI训练集群/超算', value: 80, itemStyle: { color: '#4ade80' } },
+    { name: 'GPU架构设计', value: 65, itemStyle: { color: '#4ade80' } },
+    { name: 'ASIC/AI定制芯片', value: 60, itemStyle: { color: '#4ade80' } },
+    { name: 'HBM高带宽内存', value: 55, itemStyle: { color: '#60a5fa' } },
+    { name: 'GPU制造代工', value: 55, itemStyle: { color: '#4ade80' } },
+    { name: 'CPU(服务器级)', value: 40, itemStyle: { color: '#4ade80' } },
+    { name: '自动驾驶', value: 40, itemStyle: { color: '#fb923c' } },
+    { name: '光刻机', value: 33, itemStyle: { color: '#60a5fa' } },
+    { name: '先进封装CoWoS', value: 30, itemStyle: { color: '#60a5fa' } },
+    { name: '800G/1.6T光模块', value: 26, itemStyle: { color: '#60a5fa' } },
+    { name: '刻蚀设备', value: 25, itemStyle: { color: '#60a5fa' } },
+    { name: '边缘AI', value: 25, itemStyle: { color: '#fb923c' } },
+    { name: 'AI模型训练平台', value: 20, itemStyle: { color: '#fb923c' } },
+    { name: '薄膜沉积设备', value: 20, itemStyle: { color: '#60a5fa' } },
+    { name: 'EDA与IP核', value: 18, itemStyle: { color: '#60a5fa' } },
+    { name: '高纯硅料与硅片', value: 15, itemStyle: { color: '#94a3b8' } },
+    { name: 'Chiplet与异构集成', value: 14, itemStyle: { color: '#60a5fa' } },
+    { name: '检测量测设备', value: 13, itemStyle: { color: '#60a5fa' } },
+    { name: '网络交换芯片', value: 12, itemStyle: { color: '#4ade80' } },
+    { name: 'PCB与IC载板', value: 12, itemStyle: { color: '#60a5fa' } },
+    { name: 'AI Agent', value: 11, itemStyle: { color: '#fb923c' } },
+    { name: 'FPGA', value: 9, itemStyle: { color: '#4ade80' } },
+    { name: 'AI开发者工具', value: 8, itemStyle: { color: '#fb923c' } },
+    { name: '电子特气', value: 6, itemStyle: { color: '#94a3b8' } },
+    { name: 'DPU/SmartNIC', value: 6, itemStyle: { color: '#4ade80' } },
+    { name: 'NVMe/存储芯片', value: 6, itemStyle: { color: '#4ade80' } },
+    { name: '光刻胶与湿化学品', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '封装基板材料', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '高速连接器与铜缆', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: '散热液冷系统', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: '服务器电源与UPS', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: 'DSP与光芯片', value: 3, itemStyle: { color: '#60a5fa' } },
+    { name: '溅射靶材', value: 2.5, itemStyle: { color: '#94a3b8' } },
+    { name: 'RISC-V AI芯片', value: 2.5, itemStyle: { color: '#4ade80' } }
+  ],
+  semi: [
+    { name: '晶圆代工(先进制程)', value: 170, itemStyle: { color: '#4ade80' } },
+    { name: '存储芯片(DRAM/NAND)', value: 120, itemStyle: { color: '#4ade80' } },
+    { name: '模拟芯片', value: 95, itemStyle: { color: '#fb923c' } },
+    { name: '成熟制程代工', value: 45, itemStyle: { color: '#4ade80' } },
+    { name: '封装测试(OSAT)', value: 42, itemStyle: { color: '#4ade80' } },
+    { name: '功率半导体', value: 42, itemStyle: { color: '#4ade80' } },
+    { name: 'CPU(服务器级)', value: 40, itemStyle: { color: '#4ade80' } },
+    { name: '光刻机', value: 33, itemStyle: { color: '#60a5fa' } },
+    { name: '先进封装(CoWoS/3D)', value: 30, itemStyle: { color: '#4ade80' } },
+    { name: 'MCU与嵌入式处理器', value: 26, itemStyle: { color: '#fb923c' } },
+    { name: '刻蚀设备', value: 25, itemStyle: { color: '#60a5fa' } },
+    { name: 'AI芯片设计(Fabless)', value: 25, itemStyle: { color: '#fb923c' } },
+    { name: '半导体设备零部件', value: 25, itemStyle: { color: '#fb923c' } },
+    { name: 'CIS图像传感器', value: 21, itemStyle: { color: '#fb923c' } },
+    { name: '薄膜沉积设备', value: 20, itemStyle: { color: '#60a5fa' } },
+    { name: 'EDA与IP核', value: 18, itemStyle: { color: '#60a5fa' } },
+    { name: '高纯硅料与硅片', value: 15, itemStyle: { color: '#94a3b8' } },
+    { name: 'IC设计服务(Fabless)', value: 15, itemStyle: { color: '#fb923c' } },
+    { name: 'Chiplet与异构集成', value: 14, itemStyle: { color: '#60a5fa' } },
+    { name: '检测量测设备', value: 13, itemStyle: { color: '#60a5fa' } },
+    { name: 'FPGA', value: 9, itemStyle: { color: '#4ade80' } },
+    { name: '电子特气', value: 6, itemStyle: { color: '#94a3b8' } },
+    { name: '清洗设备', value: 5.5, itemStyle: { color: '#60a5fa' } },
+    { name: '光掩模版', value: 5.5, itemStyle: { color: '#94a3b8' } },
+    { name: '光刻胶与湿化学品', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '封装基板材料', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '高速连接器与铜缆', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: '涂胶显影设备(Track)', value: 4, itemStyle: { color: '#60a5fa' } },
+    { name: 'CMP抛光液与抛光垫', value: 3.5, itemStyle: { color: '#94a3b8' } },
+    { name: 'CMP设备', value: 3.5, itemStyle: { color: '#60a5fa' } },
+    { name: '溅射靶材', value: 2.5, itemStyle: { color: '#94a3b8' } },
+    { name: '离子注入设备', value: 2.5, itemStyle: { color: '#60a5fa' } },
+    { name: 'RISC-V AI芯片', value: 2.5, itemStyle: { color: '#fb923c' } },
+    { name: '前驱体与ALD/CVD材料', value: 2.2, itemStyle: { color: '#94a3b8' } }
+  ],
+  nev: [
+    { name: '动力电池', value: 150, itemStyle: { color: '#533afd' } },
+    { name: '电机电控', value: 60, itemStyle: { color: '#7c3aed' } },
+    { name: '整车制造', value: 300, itemStyle: { color: '#8b5cf6' } },
+    { name: '充电桩', value: 25, itemStyle: { color: '#a78bfa' } },
+    { name: '智能驾驶', value: 35, itemStyle: { color: '#c4b5fd' } },
+    { name: '热管理', value: 12, itemStyle: { color: '#6366f1' } },
+    { name: '轻量化', value: 18, itemStyle: { color: '#818cf8' } },
+    { name: '正极材料', value: 40, itemStyle: { color: '#4f46e5' } },
+    { name: '负极材料', value: 20, itemStyle: { color: '#6d28d9' } },
+    { name: '电解液', value: 15, itemStyle: { color: '#ddd6fe' } },
+    { name: '隔膜', value: 10, itemStyle: { color: '#93c5fd' } },
+    { name: '锂资源', value: 8, itemStyle: { color: '#60a5fa' } },
+  ],
+  pv: [
+    { name: '硅料', value: 30, itemStyle: { color: '#533afd' } },
+    { name: '硅片', value: 45, itemStyle: { color: '#7c3aed' } },
+    { name: '电池片', value: 55, itemStyle: { color: '#8b5cf6' } },
+    { name: '组件', value: 80, itemStyle: { color: '#a78bfa' } },
+    { name: '逆变器', value: 25, itemStyle: { color: '#c4b5fd' } },
+    { name: '储能系统', value: 60, itemStyle: { color: '#6366f1' } },
+    { name: '光伏玻璃', value: 12, itemStyle: { color: '#818cf8' } },
+    { name: '胶膜', value: 8, itemStyle: { color: '#4f46e5' } },
+    { name: '支架', value: 10, itemStyle: { color: '#6d28d9' } },
+    { name: '银浆', value: 5, itemStyle: { color: '#ddd6fe' } },
+  ],
+  robot: [
+    { name: '减速器', value: 12, itemStyle: { color: '#533afd' } },
+    { name: '伺服电机', value: 18, itemStyle: { color: '#7c3aed' } },
+    { name: '控制器', value: 10, itemStyle: { color: '#8b5cf6' } },
+    { name: '传感器', value: 15, itemStyle: { color: '#a78bfa' } },
+    { name: 'AI算法', value: 20, itemStyle: { color: '#c4b5fd' } },
+    { name: '整机集成', value: 35, itemStyle: { color: '#6366f1' } },
+    { name: '灵巧手', value: 5, itemStyle: { color: '#818cf8' } },
+    { name: '关节模组', value: 8, itemStyle: { color: '#4f46e5' } },
+    { name: '力控传感器', value: 3, itemStyle: { color: '#6d28d9' } },
+    { name: '机器视觉', value: 6, itemStyle: { color: '#ddd6fe' } },
+  ],
+  evtol: [
+    { name: 'eVTOL主机', value: 18, itemStyle: { color: '#533afd' } },
+    { name: '飞控系统', value: 8, itemStyle: { color: '#7c3aed' } },
+    { name: '动力电池', value: 22, itemStyle: { color: '#8b5cf6' } },
+    { name: '电机电控', value: 12, itemStyle: { color: '#a78bfa' } },
+    { name: '空管系统', value: 10, itemStyle: { color: '#c4b5fd' } },
+    { name: '起降场', value: 7, itemStyle: { color: '#6366f1' } },
+    { name: '复合材料', value: 9, itemStyle: { color: '#818cf8' } },
+    { name: '通信导航', value: 6, itemStyle: { color: '#4f46e5' } },
+    { name: '运营服务', value: 15, itemStyle: { color: '#6d28d9' } },
+    { name: '适航认证', value: 4, itemStyle: { color: '#ddd6fe' } },
+  ]
+};
+
+// ── Relation Data (from invest_kg.db) ──
+var suppliesData = {
+  ai: [
+    { source: '高纯硅料与硅片', target: '晶圆代工(先进制程)' },
+    { source: '电子特气', target: '晶圆代工(先进制程)' },
+    { source: '光刻胶与湿化学品', target: '晶圆代工(先进制程)' },
+    { source: '溅射靶材', target: '晶圆代工(先进制程)' },
+    { source: '光刻机', target: '晶圆代工(先进制程)' },
+    { source: '刻蚀设备', target: '晶圆代工(先进制程)' },
+    { source: '薄膜沉积设备', target: '晶圆代工(先进制程)' },
+    { source: '检测量测设备', target: '晶圆代工(先进制程)' },
+    { source: 'EDA与IP核', target: 'GPU架构设计' },
+    { source: 'EDA与IP核', target: 'ASIC/AI定制芯片' },
+    { source: '晶圆代工(先进制程)', target: 'GPU制造代工' },
+    { source: '晶圆代工(先进制程)', target: 'ASIC/AI定制芯片' },
+    { source: '晶圆代工(先进制程)', target: 'CPU(服务器级)' },
+    { source: 'HBM高带宽内存', target: 'GPU' },
+    { source: '先进封装CoWoS', target: 'GPU' },
+    { source: '先进封装CoWoS', target: 'ASIC/AI定制芯片' },
+    { source: 'GPU', target: 'AI服务器' },
+    { source: 'AI服务器', target: '云计算IaaS' },
+    { source: 'AI训练集群/超算', target: 'AI模型训练平台' },
+    { source: '数据中心IDC', target: '云计算IaaS' },
+    { source: 'DSP与光芯片', target: '800G/1.6T光模块' }
+  ],
+  semi: [
+    { source: '高纯硅料与硅片', target: '晶圆代工(先进制程)' },
+    { source: '光刻胶与湿化学品', target: '晶圆代工(先进制程)' },
+    { source: '光刻机', target: '晶圆代工(先进制程)' },
+    { source: '刻蚀设备', target: '晶圆代工(先进制程)' },
+    { source: '薄膜沉积设备', target: '晶圆代工(先进制程)' },
+    { source: 'EDA与IP核', target: 'IC设计服务(Fabless)' },
+    { source: '晶圆代工(先进制程)', target: 'AI芯片设计(Fabless)' },
+    { source: '晶圆代工(先进制程)', target: 'CPU(服务器级)' },
+    { source: '先进封装(CoWoS/3D)', target: 'AI芯片设计(Fabless)' },
+    { source: 'CMP抛光液与抛光垫', target: '晶圆代工(先进制程)' }
+  ]
+};
+
+var competesData = {
+  ai: [
+    { source: 'GPU', target: 'ASIC/AI定制芯片' },
+    { source: 'GPU', target: 'FPGA' }
+  ],
+  semi: []
+};
+
+var causalData = {
+  ai: [
+    { source: 'AI模型训练平台', target: 'AI推理API服务' },
+    { source: 'AI Agent', target: 'AI推理API服务' },
+    { source: 'HBM高带宽内存', target: 'GPU' },
+    { source: '先进封装CoWoS', target: 'GPU' },
+    { source: '晶圆代工(先进制程)', target: 'GPU' },
+    { source: 'GPU', target: 'AI服务器' },
+    { source: 'AI服务器', target: 'AI训练集群/超算' },
+    { source: 'AI服务器', target: '数据中心IDC' },
+    { source: 'HBM高带宽内存', target: 'AI服务器' },
+    { source: 'AI推理API服务', target: 'AI Agent' },
+    { source: '云计算IaaS', target: 'AI推理API服务' },
+    { source: '800G/1.6T光模块', target: 'AI训练集群/超算' },
+    { source: '散热液冷系统', target: '数据中心IDC' },
+    { source: '自动驾驶', target: '边缘AI' }
+  ],
+  semi: [
+    { source: '晶圆代工(先进制程)', target: 'AI芯片设计(Fabless)' },
+    { source: '存储芯片(DRAM/NAND)', target: 'AI芯片设计(Fabless)' },
+    { source: '先进封装(CoWoS/3D)', target: 'AI芯片设计(Fabless)' },
+    { source: 'EDA与IP核', target: 'IC设计服务(Fabless)' },
+    { source: '半导体设备零部件', target: '光刻机' }
+  ]
+};
+
+// ── Now that data is loaded, build segment name map ──
+buildSegmentNameMap();
+
+// ── Initialize Treemap + Click Handler ──
+treemapChart.setOption(getTreemapOption('ai'));
+treemapChart.on('click', function(params) {
+  if (params.name) {
+    document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelector('.nav-tab[data-tab="tab-sector"]').classList.add('active');
+    document.querySelectorAll('.tab-page').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById('tab-sector').classList.add('active');
+    var titleEl = document.querySelector('#tab-sector .card-title');
+    if (titleEl) {
+      titleEl.innerHTML = params.name + ' 赛道详情 <span class="sector-label">点击Treemap进入 · ' + currentIndustry + '</span>';
+    }
+    setTimeout(resizeAllCharts, 100);
+  }
+});
+
+// ── ECharts: Candlestick (GPU ETF mock data) ──
+var candlestickChart = echarts.init(document.getElementById('candlestickChart'));
+
+// Generate 60 days of mock candlestick data
+var basePrice = 85;
+var dates = [];
+var ohlcData = [];
+var volData = [];
+for (var i = 0; i < 60; i++) {
+  var d = new Date(2026, 5, 1);
+  d.setDate(d.getDate() + i);
+  if (d.getDay() === 0 || d.getDay() === 6) continue; // skip weekends in mock
+  var dateStr = d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+  dates.push(dateStr);
+
+  var change = (Math.random() - 0.48) * 6;
+  var open = basePrice;
+  var close = open + change;
+  var high = Math.max(open, close) + Math.random() * 3;
+  var low = Math.min(open, close) - Math.random() * 3;
+  ohlcData.push([open.toFixed(2), close.toFixed(2), low.toFixed(2), high.toFixed(2)].map(Number));
+  volData.push(Math.floor(Math.random() * 5000000 + 2000000));
+  basePrice = close;
+}
+
+// Trim to exactly the data we have
+dates = dates.slice(0, ohlcData.length);
+
+candlestickChart.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+  legend: { data: ['GPU ETF', 'MA5', 'MA20'], bottom: 0 },
+  grid: [
+    { left: '8%', right: '8%', top: '8%', height: '60%' },
+    { left: '8%', right: '8%', top: '78%', height: '14%' }
+  ],
+  xAxis: [
+    { type: 'category', data: dates, gridIndex: 0, axisLabel: { show: false } },
+    { type: 'category', data: dates, gridIndex: 1, axisLabel: { fontSize: 9, rotate: 45, interval: 9 } }
+  ],
+  yAxis: [
+    { type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: '#f0f0f0' } } },
+    { type: 'value', gridIndex: 1, axisLabel: { fontSize: 9 } }
+  ],
+  series: [
+    {
+      name: 'GPU ETF',
+      type: 'candlestick',
+      data: ohlcData,
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      itemStyle: {
+        color: '#dc2626',
+        color0: '#16a34a',
+        borderColor: '#dc2626',
+        borderColor0: '#16a34a'
+      }
+    },
+    {
+      name: 'MA5',
+      type: 'line',
+      data: calcMA(ohlcData, 5),
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      smooth: true,
+      lineStyle: { width: 1, color: '#f59e0b' },
+      symbol: 'none'
+    },
+    {
+      name: 'MA20',
+      type: 'line',
+      data: calcMA(ohlcData, 20),
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      smooth: true,
+      lineStyle: { width: 1, color: '#3b82f6' },
+      symbol: 'none'
+    },
+    {
+      name: '成交量',
+      type: 'bar',
+      data: volData,
+      xAxisIndex: 1,
+      yAxisIndex: 1,
+      itemStyle: {
+        color: function(params) {
+          var idx = params.dataIndex;
+          if (idx >= ohlcData.length) return '#d1d5db';
+          return ohlcData[idx][1] >= ohlcData[idx][0] ? '#dc2626' : '#16a34a';
+        }
+      }
+    }
+  ]
+});
+
+function calcMA(ohlc, period) {
+  var result = [];
+  for (var i = 0; i < ohlc.length; i++) {
+    if (i < period - 1) { result.push(null); continue; }
+    var sum = 0;
+    for (var j = 0; j < period; j++) sum += ohlc[i - j][1]; // close
+    result.push(+(sum / period).toFixed(2));
+  }
+  return result;
+}
+
+// ── ECharts: Radar (Stock Assessment) ──
+var radarChart = echarts.init(document.getElementById('radarChart'));
+radarChart.setOption({
+  tooltip: {},
+  legend: {
+    data: ['NVIDIA', 'AMD', '行业均值'],
+    bottom: 0
+  },
+  radar: {
+    center: ['50%', '52%'],
+    radius: '68%',
+    indicator: [
+      { name: '商业模式', max: 25 },
+      { name: '财务健康', max: 10 },
+      { name: '护城河', max: 5 },
+      { name: '成长性', max: 10 },
+      { name: '估值', max: 10 },
+      { name: '技术实力', max: 10 }
+    ]
+  },
+  series: [{
+    type: 'radar',
+    data: [
+      {
+        name: 'NVIDIA',
+        value: [22, 9, 5, 9.5, 6.5, 9.8],
+        areaStyle: { color: 'rgba(83, 58, 253, 0.15)' },
+        lineStyle: { color: '#533afd', width: 2 },
+        itemStyle: { color: '#533afd' }
+      },
+      {
+        name: 'AMD',
+        value: [18, 7.5, 3.5, 8, 7.5, 8],
+        areaStyle: { color: 'rgba(220, 38, 38, 0.08)' },
+        lineStyle: { color: '#dc2626', width: 2 },
+        itemStyle: { color: '#dc2626' }
+      },
+      {
+        name: '行业均值',
+        value: [14, 6, 2.5, 6, 7, 6],
+        areaStyle: { color: 'rgba(107, 114, 128, 0.06)' },
+        lineStyle: { color: '#9ca3af', width: 1.5, type: 'dashed' },
+        itemStyle: { color: '#9ca3af' }
+      }
+    ]
+  }]
+});
+
+// ── ECharts: Sunburst (Knowledge Coverage) ──
+var sunburstChart = echarts.init(document.getElementById('sunburstChart'));
+sunburstChart.setOption({
+  tooltip: {
+    formatter: function(p) {
+      return p.name + (p.value ? '<br/>文件数: ' + p.value : '');
+    }
+  },
+  series: [{
+    type: 'sunburst',
+    radius: ['15%', '85%'],
+    center: ['50%', '52%'],
+    emphasis: { focus: 'ancestor' },
+    label: { fontSize: 11, fontWeight: 'bold' },
+    data: [
+      {
+        name: 'AI算力',
+        itemStyle: { color: '#533afd' },
+        children: [
+          { name: 'GPU', value: 28, itemStyle: { color: '#7c3aed' } },
+          { name: 'HBM', value: 12, itemStyle: { color: '#8b5cf6' } },
+          { name: '光模块', value: 18, itemStyle: { color: '#a78bfa' } },
+          { name: '服务器', value: 22, itemStyle: { color: '#c4b5fd' } },
+          { name: 'ASIC', value: 8, itemStyle: { color: '#ddd6fe' } },
+          { name: '网络', value: 14, itemStyle: { color: '#e9d5ff' } }
+        ]
+      },
+      {
+        name: '半导体',
+        itemStyle: { color: '#3b82f6' },
+        children: [
+          { name: '制造', value: 20, itemStyle: { color: '#60a5fa' } },
+          { name: '设备', value: 16, itemStyle: { color: '#93c5fd' } },
+          { name: '材料', value: 12, itemStyle: { color: '#bfdbfe' } },
+          { name: 'EDA/IP', value: 8, itemStyle: { color: '#dbeafe' } }
+        ]
+      },
+      {
+        name: '新能源',
+        itemStyle: { color: '#16a34a' },
+        children: [
+          { name: '动力电池', value: 24, itemStyle: { color: '#4ade80' } },
+          { name: '光伏', value: 18, itemStyle: { color: '#86efac' } },
+          { name: '储能', value: 10, itemStyle: { color: '#bbf7d0' } }
+        ]
+      },
+      {
+        name: '智能驾驶',
+        value: 27,
+        itemStyle: { color: '#dc2626' },
+        children: [
+          { name: '芯片', value: 12, itemStyle: { color: '#f87171' } },
+          { name: '激光雷达', value: 8, itemStyle: { color: '#fca5a5' } },
+          { name: '算法', value: 7, itemStyle: { color: '#fecaca' } }
+        ]
+      }
+    ]
+  }]
+});
+
+// ── Resize all charts ──
+function resizeAllCharts() {
+  treemapChart && treemapChart.resize();
+  graphChart && graphChart.resize();
+  sankeyChart && sankeyChart.resize();
+  causalChart && causalChart.resize();
+  candlestickChart && candlestickChart.resize();
+  radarChart && radarChart.resize();
+  sunburstChart && sunburstChart.resize();
+}
+window.addEventListener('resize', resizeAllCharts);
+
+// ── Initialization on load ──
+setTimeout(resizeAllCharts, 200);
+</script>
+
+</body>
+</html>

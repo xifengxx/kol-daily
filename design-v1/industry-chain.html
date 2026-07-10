@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产业链图谱 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text-secondary: #6b7280; --accent: #533afd;
+  --navy: #061b31; --up: #dc2626; --down: #16a34a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; }
+.nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-sub.active { color: #8b9cf7; font-weight: 500; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text); }
+.search input::placeholder { color: var(--text-secondary); }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--navy); letter-spacing: -0.3px; }
+.card-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.tab-row { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+.tab-btn { padding: 10px 20px; font-size: 13px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn:hover { color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.industry-switcher { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.industry-btn { padding: 6px 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--card); cursor: pointer; font-size: 12px; font-family: inherit; color: var(--text-secondary); transition: all 0.2s; }
+.industry-btn:hover { border-color: var(--accent); color: var(--accent); }
+.industry-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.tag-green { background: rgba(34,197,94,0.12); color: #16a34a; }
+.tag-blue { background: rgba(59,130,246,0.12); color: #2563eb; }
+.tag-yellow { background: rgba(245,158,11,0.12); color: #b45309; }
+.tag-red { background: rgba(239,68,68,0.12); color: #dc2626; }
+.tag-purple { background: rgba(139,92,246,0.12); color: #7c3aed; }
+.tag-gray { background: #f3f4f6; color: #64748d; }
+.tree-item { padding: 6px 10px; cursor: pointer; border-radius: 4px; transition: all 0.15s; display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.tree-item:hover { background: #f3f4f6; }
+.tree-item.active { background: rgba(83,58,253,0.08); color: var(--accent); font-weight: 600; }
+.tree-level-1 { padding-left: 10px; }
+.tree-level-2 { padding-left: 24px; }
+.tree-level-3 { padding-left: 38px; }
+.tree-level-4 { padding-left: 52px; }
+.stat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+.stat-value { font-size: 20px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-transform: uppercase; font-size: 10px; color: var(--text-secondary); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--border); background: #fafbfc; letter-spacing: 0.5px; }
+.data-table td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; }
+.data-table tbody tr:hover { background: #f8f9fc; }
+.info-card { border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 10px; background: var(--card); }
+.info-card-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.info-card-body { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 500; margin-left: 4px; }
+.badge-high { background: #dcfce7; color: #166534; }
+.badge-mid { background: #fef3c7; color: #92400e; }
+.badge-low { background: #fee2e2; color: #991b1b; }
+.progress-bar { width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; margin-top: 4px; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+.chart-container { width: 100%; height: 400px; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5<span>Factor</span> AI</div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon">📊</span> 行情与数据</div>
+    <div class="nav-item"><span class="icon">📰</span> 内容与信息</div>
+    <div class="nav-item"><span class="icon">🎯</span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon">🔗</span> 产业链与知识</div>
+    <div class="nav-sub active">产业链全景</div>
+    <div class="nav-sub">赛道详情</div>
+    <div class="nav-sub">个股深度</div>
+    <div class="nav-sub">概念卡片</div>
+    <div class="nav-sub">知识库</div>
+    <div class="nav-item"><span class="icon">🤖</span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon">👥</span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="搜索赛道、公司、概念...（如：HBM、台积电、AI算力）">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h1 style="font-size:24px; font-weight:600; color:var(--navy); letter-spacing:-0.5px;">产业链图谱</h1>
+        <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">投资知识图谱 F2.1 · 74赛道 / 398公司 / 572股票映射 / 518条关系</p>
+      </div>
+      <div style="font-size:12px; color:var(--text-secondary);">数据更新: 2026-07-09</div>
+    </div>
+
+    <!-- Industry Switcher -->
+    <div class="industry-switcher">
+      <button class="industry-btn active">AI算力</button>
+      <button class="industry-btn">半导体</button>
+      <button class="industry-btn">新能源车</button>
+      <button class="industry-btn">光伏储能</button>
+      <button class="industry-btn">机器人</button>
+      <button class="industry-btn">低空经济</button>
+    </div>
+
+    <!-- Tab: 4 Views -->
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="treemap">Treemap 规模</button>
+      <button class="tab-btn" data-tab="graph">关系网络</button>
+      <button class="tab-btn" data-tab="sankey">Sankey 流向</button>
+      <button class="tab-btn" data-tab="causal">因果传导</button>
+    </div>
+
+    <!-- Main Layout: 3 Columns -->
+    <div style="display:flex; gap:16px; height: calc(100vh - 280px); min-height: 600px;">
+      <!-- Left: Tree Nav -->
+      <div class="card" style="width:280px; flex-shrink:0; overflow-y:auto;">
+        <div class="card-title" style="font-size:15px;">AI算力产业树</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:8px;">四层结构 · L1→L4</div>
+        <div class="tree-item active tree-level-1">📁 AI算力 <span style="margin-left:auto; font-size:10px; color:var(--text-secondary);">40赛道</span></div>
+        <div class="tree-item tree-level-2">├─ L1 原材料与资源</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 硅料与晶圆</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 电子特气</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 光刻胶</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;└─ 靶材与CMP材料</div>
+        <div class="tree-item tree-level-2">├─ L2 设备与零部件</div>
+        <div class="tree-item tree-level-3 active">&nbsp;&nbsp;├─ HBM存储 <span class="tag tag-purple">🔥高热</span></div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ CoWoS封装</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 光模块/CPO</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 光刻机</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;└─ EDA工具</div>
+        <div class="tree-item tree-level-2">├─ L3 核心产品与集成</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ AI GPU</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ AI服务器</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 晶圆代工</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;└─ 芯片设计IP</div>
+        <div class="tree-item tree-level-2">└─ L4 终端应用与服务</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 云计算</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ AI Agent</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;├─ 自动驾驶</div>
+        <div class="tree-item tree-level-3">&nbsp;&nbsp;└─ 大模型服务</div>
+      </div>
+
+      <!-- Middle: Chart Area -->
+      <div class="card" style="flex:1.2; display:flex; flex-direction:column;">
+        <div class="flex-between" style="margin-bottom:12px;">
+          <div class="card-title" style="font-size:15px; margin:0;">HBM赛道 · 产业链全景</div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="tag tag-green">置信度: 高</span>
+            <span class="tag tag-blue">来源: 5-8条</span>
+          </div>
+        </div>
+        <div id="chart-main" class="chart-container" style="flex:1;"></div>
+      </div>
+
+      <!-- Right: Detail Cards -->
+      <div style="width:320px; flex-shrink:0; overflow-y:auto;">
+        <!-- Stat Grid -->
+        <div class="stat-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <div class="stat-card">
+            <div class="stat-value">$42B</div>
+            <div class="stat-label">TAM 2026</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">68%</div>
+            <div class="stat-label">CAGR 23-26</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">52%</div>
+            <div class="stat-label">毛利率</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">3</div>
+            <div class="stat-label">寡头玩家</div>
+          </div>
+        </div>
+
+        <!-- Detail Cards -->
+        <div class="info-card">
+          <div class="info-card-title">📍 定位</div>
+          <div class="info-card-body">HBM（高带宽存储）是AI GPU的瓶颈组件，位于AI算力产业链L2层。SK海力士/三星/美光三家垄断，技术壁垒极高。</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">📊 竞争格局</div>
+          <div class="info-card-body">
+            <div style="margin-bottom:4px;"><strong>SK海力士</strong> <span class="badge badge-high">HBM3E首发</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:52%;"></div></div>
+            <div style="margin:4px 0;"><strong>三星</strong> <span class="badge badge-mid">追赶中</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:38%;"></div></div>
+            <div style="margin:4px 0;"><strong>美光</strong> <span class="badge badge-low">HBM3E</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:10%;"></div></div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">🔗 上下游关系</div>
+          <div class="info-card-body">
+            <div><strong>上游:</strong> 硅晶圆 → 存储颗粒 → TSV工艺</div>
+            <div style="margin-top:4px;"><strong>下游:</strong> NVIDIA H100/B200 · AMD MI300 · 谷歌TPU</div>
+            <div style="margin-top:4px;"><strong>替代:</strong> GDDR6X (低端) · CXL (远期)</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">📈 关键趋势</div>
+          <div class="info-card-body">
+            <div>• HBM3E → HBM4 技术迭代加速</div>
+            <div>• 2026年HBM占GPU成本比重升至35%</div>
+            <div>• 中国长鑫/长江存储追赶（2-3年差距）</div>
+            <div>• 3D堆叠层数从12层向16层演进</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">🏢 核心标的</div>
+          <div class="info-card-body">
+            <table class="data-table" style="font-size:11px;">
+              <tr><td><strong>SK海力士</strong></td><td>000660.KS</td><td class="tag tag-green">Core</td></tr>
+              <tr><td><strong>三星电子</strong></td><td>005930.KS</td><td class="tag tag-blue">Tactical</td></tr>
+              <tr><td><strong>美光科技</strong></td><td>MU</td><td class="tag tag-green">Core</td></tr>
+              <tr><td><strong>通富微电</strong></td><td>002156.SZ</td><td class="tag tag-yellow">Watch</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    renderChart(this.dataset.tab);
+  });
+});
+
+// Industry switcher
+document.querySelectorAll('.industry-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.industry-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Tree navigation
+document.querySelectorAll('.tree-item').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Chart rendering
+function renderChart(type) {
+  const dom = document.getElementById('chart-main');
+  const chart = echarts.init(dom);
+  chart.dispose();
+  const newChart = echarts.init(dom);
+
+  if (type === 'treemap' || !type) {
+    // Treemap data for AI Computing industry
+    const treemapData = [
+      {
+        name: 'L1 原材料', value: 80, children: [
+          { name: '硅晶圆', value: 25 },
+          { name: '电子特气', value: 18 },
+          { name: '光刻胶', value: 15 },
+          { name: '靶材', value: 12 },
+          { name: 'CMP材料', value: 10 }
+        ]
+      },
+      {
+        name: 'L2 设备零部件', value: 200, children: [
+          { name: 'HBM存储', value: 55 },
+          { name: 'CoWoS封装', value: 45 },
+          { name: '光模块/CPO', value: 40 },
+          { name: '光刻机', value: 35 },
+          { name: 'EDA工具', value: 25 }
+        ]
+      },
+      {
+        name: 'L3 核心产品', value: 350, children: [
+          { name: 'AI GPU', value: 120 },
+          { name: 'AI服务器', value: 90 },
+          { name: '晶圆代工', value: 80 },
+          { name: '芯片IP', value: 60 }
+        ]
+      },
+      {
+        name: 'L4 终端应用', value: 500, children: [
+          { name: '云计算', value: 180 },
+          { name: 'AI Agent', value: 120 },
+          { name: '自动驾驶', value: 100 },
+          { name: '大模型', value: 100 }
+        ]
+      }
+    ];
+    newChart.setOption({
+      tooltip: { formatter: '{b}: ${c}B TAM' },
+      series: [{
+        type: 'treemap', data: treemapData,
+        label: { show: true, formatter: '{b}\n${c}B', fontSize: 11 },
+        itemStyle: { borderColor: '#fff', borderWidth: 2, gapWidth: 2 },
+        levels: [
+          { itemStyle: { borderColor: '#fff', borderWidth: 4, gapWidth: 4 } },
+          { colorSaturation: [0.3, 0.6], itemStyle: { borderColorSaturation: 0.6, gapWidth: 2 } }
+        ],
+        color: ['#533afd', '#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd']
+      }]
+    });
+  } else if (type === 'graph') {
+    // Relationship Graph
+    const nodes = [
+      { id: '0', name: 'HBM', symbolSize: 60, category: 0 },
+      { id: '1', name: 'SK海力士', symbolSize: 40, category: 1 },
+      { id: '2', name: '三星', symbolSize: 40, category: 1 },
+      { id: '3', name: '美光', symbolSize: 40, category: 1 },
+      { id: '4', name: 'NVIDIA', symbolSize: 50, category: 2 },
+      { id: '5', name: 'AMD', symbolSize: 35, category: 2 },
+      { id: '6', name: 'TSMC', symbolSize: 45, category: 3 },
+      { id: '7', name: 'CoWoS', symbolSize: 35, category: 3 },
+      { id: '8', name: 'AI GPU', symbolSize: 45, category: 2 },
+      { id: '9', name: '硅晶圆', symbolSize: 30, category: 4 },
+      { id: '10', name: '电子特气', symbolSize: 30, category: 4 },
+      { id: '11', name: '通富微电', symbolSize: 25, category: 1 },
+      { id: '12', name: '长鑫存储', symbolSize: 25, category: 1 }
+    ];
+    const links = [
+      { source: '1', target: '0', name: 'produces' },
+      { source: '2', target: '0', name: 'produces' },
+      { source: '3', target: '0', name: 'produces' },
+      { source: '0', target: '4', name: 'supplies_to' },
+      { source: '0', target: '5', name: 'supplies_to' },
+      { source: '6', target: '0', name: 'produces' },
+      { source: '7', target: '0', name: 'depends_on' },
+      { source: '0', target: '8', name: 'leads_to' },
+      { source: '9', target: '0', name: 'supplies_to' },
+      { source: '10', target: '0', name: 'supplies_to' },
+      { source: '11', target: '0', name: 'competes_with' },
+      { source: '12', target: '0', name: 'competes_with' }
+    ];
+    const categories = [
+      { name: '赛道' }, { name: '公司' }, { name: '下游' }, { name: '制造' }, { name: '上游' }
+    ];
+    newChart.setOption({
+      tooltip: { formatter: '{b}' },
+      legend: { data: categories.map(c => c.name), bottom: 10, textStyle: { fontSize: 11 } },
+      series: [{
+        type: 'graph', layout: 'force', data: nodes, links: links, categories: categories,
+        roam: true, label: { show: true, position: 'right', fontSize: 11 },
+        force: { repulsion: 300, edgeLength: 100 },
+        lineStyle: { color: 'source', curveness: 0.3 },
+        emphasis: { focus: 'adjacency', lineStyle: { width: 4 } }
+      }]
+    });
+  } else if (type === 'sankey') {
+    // Sankey flow
+    newChart.setOption({
+      tooltip: { trigger: 'item', triggerOn: 'mousemove' },
+      series: [{
+        type: 'sankey', layout: 'none', emphasis: { focus: 'adjacency' },
+        data: [
+          { name: '硅晶圆' }, { name: '电子特气' }, { name: '存储颗粒' },
+          { name: 'TSV工艺' }, { name: 'HBM成品' }, { name: 'CoWoS封装' },
+          { name: 'AI GPU' }, { name: 'AI服务器' }, { name: '云计算' }, { name: '大模型' }
+        ],
+        links: [
+          { source: '硅晶圆', target: '存储颗粒', value: 10 },
+          { source: '电子特气', target: '存储颗粒', value: 8 },
+          { source: '存储颗粒', target: 'TSV工艺', value: 15 },
+          { source: 'TSV工艺', target: 'HBM成品', value: 15 },
+          { source: 'HBM成品', target: 'CoWoS封装', value: 12 },
+          { source: 'CoWoS封装', target: 'AI GPU', value: 12 },
+          { source: 'AI GPU', target: 'AI服务器', value: 10 },
+          { source: 'AI服务器', target: '云计算', value: 8 },
+          { source: '云计算', target: '大模型', value: 6 }
+        ],
+        lineStyle: { color: 'gradient', curveness: 0.5 },
+        itemStyle: { color: '#533afd', borderColor: '#533afd' },
+        label: { color: '#1a1f36', fontSize: 11, fontFamily: 'PingFang SC' }
+      }]
+    });
+  } else if (type === 'causal') {
+    // Causal传导 Graph
+    newChart.setOption({
+      tooltip: { formatter: '{b}' },
+      series: [{
+        type: 'graph', layout: 'circular', symbolSize: 50, roam: true,
+        label: { show: true, fontSize: 11 },
+        edgeSymbol: ['circle', 'arrow'], edgeSymbolSize: [4, 10],
+        data: [
+          { name: 'HBM涨价', itemStyle: { color: '#dc2626' } },
+          { name: 'GPU成本↑', itemStyle: { color: '#f59e0b' } },
+          { name: 'AI服务器价↑', itemStyle: { color: '#f59e0b' } },
+          { name: '云厂商 capex↑', itemStyle: { color: '#3b82f6' } },
+          { name: '国产替代加速', itemStyle: { color: '#16a34a' } },
+          { name: '封测厂受益', itemStyle: { color: '#16a34a' } },
+          { name: '存储周期反转', itemStyle: { color: '#8b5cf6' } }
+        ],
+        links: [
+          { source: 'HBM涨价', target: 'GPU成本↑', lineStyle: { color: '#dc2626', type: 'dashed', width: 2 } },
+          { source: 'GPU成本↑', target: 'AI服务器价↑', lineStyle: { color: '#f59e0b', type: 'dashed', width: 2 } },
+          { source: 'AI服务器价↑', target: '云厂商 capex↑', lineStyle: { color: '#3b82f6', type: 'dashed', width: 2 } },
+          { source: 'HBM涨价', target: '国产替代加速', lineStyle: { color: '#16a34a', type: 'dashed', width: 2 } },
+          { source: 'HBM涨价', target: '存储周期反转', lineStyle: { color: '#8b5cf6', type: 'dashed', width: 2 } },
+          { source: '国产替代加速', target: '封测厂受益', lineStyle: { color: '#16a34a', type: 'dashed', width: 2 } }
+        ],
+        lineStyle: { opacity: 0.9, width: 2, curveness: 0.3 }
+      }]
+    });
+  }
+}
+
+// Initialize treemap on load
+setTimeout(() => renderChart('treemap'), 100);
+
+// Resize handler
+window.addEventListener('resize', () => {
+  const chart = echarts.getInstanceByDom(document.getElementById('chart-main'));
+  if (chart) chart.resize();
+});
+</script>
+
+
+</body>
+</html>

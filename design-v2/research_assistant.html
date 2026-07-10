@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root { --primary:#1D1D1F; --secondary:#86868B; --accent:#0071E3; --bg:#F5F5F7; --card:#FFFFFF; --border:#E5E5EA; --light:#F2F2F7; --bullish:#34C759; --bearish:#FF3B30; --neutral:#8E8E93; --warning:#FF9500; --purple:#5856D6; --teal:#5AC8FA; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--primary); margin:0; }
+  .card { background:var(--card); border-radius:12px; border:1px solid var(--border); padding:24px; transition:all 0.3s ease; }
+  .card-hover:hover { box-shadow:0 8px 24px rgba(0,0,0,0.12); transform:translateY(-2px); }
+  .section-title { font-size:22px; font-weight:600; line-height:1.3; letter-spacing:-0.01em; color:var(--primary); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .btn-primary { background:var(--accent); color:#fff; border-radius:8px; padding:10px 20px; font-size:14px; font-weight:500; border:none; cursor:pointer; transition:opacity 0.2s; }
+  .btn-primary:hover { opacity:0.9; }
+  .btn-secondary { background:var(--light); color:var(--primary); border:1px solid var(--border); border-radius:8px; padding:10px 20px; font-size:14px; font-weight:500; cursor:pointer; transition:all 0.2s; }
+  .btn-secondary:hover { background:var(--border); }
+  .badge { height:20px; padding:0 8px; border-radius:10px; font-size:11px; font-weight:500; display:inline-flex; align-items:center; }
+  .badge-primary { background:var(--accent); color:#fff; }
+  .badge-success { background:var(--bullish); color:#fff; }
+  .badge-warning { background:var(--warning); color:#fff; }
+  .badge-danger { background:var(--bearish); color:#fff; }
+  .badge-neutral { background:var(--light); color:var(--primary); }
+  .tab-bar { display:flex; gap:8px; border-bottom:1px solid var(--border); padding:0 32px; background:#fff; position:sticky; top:56px; z-index:90; }
+  .tab-item { padding:14px 20px; font-size:14px; font-weight:500; color:var(--secondary); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; background:transparent; border-top:none; border-left:none; border-right:none; }
+  .tab-item.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .tab-item:hover { color:var(--primary); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+  .dim-card { padding:20px; border-radius:12px; border:1px solid var(--border); background:#fff; transition:all 0.3s; }
+  .dim-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.08); transform:translateY(-2px); }
+  .hotspot-item { border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px; transition:all 0.3s; cursor:pointer; }
+  .hotspot-item:hover { border-color:var(--accent); box-shadow:0 4px 12px rgba(0,113,227,0.08); }
+  .hotspot-detail { max-height:0; overflow:hidden; transition:max-height 0.4s ease, opacity 0.3s ease; opacity:0; }
+  .hotspot-detail.open { max-height:600px; opacity:1; }
+  .check-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .check-item:last-child { border-bottom:none; }
+  .check-box { width:18px; height:18px; border:2px solid var(--border); border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; flex-shrink:0; }
+  .check-box.checked { background:var(--accent); border-color:var(--accent); }
+  .chart-container { width:100%; height:300px; }
+  .stage-card { border:1px solid var(--border); border-radius:12px; margin-bottom:12px; overflow:hidden; }
+  .stage-header { padding:16px 20px; background:var(--light); cursor:pointer; display:flex; align-items:center; justify-content:space-between; font-weight:600; font-size:15px; }
+  .stage-content { max-height:0; overflow:hidden; transition:max-height 0.5s ease, opacity 0.3s ease; opacity:0; padding:0 20px; }
+  .stage-content.open { max-height:1200px; opacity:1; padding:20px; }
+  .concept-section { padding:16px; border-bottom:1px solid var(--border); }
+  .concept-section:last-child { border-bottom:none; }
+  .concept-section h4 { font-size:15px; font-weight:600; margin:0 0 8px; color:var(--accent); }
+  .search-box { height:48px; border-radius:8px; border:1px solid transparent; background:var(--light); padding:0 16px; font-size:14px; width:100%; outline:none; transition:all 0.2s; }
+  .search-box:focus { background:#fff; border-color:var(--accent); box-shadow:0 0 0 3px rgba(0,113,227,0.15); }
+  .stock-input { height:48px; border-radius:8px; border:1px solid var(--border); background:#fff; padding:0 16px; font-size:16px; font-weight:600; width:200px; text-transform:uppercase; outline:none; transition:all 0.2s; }
+  .stock-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(0,113,227,0.15); }
+  .progress-ring { width:80px; height:80px; }
+  .progress-ring-bg { fill:none; stroke:var(--light); stroke-width:6; }
+  .progress-ring-fill { fill:none; stroke:var(--accent); stroke-width:6; stroke-linecap:round; transform:rotate(-90deg); transform-origin:50% 50%; transition:stroke-dashoffset 1s ease; }
+  /* AI助手布局 */
+  .ai-layout { display: flex; gap: 0; height: calc(100vh - 56px - 50px - 64px); min-height: 600px; }
+  .skill-panel { width: 280px; flex-shrink: 0; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+  .chat-area { flex: 1; display: flex; flex-direction: column; background: var(--bg); overflow: hidden; }
+
+  /* 技能面板 */
+  .skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .skill-header h3 { font-size: 16px; font-weight: 600; margin: 0; }
+  .skill-count { font-size: 12px; color: var(--secondary); background: var(--light); padding: 4px 10px; border-radius: 12px; }
+  .skill-list { flex: 1; overflow-y: auto; }
+  .skill-item { border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; background: #fff; }
+  .skill-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  .skill-item.imported { border-color: var(--accent); }
+  .skill-item.not-imported { border-color: var(--border); opacity: 0.7; }
+  .skill-item.not-imported:hover { opacity: 1; }
+  .skill-item.imported .skill-icon { filter: none; }
+  .skill-item.not-imported .skill-icon { filter: grayscale(0.6); }
+  .skill-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .skill-icon { font-size: 16px; }
+  .skill-name { font-size: 13px; font-weight: 600; flex: 1; }
+  .skill-status { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+  .skill-status.enabled { background: var(--bullish); color: #fff; }
+  .skill-status.import { background: var(--light); color: var(--secondary); }
+  .skill-desc { font-size: 11px; color: var(--secondary); line-height: 1.4; }
+  .btn-import-custom { margin-top: 12px; padding: 10px; border: 1px dashed var(--border); border-radius: 10px; background: var(--light); color: var(--secondary); font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; }
+  .btn-import-custom:hover { background: var(--border); color: var(--primary); }
+
+  /* 聊天消息区域 */
+  .chat-messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  .chat-messages::-webkit-scrollbar { width: 6px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* 消息气泡 */
+  .message { max-width: 85%; display: flex; gap: 10px; animation: fadeInUp 0.35s ease; }
+  .message.user { align-self: flex-end; flex-direction: row-reverse; }
+  .message.ai { align-self: flex-start; }
+  .message-bubble { padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; word-break: break-word; }
+  .message.user .message-bubble { background: var(--accent); color: #fff; }
+  .message.ai .message-bubble { background: #fff; border: 1px solid var(--border); color: var(--primary); }
+
+  /* 头像 */
+  .message-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .message.user .message-avatar { background: var(--bullish); color: #fff; position: relative; }
+  .message.user .message-avatar::after { content: ''; position: absolute; bottom: 0; right: 0; width: 8px; height: 8px; background: var(--bullish); border: 2px solid var(--bg); border-radius: 50%; }
+  .message.ai .message-avatar { background: linear-gradient(135deg, var(--accent), var(--teal)); border-radius: 8px; color: #fff; }
+
+  /* 技能引用 */
+  .skill-citation { display: inline-flex; align-items: center; gap: 4px; background: #F5F5F7; padding: 4px 10px; border-radius: 8px; font-size: 11px; color: var(--secondary); margin-bottom: 6px; width: fit-content; }
+
+  /* 输入区域 */
+  .chat-input-area { background: #fff; border-top: 1px solid var(--border); padding: 16px 24px; }
+  .quick-tags { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .quick-tag { padding: 6px 12px; background: var(--light); border-radius: 16px; font-size: 12px; color: var(--primary); cursor: pointer; border: 1px solid transparent; transition: all 0.2s; user-select: none; }
+  .quick-tag:hover { background: var(--accent); color: #fff; }
+  .input-wrapper { display: flex; gap: 10px; align-items: center; position: relative; }
+  .at-btn { width: 36px; height: 48px; border-radius: 8px; border: 1px solid var(--border); background: var(--light); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--secondary); transition: all 0.2s; flex-shrink: 0; }
+  .at-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .chat-input { flex: 1; height: 48px; border-radius: 8px; border: 1px solid transparent; background: var(--light); padding: 0 16px; font-size: 14px; outline: none; transition: all 0.2s; }
+  .chat-input:focus { background: #fff; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .send-btn { width: 48px; height: 48px; border-radius: 8px; background: var(--accent); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; transition: all 0.2s; flex-shrink: 0; }
+  .send-btn:hover { transform: scale(1.05); opacity: 0.9; }
+  .send-btn:active { transform: scale(0.95); }
+
+  /* @菜单 */
+  .at-menu { position: absolute; bottom: 60px; left: 0; background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); padding: 8px; min-width: 180px; display: none; z-index: 100; }
+  .at-menu.show { display: block; animation: fadeInUp 0.2s ease; }
+  .at-menu-item { padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+  .at-menu-item:hover { background: var(--light); }
+
+  /* 动画 */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* 移动端技能面板抽屉 */
+  .skill-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 150; }
+  .skill-drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-radius: 20px 20px 0 0; padding: 20px; max-height: 70vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; z-index: 160; }
+  .skill-drawer.show { transform: translateY(0); }
+  .skill-drawer-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+  .skill-drawer-toggle { display: none; margin-bottom: 10px; }
+
+  @media (max-width:768px) {
+    .card { padding: 16px; }
+    .section-title { font-size: 18px; }
+    .tab-bar { padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 14px; white-space: nowrap; }
+    .ai-layout { height: auto; min-height: calc(100vh - 120px); }
+    .skill-panel { display: none; }
+    .skill-drawer-toggle { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--light); border-radius: 8px; font-size: 13px; color: var(--primary); cursor: pointer; border: 1px solid var(--border); width: fit-content; }
+    .message { max-width: 92%; }
+  }
+</style>
+</head>
+<body>
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">投研助手</span>
+  </div>
+</div>
+
+
+<!-- 顶部导航 -->
+<nav style="height:56px; background:#fff; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 32px;">
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div style="width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;">AI</div>
+    <span style="font-size:16px;font-weight:600;">AI投研助手</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:16px;">
+    <div style="display:flex;align-items:center;gap:8px;background:var(--light);padding:8px 14px;border-radius:8px;min-width:240px;">
+      <i data-lucide="search" style="width:16px;height:16px;color:var(--secondary);"></i>
+      <input type="text" placeholder="搜索股票、概念..." style="border:none;background:transparent;outline:none;font-size:14px;color:var(--primary);width:100%;">
+    </div>
+    <span style="font-size:14px;color:var(--secondary);">2025-07-09</span>
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;cursor:pointer;"><i data-lucide="bell" style="width:18px;height:18px;color:var(--secondary);"></i></div>
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">U</div>
+  </div>
+</nav>
+
+<!-- Tab 导航 -->
+<div class="tab-bar">
+  <button class="tab-item active" onclick="switchTab('ai')">AI助手</button>
+  <button class="tab-item" onclick="switchTab('brief')">每日简报</button>
+  <button class="tab-item" onclick="switchTab('knowledge')">知识科普</button>
+  <button class="tab-item" onclick="switchTab('deep')">深度分析</button>
+  <button class="tab-item" onclick="switchTab('kb')">知识库</button>
+</div>
+
+<!-- 主内容 -->
+<main style="max-width:1200px; margin:0 auto; padding:32px 32px 64px;">
+
+<!-- ==================== AI助手 Tab ==================== -->
+<div id="tab-ai" class="tab-panel active">
+  <div class="ai-layout">
+    <!-- 左侧技能面板 -->
+    <aside class="skill-panel">
+      <div class="skill-header">
+        <h3>技能库</h3>
+        <span class="skill-count">已导入 4/7</span>
+      </div>
+      <div class="skill-list" id="skill-list">
+        <!-- 已导入技能 -->
+        <div class="skill-item imported" data-skill="financial">
+          <div class="skill-item-header">
+            <span class="skill-icon">📊</span>
+            <span class="skill-name">财报分析</span>
+            <span class="skill-status enabled">已启用</span>
+          </div>
+          <div class="skill-desc">深度拆解三大报表，识别财务健康度</div>
+        </div>
+        <div class="skill-item imported" data-skill="factor">
+          <div class="skill-item-header">
+            <span class="skill-icon">📈</span>
+            <span class="skill-name">五因子评分</span>
+            <span class="skill-status enabled">已启用</span>
+          </div>
+          <div class="skill-desc">商业模式/财务/成长/风险/估值五维评分</div>
+        </div>
+        <div class="skill-item imported" data-skill="valuation">
+          <div class="skill-item-header">
+            <span class="skill-icon">🔍</span>
+            <span class="skill-name">估值检查</span>
+            <span class="skill-status enabled">已启用</span>
+          </div>
+          <div class="skill-desc">PE/PB/PEG/PS全维度估值对比</div>
+        </div>
+        <div class="skill-item imported" data-skill="trend">
+          <div class="skill-item-header">
+            <span class="skill-icon">📉</span>
+            <span class="skill-name">趋势分析</span>
+            <span class="skill-status enabled">已启用</span>
+          </div>
+          <div class="skill-desc">技术信号与价格形态识别</div>
+        </div>
+        <!-- 未导入技能 -->
+        <div class="skill-item not-imported" data-skill="sentiment" onclick="importSkill(this)">
+          <div class="skill-item-header">
+            <span class="skill-icon">🌐</span>
+            <span class="skill-name">舆情监测</span>
+            <span class="skill-status import">点击导入</span>
+          </div>
+          <div class="skill-desc">实时新闻与情绪追踪</div>
+        </div>
+        <div class="skill-item not-imported" data-skill="report" onclick="importSkill(this)">
+          <div class="skill-item-header">
+            <span class="skill-icon">📑</span>
+            <span class="skill-name">研报速读</span>
+            <span class="skill-status import">点击导入</span>
+          </div>
+          <div class="skill-desc">机构观点智能汇总</div>
+        </div>
+        <div class="skill-item not-imported" data-skill="announcement" onclick="importSkill(this)">
+          <div class="skill-item-header">
+            <span class="skill-icon">🔔</span>
+            <span class="skill-name">公告追踪</span>
+            <span class="skill-status import">点击导入</span>
+          </div>
+          <div class="skill-desc">重大事件自动提醒</div>
+        </div>
+      </div>
+      <button class="btn-import-custom" onclick="alert('自定义技能导入功能开发中...')">
+        <i data-lucide="plus" style="width:16px;height:16px;"></i> 导入自定义技能
+      </button>
+    </aside>
+
+    <!-- 右侧聊天区域 -->
+    <div class="chat-area">
+      <div class="chat-messages" id="chat-messages">
+        <!-- 欢迎消息 -->
+        <div class="message ai">
+          <div class="message-avatar">AI</div>
+          <div>
+            <div class="message-bubble">
+              <p style="margin:0 0 12px;">你好！我是AI投研助手。你可以问我任何关于投资研究的问题。我已经为你导入了财报分析、五因子评分、估值检查、趋势分析等技能。</p>
+              <p style="margin:0 0 8px;">试着问我：</p>
+              <ul style="margin:0; padding-left:18px; line-height:1.8;">
+                <li>"分析一下英伟达(NVDA)的投资价值"</li>
+                <li>"最近半导体板块的走势如何？"</li>
+                <li>"帮我看看贵州茅台的财报数据"</li>
+                <li>"AI算力产业链有哪些核心公司？"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Round 1: NVDA -->
+        <div class="message user">
+          <div class="message-avatar">U</div>
+          <div class="message-bubble">帮我分析一下NVDA的投资价值</div>
+        </div>
+        <div class="message ai">
+          <div class="message-avatar">AI</div>
+          <div>
+            <div class="skill-citation"><i data-lucide="zap" style="width:12px;height:12px;"></i> 正在调用：五因子评分 Skill</div>
+            <div class="message-bubble">
+              <p style="margin:0 0 10px;"><strong>五因子评分摘要：</strong></p>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><span style="font-size:12px;color:var(--secondary);">F1 商业模式</span><div style="font-size:16px;font-weight:600;color:var(--accent);">92/100</div></div>
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><span style="font-size:12px;color:var(--secondary);">F2 财务健康</span><div style="font-size:16px;font-weight:600;color:var(--accent);">88/100</div></div>
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><span style="font-size:12px;color:var(--secondary);">F3 成长前景</span><div style="font-size:16px;font-weight:600;color:var(--bullish);">95/100</div></div>
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><span style="font-size:12px;color:var(--secondary);">F4 风险水平</span><div style="font-size:16px;font-weight:600;color:var(--warning);">65/100</div></div>
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;grid-column:1/-1;"><span style="font-size:12px;color:var(--secondary);">F5 估值水平</span><div style="font-size:16px;font-weight:600;color:var(--bearish);">55/100</div></div>
+              </div>
+              <p style="margin:0 0 8px;"><strong>综合评分：79.4</strong> — 优质标的，估值偏高</p>
+            </div>
+            <div class="skill-citation" style="margin-top:8px;"><i data-lucide="zap" style="width:12px;height:12px;"></i> 正在调用：估值检查 Skill</div>
+            <div class="message-bubble" style="margin-top:8px;">
+              <p style="margin:0 0 10px;"><strong>估值检查数据：</strong></p>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;">
+                <div style="text-align:center;"><div style="font-size:20px;font-weight:600;color:var(--primary);">65.2x</div><div style="font-size:11px;color:var(--secondary);">PE-TTM</div></div>
+                <div style="text-align:center;"><div style="font-size:20px;font-weight:600;color:var(--primary);">52.1x</div><div style="font-size:11px;color:var(--secondary);">Forward PE</div></div>
+                <div style="text-align:center;"><div style="font-size:20px;font-weight:600;color:var(--primary);">1.85</div><div style="font-size:11px;color:var(--secondary);">PEG</div></div>
+              </div>
+              <p style="margin:0 0 8px;"><strong>综合结论：</strong><span style="color:var(--accent);">观望</span></p>
+              <p style="margin:0;font-size:13px;color:var(--secondary);">核心逻辑极强，但当前PE处于历史85%分位，建议等待回调至PE 50x以下再分批建仓。风险：AI capex增速放缓、地缘政治限制、竞争加剧。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Round 2: 半导体 -->
+        <div class="message user">
+          <div class="message-avatar">U</div>
+          <div class="message-bubble">半导体行业最近有什么变化？</div>
+        </div>
+        <div class="message ai">
+          <div class="message-avatar">AI</div>
+          <div>
+            <div class="skill-citation"><i data-lucide="zap" style="width:12px;height:12px;"></i> 正在调用：舆情监测 Skill</div>
+            <div class="message-bubble">
+              <p style="margin:0 0 10px;"><strong>近期新闻摘要：</strong></p>
+              <ul style="margin:0;padding-left:18px;line-height:1.7;font-size:13px;">
+                <li>台积电CoWoS产能持续紧缺，扩产计划推迟至2025Q1</li>
+                <li>美国考虑进一步收紧对华AI芯片出口管制</li>
+                <li>SK海力士HBM3E良率突破85%，产能爬坡加速</li>
+                <li>英伟达Blackwell架构B100/B200开始出货，客户包括微软、谷歌、Meta</li>
+                <li>国内半导体设备厂商订单同比+42%，国产替代加速</li>
+              </ul>
+            </div>
+            <div class="skill-citation" style="margin-top:8px;"><i data-lucide="zap" style="width:12px;height:12px;"></i> 正在调用：研报速读 Skill</div>
+            <div class="message-bubble" style="margin-top:8px;">
+              <p style="margin:0 0 10px;"><strong>机构观点汇总：</strong></p>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="padding:10px;background:var(--light);border-radius:8px;">
+                  <div style="font-size:12px;font-weight:600;color:var(--accent);">高盛 · 超配</div>
+                  <div style="font-size:12px;color:var(--secondary);margin-top:4px;">AI基础设施投资周期仍处于早期，半导体板块2025年EPS增速有望达35%</div>
+                </div>
+                <div style="padding:10px;background:var(--light);border-radius:8px;">
+                  <div style="font-size:12px;font-weight:600;color:var(--bullish);">摩根士丹利 · 增持</div>
+                  <div style="font-size:12px;color:var(--secondary);margin-top:4px;">存储芯片价格触底回升，HBM需求持续强劲，看好SK海力士、美光</div>
+                </div>
+                <div style="padding:10px;background:var(--light);border-radius:8px;">
+                  <div style="font-size:12px;font-weight:600;color:var(--warning);">瑞银 · 中性</div>
+                  <div style="font-size:12px;color:var(--secondary);margin-top:4px;">估值已充分反映乐观预期，建议 selective exposure，关注具有定价权的公司</div>
+                </div>
+              </div>
+              <p style="margin:12px 0 0;"><strong>行业趋势判断：</strong>AI算力需求是核心驱动力，存储（HBM）和先进封装（CoWoS）是瓶颈环节。短期关注出口管制风险，中长期看好国产替代和AI应用扩散。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Round 3: 贵州茅台 -->
+        <div class="message user">
+          <div class="message-avatar">U</div>
+          <div class="message-bubble">我持仓的贵州茅台，你看怎么样？</div>
+        </div>
+        <div class="message ai">
+          <div class="message-avatar">AI</div>
+          <div>
+            <div class="skill-citation"><i data-lucide="zap" style="width:12px;height:12px;"></i> 正在调用：财报分析 Skill</div>
+            <div class="message-bubble">
+              <p style="margin:0 0 10px;"><strong>最新财报亮点（2025Q1）：</strong></p>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><div style="font-size:12px;color:var(--secondary);">营收</div><div style="font-size:15px;font-weight:600;">¥457.8亿</div><div style="font-size:11px;color:var(--bullish);">+14.6% YoY</div></div>
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><div style="font-size:12px;color:var(--secondary);">净利润</div><div style="font-size:15px;font-weight:600;">¥231.6亿</div><div style="font-size:11px;color:var(--bullish);">+15.8% YoY</div></div>
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><div style="font-size:12px;color:var(--secondary);">毛利率</div><div style="font-size:15px;font-weight:600;">92.1%</div><div style="font-size:11px;color:var(--bullish);">+0.3pp</div></div>
+                <div style="background:var(--light);padding:8px 12px;border-radius:8px;"><div style="font-size:12px;color:var(--secondary);">ROE</div><div style="font-size:15px;font-weight:600;">28.4%</div><div style="font-size:11px;color:var(--bullish);">+1.2pp</div></div>
+              </div>
+              <p style="margin:0;font-size:13px;color:var(--secondary);">直销占比提升至46%，i茅台平台贡献稳定。合同负债环比增加23亿，预收款健康。</p>
+            </div>
+            <div class="skill-citation" style="margin-top:8px;"><i data-lucide="zap" style="width:12px;height:12px;"></i> 正在调用：估值检查 Skill</div>
+            <div class="message-bubble" style="margin-top:8px;">
+              <p style="margin:0 0 10px;"><strong>估值百分位：</strong></p>
+              <div style="display:flex;gap:16px;align-items:center;margin-bottom:12px;">
+                <div style="flex:1;">
+                  <div style="height:8px;background:var(--light);border-radius:4px;overflow:hidden;">
+                    <div style="height:100%;width:72%;background:var(--warning);border-radius:4px;"></div>
+                  </div>
+                  <div style="font-size:11px;color:var(--secondary);margin-top:4px;">PE-TTM 28.5x · 历史72%分位</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;">
+                <div style="text-align:center;"><div style="font-size:18px;font-weight:600;">28.5x</div><div style="font-size:11px;color:var(--secondary);">PE-TTM</div></div>
+                <div style="text-align:center;"><div style="font-size:18px;font-weight:600;">8.2x</div><div style="font-size:11px;color:var(--secondary);">PB</div></div>
+                <div style="text-align:center;"><div style="font-size:18px;font-weight:600;">1.85</div><div style="font-size:11px;color:var(--secondary);">PEG</div></div>
+              </div>
+              <p style="margin:0;font-size:13px;color:var(--secondary);">估值处于历史中上水平，PEG约1.85，对于15%增速的白酒龙头而言合理偏贵。</p>
+            </div>
+            <div class="skill-citation" style="margin-top:8px;"><i data-lucide="zap" style="width:12px;height:12px;"></i> 正在调用：趋势分析 Skill</div>
+            <div class="message-bubble" style="margin-top:8px;">
+              <p style="margin:0 0 10px;"><strong>技术信号：</strong></p>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                <span class="badge badge-success">MA20上方</span>
+                <span class="badge badge-success">MACD金叉</span>
+                <span class="badge badge-neutral">RSI 58</span>
+                <span class="badge badge-warning">成交量萎缩</span>
+              </div>
+              <p style="margin:0;font-size:13px;color:var(--secondary);">股价站上年线，短期呈多头排列，但成交量连续5日低于20日均量，上涨动能减弱。</p>
+            </div>
+            <div class="message-bubble" style="margin-top:8px;">
+              <p style="margin:0 0 8px;"><strong>持仓建议：</strong><span style="color:var(--accent);">持有观望</span></p>
+              <p style="margin:0;font-size:13px;color:var(--secondary);line-height:1.7;">基本面稳健，但估值不便宜。你当前持仓可继续持有，建议关注PE 25x以下的加仓机会。若股价跌破MA20（约¥1,420）且放量，建议减仓一半。白酒行业面临消费降级压力，建议仓位不超过组合的10%。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 移动端技能抽屉 -->
+      <div class="skill-drawer-overlay" id="skill-drawer-overlay" onclick="closeSkillDrawer()"></div>
+      <div class="skill-drawer" id="skill-drawer">
+        <div class="skill-drawer-handle"></div>
+        <div class="skill-header"><h3>技能库</h3><span class="skill-count">已导入 4/7</span></div>
+        <div class="skill-list" id="skill-list-mobile"></div>
+      </div>
+      <!-- 输入区域 -->
+      <div class="chat-input-area">
+        <div class="skill-drawer-toggle" onclick="toggleSkillDrawer()">
+          <i data-lucide="layout-grid" style="width:14px;height:14px;"></i> 技能库
+        </div>
+        <div class="quick-tags">
+          <span class="quick-tag" onclick="sendQuickTag('帮我分析一下NVDA的投资价值')">NVDA分析</span>
+          <span class="quick-tag" onclick="sendQuickTag('贵州茅台600519最近怎么样')">贵州茅台</span>
+          <span class="quick-tag" onclick="sendQuickTag('AI算力产业链有哪些核心公司')">AI算力</span>
+          <span class="quick-tag" onclick="sendQuickTag('半导体行业最新趋势')">半导体</span>
+        </div>
+        <div class="input-wrapper" style="position:relative;">
+          <button class="at-btn" onclick="toggleAtMenu()">@</button>
+          <input type="text" class="chat-input" id="chat-input" placeholder="输入股票代码或投资问题..." onkeydown="if(event.key==='Enter')sendMessage()">
+          <button class="send-btn" onclick="sendMessage()">
+            <i data-lucide="arrow-up" style="width:20px;height:20px;"></i>
+          </button>
+          <!-- @菜单 -->
+          <div class="at-menu" id="at-menu">
+            <div class="at-menu-item" onclick="insertAt('@五因子评分')">📈 五因子评分</div>
+            <div class="at-menu-item" onclick="insertAt('@财报分析')">📊 财报分析</div>
+            <div class="at-menu-item" onclick="insertAt('@估值检查')">🔍 估值检查</div>
+            <div class="at-menu-item" onclick="insertAt('@趋势分析')">📉 趋势分析</div>
+            <div class="at-menu-item" onclick="insertAt('@舆情监测')">🌐 舆情监测</div>
+            <div class="at-menu-item" onclick="insertAt('@研报速读')">📑 研报速读</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 每日简报 Tab ==================== -->
+<div id="tab-brief" class="tab-panel">
+
+<!-- 市场一句话 -->
+<section class="card" style="margin-bottom:32px; background:linear-gradient(135deg,#1D1D1F 0%,#2C2C2E 100%); color:#fff; border:none;">
+  <div style="font-size:12px; font-weight:500; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">市场一句话</div>
+  <h1 style="font-size:24px; font-weight:600; line-height:1.4; margin:0; max-width:900px;">美股三大指数集体收涨，科技股领涨，AI芯片持续受追捧</h1>
+  <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:20px;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="trending-up" style="width:16px;height:16px;color:var(--bullish);"></i> 纳斯达克 +1.28%</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="trending-up" style="width:16px;height:16px;color:var(--bullish);"></i> 标普500 +0.84%</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="trending-up" style="width:16px;height:16px;color:var(--bullish);"></i> 道琼斯 +0.56%</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="activity" style="width:16px;height:16px;color:var(--warning);"></i> VIX 14.2</div>
+  </div>
+</section>
+
+<!-- 6大维度 -->
+<section class="card" style="margin-bottom:32px;">
+  <div class="section-title"><i data-lucide="layout-grid" style="width:22px;height:22px;color:var(--accent);"></i> 六大维度</div>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+    <div class="dim-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><i data-lucide="globe" style="width:18px;height:18px;color:var(--accent);"></i><span style="font-size:15px;font-weight:600;">宏观政策</span></div>
+      <div style="font-size:13px;color:var(--secondary);line-height:1.6;">6月CPI回落至3.0%，低于预期3.1%。美联储9月降息概率升至78%，年内或降息2次。</div>
+      <div style="margin-top:8px;"><span class="badge badge-success">利好</span></div>
+    </div>
+    <div class="dim-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><i data-lucide="bar-chart" style="width:18px;height:18px;color:var(--bullish);"></i><span style="font-size:15px;font-weight:600;">市场指数</span></div>
+      <div style="font-size:13px;color:var(--secondary);line-height:1.6;">三大指数集体收涨，纳斯达克突破18,000点。成交量较20日均量放大12%。</div>
+      <div style="margin-top:8px;"><span class="badge badge-success">强势</span></div>
+    </div>
+    <div class="dim-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><i data-lucide="flame" style="width:18px;height:18px;color:var(--bearish);"></i><span style="font-size:15px;font-weight:600;">板块热点</span></div>
+      <div style="font-size:13px;color:var(--secondary);line-height:1.6;">半导体+3.2%、云计算+2.8%、AI应用+4.1%。能源-1.2%、公用事业-0.8%。</div>
+      <div style="margin-top:8px;"><span class="badge badge-warning">分化</span></div>
+    </div>
+    <div class="dim-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><i data-lucide="zap" style="width:18px;height:18px;color:var(--warning);"></i><span style="font-size:15px;font-weight:600;">个股要闻</span></div>
+      <div style="font-size:13px;color:var(--secondary);line-height:1.6;">NVDA涨+4.2%创新高；TSLA交付超预期+5.1%；AAPL获摩根士丹利上调目标价至$273。</div>
+      <div style="margin-top:8px;"><span class="badge badge-success">活跃</span></div>
+    </div>
+    <div class="dim-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><i data-lucide="map" style="width:18px;height:18px;color:var(--purple);"></i><span style="font-size:15px;font-weight:600;">国际市场</span></div>
+      <div style="font-size:13px;color:var(--secondary);line-height:1.6;">欧股普涨，DAX+0.6%；日经225+1.1%创新高；恒生指数+0.4%。</div>
+      <div style="margin-top:8px;"><span class="badge badge-success">联动</span></div>
+    </div>
+    <div class="dim-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><i data-lucide="arrow-left-right" style="width:18px;height:18px;color:var(--teal);"></i><span style="font-size:15px;font-weight:600;">资金流向</span></div>
+      <div style="font-size:13px;color:var(--secondary);line-height:1.6;">北向资金净流入+42.3亿；主力资金流入半导体、流出银行；ETF资金流入科技类。</div>
+      <div style="margin-top:8px;"><span class="badge badge-success">流入</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10个热点 -->
+<section class="card" style="margin-bottom:32px;">
+  <div class="section-title"><i data-lucide="flame" style="width:22px;height:22px;color:var(--bearish);"></i> 十大热点追踪</div>
+  <div class="chart-container" id="hotspot-chart" style="height:300px; margin-bottom:20px;"></div>
+  
+  <!-- 热点1 -->
+  <div class="hotspot-item" onclick="toggleHotspot('hot1')">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="badge badge-primary">1</span>
+        <span style="font-size:15px;font-weight:600;">英伟达H200需求超预期</span>
+        <span class="badge badge-success">高潮</span>
+      </div>
+      <i data-lucide="chevron-down" id="hot1-icon" style="width:16px;height:16px;color:var(--secondary);transition:transform 0.3s;"></i>
+    </div>
+    <div id="hot1" class="hotspot-detail">
+      <div style="padding-top:16px; display:grid; grid-template-columns:repeat(2,1fr); gap:12px;">
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">爆发逻辑</div><div style="font-size:13px;">Blackwell架构产能爬坡顺利，云厂商capex指引上修，H200出货环比增长37%</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">产业链</div><div style="font-size:13px;">GPU设计→台积电代工→CoWoS封装→HBM供应→服务器组装→云数据中心</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">典型公司</div><div style="font-size:13px;">NVDA, TSM, SK海力士, AVGO, DELL, SMCI</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">持续性</div><div style="font-size:13px;">中期趋势（6-12个月）</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">热度判断</div><div style="font-size:13px;">高潮期，市场情绪极度乐观，需警惕预期差</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">风险提示</div><div style="font-size:13px;color:var(--bearish);">估值处于历史高位，任何capex下修都将引发剧烈回调</div></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 热点2 -->
+  <div class="hotspot-item" onclick="toggleHotspot('hot2')">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="badge badge-primary">2</span>
+        <span style="font-size:15px;font-weight:600;">美联储降息预期升温</span>
+        <span class="badge badge-success">发酵</span>
+      </div>
+      <i data-lucide="chevron-down" id="hot2-icon" style="width:16px;height:16px;color:var(--secondary);transition:transform 0.3s;"></i>
+    </div>
+    <div id="hot2" class="hotspot-detail">
+      <div style="padding-top:16px; display:grid; grid-template-columns:repeat(2,1fr); gap:12px;">
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">爆发逻辑</div><div style="font-size:13px;">CPI 3.0%+非农降温，市场押注降息周期开启</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">产业链</div><div style="font-size:13px;">利率→美元→成长股估值→资金轮动</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">典型公司</div><div style="font-size:13px;">QQQ, TLT, GLD, DXY, ARKK</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">持续性</div><div style="font-size:13px;">短期事件（1-3个月）</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">热度判断</div><div style="font-size:13px;">发酵期，预期已部分定价</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">风险提示</div><div style="font-size:13px;color:var(--bearish);">若降息延后或通胀反弹，估值将面临压缩</div></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 热点3 -->
+  <div class="hotspot-item" onclick="toggleHotspot('hot3')">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="badge badge-primary">3</span>
+        <span style="font-size:15px;font-weight:600;">特斯拉Q2交付量超预期</span>
+        <span class="badge badge-success">发酵</span>
+      </div>
+      <i data-lucide="chevron-down" id="hot3-icon" style="width:16px;height:16px;color:var(--secondary);transition:transform 0.3s;"></i>
+    </div>
+    <div id="hot3" class="hotspot-detail">
+      <div style="padding-top:16px; display:grid; grid-template-columns:repeat(2,1fr); gap:12px;">
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">爆发逻辑</div><div style="font-size:13px;">Q2交付44.4万辆，超华尔街预期43.8万，降价策略提振销量</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">产业链</div><div style="font-size:13px;">整车制造→电池供应链→充电网络→自动驾驶软件</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">典型公司</div><div style="font-size:13px;">TSLA, RIVN, LCID, NIO, BYD</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">持续性</div><div style="font-size:13px;">短期事件</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">热度判断</div><div style="font-size:13px;">发酵期，等待Q2财报验证利润率</div></div>
+        <div><div style="font-size:12px;color:var(--secondary);margin-bottom:4px;">风险提示</div><div style="font-size:13px;color:var(--bearish);">价格战压缩毛利率，Robotaxi落地不及预期</div></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 热点4-10 简要展示 -->
+  <div class="hotspot-item">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-primary">4</span>
+      <span style="font-size:15px;font-weight:600;">苹果AI功能推动换机潮</span>
+      <span class="badge badge-neutral">萌芽</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);">Apple Intelligence功能发布，iPhone 16预期升温</span>
+    </div>
+  </div>
+  <div class="hotspot-item">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-primary">5</span>
+      <span style="font-size:15px;font-weight:600;">微软Azure增速放缓隐忧</span>
+      <span class="badge badge-warning">退潮</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);">Azure Q2增速降至31%，低于预期的33%</span>
+    </div>
+  </div>
+  <div class="hotspot-item">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-primary">6</span>
+      <span style="font-size:15px;font-weight:600;">加密货币ETF持续流入</span>
+      <span class="badge badge-success">高潮</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);">IBIT连续15日净流入，ETH ETF审批加速</span>
+    </div>
+  </div>
+  <div class="hotspot-item">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-primary">7</span>
+      <span style="font-size:15px;font-weight:600;">中概股监管担忧</span>
+      <span class="badge badge-neutral">萌芽</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);">PCAOB审查进展停滞，美国国会提出新法案</span>
+    </div>
+  </div>
+  <div class="hotspot-item">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-primary">8</span>
+      <span style="font-size:15px;font-weight:600;">日本半导体设备出口大增</span>
+      <span class="badge badge-success">发酵</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);">5月设备出口同比+42%，对华出口限制下的结构性转移</span>
+    </div>
+  </div>
+  <div class="hotspot-item">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-primary">9</span>
+      <span style="font-size:15px;font-weight:600;">欧洲绿色能源政策加码</span>
+      <span class="badge badge-neutral">萌芽</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);">欧盟通过新的可再生能源目标，光伏/风电受益</span>
+    </div>
+  </div>
+  <div class="hotspot-item">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="badge badge-primary">10</span>
+      <span style="font-size:15px;font-weight:600;">台积电CoWoS产能紧缺</span>
+      <span class="badge badge-success">高潮</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);">先进封装产能瓶颈制约AI芯片出货，扩产计划2025年释放</span>
+    </div>
+  </div>
+</section>
+
+<!-- 个股头像 + 资金流向 + 国际市场 三栏 -->
+<div style="display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:24px; margin-bottom:32px;">
+  <!-- 个股头像 -->
+  <section class="card">
+    <div class="section-title" style="font-size:16px;"><i data-lucide="users" style="width:18px;height:18px;color:var(--accent);"></i> 重要个股</div>
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--light);">
+        <div style="width:36px;height:36px;border-radius:50%;background:#76B900;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">NVDA</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">NVIDIA</div><div style="font-size:12px;color:var(--secondary);">$148.32</div></div>
+        <div style="font-size:14px;font-weight:600;color:var(--bullish);">+4.21%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--light);">
+        <div style="width:36px;height:36px;border-radius:50%;background:#E82127;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">TSLA</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Tesla</div><div style="font-size:12px;color:var(--secondary);">$268.45</div></div>
+        <div style="font-size:14px;font-weight:600;color:var(--bullish);">+5.13%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--light);">
+        <div style="width:36px;height:36px;border-radius:50%;background:#000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">AAPL</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Apple</div><div style="font-size:12px;color:var(--secondary);">$232.18</div></div>
+        <div style="font-size:14px;font-weight:600;color:var(--bullish);">+1.84%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--light);">
+        <div style="width:36px;height:36px;border-radius:50%;background:#00A4EF;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">MSFT</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Microsoft</div><div style="font-size:12px;color:var(--secondary);">$458.72</div></div>
+        <div style="font-size:14px;font-weight:600;color:var(--bullish);">+0.92%</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--light);">
+        <div style="width:36px;height:36px;border-radius:50%;background:#0668E1;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;">META</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Meta</div><div style="font-size:12px;color:var(--secondary);">$528.36</div></div>
+        <div style="font-size:14px;font-weight:600;color:var(--bullish);">+2.15%</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 资金流向 Sankey -->
+  <section class="card">
+    <div class="section-title" style="font-size:16px;"><i data-lucide="arrow-left-right" style="width:18px;height:18px;color:var(--accent);"></i> 资金流向</div>
+    <div class="chart-container" id="sankey-chart" style="height:400px;"></div>
+  </section>
+  
+  <!-- 国际市场 -->
+  <section class="card">
+    <div class="section-title" style="font-size:16px;"><i data-lucide="globe-2" style="width:18px;height:18px;color:var(--accent);"></i> 国际市场</div>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:600;">标普500</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bullish);">+0.84%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:600;">纳斯达克</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bullish);">+1.28%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:600;">道琼斯</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bullish);">+0.56%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:600;">DAX</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bullish);">+0.62%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:600;">日经225</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bullish);">+1.12%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:600;">恒生指数</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bullish);">+0.38%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:600;">上证指数</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bearish);">-0.24%</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;">
+        <span style="font-size:13px;font-weight:600;">BTC/USD</span>
+        <span style="font-size:13px;font-weight:600;color:var(--bullish);">+2.45%</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 舆情 + 追踪清单 双栏 -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px;">
+  <!-- 舆情 -->
+  <section class="card">
+    <div class="section-title"><i data-lucide="cloud" style="width:22px;height:22px;color:var(--accent);"></i> 舆情监测</div>
+    <div style="display:flex; gap:16px; margin-bottom:16px;">
+      <div style="flex:1; text-align:center; padding:16px; background:var(--light); border-radius:12px;">
+        <div style="font-size:32px; font-weight:600; color:var(--bullish);">72</div>
+        <div style="font-size:12px; color:var(--secondary); margin-top:4px;">情绪指数</div>
+        <div style="font-size:12px; color:var(--bullish); margin-top:4px;">偏乐观</div>
+      </div>
+      <div style="flex:1; text-align:center; padding:16px; background:var(--light); border-radius:12px;">
+        <div style="font-size:32px; font-weight:600; color:var(--accent);">Medium</div>
+        <div style="font-size:12px; color:var(--secondary); margin-top:4px;">共识度</div>
+        <div style="font-size:12px; color:var(--warning); margin-top:4px;">中等分化</div>
+      </div>
+    </div>
+    <div class="chart-container" id="wordcloud-chart" style="height:280px;"></div>
+  </section>
+  
+  <!-- 追踪清单 -->
+  <section class="card">
+    <div class="section-title"><i data-lucide="list-checks" style="width:22px;height:22px;color:var(--accent);"></i> 追踪清单</div>
+    <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">美联储6月FOMC会议纪要</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">中国6月CPI/PPI数据</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">台积电6月营收公告</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">特斯拉Q2交付量</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">百事可乐(PEP) Q2财报</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">北向资金流向</span></div>
+    <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">比特币60,000美元关键位</span></div>
+  </section>
+</div>
+
+<!-- 展望 -->
+<section class="card" style="margin-bottom:32px;">
+  <div class="section-title"><i data-lucide="telescope" style="width:22px;height:22px;color:var(--accent);"></i> 策略展望</div>
+  <div style="font-size:14px; line-height:1.8; color:var(--primary);">
+    <p style="margin:0 0 12px;"><strong>短期（1-2周）：</strong>市场处于降息预期与财报验证的交织期。建议维持科技核心仓位，但避免在财报前追高英伟达等已大幅上涨的标的。关注微软、谷歌财报中AI收入占比的变化。</p>
+    <p style="margin:0 0 12px;"><strong>中期（1-3个月）：</strong>若9月降息落地，成长股估值有望进一步扩张。重点关注AI从基础设施向应用层扩散的机会（软件、SaaS、自动驾驶）。</p>
+    <p style="margin:0;"><strong>风险提示：</strong>①通胀反弹导致降息推迟；②AI叙事出现裂痕（如大客户capex下修）；③地缘政治冲突升级。建议保持15-20%现金仓位作为缓冲。</p>
+  </div>
+</section>
+
+</div> <!-- end tab-brief -->
+
+<!-- ==================== 知识科普 Tab ==================== -->
+<div id="tab-knowledge" class="tab-panel">
+
+<!-- 搜索框 -->
+<section class="card" style="margin-bottom:32px;">
+  <div style="display:flex; gap:12px; align-items:center;">
+    <div style="flex:1; position:relative;">
+      <i data-lucide="search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:var(--secondary);"></i>
+      <input type="text" class="search-box" placeholder="输入概念名称，如 HBM、CoWoS、Chiplet..." style="padding-left:42px;" onkeyup="conceptSearch(this.value)">
+    </div>
+    <button class="btn-primary">搜索</button>
+  </div>
+</section>
+
+<!-- 概念卡片：HBM -->
+<section class="card" id="concept-card">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+    <div style="width:48px; height:48px; border-radius:12px; background:var(--accent); display:flex; align-items:center; justify-content:center; color:#fff; font-size:20px; font-weight:700;">H</div>
+    <div>
+      <h2 style="font-size:22px; font-weight:600; margin:0;">HBM</h2>
+      <div style="font-size:13px; color:var(--secondary);">High Bandwidth Memory · 高带宽存储器</div>
+    </div>
+    <div style="margin-left:auto;"><span class="badge badge-primary">热门概念</span></div>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="message-circle" style="width:14px;height:14px;margin-right:4px;"></i> 一句话解释</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;">HBM就是一种把多块存储芯片像三明治一样垂直堆叠起来，然后用极细的线路连接的高速存储芯片。它比普通内存快得多，是AI GPU的"弹药库"。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="coffee" style="width:14px;height:14px;margin-right:4px;"></i> 生活化类比</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;">想象你在厨房做饭。普通内存（DDR）就像每次只能拿一盘菜的传送带，而HBM就像一次能拿10盘菜的升降梯。AI计算就像一场大型宴会，需要同时处理海量食材，所以必须用"升降梯"（HBM）而不是"传送带"（DDR）。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="book-open" style="width:14px;height:14px;margin-right:4px;"></i> 专业定义</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;">HBM（High Bandwidth Memory）是一种3D堆叠DRAM技术，通过硅通孔（TSV）和微凸点（Micro-bump）实现多层DRAM芯片的垂直互联。HBM3E可提供超过1.2TB/s的带宽，远超DDR5的51.2GB/s，是GPU显存的核心技术方案。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="target" style="width:14px;height:14px;margin-right:4px;"></i> 市场关注逻辑</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;">AI训练需要同时处理海量参数，显存带宽是制约GPU性能的关键瓶颈。英伟达H100配备80GB HBM3，H200升级至141GB HBM3E。AI军备竞赛中，"算力"和"存力"缺一不可，HBM是"存力"的核心。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="layers" style="width:14px;height:14px;margin-right:4px;"></i> 产业链位置</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;">HBM位于半导体产业链的L2（设备与零部件）→L3（核心产品）之间的存储环节。上游：DRAM晶圆（三星、美光、SK海力士）；中游：TSV封装（台积电、Amkor）；下游：GPU厂商（英伟达、AMD）。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="building-2" style="width:14px;height:14px;margin-right:4px;"></i> 相关公司</h4>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+      <span class="badge badge-neutral">SK海力士</span>
+      <span class="badge badge-neutral">三星电子</span>
+      <span class="badge badge-neutral">美光科技</span>
+      <span class="badge badge-neutral">台积电</span>
+      <span class="badge badge-neutral">英伟达</span>
+      <span class="badge badge-neutral">AMD</span>
+      <span class="badge badge-neutral">Amkor</span>
+      <span class="badge badge-neutral">通富微电</span>
+    </div>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="trending-up" style="width:14px;height:14px;margin-right:4px;"></i> 投资关注点</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;">①技术迭代速度（HBM3→HBM3E→HBM4的时间表）；②产能扩张进度（SK海力士、三星的扩产计划）；③与GPU的配比关系（每颗GPU配几颗HBM）；④良率提升（堆叠层数增加导致良率下降）；⑤国产替代进度（中国HBM研发进展）。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="alert-triangle" style="width:14px;height:14px;margin-right:4px;"></i> 风险提示</h4>
+    <p style="font-size:14px; color:var(--bearish); margin:0; line-height:1.6;">①技术路线变更风险（如CXL内存可能替代部分HBM需求）；②产能过剩风险（三大厂商同时扩产可能导致2025-2026年供过于求）；③价格周期风险（存储芯片具有强周期性，HBM也不例外）；④地缘政治风险（美国出口管制影响中国AI厂商获取HBM）。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="check-circle" style="width:14px;height:14px;margin-right:4px;"></i> 真逻辑 vs 炒概念</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;"><strong style="color:var(--bullish);">真逻辑：</strong>AI训练确实需要HBM，英伟达GPU的80% BOM成本来自HBM，SK海力士市占率超50%且技术领先。</p>
+    <p style="font-size:14px; color:var(--primary); margin:8px 0 0; line-height:1.6;"><strong style="color:var(--bearish);">炒概念：</strong>任何带"存储"或"芯片"的公司都宣称做HBM，实际上大部分只是普通DRAM厂商，技术差距2-3代。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="activity" style="width:14px;height:14px;margin-right:4px;"></i> 追踪指标</h4>
+    <p style="font-size:14px; color:var(--primary); margin:0; line-height:1.6;">HBM合约价格、HBM出货量季度数据、GPU出货量配比、TSV良率、HBM4研发进度、三大厂商资本开支计划。</p>
+  </div>
+  
+  <div class="concept-section">
+    <h4><i data-lucide="link" style="width:14px;height:14px;margin-right:4px;"></i> 相关概念</h4>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+      <span class="badge badge-primary">GDDR</span>
+      <span class="badge badge-primary">CoWoS</span>
+      <span class="badge badge-primary">先进封装</span>
+      <span class="badge badge-primary">AI服务器</span>
+      <span class="badge badge-primary">CXL</span>
+      <span class="badge badge-primary">TSV</span>
+      <span class="badge badge-primary">DRAM</span>
+    </div>
+  </div>
+</section>
+
+</div> <!-- end tab-knowledge -->
+
+<!-- ==================== 深度分析 Tab ==================== -->
+<div id="tab-deep" class="tab-panel">
+
+<!-- 股票输入 -->
+<section class="card" style="margin-bottom:32px;">
+  <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+    <div>
+      <div style="font-size:12px; color:var(--secondary); margin-bottom:6px;">输入股票代码</div>
+      <div style="display:flex; gap:8px;">
+        <input type="text" class="stock-input" value="NVDA" placeholder="如 AAPL, NVDA...">
+        <button class="btn-primary" onclick="startAnalysis()">开始分析</button>
+      </div>
+    </div>
+    <div style="flex:1; min-width:200px;">
+      <div style="font-size:12px; color:var(--secondary); margin-bottom:6px;">当前标的</div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:40px; height:40px; border-radius:8px; background:#76B900; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700;">NVDA</div>
+        <div>
+          <div style="font-size:16px; font-weight:600;">NVIDIA Corporation</div>
+          <div style="font-size:13px; color:var(--secondary);">NASDAQ · 半导体 · 市值 $3.62万亿</div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div style="font-size:24px; font-weight:600;">$148.32</div>
+          <div style="font-size:14px; font-weight:600; color:var(--bullish);">+4.21%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 四阶段十二步分析 -->
+<section class="card" style="margin-bottom:32px;">
+  <div class="section-title"><i data-lucide="microscope" style="width:22px;height:22px;color:var(--accent);"></i> 四阶段十二步分析流程</div>
+  
+  <!-- Stage 1 -->
+  <div class="stage-card">
+    <div class="stage-header" onclick="toggleStage('stage1')">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span class="badge badge-primary">Stage 1</span>
+        <span>业务透视</span>
+      </div>
+      <i data-lucide="chevron-down" id="stage1-icon" style="width:16px;height:16px;color:var(--secondary);transition:transform 0.3s;"></i>
+    </div>
+    <div id="stage1" class="stage-content open">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 1 · 解析代码</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">NVDA → NASDAQ上市 → NVIDIA Corporation → 半导体行业</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 2 · 抓取概况</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">成立于1993年，总部加州圣克拉拉。主营GPU设计，2024财年营收$609亿，员工29,600人。</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 3 · 商业模式与护城河</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">GPU设计+CUDA生态双护城河。CUDA 20年积累形成开发者锁定，市占率AI训练>90%。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Stage 2 -->
+  <div class="stage-card">
+    <div class="stage-header" onclick="toggleStage('stage2')">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span class="badge badge-primary">Stage 2</span>
+        <span>财务诊断</span>
+      </div>
+      <i data-lucide="chevron-down" id="stage2-icon" style="width:16px;height:16px;color:var(--secondary);transition:transform 0.3s;"></i>
+    </div>
+    <div id="stage2" class="stage-content">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 4 · 抓取财务指标</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">2024财年：营收$609亿（+126%），净利$297亿（+581%），毛利率76.0%。</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 5 · 核心比率分析</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">ROE 56.1%，净利率48.8%，资产负债率38.2%，流动比率4.2。</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 6 · 杜邦拆解ROE</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">ROE=净利率48.8% × 资产周转率0.72 × 权益乘数1.60。高净利率是核心驱动。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Stage 3 -->
+  <div class="stage-card">
+    <div class="stage-header" onclick="toggleStage('stage3')">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span class="badge badge-primary">Stage 3</span>
+        <span>风险排查</span>
+      </div>
+      <i data-lucide="chevron-down" id="stage3-icon" style="width:16px;height:16px;color:var(--secondary);transition:transform 0.3s;"></i>
+    </div>
+    <div id="stage3" class="stage-content">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 7 · 股权结构扫描</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">CEO黄仁勋持股3.5%，机构持仓68%（Vanguard+BlackRock+State Street）。</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 8 · 法律合规排查</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">面临美国出口管制调查（对华芯片限制）、欧盟反垄断审查。历史诉讼风险低。</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 9 · 舆情公告追踪</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">近期正面：H200需求超预期；负面：反垄断调查、高管减持计划。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Stage 4 -->
+  <div class="stage-card">
+    <div class="stage-header" onclick="toggleStage('stage4')">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span class="badge badge-primary">Stage 4</span>
+        <span>横向对比</span>
+      </div>
+      <i data-lucide="chevron-down" id="stage4-icon" style="width:16px;height:16px;color:var(--secondary);transition:transform 0.3s;"></i>
+    </div>
+    <div id="stage4" class="stage-content">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 10 · 可比公司对比</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">AMD：PE 48x，营收增速9%；INTC：PE 28x，营收增速-3%；NVDA：PE 65x，营收增速126%。</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 11 · 五维综合评级</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">商业模式92 · 财务健康88 · 成长前景95 · 风险水平65 · 估值水平55 → 综合79.4</div>
+        </div>
+        <div style="padding:16px; background:var(--light); border-radius:8px;">
+          <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px;">Step 12 · 生成报告</div>
+          <div style="font-size:13px; color:var(--primary); line-height:1.6;">报告已生成，见下方预览。建议：核心业务极强，但估值处于历史高位，建议逢低分批建仓。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 五维雷达图 + 报告预览 -->
+<div style="display:grid; grid-template-columns:1fr 1.5fr; gap:24px; margin-bottom:32px;">
+  <section class="card">
+    <div class="section-title"><i data-lucide="radar" style="width:22px;height:22px;color:var(--accent);"></i> 五维综合评级</div>
+    <div class="chart-container" id="radar-chart" style="height:400px;"></div>
+    <div style="text-align:center; margin-top:8px;">
+      <div style="font-size:36px; font-weight:600; color:var(--accent);">79.4</div>
+      <div style="font-size:13px; color:var(--secondary);">综合评分</div>
+    </div>
+  </section>
+  
+  <section class="card">
+    <div class="section-title"><i data-lucide="file-text" style="width:22px;height:22px;color:var(--accent);"></i> 分析报告预览</div>
+    <div style="border:1px solid var(--border); border-radius:8px; padding:20px; background:var(--light); max-height:400px; overflow-y:auto;">
+      <h3 style="font-size:16px; font-weight:600; margin:0 0 12px;">NVIDIA (NVDA) 综合基本面分析报告</h3>
+      <div style="font-size:12px; color:var(--secondary); margin-bottom:16px;">生成时间：2025-07-09 10:30 | 数据来源：yfinance、SEC filings</div>
+      
+      <h4 style="font-size:14px; font-weight:600; margin:16px 0 8px;">一、执行摘要</h4>
+      <p style="font-size:13px; line-height:1.7; margin:0;">NVIDIA是全球AI算力基础设施的核心提供商，CUDA生态形成深厚护城河。FY2024营收同比增长126%，毛利率提升至76%，盈利能力极为强劲。当前PE 65x，估值处于历史高位，但考虑到AI基础设施仍处于早期渗透阶段，高估值有一定合理性。综合评分79.4分，建议"核心持仓+逢低加仓"。</p>
+      
+      <h4 style="font-size:14px; font-weight:600; margin:16px 0 8px;">二、五维评分详情</h4>
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px;">
+        <div style="display:flex;justify-content:space-between;padding:8px;background:#fff;border-radius:6px;"><span style="font-size:13px;">商业模式</span><span style="font-size:13px;font-weight:600;color:var(--accent);">92/100</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px;background:#fff;border-radius:6px;"><span style="font-size:13px;">财务健康</span><span style="font-size:13px;font-weight:600;color:var(--accent);">88/100</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px;background:#fff;border-radius:6px;"><span style="font-size:13px;">成长前景</span><span style="font-size:13px;font-weight:600;color:var(--bullish);">95/100</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px;background:#fff;border-radius:6px;"><span style="font-size:13px;">风险水平</span><span style="font-size:13px;font-weight:600;color:var(--warning);">65/100</span></div>
+        <div style="display:flex;justify-content:space-between;padding:8px;background:#fff;border-radius:6px;"><span style="font-size:13px;">估值水平</span><span style="font-size:13px;font-weight:600;color:var(--bearish);">55/100</span></div>
+      </div>
+      
+      <h4 style="font-size:14px; font-weight:600; margin:16px 0 8px;">三、投资建议</h4>
+      <p style="font-size:13px; line-height:1.7; margin:0;"><strong style="color:var(--accent);">核心持仓：</strong>AI算力是10年级别的产业趋势，NVIDIA是确定性最高的受益者。建议将NVDA作为科技核心仓，配置比例不超过组合的20%。</p>
+      <p style="font-size:13px; line-height:1.7; margin:8px 0 0;"><strong style="color:var(--warning);">风险提醒：</strong>①估值过高（PE 65x），若AI capex增速放缓，股价可能面临30%+回调；②地缘政治风险（出口管制）；③竞争加剧（AMD MI300、自研芯片）。</p>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:16px;">
+      <button class="btn-primary"><i data-lucide="download" style="width:16px;height:16px;"></i> 下载报告</button>
+      <button class="btn-secondary"><i data-lucide="share-2" style="width:16px;height:16px;"></i> 分享</button>
+      <button class="btn-secondary"><i data-lucide="save" style="width:16px;height:16px;"></i> 保存到知识库</button>
+    </div>
+  </section>
+</div>
+
+</div> <!-- end tab-deep -->
+
+<!-- ==================== 知识库 Tab ==================== -->
+<div id="tab-kb" class="tab-panel">
+  <section class="card">
+    <div class="section-title"><i data-lucide="database" style="width:22px;height:22px;color:var(--accent);"></i> 知识库管理</div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px;">
+      <div style="padding:20px; background:var(--light); border-radius:12px; text-align:center;">
+        <div style="font-size:28px; font-weight:600; color:var(--accent);">142</div>
+        <div style="font-size:12px; color:var(--secondary); margin-top:4px;">00-原始资料</div>
+      </div>
+      <div style="padding:20px; background:var(--light); border-radius:12px; text-align:center;">
+        <div style="font-size:28px; font-weight:600; color:var(--accent);">68</div>
+        <div style="font-size:12px; color:var(--secondary); margin-top:4px;">01-消化知识</div>
+      </div>
+      <div style="padding:20px; background:var(--light); border-radius:12px; text-align:center;">
+        <div style="font-size:28px; font-weight:600; color:var(--accent);">24</div>
+        <div style="font-size:12px; color:var(--secondary); margin-top:4px;">02-方法与Skill</div>
+      </div>
+      <div style="padding:20px; background:var(--light); border-radius:12px; text-align:center;">
+        <div style="font-size:28px; font-weight:600; color:var(--accent);">37</div>
+        <div style="font-size:12px; color:var(--secondary); margin-top:4px;">03-输出与复盘</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:12px 16px; background:var(--light); font-size:12px; font-weight:500; color:var(--secondary);">
+        <div>文件名</div><div>类型</div><div>层级</div><div>更新时间</div><div>操作</div>
+      </div>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:14px 16px; border-bottom:1px solid var(--border); align-items:center; font-size:13px;">
+        <div style="display:flex;align-items:center;gap:8px;"><i data-lucide="file-text" style="width:16px;height:16px;color:var(--accent);"></i> 英伟达NVDA深度分析.md</div>
+        <div><span class="badge badge-neutral">报告</span></div><div>03-输出</div><div style="color:var(--secondary);">2025-07-09</div>
+        <div><i data-lucide="more-horizontal" style="width:16px;height:16px;color:var(--secondary);cursor:pointer;"></i></div>
+      </div>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:14px 16px; border-bottom:1px solid var(--border); align-items:center; font-size:13px;">
+        <div style="display:flex;align-items:center;gap:8px;"><i data-lucide="file-text" style="width:16px;height:16px;color:var(--accent);"></i> HBM概念卡片.md</div>
+        <div><span class="badge badge-neutral">概念</span></div><div>01-消化</div><div style="color:var(--secondary);">2025-07-08</div>
+        <div><i data-lucide="more-horizontal" style="width:16px;height:16px;color:var(--secondary);cursor:pointer;"></i></div>
+      </div>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:14px 16px; border-bottom:1px solid var(--border); align-items:center; font-size:13px;">
+        <div style="display:flex;align-items:center;gap:8px;"><i data-lucide="file-text" style="width:16px;height:16px;color:var(--accent);"></i> 四阶段十二步分析模板.md</div>
+        <div><span class="badge badge-neutral">模板</span></div><div>02-方法</div><div style="color:var(--secondary);">2025-07-05</div>
+        <div><i data-lucide="more-horizontal" style="width:16px;height:16px;color:var(--secondary);cursor:pointer;"></i></div>
+      </div>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:14px 16px; border-bottom:1px solid var(--border); align-items:center; font-size:13px;">
+        <div style="display:flex;align-items:center;gap:8px;"><i data-lucide="file-text" style="width:16px;height:16px;color:var(--accent);"></i> 2025-07-08每日简报.md</div>
+        <div><span class="badge badge-neutral">简报</span></div><div>03-输出</div><div style="color:var(--secondary);">2025-07-08</div>
+        <div><i data-lucide="more-horizontal" style="width:16px;height:16px;color:var(--secondary);cursor:pointer;"></i></div>
+      </div>
+      <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr 80px; padding:14px 16px; align-items:center; font-size:13px;">
+        <div style="display:flex;align-items:center;gap:8px;"><i data-lucide="file-text" style="width:16px;height:16px;color:var(--accent);"></i> 美联储降息跟踪笔记.md</div>
+        <div><span class="badge badge-neutral">笔记</span></div><div>00-原始</div><div style="color:var(--secondary);">2025-07-07</div>
+        <div><i data-lucide="more-horizontal" style="width:16px;height:16px;color:var(--secondary);cursor:pointer;"></i></div>
+      </div>
+    </div>
+  </section>
+</div> <!-- end tab-kb -->
+
+</main>
+
+<script>
+  lucide.createIcons();
+
+  // ===== AI助手交互 =====
+  // 技能导入
+  function importSkill(el) {
+    if (el.classList.contains('imported')) return;
+    el.classList.remove('not-imported');
+    el.classList.add('imported');
+    const status = el.querySelector('.skill-status');
+    status.classList.remove('import');
+    status.classList.add('enabled');
+    status.textContent = '已启用';
+    const icon = el.querySelector('.skill-icon');
+    if (icon) icon.style.filter = 'none';
+    // 更新计数
+    const importedCount = document.querySelectorAll('.skill-item.imported').length;
+    const totalCount = document.querySelectorAll('.skill-item').length;
+    const countEl = document.querySelector('.skill-count');
+    if (countEl) countEl.textContent = '已导入 ' + importedCount + '/' + totalCount;
+  }
+
+  // 发送消息
+  function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    addMessage(text, 'user');
+    input.value = '';
+    // 模拟AI回复（实际开发中连接后端）
+    setTimeout(() => {
+      addMessage('收到你的问题："' + text + '"\n\n我正在分析中，请稍候...实际开发时将连接AI后端进行实时推理。', 'ai');
+    }, 800);
+  }
+
+  // 添加快捷标签消息
+  function sendQuickTag(text) {
+    document.getElementById('chat-input').value = text;
+    sendMessage();
+  }
+
+  // 添加消息到聊天区域
+  function addMessage(text, sender) {
+    const container = document.getElementById('chat-messages');
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message ' + sender;
+    if (sender === 'user') {
+      msgDiv.innerHTML = '<div class="message-avatar">U</div><div class="message-bubble">' + escapeHtml(text) + '</div>';
+    } else {
+      msgDiv.innerHTML = '<div class="message-avatar">AI</div><div class="message-bubble">' + text.replace(/\n/g, '<br>') + '</div>';
+    }
+    container.appendChild(msgDiv);
+    container.scrollTop = container.scrollHeight;
+    lucide.createIcons();
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // @菜单
+  function toggleAtMenu() {
+    const menu = document.getElementById('at-menu');
+    menu.classList.toggle('show');
+  }
+
+  function insertAt(text) {
+    const input = document.getElementById('chat-input');
+    input.value = input.value + text + ' ';
+    input.focus();
+    document.getElementById('at-menu').classList.remove('show');
+  }
+
+  // 点击外部关闭@菜单
+  document.addEventListener('click', function(e) {
+    const atMenu = document.getElementById('at-menu');
+    const atBtn = document.querySelector('.at-btn');
+    if (atMenu && !atMenu.contains(e.target) && e.target !== atBtn) {
+      atMenu.classList.remove('show');
+    }
+  });
+
+  // 技能面板抽屉（移动端）
+  function toggleSkillDrawer() {
+    const overlay = document.getElementById('skill-drawer-overlay');
+    const drawer = document.getElementById('skill-drawer');
+    if (overlay && drawer) {
+      overlay.style.display = 'block';
+      setTimeout(() => drawer.classList.add('show'), 10);
+    }
+  }
+  function closeSkillDrawer() {
+    const overlay = document.getElementById('skill-drawer-overlay');
+    const drawer = document.getElementById('skill-drawer');
+    if (drawer) drawer.classList.remove('show');
+    setTimeout(() => { if (overlay) overlay.style.display = 'none'; }, 300);
+  }
+
+  // Tab 切换
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    document.querySelectorAll('.tab-item').forEach(t => {
+      if (t.getAttribute('onclick').includes("'" + name + "'")) t.classList.add('active');
+    });
+    if (name === 'brief') setTimeout(() => initBriefCharts(), 150);
+    if (name === 'deep') setTimeout(() => initRadarChart(), 150);
+    if (name === 'ai') setTimeout(() => lucide.createIcons(), 50);
+  }
+
+  // Hash 路由处理：根据 URL hash 自动切换到对应 tab
+  function handleHashRoute() {
+    var hash = window.location.hash;
+    if (!hash) return;
+    var map = {
+      '#ai': 'ai',
+      '#daily-brief': 'brief',
+      '#brief': 'brief',
+      '#knowledge': 'knowledge',
+      '#deep-analysis': 'deep',
+      '#deep': 'deep',
+      '#kb': 'kb'
+    };
+    var tabName = map[hash];
+    if (tabName) {
+      switchTab(tabName);
+    }
+  }
+
+  window.addEventListener('hashchange', handleHashRoute);
+  document.addEventListener('DOMContentLoaded', function() {
+    handleHashRoute();
+  });
+
+  // 热点展开
+  function toggleHotspot(id) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById(id + '-icon');
+    if (el.classList.contains('open')) {
+      el.classList.remove('open');
+      if (icon) icon.style.transform = 'rotate(0deg)';
+    } else {
+      el.classList.add('open');
+      if (icon) icon.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  // 勾选框
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    if (el.classList.contains('checked')) {
+      el.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    } else {
+      el.innerHTML = '';
+    }
+  }
+
+  // Stage 展开
+  function toggleStage(id) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById(id + '-icon');
+    if (el.classList.contains('open')) {
+      el.classList.remove('open');
+      if (icon) icon.style.transform = 'rotate(-90deg)';
+    } else {
+      el.classList.add('open');
+      if (icon) icon.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  // 概念搜索（简单过滤）
+  function conceptSearch(val) {
+    // 模拟搜索效果，实际开发中可连接后端
+    console.log('搜索:', val);
+  }
+
+  // 开始分析
+  function startAnalysis() {
+    alert('分析流程已启动！预计耗时 30-60 秒...');
+  }
+
+  // 每日简报图表全局引用
+  let hotspotChart = null, sankeyChart = null, wordCloudChart = null, radarChart = null;
+
+  // 初始化每日简报图表（在切换到brief tab时调用）
+  function initBriefCharts() {
+    // 热点条形图
+    if (!hotspotChart) {
+      hotspotChart = echarts.init(document.getElementById('hotspot-chart'));
+      hotspotChart.setOption({
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+        grid: { left: '12%', right: '8%', bottom: '5%', top: '5%', containLabel: true },
+        xAxis: { type: 'value', max: 100, show: false },
+        yAxis: { type: 'category', data: ['欧洲绿色能源','日本半导体设备','中概监管','加密货币ETF','微软Azure','苹果AI','特斯拉交付','美联储降息','英伟达H200'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { fontSize: 12, color: '#1D1D1F' } },
+        series: [{
+          type: 'bar', data: [32, 38, 42, 55, 58, 62, 68, 72, 89],
+          barWidth: '50%', itemStyle: { borderRadius: [0, 6, 6, 0], color: function(p) { const colors=['#0071E3','#0071E3','#FF3B30','#34C759','#FF9500','#5856D6','#34C759','#34C759','#0071E3']; return colors[p.dataIndex]; } },
+          label: { show: true, position: 'right', formatter: '{c}', fontSize: 12, color: '#86868B' }
+        }]
+      });
+    }
+    // Sankey 资金流向
+    if (!sankeyChart) {
+      sankeyChart = echarts.init(document.getElementById('sankey-chart'));
+      sankeyChart.setOption({
+        tooltip: { trigger: 'item', triggerOn: 'mousemove' },
+        series: [{
+          type: 'sankey', layout: 'none', emphasis: { focus: 'adjacency' },
+          left: '5%', right: '5%', top: '10%', bottom: '10%',
+          nodeWidth: 20, nodeGap: 16,
+          data: [
+            { name: '北向资金' }, { name: '主力资金' }, { name: 'ETF资金' },
+            { name: '半导体' }, { name: 'AI应用' }, { name: '新能源' }, { name: '银行' }, { name: '消费' }, { name: '医药' }
+          ],
+          links: [
+            { source: '北向资金', target: '半导体', value: 28 }, { source: '北向资金', target: 'AI应用', value: 15 }, { source: '北向资金', target: '消费', value: 12 }, { source: '北向资金', target: '医药', value: 8 },
+            { source: '主力资金', target: '半导体', value: 35 }, { source: '主力资金', target: 'AI应用', value: 22 }, { source: '主力资金', target: '新能源', value: 10 }, { source: '主力资金', target: '银行', value: 18 },
+            { source: 'ETF资金', target: '半导体', value: 20 }, { source: 'ETF资金', target: 'AI应用', value: 18 }, { source: 'ETF资金', target: '新能源', value: 14 }
+          ],
+          lineStyle: { color: 'gradient', curveness: 0.5, opacity: 0.4 },
+          itemStyle: { borderWidth: 1, borderColor: '#fff' },
+          label: { fontSize: 12, color: '#86868B' }
+        }]
+      });
+    }
+    // 词云（用散点图模拟）
+    if (!wordCloudChart) {
+      wordCloudChart = echarts.init(document.getElementById('wordcloud-chart'));
+      const words = [
+        ['AI芯片', 45], ['降息', 38], ['英伟达', 35], ['财报', 30], ['HBM', 28], ['特斯拉', 25], ['美联储', 24], ['半导体', 22], ['算力', 20], ['加密货币', 18],
+        ['苹果', 16], ['微软', 15], ['中概股', 14], ['新能源', 12], ['机器人', 10], ['自动驾驶', 9], ['CPI', 8], ['VIX', 7], ['Gold', 6], ['OPEC', 5]
+      ];
+      wordCloudChart.setOption({
+        tooltip: { show: true, formatter: function(p) { return p.name + ': ' + p.value[2]; } },
+        grid: { left: '5%', right: '5%', top: '5%', bottom: '5%' },
+        series: [{
+          type: 'scatter', symbolSize: function(v) { return v[2] * 1.2 + 10; },
+          data: words.map((w, i) => { const angle = (i / words.length) * Math.PI * 2; const r = 0.3 + (i % 3) * 0.25; return { name: w[0], value: [Math.cos(angle)*r, Math.sin(angle)*r, w[1]] }; }),
+          label: { show: true, formatter: '{b}', fontSize: 12, color: '#1D1D1F' },
+          itemStyle: { color: function(p) { const colors=['#0071E3','#FF3B30','#34C759','#FF9500','#5856D6','#AF52DE','#5AC8FA','#A2845E']; return colors[p.dataIndex % colors.length]; } }
+        }],
+        xAxis: { show: false, min: -1, max: 1 },
+        yAxis: { show: false, min: -1, max: 1 }
+      });
+    }
+    // Resize all
+    if (hotspotChart) hotspotChart.resize();
+    if (sankeyChart) sankeyChart.resize();
+    if (wordCloudChart) wordCloudChart.resize();
+  }
+
+  // 雷达图
+  function initRadarChart() {
+    if (radarChart) { radarChart.resize(); return; }
+    radarChart = echarts.init(document.getElementById('radar-chart'));
+    radarChart.setOption({
+      tooltip: {},
+      radar: {
+        indicator: [
+          { name: '商业模式', max: 100 }, { name: '财务健康', max: 100 }, { name: '成长前景', max: 100 },
+          { name: '风险水平', max: 100 }, { name: '估值水平', max: 100 }
+        ],
+        axisName: { fontSize: 13, color: '#86868B' },
+        splitArea: { areaStyle: { color: ['#fff', '#F5F5F7'] } },
+        axisLine: { lineStyle: { color: '#E5E5EA' } },
+        splitLine: { lineStyle: { color: '#E5E5EA' } }
+      },
+      series: [{
+        type: 'radar', data: [{
+          value: [92, 88, 95, 65, 55], name: 'NVIDIA',
+          areaStyle: { color: 'rgba(0,113,227,0.15)' }, lineStyle: { color: '#0071E3', width: 2 },
+          itemStyle: { color: '#0071E3' }, symbolSize: 6
+        }]
+      }]
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    if (hotspotChart) hotspotChart.resize();
+    if (sankeyChart) sankeyChart.resize();
+    if (wordCloudChart) wordCloudChart.resize();
+    if (radarChart) radarChart.resize();
+  });
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="kol_daily.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">▤</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">KOL日报</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="knowledge_graph.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◫</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">知识图谱</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="morning_brief.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◐</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">早晨简报</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="stock_diagnosis.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◎</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">个股诊断</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class (except skill-panel aside)
+    var hideSelectors = ['header','nav','aside:not(.skill-panel)','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议纪要 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text-primary: #1a1f36; --text-secondary: #64748d;
+  --accent: #533afd; --navy: #061b31; --up: #dc2626; --down: #16a34a;
+  --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+  --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+  --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+  --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+  --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+.unified-sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+}
+.unified-sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.unified-sidebar-logo span { color: #8b9cf7; }
+.unified-sidebar-section { padding: 12px 0; }
+.unified-sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.unified-nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.unified-nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.unified-nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.unified-nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.unified-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.unified-topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.unified-search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; border: 1px solid var(--border); }
+.unified-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text-primary); }
+.unified-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.unified-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--navy); letter-spacing: -0.5px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.card-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text-primary); border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(83,58,253,0.05); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 12px; padding: 40px; text-align: center;
+  background: #fafbfc; transition: all 0.2s; cursor: pointer;
+}
+.upload-zone:hover { border-color: var(--accent); background: rgba(83,58,253,0.03); }
+.upload-zone .upload-icon { font-size: 40px; margin-bottom: 12px; }
+.progress-bar-bg { width: 100%; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+.progress-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.5s ease; }
+.section-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+.section-card .section-title { font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.section-card .section-content { font-size: 12px; color: var(--text-primary); line-height: 1.7; }
+.section-card .highlight { background: #fef3c7; padding: 1px 4px; border-radius: 3px; font-weight: 500; }
+.section-card .risk { background: #fee2e2; padding: 1px 4px; border-radius: 3px; color: #991b1b; font-weight: 500; }
+.quote-box { border-left: 3px solid var(--accent); padding: 8px 12px; background: #fafbfc; border-radius: 0 6px 6px 0; margin: 8px 0; font-size: 12px; color: var(--text-secondary); font-style: italic; }
+.compare-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.compare-table th { text-align: left; padding: 10px 12px; font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: #fafbfc; }
+.compare-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; }
+.compare-table .changed { background: #fef3c7; font-weight: 500; }
+.compare-table .added { background: #dcfce7; }
+.compare-table .removed { background: #fee2e2; text-decoration: line-through; color: #991b1b; }
+.minutes-list { display: flex; flex-direction: column; gap: 8px; }
+.minutes-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); cursor: pointer; transition: all 0.15s; }
+.minutes-item:hover { background: #f8fafc; border-color: var(--accent); }
+.minutes-item .date { font-size: 11px; color: var(--text-secondary); min-width: 80px; }
+.minutes-item .title { flex: 1; font-size: 13px; font-weight: 500; }
+.minutes-item .meta { font-size: 11px; color: var(--text-secondary); }
+/* iframe embed mode: hide sidebar & topbar */
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important;   overflow-y: auto !important;
+}
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+<aside class="unified-sidebar">
+  <div class="unified-sidebar-logo">🧠 <span>金融投资</span>AI助手</div>
+  <div class="unified-sidebar-section">
+    <div class="unified-sidebar-title">AI编排层</div>
+    <div class="unified-nav-item"><span class="icon">🤖</span>工作流编排</div>
+    <div class="unified-nav-item active"><span class="icon">🎤</span>会议纪要</div>
+    <div class="unified-nav-item"><span class="icon">🔒</span>私域知识</div>
+    <div class="unified-nav-item"><span class="icon">⚙️</span>Prompt管理</div>
+    <div class="unified-nav-item"><span class="icon">🎨</span>多模态</div>
+    <div class="unified-nav-item"><span class="icon">💬</span>AI投研对话</div>
+  </div>
+</aside>
+<div class="unified-main">
+  <div class="unified-topbar">
+    <div class="unified-search"><span>🔍</span><input type="text" placeholder="搜索会议纪要..."></div>
+    <div class="unified-user"><span>🔔</span><div class="unified-avatar">投</div><span>投研用户</span></div>
+  </div>
+  <div style="padding: 20px 24px; max-width: 1440px; margin: 0 auto;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+      <div>
+        <div class="page-title">会议纪要</div>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">上传会议录音 → AI自动转写 → 结构化摘要 → 观点提取 → 风险标注</div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-outline btn-sm">📂 历史纪要</button>
+        <button class="btn-primary btn-sm">➕ 上传录音</button>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <!-- Left: Upload & Processing -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="card-title">🎤 上传录音</div>
+        <div class="upload-zone">
+          <div class="upload-icon">📁</div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">拖拽文件到此处或点击上传</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">支持 MP3 / M4A / WAV 格式，单个文件最大 500MB</div>
+        </div>
+        <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">处理进度</div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 11px; color: var(--text-secondary); min-width: 60px;">转写</span>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+            <span class="tag tag-green">完成</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 11px; color: var(--text-secondary); min-width: 60px;">分段</span>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+            <span class="tag tag-green">完成</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 11px; color: var(--text-secondary); min-width: 60px;">摘要</span>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+            <span class="tag tag-green">完成</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span style="font-size: 11px; color: var(--text-secondary); min-width: 60px;">提取</span>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 85%;"></div></div>
+            <span class="tag tag-yellow">85%</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; color: var(--text-secondary); min-width: 60px;">对比</span>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 30%;"></div></div>
+            <span class="tag tag-blue">30%</span>
+          </div>
+        </div>
+        <div style="border: 1px solid var(--border); border-radius: 8px; padding: 12px;">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">录音信息</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px;">
+            <div><span style="color: var(--text-secondary);">文件名：</span>NVDA_Q2_Earnings_Call_2026.mp3</div>
+            <div><span style="color: var(--text-secondary);">时长：</span><span class="tabular-nums">52:18</span></div>
+            <div><span style="color: var(--text-secondary);">大小：</span><span class="tabular-nums">48.6 MB</span></div>
+            <div><span style="color: var(--text-secondary);">语言：</span>英语（自动检测）</div>
+            <div><span style="color: var(--text-secondary);">参会人：</span>黄仁勋 + 科莱特·克雷斯</div>
+            <div><span style="color: var(--text-secondary);">QA环节：</span>12个问题</div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Structured Summary -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card-title">📋 结构化摘要</div>
+        <div class="section-card">
+          <div class="section-title">🏢 公司核心信息</div>
+          <div class="section-content">
+            <strong>NVIDIA Corporation (NVDA)</strong> — Q2 FY2026 财报电话会议<br>
+            • 营收 <span class="tabular-nums">$38.7B</span>，同比增长 <span class="highlight">+56%</span>，超出预期 <span class="highlight">$1.2B</span><br>
+            • 数据中心业务占比 <span class="tabular-nums">87%</span>，同比增长 <span class="highlight">+73%</span><br>
+            • 毛利率 <span class="tabular-nums">78.4%</span>（环比+0.8pct），受益于HBM3e良率提升<br>
+            • 下季度指引：营收 <span class="tabular-nums">$42.0B ± 2%</span>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-title">🏭 行业与产业链</div>
+          <div class="section-content">
+            • <strong>AI算力需求</strong>：企业级AI训练集群订单持续强劲，主权AI（Sovereign AI）成为新增长点<br>
+            • <strong>供应链</strong>：HBM供应紧张缓解，但CoWoS封装仍是瓶颈，预计Q3产能释放<br>
+            • <strong>竞争格局</strong>：AMD MI350在推理性能上有竞争力，但CUDA生态壁垒依然深厚<br>
+            • 台积电 N3E 产能分配：NVDA占比约 <span class="tabular-nums">25%</span>，为第一大客户
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-title">💡 关键观点与指引</div>
+          <div class="section-content">
+            • 黄仁勋强调："AI推理需求正进入超线性增长阶段，每代芯片推理效率提升 <span class="tabular-nums">10-20x</span>"<br>
+            • Blackwell 架构服务器已出样，Q3 开始量产，预计 FY2026 贡献 <span class="tabular-nums">$15B+</span> 营收<br>
+            • 软件业务（AI Enterprise + Omniverse）年化收入突破 <span class="tabular-nums">$5B</span>
+          </div>
+          <div class="quote-box">"我们看到的不是需求的周期性波动，而是结构性转变——每一层数据中心基础设施都需要被AI重新构建。" — 黄仁勋</div>
+        </div>
+        <div class="section-card">
+          <div class="section-title">❓ Q&A 亮点</div>
+          <div class="section-content">
+            • <strong>提问：</strong>Blackwell 毛利率路径？<br>
+            <strong>回答：</strong>初期 70% 左右，12个月内爬坡至 78%+（Hopper 水平）<br><br>
+            • <strong>提问：</strong>中国市场收入占比？<br>
+            <strong>回答：</strong>已降至 <span class="tabular-nums">&lt;5%</span>，H20 出口管制影响持续，但非核心担忧<br><br>
+            • <strong>提问：</strong>竞争压力（AMD/自研芯片）？<br>
+            <strong>回答：</strong>客户自研芯片（CSP custom silicon）用于特定场景，但通用AI训练仍依赖 CUDA
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-title">⚠️ 风险提示</div>
+          <div class="section-content">
+            • <span class="risk">地缘政治风险</span>：出口管制可能进一步收紧，影响H20及后续产品<br>
+            • <span class="risk">供应链集中度</span>：CoWoS封装 90%+ 依赖台积电，产能瓶颈持续<br>
+            • <span class="risk">客户集中度</span>：Top 4 CSP 客户贡献约 45% 数据中心收入<br>
+            • <span class="risk">估值压力</span>：当前PE 45x，隐含对持续高增长的假设
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-title">📌 待验证事项</div>
+          <div class="section-content">
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" checked> Q3 毛利率是否达 78% 指引</div>
+              <div style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" checked> Blackwell 量产良率是否达标</div>
+              <div style="display: flex; align-items: center; gap: 8px;"><input type="checkbox"> AMD MI350 市场份额是否如预期</div>
+              <div style="display: flex; align-items: center; gap: 8px;"><input type="checkbox"> 主权AI项目落地进度</div>
+              <div style="display: flex; align-items: center; gap: 8px;"><input type="checkbox"> 出口管制是否进一步升级</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Comparison Section -->
+    <div class="card" style="margin-bottom: 16px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div class="card-title">🔍 与上次会议对比（表述变化检测）</div>
+        <div style="font-size: 12px; color: var(--text-secondary);">对比：2026 Q1 vs 2026 Q2</div>
+      </div>
+      <table class="compare-table">
+        <thead>
+          <tr><th>维度</th><th>Q1 表述</th><th>Q2 表述</th><th>变化</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>数据中心增速</td><td>"同比增长 65%"</td><td class="changed">"同比增长 73%" ↑</td><td><span class="tag tag-green">加速</span></td></tr>
+          <tr><td>Blackwell进展</td><td>"预计下半年量产"</td><td class="changed">"Q3开始量产，已出样"</td><td><span class="tag tag-green">提前</span></td></tr>
+          <tr><td>中国业务</td><td>"约 7% 收入"</td><td class="changed">"已降至 &lt;5%" ↓</td><td><span class="tag tag-red">下降</span></td></tr>
+          <tr><td>毛利率指引</td><td>"维持 75-78%"</td><td>"78.4%，继续提升"</td><td><span class="tag tag-green">上调</span></td></tr>
+          <tr><td>竞争评论</td><td>"竞争格局稳定"</td><td class="changed">"AMD推理有竞争力，但训练壁垒仍在"</td><td><span class="tag tag-yellow">更谨慎</span></td></tr>
+          <tr><td>软件业务</td><td class="added">新增重点</td><td class="added">"年化突破 $5B"</td><td><span class="tag tag-blue">新增</span></td></tr>
+          <tr><td>游戏业务</td><td>"同比持平"</td><td class="removed">未提及</td><td><span class="tag tag-red">淡化</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- History List -->
+    <div class="card">
+      <div class="card-title">📚 历史会议纪要</div>
+      <div class="minutes-list">
+        <div class="minutes-item">
+          <div class="date">2026-07-08</div>
+          <div class="title">NVIDIA Q2 FY2026 财报电话会议</div>
+          <div class="meta">52:18 · 英语 · 12个QA</div>
+          <span class="tag tag-green">已处理</span>
+        </div>
+        <div class="minutes-item">
+          <div class="date">2026-06-25</div>
+          <div class="title">Micron Technology Q3 FY2026 财报电话会议</div>
+          <div class="meta">45:33 · 英语 · 8个QA</div>
+          <span class="tag tag-green">已处理</span>
+        </div>
+        <div class="minutes-item">
+          <div class="date">2026-06-18</div>
+          <div class="title">TSMC 2026技术论坛 投资者会议</div>
+          <div class="meta">38:12 · 中文/英语 · 6个QA</div>
+          <span class="tag tag-green">已处理</span>
+        </div>
+        <div class="minutes-item">
+          <div class="date">2026-06-10</div>
+          <div class="title">AMD 数据中心业务更新会</div>
+          <div class="meta">28:45 · 英语 · 5个QA</div>
+          <span class="tag tag-green">已处理</span>
+        </div>
+        <div class="minutes-item">
+          <div class="date">2026-05-28</div>
+          <div class="title">Dell Technologies Q1 FY2026 财报</div>
+          <div class="meta">41:20 · 英语 · 9个QA</div>
+          <span class="tag tag-green">已处理</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // iframe embed detection
+  console.log('会议纪要页已加载');
+});
+</script>
+</body>
+</html>

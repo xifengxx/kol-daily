@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行情与数据子系统 F1.2</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --text-primary: #1a1f36;
+    --text-secondary: #6b7280;
+    --accent: #533afd;
+    --navy: #061b31;
+    --up: #dc2626;
+    --down: #16a34a;
+    --tag-green-bg: #dcfce7;
+    --tag-green-text: #166534;
+    --tag-blue-bg: #dbeafe;
+    --tag-blue-text: #1e40af;
+    --tag-yellow-bg: #fef3c7;
+    --tag-yellow-text: #92400e;
+    --tag-red-bg: #fee2e2;
+    --tag-red-text: #991b1b;
+    --tag-purple-bg: #ede9fe;
+    --tag-purple-text: #6d28d9;
+    --radius-card: 10px;
+    --radius-btn: 16px;
+    --radius-tag: 4px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 16px;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-label { font-size: 11px; color: var(--text-secondary); }
+  .stat-value { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  .stat-change { font-size: 12px; font-weight: 600; }
+  .up { color: var(--up); }
+  .down { color: var(--down); }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-btn);
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-btn);
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tag {
+    display: inline-block;
+    border-radius: var(--radius-tag);
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+  .tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+  .tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+  .tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+  .tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-btn:hover { color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  table.data-table thead th {
+    text-transform: uppercase;
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: #fafbfc;
+  }
+  table.data-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    color: var(--text-primary);
+  }
+  table.data-table tbody tr:hover { background: #f8f9fb; }
+  .indicator-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .indicator-item {
+    flex: 1;
+    min-width: 160px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .indicator-item .label { font-size: 11px; color: var(--text-secondary); }
+  .indicator-item .value { font-size: 14px; font-weight: 700; }
+  .signal-bull { color: var(--up); font-weight: 700; }
+  .signal-bear { color: var(--down); font-weight: 700; }
+  .signal-neutral { color: #f59e0b; font-weight: 700; }
+  .navy-header {
+    background: var(--navy);
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-radius: var(--radius-card);
+    margin-bottom: 20px;
+  }
+  .navy-header .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .navy-header .sub { font-size: 11px; color: #94a3b8; }
+  .flex-grow { flex: 1; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="navy-header">
+    <div>
+      <div class="logo">5Factor AI Research</div>
+      <div class="sub">行情与数据子系统 F1.2 · 实时市场数据</div>
+    </div>
+    <div class="flex-grow"></div>
+    <div style="font-size:12px; color:#94a3b8;">数据更新: <span id="updateTime">--</span></div>
+  </div>
+
+  <!-- Tab Nav -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="tab-market">市场总览</button>
+    <button class="tab-btn" data-tab="tab-stock">个股K线 · NVDA</button>
+    <button class="tab-btn" data-tab="tab-global">全球市场联动</button>
+  </div>
+
+  <!-- ===== PAGE 1: 市场总览 ===== -->
+  <div id="tab-market" class="tab-panel active">
+
+    <!-- 8 Stat Cards -->
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;">
+      <div class="stat-card">
+        <span class="stat-label">上证指数</span>
+        <span class="stat-value">3,218.45</span>
+        <span class="stat-change up">+0.87%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">深证成指</span>
+        <span class="stat-value">10,892.76</span>
+        <span class="stat-change up">+1.23%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">创业板指</span>
+        <span class="stat-value">2,156.30</span>
+        <span class="stat-change up">+1.56%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">科创50</span>
+        <span class="stat-value">876.52</span>
+        <span class="stat-change down">-0.34%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">恒生指数</span>
+        <span class="stat-value">18,345.20</span>
+        <span class="stat-change up">+0.62%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">纳斯达克</span>
+        <span class="stat-value">18,712.44</span>
+        <span class="stat-change up">+1.41%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">标普500</span>
+        <span class="stat-value">5,892.15</span>
+        <span class="stat-change up">+0.93%</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">VIX 恐慌指数</span>
+        <span class="stat-value">14.32</span>
+        <span class="stat-change down">-5.12%</span>
+      </div>
+    </div>
+
+    <!-- ECharts: 沪深300 Intraday -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:14px; font-weight:700;">沪深300 日内走势</span>
+        <span style="font-size:11px; color:var(--text-secondary);">2026-07-09</span>
+      </div>
+      <div id="chart-hs300" style="width:100%; height:320px;"></div>
+    </div>
+
+    <!-- 行业板块热力图 -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="font-size:14px; font-weight:700; margin-bottom:10px;">行业板块热力图</div>
+      <div id="sector-tags" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+    </div>
+
+    <!-- Key Indicators Row -->
+    <div class="indicator-row">
+      <div class="indicator-item">
+        <span class="label">北向资金净流入</span>
+        <span class="value up">+32.50亿 <span style="font-size:10px; color:var(--accent);">连续3日</span></span>
+      </div>
+      <div class="indicator-item">
+        <span class="label">两市成交额</span>
+        <span class="value up">8,742亿 <span style="font-size:10px; color:var(--text-secondary);">+12%</span></span>
+      </div>
+      <div class="indicator-item">
+        <span class="label">涨跌比</span>
+        <span class="value">2847<span style="color:var(--up);">:1023</span></span>
+      </div>
+      <div class="indicator-item">
+        <span class="label">涨停 / 跌停</span>
+        <span class="value"><span style="color:var(--up);">68</span> / <span style="color:var(--down);">12</span></span>
+      </div>
+      <div class="indicator-item">
+        <span class="label">融资余额</span>
+        <span class="value up">15,236亿 <span style="font-size:10px; color:var(--text-secondary);">+42亿</span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== PAGE 2: 个股K线 ===== -->
+  <div id="tab-stock" class="tab-panel">
+
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+      <span style="font-size:18px; font-weight:800;">NVDA</span>
+      <span style="font-size:13px; color:var(--text-secondary);">英伟达 · NVIDIA Corp.</span>
+      <span style="font-size:12px; color:var(--text-secondary);">NASDAQ</span>
+    </div>
+
+    <!-- 6 Stat Cards -->
+    <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:20px;">
+      <div class="stat-card">
+        <span class="stat-label">最新价</span>
+        <span class="stat-value">$146.82</span>
+        <span class="stat-change up">+$4.56 (+3.20%)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">开盘价</span>
+        <span class="stat-value">$142.30</span>
+        <span class="stat-change" style="font-size:11px;color:var(--text-secondary);">昨收 $142.26</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">最高价</span>
+        <span class="stat-value">$148.75</span>
+        <span class="stat-change" style="font-size:11px;color:var(--text-secondary);">日内高点</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">最低价</span>
+        <span class="stat-value">$140.12</span>
+        <span class="stat-change" style="font-size:11px;color:var(--text-secondary);">日内低点</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">成交量</span>
+        <span class="stat-value">52.3M</span>
+        <span class="stat-change" style="font-size:11px;color:var(--text-secondary);">均量 48.1M</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">市盈率 (TTM)</span>
+        <span class="stat-value">68.4</span>
+        <span class="stat-change" style="font-size:11px;color:var(--text-secondary);">行业均值 45.2</span>
+      </div>
+    </div>
+
+    <!-- ECharts: Candlestick 60-day K-line -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:14px; font-weight:700;">NVDA 日K线 · 近60交易日</span>
+        <div style="display:flex; gap:6px;">
+          <button class="btn-outline" style="font-size:10px; padding:3px 10px;">1月</button>
+          <button class="btn-primary" style="font-size:10px; padding:3px 10px;">2月</button>
+          <button class="btn-outline" style="font-size:10px; padding:3px 10px;">3月</button>
+        </div>
+      </div>
+      <div id="chart-candlestick" style="width:100%; height:400px;"></div>
+    </div>
+
+    <!-- Technical Indicators + Capital Flow -->
+    <div style="display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-bottom:20px;">
+      <div class="card">
+        <div style="font-size:14px; font-weight:700; margin-bottom:10px;">技术指标</div>
+        <table class="data-table">
+          <thead><tr><th>指标</th><th>数值</th><th>信号</th></tr></thead>
+          <tbody>
+            <tr><td>MA5</td><td>$143.58</td><td><span class="signal-bull">多头 ↑</span></td></tr>
+            <tr><td>MA20</td><td>$139.20</td><td><span class="signal-bull">多头 ↑</span></td></tr>
+            <tr><td>MA60</td><td>$131.45</td><td><span class="signal-bull">多头 ↑</span></td></tr>
+            <tr><td>MACD</td><td>DIF: 3.82 / DEA: 2.14</td><td><span class="signal-bull">金叉 多头 ↑</span></td></tr>
+            <tr><td>RSI (14)</td><td>62.8</td><td><span class="signal-neutral">中性 →</span></td></tr>
+            <tr><td>BOLL</td><td>上轨$153.2 / 中轨$139.2 / 下轨$125.2</td><td><span class="signal-bull">中轨上方 偏多 ↑</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div style="font-size:14px; font-weight:700; margin-bottom:10px;">资金流向</div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div>
+            <div style="font-size:11px; color:var(--text-secondary);">主力净流入</div>
+            <div style="font-size:22px; font-weight:800; color:var(--up);">+$1.20B</div>
+            <div style="font-size:10px; color:var(--text-secondary);">今日净流入 · 超大单+大单合计</div>
+          </div>
+          <div style="border-top:1px solid var(--border);"></div>
+          <div>
+            <div style="font-size:11px; color:var(--text-secondary);">机构持股占比</div>
+            <div style="font-size:22px; font-weight:800;">67.3%</div>
+            <div style="font-size:10px; color:var(--text-secondary);">Vanguard 8.9% · BlackRock 7.5% · Fidelity 5.1%</div>
+          </div>
+          <div style="border-top:1px solid var(--border);"></div>
+          <div>
+            <div style="font-size:11px; color:var(--text-secondary);">卖空比率</div>
+            <div style="font-size:18px; font-weight:700;">1.05%</div>
+            <div style="font-size:10px; color:var(--text-secondary);">占流通盘 · 日均cover 1.2天</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== PAGE 3: 全球市场联动 ===== -->
+  <div id="tab-global" class="tab-panel">
+
+    <div class="card" style="margin-bottom:20px;">
+      <div style="font-size:14px; font-weight:700; margin-bottom:12px;">全球主要市场表现 (截至 2026-07-09)</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>市场</th><th>指数名称</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>市盈率</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-blue">美股</span></td>
+            <td>AAPL 苹果</td>
+            <td>$218.54</td>
+            <td class="up">+1.87%</td>
+            <td>48.3M</td>
+            <td>31.2</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">美股</span></td>
+            <td>MSFT 微软</td>
+            <td>$462.38</td>
+            <td class="up">+0.93%</td>
+            <td>22.1M</td>
+            <td>36.8</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">美股</span></td>
+            <td>GOOGL 谷歌</td>
+            <td>$191.45</td>
+            <td class="down">-0.42%</td>
+            <td>18.7M</td>
+            <td>25.1</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">美股</span></td>
+            <td>AMZN 亚马逊</td>
+            <td>$227.83</td>
+            <td class="up">+2.14%</td>
+            <td>35.6M</td>
+            <td>42.3</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-blue">美股</span></td>
+            <td>META 元宇宙</td>
+            <td>$548.92</td>
+            <td class="up">+1.56%</td>
+            <td>12.4M</td>
+            <td>28.7</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-purple">欧洲</span></td>
+            <td>FTSE 100 英国富时</td>
+            <td>8,342.50</td>
+            <td class="up">+0.38%</td>
+            <td>—</td>
+            <td>11.8</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-purple">欧洲</span></td>
+            <td>DAX 40 德国</td>
+            <td>18,765.20</td>
+            <td class="down">-0.21%</td>
+            <td>—</td>
+            <td>13.4</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-purple">欧洲</span></td>
+            <td>CAC 40 法国</td>
+            <td>7,592.40</td>
+            <td class="up">+0.52%</td>
+            <td>—</td>
+            <td>14.1</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-yellow">亚太</span></td>
+            <td>日经 225 日本</td>
+            <td>38,954.32</td>
+            <td class="up">+0.78%</td>
+            <td>3.2T JPY</td>
+            <td>16.5</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-yellow">亚太</span></td>
+            <td>韩国 KOSPI</td>
+            <td>2,782.45</td>
+            <td class="up">+0.45%</td>
+            <td>8.7T KRW</td>
+            <td>12.9</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-yellow">亚太</span></td>
+            <td>台湾加权指数</td>
+            <td>21,876.30</td>
+            <td class="up">+1.12%</td>
+            <td>3,820亿 TWD</td>
+            <td>17.2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Macro Events -->
+    <div class="card">
+      <div style="font-size:14px; font-weight:700; margin-bottom:12px;">关键宏观事件日历</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>时间</th><th>事件</th><th>国家/地区</th><th>预期影响</th><th>状态</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>今晚 20:30</td>
+            <td>美国6月CPI 同比/环比</td>
+            <td><span class="tag tag-blue">美国</span></td>
+            <td>预期同比 3.1%, 前值 3.3%</td>
+            <td><span class="tag tag-red">待公布</span></td>
+          </tr>
+          <tr>
+            <td>7月30-31日</td>
+            <td>FOMC 利率决议</td>
+            <td><span class="tag tag-blue">美国</span></td>
+            <td>CME FedWatch 降息概率 62%</td>
+            <td><span class="tag tag-yellow">即将</span></td>
+          </tr>
+          <tr>
+            <td>7月24日 20:15</td>
+            <td>欧洲央行利率决议</td>
+            <td><span class="tag tag-purple">欧元区</span></td>
+            <td>市场预期维持 3.75% 不变</td>
+            <td><span class="tag tag-yellow">即将</span></td>
+          </tr>
+          <tr>
+            <td>7月18日</td>
+            <td>中国二季度 GDP</td>
+            <td><span class="tag tag-green">中国</span></td>
+            <td>预期同比 5.1%</td>
+            <td><span class="tag tag-yellow">即将</span></td>
+          </tr>
+          <tr>
+            <td>7月15日</td>
+            <td>美国零售销售月率 (6月)</td>
+            <td><span class="tag tag-blue">美国</span></td>
+            <td>预期 +0.2%, 前值 +0.1%</td>
+            <td><span class="tag tag-yellow">即将</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ===== Tab Switching =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    var target = document.getElementById(this.dataset.tab);
+    target.classList.add('active');
+    // Trigger chart resize when switching tabs
+    setTimeout(function() {
+      if (chartHS300) chartHS300.resize();
+      if (chartCandle) chartCandle.resize();
+    }, 50);
+  });
+});
+
+// Update time
+var now = new Date();
+document.getElementById('updateTime').textContent =
+  now.getFullYear() + '-' +
+  String(now.getMonth()+1).padStart(2,'0') + '-' +
+  String(now.getDate()).padStart(2,'0') + ' ' +
+  String(now.getHours()).padStart(2,'0') + ':' +
+  String(now.getMinutes()).padStart(2,'0') + ':' +
+  String(now.getSeconds()).padStart(2,'0');
+
+// ===== Generate Mock Data =====
+
+// HS300 intraday: 240 data points (4 hours * 60 min)
+function generateHS300Intraday() {
+  var data = [];
+  var base = 3820 + Math.random() * 60;
+  for (var i = 0; i < 240; i++) {
+    var hour = 9 + Math.floor(i / 60);
+    var minute = (i % 60);
+    if (hour > 11 && hour < 13) continue; // lunch break skip
+    var noise = (Math.random() - 0.48) * 8;
+    // slight upward trend
+    var trend = i * 0.06;
+    base += noise + 0.06;
+    data.push({
+      time: String(hour).padStart(2,'0') + ':' + String(minute).padStart(2,'0'),
+      value: Math.round(base * 100) / 100
+    });
+  }
+  return data;
+}
+
+// NVDA candlestick: 60 days
+function generateCandlestick() {
+  var data = [];
+  var base = 128;
+  var date = new Date(2026, 3, 15); // April 15, 2026
+  for (var i = 0; i < 60; i++) {
+    var open = base + (Math.random() - 0.48) * 12;
+    var close = open + (Math.random() - 0.47) * 10;
+    var high = Math.max(open, close) + Math.random() * 6;
+    var low = Math.min(open, close) - Math.random() * 6;
+    var day = new Date(date);
+    day.setDate(date.getDate() + i);
+    var dateStr = day.getFullYear() + '-' +
+      String(day.getMonth()+1).padStart(2,'0') + '-' +
+      String(day.getDate()).padStart(2,'0');
+    data.push([dateStr, +open.toFixed(2), +close.toFixed(2), +low.toFixed(2), +high.toFixed(2)]);
+    base = close; // carry forward
+  }
+  // Last entry should hit ~146.82
+  var last = data[59];
+  last[2] = 146.82;
+  last[1] = 142.30;
+  last[4] = 148.75;
+  last[3] = 140.12;
+  data[59] = last;
+  return data;
+}
+
+// ===== ECharts: 沪深300 Intraday =====
+var chartHS300 = echarts.init(document.getElementById('chart-hs300'));
+var hs300Data = generateHS300Intraday();
+var times = hs300Data.map(function(d) { return d.time; });
+var values = hs300Data.map(function(d) { return d.value; });
+
+chartHS300.setOption({
+  tooltip: { trigger: 'axis' },
+  grid: { left: 50, right: 20, top: 20, bottom: 30 },
+  xAxis: {
+    type: 'category',
+    data: times,
+    axisLine: { lineStyle: { color: '#e5e7eb' } },
+    axisTick: { show: false },
+    axisLabel: {
+      fontSize: 10,
+      color: '#6b7280',
+      interval: 29
+    },
+    splitLine: { show: false }
+  },
+  yAxis: {
+    type: 'value',
+    scale: true,
+    axisLine: { show: false },
+    axisTick: { show: false },
+    axisLabel: { fontSize: 10, color: '#6b7280' },
+    splitLine: { lineStyle: { color: '#f3f4f6' } }
+  },
+  series: [{
+    name: '沪深300',
+    type: 'line',
+    data: values,
+    smooth: true,
+    symbol: 'none',
+    lineStyle: { color: '#533afd', width: 2 },
+    areaStyle: {
+      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        { offset: 0, color: 'rgba(83,58,253,0.25)' },
+        { offset: 1, color: 'rgba(83,58,253,0.02)' }
+      ])
+    },
+    markLine: {
+      silent: true,
+      symbol: 'none',
+      data: [{ yAxis: values[0], label: { formatter: '开盘', fontSize: 10, color: '#6b7280' } }],
+      lineStyle: { color: '#d1d5db', type: 'dashed', width: 1 }
+    }
+  }]
+});
+
+// ===== ECharts: NVDA Candlestick =====
+var chartCandle = echarts.init(document.getElementById('chart-candlestick'));
+var candleData = generateCandlestick();
+var candleRaw = candleData.map(function(d) { return d; });
+
+chartCandle.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'cross' }
+  },
+  grid: { left: 60, right: 80, top: 20, bottom: 30 },
+  xAxis: {
+    type: 'category',
+    data: candleRaw.map(function(d) { return d[0]; }),
+    axisLine: { lineStyle: { color: '#e5e7eb' } },
+    axisTick: { show: false },
+    axisLabel: { fontSize: 10, color: '#6b7280', interval: 9 },
+    splitLine: { show: false }
+  },
+  yAxis: {
+    type: 'value',
+    scale: true,
+    axisLine: { show: false },
+    axisTick: { show: false },
+    axisLabel: { fontSize: 10, color: '#6b7280' },
+    splitLine: { lineStyle: { color: '#f3f4f6' } }
+  },
+  dataZoom: [
+    { type: 'inside', start: 50, end: 100 }
+  ],
+  series: [
+    {
+      name: 'NVDA',
+      type: 'candlestick',
+      data: candleRaw,
+      itemStyle: {
+        color: '#dc2626',
+        color0: '#16a34a',
+        borderColor: '#dc2626',
+        borderColor0: '#16a34a'
+      }
+    },
+    {
+      name: 'MA5',
+      type: 'line',
+      data: calcMA(candleRaw, 5),
+      smooth: true,
+      symbol: 'none',
+      lineStyle: { color: '#f59e0b', width: 1, type: 'solid' }
+    },
+    {
+      name: 'MA20',
+      type: 'line',
+      data: calcMA(candleRaw, 20),
+      smooth: true,
+      symbol: 'none',
+      lineStyle: { color: '#3b82f6', width: 1, type: 'dashed' }
+    },
+    {
+      name: 'MA60',
+      type: 'line',
+      data: calcMA(candleRaw, 60),
+      smooth: true,
+      symbol: 'none',
+      lineStyle: { color: '#8b5cf6', width: 1, type: 'dotted' }
+    }
+  ]
+});
+
+function calcMA(rawData, period) {
+  var result = [];
+  for (var i = 0; i < rawData.length; i++) {
+    if (i < period - 1) {
+      result.push('-');
+      continue;
+    }
+    var sum = 0;
+    for (var j = 0; j < period; j++) {
+      sum += rawData[i - j][2]; // close price
+    }
+    result.push(+(sum / period).toFixed(2));
+  }
+  return result;
+}
+
+// ===== Sector Tags =====
+var sectors = [
+  { name: '半导体', change: +3.24, type: 'green' },
+  { name: 'AI算力', change: +4.58, type: 'green' },
+  { name: '消费电子', change: +2.12, type: 'green' },
+  { name: '新能源车', change: +1.87, type: 'green' },
+  { name: '光伏', change: -0.92, type: 'red' },
+  { name: '锂电池', change: -1.45, type: 'red' },
+  { name: '医药生物', change: +1.23, type: 'green' },
+  { name: '创新药', change: +2.78, type: 'green' },
+  { name: '白酒', change: -0.56, type: 'red' },
+  { name: '食品饮料', change: +0.34, type: 'green' },
+  { name: '银行', change: +0.21, type: 'green' },
+  { name: '券商', change: +1.56, type: 'green' },
+  { name: '保险', change: -0.18, type: 'red' },
+  { name: '房地产', change: -2.34, type: 'red' },
+  { name: '建筑材料', change: -1.67, type: 'red' },
+  { name: '国防军工', change: +3.12, type: 'green' },
+  { name: '航空航天', change: +2.45, type: 'green' },
+  { name: '计算机', change: +1.98, type: 'green' },
+  { name: '通信设备', change: +2.67, type: 'green' },
+  { name: '传媒', change: -0.78, type: 'red' },
+  { name: '游戏', change: -1.23, type: 'red' },
+  { name: '电力', change: +0.92, type: 'green' },
+  { name: '煤炭', change: -2.15, type: 'red' },
+  { name: '钢铁', change: -1.89, type: 'red' },
+  { name: '化工', change: +0.45, type: 'green' },
+  { name: '农业', change: -0.67, type: 'red' },
+  { name: '机器人', change: +5.12, type: 'green' },
+  { name: '低空经济', change: +3.89, type: 'green' },
+  { name: '数据要素', change: +2.34, type: 'green' }
+];
+
+var tagsContainer = document.getElementById('sector-tags');
+sectors.forEach(function(s) {
+  var tag = document.createElement('span');
+  var cls = s.change >= 0 ? 'tag-green' : 'tag-red';
+  var sign = s.change >= 0 ? '+' : '';
+  tag.className = 'tag ' + cls;
+  tag.textContent = s.name + ' ' + sign + s.change.toFixed(2) + '%';
+  tagsContainer.appendChild(tag);
+});
+
+// Responsive: resize charts on window resize
+window.addEventListener('resize', function() {
+  if (chartHS300) chartHS300.resize();
+  if (chartCandle) chartCandle.resize();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F5 Agent — AI编排与智能体子系统</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        bg: '#f7f8fa',
+        surface: '#ffffff',
+        border: '#e5e7eb',
+        textPrimary: '#1a1f36',
+        textSecondary: '#6b7280',
+        accent: '#533afd',
+        navy: '#061b31',
+        up: '#dc2626',
+        down: '#16a34a',
+        tagGreenBg: '#dcfce7', tagGreenTxt: '#166534',
+        tagBlueBg: '#dbeafe', tagBlueTxt: '#1e40af',
+        tagYellowBg: '#fef3c7', tagYellowTxt: '#92400e',
+        tagRedBg: '#fee2e2', tagRedTxt: '#991b1b',
+        tagPurpleBg: '#ede9fe', tagPurpleTxt: '#6d28d9',
+      }
+    }
+  }
+}
+</script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: #f7f8fa;
+    color: #1a1f36;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    background: #061b31;
+    color: #fff;
+    min-height: 100vh;
+    position: fixed;
+    left: 0; top: 0;
+    padding: 24px 0;
+    z-index: 50;
+  }
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 12px;
+  }
+  .sidebar-logo span { color: #8b9cf7; }
+  .sidebar-nav { list-style: none; padding: 0; }
+  .sidebar-nav li a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 20px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  .sidebar-nav li a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .sidebar-nav li a.active { color: #fff; background: rgba(83,58,253,0.25); border-left: 3px solid #533afd; }
+
+  /* Main */
+  .main-content { max-width: 1280px; margin: 0 auto; padding: 28px 32px; min-height: 100vh; }
+
+  /* Tabs */
+  .tab-bar { display: flex; gap: 4px; background: #e5e7eb; border-radius: 10px; padding: 3px; width: fit-content; margin-bottom: 24px; }
+  .tab-btn {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab-btn.active { background: #fff; color: #1a1f36; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-weight: 600; }
+  .tab-btn:hover:not(.active) { color: #1a1f36; }
+
+  /* Cards */
+  .card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    transition: box-shadow 0.15s;
+  }
+  .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+
+  /* Buttons */
+  .btn-primary {
+    background: #533afd; color: #fff;
+    border: none; border-radius: 18px;
+    padding: 8px 20px; font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: #4527e6; }
+  .btn-outline {
+    background: transparent; color: #533afd;
+    border: 1px solid #533afd; border-radius: 18px;
+    padding: 7px 18px; font-size: 12px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-outline:hover { background: #f5f3ff; }
+  .btn-ghost {
+    background: transparent; color: #6b7280;
+    border: none; padding: 6px 12px; font-size: 12px;
+    cursor: pointer; border-radius: 6px;
+  }
+  .btn-ghost:hover { background: #f3f4f6; color: #1a1f36; }
+
+  /* Tags */
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 2px 8px; border-radius: 4px;
+    font-size: 10px; font-weight: 500;
+  }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-yellow { background: #fef3c7; color: #92400e; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #ede9fe; color: #6d28d9; }
+  .tag-gray { background: #f3f4f6; color: #4b5563; }
+
+  /* Status dots */
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+  .dot-green { background: #16a34a; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-gray { background: #9ca3af; }
+
+  /* Table */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    text-align: left; padding: 10px 14px;
+    font-size: 10px; font-weight: 600; color: #6b7280;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .data-table td {
+    padding: 12px 14px;
+    font-size: 12px; color: #1a1f36;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .data-table tr:hover td { background: #f9fafb; }
+  .data-table tr.expanded td { background: #f5f3ff; }
+
+  /* Drop zone */
+  .dropzone {
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 48px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafbfc;
+  }
+  .dropzone:hover, .dropzone.drag-over { border-color: #533afd; background: #f5f3ff; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+  }
+  .modal {
+    background: #fff; border-radius: 16px;
+    padding: 28px; width: 560px; max-height: 80vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+  .modal h2 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+
+  /* Input */
+  .input {
+    width: 100%; padding: 9px 14px;
+    border: 1px solid #e5e7eb; border-radius: 8px;
+    font-size: 13px; color: #1a1f36;
+    outline: none; transition: border 0.15s;
+    background: #fff;
+  }
+  .input:focus { border-color: #533afd; box-shadow: 0 0 0 3px rgba(83,58,253,0.1); }
+  .input::placeholder { color: #9ca3af; }
+
+  /* Select */
+  .select {
+    padding: 9px 14px; border: 1px solid #e5e7eb;
+    border-radius: 8px; font-size: 13px; color: #1a1f36;
+    background: #fff; outline: none; cursor: pointer;
+  }
+  .select:focus { border-color: #533afd; }
+
+  /* Checkbox style */
+  .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip-check {
+    padding: 6px 14px; border: 1px solid #e5e7eb; border-radius: 18px;
+    font-size: 12px; cursor: pointer; transition: all 0.15s;
+    user-select: none; background: #fff; color: #6b7280;
+  }
+  .chip-check.selected { background: #f5f3ff; border-color: #533afd; color: #533afd; font-weight: 500; }
+
+  /* Expand row */
+  .expand-row { background: #fafafe; padding: 16px 20px; border-top: 1px solid #e5e7eb; }
+  .expand-row code { background: #f3f4f6; padding: 2px 6px; border-radius: 3px; font-size: 11px; color: #533afd; }
+
+  /* Chat bubbles */
+  .bubble-user { background: #f5f3ff; color: #1a1f36; border-radius: 14px 14px 4px 14px; padding: 10px 14px; max-width: 80%; align-self: flex-end; font-size: 12px; }
+  .bubble-ai { background: #f3f4f6; color: #1a1f36; border-radius: 14px 14px 14px 4px; padding: 10px 14px; max-width: 80%; align-self: flex-start; font-size: 12px; }
+
+  /* Toggle switch */
+  .toggle { position: relative; width: 40px; height: 22px; display: inline-block; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #d1d5db; border-radius: 22px; transition: 0.2s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
+  .toggle input:checked + .toggle-slider { background: #533afd; }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+  .fade-in { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .skill-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 14px; border-radius: 18px; font-size: 12px;
+    font-weight: 500; cursor: pointer; transition: all 0.15s;
+    border: 1px solid #e5e7eb; background: #fff; color: #374151;
+  }
+  .skill-tag:hover { border-color: #533afd; color: #533afd; background: #f5f3ff; }
+
+  .model-chip {
+    display: inline-flex; align-items: center;
+    padding: 3px 10px; border-radius: 12px; font-size: 10px;
+    font-weight: 500; cursor: pointer; transition: all 0.15s;
+    border: 1px solid #e5e7eb; background: #fff; color: #6b7280;
+  }
+  .model-chip:hover { border-color: #533afd; }
+  .model-chip.active { background: #533afd; color: #fff; border-color: #533afd; }
+
+  .multi-model-card {
+    border: 1px solid #e5e7eb; border-radius: 8px; padding: 10px 12px;
+    margin-bottom: 8px; background: #fafbfc;
+  }
+  .multi-model-card .model-name {
+    font-size: 10px; font-weight: 600; color: #533afd; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .multi-model-card .model-answer {
+    font-size: 12px; color: #374151; line-height: 1.6;
+  }
+  .consensus-bar {
+    display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin: 6px 0;
+  }
+  .consensus-bar .cb-bull { background: #dc2626; }
+  .consensus-bar .cb-neutral { background: #f59e0b; }
+  .consensus-bar .cb-bear { background: #16a34a; }
+
+  .num-stat { font-size: 20px; font-weight: 700; color: #1a1f36; }
+</style>
+</head>
+<body>
+
+<!-- Main Content -->
+<div class="main-content">
+
+  <!-- Top Bar -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div>
+      <h1 style="font-size:20px; font-weight:700; color:#1a1f36;">AI 编排与智能体子系统</h1>
+      <p style="font-size:12px; color:#6b7280; margin-top:2px;">F3.1 Agent工作流 &middot; F3.3 多模态交互</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span style="font-size:12px; color:#6b7280;">系统健康 98.7%</span>
+      <span class="tag tag-green">v2.4.1</span>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="tab-workflow">&#9881; Agent工作流</button>
+    <button class="tab-btn" data-tab="tab-meeting">&#127897; AI会议纪要</button>
+    <button class="tab-btn" data-tab="tab-rag">&#128214; 私域知识问答</button>
+    <button class="tab-btn" data-tab="tab-prompt">&#128221; Prompt管理</button>
+    <button class="tab-btn" data-tab="tab-chat">&#128172; AI投研对话</button>
+    <button class="tab-btn" data-tab="tab-multimodal">&#128247; 多模态</button>
+  </div>
+
+  <!-- ============ TAB 1: Agent工作流 ============ -->
+  <div class="fade-in" id="tab-workflow">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2 style="font-size:16px; font-weight:700;">我的投研工作流</h2>
+      <button class="btn-primary" onclick="openWorkflowModal()">+ 新建</button>
+    </div>
+
+    <!-- 2x2 Grid -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px;">
+
+      <!-- Card 1: 运行中 -->
+      <div class="card" style="border-left:3px solid #16a34a;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+          <div>
+            <h3 style="font-size:15px; font-weight:700;">&#128197; 每周五自选扫描</h3>
+            <p style="font-size:11px; color:#6b7280; margin-top:2px;">Workflow ID: WF-001 &middot; 创建于 2025-09-12</p>
+          </div>
+          <span class="tag tag-green"><span class="dot dot-green"></span> 运行中</span>
+        </div>
+        <div style="margin-bottom:10px;">
+          <span style="font-size:11px; color:#6b7280;">Skill链: </span>
+          <span class="tag tag-blue" style="margin-right:4px;">行情扫描</span>
+          <span style="color:#9ca3af;">&#8594;</span>
+          <span class="tag tag-purple" style="margin:0 4px;">五因子</span>
+          <span style="color:#9ca3af;">&#8594;</span>
+          <span class="tag tag-yellow" style="margin:0 4px;">F4检测</span>
+          <span style="color:#9ca3af;">&#8594;</span>
+          <span class="tag tag-green" style="margin-left:4px;">推送+简报</span>
+        </div>
+        <div style="display:flex; gap:24px; font-size:11px; color:#6b7280;">
+          <span>&#128340; 上次: 07-04 17:05</span>
+          <span>&#9889; 耗时 42s</span>
+          <span>&#128202; 23只标的</span>
+          <span>&#9888; 预警 <b style="color:#16a34a;">0</b></span>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <button class="btn-ghost" style="font-size:11px;">&#9654; 立即运行</button>
+          <button class="btn-ghost" style="font-size:11px;">&#9998; 编辑</button>
+          <button class="btn-ghost" style="font-size:11px;">&#9889; 日志</button>
+        </div>
+      </div>
+
+      <!-- Card 2: 待触发 -->
+      <div class="card" style="border-left:3px solid #3b82f6;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+          <div>
+            <h3 style="font-size:15px; font-weight:700;">&#128202; 财报季自动分析</h3>
+            <p style="font-size:11px; color:#6b7280; margin-top:2px;">Workflow ID: WF-002 &middot; 创建于 2026-04-01</p>
+          </div>
+          <span class="tag tag-blue"><span class="dot dot-yellow"></span> 待触发</span>
+        </div>
+        <div style="margin-bottom:10px;">
+          <span style="font-size:11px; color:#6b7280;">Skill链: </span>
+          <span class="tag tag-blue">财报提取</span>
+          <span style="color:#9ca3af;">&#8594;</span>
+          <span class="tag tag-purple">五因子</span>
+          <span style="color:#9ca3af;">&#8594;</span>
+          <span class="tag tag-red">预期差分析</span>
+        </div>
+        <div style="font-size:11px; color:#6b7280; margin-bottom:6px;">&#128197; 即将触发:</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div style="background:#f0f7ff; border-radius:8px; padding:8px 12px; border:1px solid #bfdbfe;">
+            <div style="font-size:12px; font-weight:600;">TSMC</div>
+            <div style="font-size:10px; color:#6b7280;">7月17日</div>
+          </div>
+          <div style="background:#f0f7ff; border-radius:8px; padding:8px 12px; border:1px solid #bfdbfe;">
+            <div style="font-size:12px; font-weight:600;">ASML</div>
+            <div style="font-size:10px; color:#6b7280;">7月17日</div>
+          </div>
+          <div style="background:#f0f7ff; border-radius:8px; padding:8px 12px; border:1px solid #bfdbfe;">
+            <div style="font-size:12px; font-weight:600;">美光</div>
+            <div style="font-size:10px; color:#6b7280;">7月19日</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <button class="btn-ghost" style="font-size:11px;">&#9998; 编辑触发条件</button>
+        </div>
+      </div>
+
+      <!-- Card 3: 已暂停 -->
+      <div class="card" style="border-left:3px solid #9ca3af; opacity:0.75;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+          <div>
+            <h3 style="font-size:15px; font-weight:700;">&#128279; 跨市场半导体对比</h3>
+            <p style="font-size:11px; color:#6b7280; margin-top:2px;">Workflow ID: WF-003 &middot; 创建于 2026-02-20</p>
+          </div>
+          <span class="tag tag-gray"><span class="dot dot-gray"></span> 已暂停</span>
+        </div>
+        <div style="margin-bottom:10px; padding:10px; background:#f9fafb; border-radius:8px; font-size:12px; color:#6b7280;">
+          &#9888; 暂停原因: 待A股Level-2行情数据接入完成后恢复
+        </div>
+        <div style="display:flex; gap:24px; font-size:11px; color:#6b7280;">
+          <span>上次运行: 06-15 10:30</span>
+          <span>暂停时长: 24天</span>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <button class="btn-ghost" style="font-size:11px;">&#9654; 尝试恢复</button>
+          <button class="btn-ghost" style="font-size:11px;">&#9998; 编辑</button>
+        </div>
+      </div>
+
+      <!-- Card 4: 新建 -->
+      <div class="card" style="border:2px dashed #d1d5db; background:#fafbfc; display:flex; align-items:center; justify-content:center; flex-direction:column; cursor:pointer; min-height:200px;" onclick="openWorkflowModal()">
+        <div style="width:48px; height:48px; border-radius:50%; background:#f3f4f6; display:flex; align-items:center; justify-content:center; margin-bottom:12px; font-size:22px; color:#9ca3af;">+</div>
+        <div style="font-size:14px; font-weight:600; color:#6b7280;">新建工作流</div>
+        <div style="font-size:11px; color:#9ca3af; margin-top:4px;">拖拽Skill组合，配置触发条件</div>
+      </div>
+    </div>
+
+    <!-- Skill库 -->
+    <div class="card">
+      <h3 style="font-size:14px; font-weight:700; margin-bottom:12px;">&#129521; Skill 库</h3>
+      <p style="font-size:11px; color:#6b7280; margin-bottom:14px;">单击添加到当前编辑的工作流，共14个可用Skill</p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;" id="skillPool">
+        <span class="skill-tag">&#128200; 行情扫描</span>
+        <span class="skill-tag">&#128270; 五因子评分</span>
+        <span class="skill-tag">&#9888; F4风险检测</span>
+        <span class="skill-tag">&#128172; 推送+简报</span>
+        <span class="skill-tag">&#128196; 财报提取</span>
+        <span class="skill-tag">&#128202; 预期差分析</span>
+        <span class="skill-tag">&#128279; 跨市场对比</span>
+        <span class="skill-tag">&#128213; KOL观点聚合</span>
+        <span class="skill-tag">&#127758; 宏观指标</span>
+        <span class="skill-tag">&#128269; 估值回测</span>
+        <span class="skill-tag">&#128038; 社交情绪</span>
+        <span class="skill-tag">&#128240; 新闻摘要</span>
+        <span class="skill-tag">&#128273; 私域RAG检索</span>
+        <span class="skill-tag">&#128202; 技术指标</span>
+      </div>
+      <div style="font-size:10px; color:#9ca3af; margin-top:10px;">点击Skill标签将其加入工作流 — 蓝色高亮表示已选中</div>
+    </div>
+
+    
+  </div>
+
+  <!-- ============ TAB 1.5: AI投研对话 ============ -->
+  <div class="fade-in" id="tab-chat" style="display:none;">
+
+    <!-- AI Chat Window -->
+    <div class="card" style="margin-top:16px;">
+      <div style="margin-bottom:16px;">
+        <h3 style="font-size:15px; font-weight:700; color:#1a1f36;">AI 投研对话</h3>
+        <p style="font-size:12px; color:#6b7280; margin-top:2px;">引用Skill/插件/策略进行分析</p>
+      </div>
+
+      <!-- Chat Messages -->
+      <div id="workflowChatMessages" style="background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:16px; max-height:400px; overflow-y:auto; display:flex; flex-direction:column; gap:14px; margin-bottom:14px;">
+
+        <!-- Pre-populated conversation: Round 1 User -->
+        <div style="display:flex; flex-direction:column; align-items:flex-end;">
+          <div class="bubble-user" style="font-size:13px;">
+            <b>帮我分析一下NVDA，引用五因子评分Skill和产业链数据</b>
+          </div>
+          <span style="font-size:10px; color:#9ca3af; margin-top:3px;">10:32</span>
+        </div>
+
+        <!-- Round 1 AI -->
+        <div style="display:flex; flex-direction:column; align-items:flex-start;">
+          <div class="bubble-ai" style="font-size:13px; line-height:1.7;">
+            <div style="font-size:11px; color:#533afd; margin-bottom:8px; padding:6px 10px; background:#f5f3ff; border-radius:6px; display:inline-block;">
+              &#128736; 已加载 Skill: <b>五因子评分 v2.3</b> &middot; <b>产业链知识图谱 v1.0</b>
+            </div>
+            <b>NVDA 五因子分析：</b><br><br>
+            <b>F1 资金面 (78/100)</b> — 机构持仓环比+3.2%，北向资金持续流入，量比1.4<br>
+            <b>F2 宏观环境 (72/100)</b> — 利率预期稳定，AI算力capex持续扩张，政策面友好<br>
+            <b>F3 市场情绪 (85/100)</b> — 社交媒体热度历史高位，期权PCR偏多，做空比例仅1.8%<br>
+            <b>F4 基本面估值 (65/100)</b> — Forward PE 38x，PEG 1.2，DCF估值上限$185 (+12%)<br>
+            <b>F5 技术面 (80/100)</b> — 50日均线上方，MACD金叉，RSI 62未超买<br><br>
+            <b>综合评分: A- (76/100)</b><br><br>
+            <b>&#128279; 产业链位置:</b> GPU/AI算力核心 — 上游台积电CoWoS产能、下游云厂商Capex、HBM供给均构成关键约束<br><br>
+            <b>&#128213; LLM共识:</b> 近30天20+研报一致看好，目标价中位数$175，但3家提示HBM供给瓶颈风险<br><br>
+            <b>&#9888; 风险提示:</b> Rubin架构延期风险、中国区营收受限、估值处于历史80%分位
+          </div>
+          <span style="font-size:10px; color:#9ca3af; margin-top:3px;">10:32</span>
+        </div>
+
+        <!-- Round 2 User -->
+        <div style="display:flex; flex-direction:column; align-items:flex-end;">
+          <div class="bubble-user" style="font-size:13px;">
+            <b>加入我的"低估值+ROE"量化策略再来评估一次</b>
+          </div>
+          <span style="font-size:10px; color:#9ca3af; margin-top:3px;">10:33</span>
+        </div>
+
+        <!-- Round 2 AI -->
+        <div style="display:flex; flex-direction:column; align-items:flex-start;">
+          <div class="bubble-ai" style="font-size:13px; line-height:1.7;">
+            <div style="font-size:11px; color:#92400e; margin-bottom:8px; padding:6px 10px; background:#fef3c7; border-radius:6px; display:inline-block;">
+              &#128736; 已加载量化策略: <b>低估值+ROE+趋势跟随</b> (回测年化 <b>+28.3%</b>, 夏普 <b>2.35</b>)
+            </div>
+            <b>策略过滤后重新评估 NVDA：</b><br><br>
+            <b>&#128204; 低估值筛选 — &#10060; 未通过</b><br>
+            Forward PE 38x 远高于策略阈值(≤18x)，无条件排除。这是该策略自2024年以来持续排除NVDA的核心原因。<br><br>
+            <b>&#128204; ROE筛选 — &#9989; 通过</b><br>
+            ROE 118% (TTM)，远超策略最低门槛(≥15%)。超高ROE源于轻资产模式+定价权。<br><br>
+            <b>&#128204; 趋势跟随 — &#9989; 通过</b><br>
+            50日>200日均线，且价格在50日均线上方2.3%，多头排列确认。<br><br>
+            <b>&#9888; 策略结论:</b> 你的"低估值+ROE"策略<b>不会买入NVDA</b>（估值不达标）。如果你坚持纳入NVDA，建议将估值阈值放宽至PE≤30x，或使用F5技术面+资金面双因子作为替代入场信号。<br><br>
+            <span style="font-size:11px; color:#6b7280;">&#128161; 提示: NVDA更适合你的"成长动量"策略（回测年化+41.2%，夏普2.89），建议切换到该策略重新评估。</span>
+          </div>
+          <span style="font-size:10px; color:#9ca3af; margin-top:3px;">10:33</span>
+        </div>
+      </div>
+
+      <!-- Quick Reference Chips -->
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;" id="quickRefChips">
+        <span class="skill-tag" data-ref="@五因子评分" style="cursor:pointer; font-size:11px;">@五因子评分</span>
+        <span class="skill-tag" data-ref="@产业链图谱" style="cursor:pointer; font-size:11px;">@产业链图谱</span>
+        <span class="skill-tag" data-ref="@KOL观点" style="cursor:pointer; font-size:11px;">@KOL观点</span>
+        <span class="skill-tag" data-ref="@技术指标" style="cursor:pointer; font-size:11px;">@技术指标</span>
+        <span class="skill-tag" data-ref="@量化策略" style="cursor:pointer; font-size:11px;">@量化策略</span>
+        <span class="skill-tag" data-ref="@财报数据" style="cursor:pointer; font-size:11px;">@财报数据</span>
+      </div>
+
+      <!-- Model Selector -->
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;" id="modelSelector">
+        <span style="font-size:11px; color:var(--text-secondary); white-space:nowrap;">调用模型:</span>
+        <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;">
+          <input type="radio" name="modelMode" value="single" checked onchange="switchModelMode('single')"> 单模型
+        </label>
+        <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;">
+          <input type="radio" name="modelMode" value="multi" onchange="switchModelMode('multi')"> 多模型共识
+        </label>
+        <span style="color:var(--border);margin:0 4px;">|</span>
+        <span class="model-chip active" data-model="deepseek" onclick="toggleModel(this)">DeepSeek-V3</span>
+        <span class="model-chip active" data-model="gpt" onclick="toggleModel(this)">GPT-5.5</span>
+        <span class="model-chip" data-model="claude" onclick="toggleModel(this)">Claude-4</span>
+        <span class="model-chip" data-model="gemini" onclick="toggleModel(this)">Gemini-3</span>
+        <span class="model-chip" data-model="qwen" onclick="toggleModel(this)">Qwen3.6</span>
+        <span class="model-chip" data-model="llama" onclick="toggleModel(this)">Llama-4</span>
+      </div>
+
+      <!-- Input Area -->
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn-ghost" style="font-size:16px; padding:8px 10px;" title="附加文件/Skill" id="chatAttachBtn">&#128206;</button>
+        <input class="input" type="text" id="workflowChatInput" placeholder="输入分析指令，如: 对比TSMC和三星的五因子评分..." style="flex:1;">
+        <button class="btn-primary" id="workflowChatSend" style="padding:9px 22px; font-size:13px;">发送</button>
+      </div>
+    </div>
+  </div>
+
+<!-- ============ TAB 2: AI会议纪要 ============ -->
+  <div class="fade-in" id="tab-meeting" style="display:none;">
+    <h2 style="font-size:16px; font-weight:700; margin-bottom:16px;">AI 会议纪要</h2>
+
+    <!-- Upload -->
+    <div class="dropzone" id="dropZone">
+      <div style="font-size:36px; margin-bottom:10px;">&#127897;</div>
+      <div style="font-size:14px; font-weight:600; margin-bottom:4px;">拖拽音频文件到此处</div>
+      <div style="font-size:12px; color:#9ca3af;">或点击上传 &middot; 支持 MP3 / M4A / WAV &middot; 最大 500MB</div>
+      <input type="file" id="fileInput" accept=".mp3,.m4a,.wav" style="display:none;">
+    </div>
+
+    <!-- Pipeline -->
+    <div class="card" style="margin-top:16px;">
+      <h3 style="font-size:13px; font-weight:700; margin-bottom:10px;">&#9881; 处理流水线</h3>
+      <div style="display:flex; align-items:center; gap:0;">
+        <div style="flex:1; text-align:center; padding:14px; background:#f5f3ff; border-radius:10px;">
+          <div style="font-size:11px; font-weight:600; color:#533afd;">Whisper (本地)</div>
+          <div style="font-size:10px; color:#6b7280;">语音转录 &middot; GPU加速</div>
+        </div>
+        <div style="font-size:18px; color:#d1d5db; padding:0 8px;">&#8594;</div>
+        <div style="flex:1; text-align:center; padding:14px; background:#fef3c7; border-radius:10px;">
+          <div style="font-size:11px; font-weight:600; color:#92400e;">DeepSeek-R1</div>
+          <div style="font-size:10px; color:#6b7280;">关键结论提取 &middot; 摘要</div>
+        </div>
+        <div style="font-size:18px; color:#d1d5db; padding:0 8px;">&#8594;</div>
+        <div style="flex:1; text-align:center; padding:14px; background:#dcfce7; border-radius:10px;">
+          <div style="font-size:11px; font-weight:600; color:#166534;">结构化输出</div>
+          <div style="font-size:10px; color:#6b7280;">JSON &middot; 数据库 &middot; 推送</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="card" style="margin-top:16px;">
+      <h3 style="font-size:13px; font-weight:700; margin-bottom:12px;">&#128196; 历史会议记录</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:30%;">会议名称</th>
+            <th>日期</th>
+            <th>时长</th>
+            <th>关键结论</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>TSMC Q1 2026 Earnings Call</b><br><span style="font-size:10px; color:#6b7280;">法说会 · 中文+英文</span></td>
+            <td>2026-04-16</td>
+            <td>1h 42m</td>
+            <td>3nm节点超预期，产能利用率95%+；CoWoS扩产加速；2026全年营收指引上调15%</td>
+            <td><span class="tag tag-green">已验证 &#10003;</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;">&#128065; 查看</button></td>
+          </tr>
+          <tr>
+            <td><b>NVIDIA GTC 2026 Keynote</b><br><span style="font-size:10px; color:#6b7280;">主题演讲 · 英文</span></td>
+            <td>2026-03-18</td>
+            <td>2h 15m</td>
+            <td>Rubin架构2026H2发布；B300系列下半年量产；AI推理成本降低40%</td>
+            <td><span class="tag tag-yellow">待验证</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;">&#128065; 查看</button></td>
+          </tr>
+          <tr>
+            <td><b>ASML Q4 2025 Earnings Call</b><br><span style="font-size:10px; color:#6b7280;">法说会 · 英文</span></td>
+            <td>2026-01-22</td>
+            <td>1h 08m</td>
+            <td>EUV交付周期延长至12-18个月；High-NA EUV首批客户已验收；2026年EUV出货指引56-60台</td>
+            <td><span class="tag tag-green">已验证 &#10003;</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;">&#128065; 查看</button></td>
+          </tr>
+          <tr>
+            <td><b>中芯国际 Q4 2025 业绩会</b><br><span style="font-size:10px; color:#6b7280;">业绩说明会 · 中文</span></td>
+            <td>2026-02-14</td>
+            <td>58m</td>
+            <td>28nm及以上节点满产；资本开支缩减15%；成熟制程ASP承压</td>
+            <td><span class="tag tag-green">已验证 &#10003;</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;">&#128065; 查看</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ TAB 3: 私域知识问答 ============ -->
+  <div class="fade-in" id="tab-rag" style="display:none;">
+    <h2 style="font-size:16px; font-weight:700; margin-bottom:16px;">私域知识问答 (RAG)</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 320px; gap:16px;">
+
+      <!-- Left: Q&A Panel -->
+      <div>
+        <!-- Input -->
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex; gap:10px;">
+            <input class="input" type="text" id="ragInput" placeholder="我去年对宁德时代的判断现在看对吗？对比DCF假设和实际情况" style="flex:1;">
+            <button class="btn-primary" onclick="sendRagMessage()">发送</button>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; margin-top:10px;">
+            <span style="font-size:10px; color:#6b7280;">&#128274; AES-256加密 &middot; 平台无法解密 &middot; 跨用户不可检索</span>
+          </div>
+        </div>
+
+        <!-- Conversation -->
+        <div class="card" style="display:flex; flex-direction:column; gap:14px; max-height:500px; overflow-y:auto;" id="ragChat">
+          <!-- Round 1 -->
+          <div style="display:flex; flex-direction:column; align-items:flex-end;">
+            <div class="bubble-user">
+              <b>我去年对宁德时代的判断现在看对吗？对比DCF假设和实际情况</b>
+            </div>
+            <span style="font-size:9px; color:#9ca3af; margin-top:2px;">07-09 14:22</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-start;">
+            <div class="bubble-ai">
+              根据你2025年6月的DCF模型记录，你对宁德时代的核心假设为：<br><br>
+              <b>你当时的假设 vs 实际情况：</b><br>
+              &bull; 营收增速 25% CAGR → 实际 18%（国内份额被比亚迪挤压）<br>
+              &bull; 毛利率 24% → 实际 22.3%（碳酸锂降价传导延迟）<br>
+              &bull; 海外收入占比 40% → 实际 35%（欧盟反补贴调查影响）<br><br>
+              你当时的DCF估值区间为 180-220 元，当前股价 156 元。核心偏差来自市场份额假设过于乐观。建议重新审视你的海外扩张时间线。<br><br>
+              <span style="font-size:10px; color:#6b7280;">&#128213; 引用: 你的宁德时代DCF模型v3 (2025-06-15), Q2持仓复盘笔记, 电池行业竞争格局更新 (2026-06)</span>
+            </div>
+            <span style="font-size:9px; color:#9ca3af; margin-top:2px;">07-09 14:22 &middot; 基于你的私域知识库</span>
+          </div>
+
+          <!-- Round 2 -->
+          <div style="display:flex; flex-direction:column; align-items:flex-end;">
+            <div class="bubble-user">
+              <b>那比亚迪自己呢？我在2025年初的判断是"电池外供不及预期"，这个判断还成立吗？</b>
+            </div>
+            <span style="font-size:9px; color:#9ca3af; margin-top:2px;">07-09 14:23</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-start;">
+            <div class="bubble-ai">
+              你这个判断 <b>部分成立, 但需要修正</b>：<br><br>
+              &bull; 2025年比亚迪电池外供确实低于你预期的15GWh，实际仅8.2GWh（你笔记中标注的标杆客户 Tesla 和丰田仍在认证阶段）<br>
+              &bull; 但你忽略了弗迪电池的储能业务爆发——2026H1储能出货已达12GWh，是你当时模型中储能收入的3倍<br>
+              &bull; 你的结论方向对（外供慢），但没覆盖储能替代逻辑<br><br>
+              <span style="font-size:10px; color:#6b7280;">&#128213; 引用: 你的比亚迪深度报告笔记 (2025-01-20), 储能行业季度跟踪 v4, 港股通持仓记录 Q1 2026</span>
+            </div>
+            <span style="font-size:9px; color:#9ca3af; margin-top:2px;">07-09 14:23</span>
+          </div>
+
+          <!-- Round 3 -->
+          <div style="display:flex; flex-direction:column; align-items:flex-end;">
+            <div class="bubble-user">
+              <b>帮我生成一个对比表格：我的所有持仓 vs 最新的五因子评分，标注哪些偏离了我的买入逻辑</b>
+            </div>
+            <span style="font-size:9px; color:#9ca3af; margin-top:2px;">07-09 14:25</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-start;">
+            <div class="bubble-ai">
+              已检索你的持仓快照 (2026-07-08) 和最新五因子评分, 对比如下：<br><br>
+              <table style="width:100%; border-collapse:collapse; font-size:11px; margin-top:6px;">
+                <tr style="border-bottom:1px solid #e5e7eb;"><th style="text-align:left; padding:4px 8px;">标的</th><th style="text-align:left; padding:4px 8px;">你的逻辑</th><th style="text-align:left; padding:4px 8px;">五因子评分</th><th style="text-align:left; padding:4px 8px;">偏离</th></tr>
+                <tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:4px 8px; color:#dc2626;">宁德时代</td><td style="padding:4px 8px;">全球龙头溢价</td><td style="padding:4px 8px;">B+ (68/100)</td><td style="padding:4px 8px; color:#dc2626;">&#9888; 高</td></tr>
+                <tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:4px 8px; color:#16a34a;">TSMC</td><td style="padding:4px 8px;">先进制程垄断</td><td style="padding:4px 8px;">A (88/100)</td><td style="padding:4px 8px; color:#16a34a;">&#10003; 低</td></tr>
+                <tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:4px 8px; color:#dc2626;">中芯国际</td><td style="padding:4px 8px;">国产替代</td><td style="padding:4px 8px;">C+ (52/100)</td><td style="padding:4px 8px; color:#dc2626;">&#9888; 中</td></tr>
+                <tr><td style="padding:4px 8px; color:#16a34a;">ASML</td><td style="padding:4px 8px;">EUV不可替代</td><td style="padding:4px 8px;">A- (82/100)</td><td style="padding:4px 8px; color:#16a34a;">&#10003; 低</td></tr>
+              </table>
+              <br>宁德时代和中芯国际已偏离你的原始买入逻辑，建议阅读详细偏离分析报告。<br><br>
+              <span style="font-size:10px; color:#6b7280;">&#128213; 引用: 持仓快照 2026-07-08, 五因子评分矩阵 v2026-07, 个人投资日志 2025-2026</span>
+            </div>
+            <span style="font-size:9px; color:#9ca3af; margin-top:2px;">07-09 14:25</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Stats Panel -->
+      <div>
+        <!-- Knowledge Stats -->
+        <div class="card" style="margin-bottom:16px;">
+          <h3 style="font-size:13px; font-weight:700; margin-bottom:14px;">&#128202; 知识库统计</h3>
+          <div id="knowledgeChart" style="width:100%; height:180px;"></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
+            <div style="text-align:center; padding:10px; background:#f5f3ff; border-radius:8px;">
+              <div class="num-stat" style="font-size:16px; color:#533afd;">247</div>
+              <div style="font-size:10px; color:#6b7280;">已索引文档</div>
+            </div>
+            <div style="text-align:center; padding:10px; background:#fef3c7; border-radius:8px;">
+              <div class="num-stat" style="font-size:16px; color:#92400e;">1,842</div>
+              <div style="font-size:10px; color:#6b7280;">向量片段</div>
+            </div>
+          </div>
+          <div style="font-size:11px; color:#6b7280; margin-top:10px; text-align:center;">
+            &#128340; 最后索引时间: 2026-07-09 03:00
+          </div>
+        </div>
+
+        <!-- Document Types -->
+        <div class="card" style="margin-bottom:16px;">
+          <h3 style="font-size:13px; font-weight:700; margin-bottom:10px;">&#128196; 文档类型分布</h3>
+          <div style="font-size:12px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>投资笔记</span><span style="font-weight:600;">86篇</span></div>
+            <div style="width:100%; height:5px; background:#ede9fe; border-radius:3px; margin-bottom:10px;"><div style="width:60%; height:5px; background:#533afd; border-radius:3px;"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>研报摘要</span><span style="font-weight:600;">52篇</span></div>
+            <div style="width:100%; height:5px; background:#ede9fe; border-radius:3px; margin-bottom:10px;"><div style="width:36%; height:5px; background:#533afd; border-radius:3px;"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>会议纪要</span><span style="font-weight:600;">38篇</span></div>
+            <div style="width:100%; height:5px; background:#ede9fe; border-radius:3px; margin-bottom:10px;"><div style="width:26%; height:5px; background:#533afd; border-radius:3px;"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>DCF模型</span><span style="font-weight:600;">31个</span></div>
+            <div style="width:100%; height:5px; background:#ede9fe; border-radius:3px; margin-bottom:10px;"><div style="width:21%; height:5px; background:#533afd; border-radius:3px;"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>持仓日志</span><span style="font-weight:600;">24篇</span></div>
+            <div style="width:100%; height:5px; background:#ede9fe; border-radius:3px; margin-bottom:6px;"><div style="width:17%; height:5px; background:#533afd; border-radius:3px;"></div></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>其他</span><span style="font-weight:600;">16篇</span></div>
+            <div style="width:100%; height:5px; background:#ede9fe; border-radius:3px;"><div style="width:11%; height:5px; background:#533afd; border-radius:3px;"></div></div>
+          </div>
+        </div>
+
+        <!-- Privacy -->
+        <div class="card" style="background:#fef3c7; border-color:#fde68a;">
+          <div style="display:flex; align-items:flex-start; gap:8px;">
+            <span style="font-size:18px;">&#128274;</span>
+            <div>
+              <div style="font-size:12px; font-weight:600; color:#92400e;">安全承诺</div>
+              <div style="font-size:11px; color:#92400e; margin-top:4px;">
+                AES-256加密 &middot; 平台无法解密 &middot; 跨用户不可检索 &middot; 索引全量加密向量
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB 4: Prompt管理 ============ -->
+  <div class="fade-in" id="tab-prompt" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <h2 style="font-size:16px; font-weight:700;">Prompt 管理</h2>
+      <button class="btn-outline">+ 新建 Prompt</button>
+    </div>
+
+    <div class="card">
+      <table class="data-table" id="promptTable">
+        <thead>
+          <tr>
+            <th style="width:22%;">Prompt名称</th>
+            <th style="width:8%;">版本</th>
+            <th style="width:10%;">Token数</th>
+            <th style="width:15%;">使用场景</th>
+            <th style="width:12%;">最后更新</th>
+            <th style="width:10%;">状态</th>
+            <th style="width:10%;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-prompt="0" style="cursor:pointer;">
+            <td><b>每日晨报</b><br><span style="font-size:10px; color:#6b7280;">morning-brief-v2</span></td>
+            <td>v2</td>
+            <td>25K</td>
+            <td>每日盘前推送</td>
+            <td>2026-07-08</td>
+            <td><span class="tag tag-green">运行中</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;" onclick="event.stopPropagation();togglePromptRow(0)">展开</button></td>
+          </tr>
+          <tr data-prompt="0" style="cursor:pointer;">
+            <td colspan="7" style="padding:0;">
+              <div class="expand-row" style="display:none;" id="promptDetail0">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:12px;">
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">&#128221; Role (角色定义)</div>
+                    <div style="color:#6b7280; margin-bottom:10px;">你是一位资深A股/港股/美股三地市场分析师，负责每日盘前生成综合晨报。要求客观、数据驱动、避免情绪化表述。</div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">&#128204; Task (任务)</div>
+                    <div style="color:#6b7280;">1. 扫描隔夜美股/欧股 2. 提取A50期货/A股资金流向 3. 五因子自选池快速诊断 4. 生成300字以内摘要 + 3条重点关注</div>
+                  </div>
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">&#128229; Input (输入格式)</div>
+                    <code>JSON { watchlist: [], market_data: {}, news_feed: [], prev_ratings: {} }</code>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">&#128228; Output (输出格式)</div>
+                    <code>JSON { summary: "", highlights: [], alerts: [], ratings_update: {} }</code>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">&#128683; Constraints (约束)</div>
+                    <div style="color:#6b7280;">禁用: "重大利好/利空"等模糊表述；必须标注P值/置信区间；单只个股不超过3条</div>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">&#128218; Examples (示例)</div>
+                    <div style="color:#6b7280;">Few-shot: 2026-07-07 晨报示例已内嵌，共2组正例 + 1组负例</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-prompt="1" style="cursor:pointer;">
+            <td><b>KOL摘要</b><br><span style="font-size:10px; color:#6b7280;">kol-digest-v1</span></td>
+            <td>v1</td>
+            <td>12K</td>
+            <td>意见领袖观点聚合</td>
+            <td>2026-07-05</td>
+            <td><span class="tag tag-green">运行中</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;" onclick="event.stopPropagation();togglePromptRow(1)">展开</button></td>
+          </tr>
+          <tr data-prompt="1" style="cursor:pointer;">
+            <td colspan="7" style="padding:0;">
+              <div class="expand-row" style="display:none;" id="promptDetail1">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:12px;">
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Role</div>
+                    <div style="color:#6b7280; margin-bottom:10px;">聚合分析助手，从20+位KOL的社交媒体/公众号/研报中提取一致观点和分歧点。</div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Task</div>
+                    <div style="color:#6b7280;">1. 提取本周KOL核心观点 2. 标记一致性和分歧 3. 标注每位KOL历史准确率 4. 生成共识/分歧对比表</div>
+                  </div>
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Input</div>
+                    <code>JSON { kol_ids: [], date_range: {}, topics: [] }</code>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">Output</div>
+                    <code>JSON { consensus: [], divergence: [], kol_accuracy: {}, summary: "" }</code>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">Constraints</div>
+                    <div style="color:#6b7280;">匿名化KOL但保留准确率标签; 分歧点必须引用原文</div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-prompt="2" style="cursor:pointer;">
+            <td><b>个股深度分析</b><br><span style="font-size:10px; color:#6b7280;">stock-deep-v2</span></td>
+            <td>v2</td>
+            <td>18K</td>
+            <td>个股全面评估</td>
+            <td>2026-07-03</td>
+            <td><span class="tag tag-green">运行中</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;" onclick="event.stopPropagation();togglePromptRow(2)">展开</button></td>
+          </tr>
+          <tr data-prompt="2" style="cursor:pointer;">
+            <td colspan="7" style="padding:0;">
+              <div class="expand-row" style="display:none;" id="promptDetail2">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:12px;">
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Role</div>
+                    <div style="color:#6b7280; margin-bottom:10px;">价值投资分析师，擅长DCF建模、竞争格局分析和护城河评估。基于Graham/Dodd + Porter五力框架。</div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Task</div>
+                    <div style="color:#6b7280;">对指定个股生成五因子评分、DCF估值区间、竞争位置图谱、风险矩阵。</div>
+                  </div>
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Input</div>
+                    <code>JSON { ticker: "", financials: {}, competitors: [], industry: "" }</code>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">Output</div>
+                    <code>JSON { ratings: {}, dcf_range: {}, moat: {}, risks: [], recommendation: "" }</code>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-prompt="3" style="cursor:pointer;">
+            <td><b>概念卡片</b><br><span style="font-size:10px; color:#6b7280;">concept-card-v1</span></td>
+            <td>v1</td>
+            <td>8K</td>
+            <td>新兴概念快速理解</td>
+            <td>2026-06-28</td>
+            <td><span class="tag tag-blue">测试中</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;" onclick="event.stopPropagation();togglePromptRow(3)">展开</button></td>
+          </tr>
+          <tr data-prompt="3" style="cursor:pointer;">
+            <td colspan="7" style="padding:0;">
+              <div class="expand-row" style="display:none;" id="promptDetail3">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:12px;">
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Role</div>
+                    <div style="color:#6b7280; margin-bottom:10px;">科普解释器，将复杂技术概念转化为投资视角的简明卡片。面向非技术背景投资者。</div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Task</div>
+                    <div style="color:#6b7280;">生成"是什么→为什么重要→受益标的→风险"四栏卡片，每栏不超过50字。</div>
+                  </div>
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Input</div>
+                    <code>JSON { concept: "", context: "", audience: "investor" }</code>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">Output</div>
+                    <code>JSON { card: { what, why, beneficiaries, risks } }</code>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-prompt="4" style="cursor:pointer;">
+            <td><b>复盘验证</b><br><span style="font-size:10px; color:#6b7280;">review-verify-v1</span></td>
+            <td>v1</td>
+            <td>14K</td>
+            <td>投资决策事后复盘</td>
+            <td>2026-06-20</td>
+            <td><span class="tag tag-blue">测试中</span></td>
+            <td><button class="btn-ghost" style="font-size:11px;" onclick="event.stopPropagation();togglePromptRow(4)">展开</button></td>
+          </tr>
+          <tr data-prompt="4" style="cursor:pointer;">
+            <td colspan="7" style="padding:0;">
+              <div class="expand-row" style="display:none;" id="promptDetail4">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:12px;">
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Role</div>
+                    <div style="color:#6b7280; margin-bottom:10px;">投资决策复盘教练，基于历史决策记录和实际市场表现，评估决策质量和认知偏差。</div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Task</div>
+                    <div style="color:#6b7280;">对比买入/卖出时的逻辑与实际结果，识别决策偏差类型（过度自信/锚定/确认偏误等），给出改进建议。</div>
+                  </div>
+                  <div>
+                    <div style="font-weight:600; color:#533afd; margin-bottom:6px;">Input</div>
+                    <code>JSON { trade_log: {}, market_actual: {}, time_period: {} }</code>
+                    <div style="font-weight:600; color:#533afd; margin-top:10px; margin-bottom:6px;">Output</div>
+                    <code>JSON { decision_quality: "", bias_detected: [], lessons: [], score: 0-100 }</code>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ============ TAB 5: 多模态交互 ============ -->
+  <div class="fade-in" id="tab-multimodal" style="display:none;">
+    <h2 style="font-size:16px; font-weight:700; margin-bottom:16px;">多模态交互 F3.3</h2>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:20px;">
+
+      <!-- 截图K线识别 -->
+      <div class="card" style="text-align:center;">
+        <div style="font-size:40px; margin-bottom:12px;">&#128247;</div>
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:8px;">截图K线识别</h3>
+        <p style="font-size:11px; color:#6b7280; margin-bottom:16px;">截图任意K线图 → AI识别技术形态<br>(头肩顶/双底/三角形/旗形等)</p>
+        <div class="dropzone" style="padding:24px;margin-bottom:12px;" onclick="alert('截图K线识别\n\n支持: 截图/拍照/粘贴\n识别: 趋势线+技术形态+关键价位\n\n(原型演示)')">
+          <div style="font-size:28px;">&#128206;</div>
+          <div style="font-size:11px; color:#9ca3af;">点击上传K线截图</div>
+        </div>
+        <div style="font-size:10px; color:#9ca3af;">支持 PNG/JPG · 自动标注关键位</div>
+      </div>
+
+      <!-- 拍照财报识别 -->
+      <div class="card" style="text-align:center;">
+        <div style="font-size:40px; margin-bottom:12px;">&#128202;</div>
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:8px;">拍照财报识别</h3>
+        <p style="font-size:11px; color:#6b7280; margin-bottom:16px;">拍照财报表格 → AI提取关键数据<br>自动同比/环比分析</p>
+        <div class="dropzone" style="padding:24px;margin-bottom:12px;" onclick="alert('拍照财报识别\n\n支持: 拍照/PDF截图/扫描件\n输出: 结构化财务数据+同比环比\n+异常项标注\n\n(原型演示)')">
+          <div style="font-size:28px;">&#128196;</div>
+          <div style="font-size:11px; color:#9ca3af;">点击上传财报截图</div>
+        </div>
+        <div style="font-size:10px; color:#9ca3af;">OCR + LLM提取 · 结构化输出</div>
+      </div>
+
+      <!-- 语音搜索 -->
+      <div class="card" style="text-align:center;">
+        <div style="font-size:40px; margin-bottom:12px;">&#127897;</div>
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:8px;">语音搜索</h3>
+        <p style="font-size:11px; color:#6b7280; margin-bottom:16px;">语音输入查询 → AI理解意图<br>如"今天白酒怎么了"</p>
+        <div style="padding:24px;margin-bottom:12px;background:#fafbfc;border-radius:12px;border:2px dashed #d1d5db;cursor:pointer;" onclick="alert('语音搜索\n\n支持: 普通话/粤语/英语\n示例:\n"帮我看看今天AI板块"\n"NVDA的技术面怎么样"\n\n(原型演示)')">
+          <div style="font-size:28px;">&#127908;</div>
+          <div style="font-size:11px; color:#9ca3af;">点击开始录音</div>
+        </div>
+        <div style="font-size:10px; color:#9ca3af;">Whisper + NL理解 · 中英文</div>
+      </div>
+    </div>
+
+    <!-- Recent multimodal history -->
+    <div class="card">
+      <h3 style="font-size:13px; font-weight:700; margin-bottom:12px;">&#128196; 最近识别记录</h3>
+      <table class="data-table">
+        <thead><tr><th>时间</th><th>类型</th><th>内容</th><th>结果</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>07-09 14:30</td>
+            <td><span class="tag tag-purple">截图K线</span></td>
+            <td>NVDA日K线截图</td>
+            <td>上升三角形突破 · 目标$155 · 置信度78%</td>
+          </tr>
+          <tr>
+            <td>07-09 10:15</td>
+            <td><span class="tag tag-blue">语音搜索</span></td>
+            <td>"半导体板块今天怎么了"</td>
+            <td>→ 唤醒半导体产业链页+当日新闻</td>
+          </tr>
+          <tr>
+            <td>07-08 16:00</td>
+            <td><span class="tag tag-green">拍照财报</span></td>
+            <td>宁德时代H1业绩预告截图</td>
+            <td>净利润预增35-42% · 超预期 · 标注3项异常</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /main-content -->
+
+<!-- ============ MODAL: 新建工作流 ============ -->
+<div class="modal-overlay" id="workflowModal" style="display:none;">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h2>新建工作流</h2>
+      <button class="btn-ghost" onclick="closeWorkflowModal()" style="font-size:18px;">&times;</button>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:12px; font-weight:600; margin-bottom:6px;">工作流名称</label>
+      <input class="input" type="text" placeholder="如: 每周五自选扫描">
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:12px; font-weight:600; margin-bottom:6px;">选择 Skill 链 (按执行顺序)</label>
+      <div class="checkbox-group" id="modalSkillPool">
+        <span class="chip-check" data-skill="行情扫描">行情扫描</span>
+        <span class="chip-check" data-skill="五因子评分">五因子评分</span>
+        <span class="chip-check" data-skill="F4风险检测">F4风险检测</span>
+        <span class="chip-check" data-skill="推送+简报">推送+简报</span>
+        <span class="chip-check" data-skill="财报提取">财报提取</span>
+        <span class="chip-check" data-skill="预期差分析">预期差分析</span>
+        <span class="chip-check" data-skill="跨市场对比">跨市场对比</span>
+        <span class="chip-check" data-skill="KOL观点聚合">KOL观点聚合</span>
+        <span class="chip-check" data-skill="宏观指标">宏观指标</span>
+        <span class="chip-check" data-skill="估值回测">估值回测</span>
+      </div>
+      <div style="font-size:10px; color:#9ca3af; margin-top:6px;">已选: <span id="selectedSkills">无</span></div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:12px; font-weight:600; margin-bottom:6px;">触发条件</label>
+      <select class="select" style="width:100%;">
+        <option>Cron 定时触发</option>
+        <option>事件触发 (财报发布)</option>
+        <option>手动触发</option>
+        <option>Webhook 触发</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:12px; font-weight:600; margin-bottom:6px;">Cron 表达式</label>
+      <input class="input" type="text" placeholder="0 17 * * 5 (每周五 17:00)" style="font-family:monospace;">
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:12px; font-weight:600; margin-bottom:6px;">关注标的池</label>
+      <select class="select" style="width:100%;">
+        <option>自选股池 (23只)</option>
+        <option>半导体池 (12只)</option>
+        <option>A50成分股 (50只)</option>
+        <option>自定义筛选</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+      <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="toggle-slider"></span>
+      </label>
+      <span style="font-size:12px;">完成后推送通知</span>
+    </div>
+
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button class="btn-outline" onclick="closeWorkflowModal()">取消</button>
+      <button class="btn-primary" onclick="closeWorkflowModal()">创建工作流</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ Tab Switching ============
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const target = this.dataset.tab;
+    document.querySelectorAll('[id^="tab-"]').forEach(p => p.style.display = 'none');
+    document.getElementById(target).style.display = 'block';
+    if (target === 'tab-rag') { setTimeout(initKnowledgeChart, 100); }
+  });
+});
+
+// ============ Modal ============
+function openWorkflowModal() { document.getElementById('workflowModal').style.display = 'flex'; }
+function closeWorkflowModal() { document.getElementById('workflowModal').style.display = 'none'; }
+document.getElementById('workflowModal').addEventListener('click', function(e) {
+  if (e.target === this) closeWorkflowModal();
+});
+
+// Skill chip selection in modal
+document.querySelectorAll('#modalSkillPool .chip-check').forEach(chip => {
+  chip.addEventListener('click', function() {
+    this.classList.toggle('selected');
+    updateSelectedSkills();
+  });
+});
+function updateSelectedSkills() {
+  const selected = document.querySelectorAll('#modalSkillPool .chip-check.selected');
+  const el = document.getElementById('selectedSkills');
+  el.textContent = selected.length === 0 ? '无' : Array.from(selected).map(s => s.dataset.skill).join(' → ');
+}
+
+// Skill tag click in main page
+document.querySelectorAll('#skillPool .skill-tag').forEach(tag => {
+  tag.addEventListener('click', function() {
+    this.classList.toggle('selected');
+    if (this.classList.contains('selected')) {
+      this.style.borderColor = '#533afd';
+      this.style.color = '#533afd';
+      this.style.background = '#f5f3ff';
+    } else {
+      this.style.borderColor = '#e5e7eb';
+      this.style.color = '#374151';
+      this.style.background = '#fff';
+    }
+  });
+});
+
+// ============ Dropzone ============
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const files = e.dataTransfer.files;
+  if (files.length) alert('文件已接收: ' + files[0].name + '\n(原型演示 — 实际将触发 Whisper 转录流水线)');
+});
+fileInput.addEventListener('change', function() {
+  if (this.files.length) alert('文件已选择: ' + this.files[0].name + '\n(原型演示)');
+});
+
+// ============ RAG Chat ============
+function sendRagMessage() {
+  const input = document.getElementById('ragInput');
+  if (!input.value.trim()) return;
+  const chat = document.getElementById('ragChat');
+  const now = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
+  chat.insertAdjacentHTML('beforeend',
+    '<div style="display:flex;flex-direction:column;align-items:flex-end;">' +
+    '<div class="bubble-user">' + input.value + '</div>' +
+    '<span style="font-size:9px;color:#9ca3af;margin-top:2px;">' + now + '</span></div>' +
+    '<div style="display:flex;flex-direction:column;align-items:flex-start;">' +
+    '<div class="bubble-ai">正在检索你的私域知识库... (原型演示 — 实际将调用 RAG 流水线)</div>' +
+    '<span style="font-size:9px;color:#9ca3af;margin-top:2px;">' + now + '</span></div>'
+  );
+  input.value = '';
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// ============ Workflow AI Chat ============
+var modelMode = 'single';
+var activeModels = ['deepseek', 'gpt'];
+
+window.switchModelMode = function(mode) {
+  modelMode = mode;
+  var chips = document.querySelectorAll('.model-chip');
+  if (mode === 'single') {
+    chips.forEach(function(c) { c.style.display = ''; });
+    // Keep only first model active in single mode
+    chips.forEach(function(c) { c.classList.remove('active'); });
+    chips[0].classList.add('active');
+    activeModels = [chips[0].dataset.model];
+  } else {
+    chips.forEach(function(c) { c.style.display = ''; });
+  }
+};
+
+window.toggleModel = function(chip) {
+  if (modelMode === 'single') {
+    document.querySelectorAll('.model-chip').forEach(function(c) { c.classList.remove('active'); });
+    chip.classList.add('active');
+    activeModels = [chip.dataset.model];
+  } else {
+    chip.classList.toggle('active');
+    activeModels = Array.from(document.querySelectorAll('.model-chip.active')).map(function(c) { return c.dataset.model; });
+    if (activeModels.length === 0) { chip.classList.add('active'); activeModels = [chip.dataset.model]; }
+  }
+};
+
+(function initWorkflowChat() {
+  const chatMessages = document.getElementById('workflowChatMessages');
+  const chatInput = document.getElementById('workflowChatInput');
+  const sendBtn = document.getElementById('workflowChatSend');
+  const attachBtn = document.getElementById('chatAttachBtn');
+  const chips = document.querySelectorAll('#quickRefChips .skill-tag');
+
+  function scrollToBottom() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function getTime() {
+    return new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit'});
+  }
+
+  function appendUserMessage(text) {
+    chatMessages.insertAdjacentHTML('beforeend',
+      '<div style="display:flex;flex-direction:column;align-items:flex-end;" class="fade-in">' +
+      '<div class="bubble-user" style="font-size:13px;"><b>' + escapeHtml(text) + '</b></div>' +
+      '<span style="font-size:10px;color:#9ca3af;margin-top:3px;">' + getTime() + '</span></div>'
+    );
+    scrollToBottom();
+  }
+
+  function appendLoadingMessage(msg) {
+    var loadingMsg = msg || 'AI思考中';
+    const loadingId = 'loading-' + Date.now();
+    chatMessages.insertAdjacentHTML('beforeend',
+      '<div style="display:flex;flex-direction:column;align-items:flex-start;" id="' + loadingId + '" class="fade-in">' +
+      '<div class="bubble-ai" style="font-size:13px;color:#6b7280;">' +
+      '<span style="display:inline-block;animation:pulse 1.2s infinite;">' + loadingMsg + '</span>' +
+      '<span class="loading-dots"></span></div>' +
+      '<span style="font-size:10px;color:#9ca3af;margin-top:3px;">' + getTime() + '</span></div>'
+    );
+    scrollToBottom();
+    const dots = document.querySelector('#' + loadingId + ' .loading-dots');
+    let count = 0;
+    const interval = setInterval(function() {
+      count = (count + 1) % 4;
+      if (dots) dots.textContent = '.'.repeat(count);
+    }, 400);
+    return { id: loadingId, interval: interval };
+  }
+
+  function removeLoading(loading) {
+    clearInterval(loading.interval);
+    const el = document.getElementById(loading.id);
+    if (el) el.remove();
+  }
+
+  function appendAiMessage(text) {
+    chatMessages.insertAdjacentHTML('beforeend',
+      '<div style="display:flex;flex-direction:column;align-items:flex-start;" class="fade-in">' +
+      '<div class="bubble-ai" style="font-size:13px;line-height:1.7;">' + text + '</div>' +
+      '<span style="font-size:10px;color:#9ca3af;margin-top:3px;">' + getTime() + '</span></div>'
+    );
+    scrollToBottom();
+  }
+
+  var MODEL_NAMES = { deepseek: 'DeepSeek-V3', gpt: 'GPT-5.5', claude: 'Claude-4', gemini: 'Gemini-3', qwen: 'Qwen3.6', llama: 'Llama-4' };
+  var MODEL_COLORS = { deepseek: '#533afd', gpt: '#16a34a', claude: '#dc2626', gemini: '#3b82f6', qwen: '#f59e0b', llama: '#8b5cf6' };
+
+  function getMultiModelResponse(userText) {
+    var models = activeModels.length > 0 ? activeModels : ['deepseek'];
+    var hasRef = userText.includes('@');
+    var refs = [];
+    if (userText.includes('五因子')) refs.push('五因子评分 Skill v2.3');
+    if (userText.includes('产业链') || userText.includes('图谱')) refs.push('产业链知识图谱 Skill v1.0');
+    if (userText.includes('量化') || userText.includes('策略')) refs.push('量化策略: 低估值+ROE+趋势跟随');
+    if (userText.includes('KOL') || userText.includes('观点')) refs.push('KOL观点聚合 Skill v1.2');
+
+    var header = '';
+    if (refs.length > 0) {
+      header = '<div style="font-size:11px;color:#533afd;margin-bottom:10px;padding:6px 10px;background:#f5f3ff;border-radius:6px;">&#128736; 已加载 Skill: <b>' + refs.join('</b> &middot; <b>') + '</b></div>';
+    }
+
+    // Multi-model: show each model's response
+    var modelsHtml = '';
+    var bullCount = 0, neutralCount = 0, bearCount = 0;
+    models.forEach(function(m, i) {
+      var name = MODEL_NAMES[m] || m;
+      var color = MODEL_COLORS[m] || '#6b7280';
+      var score = Math.floor(Math.random() * 15) + 65; // 65-80
+      var sentiment = score >= 75 ? 'bull' : score >= 68 ? 'neutral' : 'bear';
+      if (sentiment === 'bull') bullCount++;
+      else if (sentiment === 'neutral') neutralCount++;
+      else bearCount++;
+
+      var answer;
+      if (userText.toLowerCase().includes('nvda') || userText.includes('英伟达')) {
+        answer = '<b>NVDA评估:</b> 综合评分 <b style="color:' + color + '">' + score + '/100</b><br>' +
+          'F1资金' + (70+Math.floor(Math.random()*20)) + ' | F2宏观' + (65+Math.floor(Math.random()*20)) + ' | F3情绪' + (75+Math.floor(Math.random()*20)) +
+          ' | F4估值' + (55+Math.floor(Math.random()*20)) + ' | F5技术' + (70+Math.floor(Math.random()*20)) + '<br>' +
+          (sentiment === 'bull' ? '&#128200; 偏多：AI算力需求强劲' : sentiment === 'bear' ? '&#128201; 偏空：估值偏高需谨慎' : '&#128204; 中性：持有观望');
+      } else {
+        answer = '<b>分析结果:</b> 综合评分 <b style="color:' + color + '">' + score + '/100</b><br>' +
+          '已基于引用的Skill和策略完成评估<br>' +
+          (sentiment === 'bull' ? '&#128200; 看多' : sentiment === 'bear' ? '&#128201; 偏空' : '&#128204; 中性');
+      }
+
+      modelsHtml += '<div class="multi-model-card">' +
+        '<div class="model-name"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + color + ';"></span> ' + name + '</div>' +
+        '<div class="model-answer">' + answer + '</div></div>';
+    });
+
+    // Consensus summary
+    var total = models.length;
+    var consensusIcon = bullCount >= total * 0.6 ? '&#9989;' : bearCount >= total * 0.6 ? '&#9888;' : '&#9881;';
+    var consensusText = bullCount >= total * 0.6 ? '多模型共识偏多 (' + bullCount + '/' + total + ' 看多)' :
+                        bearCount >= total * 0.6 ? '多模型共识偏空 (' + bearCount + '/' + total + ' 看空)' :
+                        '模型存在分歧 (' + bullCount + '多/' + neutralCount + '中/' + bearCount + '空) — 建议谨慎';
+
+    var consensusHtml = '<div style="margin-top:8px; padding:10px 14px; background:#fffbeb; border:1px solid #fde68a; border-radius:8px;">' +
+      '<div style="font-size:12px;font-weight:600;color:#92400e;margin-bottom:4px;">' + consensusIcon + ' 共识摘要</div>' +
+      '<div style="font-size:11px;color:#92400e;">' + consensusText + '</div>' +
+      '<div class="consensus-bar" style="margin-top:6px;">' +
+      (bullCount > 0 ? '<div class="cb-bull" style="width:' + (bullCount/total*100) + '%;"></div>' : '') +
+      (neutralCount > 0 ? '<div class="cb-neutral" style="width:' + (neutralCount/total*100) + '%;"></div>' : '') +
+      (bearCount > 0 ? '<div class="cb-bear" style="width:' + (bearCount/total*100) + '%;"></div>' : '') +
+      '</div></div>';
+
+    return header + '<div style="font-size:11px;color:#6b7280;margin-bottom:6px;">&#129521; 调用 ' + models.length + ' 个模型并行回答:</div>' + modelsHtml + consensusHtml;
+  }
+
+  function getMockAiResponse(userText) {
+    var hasRef = userText.includes('@');
+    var refs = [];
+    if (userText.includes('五因子')) refs.push('五因子评分 Skill v2.3');
+    if (userText.includes('产业链') || userText.includes('图谱')) refs.push('产业链知识图谱 Skill v1.0');
+    if (userText.includes('量化') || userText.includes('策略')) refs.push('量化策略: 低估值+ROE+趋势跟随 (回测年化+28.3%, 夏普2.35)');
+    if (userText.includes('KOL') || userText.includes('观点')) refs.push('KOL观点聚合 Skill v1.2');
+    if (userText.includes('技术指标')) refs.push('技术指标分析 Skill v2.0');
+    if (userText.includes('财报')) refs.push('财报数据提取 Skill v1.5');
+
+    var header = '';
+    if (refs.length > 0) {
+      header = '<div style="font-size:11px;color:#533afd;margin-bottom:8px;padding:6px 10px;background:#f5f3ff;border-radius:6px;display:inline-block;">&#128736; 已加载 Skill: <b>' + refs.join('</b> &middot; <b>') + '</b></div>';
+    }
+
+    var body;
+    if (userText.toLowerCase().includes('nvda') || userText.includes('英伟达')) {
+      body = '<b>NVDA 综合分析 (基于已加载Skill):</b><br><br>' +
+        '<b>五因子评分汇总:</b> F1资金面 78 | F2宏观 72 | F3情绪 85 | F4估值 65 | F5技术 80<br>' +
+        '<b>综合评级:</b> A- (76/100)<br><br>' +
+        '<b>关键发现:</b><br>' +
+        '&bull; AI算力需求持续超预期，数据中心收入YoY +112%<br>' +
+        '&bull; Rubin架构预计2026H2发布，Blackwell Ultra持续放量<br>' +
+        '&bull; 估值处于历史80%分位，需关注回调风险<br>' +
+        '&bull; 供应链: CoWoS产能是关键瓶颈，HBM供给逐步改善<br><br>' +
+        '<span style="font-size:11px;color:#6b7280;">&#128213; 数据来源: 五因子评分矩阵 v2026-07, 产业链知识图谱, 近30天20+研报共识</span>';
+    } else if (userText.toLowerCase().includes('tsmc') || userText.includes('台积电')) {
+      body = '<b>TSMC 五因子分析:</b><br><br>' +
+        '<b>综合评级:</b> A (88/100)<br>' +
+        'F1资金面 92 | F2宏观 80 | F3情绪 88 | F4估值 82 | F5技术 90<br><br>' +
+        '<b>核心优势:</b> 3nm/5nm产能利用率95%+，先进制程垄断地位稳固，AI/HPC营收占比超50%<br>' +
+        '<b>风险:</b> 地缘政治、海外厂成本高于台湾本土20-30%<br><br>' +
+        '<span style="font-size:11px;color:#6b7280;">&#128213; 基于已加载的Skill和最新产业链数据</span>';
+    } else if (userText.includes('对比') || userText.includes('比较')) {
+      body = '<b>多标的对比分析:</b><br><br>' +
+        '<table style="width:100%;border-collapse:collapse;font-size:11px;margin:8px 0;">' +
+        '<tr style="border-bottom:1px solid #e5e7eb;"><th style="text-align:left;padding:4px 8px;">标的</th><th style="text-align:left;padding:4px 8px;">五因子评分</th><th style="text-align:left;padding:4px 8px;">PE</th><th style="text-align:left;padding:4px 8px;">ROE</th><th style="text-align:left;padding:4px 8px;">建议</th></tr>' +
+        '<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:4px 8px;">NVDA</td><td style="padding:4px 8px;">A- (76)</td><td style="padding:4px 8px;">38x</td><td style="padding:4px 8px;">118%</td><td style="padding:4px 8px;color:#dc2626;">估值偏高</td></tr>' +
+        '<tr style="border-bottom:1px solid #f3f4f6;"><td style="padding:4px 8px;">TSMC</td><td style="padding:4px 8px;">A (88)</td><td style="padding:4px 8px;">18x</td><td style="padding:4px 8px;">28%</td><td style="padding:4px 8px;color:#16a34a;">&#10003; 合理</td></tr>' +
+        '<tr><td style="padding:4px 8px;">ASML</td><td style="padding:4px 8px;">A- (82)</td><td style="padding:4px 8px;">32x</td><td style="padding:4px 8px;">60%</td><td style="padding:4px 8px;color:#16a34a;">&#10003; 合理</td></tr>' +
+        '</table><br>' +
+        '<span style="font-size:11px;color:#6b7280;">&#128161; 建议优先关注TSMC和ASML，估值更为合理且护城河同样深厚。</span>';
+    } else {
+      body = '<b>分析结果:</b><br><br>' +
+        '已基于引用的Skill和策略完成分析。当前覆盖以下维度：<br>' +
+        '&bull; 五因子评分 (F1-F5完整评估)<br>' +
+        '&bull; 产业链位置与竞争格局<br>' +
+        '&bull; LLM共识与市场情绪<br>' +
+        '&bull; 风险矩阵与预警信号<br><br>' +
+        '<span style="font-size:11px;color:#6b7280;">&#128161; 提示: 你可以继续追问细节，或引用额外的Skill/策略来深化分析。也可以说"加入@量化策略"来叠加策略过滤。</span>';
+    }
+
+    return header + body;
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function sendMessage() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+
+    appendUserMessage(text);
+    chatInput.value = '';
+
+    var isMulti = modelMode === 'multi' && activeModels.length > 1;
+    var loadingMsg = isMulti ? '调用 ' + activeModels.length + ' 个模型并行分析中' : 'AI思考中';
+    var loading = appendLoadingMessage(loadingMsg);
+
+    var delay = isMulti ? 2000 : 1500;
+
+    setTimeout(function() {
+      removeLoading(loading);
+      if (isMulti) {
+        appendAiMessage(getMultiModelResponse(text));
+      } else {
+        appendAiMessage(getMockAiResponse(text));
+      }
+    }, delay);
+  }
+
+  // Send button
+  sendBtn.addEventListener('click', sendMessage);
+
+  // Enter key
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Quick reference chips
+  chips.forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      var ref = this.dataset.ref;
+      var current = chatInput.value;
+      if (current && !current.endsWith(' ')) current += ' ';
+      chatInput.value = current + ref + ' ';
+      chatInput.focus();
+    });
+  });
+
+  // Attach button (paperclip) - prototype demo
+  attachBtn.addEventListener('click', function() {
+    alert('附加文件/Skill\n\n支持:\n• 上传PDF/Excel/CSV文件\n• 选择已安装的Skill\n• 粘贴外部链接\n\n(原型演示)');
+  });
+})();
+
+// ============ Prompt Row Expand ============
+function togglePromptRow(index) {
+  const detail = document.getElementById('promptDetail' + index);
+  const isVisible = detail.style.display !== 'none';
+  // Hide all first
+  document.querySelectorAll('[id^="promptDetail"]').forEach(d => d.style.display = 'none');
+  document.querySelectorAll('#promptTable tbody tr').forEach(r => r.classList.remove('expanded'));
+  if (!isVisible) {
+    detail.style.display = 'block';
+    const rows = document.querySelectorAll('[data-prompt="' + index + '"]');
+    rows.forEach(r => r.classList.add('expanded'));
+  }
+}
+
+// ============ ECharts: Knowledge Stats ============
+function initKnowledgeChart() {
+  const dom = document.getElementById('knowledgeChart');
+  if (!dom || dom.dataset.init === '1') return;
+  dom.dataset.init = '1';
+  const chart = echarts.init(dom);
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: 40, right: 16, top: 10, bottom: 20 },
+    xAxis: {
+      type: 'category',
+      data: ['06-01','06-08','06-15','06-22','06-29','07-06'],
+      axisLabel: { fontSize: 9, color: '#9ca3af' },
+      axisLine: { lineStyle: { color: '#e5e7eb' } },
+      axisTick: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: '#f3f4f6' } },
+      axisLabel: { fontSize: 9, color: '#9ca3af' },
+      min: 0
+    },
+    series: [
+      {
+        name: '文档数',
+        type: 'bar',
+        data: [210, 218, 225, 233, 240, 247],
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: '#533afd' },
+            { offset: 1, color: '#a78bfa' }
+          ]),
+          borderRadius: [4, 4, 0, 0]
+        },
+        barWidth: 12
+      },
+      {
+        name: '向量片段',
+        type: 'line',
+        data: [1560, 1620, 1680, 1740, 1790, 1842],
+        lineStyle: { color: '#f59e0b', width: 2 },
+        itemStyle: { color: '#f59e0b' },
+        symbol: 'circle',
+        symbolSize: 5,
+        smooth: true
+      }
+    ]
+  });
+}
+
+// Init chart on RAG tab if visible by default (unlikely, but safe)
+window.addEventListener('load', () => {
+  if (document.getElementById('tab-rag').style.display !== 'none') {
+    setTimeout(initKnowledgeChart, 200);
+  }
+});
+</script>
+
+</body>
+</html>

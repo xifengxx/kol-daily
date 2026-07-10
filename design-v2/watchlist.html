@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自选股 | AI智能投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; background-color: #F5F5F7; }
+  .card { background: #FFFFFF; border-radius: 12px; border: 1px solid #E5E5EA; padding: 24px; }
+  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+  .badge-primary { background: #0071E3; color: #FFFFFF; }
+  .badge-success { background: #34C759; color: #FFFFFF; }
+  .badge-warning { background: #FF9500; color: #FFFFFF; }
+  .badge-neutral { background: #F2F2F7; color: #1D1D1F; }
+  .table-header { background: #F2F2F7; color: #86868B; font-size: 12px; font-weight: 500; padding: 12px 16px; text-align: left; }
+  .table-row { padding: 14px 16px; border-bottom: 1px solid #E5E5EA; font-size: 14px; cursor: pointer; }
+  .table-row:hover { background: #F5F5F7; }
+  .table-row.selected { border-left: 4px solid #0071E3; background: #F5F5F7; }
+  .up { color: #FF3B30; }
+  .down { color: #34C759; }
+  .us-up { color: #34C759; }
+  .us-down { color: #FF3B30; }
+  .hidden { display: none !important; }
+  .sidebar-group { padding: 10px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+  .sidebar-group:hover { background: #F5F5F7; }
+  .sidebar-group.active { background: #0071E3; color: #FFFFFF; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal-content { background: #FFFFFF; border-radius: 16px; padding: 24px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; }
+  .sparkline { height: 30px; width: 80px; }
+  .score-bar { height: 4px; border-radius: 2px; background: #F2F2F7; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 2px; }
+  @media (max-width: 1024px) { .sidebar { display: none; } }
+  @media (max-width: 640px) { .card { padding: 16px; } }
+</style>
+</head>
+<body class="min-h-screen">
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">自选股</span>
+  </div>
+</div>
+
+
+<!-- 顶部导航栏 -->
+<nav class="fixed top-0 left-0 right-0 bg-white border-b border-[#E5E5EA] z-50" style="height:56px">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-[#0071E3] rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c.251.023.501.05.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714a2.25 2.25 0 0 1-.659 1.591L14.25 14.5M9.75 3.104c.282.044.565.087.848.135m7.363-1.181A24.375 24.375 0 0 1 21 6.75m-9 5.25h.008v.008h-.008V12Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H13.5v-.008Zm0 2.25h.008v.008H13.5V12Zm0 2.25h.008v.008H13.5v-.008Zm2.25-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V12Zm0 2.25h.008v.008h-.008v-.008Z"/></svg>
+      </div>
+      <span class="font-semibold text-[#1D1D1F]" style="font-size:16px">AI智能投研助手</span>
+    </div>
+    <div class="hidden md:flex flex-1 max-w-md mx-8">
+      <div class="relative w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索股票、概念..." class="w-full h-10 pl-10 pr-4 rounded-lg bg-[#F5F5F7] border border-transparent focus:bg-white focus:border-[#0071E3] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,113,227,0.15)] text-sm transition-all">
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <span class="text-sm text-[#86868B] hidden sm:block">2025-07-10</span>
+      <div class="w-8 h-8 rounded-full bg-[#0071E3] flex items-center justify-center text-white text-xs font-medium cursor-pointer">A</div>
+    </div>
+  </div>
+</nav>
+
+<!-- 主内容区 -->
+<main class="pt-[56px]">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- 页面标题 -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div>
+        <h1 class="font-bold text-[#1D1D1F]" style="font-size:28px;line-height:1.2;letter-spacing:-0.02em">自选股</h1>
+        <p class="text-[#86868B] text-sm mt-1">共 12 只股票</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="px-4 py-2 rounded-lg text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-opacity" onclick="showAddModal()">+ 添加股票</button>
+        <button class="px-4 py-2 rounded-lg text-sm font-medium bg-[#F2F2F7] text-[#1D1D1F] hover:bg-[#E5E5EA] transition-colors">导入</button>
+        <button class="px-4 py-2 rounded-lg text-sm font-medium bg-[#F2F2F7] text-[#1D1D1F] hover:bg-[#E5E5EA] transition-colors">导出</button>
+      </div>
+    </div>
+
+    <div class="flex gap-6">
+      <!-- 侧边栏分组 -->
+      <aside class="sidebar w-48 flex-shrink-0 hidden lg:block">
+        <div class="card p-4">
+          <div class="text-xs font-medium text-[#86868B] uppercase mb-3 tracking-wider">分组</div>
+          <div class="space-y-1">
+            <div class="sidebar-group active flex justify-between items-center"><span class="text-sm font-medium">全部</span><span class="text-xs">12</span></div>
+            <div class="sidebar-group flex justify-between items-center text-[#86868B]"><span class="text-sm">AI持仓</span><span class="text-xs">4</span></div>
+            <div class="sidebar-group flex justify-between items-center text-[#86868B]"><span class="text-sm">港股</span><span class="text-xs">2</span></div>
+            <div class="sidebar-group flex justify-between items-center text-[#86868B]"><span class="text-sm">美股</span><span class="text-xs">3</span></div>
+            <div class="sidebar-group flex justify-between items-center text-[#86868B]"><span class="text-sm">价值蓝筹</span><span class="text-xs">3</span></div>
+            <div class="sidebar-group flex justify-between items-center text-[#86868B]"><span class="text-sm">+ 新建分组</span></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 主表格区 -->
+      <div class="flex-1 min-w-0">
+        <!-- 工具栏 -->
+        <div class="card mb-4 py-3 px-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-[#E5E5EA] text-[#0071E3] focus:ring-[#0071E3]">
+              <span class="text-sm text-[#1D1D1F]">全选</span>
+            </label>
+            <button class="px-3 py-1.5 rounded-lg text-sm font-medium bg-[#F2F2F7] text-[#86868B] hover:bg-[#E5E5EA] transition-colors" onclick="batchDiagnose()">批量诊断</button>
+            <div class="flex-1"></div>
+            <select class="h-8 px-3 rounded-lg bg-[#F5F5F7] border border-[#E5E5EA] text-sm text-[#1D1D1F] focus:outline-none focus:border-[#0071E3]">
+              <option>全部市场</option>
+              <option>A股</option>
+              <option>港股</option>
+              <option>美股</option>
+            </select>
+            <select class="h-8 px-3 rounded-lg bg-[#F5F5F7] border border-[#E5E5EA] text-sm text-[#1D1D1F] focus:outline-none focus:border-[#0071E3]">
+              <option>全部涨跌幅</option>
+              <option>上涨</option>
+              <option>下跌</option>
+            </select>
+            <select class="h-8 px-3 rounded-lg bg-[#F5F5F7] border border-[#E5E5EA] text-sm text-[#1D1D1F] focus:outline-none focus:border-[#0071E3]">
+              <option>全部评分</option>
+              <option>80分以上</option>
+              <option>60-80分</option>
+              <option>60分以下</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 表格 -->
+        <div class="card overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full" id="watchlistTable">
+              <thead>
+                <tr>
+                  <th class="table-header rounded-tl-lg w-10"><input type="checkbox" id="headerCheckbox" class="w-4 h-4 rounded border-[#E5E5EA]"></th>
+                  <th class="table-header">股票名称</th>
+                  <th class="table-header">代码</th>
+                  <th class="table-header">当前价</th>
+                  <th class="table-header">涨跌幅</th>
+                  <th class="table-header">走势</th>
+                  <th class="table-header">五因子</th>
+                  <th class="table-header">评级</th>
+                  <th class="table-header">所属板块</th>
+                  <th class="table-header rounded-tr-lg">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="table-row" data-code="600519.SH">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">贵州茅台</td>
+                  <td class="text-[#86868B]">600519.SH</td>
+                  <td class="font-medium">1,580.00</td>
+                  <td class="up font-medium">+1.25%</td>
+                  <td><div class="sparkline" id="spark1"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:88%;background:#34C759"></div></div><div class="text-xs mt-1">88</div></td>
+                  <td><span class="badge badge-success">core</span></td>
+                  <td class="text-[#86868B]">白酒</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="300750.SZ">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">宁德时代</td>
+                  <td class="text-[#86868B]">300750.SZ</td>
+                  <td class="font-medium">218.50</td>
+                  <td class="down font-medium">-0.85%</td>
+                  <td><div class="sparkline" id="spark2"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:82%;background:#0071E3"></div></div><div class="text-xs mt-1">82</div></td>
+                  <td><span class="badge badge-success">core</span></td>
+                  <td class="text-[#86868B]">新能源</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="00700.HK">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">腾讯控股</td>
+                  <td class="text-[#86868B]">00700.HK</td>
+                  <td class="font-medium">385.20</td>
+                  <td class="up font-medium">+2.15%</td>
+                  <td><div class="sparkline" id="spark3"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:90%;background:#34C759"></div></div><div class="text-xs mt-1">90</div></td>
+                  <td><span class="badge badge-success">core</span></td>
+                  <td class="text-[#86868B]">互联网</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="NVDA.US">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">英伟达</td>
+                  <td class="text-[#86868B]">NVDA.US</td>
+                  <td class="font-medium">128.50</td>
+                  <td class="us-up font-medium">+3.45%</td>
+                  <td><div class="sparkline" id="spark4"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:95%;background:#34C759"></div></div><div class="text-xs mt-1">95</div></td>
+                  <td><span class="badge badge-success">core</span></td>
+                  <td class="text-[#86868B]">AI芯片</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="AAPL.US">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">苹果</td>
+                  <td class="text-[#86868B]">AAPL.US</td>
+                  <td class="font-medium">225.80</td>
+                  <td class="us-up font-medium">+0.95%</td>
+                  <td><div class="sparkline" id="spark5"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:85%;background:#34C759"></div></div><div class="text-xs mt-1">85</div></td>
+                  <td><span class="badge badge-primary">tactical</span></td>
+                  <td class="text-[#86868B]">消费电子</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="600036.SH">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">招商银行</td>
+                  <td class="text-[#86868B]">600036.SH</td>
+                  <td class="font-medium">35.20</td>
+                  <td class="up font-medium">+0.55%</td>
+                  <td><div class="sparkline" id="spark6"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:76%;background:#0071E3"></div></div><div class="text-xs mt-1">76</div></td>
+                  <td><span class="badge badge-primary">tactical</span></td>
+                  <td class="text-[#86868B]">银行</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="002594.SZ">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">比亚迪</td>
+                  <td class="text-[#86868B]">002594.SZ</td>
+                  <td class="font-medium">258.00</td>
+                  <td class="up font-medium">+1.85%</td>
+                  <td><div class="sparkline" id="spark7"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:84%;background:#34C759"></div></div><div class="text-xs mt-1">84</div></td>
+                  <td><span class="badge badge-primary">tactical</span></td>
+                  <td class="text-[#86868B]">新能源汽车</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="300308.SZ">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">中际旭创</td>
+                  <td class="text-[#86868B]">300308.SZ</td>
+                  <td class="font-medium">158.50</td>
+                  <td class="up font-medium">+6.83%</td>
+                  <td><div class="sparkline" id="spark8"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:92%;background:#34C759"></div></div><div class="text-xs mt-1">92</div></td>
+                  <td><span class="badge badge-success">core</span></td>
+                  <td class="text-[#86868B]">光模块</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="601138.SH">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">工业富联</td>
+                  <td class="text-[#86868B]">601138.SH</td>
+                  <td class="font-medium">22.80</td>
+                  <td class="up font-medium">+4.56%</td>
+                  <td><div class="sparkline" id="spark9"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:88%;background:#34C759"></div></div><div class="text-xs mt-1">88</div></td>
+                  <td><span class="badge badge-success">core</span></td>
+                  <td class="text-[#86868B]">AI服务器</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="BABA.US">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">阿里巴巴</td>
+                  <td class="text-[#86868B]">BABA.US</td>
+                  <td class="font-medium">98.50</td>
+                  <td class="us-up font-medium">+2.10%</td>
+                  <td><div class="sparkline" id="spark10"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:78%;background:#0071E3"></div></div><div class="text-xs mt-1">78</div></td>
+                  <td><span class="badge badge-primary">tactical</span></td>
+                  <td class="text-[#86868B]">电商</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="601318.SH">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">中国平安</td>
+                  <td class="text-[#86868B]">601318.SH</td>
+                  <td class="font-medium">42.50</td>
+                  <td class="down font-medium">-0.35%</td>
+                  <td><div class="sparkline" id="spark11"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:72%;background:#0071E3"></div></div><div class="text-xs mt-1">72</div></td>
+                  <td><span class="badge badge-neutral">watch</span></td>
+                  <td class="text-[#86868B]">保险</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+                <tr class="table-row" data-code="600030.SH">
+                  <td><input type="checkbox" class="row-checkbox w-4 h-4 rounded border-[#E5E5EA]"></td>
+                  <td class="font-medium">中信证券</td>
+                  <td class="text-[#86868B]">600030.SH</td>
+                  <td class="font-medium">22.30</td>
+                  <td class="up font-medium">+1.20%</td>
+                  <td><div class="sparkline" id="spark12"></div></td>
+                  <td><div class="w-16 score-bar"><div class="score-bar-fill" style="width:80%;background:#0071E3"></div></div><div class="text-xs mt-1">80</div></td>
+                  <td><span class="badge badge-neutral">watch</span></td>
+                  <td class="text-[#86868B]">券商</td>
+                  <td><button class="text-[#0071E3] text-sm hover:underline">诊断</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 批量诊断面板 -->
+        <div id="batchPanel" class="card mt-4 hidden">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <span class="text-sm text-[#1D1D1F]">已选 <strong id="selectedCount">0</strong> 只股票</span>
+              <button class="px-4 py-2 rounded-lg text-sm font-medium bg-[#0071E3] text-white hover:opacity-90 transition-opacity">开始批量诊断</button>
+            </div>
+            <div class="text-xs text-[#86868B]">上次诊断：2025-07-09 15:30</div>
+          </div>
+        </div>
+
+        <!-- 底部统计 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+          <div class="card">
+            <div class="text-xs text-[#86868B] mb-2">总持仓市值</div>
+            <div class="font-semibold text-2xl text-[#1D1D1F]">¥ 2,850,000</div>
+            <div class="text-xs text-[#86868B] mt-1">模拟持仓</div>
+          </div>
+          <div class="card">
+            <div class="text-xs text-[#86868B] mb-2">当日盈亏</div>
+            <div class="font-semibold text-2xl up">+¥ 32,580</div>
+            <div class="text-xs text-[#86868B] mt-1">+1.15%</div>
+          </div>
+          <div class="card">
+            <div class="text-xs text-[#86868B] mb-2">持仓分布</div>
+            <div id="allocationChart" style="height:120px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 添加弹窗 -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal-content">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-semibold text-[#1D1D1F] text-lg">添加自选股</h3>
+      <button onclick="hideAddModal()" class="w-8 h-8 rounded-full hover:bg-[#F5F5F7] flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-[#86868B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="relative mb-4">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="stockSearchInput" placeholder="输入股票代码或名称..." class="w-full h-10 pl-10 pr-4 rounded-lg bg-[#F5F5F7] border border-[#E5E5EA] focus:bg-white focus:border-[#0071E3] focus:outline-none text-sm transition-all">
+    </div>
+    <div id="searchResults" class="space-y-2 max-h-60 overflow-y-auto">
+      <div class="p-3 rounded-lg hover:bg-[#F5F5F7] cursor-pointer flex justify-between items-center">
+        <div><div class="text-sm font-medium">中芯国际</div><div class="text-xs text-[#86868B]">0981.HK</div></div>
+        <button class="px-3 py-1 rounded-lg text-xs font-medium bg-[#0071E3] text-white">添加</button>
+      </div>
+      <div class="p-3 rounded-lg hover:bg-[#F5F5F7] cursor-pointer flex justify-between items-center">
+        <div><div class="text-sm font-medium">特斯拉</div><div class="text-xs text-[#86868B]">TSLA.US</div></div>
+        <button class="px-3 py-1 rounded-lg text-xs font-medium bg-[#0071E3] text-white">添加</button>
+      </div>
+      <div class="p-3 rounded-lg hover:bg-[#F5F5F7] cursor-pointer flex justify-between items-center">
+        <div><div class="text-sm font-medium">五粮液</div><div class="text-xs text-[#86868B]">000858.SZ</div></div>
+        <button class="px-3 py-1 rounded-lg text-xs font-medium bg-[#0071E3] text-white">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Sparkline图表
+const sparkIds = ['spark1','spark2','spark3','spark4','spark5','spark6','spark7','spark8','spark9','spark10','spark11','spark12'];
+sparkIds.forEach((id, idx) => {
+  const dom = document.getElementById(id);
+  if (!dom) return;
+  const chart = echarts.init(dom);
+  const data = Array.from({length:20}, (_,i) => 50 + (Math.random()-0.5) * 10 + (idx % 2 === 0 ? i * 0.5 : -i * 0.3));
+  chart.setOption({
+    grid: { left: 0, right: 0, top: 2, bottom: 2 },
+    xAxis: { type: 'category', show: false },
+    yAxis: { type: 'value', show: false },
+    series: [{ data: data, type: 'line', smooth: true, lineStyle: { width: 1.5, color: idx % 2 === 0 ? '#FF3B30' : '#34C759' }, symbol: 'none' }]
+  });
+});
+
+// 持仓分布饼图
+const allocationChart = echarts.init(document.getElementById('allocationChart'));
+allocationChart.setOption({
+  tooltip: { trigger: 'item', backgroundColor: '#FFFFFF', borderRadius: 8, borderColor: '#E5E5EA', textStyle: { color: '#1D1D1F' } },
+  series: [{
+    type: 'pie', radius: ['45%', '70%'], avoidLabelOverlap: false,
+    label: { show: false },
+    data: [
+      { value: 35, name: 'A股', itemStyle: { color: '#0071E3' } },
+      { value: 25, name: '港股', itemStyle: { color: '#34C759' } },
+      { value: 25, name: '美股', itemStyle: { color: '#FF9500' } },
+      { value: 15, name: '现金', itemStyle: { color: '#86868B' } }
+    ]
+  }]
+});
+
+// 行选中与批量诊断
+const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+const headerCheckbox = document.getElementById('headerCheckbox');
+const selectAllCheckbox = document.getElementById('selectAll');
+const batchPanel = document.getElementById('batchPanel');
+const selectedCountEl = document.getElementById('selectedCount');
+
+function updateBatchPanel() {
+  const checked = document.querySelectorAll('.row-checkbox:checked');
+  selectedCountEl.textContent = checked.length;
+  if (checked.length > 0) batchPanel.classList.remove('hidden');
+  else batchPanel.classList.add('hidden');
+}
+
+rowCheckboxes.forEach(cb => {
+  cb.addEventListener('change', () => {
+    const row = cb.closest('tr');
+    if (cb.checked) row.classList.add('selected');
+    else row.classList.remove('selected');
+    updateBatchPanel();
+  });
+});
+
+headerCheckbox.addEventListener('change', () => {
+  rowCheckboxes.forEach(cb => {
+    cb.checked = headerCheckbox.checked;
+    const row = cb.closest('tr');
+    if (cb.checked) row.classList.add('selected');
+    else row.classList.remove('selected');
+  });
+  updateBatchPanel();
+});
+
+selectAllCheckbox.addEventListener('change', () => {
+  headerCheckbox.checked = selectAllCheckbox.checked;
+  rowCheckboxes.forEach(cb => {
+    cb.checked = selectAllCheckbox.checked;
+    const row = cb.closest('tr');
+    if (cb.checked) row.classList.add('selected');
+    else row.classList.remove('selected');
+  });
+  updateBatchPanel();
+});
+
+function batchDiagnose() {
+  const checked = document.querySelectorAll('.row-checkbox:checked');
+  if (checked.length === 0) alert('请先选择股票');
+  else alert('开始对 ' + checked.length + ' 只股票进行批量诊断...');
+}
+
+// 弹窗
+function showAddModal() { document.getElementById('addModal').classList.add('show'); }
+function hideAddModal() { document.getElementById('addModal').classList.remove('show'); }
+
+document.getElementById('addModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('addModal')) hideAddModal();
+});
+
+// 分组切换
+document.querySelectorAll('.sidebar-group').forEach(g => {
+  g.addEventListener('click', () => {
+    document.querySelectorAll('.sidebar-group').forEach(sg => sg.classList.remove('active', 'text-white'));
+    g.classList.add('active');
+  });
+});
+
+window.addEventListener('resize', () => {
+  allocationChart.resize();
+  sparkIds.forEach(id => { const c = echarts.getInstanceByDom(document.getElementById(id)); if (c) c.resize(); });
+});
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="stock_analysis.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◉</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">AI荐股</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="stock_diagnosis.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◎</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">个股诊断</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="theme_index.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◯</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">题材指数</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

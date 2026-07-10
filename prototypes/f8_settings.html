@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设置中心 - F1.8</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #fff; --border: #e5e7eb;
+  --text: #1a1f36; --text2: #6b7280; --accent: #533afd; --navy: #061b31;
+  --up: #dc2626; --down: #16a34a;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; }
+.settings-wrap { padding: 20px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+.card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 700; }
+.card-body { padding: 20px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 18px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: .9; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: #fff; border: 1px solid #fca5a5; color: #dc2626; }
+.btn-danger:hover { background: #fef2f2; }
+.toggle { position: relative; width: 44px; height: 24px; display: inline-block; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #d1d5db; border-radius: 24px; transition: .2s; }
+.toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+.toggle input:checked + .toggle-slider { background: var(--accent); }
+.toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f3f4f6; }
+.setting-row:last-child { border-bottom: none; }
+.setting-label { font-size: 13px; font-weight: 500; }
+.setting-desc { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.input { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; }
+.input:focus { border-color: var(--accent); }
+.select { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: #fff; outline: none; }
+.select:focus { border-color: var(--accent); }
+.sub-tabs { display: flex; gap: 4px; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 20px; width: fit-content; }
+.sub-tab { padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text2); border: none; background: transparent; transition: all .15s; }
+.sub-tab:hover { color: var(--text); }
+.sub-tab.active { background: #fff; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-weight: 600; }
+.settings-page { display: none; }
+.settings-page.active { display: block; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+.tag-green { background: #dcfce7; color: #166534; }
+.tag-blue { background: #dbeafe; color: #1e40af; }
+</style>
+</head>
+<body>
+<div class="settings-wrap">
+
+  <div style="margin-bottom:20px;">
+    <h1 style="font-size:20px; font-weight:700; color:var(--navy);">⚙️ 设置中心</h1>
+    <p style="font-size:12px; color:var(--text2); margin-top:2px;">F1.8 · 账户 · 通知 · 数据 · 主题 · 关于</p>
+  </div>
+
+  <!-- Settings Tabs -->
+  <div class="sub-tabs" id="settingsTabs">
+    <button class="sub-tab active" data-page="account">账户信息</button>
+    <button class="sub-tab" data-page="notifications">通知偏好</button>
+    <button class="sub-tab" data-page="data">数据管理</button>
+    <button class="sub-tab" data-page="theme">主题设置</button>
+    <button class="sub-tab" data-page="about">关于</button>
+  </div>
+
+  <!-- ====== 账户信息 ====== -->
+  <div class="settings-page active" id="settings-account">
+    <div class="card">
+      <div class="card-header">个人资料</div>
+      <div class="card-body">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+          <div style="width:64px; height:64px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700;">Z</div>
+          <div>
+            <button class="btn btn-outline btn-sm">更换头像</button>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px;">用户名</label><input class="input" value="研究员_Zhang" style="width:100%;"></div>
+          <div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px;">邮箱</label><input class="input" value="zhang@5factor.ai" style="width:100%;"></div>
+          <div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px;">手机号</label><input class="input" value="+86 138****8888" style="width:100%;"></div>
+          <div><label style="font-size:11px;color:var(--text2);display:block;margin-bottom:4px;">注册日期</label><input class="input" value="2025-06-15" disabled style="width:100%;background:#f9fafb;"></div>
+        </div>
+        <div style="margin-top:16px;"><button class="btn btn-primary btn-sm">保存修改</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">订阅方案</div>
+      <div class="card-body">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <div>
+            <div style="font-size:15px; font-weight:700;">Pro 版 <span class="tag tag-blue" style="margin-left:6px;">当前方案</span></div>
+            <div style="font-size:12px; color:var(--text2); margin-top:4px;">¥388/年 · 下次续费 2027-06-15 · 无限自选 · 全市场Level-2 · 个股深度分析 · 产业链全景</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-outline btn-sm">升级 Max</button>
+            <button class="btn btn-outline btn-sm">账单历史</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">安全设置</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">修改密码</div><div class="setting-desc">上次修改: 2026-03-10</div></div>
+          <button class="btn btn-outline btn-sm">修改</button>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">两步验证</div><div class="setting-desc">使用 Google Authenticator 或短信验证码</div></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">绑定第三方登录</div><div class="setting-desc">微信 / Google / Apple ID</div></div>
+          <button class="btn btn-outline btn-sm">管理</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 通知偏好 ====== -->
+  <div class="settings-page" id="settings-notifications">
+    <div class="card">
+      <div class="card-header">全局通知</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">启用推送通知</div><div class="setting-desc">关闭后将不再收到任何推送</div></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">免打扰时段</div><div class="setting-desc">在此时间段内不推送通知</div></div>
+          <select class="select"><option>22:00 - 08:00</option><option>23:00 - 07:00</option><option>不开启</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">分模块通知</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">每日智能晨报 (F1.3)</div><div class="setting-desc">推送时间: 08:30 · 渠道: App Push + 邮件</div></div>
+          <button class="btn btn-outline btn-sm">编辑</button>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">五因子信号订阅 (F1.4)</div><div class="setting-desc">FinalScore>80 或 F4恶化>20% 时推送</div></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">KOL观点提及提醒 (F1.5)</div><div class="setting-desc">关注的KOL发表新观点或被提及标的时推送</div></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">产业链热度预警 (F2.1)</div><div class="setting-desc">赛道热度突变（社交媒体/资金/研报/新闻密度）</div></div>
+          <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">模拟交易风险预警 (F2.4)</div><div class="setting-desc">跑输基准>5% / 单只回撤>8%</div></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">复盘提醒 (F2.3)</div><div class="setting-desc">每周日 20:00 自动推送周度复盘报告</div></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 数据管理 ====== -->
+  <div class="settings-page" id="settings-data">
+    <div class="card">
+      <div class="card-header">数据导出</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">自选股数据</div><div class="setting-desc">导出为 CSV / Excel · 含代码/名称/价格/F1-F5/分组</div></div>
+          <button class="btn btn-outline btn-sm">导出</button>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">知识库备份</div><div class="setting-desc">Obsidian Markdown 格式 · 含全部笔记/概念卡片/分析报告</div></div>
+          <button class="btn btn-outline btn-sm">备份</button>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">模拟交易记录</div><div class="setting-desc">导出为 CSV · 含每笔交易的买入/卖出/盈亏/T+N矩阵</div></div>
+          <button class="btn btn-outline btn-sm">导出</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">存储管理</div>
+      <div class="card-body">
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:12px;">
+            <span>知识库: 247文件 · 12.5MB / 100MB</span><span>12.5%</span>
+          </div>
+          <div style="width:100%; height:6px; background:#f3f4f6; border-radius:3px;"><div style="width:12.5%; height:6px; background:var(--accent); border-radius:3px;"></div></div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:12px;">
+            <span>模拟交易数据: 50笔交易 · 2.1MB</span><span>—</span>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">清除缓存</div><div class="setting-desc">清除行情缓存、临时文件 · 不影响知识和交易数据</div></div>
+          <button class="btn btn-outline btn-sm" onclick="alert('缓存已清除 · 释放空间 8.3MB')">清除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#fca5a5;">
+      <div class="card-header" style="color:#dc2626;">危险操作</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">删除账户</div><div class="setting-desc">永久删除所有数据，不可恢复（GDPR合规）</div></div>
+          <button class="btn btn-danger btn-sm" onclick="if(confirm('确定要永久删除账户？此操作不可撤销！\n\n(原型演示)')) alert('账户删除请求已提交');">删除账户</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 主题设置 ====== -->
+  <div class="settings-page" id="settings-theme">
+    <div class="card">
+      <div class="card-header">外观</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">主题模式</div><div class="setting-desc">亮色 / 暗色 / 跟随系统</div></div>
+          <select class="select"><option>亮色模式 (Stripe+Apple)</option><option>暗色模式</option><option>跟随系统</option></select>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">字体大小</div><div class="setting-desc">影响正文、表格、标签等所有文字</div></div>
+          <select class="select"><option>中 (13px)</option><option>小 (12px)</option><option>大 (15px)</option></select>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">强调色</div><div class="setting-desc">主色调: 紫色 #533afd</div></div>
+          <div style="display:flex; gap:6px;">
+            <span style="width:20px;height:20px;border-radius:50%;background:#533afd;border:2px solid #fff;box-shadow:0 0 0 1px #533afd;cursor:pointer;" title="紫色(默认)"></span>
+            <span style="width:20px;height:20px;border-radius:50%;background:#3b82f6;cursor:pointer;" title="蓝色"></span>
+            <span style="width:20px;height:20px;border-radius:50%;background:#16a34a;cursor:pointer;" title="绿色"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">数据市场偏好</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">默认市场排序</div><div class="setting-desc">首页行情和自选股列表的默认排序</div></div>
+          <select class="select"><option>A股 → 港股 → 美股</option><option>美股 → A股 → 港股</option><option>按自选股分组</option></select>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">界面语言</div></div>
+          <select class="select"><option>简体中文</option><option>繁體中文</option><option>English</option></select>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">货币显示</div></div>
+          <select class="select"><option>CNY (¥)</option><option>HKD (HK$)</option><option>USD ($)</option></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== 关于 ====== -->
+  <div class="settings-page" id="settings-about">
+    <div class="card" style="text-align:center; padding:40px;">
+      <div style="font-size:24px; font-weight:700; color:var(--navy); margin-bottom:8px;">5<span style="color:var(--accent);">Factor</span> AI</div>
+      <div style="font-size:14px; color:var(--text2);">金融投研平台</div>
+      <div style="font-size:12px; color:var(--text2); margin-top:4px;">版本 v1.0.0 (Build 2026-07-09)</div>
+      <div style="margin-top:12px; font-size:11px; color:var(--text2);">
+        基于五因子量化评分 + LLM 共识研判 + 产业链知识图谱 · 覆盖A股/港股/美股
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">法律信息</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">用户协议</div></div>
+          <span style="font-size:11px; color:var(--accent); cursor:pointer;">查看</span>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">隐私政策</div></div>
+          <span style="font-size:11px; color:var(--accent); cursor:pointer;">查看</span>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">开源许可</div><div class="setting-desc">MIT License · GitHub: 5factor-ai/research-platform</div></div>
+          <span style="font-size:11px; color:var(--accent); cursor:pointer;">GitHub</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">帮助与反馈</div>
+      <div class="card-body">
+        <div class="setting-row">
+          <div><div class="setting-label">常见问题 FAQ</div></div>
+          <span style="font-size:11px; color:var(--accent); cursor:pointer;">查看</span>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">更新日志</div></div>
+          <span style="font-size:11px; color:var(--accent); cursor:pointer;">查看</span>
+        </div>
+        <div class="setting-row">
+          <div><div class="setting-label">联系客服 / 反馈建议</div></div>
+          <button class="btn btn-outline btn-sm" onclick="alert('客服邮箱: support@5factor.ai\n工作时间: 工作日 9:00-18:00\n\n(原型演示)')">联系我们</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Settings tab switching
+document.querySelectorAll('#settingsTabs .sub-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('#settingsTabs .sub-tab').forEach(function(t) { t.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.settings-page').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById('settings-' + this.dataset.page).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能投研助手</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'apple-bg': '#F5F5F7',
+            'apple-card': '#FFFFFF',
+            'apple-border': '#E5E5EA',
+            'apple-text': '#1D1D1F',
+            'apple-secondary': '#86868B',
+            'apple-accent': '#0071E3',
+            'apple-accent-bg': '#F0F7FF',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+      background-color: #F5F5F7;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #D1D1D6; border-radius: 3px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #8E8E93; }
+    .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .submenu.expanded { max-height: 300px; }
+    #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    #overlay { transition: opacity 0.3s ease; }
+    .nav-item { border-radius: 8px; transition: background-color 0.15s ease; }
+    .nav-item:hover:not(.active):not(.active-parent) { background-color: #F5F5F7; }
+    .nav-item.active { background-color: #F0F7FF; position: relative; }
+    .nav-item.active::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 4px; background-color: #0071E3; border-radius: 0 2px 2px 0; }
+    .nav-item.active .nav-text { color: #0071E3; font-weight: 500; }
+    .nav-item.active .nav-icon { color: #0071E3; stroke: #0071E3; }
+    .nav-item.active-parent { background-color: #FAFAFA; }
+    .nav-item.active-parent .nav-text { color: #0071E3; font-weight: 500; }
+    .nav-item.active-parent .nav-icon { color: #0071E3; stroke: #0071E3; }
+    .submenu .nav-item.active { background-color: #F0F7FF; }
+    .submenu .nav-item.active::before { top: 8px; bottom: 8px; }
+    .submenu-arrow { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .submenu-arrow.rotated { transform: rotate(180deg); }
+    iframe { border: none; display: block; }
+    #menuBtn { transition: background-color 0.15s ease; }
+    #menuBtn:hover { background-color: #F5F5F7; }
+    .header-btn { transition: background-color 0.15s ease; }
+    .header-btn:hover { background-color: #F5F5F7; }
+    .logo-box { background: linear-gradient(135deg, #0071E3 0%, #5E5CE6 100%); }
+    .notification-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  </style>
+</head>
+<body>
+  <header id="header" class="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#E5E5EA] z-50 flex items-center px-4 select-none">
+    <div class="flex items-center gap-3">
+      <button id="menuBtn" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg -ml-1">
+        <i data-lucide="menu" class="w-[18px] h-[18px] text-[#1D1D1F]"></i>
+      </button>
+      <h1 id="pageTitleLeft" class="text-[15px] font-medium text-[#1D1D1F] lg:hidden">首页</h1>
+    </div>
+    <div class="absolute left-1/2 -translate-x-1/2 hidden lg:block">
+      <h1 id="pageTitle" class="text-[15px] font-medium text-[#1D1D1F]">首页</h1>
+    </div>
+    <div class="ml-auto flex items-center gap-0.5">
+      <button class="header-btn w-9 h-9 flex items-center justify-center rounded-lg" title="搜索">
+        <i data-lucide="search" class="w-[18px] h-[18px] text-[#86868B]"></i>
+      </button>
+      <button class="header-btn w-9 h-9 flex items-center justify-center rounded-lg relative" title="通知">
+        <i data-lucide="bell" class="w-[18px] h-[18px] text-[#86868B]"></i>
+        <span class="notification-dot absolute top-1.5 right-1.5 w-[7px] h-[7px] bg-red-500 rounded-full border-2 border-white"></span>
+      </button>
+      <button class="header-btn w-9 h-9 flex items-center justify-center rounded-full ml-0.5" title="用户中心">
+        <div class="w-7 h-7 rounded-full bg-gradient-to-br from-[#FF9500] to-[#FF6B35] flex items-center justify-center text-white text-xs font-medium">投</div>
+      </button>
+    </div>
+  </header>
+
+  <div id="overlay" class="fixed inset-0 bg-black/40 z-40 opacity-0 pointer-events-none lg:hidden"></div>
+
+  <aside id="sidebar" class="fixed top-14 left-0 w-[280px] lg:w-[240px] h-[calc(100vh-56px)] bg-white border-r border-[#E5E5EA] z-40 overflow-y-auto custom-scrollbar transform -translate-x-full lg:translate-x-0">
+    <nav id="navMenu" class="px-3 py-2 pb-8"></nav>
+  </aside>
+
+  <main id="mainContent" class="fixed top-14 left-0 lg:left-[240px] w-full lg:w-[calc(100%-240px)] h-[calc(100vh-56px)] bg-[#F5F5F7]">
+    <iframe id="contentFrame" src="home.html" frameborder="0" style="border:none; width:100%; height:100%; display:block;" title="主内容区" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
+  </main>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const navData = [
+        {
+          title: '工作台',
+          items: [
+            {
+              key: 'navigation-map',
+              name: '导航图',
+              icon: 'layout-grid',
+              href: 'home.html',
+              pageTitle: '导航图'
+            },
+            {
+              key: 'dashboard',
+              name: '首页',
+              icon: 'layout-dashboard',
+              href: 'dashboard.html',
+              pageTitle: '首页'
+            },
+            {
+              key: 'ai-stock',
+              name: 'AI荐股',
+              icon: 'trending-up',
+              href: 'stock_analysis.html',
+              pageTitle: 'AI荐股',
+              children: [
+                { key: 'stock-board', name: '个股看板', href: 'stock_analysis.html', pageTitle: '个股看板' },
+                { key: 'stock-diagnosis-child', name: '个股诊断', href: 'stock_diagnosis.html', pageTitle: '个股诊断' }
+              ]
+            },
+            {
+              key: 'kol-daily',
+              name: 'KOL日报',
+              icon: 'newspaper',
+              href: 'kol_daily.html',
+              pageTitle: 'KOL日报'
+            },
+            {
+              key: 'knowledge-graph',
+              name: '知识图谱',
+              icon: 'network',
+              href: 'knowledge_graph.html',
+              pageTitle: '知识图谱'
+            },
+            {
+              key: 'research-assistant',
+              name: '投研助手',
+              icon: 'brain',
+              href: 'research_assistant.html',
+              pageTitle: '投研助手',
+              children: [
+                { key: 'ra-ai', name: 'AI助手', href: 'research_assistant.html', hash: '#ai', pageTitle: 'AI助手' },
+                { key: 'daily-brief', name: '每日简报', href: 'research_assistant.html', hash: '#daily-brief', pageTitle: '每日简报' },
+                { key: 'knowledge-pop', name: '知识科普', href: 'research_assistant.html', hash: '#knowledge', pageTitle: '知识科普' },
+                { key: 'deep-analysis', name: '深度分析', href: 'research_assistant.html', hash: '#deep-analysis', pageTitle: '深度分析' },
+                { key: 'knowledge-base', name: '知识库', href: 'research_assistant.html', hash: '#kb', pageTitle: '知识库' }
+              ]
+            }
+          ]
+        },
+        {
+          title: '市场',
+          items: [
+            { key: 'morning-brief', name: '早晨简报', icon: 'sunrise', href: 'morning_brief.html', pageTitle: '早晨简报' },
+            { key: 'closing-review', name: '收盘复盘', icon: 'sunset', href: 'closing_review.html', pageTitle: '收盘复盘' },
+            { key: 'stock-diagnosis', name: '个股诊断', icon: 'activity', href: 'stock_diagnosis.html', pageTitle: '个股诊断' },
+            { key: 'theme-index', name: '题材指数', icon: 'target', href: 'theme_index.html', pageTitle: '题材指数' },
+            { key: 'cross-market', name: '跨市场助手', icon: 'globe', href: 'cross_market.html', pageTitle: '跨市场助手' },
+            { key: 'watchlist', name: '自选股', icon: 'star', href: 'watchlist.html', pageTitle: '自选股' }
+          ]
+        },
+        {
+          title: '系统',
+          items: [
+            { key: 'settings', name: '设置', icon: 'settings', href: 'settings.html', pageTitle: '设置' }
+          ]
+        }
+      ];
+
+      let activeKey = '';
+      let currentHref = 'home.html';
+      let currentHash = '';
+
+      const expandedState = {};
+      navData.forEach(group => {
+        group.items.forEach(item => {
+          if (item.children) {
+            expandedState[item.key] = true;
+          }
+        });
+      });
+
+      const navMenu = document.getElementById('navMenu');
+      const pageTitle = document.getElementById('pageTitle');
+      const pageTitleLeft = document.getElementById('pageTitleLeft');
+      const contentFrame = document.getElementById('contentFrame');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const menuBtn = document.getElementById('menuBtn');
+
+      function findNavItem(key) {
+        for (const group of navData) {
+          for (const item of group.items) {
+            if (item.key === key) return item;
+            if (item.children) {
+              for (const child of item.children) {
+                if (child.key === key) return child;
+              }
+            }
+          }
+        }
+        return null;
+      }
+
+      function findParentKey(childKey) {
+        for (const group of navData) {
+          for (const item of group.items) {
+            if (item.children) {
+              for (const child of item.children) {
+                if (child.key === childKey) return item.key;
+              }
+            }
+          }
+        }
+        return null;
+      }
+
+      function isParentActive(parentKey) {
+        const parent = findNavItem(parentKey);
+        if (!parent || !parent.children) return false;
+        return parent.children.some(child => child.key === activeKey);
+      }
+
+      function renderNav() {
+        navMenu.innerHTML = '';
+
+        navData.forEach((group) => {
+          const groupTitle = document.createElement('div');
+          groupTitle.className = 'pt-4 pb-2 px-3 text-[11px] font-semibold text-[#86868B] uppercase tracking-wider';
+          groupTitle.textContent = group.title;
+          navMenu.appendChild(groupTitle);
+
+          group.items.forEach((item) => {
+            const hasChildren = item.children && item.children.length > 0;
+            const isActive = item.key === activeKey;
+            const isParentActiveState = hasChildren && isParentActive(item.key);
+            const isExpanded = expandedState[item.key];
+
+            const navItemEl = document.createElement('div');
+            navItemEl.className = `nav-item flex items-center justify-between h-10 px-3 cursor-pointer select-none ${isActive ? 'active' : (isParentActiveState ? 'active-parent' : '')}`;
+
+            const leftEl = document.createElement('div');
+            leftEl.className = 'flex items-center gap-3 flex-1 min-w-0';
+
+            const iconEl = document.createElement('i');
+            iconEl.setAttribute('data-lucide', item.icon);
+            iconEl.className = `nav-icon w-5 h-5 flex-shrink-0 ${isActive || isParentActiveState ? 'text-[#0071E3]' : 'text-[#86868B]'}`;
+            leftEl.appendChild(iconEl);
+
+            const textEl = document.createElement('span');
+            textEl.className = `nav-text text-sm truncate ${isActive || isParentActiveState ? 'text-[#0071E3]' : 'text-[#1D1D1F]'}`;
+            textEl.textContent = item.name;
+            leftEl.appendChild(textEl);
+
+            navItemEl.appendChild(leftEl);
+
+            if (hasChildren) {
+              const arrowEl = document.createElement('i');
+              arrowEl.setAttribute('data-lucide', 'chevron-down');
+              arrowEl.className = `submenu-arrow w-4 h-4 text-[#86868B] flex-shrink-0 ml-1 ${isExpanded ? 'rotated' : ''}`;
+              navItemEl.appendChild(arrowEl);
+            }
+
+            leftEl.addEventListener('click', (e) => {
+              e.stopPropagation();
+              loadPage(item.href, '', item.pageTitle, item.key);
+              if (window.innerWidth < 1024) closeMobileSidebar();
+            });
+
+            if (hasChildren) {
+              const arrowEl = navItemEl.querySelector('.submenu-arrow');
+              arrowEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleExpand(item.key);
+              });
+            }
+
+            navMenu.appendChild(navItemEl);
+
+            if (hasChildren) {
+              const submenuEl = document.createElement('div');
+              submenuEl.className = `submenu ${isExpanded ? 'expanded' : ''}`;
+
+              item.children.forEach((child) => {
+                const isChildActive = child.key === activeKey;
+
+                const childEl = document.createElement('div');
+                childEl.className = `nav-item flex items-center h-9 pl-12 pr-3 cursor-pointer select-none ${isChildActive ? 'active' : ''}`;
+
+                const childText = document.createElement('span');
+                childText.className = `text-[13px] truncate ${isChildActive ? 'text-[#0071E3] font-medium' : 'text-[#1D1D1F]'}`;
+                childText.textContent = child.name;
+                childEl.appendChild(childText);
+
+                childEl.addEventListener('click', () => {
+                  loadPage(child.href, child.hash || '', child.pageTitle, child.key);
+                  if (window.innerWidth < 1024) closeMobileSidebar();
+                });
+
+                submenuEl.appendChild(childEl);
+              });
+
+              navMenu.appendChild(submenuEl);
+            }
+          });
+        });
+
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+      }
+
+      function toggleExpand(key) {
+        expandedState[key] = !expandedState[key];
+        renderNav();
+      }
+
+      function loadPage(href, hash, title, key) {
+        activeKey = key || '';
+        currentHref = href;
+        currentHash = hash || '';
+
+        if (title) {
+          pageTitle.textContent = title;
+          if (pageTitleLeft) pageTitleLeft.textContent = title;
+          document.title = title + ' - 智能投研助手';
+        }
+
+        const parentKey = findParentKey(key);
+        if (parentKey) {
+          expandedState[parentKey] = true;
+        }
+
+        renderNav();
+
+        const currentSrc = (contentFrame.src || '').split('#')[0].split('/').pop() || '';
+        const targetFile = href.split('/').pop();
+
+        if (currentSrc === targetFile || currentSrc === '') {
+          if (hash) {
+            try {
+              contentFrame.contentWindow.location.hash = hash;
+            } catch (e) {
+              contentFrame.src = href + hash;
+            }
+          } else {
+            if (currentSrc === '') {
+              contentFrame.src = href;
+            }
+          }
+        } else {
+          contentFrame.src = href + (hash || '');
+        }
+      }
+
+      function openMobileSidebar() {
+        sidebar.style.transform = 'translateX(0)';
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileSidebar() {
+        sidebar.style.transform = 'translateX(-100%)';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        document.body.style.overflow = '';
+      }
+
+      menuBtn.addEventListener('click', openMobileSidebar);
+      overlay.addEventListener('click', closeMobileSidebar);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && window.innerWidth < 1024) {
+          closeMobileSidebar();
+        }
+      });
+
+      contentFrame.addEventListener('load', () => {
+        if (currentHash) {
+          try {
+            const targetId = currentHash.replace('#', '');
+            const el = contentFrame.contentDocument.getElementById(targetId);
+            if (el) {
+              setTimeout(() => {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 100);
+            } else {
+              contentFrame.contentWindow.location.hash = currentHash;
+            }
+          } catch (e) {}
+        }
+      });
+
+      let iframeCheckInterval;
+      function startIframeSync() {
+        iframeCheckInterval = setInterval(() => {
+          try {
+            const iframeLoc = contentFrame.contentWindow.location;
+            const iframeHref = iframeLoc.pathname.split('/').pop();
+            const iframeHash = iframeLoc.hash;
+
+            if (iframeHref && (iframeHref !== currentHref || iframeHash !== currentHash)) {
+              let matchedKey = null;
+              for (const group of navData) {
+                for (const item of group.items) {
+                  if (item.href === iframeHref) {
+                    if (!item.children) {
+                      matchedKey = item.key;
+                    }
+                  }
+                  if (item.children) {
+                    for (const child of item.children) {
+                      if (child.href === iframeHref) {
+                        if (child.hash) {
+                          if (child.hash === iframeHash) {
+                            matchedKey = child.key;
+                          }
+                        } else {
+                          matchedKey = child.key;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              if (matchedKey && matchedKey !== activeKey) {
+                activeKey = matchedKey;
+                currentHref = iframeHref;
+                currentHash = iframeHash;
+                const navItem = findNavItem(matchedKey);
+                if (navItem && navItem.pageTitle) {
+                  pageTitle.textContent = navItem.pageTitle;
+                  document.title = navItem.pageTitle + ' - 智能投研助手';
+                }
+                renderNav();
+              }
+            }
+          } catch (e) {}
+        }, 500);
+      }
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) {
+          closeMobileSidebar();
+        }
+      });
+
+      contentFrame.addEventListener('load', function() {
+        try {
+          var iframeDoc = contentFrame.contentDocument || contentFrame.contentWindow.document;
+          if (iframeDoc && iframeDoc.body) {
+            iframeDoc.body.classList.add('in-iframe');
+          }
+        } catch (e) {}
+      });
+
+      renderNav();
+      startIframeSync();
+
+      window.loadPage = loadPage;
+      window.appNavigate = loadPage;
+
+    })();
+  </script>
+</body>
+</html>

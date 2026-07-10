@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>跨市场联动分析 | AI智能投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; background-color: #F5F5F7; }
+  .card { background: #FFFFFF; border-radius: 12px; border: 1px solid #E5E5EA; padding: 24px; }
+  .card-hover:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); transition: all 0.3s ease; }
+  .tab-btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #86868B; cursor: pointer; transition: all 0.2s; border: none; background: transparent; white-space: nowrap; }
+  .tab-btn.active { background: #0071E3; color: #FFFFFF; }
+  .tab-btn:hover:not(.active) { background: #F2F2F7; color: #1D1D1F; }
+  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+  .badge-primary { background: #0071E3; color: #FFFFFF; }
+  .badge-success { background: #34C759; color: #FFFFFF; }
+  .badge-warning { background: #FF9500; color: #FFFFFF; }
+  .badge-danger { background: #FF3B30; color: #FFFFFF; }
+  .badge-neutral { background: #F2F2F7; color: #1D1D1F; }
+  .table-header { background: #F2F2F7; color: #86868B; font-size: 12px; font-weight: 500; padding: 12px 16px; text-align: left; }
+  .table-row { padding: 14px 16px; border-bottom: 1px solid #E5E5EA; font-size: 14px; }
+  .table-row:hover { background: #F5F5F7; }
+  .up { color: #FF3B30; }
+  .down { color: #34C759; }
+  .us-up { color: #34C759; }
+  .us-down { color: #FF3B30; }
+  .hidden { display: none !important; }
+  .arrow-chain { display: flex; align-items: center; gap: 8px; }
+  .arrow-chain .arrow { color: #86868B; }
+  .mini-chart { height: 40px; width: 100px; }
+  @media (max-width: 640px) { .card { padding: 16px; } .tab-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+</style>
+</head>
+<body class="min-h-screen">
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">跨市场助手</span>
+  </div>
+</div>
+
+
+<!-- 顶部导航栏 -->
+<nav class="fixed top-0 left-0 right-0 bg-white border-b border-[#E5E5EA] z-50" style="height:56px">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-[#0071E3] rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c.251.023.501.05.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714a2.25 2.25 0 0 1-.659 1.591L14.25 14.5M9.75 3.104c.282.044.565.087.848.135m7.363-1.181A24.375 24.375 0 0 1 21 6.75m-9 5.25h.008v.008h-.008V12Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H13.5v-.008Zm0 2.25h.008v.008H13.5V12Zm0 2.25h.008v.008H13.5v-.008Zm2.25-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V12Zm0 2.25h.008v.008h-.008v-.008Z"/></svg>
+      </div>
+      <span class="font-semibold text-[#1D1D1F]" style="font-size:16px">AI智能投研助手</span>
+    </div>
+    <div class="hidden md:flex flex-1 max-w-md mx-8">
+      <div class="relative w-full">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索股票、概念..." class="w-full h-10 pl-10 pr-4 rounded-lg bg-[#F5F5F7] border border-transparent focus:bg-white focus:border-[#0071E3] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,113,227,0.15)] text-sm transition-all">
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <span class="text-sm text-[#86868B] hidden sm:block">2025-07-10</span>
+      <div class="w-8 h-8 rounded-full bg-[#0071E3] flex items-center justify-center text-white text-xs font-medium cursor-pointer">A</div>
+    </div>
+  </div>
+</nav>
+
+<!-- 主内容区 -->
+<main class="pt-[56px]">
+  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- 页面标题 -->
+    <div class="mb-6">
+      <h1 class="font-bold text-[#1D1D1F]" style="font-size:28px;line-height:1.2;letter-spacing:-0.02em">跨市场联动分析</h1>
+      <p class="text-[#86868B] text-sm mt-2">A股 / 港股 / 美股 / 日股 / 欧股 全球市场联动监测</p>
+    </div>
+
+    <!-- Tab导航 -->
+    <div class="tab-scroll flex gap-2 mb-6 overflow-x-auto pb-2">
+      <button class="tab-btn active" data-tab="hk">港股通</button>
+      <button class="tab-btn" data-tab="adr">ADR联动</button>
+      <button class="tab-btn" data-tab="valuation">估值对比</button>
+      <button class="tab-btn" data-tab="macro">宏观联动</button>
+      <button class="tab-btn" data-tab="overseas">外盘复盘</button>
+    </div>
+
+    <!-- 港股通 Tab -->
+    <div id="tab-hk" class="tab-content">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="lg:col-span-2 card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">北水南下资金流向（近5日）</h3>
+          <div id="hkFlowChart" style="height:300px"></div>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">今日概览</h3>
+          <div class="space-y-4">
+            <div class="p-4 rounded-lg bg-[#F5F5F7]">
+              <div class="text-xs text-[#86868B] mb-1">今日净流入</div>
+              <div class="font-semibold text-2xl up">+58.3亿</div>
+              <div class="text-xs text-[#86868B] mt-1">港元</div>
+            </div>
+            <div class="p-4 rounded-lg bg-[#F5F5F7]">
+              <div class="text-xs text-[#86868B] mb-1">近5日累计</div>
+              <div class="font-semibold text-2xl up">+256.8亿</div>
+              <div class="text-xs text-[#86868B] mt-1">港元</div>
+            </div>
+            <div class="p-4 rounded-lg bg-[#F5F5F7]">
+              <div class="text-xs text-[#86868B] mb-1">北水活跃度</div>
+              <div class="font-semibold text-2xl text-[#1D1D1F]">高</div>
+              <div class="text-xs text-[#86868B] mt-1">高于近30日平均</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">港股通持仓TOP10</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead><tr><th class="table-header rounded-tl-lg">股票</th><th class="table-header">代码</th><th class="table-header">持仓市值</th><th class="table-header">占比</th><th class="table-header rounded-tr-lg">当日增减</th></tr></thead>
+              <tbody>
+                <tr class="table-row"><td class="font-medium">腾讯控股</td><td class="text-[#86868B]">00700.HK</td><td>2,850亿</td><td>12.5%</td><td class="up">+8.2亿</td></tr>
+                <tr class="table-row"><td class="font-medium">美团</td><td class="text-[#86868B]">03690.HK</td><td>1,240亿</td><td>8.3%</td><td class="up">+5.6亿</td></tr>
+                <tr class="table-row"><td class="font-medium">小米集团</td><td class="text-[#86868B]">01810.HK</td><td>980亿</td><td>6.8%</td><td class="up">+4.3亿</td></tr>
+                <tr class="table-row"><td class="font-medium">中国移动</td><td class="text-[#86868B]">00941.HK</td><td>860亿</td><td>5.5%</td><td class="down">-1.2亿</td></tr>
+                <tr class="table-row"><td class="font-medium">建设银行</td><td class="text-[#86868B]">00939.HK</td><td>720亿</td><td>4.9%</td><td class="up">+2.1亿</td></tr>
+                <tr class="table-row"><td class="font-medium">工商银行</td><td class="text-[#86868B]">01398.HK</td><td>680亿</td><td>4.5%</td><td class="up">+1.8亿</td></tr>
+                <tr class="table-row"><td class="font-medium">汇丰控股</td><td class="text-[#86868B]">00005.HK</td><td>620亿</td><td>4.2%</td><td class="up">+3.4亿</td></tr>
+                <tr class="table-row"><td class="font-medium">中海油</td><td class="text-[#86868B]">00883.HK</td><td>580亿</td><td>3.8%</td><td class="down">-0.8亿</td></tr>
+                <tr class="table-row"><td class="font-medium">港交所</td><td class="text-[#86868B]">00388.HK</td><td>520亿</td><td>3.5%</td><td class="up">+2.5亿</td></tr>
+                <tr class="table-row"><td class="font-medium">安踏体育</td><td class="text-[#86868B]">02020.HK</td><td>480亿</td><td>3.2%</td><td class="up">+1.2亿</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div class="card">
+            <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">净流入排行</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead><tr><th class="table-header rounded-tl-lg">股票</th><th class="table-header">代码</th><th class="table-header rounded-tr-lg">净流入</th></tr></thead>
+                <tbody>
+                  <tr class="table-row"><td class="font-medium">腾讯控股</td><td class="text-[#86868B]">00700.HK</td><td class="up font-medium">+8.2亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">美团</td><td class="text-[#86868B]">03690.HK</td><td class="up font-medium">+5.6亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">小米集团</td><td class="text-[#86868B]">01810.HK</td><td class="up font-medium">+4.3亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">汇丰控股</td><td class="text-[#86868B]">00005.HK</td><td class="up font-medium">+3.4亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">港交所</td><td class="text-[#86868B]">00388.HK</td><td class="up font-medium">+2.5亿</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">净流出排行</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead><tr><th class="table-header rounded-tl-lg">股票</th><th class="table-header">代码</th><th class="table-header rounded-tr-lg">净流出</th></tr></thead>
+                <tbody>
+                  <tr class="table-row"><td class="font-medium">中国移动</td><td class="text-[#86868B]">00941.HK</td><td class="down font-medium">-1.2亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">中海油</td><td class="text-[#86868B]">00883.HK</td><td class="down font-medium">-0.8亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">李宁</td><td class="text-[#86868B]">02331.HK</td><td class="down font-medium">-0.6亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">碧桂园服务</td><td class="text-[#86868B]">06098.HK</td><td class="down font-medium">-0.5亿</td></tr>
+                  <tr class="table-row"><td class="font-medium">药明生物</td><td class="text-[#86868B]">02269.HK</td><td class="down font-medium">-0.4亿</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADR联动 Tab -->
+    <div id="tab-adr" class="tab-content hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">ADR与正股对比</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead><tr><th class="table-header rounded-tl-lg">公司</th><th class="table-header">港股</th><th class="table-header">ADR</th><th class="table-header">ADR价格</th><th class="table-header rounded-tr-lg">溢价率</th></tr></thead>
+              <tbody>
+                <tr class="table-row"><td class="font-medium">阿里巴巴</td><td class="text-[#86868B]">9988.HK</td><td class="text-[#86868B]">BABA.US</td><td>98.50</td><td class="up">+2.3%</td></tr>
+                <tr class="table-row"><td class="font-medium">京东</td><td class="text-[#86868B]">9618.HK</td><td class="text-[#86868B]">JD.US</td><td>32.80</td><td class="down">-1.5%</td></tr>
+                <tr class="table-row"><td class="font-medium">百度</td><td class="text-[#86868B]">9888.HK</td><td class="text-[#86868B]">BIDU.US</td><td>95.20</td><td class="up">+0.8%</td></tr>
+                <tr class="table-row"><td class="font-medium">网易</td><td class="text-[#86868B]">9999.HK</td><td class="text-[#86868B]">NTES.US</td><td>185.60</td><td class="down">-0.5%</td></tr>
+                <tr class="table-row"><td class="font-medium">携程</td><td class="text-[#86868B]">9961.HK</td><td class="text-[#86868B]">TCOM.US</td><td>52.30</td><td class="up">+1.2%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">阿里巴巴溢价率趋势（30日）</h3>
+          <div id="premiumChart" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 估值对比 Tab -->
+    <div id="tab-valuation" class="tab-content hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">同一公司多市场估值对比</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead><tr><th class="table-header rounded-tl-lg">公司</th><th class="table-header">A股</th><th class="table-header">港股</th><th class="table-header">美股</th></tr></thead>
+              <tbody>
+                <tr class="table-row"><td class="font-medium">阿里巴巴</td><td class="text-[#86868B]">-</td><td>PE 12.5</td><td>PE 13.2</td></tr>
+                <tr class="table-row"><td class="font-medium">中芯国际</td><td>PE 68.5</td><td>PE 24.3</td><td class="text-[#86868B]">-</td></tr>
+                <tr class="table-row"><td class="font-medium">比亚迪</td><td>PE 22.8</td><td>PE 20.5</td><td class="text-[#86868B]">-</td></tr>
+                <tr class="table-row"><td class="font-medium">中信证券</td><td>PE 18.5</td><td>PE 12.3</td><td class="text-[#86868B]">-</td></tr>
+                <tr class="table-row"><td class="font-medium">长城汽车</td><td>PE 28.6</td><td>PE 14.2</td><td class="text-[#86868B]">-</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">估值差异对比</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead><tr><th class="table-header rounded-tl-lg">公司</th><th class="table-header">PE差异</th><th class="table-header">PB差异</th><th class="table-header">PS差异</th></tr></thead>
+              <tbody>
+                <tr class="table-row"><td class="font-medium">中芯国际</td><td>A股高182%</td><td>A股高156%</td><td>A股高98%</td></tr>
+                <tr class="table-row"><td class="font-medium">比亚迪</td><td>A股高11%</td><td>A股高8%</td><td>A股高5%</td></tr>
+                <tr class="table-row"><td class="font-medium">中信证券</td><td>A股高50%</td><td>A股高42%</td><td>A股高35%</td></tr>
+                <tr class="table-row"><td class="font-medium">长城汽车</td><td>A股高101%</td><td>A股高88%</td><td>A股高72%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">A/H股估值差异（溢价率）</h3>
+        <div id="ahPremiumChart" style="height:300px"></div>
+      </div>
+    </div>
+
+    <!-- 宏观联动 Tab -->
+    <div id="tab-macro" class="tab-content hidden">
+      <div class="card mb-6">
+        <h3 class="font-semibold text-[#1D1D1F] text-lg mb-6">全球宏观传导链条</h3>
+        <div class="flex flex-wrap items-center justify-center gap-3 md:gap-6 py-4">
+          <div class="text-center p-4 rounded-lg bg-[#FF3B30]/10 border border-[#FF3B30]/20 w-32">
+            <div class="text-xs text-[#86868B] mb-1">美联储</div>
+            <div class="font-semibold text-sm">基准利率</div>
+            <div class="font-bold text-[#FF3B30] text-lg mt-1">5.25%</div>
+          </div>
+          <svg class="w-6 h-6 text-[#86868B] hidden md:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          <div class="text-center p-4 rounded-lg bg-[#FF9500]/10 border border-[#FF9500]/20 w-32">
+            <div class="text-xs text-[#86868B] mb-1">美元指数</div>
+            <div class="font-semibold text-sm">DXY</div>
+            <div class="font-bold text-[#FF9500] text-lg mt-1">103.2</div>
+          </div>
+          <svg class="w-6 h-6 text-[#86868B] hidden md:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          <div class="text-center p-4 rounded-lg bg-[#0071E3]/10 border border-[#0071E3]/20 w-32">
+            <div class="text-xs text-[#86868B] mb-1">离岸人民币</div>
+            <div class="font-semibold text-sm">CNH</div>
+            <div class="font-bold text-[#0071E3] text-lg mt-1">7.18</div>
+          </div>
+          <svg class="w-6 h-6 text-[#86868B] hidden md:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          <div class="text-center p-4 rounded-lg bg-[#5856D6]/10 border border-[#5856D6]/20 w-32">
+            <div class="text-xs text-[#86868B] mb-1">北向资金</div>
+            <div class="font-semibold text-sm">净流入</div>
+            <div class="font-bold text-[#5856D6] text-lg mt-1">+32.5亿</div>
+          </div>
+          <svg class="w-6 h-6 text-[#86868B] hidden md:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          <div class="text-center p-4 rounded-lg bg-[#34C759]/10 border border-[#34C759]/20 w-32">
+            <div class="text-xs text-[#86868B] mb-1">A股/港股</div>
+            <div class="font-semibold text-sm">情绪</div>
+            <div class="font-bold text-[#34C759] text-lg mt-1">偏多</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="card">
+          <div class="text-xs text-[#86868B] mb-2">联邦基金利率</div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-2">5.25%</div>
+          <div id="miniChart1" class="mini-chart"></div>
+          <div class="text-xs text-[#86868B] mt-2">美联储维持利率不变</div>
+        </div>
+        <div class="card">
+          <div class="text-xs text-[#86868B] mb-2">美元指数</div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-2">103.2</div>
+          <div id="miniChart2" class="mini-chart"></div>
+          <div class="text-xs text-[#86868B] mt-2">近30日-1.8%</div>
+        </div>
+        <div class="card">
+          <div class="text-xs text-[#86868B] mb-2">离岸人民币</div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-2">7.18</div>
+          <div id="miniChart3" class="mini-chart"></div>
+          <div class="text-xs text-[#86868B] mt-2">近30日+0.5%</div>
+        </div>
+        <div class="card">
+          <div class="text-xs text-[#86868B] mb-2">10年期美债收益率</div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-2">4.20%</div>
+          <div id="miniChart4" class="mini-chart"></div>
+          <div class="text-xs text-[#86868B] mt-2">近30日-8bp</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">关键指标近30日走势</h3>
+        <div id="macroTrendChart" style="height:300px"></div>
+      </div>
+    </div>
+
+    <!-- 外盘复盘 Tab -->
+    <div id="tab-overseas" class="tab-content hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="card card-hover">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-medium text-[#1D1D1F]">道琼斯</div>
+            <span class="badge badge-success">US</span>
+          </div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-1">39,850.32</div>
+          <div class="us-up font-medium text-sm mb-3">+0.85%</div>
+          <div id="usChart1" class="mini-chart"></div>
+        </div>
+        <div class="card card-hover">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-medium text-[#1D1D1F]">纳斯达克</div>
+            <span class="badge badge-success">US</span>
+          </div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-1">16,450.18</div>
+          <div class="us-up font-medium text-sm mb-3">+1.12%</div>
+          <div id="usChart2" class="mini-chart"></div>
+        </div>
+        <div class="card card-hover">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-medium text-[#1D1D1F]">日经225</div>
+            <span class="badge badge-warning">JP</span>
+          </div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-1">41,230.50</div>
+          <div class="up font-medium text-sm mb-3">+0.45%</div>
+          <div id="jpChart" class="mini-chart"></div>
+        </div>
+        <div class="card card-hover">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-medium text-[#1D1D1F]">欧洲斯托克50</div>
+            <span class="badge badge-primary">EU</span>
+          </div>
+          <div class="font-semibold text-2xl text-[#1D1D1F] mb-1">4,850.25</div>
+          <div class="us-up font-medium text-sm mb-3">+0.62%</div>
+          <div id="euChart" class="mini-chart"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">美股隔夜复盘</h3>
+          <div class="space-y-3">
+            <div class="p-3 rounded-lg bg-[#F5F5F7]"><div class="text-sm font-medium">科技股领涨</div><div class="text-xs text-[#86868B] mt-1">英伟达+3.2%，特斯拉+2.8%，苹果+1.5%，科技板块受AI需求预期提振</div></div>
+            <div class="p-3 rounded-lg bg-[#F5F5F7]"><div class="text-sm font-medium">中概股表现分化</div><div class="text-xs text-[#86868B] mt-1">阿里巴巴+2.1%，拼多多-1.5%，京东+0.8%，整体跟随美股大盘上行</div></div>
+            <div class="p-3 rounded-lg bg-[#F5F5F7]"><div class="text-sm font-medium">VIX指数回落</div><div class="text-xs text-[#86868B] mt-1">VIX跌至14.5，市场风险偏好回升，恐慌情绪消退</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold text-[#1D1D1F] text-lg mb-4">对A股/港股影响预判</h3>
+          <div class="space-y-3">
+            <div class="p-3 rounded-lg bg-[#34C759]/5 border border-[#34C759]/10">
+              <div class="text-sm font-medium text-[#34C759]">正面影响</div>
+              <div class="text-xs text-[#86868B] mt-1">美股科技股上涨将提振港股科技板块情绪，尤其是阿里、腾讯等。VIX回落有利于全球风险偏好回升，北向资金有望延续净流入。</div>
+            </div>
+            <div class="p-3 rounded-lg bg-[#FF9500]/5 border border-[#FF9500]/10">
+              <div class="text-sm font-medium text-[#FF9500]">中性因素</div>
+              <div class="text-xs text-[#86868B] mt-1">美元指数小幅回落，人民币汇率保持稳定，对跨境资金流动影响有限。美联储维持利率不变预期已被市场充分定价。</div>
+            </div>
+            <div class="p-3 rounded-lg bg-[#FF3B30]/5 border border-[#FF3B30]/10">
+              <div class="text-sm font-medium text-[#FF3B30]">潜在风险</div>
+              <div class="text-xs text-[#86868B] mt-1">若美股今晚回调，可能拖累次日港股开盘。地缘政治不确定性仍需警惕。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// Tab切换
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('tab-' + tab).classList.remove('hidden');
+    if (tab === 'hk') initHkFlowChart();
+    if (tab === 'adr') initPremiumChart();
+    if (tab === 'valuation') initAhPremiumChart();
+    if (tab === 'macro') { initMacroMiniCharts(); initMacroTrendChart(); }
+    if (tab === 'overseas') initOverseasMiniCharts();
+  });
+});
+
+// 港股资金流向图
+let hkFlowChart;
+function initHkFlowChart() {
+  if (hkFlowChart) return;
+  hkFlowChart = echarts.init(document.getElementById('hkFlowChart'));
+  const option = {
+    tooltip: { trigger: 'axis', backgroundColor: '#FFFFFF', borderRadius: 8, borderColor: '#E5E5EA' },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: ['07-06', '07-07', '07-08', '07-09', '07-10'], axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { color: '#86868B' } },
+    yAxis: { type: 'value', axisLabel: { formatter: '{value}亿', color: '#86868B' }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+    series: [
+      { data: [45.2, 38.7, 52.3, 61.5, 58.3], type: 'bar', itemStyle: { color: '#FF3B30', borderRadius: [4, 4, 0, 0] }, barWidth: '50%' },
+      { data: [45.2, 38.7, 52.3, 61.5, 58.3], type: 'line', smooth: true, lineStyle: { color: '#0071E3', width: 2 }, itemStyle: { color: '#0071E3' }, symbol: 'circle', symbolSize: 6 }
+    ]
+  };
+  hkFlowChart.setOption(option);
+}
+
+// 溢价率趋势图
+let premiumChart;
+function initPremiumChart() {
+  if (premiumChart) return;
+  premiumChart = echarts.init(document.getElementById('premiumChart'));
+  const option = {
+    tooltip: { trigger: 'axis', backgroundColor: '#FFFFFF', borderRadius: 8, borderColor: '#E5E5EA' },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: Array.from({length:30}, (_,i) => '6/' + (i+11)), axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { color: '#86868B', interval: 4 } },
+    yAxis: { type: 'value', axisLabel: { formatter: '{value}%', color: '#86868B' }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+    series: [{ data: Array.from({length:30}, () => (Math.random() * 6 - 1).toFixed(2)), type: 'line', smooth: true, lineStyle: { color: '#0071E3', width: 2 }, areaStyle: { color: 'rgba(0,113,227,0.08)' }, symbol: 'none' }]
+  };
+  premiumChart.setOption(option);
+}
+
+// AH溢价图
+let ahPremiumChart;
+function initAhPremiumChart() {
+  if (ahPremiumChart) return;
+  ahPremiumChart = echarts.init(document.getElementById('ahPremiumChart'));
+  const option = {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, backgroundColor: '#FFFFFF', borderRadius: 8, borderColor: '#E5E5EA' },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%', color: '#86868B' }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+    yAxis: { type: 'category', data: ['中芯国际', '长城汽车', '中信证券', '比亚迪', '阿里巴巴'].reverse(), axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#1D1D1F' } },
+    series: [{ type: 'bar', data: [182, 101, 50, 11, 8].reverse(), itemStyle: { color: (p) => p.value > 50 ? '#FF3B30' : '#0071E3', borderRadius: [0, 4, 4, 0] }, barWidth: '60%' }]
+  };
+  ahPremiumChart.setOption(option);
+}
+
+// 宏观迷你图
+function initMacroMiniCharts() {
+  ['miniChart1', 'miniChart2', 'miniChart3', 'miniChart4'].forEach((id, idx) => {
+    const chart = echarts.init(document.getElementById(id));
+    const data = Array.from({length:30}, () => Math.random() * 10 + 50 + idx * 20);
+    chart.setOption({
+      grid: { left: 0, right: 0, top: 2, bottom: 2 },
+      xAxis: { type: 'category', show: false, data: Array.from({length:30}, (_,i) => i) },
+      yAxis: { type: 'value', show: false },
+      series: [{ data: data, type: 'line', smooth: true, lineStyle: { width: 1.5, color: '#0071E3' }, areaStyle: { color: 'rgba(0,113,227,0.1)' }, symbol: 'none' }]
+    });
+  });
+}
+
+// 宏观趋势图
+let macroTrendChart;
+function initMacroTrendChart() {
+  if (macroTrendChart) return;
+  macroTrendChart = echarts.init(document.getElementById('macroTrendChart'));
+  const option = {
+    tooltip: { trigger: 'axis', backgroundColor: '#FFFFFF', borderRadius: 8, borderColor: '#E5E5EA' },
+    legend: { data: ['美元指数', '离岸人民币', '10Y美债'], bottom: 0, textStyle: { color: '#86868B' } },
+    grid: { left: '3%', right: '4%', bottom: '12%', top: '10%', containLabel: true },
+    xAxis: { type: 'category', data: Array.from({length:30}, (_,i) => '6/' + (i+11)), axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { color: '#86868B', interval: 4 } },
+    yAxis: { type: 'value', axisLabel: { color: '#86868B' }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+    series: [
+      { name: '美元指数', data: Array.from({length:30}, (_,i) => 105 - i * 0.05 + Math.random() * 0.5), type: 'line', smooth: true, lineStyle: { color: '#FF3B30', width: 2 }, showSymbol: false },
+      { name: '离岸人民币', data: Array.from({length:30}, (_,i) => 7.15 + i * 0.01 + Math.random() * 0.05), type: 'line', smooth: true, lineStyle: { color: '#0071E3', width: 2 }, showSymbol: false },
+      { name: '10Y美债', data: Array.from({length:30}, (_,i) => 4.35 - i * 0.005 + Math.random() * 0.08), type: 'line', smooth: true, lineStyle: { color: '#34C759', width: 2 }, showSymbol: false }
+    ]
+  };
+  macroTrendChart.setOption(option);
+}
+
+// 外盘迷你图
+function initOverseasMiniCharts() {
+  const configs = [
+    { id: 'usChart1', color: '#34C759', data: Array.from({length:20}, (_,i) => 50 + i * 0.8 + Math.random() * 3) },
+    { id: 'usChart2', color: '#34C759', data: Array.from({length:20}, (_,i) => 50 + i * 1.2 + Math.random() * 4) },
+    { id: 'jpChart', color: '#FF3B30', data: Array.from({length:20}, (_,i) => 50 + i * 0.5 + Math.random() * 2) },
+    { id: 'euChart', color: '#34C759', data: Array.from({length:20}, (_,i) => 50 + i * 0.6 + Math.random() * 2.5) }
+  ];
+  configs.forEach(cfg => {
+    const chart = echarts.init(document.getElementById(cfg.id));
+    chart.setOption({
+      grid: { left: 0, right: 0, top: 2, bottom: 2 },
+      xAxis: { type: 'category', show: false, data: Array.from({length:20}, (_,i) => i) },
+      yAxis: { type: 'value', show: false },
+      series: [{ data: cfg.data, type: 'line', smooth: true, lineStyle: { width: 1.5, color: cfg.color }, areaStyle: { color: cfg.color === '#34C759' ? 'rgba(52,199,89,0.1)' : 'rgba(255,59,48,0.1)' }, symbol: 'none' }]
+    });
+  });
+}
+
+window.addEventListener('resize', () => {
+  if (hkFlowChart) hkFlowChart.resize();
+  if (premiumChart) premiumChart.resize();
+  if (ahPremiumChart) ahPremiumChart.resize();
+  if (macroTrendChart) macroTrendChart.resize();
+});
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="theme_index.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◯</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">题材指数</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="stock_analysis.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◉</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">AI荐股</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="morning_brief.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◐</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">早晨简报</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

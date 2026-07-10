@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多模态 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text-primary: #1a1f36; --text-secondary: #64748d;
+  --accent: #533afd; --navy: #061b31; --up: #dc2626; --down: #16a34a;
+  --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+  --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+  --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+  --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+  --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+.unified-sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+}
+.unified-sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.unified-sidebar-logo span { color: #8b9cf7; }
+.unified-sidebar-section { padding: 12px 0; }
+.unified-sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.unified-nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.unified-nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.unified-nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.unified-nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.unified-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.unified-topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.unified-search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; border: 1px solid var(--border); }
+.unified-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text-primary); }
+.unified-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.unified-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--navy); letter-spacing: -0.5px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.card-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text-primary); border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(83,58,253,0.05); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.mm-zone { border: 2px dashed var(--border); border-radius: 12px; padding: 32px; text-align: center; background: #fafbfc; transition: all 0.2s; cursor: pointer; margin-bottom: 12px; }
+.mm-zone:hover { border-color: var(--accent); background: rgba(83,58,253,0.03); }
+.mm-result { border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: #fafbfc; font-size: 12px; line-height: 1.7; min-height: 120px; }
+.mm-icon { font-size: 36px; margin-bottom: 8px; }
+.voice-btn { width: 56px; height: 56px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(83,58,253,0.3); }
+.voice-btn:hover { transform: scale(1.05); }
+.voice-btn.recording { animation: pulse-red 1.5s infinite; background: #dc2626; }
+@keyframes pulse-red { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.4); } 50% { box-shadow: 0 0 0 12px rgba(220,38,38,0); } }
+.waveform { display: flex; align-items: center; justify-content: center; gap: 3px; height: 40px; margin: 12px 0; }
+.wave-bar { width: 4px; background: var(--accent); border-radius: 2px; animation: wave 1s ease-in-out infinite; }
+.wave-bar:nth-child(1) { height: 12px; animation-delay: 0s; }
+.wave-bar:nth-child(2) { height: 20px; animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { height: 28px; animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { height: 36px; animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { height: 24px; animation-delay: 0.4s; }
+.wave-bar:nth-child(6) { height: 16px; animation-delay: 0.5s; }
+.wave-bar:nth-child(7) { height: 32px; animation-delay: 0.6s; }
+.wave-bar:nth-child(8) { height: 20px; animation-delay: 0.7s; }
+.wave-bar:nth-child(9) { height: 14px; animation-delay: 0.8s; }
+@keyframes wave { 0%,100% { transform: scaleY(0.5); opacity: 0.5; } 50% { transform: scaleY(1); opacity: 1; } }
+.kline-preview { width: 100%; height: 160px; background: #0f172a; border-radius: 8px; position: relative; overflow: hidden; }
+.kline-preview .overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: rgba(255,255,255,0.5); }
+/* iframe embed mode: hide sidebar & topbar */
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important;   overflow-y: auto !important;
+}
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+<aside class="unified-sidebar">
+  <div class="unified-sidebar-logo">🧠 <span>金融投资</span>AI助手</div>
+  <div class="unified-sidebar-section">
+    <div class="unified-sidebar-title">AI编排层</div>
+    <div class="unified-nav-item"><span class="icon">🤖</span>工作流编排</div>
+    <div class="unified-nav-item"><span class="icon">🎤</span>会议纪要</div>
+    <div class="unified-nav-item"><span class="icon">🔒</span>私域知识</div>
+    <div class="unified-nav-item"><span class="icon">⚙️</span>Prompt管理</div>
+    <div class="unified-nav-item active"><span class="icon">🎨</span>多模态</div>
+    <div class="unified-nav-item"><span class="icon">💬</span>AI投研对话</div>
+  </div>
+</aside>
+<div class="unified-main">
+<div class="unified-topbar">
+  <div class="unified-search"><span>🔍</span><input type="text" placeholder="搜索..."></div>
+  <div class="unified-user"><span>🔔</span><div class="unified-avatar">投</div><span>投研用户</span></div>
+</div>
+  <div style="padding: 20px 24px; max-width: 1440px; margin: 0 auto;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+      <div><div class="page-title">多模态</div><div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">截图K线分析 · 拍照财报提取 · 语音搜索</div></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+      <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card-title">📸 截图K线分析</div>
+        <div class="mm-zone">
+          <div class="mm-icon">📷</div>
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">上传K线截图或拖拽到此处</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">支持 PNG / JPG / GIF</div>
+        </div>
+        <div class="kline-preview">
+          <div class="overlay">K线预览区域</div>
+          <div style="position: absolute; bottom: 30px; left: 20px; width: 8px; height: 40px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 40px; width: 8px; height: 25px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 35px; left: 60px; width: 8px; height: 55px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 80px; width: 8px; height: 30px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 100px; width: 8px; height: 45px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 120px; width: 8px; height: 20px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 140px; width: 8px; height: 50px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 160px; width: 8px; height: 35px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 180px; width: 8px; height: 40px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 200px; width: 8px; height: 60px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 220px; width: 8px; height: 25px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 240px; width: 8px; height: 45px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 260px; width: 8px; height: 30px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 280px; width: 8px; height: 55px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 300px; width: 8px; height: 20px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 320px; width: 8px; height: 40px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 340px; width: 8px; height: 30px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 360px; width: 8px; height: 50px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 380px; width: 8px; height: 25px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 400px; width: 8px; height: 55px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 420px; width: 8px; height: 35px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 440px; width: 8px; height: 20px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 460px; width: 8px; height: 45px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 480px; width: 8px; height: 60px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 500px; width: 8px; height: 30px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 520px; width: 8px; height: 50px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 540px; width: 8px; height: 25px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 560px; width: 8px; height: 40px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 580px; width: 8px; height: 30px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 600px; width: 8px; height: 55px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 620px; width: 8px; height: 20px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 640px; width: 8px; height: 45px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 660px; width: 8px; height: 35px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 680px; width: 8px; height: 60px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 700px; width: 8px; height: 25px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 720px; width: 8px; height: 50px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 740px; width: 8px; height: 30px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 760px; width: 8px; height: 55px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 780px; width: 8px; height: 20px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 800px; width: 8px; height: 45px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 820px; width: 8px; height: 35px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 840px; width: 8px; height: 60px; background: #dc2626; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 860px; width: 8px; height: 25px; background: #16a34a; border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 880px; width: 8px; height: 50px; background: #dc2626; border-radius: 1px;"></div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">🔍 技术形态识别结果</div>
+          <div style="margin-bottom: 8px;">
+            <span class="tag tag-purple">头肩顶</span>
+            <span class="tag tag-yellow">置信度 78%</span>
+            <span class="tag tag-red">⚠️ 看跌信号</span>
+          </div>
+          <div style="color: var(--text-secondary); line-height: 1.7;">
+            • 左肩高点：$142.50（2026-06-20）<br>
+            • 头部高点：$145.80（2026-07-01）<br>
+            • 右肩高点：$141.20（2026-07-08）<br>
+            • 颈线位：$135.00（已跌破）<br>
+            • 量度跌幅目标：$128.50 - $130.00<br>
+            • 建议：关注反抽颈线确认，若无法站回则确认形态成立
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-outline btn-sm" style="flex:1;">📥 下载报告</button>
+          <button class="btn-primary btn-sm" style="flex:1;">📋 复制分析</button>
+        </div>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card-title">📷 拍照财报提取</div>
+        <div class="mm-zone">
+          <div class="mm-icon">📄</div>
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">上传财报截图或拍照</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">支持财报/公告/研报截图</div>
+        </div>
+        <div class="kline-preview" style="background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;">
+          <div style="text-align: center; color: var(--text-secondary); font-size: 12px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">📊</div>
+            <div>财报预览区域</div>
+          </div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">📋 关键数据提取</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 6px 0; color: var(--text-secondary);">营收</td><td style="padding: 6px 0; text-align: right; font-weight: 600;" class="tabular-nums">$38.7B</td></tr>
+            <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 6px 0; color: var(--text-secondary);">同比增长</td><td style="padding: 6px 0; text-align: right; font-weight: 600; color: var(--up);" class="tabular-nums">+56%</td></tr>
+            <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 6px 0; color: var(--text-secondary);">净利润</td><td style="padding: 6px 0; text-align: right; font-weight: 600;" class="tabular-nums">$19.2B</td></tr>
+            <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 6px 0; color: var(--text-secondary);">毛利率</td><td style="padding: 6px 0; text-align: right; font-weight: 600;" class="tabular-nums">78.4%</td></tr>
+            <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 6px 0; color: var(--text-secondary);">EPS</td><td style="padding: 6px 0; text-align: right; font-weight: 600;" class="tabular-nums">$0.78</td></tr>
+            <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 6px 0; color: var(--text-secondary);">下季指引</td><td style="padding: 6px 0; text-align: right; font-weight: 600;" class="tabular-nums">$42.0B</td></tr>
+            <tr><td style="padding: 6px 0; color: var(--text-secondary);">ROE</td><td style="padding: 6px 0; text-align: right; font-weight: 600;" class="tabular-nums">52.3%</td></tr>
+          </table>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-outline btn-sm" style="flex:1;">📥 导出Excel</button>
+          <button class="btn-primary btn-sm" style="flex:1;">✅ 确认数据</button>
+        </div>
+      </div>
+      <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card-title">🎙️ 语音搜索</div>
+        <div style="text-align: center; padding: 20px 0;">
+          <button class="voice-btn">🎙️</button>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;">点击开始录音</div>
+        </div>
+        <div class="waveform">
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">📝 转写文字</div>
+          <div style="font-size: 13px; color: var(--text-primary); line-height: 1.7;">
+            "帮我查一下英伟达最近五因子的评分怎么样，技术面是不是还在主升浪？"
+          </div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">🔍 搜索结果</div>
+          <div style="color: var(--text-primary); line-height: 1.7;">
+            <strong>NVIDIA (NVDA)</strong> 五因子评分：<br>
+            • FinalScore：<span class="tabular-nums" style="color: var(--accent); font-weight: 700;">64.4</span>（S4 主升浪全共振）<br>
+            • F1 资金：<span class="tabular-nums">26</span>（量比偏低，体量巨大）<br>
+            • F2 宏观：<span class="tabular-nums">54</span>（宏观环境中性偏暖）<br>
+            • F3 情绪：<span class="tabular-nums">50</span>（情绪中性）<br>
+            • F4 基本面：<span class="tabular-nums">100</span>（满分）<br>
+            • F5 技术：<span class="tabular-nums">100</span>（满分）<br>
+            • 仓位标签：<span class="tag tag-green">Core</span><br>
+            • 9模型LLM共识：87.29分，一致推荐 core 仓位
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-outline btn-sm" style="flex:1;">🔊 语音播报</button>
+          <button class="btn-primary btn-sm" style="flex:1;">📋 复制结果</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>document.addEventListener('DOMContentLoaded', function() {
+  // iframe embed detection
+  console.log('多模态页已加载'); });</script>
+</body>
+</html>

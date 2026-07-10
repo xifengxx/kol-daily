@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1.1 统一前端 + F3.4 社区 - 金融AI投研平台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --card-border: #e5e7eb;
+    --text-primary: #1a1f36;
+    --text-secondary: #6b7280;
+    --accent: #533afd;
+    --accent-light: #ede9fe;
+    --dark: #061b31;
+    --up: #dc2626;
+    --down: #16a34a;
+    --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+    --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+    --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+    --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+    --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: var(--bg); color: var(--text-primary); font-size: 13px;
+    line-height: 1.5;
+  }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  /* Layout */
+  .main-content { display: flex; flex-direction: column; min-height: 100vh; }
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--card-border);
+    padding: 12px 24px; display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .topbar-search {
+    flex: 1; max-width: 480px; display: flex; align-items: center;
+    background: var(--bg); border-radius: 20px; padding: 8px 16px; gap: 8px;
+  }
+  .topbar-search input {
+    border: none; background: transparent; outline: none; flex: 1;
+    font-size: 12px; color: var(--text-primary);
+  }
+  .topbar-search input::placeholder { color: var(--text-secondary); }
+  .topbar-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+  .topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+
+  .page-container { padding: 24px; flex: 1; }
+
+  /* Nav tabs */
+  .nav-tabs { display: flex; gap: 4px; background: #fff; border-radius: 10px; padding: 4px; border: 1px solid var(--card-border); margin-bottom: 24px; width: fit-content; }
+  .nav-tab {
+    padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 13px;
+    font-weight: 500; color: var(--text-secondary); transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--text-primary); background: var(--bg); }
+  .nav-tab.active { background: var(--accent); color: #fff; }
+
+  /* Cards */
+  .card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 10px; overflow: hidden;
+  }
+  .card-header {
+    padding: 14px 18px; border-bottom: 1px solid var(--card-border);
+    font-size: 14px; font-weight: 600; color: var(--text-primary);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-body { padding: 16px 18px; }
+
+  /* Stat cards */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 8px; padding: 14px 16px;
+  }
+  .stat-card-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+  .stat-card-value { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  .stat-card-sub { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 7px 18px; border-radius: 18px; font-size: 12px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s; border: none; font-family: inherit;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #4326e5; }
+  .btn-outline { background: transparent; border: 1px solid var(--card-border); color: var(--text-primary); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 4px 12px; font-size: 11px; border-radius: 14px; }
+  .btn-xs { padding: 3px 10px; font-size: 10px; border-radius: 12px; }
+
+  /* Tags */
+  .tag {
+    display: inline-flex; align-items: center; padding: 2px 8px;
+    border-radius: 4px; font-size: 10px; font-weight: 500;
+  }
+  .tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+  .tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+  .tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+  .tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+  .tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+
+  /* Tables */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table th {
+    text-align: left; padding: 10px 14px; font-size: 10px; font-weight: 600;
+    text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid var(--card-border);
+    letter-spacing: 0.3px;
+  }
+  .data-table td {
+    padding: 10px 14px; border-bottom: 1px solid #f3f4f6;
+    color: var(--text-primary);
+  }
+  .data-table tbody tr { cursor: pointer; transition: background 0.15s; }
+  .data-table tbody tr:hover { background: #f9fafb; }
+  .data-table tbody tr.expanded { background: #f5f3ff; }
+  .pos { color: var(--up); font-weight: 500; }
+  .neg { color: var(--down); font-weight: 500; }
+
+  /* Detail panel */
+  .detail-panel {
+    background: #fafbff; border-top: 1px solid var(--card-border);
+    padding: 20px 24px; display: none;
+  }
+  .detail-panel.open { display: block; }
+  .detail-meta { display: flex; gap: 24px; margin-bottom: 16px; font-size: 12px; }
+  .detail-chart { width: 100%; height: 280px; }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .filter-bar input {
+    padding: 8px 14px; border: 1px solid var(--card-border); border-radius: 8px;
+    font-size: 12px; outline: none; width: 200px; font-family: inherit;
+  }
+  .filter-bar input:focus { border-color: var(--accent); }
+  .sort-group { display: flex; gap: 4px; }
+  .sort-btn {
+    padding: 6px 14px; border: 1px solid var(--card-border); border-radius: 6px;
+    font-size: 11px; cursor: pointer; background: #fff; color: var(--text-secondary);
+    transition: all 0.15s; font-family: inherit;
+  }
+  .sort-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .sort-btn.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); font-weight: 500; }
+
+  /* Note cards */
+  .note-grid { display: flex; flex-direction: column; gap: 12px; }
+  .note-subtabs { display: flex; gap: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+  .note-subtab { font-size: 13px; cursor: pointer; color: var(--text-secondary); padding-bottom: 10px; margin-bottom: -11px; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .note-subtab:hover { color: var(--text-primary); }
+  .note-subtab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+  .note-card {
+    background: var(--card); border: 1px solid var(--card-border); border-radius: 10px;
+    padding: 16px 18px; cursor: pointer; transition: all 0.15s;
+  }
+  .note-card:hover { border-color: #c4b5fd; box-shadow: 0 1px 4px rgba(83,58,253,0.06); }
+  .note-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+  .note-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); line-height: 1.4; }
+  .note-card-author { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; }
+  .note-card-preview { font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
+  .note-card-stats { display: flex; gap: 16px; font-size: 11px; color: var(--text-secondary); }
+  .note-card-stats span { display: flex; align-items: center; gap: 4px; }
+  .note-full { display: none; padding-top: 12px; border-top: 1px solid var(--card-border); margin-top: 12px; font-size: 13px; line-height: 1.8; color: var(--text-primary); }
+  .note-card.expanded .note-full { display: block; }
+
+  /* Concept cards */
+  .concept-header { background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-radius: 10px; padding: 24px; margin-bottom: 20px; text-align: center; }
+  .concept-header h2 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  .concept-header p { font-size: 13px; color: var(--text-secondary); }
+  .leaderboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+  .lb-card {
+    background: var(--card); border: 1px solid var(--card-border); border-radius: 10px;
+    padding: 16px; text-align: center; transition: all 0.15s;
+  }
+  .lb-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06);}
+  .lb-rank { font-size: 24px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
+  .lb-name { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .lb-contributors { font-size: 11px; color: var(--text-secondary); }
+
+  .feed-item {
+    display: flex; align-items: flex-start; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .feed-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; }
+  .feed-text { font-size: 12px; color: var(--text-primary); line-height: 1.5; }
+  .feed-time { font-size: 10px; color: var(--text-secondary); }
+  .feed-highlight { color: var(--accent); font-weight: 500; }
+
+  /* Responsive */
+  @media (max-width: 1200px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } .leaderboard-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .leaderboard-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.25s ease-out; }
+
+  /* Expand icon */
+  .expand-icon { transition: transform 0.2s; display: inline-block; }
+  .expanded-row .expand-icon { transform: rotate(180deg); }
+
+  .text-up { color: var(--up); }
+  .text-down { color: var(--down); }
+  .page-section { display: none; }
+  .page-section.active-page { display: block; }
+
+</style>
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="topbar-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="搜索策略、笔记、概念卡片、股票代码...">
+      </div>
+      <div class="topbar-user">
+        <span>研究员_Zhang</span>
+        <div class="topbar-avatar">Z</div>
+      </div>
+    </div>
+
+    <!-- Page Container -->
+    <div class="page-container">
+
+      <!-- Tab Navigation -->
+      <div class="nav-tabs" id="mainTabs">
+        <div class="nav-tab active" data-page="strategy">策略广场</div>
+        <div class="nav-tab" data-page="notes">投资笔记</div>
+        <div class="nav-tab" data-page="concepts">概念卡片协作</div>
+      </div>
+
+      <!-- ==================== PAGE 1: 策略广场 ==================== -->
+      <div class="page-section active-page" id="page-strategy">
+        <!-- Stat Cards -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-card-label">公开策略</div>
+            <div class="stat-card-value">1,247</div>
+            <div class="stat-card-sub"><span style="color:var(--up)">&#8593; 3.2%</span> 较上月</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">月新增</div>
+            <div class="stat-card-value">89</div>
+            <div class="stat-card-sub"><span style="color:var(--up)">&#8593; 12.7%</span> 较上月</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">月活贡献者</div>
+            <div class="stat-card-value">342</div>
+            <div class="stat-card-sub"><span style="color:var(--up)">&#8593; 8.1%</span> 较上月</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Top 夏普比率</div>
+            <div class="stat-card-value">2.35</div>
+            <div class="stat-card-sub">@ValueHunter · 低估值+ROE+趋势</div>
+          </div>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="filter-bar">
+          <input type="text" placeholder="搜索策略名称或作者..." id="strategySearch">
+          <span style="font-size:11px;color:var(--text-secondary)">排序:</span>
+          <div class="sort-group" id="sortGroup">
+            <button class="sort-btn active" data-sort="sharpe">夏普</button>
+            <button class="sort-btn" data-sort="annual">年化收益</button>
+            <button class="sort-btn" data-sort="drawdown">最大回撤</button>
+            <button class="sort-btn" data-sort="winrate">胜率</button>
+          </div>
+        </div>
+
+        <!-- Strategy Table -->
+        <div class="card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>策略名称 / 作者</th>
+                <th>年化收益</th>
+                <th>夏普比率</th>
+                <th>最大回撤</th>
+                <th>收藏</th>
+                <th>投票</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 -->
+              <tr class="strategy-row" data-id="1" onclick="toggleStrategyDetail(1)">
+                <td>
+                  <div style="font-weight:600">低估值+ROE+趋势跟随</div>
+                  <div style="font-size:10px;color:var(--text-secondary)">@ValueHunter · 更新于2h前</div>
+                </td>
+                <td><span class="pos">+28.3%</span></td>
+                <td><span style="font-weight:600">2.35</span></td>
+                <td><span class="neg">-15.2%</span></td>
+                <td><span style="font-size:13px">&#11088; 342</span></td>
+                <td>
+                  <button class="btn btn-outline btn-xs" style="margin-right:4px;" onclick="event.stopPropagation(); voteStrategy(event, this, 'up')">&#9650; <span class="vote-count">142</span></button>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); voteStrategy(event, this, 'down')">&#9660; <span class="vote-count">8</span></button>
+                </td>
+                <td>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); copyStrategy(event, '低估值+ROE+趋势跟随')">复制到我的模拟</button>
+                </td>
+              </tr>
+              <tr id="detail-1" class="detail-row" style="display:none;"><td colspan="7"><div class="detail-panel open"><div class="detail-meta"><div><strong>策略逻辑</strong><br><span style="font-size:12px;color:var(--text-secondary)">基于PB<1.5筛选低估值股票，要求ROE>15%过去3年连续增长，结合50/200日均线金叉做趋势确认。仓位管理: 单票不超过15%，总仓位60%-90%动态调整。止损线: -8%硬止损。</span></div><div><strong>运行统计</strong><br><span style="font-size:12px;color:var(--text-secondary)">胜率 62.4% · 盈亏比 2.1 · 月换手率 35% · 最大连续盈利 9笔 · 最大连续亏损 3笔</span></div></div><div class="detail-chart" id="chart-backtest-1"></div></div></td></tr>
+              <!-- Row 2 -->
+              <tr class="strategy-row" data-id="2" onclick="toggleStrategyDetail(2)">
+                <td>
+                  <div style="font-weight:600">AI产业链轮动</div>
+                  <div style="font-size:10px;color:var(--text-secondary)">@ChipAnalyst · 更新于5h前</div>
+                </td>
+                <td><span class="pos">+35.1%</span></td>
+                <td><span style="font-weight:600">1.98</span></td>
+                <td><span class="neg">-22.8%</span></td>
+                <td><span style="font-size:13px">&#11088; 287</span></td>
+                <td>
+                  <button class="btn btn-outline btn-xs" style="margin-right:4px;" onclick="event.stopPropagation(); voteStrategy(event, this, 'up')">&#9650; <span class="vote-count">98</span></button>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); voteStrategy(event, this, 'down')">&#9660; <span class="vote-count">15</span></button>
+                </td>
+                <td>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); copyStrategy(event, 'AI产业链轮动')">复制到我的模拟</button>
+                </td>
+              </tr>
+              <tr id="detail-2" class="detail-row" style="display:none;"><td colspan="7"><div class="detail-panel open"><div class="detail-meta"><div><strong>策略逻辑</strong><br><span style="font-size:12px;color:var(--text-secondary)">跟踪AI产业链景气度指标（资本开支、订单、ASP趋势），在算力芯片/光模块/先进封装/HBM四个环节轮动。信号触发: 环节景气度环比>10%+行业ETF突破20日均线。持仓周期: 2-6周。</span></div><div><strong>运行统计</strong><br><span style="font-size:12px;color:var(--text-secondary)">胜率 58.1% · 盈亏比 1.9 · 月换手率 52% · 最大连续盈利 7笔 · 最大连续亏损 4笔</span></div></div><div class="detail-chart" id="chart-backtest-2"></div></div></td></tr>
+              <!-- Row 3 -->
+              <tr class="strategy-row" data-id="3" onclick="toggleStrategyDetail(3)">
+                <td>
+                  <div style="font-weight:600">双均线+RSI+止损</div>
+                  <div style="font-size:10px;color:var(--text-secondary)">@QuantBeginner · 更新于1d前</div>
+                </td>
+                <td><span class="pos">+19.7%</span></td>
+                <td><span style="font-weight:600">1.65</span></td>
+                <td><span class="neg">-11.3%</span></td>
+                <td><span style="font-size:13px">&#11088; 156</span></td>
+                <td>
+                  <button class="btn btn-outline btn-xs" style="margin-right:4px;" onclick="event.stopPropagation(); voteStrategy(event, this, 'up')">&#9650; <span class="vote-count">67</span></button>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); voteStrategy(event, this, 'down')">&#9660; <span class="vote-count">12</span></button>
+                </td>
+                <td>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); copyStrategy(event, '双均线+RSI+止损')">复制到我的模拟</button>
+                </td>
+              </tr>
+              <tr id="detail-3" class="detail-row" style="display:none;"><td colspan="7"><div class="detail-panel open"><div class="detail-meta"><div><strong>策略逻辑</strong><br><span style="font-size:12px;color:var(--text-secondary)">经典双均线系统: 20日EMA上穿60日EMA做多，RSI(14)<30加仓信号，RSI>70减仓。配合ATR动态止损。操作标的: 沪深300成分股。仓位: 等权分配5-8只。</span></div><div><strong>运行统计</strong><br><span style="font-size:12px;color:var(--text-secondary)">胜率 54.7% · 盈亏比 1.7 · 月换手率 28% · 最大连续盈利 5笔 · 最大连续亏损 5笔</span></div></div><div class="detail-chart" id="chart-backtest-3"></div></div></td></tr>
+              <!-- Row 4 -->
+              <tr class="strategy-row" data-id="4" onclick="toggleStrategyDetail(4)">
+                <td>
+                  <div style="font-weight:600">价值+动量混合</div>
+                  <div style="font-size:10px;color:var(--text-secondary)">@AlphaSeeker · 更新于3h前</div>
+                </td>
+                <td><span class="pos">+24.1%</span></td>
+                <td><span style="font-weight:600">1.88</span></td>
+                <td><span class="neg">-14.5%</span></td>
+                <td><span style="font-size:13px">&#11088; 203</span></td>
+                <td>
+                  <button class="btn btn-outline btn-xs" style="margin-right:4px;" onclick="event.stopPropagation(); voteStrategy(event, this, 'up')">&#9650; <span class="vote-count">89</span></button>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); voteStrategy(event, this, 'down')">&#9660; <span class="vote-count">11</span></button>
+                </td>
+                <td>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); copyStrategy(event, '价值+动量混合')">复制到我的模拟</button>
+                </td>
+              </tr>
+              <tr id="detail-4" class="detail-row" style="display:none;"><td colspan="7"><div class="detail-panel open"><div class="detail-meta"><div><strong>策略逻辑</strong><br><span style="font-size:12px;color:var(--text-secondary)">综合价值因子(P/E、P/B、D/Y)和动量因子(6M收益、12M-1M收益)，各占50%权重。选股池: 全A股剔除ST/金融。排名前30等权配置，月度调仓。加入波动率倒数加权优化。</span></div><div><strong>运行统计</strong><br><span style="font-size:12px;color:var(--text-secondary)">胜率 60.2% · 盈亏比 2.0 · 月换手率 42% · 最大连续盈利 8笔 · 最大连续亏损 3笔</span></div></div><div class="detail-chart" id="chart-backtest-4"></div></div></td></tr>
+              <!-- Row 5 -->
+              <tr class="strategy-row" data-id="5" onclick="toggleStrategyDetail(5)">
+                <td>
+                  <div style="font-weight:600">低波动红利策略</div>
+                  <div style="font-size:10px;color:var(--text-secondary)">@DividendKing · 更新于8h前</div>
+                </td>
+                <td><span class="pos">+15.2%</span></td>
+                <td><span style="font-weight:600">1.42</span></td>
+                <td><span class="neg">-8.1%</span></td>
+                <td><span style="font-size:13px">&#11088; 98</span></td>
+                <td>
+                  <button class="btn btn-outline btn-xs" style="margin-right:4px;" onclick="event.stopPropagation(); voteStrategy(event, this, 'up')">&#9650; <span class="vote-count">45</span></button>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); voteStrategy(event, this, 'down')">&#9660; <span class="vote-count">6</span></button>
+                </td>
+                <td>
+                  <button class="btn btn-outline btn-xs" onclick="event.stopPropagation(); copyStrategy(event, '低波动红利策略')">复制到我的模拟</button>
+                </td>
+              </tr>
+              <tr id="detail-5" class="detail-row" style="display:none;"><td colspan="7"><div class="detail-panel open"><div class="detail-meta"><div><strong>策略逻辑</strong><br><span style="font-size:12px;color:var(--text-secondary)">筛选股息率>3%+波动率<市场平均水平+连续5年分红正增长。仓位管理: 等权配置10-15只，季度调仓。核心逻辑: 低波动异象+红利再投资收益复利。适合保守型投资者。</span></div><div><strong>运行统计</strong><br><span style="font-size:12px;color:var(--text-secondary)">胜率 67.3% · 盈亏比 1.4 · 月换手率 15% · 最大连续盈利 12笔 · 最大连续亏损 2笔</span></div></div><div class="detail-chart" id="chart-backtest-5"></div></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ==================== PAGE 2: 投资笔记 ==================== -->
+      <div class="page-section" id="page-notes">
+        <div class="note-subtabs" id="noteSubTabs">
+          <div class="note-subtab active" data-filter="latest">最新</div>
+          <div class="note-subtab" data-filter="followed">关注</div>
+          <div class="note-subtab" data-filter="hot">热门</div>
+          <div class="note-subtab" data-filter="mine">我的</div>
+        </div>
+
+        <div class="note-grid" id="noteGrid">
+          <!-- Note 1 -->
+          <div class="note-card" onclick="this.classList.toggle('expanded')">
+            <div class="note-card-header">
+              <div class="note-card-title">HBM产业链深度梳理</div>
+              <span class="tag tag-blue">半导体</span>
+            </div>
+            <div class="note-card-author">@MemoryGuy · 2小时前</div>
+            <div class="note-card-preview">从工业混合键合（Hybrid Bonding）技术路线出发，全面梳理HBM产业链各环节竞争格局。重点关注TCB vs MR-MUF两种键合方案的成本和良率差异，以及国产替代在HBM封装材料端的进展...</div>
+            <div class="note-card-stats">
+              <span>&#128065; 1.2k 阅读</span>
+              <span>&#128077; 86 赞</span>
+              <span>&#128172; 24 评论</span>
+            </div>
+            <div class="note-full">
+              <p><strong>一、HBM技术路线概览</strong></p>
+              <p>HBM（高带宽存储）已成为AI芯片核心瓶颈。当前HBM3E采用8/12层堆叠，每层容量24GB，总带宽超1TB/s。关键工艺在于TSV（硅通孔）与芯片键合技术。</p>
+              <p style="margin-top:10px"><strong>二、键合方案对比</strong></p>
+              <p>TCB（热压键合）为当前主流方案，但受限于精度和热预算；MR-MUF（批量回流成型底部填充）由SK海力士主导，实现更好的热管理和更高堆叠层数。国产厂商在底部填充胶、临时键合材料领域已有突破。</p>
+              <p style="margin-top:10px"><strong>三、产业链投资机会</strong></p>
+              <p>设备端关注混合键合设备国产化进展；材料端关注underfill和TIM材料；封测端关注具备先进封装产能的代工厂。预计2025-2027年HBM市场规模复合增速超50%。</p>
+            </div>
+          </div>
+
+          <!-- Note 2 -->
+          <div class="note-card" onclick="this.classList.toggle('expanded')">
+            <div class="note-card-header">
+              <div class="note-card-title">复盘: NVDA 5次交易的得与失</div>
+              <span class="tag tag-yellow">交易复盘</span>
+            </div>
+            <div class="note-card-author">@TradeJournal · 5小时前</div>
+            <div class="note-card-preview">胜率80%为什么还在亏钱？回顾过去半年5次NVDA交易——4赢1亏但净亏损的状态。深度分析仓位管理失误：赢的时候不敢加仓，亏的那笔却满仓硬扛...</div>
+            <div class="note-card-stats">
+              <span>&#128065; 892 阅读</span>
+              <span>&#128077; 124 赞</span>
+              <span>&#128172; 38 评论</span>
+            </div>
+            <div class="note-full">
+              <p><strong>交易总结</strong></p>
+              <p>5笔交易详情：4笔盈利（+3.2%, +5.1%, +1.8%, +4.7%），1笔亏损（-22.3%）。核心问题：盈利交易平均仓位仅15%，亏损那次仓位达到80%。</p>
+              <p style="margin-top:10px"><strong>改进方向</strong></p>
+              <p>1. 建立固定风控规则：单笔最大亏损不超过总资金2%<br>2. 盈利加仓采用金字塔式递减加仓<br>3. 每笔交易前明确止损位和仓位上限<br>4. 每周复盘仓位曲线，检查是否遵守规则</p>
+            </div>
+          </div>
+
+          <!-- Note 3 -->
+          <div class="note-card" onclick="this.classList.toggle('expanded')">
+            <div class="note-card-header">
+              <div class="note-card-title">价值投资在中国半导体行业的适用性</div>
+              <span class="tag tag-green">价值投资</span>
+            </div>
+            <div class="note-card-author">@ValueChina · 8小时前</div>
+            <div class="note-card-preview">巴菲特的护城河理论在A股半导体领域是否有效？分析国内半导体企业的真实壁垒——不是技术领先而是客户粘性和供应链不可替代性。探讨估值方法论的本地化适配...</div>
+            <div class="note-card-stats">
+              <span>&#128065; 654 阅读</span>
+              <span>&#128077; 47 赞</span>
+              <span>&#128172; 12 评论</span>
+            </div>
+            <div class="note-full">
+              <p><strong>核心观点</strong></p>
+              <p>A股半导体企业的"护城河"更多体现在政策准入、客户认证周期、供应链整合能力，而非纯技术壁垒。传统DCF模型需要调整为包含政策风险溢价和国产替代溢价的双重调整。</p>
+              <p style="margin-top:10px"><strong>关键指标</strong></p>
+              <p>建议关注的估值锚：1. 研发投入/营收比（>8%为佳）2. 前5大客户集中度（适度集中为佳）3. 人均创收趋势 vs 同行 4. 设备国产化率提升空间</p>
+            </div>
+          </div>
+
+          <!-- Note 4 -->
+          <div class="note-card" onclick="this.classList.toggle('expanded')">
+            <div class="note-card-header">
+              <div class="note-card-title">CPO vs LPO技术路径对比: 谁将是最终赢家？</div>
+              <span class="tag tag-purple">光通信</span>
+            </div>
+            <div class="note-card-author">@PhotonicsGuy · 12小时前</div>
+            <div class="note-card-preview">CPO（共封装光学）和LPO（线性驱动可插拔光学）两大阵营的技术路线之争进入白热化。从功耗、成本、可维护性三个维度深度对比，展望2026-2028年市场格局...</div>
+            <div class="note-card-stats">
+              <span>&#128065; 432 阅读</span>
+              <span>&#128077; 32 赞</span>
+              <span>&#128172; 9 评论</span>
+            </div>
+            <div class="note-full">
+              <p><strong>技术对比</strong></p>
+              <p>CPO优势：功耗降低40-50%，带宽密度提升10倍，延迟更低。劣势：标准化程度低，维护困难，生态封闭。<br>LPO优势：完全兼容现有架构，即插即用，供应链成熟。劣势：带宽天花板受限，功耗相对较高。</p>
+              <p style="margin-top:10px"><strong>投资判断</strong></p>
+              <p>短期（2026-2027）：LPO主导800G/1.6T市场，受益标的为光模块龙头。长期（2028+）：CPO在AI集群中渗透率有望达30%，关注硅光芯片和先进封装环节。</p>
+            </div>
+          </div>
+
+          <!-- Note 5 -->
+          <div class="note-card" onclick="this.classList.toggle('expanded')">
+            <div class="note-card-header">
+              <div class="note-card-title">特斯拉Optimus机器人供应链深度分析</div>
+              <span class="tag tag-red">机器人</span>
+            </div>
+            <div class="note-card-author">@RobotInvestor · 1天前</div>
+            <div class="note-card-preview">从Optimus Gen 3的BOM结构出发，梳理国产供应链的切入机会。核心零部件包括电机、减速器、传感器、丝杠——其中谐波减速器和六维力传感器是国产替代最具确定性的方向...</div>
+            <div class="note-card-stats">
+              <span>&#128065; 2.1k 阅读</span>
+              <span>&#128077; 156 赞</span>
+              <span>&#128172; 42 评论</span>
+            </div>
+            <div class="note-full">
+              <p><strong>BOM结构拆解</strong></p>
+              <p>执行器（电机+减速器+编码器+力传感器）占整机成本约45%。其中谐波减速器单机用量约14-20个，六维力传感器约4-6个，行星滚柱丝杠约14个。</p>
+              <p style="margin-top:10px"><strong>国产替代机会</strong></p>
+              <p>1. 谐波减速器：国产厂商已实现技术突破，产品性能接近日本HD水平，价格低30-40%。<br>2. 六维力传感器：目前主要由ATI垄断，国产厂商预计2027年量产。<br>3. 丝杠：国内已有企业进入Tier1供应链送样阶段。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden notes for other tabs (demo filtering) -->
+        <div style="text-align:center;padding:20px;color:var(--text-secondary);font-size:12px;" id="notesEmpty" class="hidden">
+          <p>此分类暂无更多笔记</p>
+        </div>
+      </div>
+
+      <!-- ==================== PAGE 3: 概念卡片协作 ==================== -->
+      <div class="page-section" id="page-concepts">
+        <!-- Explainer -->
+        <div class="concept-header">
+          <h2>&#128214; 社区共建概念卡片库</h2>
+          <p>像维基百科一样协作编辑金融概念 —— 每个人都可以贡献知识，社区审核确保质量</p>
+        </div>
+
+        <!-- Leaderboard -->
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;color:var(--text-primary)">热门贡献卡片 Top 5</div>
+        <div class="leaderboard-grid">
+          <div class="lb-card">
+            <div class="lb-rank">#1</div>
+            <div class="lb-name">CPO</div>
+            <div class="lb-contributors">28 位贡献者</div>
+            <div style="margin-top:6px"><span class="tag tag-purple">光通信</span></div>
+          </div>
+          <div class="lb-card">
+            <div class="lb-rank">#2</div>
+            <div class="lb-name">HBM</div>
+            <div class="lb-contributors">23 位贡献者</div>
+            <div style="margin-top:6px"><span class="tag tag-blue">存储</span></div>
+          </div>
+          <div class="lb-card">
+            <div class="lb-rank">#3</div>
+            <div class="lb-name">CoWoS</div>
+            <div class="lb-contributors">19 位贡献者</div>
+            <div style="margin-top:6px"><span class="tag tag-blue">先进封装</span></div>
+          </div>
+          <div class="lb-card">
+            <div class="lb-rank">#4</div>
+            <div class="lb-name">低空经济</div>
+            <div class="lb-contributors">16 位贡献者</div>
+            <div style="margin-top:6px"><span class="tag tag-green">新兴产业</span></div>
+          </div>
+          <div class="lb-card">
+            <div class="lb-rank">#5</div>
+            <div class="lb-name">固态电池</div>
+            <div class="lb-contributors">14 位贡献者</div>
+            <div style="margin-top:6px"><span class="tag tag-yellow">新能源</span></div>
+          </div>
+        </div>
+
+        <!-- Recent Edits Feed -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-header">
+            <span>最近编辑动态</span>
+            <span style="font-size:11px;color:var(--accent);cursor:pointer;font-weight:400">查看全部 &rarr;</span>
+          </div>
+          <div class="card-body" style="padding:8px 18px">
+            <div class="feed-item">
+              <div class="feed-dot"></div>
+              <div>
+                <div class="feed-text">用户 <span class="feed-highlight">@ChipExpert</span> 更新了 <span class="feed-highlight">CPO</span> 卡片的 <span class="feed-highlight">"风险警示"</span> 章节</div>
+                <div class="feed-time">30 分钟前</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-dot"></div>
+              <div>
+                <div class="feed-text">用户 <span class="feed-highlight">@MemoryAnalyst</span> 在 <span class="feed-highlight">HBM</span> 卡片新增了 <span class="feed-highlight">"2026市场展望"</span></div>
+                <div class="feed-time">1 小时前</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-dot"></div>
+              <div>
+                <div class="feed-text">用户 <span class="feed-highlight">@PackageTech</span> 编辑了 <span class="feed-highlight">CoWoS</span> 卡片的 <span class="feed-highlight">"工艺流程"</span> 描述</div>
+                <div class="feed-time">2 小时前</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-dot"></div>
+              <div>
+                <div class="feed-text">用户 <span class="feed-highlight">@DroneInvest</span> 更新了 <span class="feed-highlight">低空经济</span> 卡片的 <span class="feed-highlight">"政策梳理"</span></div>
+                <div class="feed-time">3 小时前</div>
+              </div>
+            </div>
+            <div class="feed-item">
+              <div class="feed-dot"></div>
+              <div>
+                <div class="feed-text">社区审核通过: <span class="feed-highlight">@BatteryGuru</span> 对 <span class="feed-highlight">固态电池</span> 的贡献已合并</div>
+                <div class="feed-time">5 小时前</div>
+              </div>
+            </div>
+            <div class="feed-item" style="border-bottom:none">
+              <div class="feed-dot"></div>
+              <div>
+                <div class="feed-text">用户 <span class="feed-highlight">@NewUser_05</span> 创建了新卡片 <span class="feed-highlight">"硅光子"</span>（待审核）</div>
+                <div class="feed-time">6 小时前</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contribute CTA -->
+        <div style="text-align:center">
+          <button class="btn btn-primary" style="padding:12px 32px;font-size:14px;border-radius:20px" id="btnContribute" onclick="showContributeModal()">
+            &#9998; 开始贡献
+          </button>
+          <p style="margin-top:8px;font-size:11px;color:var(--text-secondary)">创建新概念卡片或编辑已有卡片，所有贡献经社区审核后展示</p>
+        </div>
+
+        <!-- Contribute Modal (mock) -->
+        <div id="contributeModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center;">
+          <div style="background:#fff;border-radius:12px;padding:28px;max-width:520px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.15);">
+            <div style="font-size:16px;font-weight:600;margin-bottom:16px;color:var(--text-primary)">&#9998; 创建/编辑概念卡片</div>
+            <div style="margin-bottom:12px">
+              <label style="font-size:11px;font-weight:500;color:var(--text-secondary);display:block;margin-bottom:4px">卡片名称</label>
+              <input type="text" placeholder="例如: Chiplet、硅光子、RISC-V..." style="width:100%;padding:10px 14px;border:1px solid var(--card-border);border-radius:8px;font-size:13px;outline:none;font-family:inherit" id="cardNameInput">
+            </div>
+            <div style="margin-bottom:12px">
+              <label style="font-size:11px;font-weight:500;color:var(--text-secondary);display:block;margin-bottom:4px">所属分类</label>
+              <select style="width:100%;padding:10px 14px;border:1px solid var(--card-border);border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:#fff">
+                <option>半导体</option><option>新能源</option><option>人工智能</option><option>消费电子</option><option>汽车产业链</option><option>其他</option>
+              </select>
+            </div>
+            <div style="margin-bottom:16px">
+              <label style="font-size:11px;font-weight:500;color:var(--text-secondary);display:block;margin-bottom:4px">内容（支持Markdown）</label>
+              <textarea placeholder="编写概念定义、技术原理、产业链分析、投资逻辑..." style="width:100%;padding:10px 14px;border:1px solid var(--card-border);border-radius:8px;font-size:13px;outline:none;font-family:inherit;min-height:120px;resize:vertical"></textarea>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end">
+              <button class="btn btn-outline" onclick="document.getElementById('contributeModal').style.display='none'">取消</button>
+              <button class="btn btn-primary" onclick="submitContribution()">提交贡献</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.page-container -->
+  </div><!-- /.main-content -->
+
+<!-- Toast notification container -->
+<div id="toast" style="position:fixed;bottom:32px;right:32px;background:var(--dark);color:#fff;padding:12px 20px;border-radius:10px;font-size:12px;z-index:200;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.2);align-items:center;gap:8px"></div>
+
+<script>
+// ===================== Tab Switching =====================
+document.querySelectorAll('#mainTabs .nav-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('#mainTabs .nav-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    const pageName = this.dataset.page;
+    document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-page'));
+    const targetPage = document.getElementById('page-' + pageName);
+    if (targetPage) {
+      targetPage.classList.add('active-page');
+      targetPage.classList.add('fade-in');
+    }
+    // Re-render charts if switching to strategy page
+    if (pageName === 'strategy') {
+      setTimeout(renderAllCharts, 150);
+    }
+  });
+});
+
+// ===================== Strategy Detail Toggle =====================
+const expandedRows = new Set();
+
+function toggleStrategyDetail(id) {
+  const detailRow = document.getElementById('detail-' + id);
+  const strategyRow = document.querySelector(`tr.strategy-row[data-id="${id}"]`);
+
+  if (expandedRows.has(id)) {
+    detailRow.style.display = 'none';
+    strategyRow.classList.remove('expanded-row');
+    expandedRows.delete(id);
+  } else {
+    detailRow.style.display = '';
+    strategyRow.classList.add('expanded-row');
+    expandedRows.add(id);
+    // Render chart for this detail
+    setTimeout(() => renderBacktestChart(id), 100);
+  }
+}
+
+// ===================== Copy Strategy Toast =====================
+function copyStrategy(event, name) {
+  showToast('&#9989; 策略 "' + name + '" 已复制到你的模拟账户');
+}
+
+// ===================== Vote Strategy =====================
+function voteStrategy(event, btn, direction) {
+  var countEl = btn.querySelector('.vote-count');
+  var current = parseInt(countEl.textContent) || 0;
+  if (btn.dataset.voted === '1') {
+    // Undo vote
+    countEl.textContent = current - 1;
+    btn.dataset.voted = '0';
+    btn.style.background = 'transparent';
+    btn.style.color = '';
+  } else {
+    countEl.textContent = current + 1;
+    btn.dataset.voted = '1';
+    btn.style.background = direction === 'up' ? '#dcfce7' : '#fee2e2';
+    btn.style.color = direction === 'up' ? '#166534' : '#991b1b';
+    btn.style.borderColor = direction === 'up' ? '#bbf7d0' : '#fecaca';
+    showToast('投票成功！你的投票将影响策略排名');
+  }
+}
+
+// ===================== Sort Buttons =====================
+document.querySelectorAll('#sortGroup .sort-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('#sortGroup .sort-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    showToast('已按 "' + this.textContent + '" 排序');
+  });
+});
+
+// ===================== Note Subtabs =====================
+document.querySelectorAll('#noteSubTabs .note-subtab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('#noteSubTabs .note-subtab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ===================== Contribute Modal =====================
+function showContributeModal() {
+  document.getElementById('contributeModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('cardNameInput').focus(), 100);
+}
+
+function submitContribution() {
+  document.getElementById('contributeModal').style.display = 'none';
+  showToast('&#9989; 贡献已提交，等待社区审核...');
+}
+
+// Close modal on backdrop click
+document.getElementById('contributeModal').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+
+// ===================== Global Search =====================
+function showSearchResults() {
+  // Already displayed by default
+}
+
+// ===================== Toast =====================
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.innerHTML = message;
+  toast.style.display = 'flex';
+  toast.classList.add('fade-in');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.style.display = 'none';
+  }, 2000);
+}
+
+// ===================== ECharts: Backtest Charts =====================
+function renderBacktestChart(id) {
+  const chartDom = document.getElementById('chart-backtest-' + id);
+  if (!chartDom || chartDom._rendered) return;
+  chartDom._rendered = true;
+
+  const myChart = echarts.init(chartDom);
+
+  // Generate mock cumulative return data based on strategy parameters
+  const strategies = {
+    1: { annual: 28.3, drawdown: -15.2, sharpe: 2.35 },
+    2: { annual: 35.1, drawdown: -22.8, sharpe: 1.98 },
+    3: { annual: 19.7, drawdown: -11.3, sharpe: 1.65 },
+    4: { annual: 24.1, drawdown: -14.5, sharpe: 1.88 },
+    5: { annual: 15.2, drawdown: -8.1, sharpe: 1.42 }
+  };
+
+  const s = strategies[id] || strategies[1];
+  const months = ['2023-07','2023-09','2023-11','2024-01','2024-03','2024-05','2024-07','2024-09','2024-11','2025-01','2025-03','2025-05','2025-07','2025-09','2025-11','2026-01','2026-03','2026-05','2026-07'];
+  const benchmark = [];
+  const strategy = [];
+  let bVal = 100, sVal = 100;
+  const monthlyB = 0.6; // ~7.2% annual
+  const monthlyS = s.annual / 12 / 100;
+
+  // Add some noise for realistic look
+  const seeds = [0.8, 1.2, 0.5, -0.3, 1.1, -0.6, 0.9, 0.3, -0.2, 1.4, -0.8, 0.7, 0.2, 1.0, -0.4, 1.3, -0.1, 0.6, 0.4];
+  for (let i = 0; i < months.length; i++) {
+    const noise = seeds[i] * 2.5;
+    bVal = bVal * (1 + monthlyB + noise * 0.3 / 100);
+    sVal = sVal * (1 + monthlyS + noise / 100);
+    benchmark.push(parseFloat(bVal.toFixed(1)));
+    strategy.push(parseFloat(sVal.toFixed(1)));
+  }
+
+  const option = {
+    grid: { left: 50, right: 20, top: 20, bottom: 30 },
+    tooltip: { trigger: 'axis' },
+    xAxis: {
+      type: 'category', data: months,
+      axisLabel: { fontSize: 9, color: '#6b7280', interval: 3 },
+      axisLine: { lineStyle: { color: '#e5e7eb' } },
+      axisTick: { show: false }
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { fontSize: 9, color: '#6b7280', formatter: '{value}' },
+      splitLine: { lineStyle: { color: '#f3f4f6' } },
+      name: '净值', nameTextStyle: { fontSize: 9, color: '#6b7280' }
+    },
+    series: [
+      {
+        name: '策略净值', type: 'line', data: strategy,
+        smooth: true, symbol: 'none',
+        lineStyle: { color: '#533afd', width: 2 },
+        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[
+          {offset:0, color:'rgba(83,58,253,0.15)'},
+          {offset:1, color:'rgba(83,58,253,0.01)'}
+        ])}
+      },
+      {
+        name: '沪深300基准', type: 'line', data: benchmark,
+        smooth: true, symbol: 'none',
+        lineStyle: { color: '#9ca3af', width: 1.5, type: 'dashed' }
+      }
+    ],
+    legend: {
+      data: ['策略净值', '沪深300基准'],
+      bottom: 0, textStyle: { fontSize: 10 }
+    }
+  };
+
+  myChart.setOption(option);
+  window.addEventListener('resize', () => myChart.resize());
+}
+
+// ===================== Render all charts on load =====================
+function renderAllCharts() {
+  [1,2,3,4,5].forEach(id => {
+    const detailRow = document.getElementById('detail-' + id);
+    if (detailRow && detailRow.style.display !== 'none') {
+      renderBacktestChart(id);
+    }
+  });
+}
+
+// Initial: render first chart (if detail-1 was open, but it starts hidden, so render when expanded)
+// No initial render needed as all details start hidden
+
+// ===================== Window resize handler =====================
+window.addEventListener('resize', () => {
+  // ECharts instances will auto-resize via their individual listeners
+});
+
+console.log('F1.1 + F3.4 社区子系统原型已就绪');
+console.log('  页面1: 策略广场 (默认) - 5条策略+回测图表');
+console.log('  页面2: 投资笔记 - 5篇笔记+展开全文');
+console.log('  页面3: 概念卡片协作 - 排行榜+动态流+贡献弹窗');
+</script>
+
+</body>
+</html>

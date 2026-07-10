@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI荐股-个股看板 - NVDA | AI智能投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root {
+    --primary: #1D1D1F; --secondary: #86868B; --accent: #0071E3;
+    --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA; --light: #F2F2F7;
+    --up: #FF3B30; --down: #34C759; --warning: #FF9500; --danger: #FF3B30; --safe: #34C759;
+    --info: #0071E3; --neutral: #8E8E93;
+  }
+  * { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; }
+  body { background: var(--bg); color: var(--primary); margin: 0; padding: 0; }
+  .page-container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 768px) { .page-container { padding: 0 16px; } }
+  .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 24px; transition: all 0.3s ease; }
+  .card-hover:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+  .badge { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+  .badge-primary { background: var(--accent); color: #fff; }
+  .badge-success { background: var(--safe); color: #fff; }
+  .badge-warning { background: var(--warning); color: #fff; }
+  .badge-danger { background: var(--danger); color: #fff; }
+  .badge-neutral { background: var(--light); color: var(--primary); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity 0.2s; border: none; }
+  .btn:hover { opacity: 0.9; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-secondary { background: var(--light); color: var(--primary); border: 1px solid var(--border); }
+  .input { height: 40px; padding: 0 14px; border-radius: 8px; background: var(--light); border: 1px solid transparent; font-size: 14px; outline: none; transition: all 0.2s; }
+  .input:focus { background: #fff; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .section-title { font-size: 22px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; margin-bottom: 16px; }
+  .fade-in { animation: fadeIn 0.3s ease-out forwards; opacity: 0; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .factor-card { cursor: pointer; }
+  .factor-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+  .factor-body.open { max-height: 400px; padding-top: 16px; }
+  .score-ring { position: relative; width: 120px; height: 120px; }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: 600; }
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100%); background: rgba(0,0,0,0.8); color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 14px; z-index: 999; transition: transform 0.3s ease; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  @media (max-width: 768px) {
+    .section-title { font-size: 18px; }
+    .card { padding: 16px; }
+    .score-ring { width: 100px; height: 100px; }
+  }
+</style>
+</head>
+<body>
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">AI荐股</span>
+  </div>
+</div>
+
+<!-- 顶部导航栏 -->
+<nav style="height:56px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;">
+  <div class="page-container" style="display:flex;align-items:center;justify-content:space-between;height:100%;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      <span style="font-size:16px;font-weight:600;color:var(--primary);">AI投研助手</span>
+    </div>
+    <div style="flex:1;max-width:400px;margin:0 24px;">
+      <div style="position:relative;">
+        <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--secondary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="searchInput" class="input" type="text" placeholder="搜索股票、概念..." style="width:100%;padding-left:38px;" value="NVDA">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span id="currentDate" style="font-size:13px;color:var(--secondary);"></span>
+      <svg style="width:20px;height:20px;color:var(--secondary);cursor:pointer;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">U</div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-container" style="padding-top:32px;padding-bottom:64px;">
+  <!-- 股票头部信息 -->
+  <div class="card fade-in" style="margin-bottom:24px;animation-delay:0.05s;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="font-size:28px;font-weight:700;letter-spacing:-0.02em;">NVDA</span>
+          <span class="badge badge-primary">美股</span>
+          <span class="badge badge-success">core</span>
+        </div>
+        <div style="font-size:16px;color:var(--secondary);font-weight:500;">NVIDIA Corporation · 英伟达</div>
+        <div style="font-size:13px;color:var(--secondary);margin-top:4px;">半导体 | AI芯片 | 数据中心</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:32px;font-weight:600;line-height:1.1;letter-spacing:-0.02em;">$138.50</div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px;">
+          <svg style="width:16px;height:16px;color:var(--up);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          <span style="font-size:20px;font-weight:600;color:var(--up);">+2.34%</span>
+          <span style="font-size:14px;color:var(--up);">+$3.17</span>
+        </div>
+        <div style="font-size:12px;color:var(--secondary);margin-top:4px;">盘后 $138.72 +0.16%</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:32px;margin-top:20px;flex-wrap:wrap;">
+      <div><span style="font-size:12px;color:var(--secondary);">市值</span><div style="font-size:16px;font-weight:600;margin-top:2px;">$3.42万亿</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">市盈率 TTM</span><div style="font-size:16px;font-weight:600;margin-top:2px;">62.5</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">市净率</span><div style="font-size:16px;font-weight:600;margin-top:2px;">52.3</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">52周区间</span><div style="font-size:16px;font-weight:600;margin-top:2px;">$75.61 - $153.13</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">成交量</span><div style="font-size:16px;font-weight:600;margin-top:2px;">2.84亿股</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">成交额</span><div style="font-size:16px;font-weight:600;margin-top:2px;">$393.2亿</div></div>
+    </div>
+  </div>
+
+  <!-- 五因子雷达图 + 综合评分 -->
+  <div class="card fade-in" style="margin-bottom:24px;animation-delay:0.1s;">
+    <div class="section-title">五因子综合评分</div>
+    <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+      <div id="radarChart" style="flex:1;min-width:300px;height:360px;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px;min-width:140px;">
+        <div class="score-ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--light)" stroke-width="8"/>
+            <circle cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8" stroke-dasharray="261.5 326.7" stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:var(--accent);">78</div>
+        </div>
+        <div style="font-size:13px;color:var(--secondary);text-align:center;">综合评分<br><span style="font-size:11px;">满分100</span></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--safe);">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--safe);display:inline-block;"></span>
+          高置信度
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 因子明细卡片 -->
+  <div class="card fade-in" style="margin-bottom:24px;animation-delay:0.15s;">
+    <div class="section-title">因子明细</div>
+    <div id="factorList" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
+
+  <!-- LLM定性分析卡片 -->
+  <div class="card fade-in" style="margin-bottom:24px;animation-delay:0.2s;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="section-title" style="margin-bottom:0;">LLM 定性分析</div>
+      <button class="btn btn-secondary" onclick="refreshLLM()">
+        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+        刷新分析
+      </button>
+    </div>
+    <div id="llmAnalysis" style="display:flex;flex-direction:column;gap:16px;"></div>
+  </div>
+
+  <!-- 推荐结论卡片 -->
+  <div class="card fade-in card-hover" style="margin-bottom:24px;animation-delay:0.25s;border:2px solid var(--accent);">
+    <div class="section-title" style="margin-bottom:12px;">AI 推荐结论</div>
+    <div id="recommendation"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// 日期
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'});
+
+// 搜索
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { showToast('正在分析 ' + e.target.value.toUpperCase() + ' ...'); }
+});
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// 五因子数据
+const factors = [
+  { id: 'F1', name: '资金面', weight: 30, score: 75, color: '#0071E3',
+    tags: [{l:'量比 1.8',c:'badge-primary'},{l:'MFI 65',c:'badge-primary'},{l:'放量质量良好',c:'badge-success'}],
+    desc: '当日成交量较20日均量放大80%，资金流入明显。MFI处于65的中性偏强区域，量价配合健康。收盘涨幅2.34%符合放量上涨特征，无长上影线等看跌形态。' },
+  { id: 'F2', name: '宏观环境', weight: 15, score: 60, color: '#FF9500',
+    tags: [{l:'VIX 18',c:'badge-warning'},{l:'RS: Improving',c:'badge-primary'}],
+    desc: 'VIX指数18，处于中等波动区间，宏观环境评分30分。标普500相对强度状态为"Improving"，从低位回升接近50日均线，评分35分。整体宏观环境中性，无Veto触发。' },
+  { id: 'F3', name: '市场情绪', weight: 15, score: 50, color: '#8E8E93',
+    tags: [{l:'舆情接口预留',c:'badge-neutral'},{l:'默认中性',c:'badge-neutral'}],
+    desc: '当前F3为默认占位分数50分（中性）。舆情数据接口已预留，待接入后动态计算。V2版本将基于趋势分(40%)+位置分(30%)+RSI分(30%)合成。' },
+  { id: 'F4', name: '基本面估值', weight: 25, score: 82, color: '#34C759',
+    tags: [{l:'PEG 0.85',c:'badge-success'},{l:'GROWTH型',c:'badge-primary'},{l:'Earnings Surprise +15%',c:'badge-success'}],
+    desc: 'GROWTH型成长企业，PEG 0.85 < 1，成长性溢价合理。最新季报Earnings Surprise +15%，显著超预期，无Veto触发。估值吸引力在成长股中处于优秀水平。' },
+  { id: 'F5', name: '技术面', weight: 15, score: 70, color: '#5856D6',
+    tags: [{l:'RSI 55',c:'badge-primary'},{l:'MACD金叉初期',c:'badge-success'},{l:'价格位置健康',c:'badge-primary'}],
+    desc: 'RSI 55处于健康区间（40-60最优），得分高。MACD柱状图由负转正，金叉初期信号积极。价格位于近期高低点中间区间，无极端超买超卖。RSI<85，无RiskVeto。' }
+];
+
+// 渲染因子卡片
+const factorList = document.getElementById('factorList');
+factors.forEach((f, i) => {
+  const card = document.createElement('div');
+  card.className = 'card factor-card';
+  card.style.cssText = 'padding:16px 20px;cursor:pointer;';
+  card.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;" onclick="toggleFactor(this)">
+      <div style="display:flex;align-items:center;gap:14px;flex:1;">
+        <div style="width:44px;height:44px;border-radius:10px;background:${f.color}15;display:flex;align-items:center;justify-content:center;color:${f.color};font-weight:700;font-size:16px;">${f.id}</div>
+        <div>
+          <div style="font-size:16px;font-weight:600;">${f.name} <span style="font-size:13px;color:var(--secondary);font-weight:400;">(${f.weight}%)</span></div>
+          <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">${f.tags.map(t=>`<span class="badge ${t.c}">${t.l}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="text-align:right;">
+          <div style="font-size:24px;font-weight:600;color:${f.color};">${f.score}</div>
+          <div style="font-size:11px;color:var(--secondary);">得分</div>
+        </div>
+        <svg class="chevron" style="width:20px;height:20px;color:var(--secondary);transition:transform 0.3s;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </div>
+    <div class="factor-body" style="color:var(--secondary);font-size:14px;line-height:1.6;">
+      <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;">${f.desc}</div>
+    </div>
+  `;
+  factorList.appendChild(card);
+});
+function toggleFactor(el) {
+  const body = el.parentElement.querySelector('.factor-body');
+  const chevron = el.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+// LLM分析
+const llmData = {
+  company_quality: { label: '公司质量', value: 'good', text: '优秀', color: '#34C759' },
+  industry_narrative: { label: '行业叙事', text: 'AI基础设施扩张期，数据中心需求持续增长。云厂商资本开支维持高位，GPU供不应求局面延续。' },
+  risk_flags: { label: '风险标记', text: '① 地缘政治风险（出口管制对华芯片限制）② 估值偏高（PE 62.5x处于历史高位）③ 竞争加剧（AMD MI300、自研芯片）' },
+  catalyst: { label: '催化剂', text: '① Blackwell架构GPU量产爬坡（2025Q3）② Q3业绩指引（预期数据中心收入同比+120%）③ GTC 2026大会新品发布预期' }
+};
+function renderLLM() {
+  const container = document.getElementById('llmAnalysis');
+  container.innerHTML = `
+    <div class="card" style="padding:16px;background:var(--light);border:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:14px;font-weight:600;color:var(--secondary);">${llmData.company_quality.label}</span>
+        <span class="badge" style="background:${llmData.company_quality.color};color:#fff;">${llmData.company_quality.text}</span>
+      </div>
+      <div style="font-size:14px;color:var(--primary);line-height:1.6;">NVIDIA在AI芯片领域保持绝对领先，CUDA生态壁垒深厚。数据中心业务连续8个季度超预期，毛利率维持在75%以上。管理层执行力强，产品迭代节奏明确。</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:12px;">
+      <div class="card" style="padding:16px;">
+        <div style="font-size:13px;font-weight:600;color:var(--secondary);margin-bottom:6px;">${llmData.industry_narrative.label}</div>
+        <div style="font-size:14px;color:var(--primary);line-height:1.6;">${llmData.industry_narrative.text}</div>
+      </div>
+      <div class="card" style="padding:16px;">
+        <div style="font-size:13px;font-weight:600;color:var(--secondary);margin-bottom:6px;">${llmData.catalyst.label}</div>
+        <div style="font-size:14px;color:var(--primary);line-height:1.6;">${llmData.catalyst.text}</div>
+      </div>
+      <div class="card" style="padding:16px;border:1px solid var(--warning);">
+        <div style="font-size:13px;font-weight:600;color:var(--warning);margin-bottom:6px;">${llmData.risk_flags.label}</div>
+        <div style="font-size:14px;color:var(--primary);line-height:1.6;">${llmData.risk_flags.text}</div>
+      </div>
+    </div>
+  `;
+}
+renderLLM();
+function refreshLLM() { showToast('正在刷新 LLM 分析...'); setTimeout(()=>{ showToast('LLM 分析已更新'); renderLLM(); }, 1200); }
+
+// 推荐结论
+function renderRecommendation() {
+  const weighted = Math.round(factors.reduce((s,f)=>s+f.score*f.weight/100,0));
+  const low = factors.reduce((a,b)=>a.score<b.score?a:b);
+  document.getElementById('recommendation').innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+      <div style="text-align:center;">
+        <div style="font-size:32px;font-weight:600;color:var(--accent);">${weighted}</div>
+        <div style="font-size:12px;color:var(--secondary);">加权总分</div>
+      </div>
+      <div style="width:1px;height:48px;background:var(--border);"></div>
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span class="badge badge-primary">core</span>
+          <span style="font-size:14px;font-weight:600;">核心持仓推荐</span>
+        </div>
+        <div style="font-size:13px;color:var(--secondary);">最低分因子：<span style="color:var(--warning);font-weight:500;">${low.name}（${low.id} ${low.score}分）</span></div>
+      </div>
+    </div>
+    <div style="font-size:14px;line-height:1.7;color:var(--primary);padding:16px;background:var(--light);border-radius:8px;">
+      <strong>分析结论：</strong>五因子综合评分${weighted}分，处于较高水平。F4基本面估值优秀（PEG 0.85 < 1，GROWTH型），F1资金面积极（量比1.8，MFI 65）。F3市场情绪数据待接入，当前为默认占位分，需关注接入后的评分变化。整体建议<strong style="color:var(--accent);">核心持仓</strong>，但需警惕估值偏高和地缘政治风险。Blackwell架构量产是中期重要催化剂。
+    </div>
+  `;
+}
+renderRecommendation();
+
+// 雷达图
+const radarChart = echarts.init(document.getElementById('radarChart'));
+radarChart.setOption({
+  tooltip: { trigger: 'item' },
+  radar: {
+    indicator: [
+      { name: 'F1\n资金面', max: 100 }, { name: 'F2\n宏观环境', max: 100 },
+      { name: 'F3\n市场情绪', max: 100 }, { name: 'F4\n基本面估值', max: 100 },
+      { name: 'F5\n技术面', max: 100 }
+    ],
+    shape: 'polygon', splitNumber: 5,
+    axisName: { color: '#86868B', fontSize: 14, fontWeight: 500 },
+    splitLine: { lineStyle: { color: '#E5E5EA' } },
+    splitArea: { show: true, areaStyle: { color: ['#fff','#F5F5F7','#fff','#F5F5F7','#fff'] } },
+    axisLine: { lineStyle: { color: '#E5E5EA' } }
+  },
+  series: [{
+    type: 'radar',
+    data: [{
+      value: [75,60,50,82,70], name: 'NVDA',
+      areaStyle: { color: 'rgba(0,113,227,0.15)' },
+      lineStyle: { color: '#0071E3', width: 2 },
+      itemStyle: { color: '#0071E3', borderWidth: 2, borderColor: '#fff' },
+      symbolSize: 6
+    }]
+  }]
+});
+window.addEventListener('resize', () => radarChart.resize());
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="stock_diagnosis.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◎</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">个股诊断</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="watchlist.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">★</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">自选股</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="theme_index.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◯</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">题材指数</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="research_assistant.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◬</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">投研助手</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

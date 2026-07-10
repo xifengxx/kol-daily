@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>盘后复盘 - 2025年7月8日 | AI智能投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#1D1D1F',
+        secondary: '#86868B',
+        accent: '#0071E3',
+        bg: '#F5F5F7',
+        card: '#FFFFFF',
+        border: '#E5E5EA',
+        light: '#F2F2F7',
+        up: '#FF3B30',
+        down: '#34C759',
+        warning: '#FF9500',
+        danger: '#FF3B30',
+        safe: '#34C759',
+        neutral: '#8E8E93',
+        info: '#0071E3'
+      },
+      fontFamily: {
+        sans: ['-apple-system','BlinkMacSystemFont','"Segoe UI"','Roboto','"Helvetica Neue"','Arial','"Noto Sans SC"','"PingFang SC"','"Microsoft YaHei"','sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; background:#F5F5F7; }
+.card { background:#FFFFFF; border-radius:12px; border:1px solid #E5E5EA; padding:24px; transition:all 0.3s ease; }
+.card:hover { box-shadow:0 8px 24px rgba(0,0,0,0.12); transform:translateY(-2px); }
+.badge { height:20px; padding:0 8px; border-radius:10px; font-size:11px; font-weight:500; display:inline-flex; align-items:center; }
+.data-l { font-size:32px; font-weight:600; line-height:1.1; letter-spacing:-0.02em; }
+.data-m { font-size:20px; font-weight:600; line-height:1.2; }
+.animate-fade-in { animation:fadeIn 0.5s ease-out; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.tab-btn { padding:8px 16px; border-radius:8px; font-size:14px; font-weight:500; transition:all 0.2s; cursor:pointer; }
+.tab-btn.active { background:#0071E3; color:#FFFFFF; }
+.tab-btn:not(.active) { background:#F2F2F7; color:#86868B; }
+.tab-btn:not(.active):hover { background:#E5E5EA; }
+.sortable th { cursor:pointer; user-select:none; }
+.sortable th:hover { background:#E5E5EA; }
+</style>
+</head>
+<body class="bg-bg min-h-screen">
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">收盘复盘</span>
+  </div>
+</div>
+
+
+<!-- Top Nav -->
+<nav class="fixed top-0 left-0 right-0 h-14 bg-white border-b border-border z-50 flex items-center px-4 lg:px-8">
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
+      <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
+    </div>
+    <span class="font-semibold text-primary text-base">AI智能投研助手</span>
+  </div>
+  <div class="hidden md:flex flex-1 max-w-md mx-4">
+    <div class="w-full h-10 bg-light rounded-lg flex items-center px-3 gap-2">
+      <i data-lucide="search" class="w-4 h-4 text-secondary"></i>
+      <input type="text" placeholder="搜索股票、概念..." class="bg-transparent outline-none text-sm text-primary w-full">
+    </div>
+  </div>
+  <div class="flex items-center gap-3 ml-auto">
+    <span class="text-sm text-secondary hidden sm:block">2025年7月8日 星期二</span>
+    <button class="w-8 h-8 rounded-full hover:bg-light flex items-center justify-center relative">
+      <i data-lucide="bell" class="w-5 h-5 text-primary"></i>
+      <span class="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
+    </button>
+    <div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+      <i data-lucide="user" class="w-4 h-4 text-accent"></i>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-border z-40 hidden lg:block">
+  <div class="p-4">
+    <div class="text-xs font-semibold uppercase text-secondary mb-2 tracking-wider">每日简报</div>
+    <a href="morning_brief.html" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="sunrise" class="w-5 h-5"></i>
+      <span>开盘前简报</span>
+    </a>
+    <a href="closing_review.html" class="flex items-center gap-3 h-12 px-3 rounded-lg bg-light text-accent font-medium relative">
+      <span class="absolute left-0 top-1 bottom-1 w-1 bg-accent rounded-r"></span>
+      <i data-lucide="sunset" class="w-5 h-5"></i>
+      <span>盘后复盘</span>
+    </a>
+    <div class="text-xs font-semibold uppercase text-secondary mb-2 mt-6 tracking-wider">分析工具</div>
+    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="radar" class="w-5 h-5"></i>
+      <span>个股诊断</span>
+    </a>
+    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="network" class="w-5 h-5"></i>
+      <span>知识图谱</span>
+    </a>
+    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="newspaper" class="w-5 h-5"></i>
+      <span>KOL日报</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Mobile Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-border z-50 lg:hidden flex justify-around items-center px-2">
+  <a href="morning_brief.html" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="sunrise" class="w-5 h-5"></i>
+    <span class="text-xs">晨报</span>
+  </a>
+  <a href="closing_review.html" class="flex flex-col items-center gap-1 text-accent">
+    <i data-lucide="sunset" class="w-5 h-5"></i>
+    <span class="text-xs">复盘</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="radar" class="w-5 h-5"></i>
+    <span class="text-xs">诊断</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="network" class="w-5 h-5"></i>
+    <span class="text-xs">图谱</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="newspaper" class="w-5 h-5"></i>
+    <span class="text-xs">日报</span>
+  </a>
+</nav>
+
+<!-- Main Content -->
+<main class="pt-14 lg:pl-60 pb-20 lg:pb-8">
+  <div class="max-w-6xl mx-auto px-4 lg:px-8 py-6 lg:py-8">
+    
+    <!-- Header -->
+    <div class="animate-fade-in mb-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-bold text-primary tracking-tight">2025年7月8日 盘后复盘</h1>
+          <p class="text-secondary text-sm mt-2">收盘时间 15:00 CST | 数据来源：东方财富、同花顺、交易所</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="tab-btn active" onclick="switchView('overview')">总览</button>
+          <button class="tab-btn" onclick="switchView('detail')">详情</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: 大盘复盘 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="activity" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">大盘复盘</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+        <div class="card text-center">
+          <div class="text-xs text-secondary mb-2">上证综指</div>
+          <div class="data-l text-up">3375.42</div>
+          <div class="text-sm font-semibold text-up mt-1">+0.50%</div>
+          <div class="text-xs text-secondary mt-2">成交额 3,245亿</div>
+        </div>
+        <div class="card text-center">
+          <div class="text-xs text-secondary mb-2">深证成指</div>
+          <div class="data-l text-up">10850.23</div>
+          <div class="text-sm font-semibold text-up mt-1">+0.80%</div>
+          <div class="text-xs text-secondary mt-2">成交额 4,128亿</div>
+        </div>
+        <div class="card text-center">
+          <div class="text-xs text-secondary mb-2">创业板指</div>
+          <div class="data-l text-up">2250.15</div>
+          <div class="text-sm font-semibold text-up mt-1">+1.20%</div>
+          <div class="text-xs text-secondary mt-2">成交额 1,856亿</div>
+        </div>
+        <div class="card text-center">
+          <div class="text-xs text-secondary mb-2">科创50</div>
+          <div class="data-l text-up">980.30</div>
+          <div class="text-sm font-semibold text-up mt-1">+1.50%</div>
+          <div class="text-xs text-secondary mt-2">成交额 652亿</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-sm font-medium text-primary">技术形态</div>
+          <div class="flex gap-2">
+            <button class="tab-btn active text-xs" onclick="switchKline('day')">日K</button>
+            <button class="tab-btn text-xs" onclick="switchKline('week')">周K</button>
+            <button class="tab-btn text-xs" onclick="switchKline('month')">月K</button>
+          </div>
+        </div>
+        <div id="klineChart" class="h-80"></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-border">
+          <div class="text-center">
+            <div class="text-xs text-secondary">支撑位</div>
+            <div class="text-sm font-semibold text-primary">3340 / 3310</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xs text-secondary">阻力位</div>
+            <div class="text-sm font-semibold text-primary">3400 / 3450</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xs text-secondary">MA5</div>
+            <div class="text-sm font-semibold text-primary">3368.20</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xs text-secondary">MACD</div>
+            <div class="text-sm font-semibold text-down">金叉</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: 板块轮动 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="pie-chart" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">板块轮动</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">领涨板块</div>
+          <div id="risingSectors" class="h-56"></div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">领跌板块</div>
+          <div id="fallingSectors" class="h-56"></div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">资金流向</div>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>北向资金</span>
+                <span class="font-semibold text-down">+45.2亿</span>
+              </div>
+              <div class="h-2 bg-light rounded-full overflow-hidden">
+                <div class="h-full bg-down rounded-full" style="width:75%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>主力资金</span>
+                <span class="font-semibold text-down">+128.5亿</span>
+              </div>
+              <div class="h-2 bg-light rounded-full overflow-hidden">
+                <div class="h-full bg-down rounded-full" style="width:85%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>融资余额</span>
+                <span class="font-semibold text-up">-8.3亿</span>
+              </div>
+              <div class="h-2 bg-light rounded-full overflow-hidden">
+                <div class="h-full bg-up rounded-full" style="width:15%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>散户资金</span>
+                <span class="font-semibold text-up">-35.6亿</span>
+              </div>
+              <div class="h-2 bg-light rounded-full overflow-hidden">
+                <div class="h-full bg-up rounded-full" style="width:30%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-light/50 rounded-lg">
+            <div class="text-xs text-secondary">资金偏好：科技成长 > 消费 > 金融 > 周期</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: 个股异动 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="zap" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">个股异动</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <!-- 涨停榜 -->
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4 flex items-center gap-2">
+            <i data-lucide="arrow-up-circle" class="w-4 h-4 text-up"></i>
+            涨停榜（5只）
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm sortable">
+              <thead>
+                <tr class="bg-light">
+                  <th class="text-left px-3 py-2 text-xs font-medium text-secondary rounded-tl-lg">股票</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary">现价</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary">涨幅</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary rounded-tr-lg">封单额</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border">
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">沃尔核材</div><div class="text-xs text-secondary">002130.SZ</div></td><td class="px-3 py-2.5 text-right">15.62</td><td class="px-3 py-2.5 text-right text-up font-semibold">+10.0%</td><td class="px-3 py-2.5 text-right">3.2亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">晶方科技</div><div class="text-xs text-secondary">603005.SH</div></td><td class="px-3 py-2.5 text-right">28.50</td><td class="px-3 py-2.5 text-right text-up font-semibold">+10.0%</td><td class="px-3 py-2.5 text-right">2.8亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">长电科技</div><div class="text-xs text-secondary">600584.SH</div></td><td class="px-3 py-2.5 text-right">35.20</td><td class="px-3 py-2.5 text-right text-up font-semibold">+10.0%</td><td class="px-3 py-2.5 text-right">2.1亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">沪电股份</div><div class="text-xs text-secondary">002463.SZ</div></td><td class="px-3 py-2.5 text-right">42.80</td><td class="px-3 py-2.5 text-right text-up font-semibold">+10.0%</td><td class="px-3 py-2.5 text-right">1.9亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">兆易创新</div><div class="text-xs text-secondary">603986.SH</div></td><td class="px-3 py-2.5 text-right">98.50</td><td class="px-3 py-2.5 text-right text-up font-semibold">+10.0%</td><td class="px-3 py-2.5 text-right">1.5亿</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- 跌停榜 -->
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4 flex items-center gap-2">
+            <i data-lucide="arrow-down-circle" class="w-4 h-4 text-down"></i>
+            跌停榜（5只）
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm sortable">
+              <thead>
+                <tr class="bg-light">
+                  <th class="text-left px-3 py-2 text-xs font-medium text-secondary rounded-tl-lg">股票</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary">现价</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary">跌幅</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary rounded-tr-lg">封单额</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border">
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">ST万林</div><div class="text-xs text-secondary">603117.SH</div></td><td class="px-3 py-2.5 text-right">2.85</td><td class="px-3 py-2.5 text-right text-down font-semibold">-5.0%</td><td class="px-3 py-2.5 text-right">0.8亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">ST天成</div><div class="text-xs text-secondary">600112.SH</div></td><td class="px-3 py-2.5 text-right">1.52</td><td class="px-3 py-2.5 text-right text-down font-semibold">-5.0%</td><td class="px-3 py-2.5 text-right">0.5亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">ST华微</div><div class="text-xs text-secondary">600360.SH</div></td><td class="px-3 py-2.5 text-right">3.80</td><td class="px-3 py-2.5 text-right text-down font-semibold">-5.0%</td><td class="px-3 py-2.5 text-right">0.4亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">ST鹏博士</div><div class="text-xs text-secondary">600804.SH</div></td><td class="px-3 py-2.5 text-right">1.90</td><td class="px-3 py-2.5 text-right text-down font-semibold">-5.0%</td><td class="px-3 py-2.5 text-right">0.3亿</td></tr>
+                <tr class="hover:bg-light/50"><td class="px-3 py-2.5"><div class="font-medium">ST易购</div><div class="text-xs text-secondary">002024.SZ</div></td><td class="px-3 py-2.5 text-right">1.52</td><td class="px-3 py-2.5 text-right text-down font-semibold">-5.0%</td><td class="px-3 py-2.5 text-right">0.2亿</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- 放量异动 + 龙虎榜 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">放量异动</div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent font-bold text-xs">中</div>
+                <div>
+                  <div class="text-sm font-medium">中芯国际</div>
+                  <div class="text-xs text-secondary">688981.SH</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-semibold text-up">+5.8%</div>
+                <div class="text-xs text-secondary">量比 8.5</div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent font-bold text-xs">宁</div>
+                <div>
+                  <div class="text-sm font-medium">宁德时代</div>
+                  <div class="text-xs text-secondary">300750.SZ</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-semibold text-up">+4.2%</div>
+                <div class="text-xs text-secondary">量比 6.2</div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent font-bold text-xs">比</div>
+                <div>
+                  <div class="text-sm font-medium">比亚迪</div>
+                  <div class="text-xs text-secondary">002594.SZ</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-semibold text-up">+3.5%</div>
+                <div class="text-xs text-secondary">量比 5.8</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">龙虎榜 - 机构席位</div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-light">
+                  <th class="text-left px-3 py-2 text-xs font-medium text-secondary">股票</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary">机构买入</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary">机构卖出</th>
+                  <th class="text-right px-3 py-2 text-xs font-medium text-secondary">净额</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-border">
+                <tr><td class="px-3 py-2"><div class="text-sm font-medium">中芯国际</div></td><td class="px-3 py-2 text-right text-down">+8.5亿</td><td class="px-3 py-2 text-right text-up">-2.1亿</td><td class="px-3 py-2 text-right text-down font-semibold">+6.4亿</td></tr>
+                <tr><td class="px-3 py-2"><div class="text-sm font-medium">宁德时代</div></td><td class="px-3 py-2 text-right text-down">+5.2亿</td><td class="px-3 py-2 text-right text-up">-1.8亿</td><td class="px-3 py-2 text-right text-down font-semibold">+3.4亿</td></tr>
+                <tr><td class="px-3 py-2"><div class="text-sm font-medium">比亚迪</div></td><td class="px-3 py-2 text-right text-down">+3.8亿</td><td class="px-3 py-2 text-right text-up">-2.5亿</td><td class="px-3 py-2 text-right text-down font-semibold">+1.3亿</td></tr>
+                <tr><td class="px-3 py-2"><div class="text-sm font-medium">隆基绿能</div></td><td class="px-3 py-2 text-right text-down">+1.2亿</td><td class="px-3 py-2 text-right text-up">-3.5亿</td><td class="px-3 py-2 text-right text-up font-semibold">-2.3亿</td></tr>
+                <tr><td class="px-3 py-2"><div class="text-sm font-medium">药明康德</div></td><td class="px-3 py-2 text-right text-down">+0.8亿</td><td class="px-3 py-2 text-right text-up">-2.8亿</td><td class="px-3 py-2 text-right text-up font-semibold">-2.0亿</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: 日韩市场 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="globe-2" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">日韩市场</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">日本市场</div>
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="text-xs text-secondary">日经225</div>
+              <div class="data-m text-down">+0.8%</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-secondary">收盘</div>
+              <div class="text-sm font-medium">41,250.30</div>
+            </div>
+          </div>
+          <div id="nikkeiChart" class="h-40"></div>
+          <div class="mt-3 p-3 bg-light/50 rounded-lg">
+            <div class="text-xs font-medium text-primary mb-1">对次日A股/港股影响</div>
+            <p class="text-xs text-secondary">日股半导体板块表现强劲，东京电子涨3.2%，爱德万测试涨2.8%，对A股半导体板块有正面情绪传导。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">韩国市场</div>
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="text-xs text-secondary">KOSPI</div>
+              <div class="data-m text-down">+0.5%</div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-secondary">收盘</div>
+              <div class="text-sm font-medium">2,850.15</div>
+            </div>
+          </div>
+          <div id="kospiChart" class="h-40"></div>
+          <div class="mt-3 p-3 bg-light/50 rounded-lg">
+            <div class="text-xs font-medium text-primary mb-1">对次日A股/港股影响</div>
+            <p class="text-xs text-secondary">韩股三星电子涨1.1%，SK海力士涨2.3%，存储芯片景气度持续，对A股存储芯片板块有正面影响。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: 港股联动 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="link" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">港股联动</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="card text-center">
+          <div class="text-xs text-secondary mb-2">恒生指数</div>
+          <div class="data-l text-down">+1.0%</div>
+          <div class="text-sm font-medium text-primary mt-1">18,250.80</div>
+          <div class="text-xs text-secondary mt-2">成交额 1,250亿港币</div>
+        </div>
+        <div class="card text-center">
+          <div class="text-xs text-secondary mb-2">恒生科技</div>
+          <div class="data-l text-down">+1.8%</div>
+          <div class="text-sm font-medium text-primary mt-1">3,850.20</div>
+          <div class="text-xs text-secondary mt-2">成交额 385亿港币</div>
+        </div>
+        <div class="card text-center">
+          <div class="text-xs text-secondary mb-2">A/H溢价指数</div>
+          <div class="data-l text-primary">142.5</div>
+          <div class="text-sm font-medium text-up mt-1">-0.5%</div>
+          <div class="text-xs text-secondary mt-2">港股估值相对A股更优</div>
+        </div>
+      </div>
+      <div class="card mt-4">
+        <div class="text-sm font-medium text-primary mb-4">AH股溢价变化</div>
+        <div id="ahPremiumChart" class="h-48"></div>
+      </div>
+    </section>
+
+    <!-- Section 6: 明日策略 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="target" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">明日策略</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">关键点位</div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <i data-lucide="shield" class="w-4 h-4 text-down"></i>
+                <span class="text-sm font-medium">强支撑</span>
+              </div>
+              <span class="text-sm font-semibold">3310</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <i data-lucide="shield-half" class="w-4 h-4 text-safe"></i>
+                <span class="text-sm font-medium">弱支撑</span>
+              </div>
+              <span class="text-sm font-semibold">3340</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <i data-lucide="swords" class="w-4 h-4 text-warning"></i>
+                <span class="text-sm font-medium">弱阻力</span>
+              </div>
+              <span class="text-sm font-semibold">3400</span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <i data-lucide="sword" class="w-4 h-4 text-up"></i>
+                <span class="text-sm font-medium">强阻力</span>
+              </div>
+              <span class="text-sm font-semibold">3450</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">关键观察点</div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-2 p-3 rounded-lg bg-light/50">
+              <i data-lucide="eye" class="w-4 h-4 text-accent mt-0.5"></i>
+              <div>
+                <div class="text-sm font-medium">北向资金动向</div>
+                <div class="text-xs text-secondary">今日净流入45.2亿，明日若继续流入，支撑科技成长板块</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-2 p-3 rounded-lg bg-light/50">
+              <i data-lucide="eye" class="w-4 h-4 text-accent mt-0.5"></i>
+              <div>
+                <div class="text-sm font-medium">半导体板块持续性</div>
+                <div class="text-xs text-secondary">英伟达产业链催化，观察封测、设备板块是否接力</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-2 p-3 rounded-lg bg-light/50">
+              <i data-lucide="eye" class="w-4 h-4 text-accent mt-0.5"></i>
+              <div>
+                <div class="text-sm font-medium">量能变化</div>
+                <div class="text-xs text-secondary">今日成交额7,373亿，明日需维持在7,000亿以上</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-2 p-3 rounded-lg bg-light/50">
+              <i data-lucide="eye" class="w-4 h-4 text-accent mt-0.5"></i>
+              <div>
+                <div class="text-sm font-medium">解禁股表现</div>
+                <div class="text-xs text-secondary">中芯国际7.2亿股解禁，观察抛压是否超预期</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="text-sm font-medium text-primary mb-4">策略建议</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl bg-safe/5 border border-safe/20">
+            <div class="flex items-center gap-2 mb-2">
+              <i data-lucide="trending-up" class="w-5 h-5 text-down"></i>
+              <span class="font-semibold text-primary">进攻方向</span>
+            </div>
+            <p class="text-sm text-secondary">AI算力、半导体设备、存储芯片。受益英伟达产业链催化，国产替代逻辑强化，北向资金流入支撑。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-warning/5 border border-warning/20">
+            <div class="flex items-center gap-2 mb-2">
+              <i data-lucide="shield" class="w-5 h-5 text-warning"></i>
+              <span class="font-semibold text-primary">防御方向</span>
+            </div>
+            <p class="text-sm text-secondary">高股息银行、电力、运营商。若市场波动加大，资金或回流防御板块，适合作为底仓配置。</p>
+          </div>
+          <div class="p-4 rounded-xl bg-danger/5 border border-danger/20">
+            <div class="flex items-center gap-2 mb-2">
+              <i data-lucide="alert-triangle" class="w-5 h-5 text-danger"></i>
+              <span class="font-semibold text-primary">回避方向</span>
+            </div>
+            <p class="text-sm text-secondary">光伏组件、房地产、部分消费。隆基问询函拖累光伏情绪，房地产数据仍弱，消费复苏不及预期。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-secondary py-6">
+      <p>AI智能投研助手 | 本复盘由AI自动生成，仅供参考，不构成投资建议</p>
+      <p class="mt-1">数据来源于东方财富、同花顺、交易所等公开渠道</p>
+    </footer>
+  </div>
+</main>
+
+<script>
+// Initialize Lucide icons
+lucide.createIcons();
+
+// View switch
+function switchView(view) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// K-line Chart
+const klineChart = echarts.init(document.getElementById('klineChart'));
+const klineData = [];
+const base = 3300;
+for (let i = 0; i < 60; i++) {
+  const open = base + Math.random() * 100 - 30 + i * 1.2;
+  const close = open + Math.random() * 40 - 15;
+  const low = Math.min(open, close) - Math.random() * 15;
+  const high = Math.max(open, close) + Math.random() * 15;
+  klineData.push([open.toFixed(2), close.toFixed(2), low.toFixed(2), high.toFixed(2)]);
+}
+const dates = [];
+for (let i = 0; i < 60; i++) {
+  const d = new Date(2025, 4, 1);
+  d.setDate(d.getDate() + i);
+  dates.push((d.getMonth()+1) + '/' + d.getDate());
+}
+
+klineChart.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+  grid: { left: 40, right: 20, top: 10, bottom: 30 },
+  xAxis: { type: 'category', data: dates, axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { color: '#86868B', fontSize: 10 } },
+  yAxis: { scale: true, axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { color: '#86868B', fontSize: 10 }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+  series: [
+    { type: 'candlestick', data: klineData, itemStyle: { color: '#FF3B30', color0: '#34C759', borderColor: '#FF3B30', borderColor0: '#34C759' } },
+    { type: 'line', data: klineData.map(d => ((parseFloat(d[0])+parseFloat(d[1]))/2).toFixed(2)), smooth: true, lineStyle: { color: '#0071E3', width: 1 }, symbol: 'none' }
+  ]
+});
+
+// Rising Sectors Chart
+const risingChart = echarts.init(document.getElementById('risingSectors'));
+risingChart.setOption({
+  grid: { left: 80, right: 20, top: 10, bottom: 20 },
+  xAxis: { type: 'value', show: false },
+  yAxis: { type: 'category', data: ['银行','医药','食品饮料','新能源','半导体','AI算力'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#1D1D1F', fontSize: 11 } },
+  series: [{ type: 'bar', data: [0.8, 1.2, 1.5, 1.5, 2.8, 3.2], barWidth: 16, itemStyle: { color: '#FF3B30', borderRadius: [0, 4, 4, 0] }, label: { show: true, position: 'right', formatter: '+{c}%', color: '#FF3B30', fontSize: 11 } }]
+});
+
+// Falling Sectors Chart
+const fallingChart = echarts.init(document.getElementById('fallingSectors'));
+fallingChart.setOption({
+  grid: { left: 80, right: 20, top: 10, bottom: 20 },
+  xAxis: { type: 'value', show: false, min: -2, max: 0 },
+  yAxis: { type: 'category', data: ['煤炭','钢铁','建材','房地产','银行'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#1D1D1F', fontSize: 11 } },
+  series: [{ type: 'bar', data: [-0.3, -0.5, -0.8, -1.2, -0.5], barWidth: 16, itemStyle: { color: '#34C759', borderRadius: [0, 4, 4, 0] }, label: { show: true, position: 'right', formatter: '{c}%', color: '#34C759', fontSize: 11 } }]
+});
+
+// Nikkei Chart
+const nikkeiChart = echarts.init(document.getElementById('nikkeiChart'));
+nikkeiChart.setOption({
+  grid: { left: 0, right: 0, top: 5, bottom: 20 },
+  xAxis: { type: 'category', data: ['9:00','10:00','11:00','12:00','13:00','14:00','15:00'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { fontSize: 10, color: '#86868B' } },
+  yAxis: { type: 'value', show: false },
+  series: [{ type: 'line', data: [41000,41150,41200,41180,41250,41300,41250], smooth: true, lineStyle: { color: '#0071E3', width: 2 }, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(0,113,227,0.15)' }, { offset: 1, color: 'rgba(0,113,227,0)' }] } }, symbol: 'none' }]
+});
+
+// KOSPI Chart
+const kospiChart = echarts.init(document.getElementById('kospiChart'));
+kospiChart.setOption({
+  grid: { left: 0, right: 0, top: 5, bottom: 20 },
+  xAxis: { type: 'category', data: ['9:00','10:00','11:00','12:00','13:00','14:00','15:00'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { fontSize: 10, color: '#86868B' } },
+  yAxis: { type: 'value', show: false },
+  series: [{ type: 'line', data: [2840,2845,2850,2848,2855,2858,2850], smooth: true, lineStyle: { color: '#5856D6', width: 2 }, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(88,86,214,0.15)' }, { offset: 1, color: 'rgba(88,86,214,0)' }] } }, symbol: 'none' }]
+});
+
+// AH Premium Chart
+const ahChart = echarts.init(document.getElementById('ahPremiumChart'));
+ahChart.setOption({
+  grid: { left: 40, right: 20, top: 10, bottom: 30 },
+  xAxis: { type: 'category', data: ['7/1','7/2','7/3','7/4','7/5','7/8'], axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { color: '#86868B', fontSize: 10 } },
+  yAxis: { type: 'value', min: 140, max: 146, axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { color: '#86868B', fontSize: 10 }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+  series: [{ type: 'line', data: [143.2, 144.0, 143.5, 142.8, 143.0, 142.5], smooth: true, lineStyle: { color: '#0071E3', width: 2 }, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(0,113,227,0.15)' }, { offset: 1, color: 'rgba(0,113,227,0)' }] } }, symbol: 'none' }]
+});
+
+window.addEventListener('resize', () => {
+  klineChart.resize();
+  risingChart.resize();
+  fallingChart.resize();
+  nikkeiChart.resize();
+  kospiChart.resize();
+  ahChart.resize();
+});
+
+function switchKline(period) {
+  // In real app, would switch data based on period
+  document.querySelectorAll('#klineChart').forEach(el => {
+    // visual feedback only for demo
+  });
+}
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="morning_brief.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◐</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">早晨简报</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="stock_diagnosis.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◎</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">个股诊断</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="theme_index.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◯</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">题材指数</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

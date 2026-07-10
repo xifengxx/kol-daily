@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text-secondary: #6b7280; --accent: #533afd;
+  --navy: #061b31; --up: #dc2626; --down: #16a34a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; }
+.nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-sub.active { color: #8b9cf7; font-weight: 500; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text); }
+.search input::placeholder { color: var(--text-secondary); }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--navy); letter-spacing: -0.3px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.tag-green { background: rgba(34,197,94,0.12); color: #16a34a; }
+.tag-blue { background: rgba(59,130,246,0.12); color: #2563eb; }
+.tag-yellow { background: rgba(245,158,11,0.12); color: #b45309; }
+.tag-red { background: rgba(239,68,68,0.12); color: #dc2626; }
+.tag-purple { background: rgba(139,92,246,0.12); color: #7c3aed; }
+.tag-gray { background: #f3f4f6; color: #64748d; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-transform: uppercase; font-size: 10px; color: var(--text-secondary); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--border); background: #fafbfc; letter-spacing: 0.5px; }
+.data-table td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; }
+.data-table tbody tr:hover { background: #f8f9fc; }
+.tree-item { padding: 6px 10px; cursor: pointer; border-radius: 4px; transition: all 0.15s; display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.tree-item:hover { background: #f3f4f6; }
+.tree-item.active { background: rgba(83,58,253,0.08); color: var(--accent); font-weight: 600; }
+.tree-folder { font-weight: 600; }
+.tree-level-1 { padding-left: 10px; }
+.tree-level-2 { padding-left: 24px; }
+.tree-level-3 { padding-left: 38px; }
+.file-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; transition: all 0.15s; display: flex; align-items: center; justify-content: space-between; font-size: 12px; border-bottom: 1px solid #f3f4f6; }
+.file-item:hover { background: #f8f9fc; }
+.file-item.active { background: rgba(83,58,253,0.06); }
+.file-icon { font-size: 14px; margin-right: 6px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.status-confirm { background: #16a34a; }
+.status-partial { background: #f59e0b; }
+.status-false { background: #dc2626; }
+.status-pending { background: #9ca3af; }
+.status-expired { background: #6b7280; }
+.status-invalid { background: #d1d5db; }
+.review-bar { display: flex; height: 24px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.review-bar .rb-segment { font-size: 10px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; }
+.review-bar .rb-confirm { background: #16a34a; }
+.review-bar .rb-partial { background: #f59e0b; }
+.review-bar .rb-false { background: #dc2626; }
+.review-bar .rb-pending { background: #9ca3af; }
+.review-bar .rb-expired { background: #6b7280; }
+.review-bar .rb-invalid { background: #d1d5db; color: #6b7280; }
+.filter-bar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.filter-chip { padding: 4px 12px; border: 1px solid var(--border); border-radius: 14px; font-size: 11px; cursor: pointer; transition: all 0.15s; background: var(--card); }
+.filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.preview-panel { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 12px; line-height: 1.8; }
+.preview-panel h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.preview-panel .meta { font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; }
+.knowledge-status { display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 4px; font-size: 11px; }
+.ks-indexed { background: #dcfce7; color: #166534; }
+.ks-pending { background: #fef3c7; color: #92400e; }
+.ks-failed { background: #fee2e2; color: #991b1b; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5<span>Factor</span> AI</div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon">📊</span> 行情与数据</div>
+    <div class="nav-item"><span class="icon">📰</span> 内容与信息</div>
+    <div class="nav-item"><span class="icon">🎯</span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon">🔗</span> 产业链与知识</div>
+    <div class="nav-sub">产业链全景</div>
+    <div class="nav-sub">赛道详情</div>
+    <div class="nav-sub">个股深度</div>
+    <div class="nav-sub">概念卡片</div>
+    <div class="nav-sub active">知识库</div>
+    <div class="nav-item"><span class="icon">🤖</span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon">👥</span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="搜索知识库文件...">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h1 style="font-size:24px; font-weight:600; color:var(--navy); letter-spacing:-0.5px;">知识库</h1>
+        <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">AI投研助手知识体系 F2.2 + F2.3 · 4层架构 · 58个文件 · Obsidian兼容</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <span class="tag tag-green">58 文件</span>
+        <span class="tag tag-blue">48 已索引</span>
+        <span class="tag tag-yellow">10 待处理</span>
+      </div>
+    </div>
+
+    <!-- Main Layout: 3 Columns -->
+    <div style="display:flex; gap:16px; height: calc(100vh - 260px); min-height: 600px;">
+      <!-- Left: Directory Tree -->
+      <div class="card" style="width:260px; flex-shrink:0; overflow-y:auto;">
+        <div class="card-title" style="font-size:15px;">4层知识库目录</div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:8px;">Obsidian兼容 · [[wikilink]]</div>
+        <!-- 00 Raw -->
+        <div class="tree-item tree-folder tree-level-1">📁 00-原始资料池</div>
+        <div class="tree-item tree-level-2">📁 00-新闻</div>
+        <div class="tree-item tree-level-3">📄 2026-07-09_早盘</div>
+        <div class="tree-item tree-level-3">📄 2026-07-08_收盘</div>
+        <div class="tree-item tree-level-2">📁 01-公告</div>
+        <div class="tree-item tree-level-2">📁 02-财报</div>
+        <div class="tree-item tree-level-3">📄 NVDA_FY2026Q1</div>
+        <div class="tree-item tree-level-3">📄 TSM_2026Q1</div>
+        <div class="tree-item tree-level-2">📁 03-研报</div>
+        <div class="tree-item tree-level-2">📁 04-行情</div>
+        <div class="tree-item tree-level-2">📁 05-政策</div>
+        <div class="tree-item tree-level-2">📁 06-舆情</div>
+        <!-- 01 Digested -->
+        <div class="tree-item tree-folder tree-level-1">📁 01-消化知识层</div>
+        <div class="tree-item tree-level-2">📁 00-公司档案</div>
+        <div class="tree-item tree-level-3 active">📄 [[NVDA]]</div>
+        <div class="tree-item tree-level-3">📄 [[TSM]]</div>
+        <div class="tree-item tree-level-3">📄 [[MU]]</div>
+        <div class="tree-item tree-level-2">📁 01-行业卡片</div>
+        <div class="tree-item tree-level-3">📄 [[AI算力]]</div>
+        <div class="tree-item tree-level-3">📄 [[半导体]]</div>
+        <div class="tree-item tree-level-2">📁 02-概念卡片</div>
+        <div class="tree-item tree-level-3">📄 [[HBM]]</div>
+        <div class="tree-item tree-level-3">📄 [[CPO]]</div>
+        <div class="tree-item tree-level-3">📄 [[CoWoS]]</div>
+        <div class="tree-item tree-level-2">📁 03-风险清单</div>
+        <!-- 02 Skills -->
+        <div class="tree-item tree-folder tree-level-1">📁 02-方法与Skill库</div>
+        <div class="tree-item tree-level-2">📄 05-综合基本面分析</div>
+        <div class="tree-item tree-level-2">📄 06-决策前检查框架</div>
+        <div class="tree-item tree-level-2">📄 07-价值派分析</div>
+        <div class="tree-item tree-level-2">📄 08-趋势派分析</div>
+        <div class="tree-item tree-level-2">📄 09-长期研究者分析</div>
+        <div class="tree-item tree-level-2">📄 10-定期复盘检查</div>
+        <div class="tree-item tree-level-2">📄 11-自动知识库沉淀</div>
+        <!-- 03 Output -->
+        <div class="tree-item tree-folder tree-level-1">📁 03-输出与复盘层</div>
+        <div class="tree-item tree-level-2">📁 00-每日看板</div>
+        <div class="tree-item tree-level-2">📁 01-股票分析卡</div>
+        <div class="tree-item tree-level-2">📁 02-每周复盘</div>
+        <div class="tree-item tree-level-2">📁 03-HTML报告</div>
+      </div>
+
+      <!-- Middle: File List -->
+      <div class="card" style="width:340px; flex-shrink:0; overflow-y:auto;">
+        <div class="flex-between" style="margin-bottom:12px;">
+          <div class="card-title" style="font-size:15px; margin:0;">文件列表</div>
+          <div class="filter-bar" style="margin:0;">
+            <span class="filter-chip active">全部</span>
+            <span class="filter-chip">已索引</span>
+            <span class="filter-chip">待处理</span>
+          </div>
+        </div>
+        <div style="margin-bottom:8px;">
+          <input type="text" placeholder="筛选文件..." style="width:100%; padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-size:11px; outline:none;">
+        </div>
+        <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; padding:0 4px;">公司档案 (3)</div>
+        <div class="file-item active">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📄</span>
+            <span>[[NVDA]] · NVIDIA公司档案</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📄</span>
+            <span>[[TSM]] · 台积电公司档案</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📄</span>
+            <span>[[MU]] · 美光科技公司档案</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; margin:12px 0 6px; padding:0 4px;">概念卡片 (3)</div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">🃏</span>
+            <span>[[HBM]] · 高带宽存储</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">🃏</span>
+            <span>[[CPO]] · 共封装光学</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">🃏</span>
+            <span>[[CoWoS]] · 2.5D封装</span>
+          </div>
+          <span class="knowledge-status ks-pending"><span class="status-dot status-pending"></span>待处理</span>
+        </div>
+        <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; margin:12px 0 6px; padding:0 4px;">每日看板 (5)</div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📰</span>
+            <span>每日看板_2026-07-09</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📰</span>
+            <span>每日看板_2026-07-08</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📰</span>
+            <span>每日看板_2026-07-07</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; margin:12px 0 6px; padding:0 4px;">股票分析卡 (2)</div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📊</span>
+            <span>分析卡_领益智造_002600</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">📊</span>
+            <span>分析卡_科翔股份_300903</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div style="font-size:10px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px; margin:12px 0 6px; padding:0 4px;">每周复盘 (3)</div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">🔄</span>
+            <span>每周复盘_2026-W27</span>
+          </div>
+          <span class="knowledge-status ks-pending"><span class="status-dot status-pending"></span>待处理</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">🔄</span>
+            <span>每周复盘_2026-W26</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+        <div class="file-item">
+          <div style="display:flex; align-items:center;">
+            <span class="file-icon">🔄</span>
+            <span>每周复盘_2026-W25</span>
+          </div>
+          <span class="knowledge-status ks-indexed"><span class="status-dot status-confirm"></span>已索引</span>
+        </div>
+      </div>
+
+      <!-- Right: Preview Panel -->
+      <div style="flex:1; overflow-y:auto;">
+        <div class="preview-panel">
+          <div class="flex-between">
+            <h3>[[NVDA]] · NVIDIA Corporation 公司档案</h3>
+            <div style="display:flex; gap:6px;">
+              <span class="tag tag-blue">公司档案</span>
+              <span class="tag tag-green">已索引</span>
+            </div>
+          </div>
+          <div class="meta">
+            创建: 2026-05-10 · 更新: 2026-07-09 · 标签: #AI算力 #GPU #半导体 #美股
+          </div>
+          <div style="border-top:1px solid var(--border); padding-top:12px;">
+            <div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--navy);">📋 基本信息</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.8; margin-bottom:16px;">
+              <div><strong>全称:</strong> NVIDIA Corporation / 英伟达</div>
+              <div><strong>代码:</strong> NVDA (NASDAQ)</div>
+              <div><strong>行业:</strong> Technology / Semiconductors</div>
+              <div><strong>市值:</strong> $3.32T</div>
+              <div><strong>CEO:</strong> Jensen Huang (黄仁勋)</div>
+              <div><strong>总部:</strong> Santa Clara, California, USA</div>
+              <div><strong>一句话:</strong> 全球AI GPU与CUDA生态垄断者</div>
+            </div>
+
+            <div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--navy);">🏢 业务透视</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.8; margin-bottom:16px;">
+              <div><strong>公司定位:</strong> AI算力基础设施的全球领导者，从GPU设计公司转型为AI计算平台公司</div>
+              <div><strong>产品矩阵:</strong></div>
+              <div>• 数据中心: H100/H200/B200/GB200 GPU (收入占比80%+)</div>
+              <div>• 游戏: GeForce RTX 40/50系列 (收入占比10%)</div>
+              <div>• 专业可视化: RTX专业卡 (收入占比5%)</div>
+              <div>• 汽车: DRIVE Thor (收入占比3%)</div>
+              <div><strong>商业模式:</strong> 硬件(CUDA生态锁定) + 软件(DGX Cloud/Omniverse) + 网络(Mellanox)</div>
+              <div><strong>护城河评分:</strong> CUDA生态(10/10) + 制造工艺领先(8/10) + 客户粘性(9/10) + 网络效应(9/10) + 品牌(8/10)</div>
+            </div>
+
+            <div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--navy);">📊 五因子评分</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.8; margin-bottom:16px;">
+              <div>FinalScore: <strong style="color:var(--accent); font-size:14px;">64.4</strong> (S4 主升浪全共振)</div>
+              <div>F1 资金面: 26 | F2 宏观: 54 | F3 情绪: 50 | F4 基本面: 100 | F5 技术: 100</div>
+              <div>仓位标签: <span class="tag tag-green">Core</span> · LLM共识: 87.3分</div>
+            </div>
+
+            <div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--navy);">🔄 自动知识沉淀状态</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span class="knowledge-status ks-indexed">✅ 文本解析</span>
+              <span class="knowledge-status ks-indexed">✅ 实体提取</span>
+              <span class="knowledge-status ks-indexed">✅ 关系抽取</span>
+              <span class="knowledge-status ks-indexed">✅ 向量索引</span>
+              <span class="knowledge-status ks-pending">⏳ 图谱链接</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auto沉淀管道 -->
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title" style="font-size:14px;">自动知识沉淀管道</div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+            <div style="flex:1; text-align:center; padding:10px; background:#f0fdf4; border-radius:6px; font-size:11px;">
+              <div style="font-weight:600; color:#166534;">① 摄入</div>
+              <div style="color:#6b7280;">新闻/公告/财报</div>
+            </div>
+            <span style="color:var(--accent);">→</span>
+            <div style="flex:1; text-align:center; padding:10px; background:#eff6ff; border-radius:6px; font-size:11px;">
+              <div style="font-weight:600; color:#1e40af;">② 解析</div>
+              <div style="color:#6b7280;">OCR/NLP提取</div>
+            </div>
+            <span style="color:var(--accent);">→</span>
+            <div style="flex:1; text-align:center; padding:10px; background:#faf5ff; border-radius:6px; font-size:11px;">
+              <div style="font-weight:600; color:#6d28d9;">③ 结构化</div>
+              <div style="color:#6b7280;">实体/关系/标签</div>
+            </div>
+            <span style="color:var(--accent);">→</span>
+            <div style="flex:1; text-align:center; padding:10px; background:#fffbeb; border-radius:6px; font-size:11px;">
+              <div style="font-weight:600; color:#92400e;">④ 索引</div>
+              <div style="color:#6b7280;">向量+图谱</div>
+            </div>
+            <span style="color:var(--accent);">→</span>
+            <div style="flex:1; text-align:center; padding:10px; background:#f0fdfa; border-radius:6px; font-size:11px;">
+              <div style="font-weight:600; color:#0f766e;">⑤ 归档</div>
+              <div style="color:#6b7280;">知识库入库</div>
+            </div>
+          </div>
+          <div style="font-size:11px; color:var(--text-secondary); text-align:center;">
+            最近处理: 2026-07-09 08:30 · 处理速度: 12文件/小时 · 成功率: 96.5%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Review Engine -->
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title" style="font-size:15px;">复盘验证引擎 · 6状态标注</div>
+      <div style="display:flex; gap:16px; margin-bottom:12px;">
+        <div style="flex:1;">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">复盘状态分布</div>
+          <div class="review-bar">
+            <div class="rb-segment rb-confirm" style="width:35%;">确认 35%</div>
+            <div class="rb-segment rb-partial" style="width:20%;">部分 20%</div>
+            <div class="rb-segment rb-pending" style="width:25%;">待验证 25%</div>
+            <div class="rb-segment rb-false" style="width:8%;">证伪 8%</div>
+            <div class="rb-segment rb-expired" style="width:7%;">已过期 7%</div>
+            <div class="rb-segment rb-invalid" style="width:5%;">已失效 5%</div>
+          </div>
+        </div>
+      </div>
+      <table class="data-table" style="font-size:11px;">
+        <thead>
+          <tr><th>日期</th><th>判断句</th><th>来源</th><th>T+N</th><th>实际结果</th><th>状态</th><th>失败根因</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2026-06-15</td>
+            <td>"HBM3E供不应求将持续至Q3"</td>
+            <td>晨报</td>
+            <td>T+30</td>
+            <td>SK海力士HBM收入+35% QoQ</td>
+            <td><span class="status-dot status-confirm"></span> 确认</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>2026-06-20</td>
+            <td>"NVDA F1资金面偏低，警惕回调"</td>
+            <td>五因子</td>
+            <td>T+15</td>
+            <td>股价横盘震荡，未回调</td>
+            <td><span class="status-dot status-partial"></span> 部分</td>
+            <td>时机错误</td>
+          </tr>
+          <tr>
+            <td>2026-05-28</td>
+            <td>"CPO概念将在6月全面爆发"</td>
+            <td>KOL</td>
+            <td>T+30</td>
+            <td>仅龙头涨，二线未跟</td>
+            <td><span class="status-dot status-partial"></span> 部分</td>
+            <td>市场情绪</td>
+          </tr>
+          <tr>
+            <td>2026-05-10</td>
+            <td>"固态电池Q2量产将改变格局"</td>
+            <td>研报</td>
+            <td>T+60</td>
+            <td>量产延迟至Q4</td>
+            <td><span class="status-dot status-false"></span> 证伪</td>
+            <td>数据错误</td>
+          </tr>
+          <tr>
+            <td>2026-06-01</td>
+            <td>"美联储6月降息25bp"</td>
+            <td>宏观</td>
+            <td>T+30</td>
+            <td>会议维持利率不变</td>
+            <td><span class="status-dot status-expired"></span> 已过期</td>
+            <td>前提变化</td>
+          </tr>
+          <tr>
+            <td>2026-04-15</td>
+            <td>"某AI公司将在5月发布GPT-5级模型"</td>
+            <td>舆情</td>
+            <td>T+45</td>
+            <td>窗口已过，无发布</td>
+            <td><span class="status-dot status-invalid"></span> 已失效</td>
+            <td>反身性</td>
+          </tr>
+          <tr>
+            <td>2026-07-01</td>
+            <td>"台积电CoWoS产能Q3翻倍"</td>
+            <td>产业链</td>
+            <td>T+90</td>
+            <td>—</td>
+            <td><span class="status-dot status-pending"></span> 待验证</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px; padding:10px; background:#f8fafc; border-radius:6px; font-size:11px; color:var(--text-secondary);">
+        <strong>7种失败根因:</strong> 逻辑错误 / 前提变化 / 黑天鹅 / 时机错误 / 数据错误 / 市场情绪 / 反身性
+        <span style="margin-left:16px;"><strong>确认率:</strong> <span style="color:var(--accent); font-weight:600;">55%</span></span>
+        <span style="margin-left:16px;"><strong>主要错误模式:</strong> 时机错误 (32%) + 数据错误 (24%)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Filter chips
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Tree items
+document.querySelectorAll('.tree-item').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// File items
+document.querySelectorAll('.file-item').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+
+
+</body>
+</html>

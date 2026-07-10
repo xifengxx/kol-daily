@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F2 内容与信息子系统</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        accent: '#533afd',
+        navy: '#061b31',
+        'text-primary': '#1a1f36',
+        'text-secondary': '#6b7280',
+        'bg-page': '#f7f8fa',
+        'card-border': '#e5e7eb',
+        up: '#dc2626',
+        down: '#16a34a',
+      }
+    }
+  }
+}
+</script>
+<style>
+  :root {
+    --accent: #533afd;
+    --navy: #061b31;
+    --text-primary: #1a1f36;
+    --text-secondary: #6b7280;
+    --bg-page: #f7f8fa;
+    --card-border: #e5e7eb;
+    --up: #dc2626;
+    --down: #16a34a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ---- Tab Navigation ---- */
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    background: #fff;
+    border-bottom: 1px solid var(--card-border);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .tab-btn {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    position: relative;
+    top: 1px;
+  }
+  .tab-btn:hover { color: var(--text-primary); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ---- Sub-header ---- */
+  .sub-header {
+    background: #fff;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .meta-line {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* ---- Cards ---- */
+  .card {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+  .card-sm { padding: 14px 18px; border-radius: 8px; }
+
+  /* ---- Stats ---- */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .stat-value { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+  /* ---- Tags ---- */
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    line-height: 1.6;
+  }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-yellow { background: #fef3c7; color: #92400e; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-purple { background: #ede9fe; color: #6d28d9; }
+  .tag-gray { background: #f3f4f6; color: #374151; }
+
+  /* ---- Hotspot ---- */
+  .hotspot-number {
+    font-size: 64px;
+    font-weight: 800;
+    color: rgba(83, 58, 253, 0.10);
+    line-height: 1;
+    position: absolute;
+    top: -8px;
+    left: -2px;
+    pointer-events: none;
+  }
+  .hotspot-card {
+    position: relative;
+    border-left: 3px solid var(--accent);
+    background: #fafafe;
+    border-radius: 10px;
+    padding: 20px 24px 20px 60px;
+    margin-bottom: 16px;
+  }
+
+  /* ---- Table ---- */
+  table.kol-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  table.kol-table thead th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--card-border);
+    letter-spacing: 0.5px;
+  }
+  table.kol-table tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  table.kol-table tbody tr:hover { background: #f9fafb; }
+
+  /* ---- Buttons ---- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+    text-decoration: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #4128e4; }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-danger { background: #fff; border: 1px solid #fca5a5; color: #dc2626; }
+  .btn-danger:hover { background: #fef2f2; }
+  .btn-sm { padding: 4px 14px; font-size: 11px; border-radius: 14px; }
+
+  /* ---- Layout ---- */
+  .main-content { max-width: 1100px; margin: 0 auto; padding: 24px 24px 60px; }
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* ---- Consensus thread ---- */
+  .thread-card {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+  }
+  .thread-green { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .thread-blue { background: #eff6ff; border: 1px solid #bfdbfe; }
+  .thread-yellow { background: #fffbeb; border: 1px solid #fde68a; }
+  .thread-red { background: #fff5f5; border: 1px solid #fecaca; }
+
+  .kol-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #533afd, #8b5cf6);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ---- Chart container ---- */
+  .chart-box { width: 100%; height: 280px; }
+
+  /* ---- Animate ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .tab-panel { display: none; animation: fadeUp 0.25s ease-out; }
+  .tab-panel.active { display: block; }
+
+  hr.divider { border: none; border-top: 1px solid var(--card-border); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<!-- ====== TOP NAV BAR ====== -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="morning">每日智能晨报</button>
+  <button class="tab-btn" data-tab="kol">KOL观点速览</button>
+  <button class="tab-btn" data-tab="manage">KOL管理</button>
+</div>
+
+<!-- ====== PAGE 1: 每日智能晨报 ====== -->
+<div id="tab-morning" class="tab-panel active">
+
+  <!-- Sub-header -->
+  <div class="sub-header">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <h1 style="font-size:18px;font-weight:700;color:var(--navy);margin:0;">每日智能晨报</h1>
+        <div class="meta-line" style="margin-top:4px;">
+          <span>2026-07-09 星期三</span>
+          <span style="color:var(--accent);font-weight:600;" id="editionLabel">晨间版</span>
+          <span id="editionTime">08:30 自动生成</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <button class="btn btn-sm" style="background:var(--accent);color:#fff;border-radius:14px;" id="btnMorning" onclick="switchEdition('morning')">晨间版 08:30</button>
+          <button class="btn btn-sm" style="background:transparent;border:1px solid var(--card-border);color:var(--text-secondary);border-radius:14px;" id="btnClosing" onclick="switchEdition('closing')">收盘版 16:00</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm">PDF导出</button>
+        <button class="btn btn-primary btn-sm">刷新数据</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <!-- 一句话市场总结 -->
+    <div class="card" style="background:#f0fdf4;border:1px solid #bbf7d0;">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <span style="font-size:22px;">&#x1F4CA;</span>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;">一句话市场总结</div>
+          <p style="font-size:13px;color:var(--text-secondary);margin:0;line-height:1.7;">
+            美国6月非农超预期但薪资增速放缓，市场定价9月降息概率升至78%；A股AI算力板块持续活跃，北向资金连续5日净流入；港股科技股受中美审计合作进展提振，恒生科技指数周涨3.2%。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: 宏观政策与监管动态 -->
+    <div class="section-title">宏观政策与监管动态</div>
+    <div class="grid-3">
+      <div class="card card-sm">
+        <div class="tag tag-blue" style="margin-bottom:6px;">货币政策</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">美联储6月会议纪要：多数官员支持年内降息1-2次</div>
+        <div style="font-size:11px;color:var(--text-secondary);">纪要显示"几乎所有"与会者认为通胀正在回落，但需更多数据确认趋势，首次降息可能在9月或12月。</div>
+      </div>
+      <div class="card card-sm">
+        <div class="tag tag-purple" style="margin-bottom:6px;">产业政策</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">工信部印发《AI赋能新型工业化行动计划(2026-2028)》</div>
+        <div style="font-size:11px;color:var(--text-secondary);">明确到2028年AI在制造业渗透率超40%，重点支持算力基础设施、工业大模型、智能传感器三大方向。</div>
+      </div>
+      <div class="card card-sm">
+        <div class="tag tag-yellow" style="margin-bottom:6px;">监管动态</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">欧盟AI法案第三阶段生效：高风险AI系统须通过第三方认证</div>
+        <div style="font-size:11px;color:var(--text-secondary);">涉及金融、医疗、招聘等领域的AI应用需在2026年底前完成合规认证，预计影响全球约1.2万家科技企业。</div>
+      </div>
+    </div>
+
+    <!-- Section: 10大热点深度拆解 -->
+    <div class="section-title">&#x1F525; 10大热点深度拆解</div>
+
+    <!-- Hotspot 01 -->
+    <div class="hotspot-card">
+      <div class="hotspot-number">01</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">NVIDIA B300 芯片流片成功，算力密度提升 4x</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">台积电3nm工艺流片成功，B300单卡FP8算力达20PFLOPS，统一内存架构支持288GB HBM4，预计Q4量产。</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">产业链映射</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">上游：HBM4(三星/SK海力士)、CoWoS先进封装(台积电)；下游：AI服务器(超微/纬创)、光模块(中际旭创)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">典型标的</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">龙头：中际旭创(300308)；二线弹性：天孚通信(300394)；概念：光迅科技(002281)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">持续性判断</span>
+          <p style="margin:2px 0 0;"><span class="tag tag-green">强持续 &#x2265;6个月</span></p>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">B300量产周期将贯穿2026H2-2027H1，产业链备货需求确定性高</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">风险警示</span>
+          <p style="margin:2px 0 0;color:#dc2626;font-size:11px;">&#x26A0; 美国可能进一步收紧对华AI芯片出口管制，B300对华供应存在政策不确定性</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">数据来源</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">Reuters / SemiAnalysis / 台湾经济日报 / 公司IR</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hotspot 02 -->
+    <div class="hotspot-card">
+      <div class="hotspot-number">02</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">华为昇腾910C大规模部署，国产算力生态拐点</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">华为云宣布昇腾910C集群规模突破10万卡，已向头部互联网企业交付训练服务，单卡性能对标A100。</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">产业链映射</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">上游：先进封装(长电科技)、ABF载板(兴森科技)；下游：AI服务器(拓维信息)、应用(科大讯飞)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">典型标的</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">龙头：中芯国际(688981)；二线弹性：景嘉微(300474)；概念：海光信息(688041)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">持续性判断</span>
+          <p style="margin:2px 0 0;"><span class="tag tag-green">强持续 &#x2265;6个月</span></p>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">国产替代趋势不可逆，华为昇腾生态2026年预计出货量同比增长200%+</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">风险警示</span>
+          <p style="margin:2px 0 0;color:#dc2626;font-size:11px;">&#x26A0; 7nm产能瓶颈可能制约大规模出货，需关注良率和扩产进度</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">数据来源</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">华为全联接大会 / 科创板日报 / 集微网</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hotspot 03 -->
+    <div class="hotspot-card">
+      <div class="hotspot-number">03</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">特斯拉FSD V14 中国获批路测，智能驾驶加速渗透</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">工信部批准特斯拉FSD V14在上海、北京等5城市开展公共道路测试，端到端神经网络方案获监管认可。</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">产业链映射</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">上游：激光雷达(禾赛/速腾)、车载芯片(地平线/黑芝麻)；下游：整车(比亚迪/小鹏)、出行平台</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">典型标的</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">龙头：德赛西威(002920)；二线弹性：经纬恒润(688326)；概念：万集科技(300552)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">持续性判断</span>
+          <p style="margin:2px 0 0;"><span class="tag tag-yellow">中持续 3-6个月</span></p>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">路测到商业化落地仍需时间，但政策催化密集，主题热度维持</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">风险警示</span>
+          <p style="margin:2px 0 0;color:#dc2626;font-size:11px;">&#x26A0; L3级别责任认定法规尚不完善，安全事故可能引发政策收紧</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">数据来源</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">工信部公告 / 36氪 / 晚点LatePost</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hotspot 04 -->
+    <div class="hotspot-card">
+      <div class="hotspot-number">04</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">苹果Vision Pro 2 量产启动，Micro-OLED供应链受益</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">供应链确认Vision Pro 2已进入量产阶段，重量减轻30%，售价降至$2,499，预计Q3全球发售。</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">产业链映射</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">上游：Micro-OLED(索尼/视涯)、Pancake光学(玉晶光)；下游：组装(立讯精密)、结构件(长盈精密)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">典型标的</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">龙头：立讯精密(002475)；二线弹性：杰普特(688025)；概念：兆威机电(003021)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">持续性判断</span>
+          <p style="margin:2px 0 0;"><span class="tag tag-yellow">中持续 3-6个月</span></p>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">备货周期3-4个月，Q3发售前供应链订单密集释放</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">风险警示</span>
+          <p style="margin:2px 0 0;color:#dc2626;font-size:11px;">&#x26A0; XR消费市场接受度存疑，第一代销量不及预期，第二代可能面临同样挑战</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">数据来源</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">Bloomberg / 天风国际 / The Information</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hotspot 05 -->
+    <div class="hotspot-card">
+      <div class="hotspot-number">05</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">美国6月CPI降至2.7%，降息交易全面启动</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">6月CPI同比2.7%（预期2.8%），核心CPI 3.1%（预期3.2%），连续第4个月回落，市场定价9月降息概率78%。</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">产业链映射</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">受益：黄金(山东黄金)、美债(利率敏感型REITs)、成长股(纳斯达克生物科技)；承压：银行净息差</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">典型标的</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);">龙头：山东黄金(600547)；二线弹性：银泰黄金(000975)；概念：赤峰黄金(600988)</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">持续性判断</span>
+          <p style="margin:2px 0 0;"><span class="tag tag-green">强持续 &#x2265;6个月</span></p>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">降息周期一旦启动将持续12-18个月，资产重定价将是中长期主线</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">风险警示</span>
+          <p style="margin:2px 0 0;color:#dc2626;font-size:11px;">&#x26A0; 就业市场韧性可能延缓降息节奏，需警惕"higher for longer"反复</p>
+        </div>
+        <div>
+          <span style="color:var(--text-secondary);font-weight:600;">数据来源</span>
+          <p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">BLS / CME FedWatch / Wind</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hotspot 06 -->
+    <div class="hotspot-card extra-hotspot" style="display:none;">
+      <div class="hotspot-number">06</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">中国6月出口数据超预期，机电产品拉动增长</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div><span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span><p style="margin:2px 0 0;color:var(--text-secondary);">6月出口同比+8.7%（预期+6.5%），机电产品+12.3%，汽车出口+28%。对东盟出口+15.2%创单月新高。</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">产业链映射</span><p style="margin:2px 0 0;color:var(--text-secondary);">受益：光伏组件出口(隆基/晶科)、动力电池(宁德时代)、工程机械(三一重工)；承压：纺织服装(东南亚替代)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">典型标的</span><p style="margin:2px 0 0;color:var(--text-secondary);">龙头：宁德时代(300750)；二线弹性：阳光电源(300274)；概念：赛轮轮胎(601058)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">持续性判断</span><p style="margin:2px 0 0;"><span class="tag tag-yellow">中持续 3-6个月</span></p><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">海外补库存周期+一带一路深化支撑出口韧性</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">风险警示</span><p style="margin:2px 0 0;color:#dc2626;font-size:11px;">⚠️ 欧盟对中国电动汽车加征关税落地，7月起实施，可能拖累下半年汽车出口增速</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">数据来源</span><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">海关总署 / Wind / 商务部</p></div>
+      </div>
+    </div>
+
+    <!-- Hotspot 07 -->
+    <div class="hotspot-card extra-hotspot" style="display:none;">
+      <div class="hotspot-number">07</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">全球半导体销售额连续11个月同比增长，Q2创历史新高</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div><span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span><p style="margin:2px 0 0;color:var(--text-secondary);">SIA数据：5月全球半导体销售额$53.2B，同比+19.3%，连续11个月增长。存储芯片+35%领涨，逻辑芯片+15%。</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">产业链映射</span><p style="margin:2px 0 0;color:var(--text-secondary);">上游：硅片(沪硅产业)、设备(北方华创)；下游：封测(长电科技)、设计(韦尔股份/兆易创新)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">典型标的</span><p style="margin:2px 0 0;color:var(--text-secondary);">龙头：北方华创(002371)；二线弹性：长电科技(600584)；概念：通富微电(002156)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">持续性判断</span><p style="margin:2px 0 0;"><span class="tag tag-green">强持续 ≥6个月</span></p><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">AI+存储双轮驱动，2026全年销售额预计突破$600B</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">风险警示</span><p style="margin:2px 0 0;color:#dc2626;font-size:11px;">⚠️ 客户库存水位回升，下半年可能进入去库存阶段</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">数据来源</span><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">SIA / WSTS / SEMI</p></div>
+      </div>
+    </div>
+
+    <!-- Hotspot 08 -->
+    <div class="hotspot-card extra-hotspot" style="display:none;">
+      <div class="hotspot-number">08</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">人形机器人产业化加速：特斯拉Optimus获宝马首批工厂订单</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div><span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span><p style="margin:2px 0 0;color:var(--text-secondary);">宝马宣布采购500台Optimus用于慕尼黑工厂物流线，2026Q4交付。单台售价约$30,000，标志着人形机器人从实验室走向工厂。</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">产业链映射</span><p style="margin:2px 0 0;color:var(--text-secondary);">上游：谐波减速器(绿的谐波)、六维力传感器(柯力传感)、丝杠(恒立液压)；中游：整机集成(三花智控/拓普集团)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">典型标的</span><p style="margin:2px 0 0;color:var(--text-secondary);">龙头：三花智控(002050)；二线弹性：绿的谐波(688017)；概念：鸣志电器(603728)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">持续性判断</span><p style="margin:2px 0 0;"><span class="tag tag-yellow">中持续 3-6个月</span></p><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">订单规模尚小但象征意义重大，产业链备货预期升温</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">风险警示</span><p style="margin:2px 0 0;color:#dc2626;font-size:11px;">⚠️ 500台订单对业绩贡献极小(约$15M)，谨防概念炒作。量产良率和成本控制仍需验证</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">数据来源</span><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">Reuters / 36氪 / Tesla IR</p></div>
+      </div>
+    </div>
+
+    <!-- Hotspot 09 -->
+    <div class="hotspot-card extra-hotspot" style="display:none;">
+      <div class="hotspot-number">09</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">碳酸锂价格跌破8万元/吨，锂电产业链利润重新分配</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div><span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span><p style="margin:2px 0 0;color:var(--text-secondary);">电池级碳酸锂报7.85万元/吨，较年初-20%。非洲锂矿+南美盐湖产能集中释放，供给过剩至少持续至2027H1。</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">产业链映射</span><p style="margin:2px 0 0;color:var(--text-secondary);">受损：锂矿(赣锋/天齐)；受益：电池厂(宁德时代/国轩高科，成本下降)；受益：整车(比亚迪，电池降价传导)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">典型标的</span><p style="margin:2px 0 0;color:var(--text-secondary);">受损标的：赣锋锂业(002460)；受益标的：宁德时代(300750)、比亚迪(002594)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">持续性判断</span><p style="margin:2px 0 0;"><span class="tag tag-green">强持续 ≥6个月</span></p><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">供给过剩格局确立，锂价将长期低位运行，电池厂盈利弹性释放</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">风险警示</span><p style="margin:2px 0 0;color:#dc2626;font-size:11px;">⚠️ 若锂价跌至6万以下可能触发矿企减产，供给端出清速度决定价格底部</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">数据来源</span><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">SMM / 安泰科 / 百川盈孚</p></div>
+      </div>
+    </div>
+
+    <!-- Hotspot 10 -->
+    <div class="hotspot-card extra-hotspot" style="display:none;">
+      <div class="hotspot-number">10</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:10px;">低空经济政策密集落地：六城获批开展eVTOL商业运营试点</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:12px;">
+        <div><span style="color:var(--text-secondary);font-weight:600;">触发逻辑</span><p style="margin:2px 0 0;color:var(--text-secondary);">民航局批准深圳、成都、合肥、杭州、西安、沈阳六个城市开展eVTOL商业载客试点，2026Q4开航。空管系统、起降场标准同步发布。</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">产业链映射</span><p style="margin:2px 0 0;color:var(--text-secondary);">上游：eVTOL主机厂(亿航/峰飞)、飞控系统(中航智)；基础设施：空管(莱斯信息)、起降场(深城交)；运营：通航公司</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">典型标的</span><p style="margin:2px 0 0;color:var(--text-secondary);">龙头：亿航智能(EH)；二线弹性：万丰奥威(002085)；概念：中信海直(000099)</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">持续性判断</span><p style="margin:2px 0 0;"><span class="tag tag-green">强持续 ≥6个月</span></p><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">政策催化密集(试点→标准→全国推广)，2027年市场规模有望突破千亿</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">风险警示</span><p style="margin:2px 0 0;color:#dc2626;font-size:11px;">⚠️ 安全事故是行业最大黑天鹅，适航审定进度可能慢于预期</p></div>
+        <div><span style="color:var(--text-secondary);font-weight:600;">数据来源</span><p style="margin:2px 0 0;color:var(--text-secondary);font-size:11px;">民航局公告 / 新华网 / 证券时报</p></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:12px;">
+      <button class="btn btn-outline" id="btnExpandHotspots" onclick="toggleExtraHotspots()">展开全部 10 条热点 (剩余 5 条)</button>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Section: 明日跟踪清单 -->
+    <div class="section-title">&#x1F4CB; 明日跟踪清单 (6类)</div>
+    <div class="grid-3">
+      <!-- 政策 -->
+      <div class="card card-sm">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--accent);">&#x1F3DB;</span> 政策推进
+        </div>
+        <ul style="margin:0;padding:0 0 0 16px;font-size:12px;line-height:2.2;color:var(--text-secondary);">
+          <li>美联储主席Powell国会听证 (7/10 22:00)</li>
+          <li>中国6月CPI/PPI数据公布 (7/10 09:30)</li>
+          <li>欧盟数字欧元立法进展更新</li>
+        </ul>
+      </div>
+      <!-- 财报 -->
+      <div class="card card-sm">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--accent);">&#x1F4CA;</span> 财报日历
+        </div>
+        <ul style="margin:0;padding:0 0 0 16px;font-size:12px;line-height:2.2;color:var(--text-secondary);">
+          <li>台积电6月营收 (预估同比+32%)</li>
+          <li>宁德时代H1业绩预告</li>
+          <li>拼多多Q2业绩指引更新</li>
+        </ul>
+      </div>
+      <!-- 资金 -->
+      <div class="card card-sm">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--accent);">&#x1F4B0;</span> 资金异动
+        </div>
+        <ul style="margin:0;padding:0 0 0 16px;font-size:12px;line-height:2.2;color:var(--text-secondary);">
+          <li>北向资金连续流入天数 (目前5日)</li>
+          <li>南向资金港股通净买入额</li>
+          <li>融资余额变动 (AI板块)</li>
+        </ul>
+      </div>
+      <!-- 公告后续 -->
+      <div class="card card-sm">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--accent);">&#x1F4DD;</span> 公告后续
+        </div>
+        <ul style="margin:0;padding:0 0 0 16px;font-size:12px;line-height:2.2;color:var(--text-secondary);">
+          <li>中际旭创重大合同详情披露</li>
+          <li>寒武纪重组预案交易所问询函回复</li>
+          <li>宁德时代H1业绩预告正式披露</li>
+        </ul>
+      </div>
+      <!-- 海外 -->
+      <div class="card card-sm">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--accent);">&#x1F30D;</span> 海外联动
+        </div>
+        <ul style="margin:0;padding:0 0 0 16px;font-size:12px;line-height:2.2;color:var(--text-secondary);">
+          <li>美国6月PPI数据 (7/10 20:30)</li>
+          <li>日本央行会议意见摘要</li>
+          <li>VIX恐慌指数变化</li>
+        </ul>
+      </div>
+      <!-- 技术关键位 -->
+      <div class="card card-sm">
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--accent);">&#x1F4D0;</span> 技术关键位
+        </div>
+        <ul style="margin:0;padding:0 0 0 16px;font-size:12px;line-height:2.2;color:var(--text-secondary);">
+          <li>NVDA $140支撑位有效性验证</li>
+          <li>上证3200整数关口多空争夺</li>
+          <li>宁德时代200元压力位突破确认</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 收盘版内容 (默认隐藏) -->
+    <div id="closing-content" style="display:none;">
+      <div style="background:#fff;padding:16px 24px;border-bottom:1px solid var(--card-border);margin-bottom:20px;">
+        <div style="font-size:14px;font-weight:700;color:var(--navy);">A股收盘回顾 · 2026-07-09</div>
+        <div class="meta-line" style="margin-top:4px;"><span>16:00 自动生成</span><span style="color:var(--accent);font-weight:600;">收盘版</span></div>
+      </div>
+      <div class="card" style="margin-bottom:16px;background:#f0fdf4;border:1px solid #bbf7d0;">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <span style="font-size:22px;">📊</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;">今日A股盘面总结</div>
+            <p style="font-size:13px;color:var(--text-secondary);margin:0;line-height:1.7;">
+              三大指数全线收涨，沪指+0.87%报3218点，深成指+1.23%，创业板指+1.56%。两市成交8742亿，较昨日放量12%。北向资金净流入32.5亿，连续3日净流入。AI算力、半导体、国防军工领涨；光伏、锂电池、房地产回调。
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">📈 主要指数表现</div>
+      <div class="grid-4" style="margin-bottom:16px;">
+        <div class="stat-card"><div class="stat-value" style="color:var(--up);">3,218.45</div><div class="stat-label">上证指数 +0.87%</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:var(--up);">10,892.76</div><div class="stat-label">深证成指 +1.23%</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:var(--up);">2,156.30</div><div class="stat-label">创业板指 +1.56%</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:var(--down);">876.52</div><div class="stat-label">科创50 -0.34%</div></div>
+      </div>
+      <div class="section-title">🇯🇵🇰🇷 日韩股市回顾</div>
+      <div class="grid-3" style="margin-bottom:16px;">
+        <div class="card card-sm">
+          <div class="tag tag-yellow" style="margin-bottom:6px;">日经225</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-primary);">38,954.32 <span class="up">+0.78%</span></div>
+          <div style="font-size:11px;color:var(--text-secondary);">半导体设备股领涨，Tokyo Electron +3.2%。日元维持155关口，出口板块受益。</div>
+        </div>
+        <div class="card card-sm">
+          <div class="tag tag-yellow" style="margin-bottom:6px;">韩国KOSPI</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-primary);">2,782.45 <span class="up">+0.45%</span></div>
+          <div style="font-size:11px;color:var(--text-secondary);">SK海力士+4.1%创新高，HBM3E订单饱满。三星电子+1.2%，3nm良率改善。</div>
+        </div>
+        <div class="card card-sm">
+          <div class="tag tag-yellow" style="margin-bottom:6px;">台湾加权</div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-primary);">21,876.30 <span class="up">+1.12%</span></div>
+          <div style="font-size:11px;color:var(--text-secondary);">台积电+2.8%，Q2营收超预期。联发科+1.5%，天玑9400出货量上修。</div>
+        </div>
+      </div>
+      <div class="section-title">📋 盘后公告摘要</div>
+      <div class="card" style="margin-bottom:16px;">
+        <table class="kol-table"><tbody>
+          <tr><td style="width:120px;"><span class="tag tag-red">业绩预告</span></td><td><b>宁德时代</b>：H1净利润预增35%-42%，储能业务出货量翻倍</td></tr>
+          <tr><td style="width:120px;"><span class="tag tag-blue">增减持</span></td><td><b>中芯国际</b>：国家大基金二期增持0.8%股份，持股比例升至6.2%</td></tr>
+          <tr><td style="width:120px;"><span class="tag tag-yellow">重大合同</span></td><td><b>中际旭创</b>：获得北美客户1.6T光模块订单，合同金额约$320M</td></tr>
+          <tr><td style="width:120px;"><span class="tag tag-purple">资产重组</span></td><td><b>寒武纪</b>：拟收购某AI芯片IP公司100%股权，交易对价待披露</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /tab-morning -->
+
+<!-- ====== PAGE 2: KOL观点速览 ====== -->
+<div id="tab-kol" class="tab-panel">
+
+  <div class="sub-header">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <h1 style="font-size:18px;font-weight:700;color:var(--navy);margin:0;">KOL观点速览</h1>
+        <div class="meta-line" style="margin-top:4px;">
+          <span>&#x1F4FA; 38 YouTube + &#x1F426; 13 Twitter KOL</span>
+          <span>共识度：<span style="color:var(--accent);font-weight:600;">中高</span></span>
+          <span>日成本 ~$0.05</span>
+          <span style="color:var(--text-secondary);">更新于 2026-07-09 08:15</span>
+        </div>
+      </div>
+      <button class="btn btn-outline btn-sm">刷新KOL数据</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <!-- Stat cards -->
+    <div class="stat-grid" style="margin-bottom:24px;">
+      <div class="stat-card">
+        <div class="stat-value">51</div>
+        <div class="stat-label">信息源</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">32</div>
+        <div class="stat-label">今日摘要</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">5</div>
+        <div class="stat-label">投资主线</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">2</div>
+        <div class="stat-label">显著分歧</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--up);">偏多</div>
+        <div class="stat-label">情绪判断</div>
+      </div>
+    </div>
+
+    <!-- ECharts: Sentiment distribution -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:8px;">KOL情绪分布 (近7日)</div>
+      <div id="sentiment-chart" class="chart-box"></div>
+    </div>
+
+    <!-- Consensus Thread 1 -->
+    <div class="thread-card thread-green">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span class="tag tag-green" style="font-size:11px;">高共识 (85%)</span>
+        <span style="font-size:15px;font-weight:700;color:var(--navy);">AI硬件牛市未结束</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);margin:0 0 12px;">
+        多数KOL认为AI算力投资周期仍在早期，B300/GB300平台升级将带动新一轮capex增长。数据中心电力基础设施、液冷散热、高速互联成为新的投资方向。
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">SK</span> @SemiconductorK — "AI capex cycle has 3-5 more years"
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">DH</span> @dylan522p — "B300 is the real inflection"
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">JL</span> @jameslf — "NVDA still cheap on 2027 P/E"
+        </span>
+      </div>
+    </div>
+
+    <!-- Consensus Thread 2 -->
+    <div class="thread-card thread-blue">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span class="tag tag-blue" style="font-size:11px;">中高共识 (72%)</span>
+        <span style="font-size:15px;font-weight:700;color:var(--navy);">中国半导体国产替代加速</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);margin:0 0 12px;">
+        华为昇腾910C大规模部署标志着国产AI芯片从"可用"走向"好用"。KOL普遍认为2026年是国产算力生态拐点，但先进制程产能仍是核心约束。
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">ZC</span> @zichen_tech — "国产替代拐点已至，昇腾生态不可逆"
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">LW</span> @liwei_chip — "7nm产能若能突破，2027年国产替代率可达40%"
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">CM</span> @chipmkt — "中芯国际扩产进度是核心观测指标"
+        </span>
+      </div>
+    </div>
+
+    <!-- Consensus Thread 3 -->
+    <div class="thread-card thread-yellow">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span class="tag tag-yellow" style="font-size:11px;">中等共识 (68%)</span>
+        <span style="font-size:15px;font-weight:700;color:var(--navy);">降息预期升温，成长股估值修复</span>
+      </div>
+      <p style="font-size:12px;color:var(--text-secondary);margin:0 0 12px;">
+        美国CPI连续回落强化9月降息预期。KOL认为纳斯达克生物科技、清洁能源、新兴市场科技股等利率敏感板块将受益，但需警惕"buy the rumor, sell the fact"。
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">MR</span> @macro_ren — "Fed put is back, risk-on into year-end"
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">BT</span> @bond_trader — "2Y yield breaking below 4% confirms dovish pivot"
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--text-secondary);">
+          <span class="kol-avatar">GM</span> @gmo_zhang — "港股成长股估值修复空间最大"
+        </span>
+      </div>
+    </div>
+
+    <!-- Consensus Thread 4 -->
+    <div class="thread-card thread-red">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span class="tag tag-red" style="font-size:11px;">显著分歧</span>
+        <span style="font-size:15px;font-weight:700;color:var(--navy);">NVDA估值争议：泡沫还是合理？</span>
+      </div>
+      <div class="grid-2" style="gap:16px;">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#16a34a;margin-bottom:6px;">&#x1F4C8; 乐观派 (42%)</div>
+          <ul style="margin:0;padding:0 0 0 16px;font-size:11px;color:var(--text-secondary);line-height:2;">
+            <li>2027E P/E仅22x，低于5年均值28x</li>
+            <li>B300产品周期将推动营收再翻倍</li>
+            <li>推理需求爆发是第二增长曲线</li>
+            <li>代表KOL: @jameslf, @dylan522p, @techfund1</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#dc2626;margin-bottom:6px;">&#x26A0; 谨慎派 (58%)</div>
+          <ul style="margin:0;padding:0 0 0 16px;font-size:11px;color:var(--text-secondary);line-height:2;">
+            <li>大客户自研芯片趋势不可忽视</li>
+            <li>60%+毛利率不可持续（竞争加剧）</li>
+            <li>出口管制可能永久损失中国市场</li>
+            <li>代表KOL: @value_invest, @techbear, @chinatiger</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /tab-kol -->
+
+<!-- ====== PAGE 3: KOL管理 ====== -->
+<div id="tab-manage" class="tab-panel">
+
+  <div class="sub-header">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <h1 style="font-size:18px;font-weight:700;color:var(--navy);margin:0;">KOL管理</h1>
+        <div class="meta-line" style="margin-top:4px;">
+          <span>已追踪 51 位KOL</span>
+          <span>本周新增内容 186 条</span>
+          <span>自动摘要覆盖率 94%</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm">导入列表</button>
+        <button class="btn btn-primary btn-sm" id="btn-add-kol">+ 添加KOL</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+
+    <!-- ECharts: Platform distribution -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px;">KOL平台与内容量分布 (本周)</div>
+      <div id="platform-chart" class="chart-box"></div>
+    </div>
+
+    <!-- KOL Table -->
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--card-border);display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:14px;font-weight:700;color:var(--navy);">KOL列表</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" placeholder="搜索KOL..." style="padding:6px 12px;border:1px solid var(--card-border);border-radius:14px;font-size:12px;width:200px;outline:none;">
+          <select style="padding:6px 12px;border:1px solid var(--card-border);border-radius:14px;font-size:12px;outline:none;">
+            <option>全部平台</option><option>YouTube</option><option>Twitter</option>
+          </select>
+        </div>
+      </div>
+      <table class="kol-table">
+        <thead>
+          <tr>
+            <th>KOL</th>
+            <th>平台</th>
+            <th>粉丝数</th>
+            <th>最近更新</th>
+            <th>本周内容数</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;">DH</span> @dylan522p</td>
+            <td><span class="tag tag-blue">TW</span></td>
+            <td>28.5万</td>
+            <td>2026-07-09</td>
+            <td>12</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#dc2626,#f87171);">SK</span> @SemiconductorK</td>
+            <td><span class="tag tag-red">YT</span></td>
+            <td>45.2万</td>
+            <td>2026-07-09</td>
+            <td>8</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#059669,#34d399);">ZC</span> @zichen_tech</td>
+            <td><span class="tag tag-blue">TW</span></td>
+            <td>15.8万</td>
+            <td>2026-07-08</td>
+            <td>7</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#dc2626,#f87171);">GM</span> @gmo_zhang</td>
+            <td><span class="tag tag-red">YT</span></td>
+            <td>32.1万</td>
+            <td>2026-07-09</td>
+            <td>5</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#2563eb,#60a5fa);">MR</span> @macro_ren</td>
+            <td><span class="tag tag-blue">TW</span></td>
+            <td>22.3万</td>
+            <td>2026-07-09</td>
+            <td>9</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#dc2626,#f87171);">LW</span> @liwei_chip</td>
+            <td><span class="tag tag-red">YT</span></td>
+            <td>18.7万</td>
+            <td>2026-07-08</td>
+            <td>6</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#7c3aed,#a78bfa);">JL</span> @jameslf</td>
+            <td><span class="tag tag-blue">TW</span></td>
+            <td>12.6万</td>
+            <td>2026-07-09</td>
+            <td>11</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#dc2626,#f87171);">CM</span> @chipmkt</td>
+            <td><span class="tag tag-red">YT</span></td>
+            <td>35.4万</td>
+            <td>2026-07-07</td>
+            <td>4</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#059669,#34d399);">BT</span> @bond_trader</td>
+            <td><span class="tag tag-blue">TW</span></td>
+            <td>9.8万</td>
+            <td>2026-07-09</td>
+            <td>14</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+          <tr>
+            <td><span class="kol-avatar" style="margin-right:8px;background:linear-gradient(135deg,#dc2626,#f87171);">TF</span> @techfund1</td>
+            <td><span class="tag tag-red">YT</span></td>
+            <td>41.3万</td>
+            <td>2026-07-09</td>
+            <td>10</td>
+            <td><button class="btn btn-danger btn-sm">移除</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div><!-- /tab-manage -->
+
+<!-- ====== SCRIPTS ====== -->
+<script>
+// ---- Tab Switching ----
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var tab = this.getAttribute('data-tab');
+
+    // Update buttons
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+
+    // Update panels
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById('tab-' + tab).classList.add('active');
+
+    // Re-render charts when switching to KOL tab
+    if (tab === 'kol') { setTimeout(renderSentimentChart, 100); }
+    if (tab === 'manage') { setTimeout(renderPlatformChart, 100); }
+  });
+});
+
+// ---- Hotspot Expand/Collapse ----
+var hotspotsExpanded = false;
+function toggleExtraHotspots() {
+  hotspotsExpanded = !hotspotsExpanded;
+  var extras = document.querySelectorAll('.extra-hotspot');
+  var btn = document.getElementById('btnExpandHotspots');
+  extras.forEach(function(el) {
+    el.style.display = hotspotsExpanded ? 'block' : 'none';
+  });
+  btn.textContent = hotspotsExpanded ? '收起热点 (仅显示前5条)' : '展开全部 10 条热点 (剩余 5 条)';
+}
+
+// ---- Edition Switching (晨间版/收盘版) ----
+var currentEdition = 'morning';
+function switchEdition(edition) {
+  if (edition === currentEdition) return;
+  currentEdition = edition;
+  var label = document.getElementById('editionLabel');
+  var time = document.getElementById('editionTime');
+  var btnM = document.getElementById('btnMorning');
+  var btnC = document.getElementById('btnClosing');
+  var closing = document.getElementById('closing-content');
+  var morningContent = document.querySelector('#tab-morning .main-content');
+
+  if (edition === 'closing') {
+    label.textContent = '收盘版';
+    time.textContent = '16:00 自动生成';
+    btnM.style.background = 'transparent';
+    btnM.style.color = 'var(--text-secondary)';
+    btnM.style.border = '1px solid var(--card-border)';
+    btnC.style.background = 'var(--accent)';
+    btnC.style.color = '#fff';
+    btnC.style.border = 'none';
+    // Hide morning content sections, show closing
+    var sections = morningContent.querySelectorAll('.section-title, .card, .hotspot-card, .grid-3, .grid-4, hr.divider, div[style*="text-align:center"]');
+    sections.forEach(function(el) { el.style.display = 'none'; });
+    // Keep the sub-header card
+    var firstCard = morningContent.querySelector('.card');
+    if (firstCard) firstCard.style.display = 'block';
+    closing.style.display = 'block';
+  } else {
+    label.textContent = '晨间版';
+    time.textContent = '08:30 自动生成';
+    btnM.style.background = 'var(--accent)';
+    btnM.style.color = '#fff';
+    btnM.style.border = 'none';
+    btnC.style.background = 'transparent';
+    btnC.style.color = 'var(--text-secondary)';
+    btnC.style.border = '1px solid var(--card-border)';
+    // Show all morning content
+    var sections = morningContent.querySelectorAll('.section-title, .card, .hotspot-card, .grid-3, .grid-4, hr.divider, div[style*="text-align:center"]');
+    sections.forEach(function(el) { el.style.display = ''; });
+    // Re-hide extra hotspots if not expanded
+    if (!hotspotsExpanded) {
+      document.querySelectorAll('.extra-hotspot').forEach(function(el) { el.style.display = 'none'; });
+    }
+    closing.style.display = 'none';
+  }
+}
+
+// ---- ECharts: Sentiment Distribution (Page 2) ----
+function renderSentimentChart() {
+  var dom = document.getElementById('sentiment-chart');
+  if (!dom) return;
+  var chart = echarts.init(dom);
+
+  var days = ['7/3', '7/4', '7/5', '7/6', '7/7', '7/8', '7/9'];
+  var bullish  = [28, 32, 25, 30, 35, 38, 34];
+  var neutral  = [15, 12, 18, 16, 12, 10, 13];
+  var bearish  = [8,  7,  8,  5,  4,  3,  4];
+
+  var option = {
+    tooltip: { trigger: 'axis' },
+    legend: {
+      data: ['偏多', '中性', '偏空'],
+      bottom: 0,
+      textStyle: { fontSize: 11 }
+    },
+    grid: { top: 10, right: 20, bottom: 35, left: 35 },
+    xAxis: {
+      type: 'category',
+      data: days,
+      axisLabel: { fontSize: 10, color: '#6b7280' },
+      axisLine: { lineStyle: { color: '#e5e7eb' } }
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { fontSize: 10, color: '#6b7280' },
+      splitLine: { lineStyle: { color: '#f3f4f6' } }
+    },
+    series: [
+      {
+        name: '偏多', type: 'bar', stack: 'total',
+        data: bullish,
+        itemStyle: { color: '#dc2626', borderRadius: [4, 4, 0, 0] },
+        barWidth: 24
+      },
+      {
+        name: '中性', type: 'bar', stack: 'total',
+        data: neutral,
+        itemStyle: { color: '#9ca3af' }
+      },
+      {
+        name: '偏空', type: 'bar', stack: 'total',
+        data: bearish,
+        itemStyle: { color: '#16a34a', borderRadius: [0, 0, 4, 4] }
+      }
+    ]
+  };
+
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+}
+
+// ---- ECharts: Platform Distribution (Page 3) ----
+function renderPlatformChart() {
+  var dom = document.getElementById('platform-chart');
+  if (!dom) return;
+  var chart = echarts.init(dom);
+
+  var kols = ['@dylan522p','@SemiconductorK','@zichen_tech','@gmo_zhang','@macro_ren',
+              '@liwei_chip','@jameslf','@chipmkt','@bond_trader','@techfund1'];
+  var ytCounts  = [0, 8, 0, 5, 0, 6, 0, 4, 0, 10];  // YouTube content count this week
+  var twCounts  = [12, 0, 7, 0, 9, 0, 11, 0, 14, 0]; // Twitter content count
+
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' }
+    },
+    legend: {
+      data: ['YouTube', 'Twitter'],
+      bottom: 0,
+      textStyle: { fontSize: 11 }
+    },
+    grid: { top: 10, right: 20, bottom: 35, left: 100 },
+    xAxis: {
+      type: 'value',
+      axisLabel: { fontSize: 10, color: '#6b7280' },
+      splitLine: { lineStyle: { color: '#f3f4f6' } }
+    },
+    yAxis: {
+      type: 'category',
+      data: kols,
+      axisLabel: { fontSize: 10, color: '#1a1f36' },
+      axisLine: { lineStyle: { color: '#e5e7eb' } }
+    },
+    series: [
+      {
+        name: 'YouTube', type: 'bar',
+        data: ytCounts,
+        itemStyle: { color: '#dc2626', borderRadius: [0, 4, 4, 0] },
+        barWidth: 12,
+        label: { show: true, position: 'right', fontSize: 10, color: '#6b7280',
+          formatter: function(p) { return p.value > 0 ? p.value : ''; } }
+      },
+      {
+        name: 'Twitter', type: 'bar',
+        data: twCounts,
+        itemStyle: { color: '#533afd', borderRadius: [0, 4, 4, 0] },
+        barWidth: 12,
+        label: { show: true, position: 'right', fontSize: 10, color: '#6b7280',
+          formatter: function(p) { return p.value > 0 ? p.value : ''; } }
+      }
+    ]
+  };
+
+  chart.setOption(option);
+  window.addEventListener('resize', function() { chart.resize(); });
+}
+
+// ---- Remove KOL buttons ----
+document.querySelectorAll('.btn-danger').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var row = this.closest('tr');
+    var name = row.querySelector('td').textContent.trim();
+    if (confirm('确定移除 ' + name + ' 吗？')) {
+      row.style.opacity = '0.4';
+      row.style.transition = 'opacity 0.3s';
+      setTimeout(function() { row.remove(); }, 300);
+    }
+  });
+});
+
+// ---- Add KOL button ----
+document.getElementById('btn-add-kol').addEventListener('click', function() {
+  alert('添加KOL功能：输入KOL的Twitter/YouTube链接，系统将自动抓取并开始追踪。\n\n(原型演示)');
+});
+
+// ---- Initial chart render ----
+setTimeout(function() {
+  renderSentimentChart();
+}, 200);
+</script>
+
+</body>
+</html>

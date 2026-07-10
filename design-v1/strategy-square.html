@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>策略广场 — 5Factor AI 社区</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+    --text-primary: #1a1f36; --text-secondary: #64748d;
+    --accent: #533afd; --navy: #061b31;
+    --up: #dc2626; --down: #16a34a; --warning: #f59e0b;
+    --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+    --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+    --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+    --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+    --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: var(--bg); color: var(--text-primary); font-size: 13px; line-height: 1.5;
+    display: flex; min-height: 100vh;
+  }
+  /* Sidebar */
+  .sidebar {
+    width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+    display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+    overflow-y: auto; z-index: 50; flex-shrink: 0;
+  }
+  .sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-logo span { color: #8b9cf7; }
+  .sidebar-section { padding: 12px 0; }
+  .sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; text-decoration: none; }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+  .nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+  .nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; text-decoration: none; }
+  .nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+  .nav-sub.active { color: #8b9cf7; font-weight: 500; }
+  /* Topbar */
+  .topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+  .search-box { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; border: 1px solid var(--border); }
+  .search-box input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text-primary); font-family: inherit; }
+  .user-area { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  /* Main */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .content { padding: 20px 24px; max-width: 1440px; }
+  /* Components */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; transition: box-shadow 0.2s ease, transform 0.2s ease; }
+  .card:hover { box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary:hover { background: #4128e4; }
+  .btn-outline { background: #fff; color: var(--accent); border: 1px solid var(--border); border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-outline:hover { border-color: var(--accent); background: rgba(83,58,253,0.05); }
+  .btn-sm { padding: 4px 12px; font-size: 11px; border-radius: 4px; }
+  .btn-ghost { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 12px; font-family: inherit; padding: 4px 8px; transition: color 0.15s; }
+  .btn-ghost:hover { color: var(--accent); }
+  .tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+  .tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+  .tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+  .tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+  .tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+  .tag-gray { background: #f3f4f6; color: #374151; }
+  .up { color: var(--up); } .down { color: var(--down); }
+  .tab-bar { display: flex; gap: 0; border-bottom: 2px solid var(--border); }
+  .tab-btn { padding: 10px 16px; font-size: 13px; font-weight: 500; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; font-family: inherit; }
+  .tab-btn:hover { color: var(--accent); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  .stat-value { font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; }
+  .chart-mini { width: 100%; height: 80px; }
+  .chart-full { width: 100%; height: 240px; }
+  .expand-body { display: none; padding-top: 16px; border-top: 1px solid var(--border); margin-top: 16px; }
+  .expand-body.open { display: block; }
+  .expand-toggle { cursor: pointer; color: var(--text-secondary); font-size: 12px; display: inline-flex; align-items: center; gap: 4px; transition: color 0.15s; }
+  .expand-toggle:hover { color: var(--accent); }
+  .rank-badge { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .rank-1 { background: #fef3c7; color: #92400e; }
+  .rank-2 { background: #f3f4f6; color: #4b5563; }
+  .rank-3 { background: #fef3c7; color: #92400e; }
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--card); border-radius: 12px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: rgba(50,50,93,0.15) 0px 16px 40px -8px; }
+  .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-body { padding: 24px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
+  .form-row { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+  .form-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; transition: border-color 0.15s; }
+  .form-input:focus { outline: none; border-color: var(--accent); }
+  .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical; min-height: 80px; transition: border-color 0.15s; }
+  .form-textarea:focus { outline: none; border-color: var(--accent); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-fade { animation: fadeIn 0.3s ease; }
+/* iframe embed mode: hide sidebar & topbar */
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .main { overflow-y: auto !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5Factor <span>AI</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">模块导航</div>
+    <a href="#" class="nav-item"><span class="icon">📊</span>行情与数据</a>
+    <a href="#" class="nav-item"><span class="icon">📰</span>内容与信息</a>
+    <a href="#" class="nav-item"><span class="icon">🎯</span>分析与选股</a>
+    <a href="#" class="nav-item"><span class="icon">🔗</span>产业链与知识</a>
+    <a href="#" class="nav-item"><span class="icon">🤖</span>AI 编排层</a>
+    <a href="strategy-square.html" class="nav-item active"><span class="icon">👥</span>社区与协作</a>
+    <a href="strategy-square.html" class="nav-sub active">F1 策略广场</a>
+    <a href="notes-share.html" class="nav-sub">F2 笔记分享</a>
+    <a href="concept-collab.html" class="nav-sub">F3 概念协作</a>
+  </div>
+  <div class="sidebar-section" style="margin-top:auto; border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
+    <a href="#" class="nav-item"><span class="icon">⚙️</span>系统设置</a>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Topbar -->
+  <header class="topbar">
+    <div style="font-size:14px; font-weight:600; color:var(--text-primary);">策略广场</div>
+    <div class="search-box">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="搜索策略、作者、标的...">
+    </div>
+    <div class="user-area">
+      <span style="font-size:12px; color:var(--text-secondary);">2026-07-09</span>
+      <div class="avatar">投</div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div>
+        <h1 style="font-size:24px; font-weight:600; color:var(--navy); margin-bottom:4px;">策略广场</h1>
+        <p style="font-size:13px; color:var(--text-secondary);">发现、验证、分享社区优质量化策略 · 本周新增 12 条策略 · 社区累计 348 条</p>
+      </div>
+      <button class="btn-primary" onclick="openModal()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        发布策略
+      </button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="tab-bar" style="margin-bottom:20px;">
+      <button class="tab-btn active" onclick="switchTab(this,'all')">全部策略</button>
+      <button class="tab-btn" onclick="switchTab(this,'trend')">趋势跟踪</button>
+      <button class="tab-btn" onclick="switchTab(this,'value')">价值投资</button>
+      <button class="tab-btn" onclick="switchTab(this,'quant')">量化选股</button>
+      <button class="tab-btn" onclick="switchTab(this,'grid')">网格交易</button>
+      <button class="tab-btn" onclick="switchTab(this,'my')">我的策略</button>
+    </div>
+
+    <!-- Sort Bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding:10px 16px; background:#fff; border:1px solid var(--border); border-radius:8px;">
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span style="font-size:12px; color:var(--text-secondary); font-weight:600;">排序：</span>
+        <button class="btn-ghost" style="color:var(--accent); font-weight:600;">综合排名</button>
+        <button class="btn-ghost">夏普比率</button>
+        <button class="btn-ghost">胜率</button>
+        <button class="btn-ghost">稳定性</button>
+        <button class="btn-ghost">社区投票</button>
+      </div>
+      <div style="font-size:12px; color:var(--text-secondary);">显示 1-8 / 348 条</div>
+    </div>
+
+    <!-- Strategy Cards Grid -->
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:16px;">
+
+      <!-- Card 1 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge rank-1">1</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">AI算力动量跟踪策略</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：量化猎人 · 2026-07-08 · <span class="tag tag-purple">量化选股</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 1,247</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+38.6%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-12.3%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">2.14</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 68%</span>
+            <span class="tag tag-green">稳定性 A</span>
+            <span class="tag tag-yellow">波动率 22%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart1"></div>
+        <div class="expand-body">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+            <div>
+              <div style="font-size:12px; font-weight:600; color:var(--text-primary); margin-bottom:8px;">策略参数</div>
+              <table style="width:100%; font-size:12px; border-collapse:collapse;">
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">调仓频率</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">周度</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">选股范围</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">美股科技板块</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">持仓数量</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">10-15 只</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">基准对比</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">纳斯达克 100</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary);">回测区间</td><td style="padding:6px 0; text-align:right; font-weight:500;">2020-01 ~ 2026-06</td></tr>
+              </table>
+            </div>
+            <div>
+              <div style="font-size:12px; font-weight:600; color:var(--text-primary); margin-bottom:8px;">核心逻辑</div>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7; margin-bottom:8px;">基于五因子评分系统中的 F5 技术面信号，筛选出日周月三级共振（S4）的AI算力标的，结合 F1 资金面动量排序，周度调仓。当 F2 宏观因子（VIX）>25 时自动降低仓位至50%。</p>
+              <div style="font-size:12px; font-weight:600; color:var(--text-primary); margin-bottom:8px;">风险警示</div>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">策略在2022年科技股大跌期间回撤达-19%，需配合止损规则。高波动环境（VIX>30）下建议暂停或降仓。</p>
+            </div>
+          </div>
+          <div class="chart-full" id="chart1-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge rank-2">2</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">低估值高ROE价值精选</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：价值坚守者 · 2026-07-06 · <span class="tag tag-green">价值投资</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 986</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+24.2%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-8.7%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">1.89</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 72%</span>
+            <span class="tag tag-green">稳定性 A+</span>
+            <span class="tag tag-yellow">波动率 15%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart2"></div>
+        <div class="expand-body">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+            <div>
+              <div style="font-size:12px; font-weight:600; color:var(--text-primary); margin-bottom:8px;">策略参数</div>
+              <table style="width:100%; font-size:12px; border-collapse:collapse;">
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">调仓频率</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">月度</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">选股范围</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">A股 + 港股</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">持仓数量</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">20-30 只</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary); border-bottom:1px solid #f3f4f6;">基准对比</td><td style="padding:6px 0; text-align:right; font-weight:500; border-bottom:1px solid #f3f4f6;">沪深 300</td></tr>
+                <tr><td style="padding:6px 0; color:var(--text-secondary);">回测区间</td><td style="padding:6px 0; text-align:right; font-weight:500;">2018-01 ~ 2026-06</td></tr>
+              </table>
+            </div>
+            <div>
+              <div style="font-size:12px; font-weight:600; color:var(--text-primary); margin-bottom:8px;">核心逻辑</div>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7; margin-bottom:8px;">基于 F4 基本面估值因子，筛选 PE<20、ROE>15%、PEG<1.5 的标的，结合 F1 资金面趋势确认，月度调仓。采用格雷厄姆安全边际原则，要求股价低于内在价值30%以上。</p>
+              <div style="font-size:12px; font-weight:600; color:var(--text-primary); margin-bottom:8px;">风险警示</div>
+              <p style="font-size:12px; color:var(--text-secondary); line-height:1.7;">价值陷阱风险：低估值可能是基本面恶化的信号。需配合 F4 的 EPS 趋势验证，连续两季度 EPS 下滑的标的不纳入。</p>
+            </div>
+          </div>
+          <div class="chart-full" id="chart2-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge rank-3">3</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">半导体设备网格交易策略</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：晶圆厂老周 · 2026-07-05 · <span class="tag tag-yellow">网格交易</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 754</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+18.5%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-5.2%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">1.56</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 81%</span>
+            <span class="tag tag-green">稳定性 A+</span>
+            <span class="tag tag-yellow">波动率 12%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart3"></div>
+        <div class="expand-body">
+          <div class="chart-full" id="chart3-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge" style="background:#f3f4f6; color:#6b7280;">4</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">红利股息再投资策略</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：股息王 · 2026-07-03 · <span class="tag tag-green">价值投资</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 623</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+15.8%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-6.1%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">1.45</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 78%</span>
+            <span class="tag tag-green">稳定性 A</span>
+            <span class="tag tag-yellow">波动率 14%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart4"></div>
+        <div class="expand-body">
+          <div class="chart-full" id="chart4-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge" style="background:#f3f4f6; color:#6b7280;">5</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">港股通高股息轮动</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：港韭翻身 · 2026-07-02 · <span class="tag tag-purple">量化选股</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 512</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+22.4%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-14.6%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">1.38</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 65%</span>
+            <span class="tag tag-green">稳定性 B+</span>
+            <span class="tag tag-yellow">波动率 18%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart5"></div>
+        <div class="expand-body">
+          <div class="chart-full" id="chart5-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge" style="background:#f3f4f6; color:#6b7280;">6</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">BTC减半周期趋势跟踪</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：链上观察者 · 2026-07-01 · <span class="tag tag-blue">趋势跟踪</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 498</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+56.3%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-32.8%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">1.22</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 58%</span>
+            <span class="tag tag-yellow">稳定性 B</span>
+            <span class="tag tag-red">波动率 45%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart6"></div>
+        <div class="expand-body">
+          <div class="chart-full" id="chart6-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge" style="background:#f3f4f6; color:#6b7280;">7</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">A股小市值多因子轮动</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：市值因子侠 · 2026-06-28 · <span class="tag tag-purple">量化选股</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 445</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+31.2%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-21.5%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">1.18</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 62%</span>
+            <span class="tag tag-yellow">稳定性 B</span>
+            <span class="tag tag-yellow">波动率 28%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart7"></div>
+        <div class="expand-body">
+          <div class="chart-full" id="chart7-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="card animate-fade">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="rank-badge" style="background:#f3f4f6; color:#6b7280;">8</div>
+            <div>
+              <div style="font-size:15px; font-weight:600; color:var(--navy);">黄金-美元对冲网格</div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">作者：避险大师 · 2026-06-25 · <span class="tag tag-yellow">网格交易</span></div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">👍 389</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px;">
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--up);" class="stat-value">+12.6%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">年化收益</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--down);" class="stat-value">-4.8%</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">最大回撤</div>
+          </div>
+          <div style="text-align:center; padding:8px; background:#f8fafc; border-radius:6px;">
+            <div style="font-size:18px; font-weight:700; color:var(--accent);" class="stat-value">1.72</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">夏普比率</div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="display:flex; gap:8px;">
+            <span class="tag tag-blue">胜率 85%</span>
+            <span class="tag tag-green">稳定性 A+</span>
+            <span class="tag tag-green">波动率 10%</span>
+          </div>
+          <span class="expand-toggle" onclick="toggleExpand(this)">展开详情 <span style="transition:transform 0.2s;">▼</span></span>
+        </div>
+        <div class="chart-mini" id="chart8"></div>
+        <div class="expand-body">
+          <div class="chart-full" id="chart8-full"></div>
+          <div style="display:flex; gap:12px; margin-top:16px; justify-content:flex-end;">
+            <button class="btn-outline btn-sm">查看源码</button>
+            <button class="btn-outline btn-sm">分享策略</button>
+            <button class="btn-primary btn-sm">一键复制到回测</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Pagination -->
+    <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:24px; padding:16px;">
+      <button class="btn-outline btn-sm">上一页</button>
+      <button class="btn-primary btn-sm">1</button>
+      <button class="btn-outline btn-sm">2</button>
+      <button class="btn-outline btn-sm">3</button>
+      <span style="color:var(--text-secondary);">...</span>
+      <button class="btn-outline btn-sm">44</button>
+      <button class="btn-outline btn-sm">下一页</button>
+    </div>
+  </main>
+</div>
+
+<!-- Publish Modal -->
+<div class="modal-overlay" id="publishModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 style="font-size:16px; font-weight:600;">发布策略</h3>
+      <button class="btn-ghost" onclick="closeModal()" style="font-size:18px;">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label">策略名称</label>
+        <input class="form-input" type="text" placeholder="给你的策略起个名字">
+      </div>
+      <div class="form-row">
+        <label class="form-label">策略类型</label>
+        <select class="form-input">
+          <option>趋势跟踪</option>
+          <option>价值投资</option>
+          <option>量化选股</option>
+          <option>网格交易</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-label">核心逻辑描述</label>
+        <textarea class="form-textarea" placeholder="描述策略的选股逻辑、入场条件、出场条件..."></textarea>
+      </div>
+      <div class="form-row">
+        <label class="form-label">回测参数</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <input class="form-input" type="text" placeholder="调仓频率">
+          <input class="form-input" type="text" placeholder="持仓数量">
+          <input class="form-input" type="text" placeholder="回测区间">
+          <input class="form-input" type="text" placeholder="基准对比">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">上传回测报告（可选）</label>
+        <div style="border:2px dashed var(--border); border-radius:8px; padding:24px; text-align:center; color:var(--text-secondary);">
+          <div style="font-size:24px; margin-bottom:8px;">📄</div>
+          <div style="font-size:12px;">拖拽文件到此处，或点击上传</div>
+          <div style="font-size:11px; margin-top:4px;">支持 .html, .pdf, .csv</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal()">取消</button>
+      <button class="btn-primary">发布策略</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleExpand(el) {
+  const body = el.closest('.card').querySelector('.expand-body');
+  const arrow = el.querySelector('span');
+  body.classList.toggle('open');
+  arrow.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+  el.childNodes[0].textContent = body.classList.contains('open') ? '收起详情 ' : '展开详情 ';
+}
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function openModal() { document.getElementById('publishModal').classList.add('open'); }
+function closeModal() { document.getElementById('publishModal').classList.remove('open'); }
+
+document.getElementById('publishModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+function generateCurveData(base, vol, len) {
+  const data = []; let v = base;
+  for (let i = 0; i < len; i++) {
+    v = v * (1 + (Math.random() - 0.48) * vol);
+    data.push([i, parseFloat(v.toFixed(2))]);
+  }
+  return data;
+}
+
+function generateFullData(base, vol, len) {
+  const dates = []; const values = []; let v = base;
+  const start = new Date('2020-01-01');
+  for (let i = 0; i < len; i++) {
+    const d = new Date(start); d.setDate(d.getDate() + i * 7);
+    dates.push(d.toISOString().slice(0,10));
+    v = v * (1 + (Math.random() - 0.48) * vol);
+    values.push(v.toFixed(2));
+  }
+  return { dates, values };
+}
+
+function initMiniChart(id, data, color) {
+  const chart = echarts.init(document.getElementById(id));
+  chart.setOption({
+    grid: { left: 0, right: 0, top: 4, bottom: 4 },
+    xAxis: { show: false, type: 'category' },
+    yAxis: { show: false, type: 'value', scale: true },
+    series: [{
+      type: 'line', data: data.map(d => d[1]), smooth: true,
+      lineStyle: { width: 2, color: color },
+      areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: color + '40' }, { offset: 1, color: color + '05' }] } },
+      symbol: 'none', showSymbol: false, animation: false
+    }]
+  });
+  return chart;
+}
+
+function initFullChart(id, dates, values, color, name) {
+  const chart = echarts.init(document.getElementById(id));
+  chart.setOption({
+    tooltip: { trigger: 'axis', backgroundColor: '#fff', borderColor: '#e5e7eb', textStyle: { color: '#1a1f36', fontSize: 12 } },
+    grid: { left: 60, right: 20, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: dates, axisLine: { lineStyle: { color: '#e5e7eb' } }, axisLabel: { color: '#64748d', fontSize: 11 } },
+    yAxis: { type: 'value', axisLine: { lineStyle: { color: '#e5e7eb' } }, axisLabel: { color: '#64748d', fontSize: 11 }, splitLine: { lineStyle: { color: '#f3f4f6' } } },
+    series: [
+      { type: 'line', data: values, smooth: true, name: name, lineStyle: { width: 2, color: color }, symbol: 'none', areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: color + '30' }, { offset: 1, color: color + '05' }] } } },
+      { type: 'line', data: values.map((v,i) => (parseFloat(v) * 0.85).toFixed(2)), smooth: true, name: '基准', lineStyle: { width: 1.5, color: '#94a3b8', type: 'dashed' }, symbol: 'none' }
+    ],
+    legend: { data: [name, '基准'], top: 0, textStyle: { color: '#64748d', fontSize: 12 } },
+    dataZoom: [{ type: 'inside', start: 0, end: 100 }]
+  });
+  return chart;
+}
+
+setTimeout(() => {
+  const miniColors = ['#533afd', '#16a34a', '#f59e0b', '#3b82f6', '#8b5cf6', '#ef4444', '#06b6d4', '#84cc16'];
+  for (let i = 1; i <= 8; i++) {
+    const data = generateCurveData(1000, 0.04, 52);
+    initMiniChart('chart' + i, data, miniColors[i-1]);
+  }
+
+  const fullColors = ['#533afd', '#16a34a', '#f59e0b', '#3b82f6', '#8b5cf6', '#ef4444', '#06b6d4', '#84cc16'];
+  const fullNames = ['AI算力动量','低估值高ROE','半导体网格','红利股息','港股高股息','BTC趋势','小市值轮动','黄金对冲'];
+  for (let i = 1; i <= 8; i++) {
+    const full = generateFullData(1000, 0.035, 340);
+    initFullChart('chart' + i + '-full', full.dates, full.values, fullColors[i-1], fullNames[i-1]);
+  }
+}, 300);
+
+window.addEventListener('resize', () => {
+  for (let i = 1; i <= 8; i++) {
+    const m = echarts.getInstanceByDom(document.getElementById('chart' + i));
+    if (m) m.resize();
+    const f = echarts.getInstanceByDom(document.getElementById('chart' + i + '-full'));
+    if (f) f.resize();
+  }
+});
+
+// iframe embed detection
+</script>
+
+</body>
+</html>

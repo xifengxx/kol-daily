@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赛道分析 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text-secondary: #6b7280; --accent: #533afd;
+  --navy: #061b31; --up: #dc2626; --down: #16a34a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; }
+.nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-sub.active { color: #8b9cf7; font-weight: 500; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text); }
+.search input::placeholder { color: var(--text-secondary); }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--navy); letter-spacing: -0.3px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.tag-green { background: rgba(34,197,94,0.12); color: #16a34a; }
+.tag-blue { background: rgba(59,130,246,0.12); color: #2563eb; }
+.tag-yellow { background: rgba(245,158,11,0.12); color: #b45309; }
+.tag-red { background: rgba(239,68,68,0.12); color: #dc2626; }
+.tag-purple { background: rgba(139,92,246,0.12); color: #7c3aed; }
+.tag-gray { background: #f3f4f6; color: #64748d; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-transform: uppercase; font-size: 10px; color: var(--text-secondary); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--border); background: #fafbfc; letter-spacing: 0.5px; }
+.data-table td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: #f8f9fc; }
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; text-align: center; }
+.stat-value { font-size: 22px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+.stat-change { font-size: 12px; font-weight: 600; margin-top: 2px; }
+.up { color: var(--up); }
+.down { color: var(--down); }
+.tab-row { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+.tab-btn { padding: 10px 20px; font-size: 13px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn:hover { color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.radar-box { width: 100%; height: 280px; }
+.progress-bar { width: 100%; height: 6px; background: #e5e7eb; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; }
+.heat-cell { text-align: center; font-size: 11px; font-weight: 600; padding: 6px 4px; border-radius: 3px; }
+.heat-red { background: #fee2e2; color: #991b1b; }
+.heat-green { background: #dcfce7; color: #166534; }
+.heat-neutral { background: #f3f4f6; color: #6b7280; }
+.conduction-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.conduction-step { padding: 6px 14px; border-radius: 18px; font-size: 12px; font-weight: 600; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.conduction-arrow { color: var(--text-secondary); font-size: 14px; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 500; margin-left: 4px; }
+.badge-high { background: #dcfce7; color: #166534; }
+.badge-mid { background: #fef3c7; color: #92400e; }
+.badge-low { background: #fee2e2; color: #991b1b; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5<span>Factor</span> AI</div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon">📊</span> 行情与数据</div>
+    <div class="nav-item"><span class="icon">📰</span> 内容与信息</div>
+    <div class="nav-item"><span class="icon">🎯</span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon">🔗</span> 产业链与知识</div>
+    <div class="nav-sub">产业链全景</div>
+    <div class="nav-sub active">赛道详情</div>
+    <div class="nav-sub">个股深度</div>
+    <div class="nav-sub">概念卡片</div>
+    <div class="nav-sub">知识库</div>
+    <div class="nav-item"><span class="icon">🤖</span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon">👥</span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="搜索赛道...">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h1 style="font-size:24px; font-weight:600; color:var(--navy); letter-spacing:-0.5px;">HBM高带宽存储赛道</h1>
+        <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">AI算力 ▸ L2 设备与零部件 · 当前热度: <span class="up">🔥🔥🔥 极高</span></p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <span class="tag tag-green">置信度: 高</span>
+        <span class="tag tag-blue">审核通过</span>
+      </div>
+    </div>
+
+    <!-- Tab -->
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="overview">基本面总览</button>
+      <button class="tab-btn" data-tab="tech">技术面分析</button>
+      <button class="tab-btn" data-tab="capital">资金面分析</button>
+      <button class="tab-btn" data-tab="stocks">核心标的</button>
+    </div>
+
+    <!-- === PANEL: OVERVIEW === -->
+    <div id="overview" class="tab-panel active fade-in">
+      <!-- Stats Row -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">$42.0B</div>
+          <div class="stat-label">TAM 2026</div>
+          <div class="stat-change up">+68% YoY</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">68%</div>
+          <div class="stat-label">CAGR 23-26</div>
+          <div class="stat-change up">行业高速增长</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">52%</div>
+          <div class="stat-label">毛利率</div>
+          <div class="stat-change up">高于存储平均</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">35%</div>
+          <div class="stat-label">GPU成本占比</div>
+          <div class="stat-change up">逐年提升</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">寡头玩家</div>
+          <div class="stat-change">CR3 = 100%</div>
+        </div>
+      </div>
+
+      <!-- 2 Column Layout -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <!-- Left: Radar + Cost -->
+        <div class="card">
+          <div class="card-title" style="font-size:15px;">五维赛道评估</div>
+          <div id="radar-sector" class="radar-box"></div>
+        </div>
+        <!-- Right: Profit Pool + Competition -->
+        <div class="card">
+          <div class="card-title" style="font-size:15px;">利润池与竞争格局</div>
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:8px;">利润池分布</div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <span style="width:80px; font-size:11px;">HBM设计</span>
+              <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:45%; background:#533afd;"></div></div>
+              <span style="font-size:11px; font-variant-numeric:tabular-nums; width:40px; text-align:right;">45%</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <span style="width:80px; font-size:11px;">TSV/封装</span>
+              <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:30%; background:#8b5cf6;"></div></div>
+              <span style="font-size:11px; font-variant-numeric:tabular-nums; width:40px; text-align:right;">30%</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+              <span style="width:80px; font-size:11px;">存储颗粒</span>
+              <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:18%; background:#a78bfa;"></div></div>
+              <span style="font-size:11px; font-variant-numeric:tabular-nums; width:40px; text-align:right;">18%</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:80px; font-size:11px;">测试/材料</span>
+              <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:7%; background:#c4b5fd;"></div></div>
+              <span style="font-size:11px; font-variant-numeric:tabular-nums; width:40px; text-align:right;">7%</span>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border); padding-top:12px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:8px;">竞争格局</div>
+            <table class="data-table" style="font-size:11px;">
+              <tr><th>维度</th><th>评估</th></tr>
+              <tr><td>⚔️ 全球格局</td><td>三寡头垄断 (SK海力士52%/三星38%/美光10%)</td></tr>
+              <tr><td>🔒 进入壁垒</td><td>极高 (TSV技术+客户认证周期2年+)</td></tr>
+              <tr><td>📐 技术代差</td><td>HBM3E → HBM4 (12层→16层堆叠)</td></tr>
+              <tr><td>💰 定价权</td><td>供应商主导，供不应求</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Conduction -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title" style="font-size:15px;">价格传导链</div>
+        <div class="conduction-flow">
+          <span class="conduction-step">硅料涨价</span>
+          <span class="conduction-arrow">→</span>
+          <span class="conduction-step">晶圆成本↑</span>
+          <span class="conduction-arrow">→</span>
+          <span class="conduction-step">HBM颗粒↑</span>
+          <span class="conduction-arrow">→</span>
+          <span class="conduction-step">GPU BOM↑</span>
+          <span class="conduction-arrow">→</span>
+          <span class="conduction-step">AI服务器价↑</span>
+          <span class="conduction-arrow">→</span>
+          <span class="conduction-step">云厂商capex↑</span>
+          <span class="conduction-arrow">→</span>
+          <span class="conduction-step">终端AI应用</span>
+        </div>
+      </div>
+
+      <!-- Key Trends -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title" style="font-size:15px;">关键趋势与追踪指标</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <div style="font-size:12px; font-weight:600; margin-bottom:8px; color:var(--accent);">🔥 关键趋势</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+              <div>1. HBM3E 2024量产，HBM4 2026年导入</div>
+              <div>2. 堆叠层数从12层向16层、20层演进</div>
+              <div>3. 中国长鑫/通富微电追赶，2-3年差距</div>
+              <div>4. CoWoS封装产能成为HBM交付瓶颈</div>
+              <div>5. 每GPU HBM容量从80GB→192GB提升</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:600; margin-bottom:8px; color:var(--accent);">📊 追踪指标</div>
+            <div style="font-size:12px; color:var(--text-secondary); line-height:1.8;">
+              <div>• HBM季度出货量 (SK海力士/三星/美光财报)</div>
+              <div>• HBM均价变化 (季度环比)</div>
+              <div>• NVIDIA/AMD GPU出货量与HBM配比</div>
+              <div>• CoWoS封装产能利用率 (TSMC)</div>
+              <div>• 中国存储厂商技术进展与良率</div>
+              <div>• HBM库存周转天数</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: TECH === -->
+    <div id="tech" class="tab-panel fade-in">
+      <div style="display:grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+        <div class="card">
+          <div class="card-title" style="font-size:15px;">HBM ETF 日K线走势</div>
+          <div id="chart-kline" style="width:100%; height:350px;"></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="font-size:15px;">技术面综合评分</div>
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:8px;">Top 5 标的综合趋势</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                  <span>SK海力士 (000660.KS)</span>
+                  <span class="up">强势上涨 +5.2%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:85%; background:var(--up);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                  <span>三星电子 (005930.KS)</span>
+                  <span class="up">温和上涨 +1.8%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:62%; background:var(--up);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                  <span>美光科技 (MU)</span>
+                  <span class="up">突破前高 +3.4%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:78%; background:var(--up);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                  <span>通富微电 (002156.SZ)</span>
+                  <span class="down">回调 -2.1%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:35%; background:var(--down);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                  <span>深科技 (000021.SZ)</span>
+                  <span class="up">盘整 +0.5%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:48%; background:#f59e0b;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border); padding-top:12px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:8px;">技术指标汇总</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; font-size:11px;">
+              <div class="heat-green">MACD: 多头</div>
+              <div class="heat-green">RSI: 62 (健康)</div>
+              <div class="heat-green">均线: 多头排列</div>
+              <div class="heat-neutral">BOLL: 上轨附近</div>
+              <div class="heat-green">成交量: 放大</div>
+              <div class="heat-red">Veto: 无</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: CAPITAL === -->
+    <div id="capital" class="tab-panel fade-in">
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title" style="font-size:15px;">赛道资金净流入趋势</div>
+        <div id="chart-capital" style="width:100%; height:300px;"></div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+        <div class="card">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">北向资金 (近5日)</div>
+          <div style="font-size:22px; font-weight:700; color:var(--up); font-variant-numeric:tabular-nums;">+12.5亿</div>
+          <div style="font-size:11px; color:var(--text-secondary);">连续3日净流入</div>
+        </div>
+        <div class="card">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">融资余额变化</div>
+          <div style="font-size:22px; font-weight:700; color:var(--up); font-variant-numeric:tabular-nums;">+8.3亿</div>
+          <div style="font-size:11px; color:var(--text-secondary);">杠杆资金加仓</div>
+        </div>
+        <div class="card">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">ETF资金流入</div>
+          <div style="font-size:22px; font-weight:700; color:var(--up); font-variant-numeric:tabular-nums;">+5.1亿</div>
+          <div style="font-size:11px; color:var(--text-secondary);">半导体ETF</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: STOCKS === -->
+    <div id="stocks" class="tab-panel fade-in">
+      <div class="card">
+        <div class="card-title" style="font-size:15px;">核心标的列表（含五因子评分）</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>排名</th><th>代码</th><th>公司名称</th><th>市场</th><th>FinalScore</th>
+              <th>F1</th><th>F2</th><th>F3</th><th>F4</th><th>F5</th>
+              <th>LLM共识</th><th>仓位</th><th>分歧</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td><td><strong>MU</strong></td><td>Micron 美光科技</td><td><span class="tag tag-blue">NASDAQ</span></td>
+              <td><strong style="color:var(--accent);">67.2</strong></td>
+              <td>56</td><td>46</td><td>50</td><td>100</td><td>45</td>
+              <td>81.1</td><td><span class="tag tag-green">Core</span></td><td></td>
+            </tr>
+            <tr>
+              <td>2</td><td><strong>000660.KS</strong></td><td>SK海力士</td><td><span class="tag tag-yellow">KOSPI</span></td>
+              <td><strong style="color:var(--accent);">72.5</strong></td>
+              <td>78</td><td>52</td><td>55</td><td>95</td><td>82</td>
+              <td>85.3</td><td><span class="tag tag-green">Core</span></td><td></td>
+            </tr>
+            <tr>
+              <td>3</td><td><strong>005930.KS</strong></td><td>三星电子</td><td><span class="tag tag-yellow">KOSPI</span></td>
+              <td><strong style="color:var(--accent);">58.3</strong></td>
+              <td>45</td><td>48</td><td>50</td><td>78</td><td>70</td>
+              <td>72.1</td><td><span class="tag tag-blue">Tactical</span></td><td>⚡</td>
+            </tr>
+            <tr>
+              <td>4</td><td><strong>002156.SZ</strong></td><td>通富微电</td><td><span class="tag tag-red">深交所</span></td>
+              <td><strong style="color:var(--accent);">45.2</strong></td>
+              <td>38</td><td>42</td><td>48</td><td>55</td><td>48</td>
+              <td>58.6</td><td><span class="tag tag-yellow">Watch</span></td><td>⚠️</td>
+            </tr>
+            <tr>
+              <td>5</td><td><strong>000021.SZ</strong></td><td>深科技</td><td><span class="tag tag-red">深交所</span></td>
+              <td><strong style="color:var(--accent);">42.8</strong></td>
+              <td>35</td><td>40</td><td>45</td><td>52</td><td>46</td>
+              <td>55.2</td><td><span class="tag tag-yellow">Watch</span></td><td></td>
+            </tr>
+            <tr>
+              <td>6</td><td><strong>300046.SZ</strong></td><td>台基股份</td><td><span class="tag tag-red">深交所</span></td>
+              <td><strong style="color:var(--accent);">38.5</strong></td>
+              <td>32</td><td>38</td><td>42</td><td>48</td><td>42</td>
+              <td>52.1</td><td><span class="tag tag-gray">Watch</span></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(this.dataset.tab).classList.add('active');
+    if (this.dataset.tab === 'overview') initRadar();
+    if (this.dataset.tab === 'tech') initKline();
+    if (this.dataset.tab === 'capital') initCapital();
+  });
+});
+
+// Radar Chart
+function initRadar() {
+  const chart = echarts.init(document.getElementById('radar-sector'));
+  chart.setOption({
+    tooltip: {},
+    legend: { data: ['HBM赛道', '行业均值'], bottom: 0, textStyle: { fontSize: 11 } },
+    radar: {
+      indicator: [
+        { name: 'F1 资金面', max: 100 },
+        { name: 'F2 宏观', max: 100 },
+        { name: 'F3 情绪', max: 100 },
+        { name: 'F4 基本面', max: 100 },
+        { name: 'F5 技术', max: 100 }
+      ],
+      radius: '65%', axisName: { fontSize: 11 },
+      splitArea: { areaStyle: { color: ['#f8fafc', '#fff'] } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        { value: [72, 58, 65, 85, 78], name: 'HBM赛道', areaStyle: { color: 'rgba(83,58,253,0.15)' }, lineStyle: { color: '#533afd', width: 2 } },
+        { value: [45, 45, 50, 55, 50], name: '行业均值', lineStyle: { color: '#94a3b8', type: 'dashed', width: 1 } }
+      ]
+    }]
+  });
+}
+
+// K-line Chart
+function initKline() {
+  const chart = echarts.init(document.getElementById('chart-kline'));
+  const dates = [];
+  const data = [];
+  let base = 100;
+  for (let i = 0; i < 60; i++) {
+    const date = new Date(2026, 4, 1 + i);
+    dates.push(date.toISOString().slice(0, 10));
+    const open = base + (Math.random() - 0.45) * 5;
+    const close = open + (Math.random() - 0.4) * 6;
+    const low = Math.min(open, close) - Math.random() * 2;
+    const high = Math.max(open, close) + Math.random() * 2;
+    base = close;
+    data.push([open.toFixed(2), close.toFixed(2), low.toFixed(2), high.toFixed(2)]);
+  }
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: '3%', right: '3%', bottom: '10%', top: '10%', containLabel: true },
+    xAxis: { data: dates, axisLine: { lineStyle: { color: '#e5e7eb' } }, axisLabel: { fontSize: 10, color: '#64748d' } },
+    yAxis: { scale: true, axisLine: { lineStyle: { color: '#e5e7eb' } }, axisLabel: { fontSize: 10, color: '#64748d' }, splitLine: { lineStyle: { color: '#f3f4f6' } } },
+    dataZoom: [{ type: 'inside', start: 50, end: 100 }],
+    series: [{
+      type: 'candlestick', data: data,
+      itemStyle: { color: '#dc2626', color0: '#16a34a', borderColor: '#dc2626', borderColor0: '#16a34a' }
+    }]
+  });
+}
+
+// Capital flow chart
+function initCapital() {
+  const chart = echarts.init(document.getElementById('chart-capital'));
+  const weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12'];
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: weeks, axisLine: { lineStyle: { color: '#e5e7eb' } }, axisLabel: { fontSize: 11 } },
+    yAxis: { type: 'value', name: '亿元', axisLine: { lineStyle: { color: '#e5e7eb' } }, splitLine: { lineStyle: { color: '#f3f4f6' } }, axisLabel: { fontSize: 11 } },
+    series: [
+      { name: '主力资金', type: 'bar', data: [12, 8, -3, 15, 22, 18, -5, 28, 35, 20, 12, 15], itemStyle: { color: '#533afd' } },
+      { name: '北向资金', type: 'line', data: [5, 8, 3, 10, 12, 15, 8, 18, 22, 15, 12, 14], lineStyle: { color: '#16a34a', width: 2 }, symbol: 'circle', symbolSize: 6 }
+    ]
+  });
+}
+
+// Init on load
+setTimeout(() => { initRadar(); initKline(); initCapital(); }, 100);
+
+window.addEventListener('resize', () => {
+  ['radar-sector', 'chart-kline', 'chart-capital'].forEach(id => {
+    const c = echarts.getInstanceByDom(document.getElementById(id));
+    if (c) c.resize();
+  });
+});
+</script>
+
+</body>
+</html>

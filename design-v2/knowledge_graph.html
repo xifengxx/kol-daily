@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投资知识图谱 - AI智能投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #F5F5F7; color: #1D1D1F; overflow-x: hidden;
+}
+/* Nav */
+.nav-bar {
+  height: 56px; background: #FFFFFF; border-bottom: 1px solid #E5E5EA;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; padding: 0 24px;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; }
+.nav-logo-icon { width: 28px; height: 28px; background: #0071E3; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.nav-logo-text { font-size: 16px; font-weight: 600; color: #1D1D1F; }
+.nav-search-wrap { flex: 1; max-width: 480px; margin: 0 auto; position: relative; }
+.nav-search-input {
+  width: 100%; height: 40px; background: #F5F5F7; border: 1px solid transparent;
+  border-radius: 8px; padding: 0 40px 0 16px; font-size: 14px; color: #1D1D1F;
+  outline: none; transition: all 0.2s ease;
+}
+.nav-search-input:focus { background: #FFFFFF; border-color: #0071E3; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.nav-search-input::placeholder { color: #86868B; }
+.nav-search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #86868B; pointer-events: none; }
+.search-dropdown {
+  position: absolute; top: 48px; left: 0; right: 0; background: #FFFFFF;
+  border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  max-height: 400px; overflow-y: auto; z-index: 101; display: none;
+}
+.search-dropdown.active { display: block; animation: fadeIn 0.2s ease; }
+.search-item {
+  padding: 12px 16px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid #F2F2F7; transition: background 0.15s;
+}
+.search-item:hover, .search-item.selected { background: #F5F5F7; }
+.search-item-type { font-size: 11px; color: #86868B; padding: 2px 8px; background: #F2F2F7; border-radius: 10px; }
+.search-item-name { font-size: 14px; font-weight: 500; }
+.search-item-desc { font-size: 12px; color: #86868B; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-date { font-size: 13px; color: #86868B; }
+.nav-icon-btn { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #86868B; cursor: pointer; transition: background 0.2s; }
+.nav-icon-btn:hover { background: #F5F5F7; }
+.nav-avatar { width: 32px; height: 32px; border-radius: 50%; background: #0071E3; display: flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+/* Sidebar */
+.sidebar {
+  position: fixed; top: 56px; left: 0; bottom: 0; width: 240px; background: #FFFFFF;
+  border-right: 1px solid #E5E5EA; z-index: 90; padding: 24px 0; overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+.sidebar-group-title {
+  font-size: 12px; font-weight: 600; color: #86868B; text-transform: uppercase;
+  letter-spacing: 0.02em; padding: 16px 24px 8px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px; padding: 12px 24px;
+  font-size: 14px; font-weight: 500; color: #1D1D1F; cursor: pointer;
+  transition: background 0.15s; position: relative;
+}
+.sidebar-item:hover { background: #F5F5F7; }
+.sidebar-item.active { color: #0071E3; }
+.sidebar-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 24px; background: #0071E3; border-radius: 0 2px 2px 0;
+}
+.sidebar-item-icon { color: #86868B; width: 20px; height: 20px; }
+.sidebar-item.active .sidebar-item-icon { color: #0071E3; }
+
+/* Filter panel */
+.filter-panel { padding: 0 24px 16px; }
+.filter-label { font-size: 12px; font-weight: 600; color: #86868B; margin-bottom: 8px; margin-top: 16px; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-chip {
+  padding: 5px 12px; border-radius: 16px; font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s; border: 1px solid #E5E5EA; background: #FFFFFF; color: #1D1D1F;
+}
+.filter-chip:hover { border-color: #0071E3; color: #0071E3; }
+.filter-chip.active { background: #0071E3; color: #FFFFFF; border-color: #0071E3; }
+.layer-chip.l1.active { background: #5AC8FA; border-color: #5AC8FA; }
+.layer-chip.l2.active { background: #0071E3; border-color: #0071E3; }
+.layer-chip.l3.active { background: #5856D6; border-color: #5856D6; }
+.layer-chip.l4.active { background: #AF52DE; border-color: #AF52DE; }
+
+/* Main content */
+.main-content { margin-left: 240px; margin-top: 56px; min-height: calc(100vh - 56px); padding: 24px 32px; }
+
+/* View Tabs */
+.view-tabs {
+  display: flex; gap: 4px; background: #F2F2F7; border-radius: 10px; padding: 4px;
+  margin-bottom: 24px; width: fit-content;
+}
+.view-tab {
+  padding: 8px 20px; border-radius: 8px; font-size: 14px; font-weight: 500;
+  color: #86868B; cursor: pointer; transition: all 0.2s; border: none; background: transparent;
+  display: flex; align-items: center; gap: 6px;
+}
+.view-tab:hover { color: #1D1D1F; }
+.view-tab.active { background: #FFFFFF; color: #1D1D1F; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+
+/* Chart container */
+.chart-card {
+  background: #FFFFFF; border-radius: 12px; border: 1px solid #E5E5EA;
+  padding: 24px; margin-bottom: 24px;
+}
+.chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.chart-title { font-size: 18px; font-weight: 600; color: #1D1D1F; }
+.chart-subtitle { font-size: 13px; color: #86868B; margin-top: 2px; }
+.chart-actions { display: flex; gap: 8px; }
+.chart-action-btn {
+  padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  border: 1px solid #E5E5EA; background: #FFFFFF; color: #1D1D1F; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: center; gap: 4px;
+}
+.chart-action-btn:hover { border-color: #0071E3; color: #0071E3; }
+.chart-container { width: 100%; height: 560px; }
+
+/* Legend */
+.legend-bar { display: flex; gap: 20px; margin-top: 16px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #86868B; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+.legend-line { width: 20px; height: 3px; border-radius: 2px; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+}
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+.modal-content {
+  background: #FFFFFF; border-radius: 16px; width: 90%; max-width: 720px;
+  max-height: 85vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+  transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.modal-overlay.active .modal-content { transform: scale(1); }
+.modal-header {
+  padding: 24px 24px 16px; border-bottom: 1px solid #E5E5EA;
+  display: flex; justify-content: space-between; align-items: flex-start; position: sticky; top: 0; background: #FFFFFF; z-index: 10; border-radius: 16px 16px 0 0;
+}
+.modal-title-wrap { flex: 1; }
+.modal-title { font-size: 22px; font-weight: 600; color: #1D1D1F; }
+.modal-subtitle { font-size: 13px; color: #86868B; margin-top: 4px; }
+.modal-close { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #86868B; cursor: pointer; transition: all 0.2s; border: none; background: transparent; }
+.modal-close:hover { background: #F5F5F7; color: #1D1D1F; transform: rotate(90deg); }
+.modal-body { padding: 16px 24px 24px; }
+
+/* Detail Cards */
+.detail-card {
+  background: #FFFFFF; border: 1px solid #E5E5EA; border-radius: 12px;
+  padding: 20px; margin-bottom: 16px; transition: box-shadow 0.3s ease;
+}
+.detail-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.detail-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.detail-card-title { font-size: 16px; font-weight: 600; color: #1D1D1F; display: flex; align-items: center; gap: 8px; }
+.confidence-badge {
+  padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; display: flex; align-items: center; gap: 4px;
+}
+.confidence-high { background: #E8F5E9; color: #34C759; }
+.confidence-medium { background: #FFF8E1; color: #FF9500; }
+.confidence-low { background: #FFEBEE; color: #FF3B30; }
+.detail-card-body { font-size: 14px; line-height: 1.6; color: #1D1D1F; }
+.detail-card-body p { margin-bottom: 8px; }
+.detail-card-body .muted { color: #86868B; font-size: 13px; }
+.detail-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.detail-table th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 600; color: #86868B; background: #F2F2F7; }
+.detail-table td { padding: 12px; font-size: 13px; border-bottom: 1px solid #F2F2F7; }
+.detail-table tr:hover { background: #F5F5F7; }
+
+/* Company tags in modal */
+.company-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; background: #F2F2F7; margin: 2px; }
+.company-tag .ticker { color: #0071E3; font-weight: 600; }
+
+/* Relationship list */
+.relation-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #F2F2F7; font-size: 13px; }
+.relation-item:last-child { border-bottom: none; }
+.relation-type { padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
+
+/* Quick stats bar */
+.stats-bar {
+  display: flex; gap: 24px; padding: 16px 24px; background: #F5F5F7; border-radius: 12px;
+  margin-bottom: 24px; flex-wrap: wrap;
+}
+.stat-item { display: flex; flex-direction: column; gap: 2px; }
+.stat-value { font-size: 20px; font-weight: 600; color: #1D1D1F; }
+.stat-label { font-size: 12px; color: #86868B; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { margin-left: 0; padding: 16px; }
+  .chart-container { height: 400px; }
+  .nav-search-wrap { max-width: 300px; }
+}
+@media (max-width: 768px) {
+  .nav-bar { padding: 0 12px; }
+  .nav-logo-text { display: none; }
+  .nav-date { display: none; }
+  .nav-search-wrap { max-width: 200px; }
+  .view-tab { padding: 6px 12px; font-size: 13px; }
+  .chart-container { height: 320px; }
+  .main-content { padding: 12px; }
+  .modal-content { width: 95%; max-height: 90vh; }
+  .stats-bar { gap: 12px; }
+  .stat-value { font-size: 16px; }
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.4s ease; }
+.slide-up { animation: slideUp 0.5s ease; }
+
+/* Tooltip custom */
+.custom-tooltip { background: #FFFFFF; border-radius: 8px; padding: 12px 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); font-size: 13px; border: 1px solid #E5E5EA; }
+</style>
+</head>
+<body>
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">知识图谱</span>
+  </div>
+</div>
+
+
+<!-- Top Nav -->
+<nav class="nav-bar">
+  <div class="nav-logo">
+    <div class="nav-logo-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+    <span class="nav-logo-text">AI投研助手</span>
+  </div>
+  <div class="nav-search-wrap">
+    <input type="text" class="nav-search-input" id="searchInput" placeholder="搜索赛道、公司、股票代码..." autocomplete="off">
+    <svg class="nav-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <div class="search-dropdown" id="searchDropdown"></div>
+  </div>
+  <div class="nav-right">
+    <span class="nav-date" id="navDate">2025年7月8日</span>
+    <div class="nav-icon-btn" id="sidebarToggle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+    <div class="nav-icon-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
+    <div class="nav-avatar">投</div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-group-title">图谱视图</div>
+  <div class="sidebar-item active" data-view="treemap"><svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>矩形树图</div>
+  <div class="sidebar-item" data-view="network"><svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="19" cy="12" r="3"/><circle cx="5" cy="12" r="3"/><circle cx="12" cy="19" r="3"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8.5" y1="10.5" x2="15.5" y2="13.5"/><line x1="8.5" y1="13.5" x2="15.5" y2="10.5"/></svg>关系网络</div>
+  <div class="sidebar-item" data-view="sankey"><svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>价值链流转</div>
+  <div class="sidebar-item" data-view="causal"><svg class="sidebar-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>因果传导</div>
+
+  <div class="sidebar-group-title">筛选器</div>
+  <div class="filter-panel">
+    <div class="filter-label">行业</div>
+    <div class="filter-chips" id="industryFilters">
+      <span class="filter-chip active" data-industry="all">全部</span>
+      <span class="filter-chip" data-industry="ai">AI算力</span>
+      <span class="filter-chip" data-industry="semi">半导体</span>
+    </div>
+    <div class="filter-label">层级</div>
+    <div class="filter-chips" id="layerFilters">
+      <span class="filter-chip layer-chip l1 active" data-layer="L1">L1 原材料</span>
+      <span class="filter-chip layer-chip l2 active" data-layer="L2">L2 设备</span>
+      <span class="filter-chip layer-chip l3 active" data-layer="L3">L3 核心产品</span>
+      <span class="filter-chip layer-chip l4 active" data-layer="L4">L4 终端应用</span>
+    </div>
+    <div class="filter-label">关系类型</div>
+    <div class="filter-chips" id="relationFilters">
+      <span class="filter-chip active" data-rel="all">全部</span>
+      <span class="filter-chip" data-rel="supplies_to">供应</span>
+      <span class="filter-chip" data-rel="competes_with">竞争</span>
+      <span class="filter-chip" data-rel="leads_to">传导</span>
+      <span class="filter-chip" data-rel="depends_on">依赖</span>
+      <span class="filter-chip" data-rel="partners_with">合作</span>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Stats Bar -->
+  <div class="stats-bar slide-up">
+    <div class="stat-item"><span class="stat-value">74</span><span class="stat-label">覆盖赛道</span></div>
+    <div class="stat-item"><span class="stat-value">370</span><span class="stat-label">关联公司</span></div>
+    <div class="stat-item"><span class="stat-value">504</span><span class="stat-label">股票标的</span></div>
+    <div class="stat-item"><span class="stat-value">378</span><span class="stat-label">关系链路</span></div>
+    <div class="stat-item"><span class="stat-value">2</span><span class="stat-label">行业板块</span></div>
+    <div class="stat-item"><span class="stat-value">10</span><span class="stat-label">关系类型</span></div>
+  </div>
+
+  <!-- View Tabs -->
+  <div class="view-tabs" id="viewTabs">
+    <button class="view-tab active" data-view="treemap"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>矩形树图</button>
+    <button class="view-tab" data-view="network"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="19" cy="12" r="3"/><circle cx="5" cy="12" r="3"/><circle cx="12" cy="19" r="3"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8.5" y1="10.5" x2="15.5" y2="13.5"/><line x1="8.5" y1="13.5" x2="15.5" y2="10.5"/></svg>关系网络</button>
+    <button class="view-tab" data-view="sankey"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>价值链流转</button>
+    <button class="view-tab" data-view="causal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4"/><path d="m16.2 7.8 2.9-2.9"/><path d="M18 12h4"/><path d="m16.2 16.2 2.9 2.9"/><path d="M12 18v4"/><path d="m4.9 19.1 2.9-2.9"/><path d="M2 12h4"/><path d="m4.9 4.9 2.9 2.9"/></svg>因果传导</button>
+  </div>
+
+  <!-- Chart Card -->
+  <div class="chart-card">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title" id="chartTitle">AI算力 + 半导体产业链全景</div>
+        <div class="chart-subtitle" id="chartSubtitle">矩形面积 = TAM（市场规模），颜色 = 产业链层级</div>
+      </div>
+      <div class="chart-actions">
+        <button class="chart-action-btn" id="resetZoomBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>重置</button>
+        <button class="chart-action-btn" id="expandBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>全屏</button>
+      </div>
+    </div>
+    <div class="chart-container" id="mainChart"></div>
+    <div class="legend-bar" id="chartLegend">
+      <div class="legend-item"><span class="legend-dot" style="background:#5AC8FA"></span>L1 原材料与资源</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#0071E3"></span>L2 设备与零部件</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#5856D6"></span>L3 核心产品与集成</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#AF52DE"></span>L4 终端应用与服务</div>
+    </div>
+  </div>
+
+  <!-- Info Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" style="margin-bottom:24px;">
+    <div class="chart-card" style="padding:20px;">
+      <div style="font-size:12px;font-weight:600;color:#86868B;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.02em;">四层产业框架</div>
+      <div style="font-size:14px;line-height:1.6;color:#1D1D1F;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="width:8px;height:8px;border-radius:50%;background:#5AC8FA;"></span><strong>L1</strong> 原材料与资源（硅料、稀土、气体）</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="width:8px;height:8px;border-radius:50%;background:#0071E3;"></span><strong>L2</strong> 设备与零部件（光刻机、PCB、连接器）</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span style="width:8px;height:8px;border-radius:50%;background:#5856D6;"></span><strong>L3</strong> 核心产品与集成（GPU、CPU、AI服务器）</div>
+        <div style="display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:#AF52DE;"></span><strong>L4</strong> 终端应用与服务（云计算、AI模型、自动驾驶）</div>
+      </div>
+    </div>
+    <div class="chart-card" style="padding:20px;">
+      <div style="font-size:12px;font-weight:600;color:#86868B;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.02em;">十类关系体系</div>
+      <div style="font-size:13px;line-height:1.7;color:#1D1D1F;">
+        <span class="company-tag">supplies_to</span> <span class="company-tag">customer_of</span>
+        <span class="company-tag">competes_with</span> <span class="company-tag">produces</span>
+        <span class="company-tag">leads_to</span> <span class="company-tag">depends_on</span>
+        <span class="company-tag">subsidiary_of</span> <span class="company-tag">invests_in</span>
+        <span class="company-tag">partners_with</span> <span class="company-tag">acquired_by</span>
+      </div>
+    </div>
+    <div class="chart-card" style="padding:20px;">
+      <div style="font-size:12px;font-weight:600;color:#86868B;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.02em;">使用提示</div>
+      <div style="font-size:14px;line-height:1.6;color:#1D1D1F;">
+        <p style="margin-bottom:6px;">• 点击任意节点查看<strong>9张详情卡片</strong></p>
+        <p style="margin-bottom:6px;">• 使用顶部搜索框快速定位（200ms防抖）</p>
+        <p style="margin-bottom:6px;">• 切换视图从不同角度分析产业链</p>
+        <p>• 卡片右上角显示<strong>置信度</strong>（高/中/低）</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <div class="modal-title" id="modalTitle">GPU赛道</div>
+        <div class="modal-subtitle" id="modalSubtitle">L3 核心产品与集成 · AI算力</div>
+      </div>
+      <button class="modal-close" id="modalClose"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+// =========================== DATA ===========================
+const LAYER_COLORS = { L1: '#5AC8FA', L2: '#0071E3', L3: '#5856D6', L4: '#AF52DE' };
+const RELATION_COLORS = {
+  supplies_to: '#0071E3', customer_of: '#34C759', competes_with: '#FF3B30',
+  produces: '#FF9500', leads_to: '#FF9500', depends_on: '#AF52DE',
+  subsidiary_of: '#5856D6', invests_in: '#5AC8FA', partners_with: '#FFCC00', acquired_by: '#A2845E'
+};
+const RELATION_NAMES = {
+  supplies_to: '供应', customer_of: '客户', competes_with: '竞争', produces: '生产',
+  leads_to: '传导', depends_on: '依赖', subsidiary_of: '子公司', invests_in: '投资',
+  partners_with: '合作', acquired_by: '收购'
+};
+
+const segments = [
+  // L1 原材料与资源
+  { id:'s1', name:'硅料', layer:'L1', industry:'semi', tam:180, cagr:'8.2%', desc:'半导体级多晶硅，芯片制造的基础原材料', companies:['通威股份','大全能源','协鑫科技'] },
+  { id:'s2', name:'电子特气', layer:'L1', industry:'semi', tam:120, cagr:'9.5%', desc:'高纯特种气体，用于芯片刻蚀、沉积等工艺', companies:['华特气体','金宏气体','南大光电'] },
+  { id:'s3', name:'光刻胶', layer:'L1', industry:'semi', tam:95, cagr:'12.3%', desc:'光刻工艺核心材料，决定芯片制程精度', companies:['晶瑞电材','彤程新材','上海新阳'] },
+  { id:'s4', name:'硅片', layer:'L1', industry:'semi', tam:140, cagr:'7.8%', desc:'半导体硅片，晶圆制造的基础衬底', companies:['沪硅产业','立昂微','TCL中环'] },
+  { id:'s5', name:'稀土永磁', layer:'L1', industry:'ai', tam:85, cagr:'11.2%', desc:'高性能稀土永磁材料，用于电机和传感器', companies:['北方稀土','金力永磁','中科三环'] },
+  { id:'s6', name:'锂矿', layer:'L1', industry:'ai', tam:320, cagr:'15.6%', desc:'锂电池核心原材料，新能源汽车储能基础', companies:['天齐锂业','赣锋锂业','雅化集团'] },
+  { id:'s7', name:'铜箔', layer:'L1', industry:'semi', tam:70, cagr:'6.5%', desc:'PCB和锂电池用铜箔，电子工业基础材料', companies:['嘉元科技','诺德股份','德福科技'] },
+  { id:'s8', name:'CMP抛光材料', layer:'L1', industry:'semi', tam:45, cagr:'8.9%', desc:'化学机械抛光材料，晶圆平坦化关键材料', companies:['安集科技','鼎龙股份'] },
+  // L2 设备与零部件
+  { id:'s9', name:'光刻机', layer:'L2', industry:'semi', tam:220, cagr:'10.2%', desc:'芯片制造最核心的设备，决定制程极限', companies:['ASML','尼康','佳能','上海微电子'] },
+  { id:'s10', name:'刻蚀设备', layer:'L2', industry:'semi', tam:160, cagr:'11.5%', desc:'等离子刻蚀设备，用于芯片图形转移', companies:['中微公司','北方华创','Lam Research'] },
+  { id:'s11', name:'薄膜沉积', layer:'L2', industry:'semi', tam:140, cagr:'9.8%', desc:'CVD/PVD/ALD薄膜沉积设备', companies:['北方华创','拓荆科技','应用材料'] },
+  { id:'s12', name:'封测设备', layer:'L2', industry:'semi', tam:110, cagr:'8.3%', desc:'芯片封装测试设备，后道工序核心', companies:['长川科技','华峰测控','日联科技'] },
+  { id:'s13', name:'PCB', layer:'L2', industry:'semi', tam:200, cagr:'6.2%', desc:'印制电路板，电子产品的连接底座', companies:['鹏鼎控股','东山精密','深南电路'] },
+  { id:'s14', name:'连接器', layer:'L2', industry:'ai', tam:95, cagr:'7.5%', desc:'高速连接器，数据中心和服务器核心组件', companies:['立讯精密','中航光电','电连技术'] },
+  { id:'s15', name:'散热模组', layer:'L2', industry:'ai', tam:65, cagr:'14.2%', desc:'高性能散热解决方案，AI芯片功耗管理关键', companies:['双鸿科技','奇鋐科技','力致科技'] },
+  { id:'s16', name:'光模块', layer:'L2', industry:'ai', tam:180, cagr:'18.5%', desc:'光通信模块，数据中心高速互联核心', companies:['中际旭创','新易盛','天孚通信'] },
+  // L3 核心产品与集成
+  { id:'s17', name:'GPU', layer:'L3', industry:'ai', tam:620, cagr:'25.3%', desc:'图形处理器，AI训练和推理的核心算力', companies:['英伟达','AMD','英特尔','海光信息'] },
+  { id:'s18', name:'CPU', layer:'L3', industry:'ai', tam:480, cagr:'8.5%', desc:'中央处理器，通用计算和服务器核心', companies:['英特尔','AMD','ARM','海光信息'] },
+  { id:'s19', name:'存储芯片', layer:'L3', industry:'semi', tam:350, cagr:'12.1%', desc:'DRAM和NAND Flash，数据存储核心器件', companies:['三星电子','SK海力士','美光科技','长鑫存储'] },
+  { id:'s20', name:'AI服务器', layer:'L3', industry:'ai', tam:280, cagr:'22.8%', desc:'搭载GPU/TPU的专用服务器，AI训练推理平台', companies:['超微电脑','戴尔','浪潮信息','工业富联'] },
+  { id:'s21', name:'芯片设计', layer:'L3', industry:'semi', tam:420, cagr:'9.6%', desc:'IC设计服务，半导体产业链高附加值环节', companies:['高通','博通','联发科','海思'] },
+  { id:'s22', name:'芯片制造', layer:'L3', industry:'semi', tam:580, cagr:'11.2%', desc:'晶圆代工，芯片制造的核心制造环节', companies:['台积电','三星电子','英特尔','中芯国际'] },
+  { id:'s23', name:'先进封装', layer:'L3', industry:'semi', tam:160, cagr:'15.4%', desc:'Chiplet、CoWoS等先进封装技术', companies:['日月光','安靠','长电科技','通富微电'] },
+  { id:'s24', name:'HBM', layer:'L3', industry:'ai', tam:120, cagr:'35.2%', desc:'高带宽内存，GPU配套的关键存储技术', companies:['SK海力士','三星电子','美光科技'] },
+  // L4 终端应用与服务
+  { id:'s25', name:'云计算', layer:'L4', industry:'ai', tam:1200, cagr:'18.5%', desc:'公有云/私有云服务，AI算力主要消费方', companies:['亚马逊AWS','微软Azure','阿里云','谷歌云'] },
+  { id:'s26', name:'AI大模型', layer:'L4', industry:'ai', tam:380, cagr:'32.1%', desc:'GPT/LLM等大语言模型，生成式AI核心', companies:['OpenAI','Anthropic','百度','阿里巴巴'] },
+  { id:'s27', name:'自动驾驶', layer:'L4', industry:'ai', tam:450, cagr:'28.6%', desc:'智能驾驶解决方案，AI在交通领域的应用', companies:['特斯拉','Waymo','小鹏汽车','蔚来'] },
+  { id:'s28', name:'智能终端', layer:'L4', industry:'ai', tam:850, cagr:'6.8%', desc:'智能手机、PC、IoT等终端设备', companies:['苹果','三星','小米','联想'] },
+  { id:'s29', name:'数据中心', layer:'L4', industry:'ai', tam:320, cagr:'14.3%', desc:'超大规模数据中心运营，算力基础设施', companies:['Equinix','Digital Realty','万国数据','世纪互联'] },
+  { id:'s30', name:'AI Agent', layer:'L4', industry:'ai', tam:150, cagr:'45.2%', desc:'智能代理系统，下一代AI应用形态', companies:['微软','谷歌','Salesforce','字节跳动'] }
+];
+
+const companies = [
+  { id:'c1', name:'英伟达', ticker:'NVDA', marketCap:'3.2T', sector:'GPU', layer:'L3', desc:'全球GPU龙头，AI算力霸主' },
+  { id:'c2', name:'台积电', ticker:'TSM', marketCap:'850B', sector:'芯片制造', layer:'L3', desc:'全球最大晶圆代工厂' },
+  { id:'c3', name:'ASML', ticker:'ASML', marketCap:'320B', sector:'光刻机', layer:'L2', desc:'EUV光刻机垄断者' },
+  { id:'c4', name:'三星电子', ticker:'005930.KS', marketCap:'420B', sector:'存储芯片', layer:'L3', desc:'存储芯片和晶圆代工巨头' },
+  { id:'c5', name:'SK海力士', ticker:'000660.KS', marketCap:'130B', sector:'HBM', layer:'L3', desc:'HBM领导者，英伟达核心供应商' },
+  { id:'c6', name:'AMD', ticker:'AMD', marketCap:'280B', sector:'GPU/CPU', layer:'L3', desc:'CPU和GPU双赛道竞争者' },
+  { id:'c7', name:'英特尔', ticker:'INTC', marketCap:'120B', sector:'CPU', layer:'L3', desc:'传统CPU巨头，转型晶圆代工' },
+  { id:'c8', name:'高通', ticker:'QCOM', marketCap:'190B', sector:'芯片设计', layer:'L3', desc:'移动芯片设计龙头' },
+  { id:'c9', name:'博通', ticker:'AVGO', marketCap:'850B', sector:'芯片设计', layer:'L3', desc:'网络和存储芯片设计巨头' },
+  { id:'c10', name:'中芯国际', ticker:'0981.HK', marketCap:'80B', sector:'芯片制造', layer:'L3', desc:'中国大陆最大晶圆代工厂' },
+  { id:'c11', name:'中微公司', ticker:'688012.SH', marketCap:'18B', sector:'刻蚀设备', layer:'L2', desc:'国产刻蚀设备龙头' },
+  { id:'c12', name:'北方华创', ticker:'002371.SZ', marketCap:'28B', sector:'薄膜沉积', layer:'L2', desc:'国产半导体设备平台型公司' },
+  { id:'c13', name:'中际旭创', ticker:'300308.SZ', marketCap:'35B', sector:'光模块', layer:'L2', desc:'全球光模块龙头' },
+  { id:'c14', name:'沪硅产业', ticker:'688126.SH', marketCap:'12B', sector:'硅片', layer:'L1', desc:'国产半导体硅片龙头' },
+  { id:'c15', name:'超微电脑', ticker:'SMCI', marketCap:'60B', sector:'AI服务器', layer:'L3', desc:'AI服务器设计和制造商' },
+  { id:'c16', name:'OpenAI', ticker:'-', marketCap:'-', sector:'AI大模型', layer:'L4', desc:'GPT系列大模型开发者' },
+  { id:'c17', name:'微软', ticker:'MSFT', marketCap:'3.5T', sector:'云计算/AI', layer:'L4', desc:'Azure云和OpenAI投资者' },
+  { id:'c18', name:'亚马逊', ticker:'AMZN', marketCap:'2.0T', sector:'云计算', layer:'L4', desc:'AWS全球最大云服务商' },
+  { id:'c19', name:'特斯拉', ticker:'TSLA', marketCap:'800B', sector:'自动驾驶', layer:'L4', desc:'智能驾驶和机器人' },
+  { id:'c20', name:'海光信息', ticker:'688041.SH', marketCap:'25B', sector:'CPU/GPU', layer:'L3', desc:'国产CPU和DCU设计者' }
+];
+
+const relations = [
+  { from:'c1', to:'c5', type:'supplies_to', strength:0.9 },
+  { from:'c5', to:'c1', type:'customer_of', strength:0.9 },
+  { from:'c3', to:'c10', type:'supplies_to', strength:0.7 },
+  { from:'c1', to:'c6', type:'competes_with', strength:0.8 },
+  { from:'c2', to:'c1', type:'supplies_to', strength:0.95 },
+  { from:'c1', to:'c2', type:'customer_of', strength:0.95 },
+  { from:'c11', to:'c10', type:'supplies_to', strength:0.6 },
+  { from:'c12', to:'c10', type:'supplies_to', strength:0.6 },
+  { from:'c14', to:'c2', type:'supplies_to', strength:0.5 },
+  { from:'c13', to:'c15', type:'supplies_to', strength:0.8 },
+  { from:'c15', to:'c1', type:'supplies_to', strength:0.85 },
+  { from:'c17', to:'c16', type:'invests_in', strength:0.9 },
+  { from:'c17', to:'c16', type:'partners_with', strength:0.9 },
+  { from:'c1', to:'c17', type:'partners_with', strength:0.8 },
+  { from:'c18', to:'c1', type:'supplies_to', strength:0.7 },
+  { from:'c6', to:'c2', type:'supplies_to', strength:0.85 },
+  { from:'c7', to:'c2', type:'supplies_to', strength:0.8 },
+  { from:'c8', to:'c2', type:'supplies_to', strength:0.75 },
+  { from:'c9', to:'c2', type:'supplies_to', strength:0.75 },
+  { from:'c4', to:'c2', type:'competes_with', strength:0.9 },
+  { from:'c20', to:'c6', type:'competes_with', strength:0.5 },
+  { from:'c3', to:'c10', type:'depends_on', strength:0.8 },
+  { from:'s1', to:'s4', type:'leads_to', strength:0.7 },
+  { from:'s4', to:'s22', type:'leads_to', strength:0.8 },
+  { from:'s9', to:'s22', type:'leads_to', strength:0.9 },
+  { from:'s17', to:'s20', type:'leads_to', strength:0.85 },
+  { from:'s20', to:'s25', type:'leads_to', strength:0.8 },
+  { from:'s16', to:'s20', type:'leads_to', strength:0.7 },
+  { from:'s3', to:'s9', type:'depends_on', strength:0.6 },
+  { from:'s24', to:'s17', type:'supplies_to', strength:0.9 },
+  { from:'s25', to:'s26', type:'leads_to', strength:0.75 },
+  { from:'s17', to:'s27', type:'leads_to', strength:0.7 },
+  { from:'c19', to:'c17', type:'partners_with', strength:0.6 },
+  { from:'c1', to:'c19', type:'supplies_to', strength:0.8 },
+  { from:'c10', to:'c20', type:'supplies_to', strength:0.7 },
+  { from:'c2', to:'c4', type:'competes_with', strength:0.9 },
+  { from:'c7', to:'c6', type:'competes_with', strength:0.85 },
+  { from:'s18', to:'s17', type:'competes_with', strength:0.7 }
+];
+
+// Detail card data for each segment
+const segmentDetails = {
+  's17': {
+    definition: { text:'GPU（Graphics Processing Unit）是图形处理器的简称，在现代AI算力时代已成为深度学习和生成式AI训练和推理的核心算力单元。GPU的大规模并行计算架构使其在矩阵运算上具有CPU数十倍的效率优势。', confidence:'high' },
+    market: { text:'TAM：$620B（2025年），CAGR：25.3%（2023-2028）。数据中心GPU市场约$450B，游戏GPU约$170B。行业平均毛利率：英伟达78%，AMD 45%。', confidence:'high' },
+    valueChain: { text:'GPU价值链上游：芯片设计（IP授权、EDA工具）→ 晶圆制造（台积电3nm/4nm，$150-200/片）→ 封装测试（CoWoS，$50-80/片）→ 下游：服务器OEM（超微、戴尔）→ 云服务商（AWS、Azure）。利润分配：设计（40%）> 制造（30%）> 封测（15%）> OEM（15%）。', confidence:'medium' },
+    upstream: { text:'上游：台积电（晶圆代工）、SK海力士（HBM）、三星（HBM/显存）、日月光（先进封装）、新思科技（EDA）。传导：硅料涨价→硅片成本↑→晶圆代工价格↑→GPU成本↑→终端售价↑。', confidence:'high' },
+    competition: { text:'CR3：英伟达88%、AMD 8%、英特尔3%。中国玩家：海光信息（DCU）、摩尔线程、壁仞科技。技术代差：CUDA生态领先中国玩家3-5年。进入壁垒：极高（软件生态、制程工艺、资金门槛）。', confidence:'high' },
+    trends: { text:'技术演进：Hopper→Blackwell→Rubin（2025-2027）。政策影响：美国出口管制限制向中国出口H100/A100级别GPU。需求变化：训练需求增速放缓，推理需求爆发。', confidence:'medium' },
+    evidence: { text:'IDC：2024年全球GPU市场规模$520B，预计2028年达$1,280B。英伟达FY2025Q1数据中心收入$226亿，同比增长427%。中信证券：GPU国产替代率不足5%，长期替代空间大。', confidence:'high' },
+    companies: { text:'', confidence:'high' },
+    relations: { text:'', confidence:'high' }
+  },
+  's22': {
+    definition: { text:'晶圆代工（Foundry）是半导体产业链中负责将芯片设计转化为实际晶圆的专业制造服务。台积电开创了纯晶圆代工模式，使设计公司无需自建工厂即可制造芯片。', confidence:'high' },
+    market: { text:'TAM：$580B（2025年），CAGR：11.2%。先进制程（7nm以下）占比约55%，成熟制程（28nm+）占比45%。行业平均毛利率：台积电55%，中芯国际20%。', confidence:'high' },
+    valueChain: { text:'晶圆代工价值链：设备（光刻机、刻蚀机，占CAPEX 70%）→ 材料（硅片、特气、光刻胶，占成本15%）→ 制造（良率决定盈利，单片成本$3,000-20,000）→ 下游：设计公司（高通、苹果）。利润集中在头部代工厂。', confidence:'high' },
+    upstream: { text:'上游：ASML（EUV光刻机，单台$1.5-2亿）、应用材料（薄膜设备）、Lam Research（刻蚀设备）、东京电子（涂胶显影）。传导：设备交付周期延长→产能扩张放缓→芯片供应紧张。', confidence:'high' },
+    competition: { text:'CR3：台积电62%、三星13%、英特尔（追赶中）。中国玩家：中芯国际（14nm量产）、华虹半导体（特色工艺）。技术代差：中芯国际与台积电差距约2-3代（5-7年）。进入壁垒：极高（CAPEX $200亿+/年）。', confidence:'high' },
+    trends: { text:'技术演进：3nm→2nm→1.4nm（2025-2028）。政策影响：美国芯片法案补贴$520亿，引导先进制程回流。需求变化：AI芯片和汽车芯片推动先进制程需求。', confidence:'medium' },
+    evidence: { text:'台积电2024年营收$900亿，毛利率58.6%。TrendForce：2024Q1全球晶圆代工市场台积电占62%份额。美国芯片法案：$390亿制造补贴+$132亿研发补贴。', confidence:'high' },
+    companies: { text:'', confidence:'high' },
+    relations: { text:'', confidence:'high' }
+  },
+  's25': {
+    definition: { text:'云计算（Cloud Computing）是通过互联网按需提供计算资源（服务器、存储、数据库、网络、软件）的服务模式。公有云是AI算力的主要消费方，约占全球数据中心CAPEX的60%。', confidence:'high' },
+    market: { text:'TAM：$1,200B（2025年），CAGR：18.5%。IaaS：$280B，PaaS：$180B，SaaS：$740B。行业平均毛利率：IaaS 25-30%，SaaS 70-80%。', confidence:'high' },
+    valueChain: { text:'云计算价值链：上游（芯片/服务器/光模块）→ 云服务商（数据中心建设、运维）→ 下游（企业客户、开发者）。利润池：SaaS（高毛利）> PaaS > IaaS（重资产）。', confidence:'medium' },
+    upstream: { text:'上游：英伟达（GPU）、AMD（CPU）、英特尔（CPU）、超微（服务器）、中际旭创（光模块）。传导：AI算力需求↑→GPU采购↑→云服务商CAPEX↑→云服务价格↓。', confidence:'high' },
+    competition: { text:'CR3：AWS 32%、Azure 23%、谷歌云 11%。中国玩家：阿里云、腾讯云、华为云。进入壁垒：极高（数据中心CAPEX、网络效应、品牌信任）。', confidence:'high' },
+    trends: { text:'技术演进：多云/混合云、边缘计算、Serverless。政策影响：数据主权法规推动区域云服务商崛起。需求变化：AI工作负载占比从2023年5%提升至2025年25%。', confidence:'medium' },
+    evidence: { text:'Synergy Research：2024年全球云基础设施支出$800B。AWS 2024年营收$105B，同比增长17%。Gartner：2025年全球公有云支出预计$725B。', confidence:'high' },
+    companies: { text:'', confidence:'high' },
+    relations: { text:'', confidence:'high' }
+  }
+};
+
+// Default detail for segments without specific data
+function getDefaultDetail(seg) {
+  const companiesList = seg.companies || [];
+  const compStr = companiesList.join('、');
+  return {
+    definition: { text:`${seg.name}是${seg.desc}，在AI算力/半导体产业链中处于${seg.layer}层级。`, confidence:'medium' },
+    market: { text:`TAM：$${seg.tam}B（2025年），CAGR：${seg.cagr}（2023-2028）。行业平均利润率区间15-30%。`, confidence:'medium' },
+    valueChain: { text:`${seg.name}价值链：上游原材料/设备→${seg.name}制造/设计→下游集成/应用。利润分配因环节而异，设计环节通常毛利率更高。`, confidence:'medium' },
+    upstream: { text:`上下游关系：请参考关联关系卡片。关键传导路径：原材料价格波动→成本变化→终端售价调整。`, confidence:'medium' },
+    competition: { text:`全球竞争格局：头部集中，CR3通常超过50%。中国玩家正在加速国产替代，技术代差因细分赛道而异。进入壁垒：技术/资金/认证。`, confidence:'low' },
+    trends: { text:`技术演进：持续向更高性能、更低功耗、更小尺寸方向发展。政策影响：出口管制和国产替代政策双向推动。市场需求：AI和新能源汽车是主要增长驱动力。`, confidence:'medium' },
+    evidence: { text:`数据来源：券商研报、行业研究机构、公司公告。已通过Web搜索交叉验证。`, confidence:'medium' },
+    companies: { text:'', confidence:'high' },
+    relations: { text:'', confidence:'high' }
+  };
+}
+
+// =========================== STATE ===========================
+let currentView = 'treemap';
+let selectedIndustry = 'all';
+let selectedLayers = { L1:true, L2:true, L3:true, L4:true };
+let selectedRelation = 'all';
+let chartInstance = null;
+let searchTimer = null;
+let searchSelectedIndex = -1;
+
+// =========================== INIT ===========================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('navDate').textContent = new Date().toLocaleDateString('zh-CN', { year:'numeric', month:'long', day:'numeric' });
+  initChart();
+  bindEvents();
+  lucide.createIcons();
+});
+
+function bindEvents() {
+  // View tabs
+  document.querySelectorAll('.view-tab, .sidebar-item[data-view]').forEach(el => {
+    el.addEventListener('click', () => switchView(el.dataset.view));
+  });
+  // Industry filters
+  document.querySelectorAll('#industryFilters .filter-chip').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#industryFilters .filter-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      selectedIndustry = el.dataset.industry;
+      renderChart();
+    });
+  });
+  // Layer filters
+  document.querySelectorAll('#layerFilters .filter-chip').forEach(el => {
+    el.addEventListener('click', () => {
+      el.classList.toggle('active');
+      selectedLayers[el.dataset.layer] = el.classList.contains('active');
+      renderChart();
+    });
+  });
+  // Relation filters
+  document.querySelectorAll('#relationFilters .filter-chip').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#relationFilters .filter-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      selectedRelation = el.dataset.rel;
+      renderChart();
+    });
+  });
+  // Search
+  const searchInput = document.getElementById('searchInput');
+  const searchDropdown = document.getElementById('searchDropdown');
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => doSearch(searchInput.value), 200);
+  });
+  searchInput.addEventListener('keydown', (e) => {
+    const items = searchDropdown.querySelectorAll('.search-item');
+    if (e.key === 'ArrowDown') { searchSelectedIndex = Math.min(searchSelectedIndex+1, items.length-1); updateSearchSelection(); e.preventDefault(); }
+    if (e.key === 'ArrowUp') { searchSelectedIndex = Math.max(searchSelectedIndex-1, -1); updateSearchSelection(); e.preventDefault(); }
+    if (e.key === 'Enter') { if (searchSelectedIndex >= 0 && items[searchSelectedIndex]) items[searchSelectedIndex].click(); }
+    if (e.key === 'Escape') { searchDropdown.classList.remove('active'); searchSelectedIndex = -1; }
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-search-wrap')) searchDropdown.classList.remove('active');
+  });
+  // Modal
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('detailModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal(); });
+  // Reset zoom
+  document.getElementById('resetZoomBtn').addEventListener('click', () => { if (chartInstance) chartInstance.dispatchAction({ type:'restore' }); });
+  // Sidebar toggle
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+}
+
+function updateSearchSelection() {
+  const items = document.getElementById('searchDropdown').querySelectorAll('.search-item');
+  items.forEach((item, i) => item.classList.toggle('selected', i === searchSelectedIndex));
+}
+
+function doSearch(query) {
+  const dropdown = document.getElementById('searchDropdown');
+  if (!query.trim()) { dropdown.classList.remove('active'); return; }
+  query = query.toLowerCase();
+  const results = [];
+  segments.forEach(s => {
+    if (s.name.toLowerCase().includes(query) || s.desc.toLowerCase().includes(query)) {
+      results.push({ type:'赛道', name:s.name, desc:s.desc, layer:s.layer, id:s.id, obj:s });
+    }
+  });
+  companies.forEach(c => {
+    if (c.name.toLowerCase().includes(query) || c.ticker.toLowerCase().includes(query) || c.desc.toLowerCase().includes(query)) {
+      results.push({ type:'公司', name:c.name, desc:c.ticker + ' · ' + c.desc, layer:c.layer, id:c.id, obj:c });
+    }
+  });
+  if (results.length === 0) { dropdown.innerHTML = '<div class="search-item"><span style="color:#86868B;">无结果</span></div>'; dropdown.classList.add('active'); return; }
+  dropdown.innerHTML = results.slice(0,15).map((r,i) =>
+    `<div class="search-item" data-index="${i}" data-id="${r.id}" data-type="${r.type}">
+      <span class="search-item-type">${r.type}</span>
+      <div style="flex:1;">
+        <div class="search-item-name">${r.name}</div>
+        <div class="search-item-desc">${r.desc}</div>
+      </div>
+      <span style="font-size:11px;color:#86868B;">${r.layer}</span>
+    </div>`
+  ).join('');
+  dropdown.querySelectorAll('.search-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const id = item.dataset.id;
+      const type = item.dataset.type;
+      dropdown.classList.remove('active');
+      document.getElementById('searchInput').value = '';
+      if (type === '赛道') {
+        const seg = segments.find(s => s.id === id);
+        if (seg) openModal(seg);
+      } else {
+        const comp = companies.find(c => c.id === id);
+        if (comp) openCompanyModal(comp);
+      }
+    });
+  });
+  searchSelectedIndex = 0;
+  updateSearchSelection();
+  dropdown.classList.add('active');
+}
+
+// =========================== VIEW SWITCHING ===========================
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-tab, .sidebar-item[data-view]').forEach(el => {
+    el.classList.toggle('active', el.dataset.view === view);
+  });
+  const titles = {
+    treemap: ['AI算力 + 半导体产业链全景', '矩形面积 = TAM（市场规模），颜色 = 产业链层级'],
+    network: ['产业链关系网络', '节点大小 = 市值/规模，连线 = 十类关系（10色）'],
+    sankey: ['价值链流转路径', '价值从L1→L2→L3→L4流转，连线宽度 = 关系强度'],
+    causal: ['因果传导链条', '橙色虚线箭头表示 leads_to 传导关系']
+  };
+  document.getElementById('chartTitle').textContent = titles[view][0];
+  document.getElementById('chartSubtitle').textContent = titles[view][1];
+  updateLegend(view);
+  renderChart();
+}
+
+function updateLegend(view) {
+  const legend = document.getElementById('chartLegend');
+  if (view === 'treemap' || view === 'sankey') {
+    legend.innerHTML = `
+      <div class="legend-item"><span class="legend-dot" style="background:#5AC8FA"></span>L1 原材料与资源</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#0071E3"></span>L2 设备与零部件</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#5856D6"></span>L3 核心产品与集成</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#AF52DE"></span>L4 终端应用与服务</div>`;
+  } else if (view === 'network') {
+    const rels = ['supplies_to','competes_with','leads_to','depends_on','partners_with','invests_in'];
+    legend.innerHTML = rels.map(r => `<div class="legend-item"><span class="legend-line" style="background:${RELATION_COLORS[r]}${r==='leads_to'?';border:2px dashed '+RELATION_COLORS[r]:''}"></span>${RELATION_NAMES[r]}</div>`).join('');
+  } else if (view === 'causal') {
+    legend.innerHTML = `<div class="legend-item"><span class="legend-line" style="border:2px dashed #FF9500;height:0;"></span>leads_to 传导关系</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#FF3B30"></span>上游事件</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#34C759"></span>下游影响</div>`;
+  }
+}
+
+// =========================== CHART ===========================
+function initChart() {
+  chartInstance = echarts.init(document.getElementById('mainChart'));
+  renderChart();
+  window.addEventListener('resize', () => chartInstance && chartInstance.resize());
+}
+
+function getFilteredSegments() {
+  return segments.filter(s => {
+    if (selectedIndustry !== 'all' && s.industry !== selectedIndustry) return false;
+    if (!selectedLayers[s.layer]) return false;
+    return true;
+  });
+}
+
+function getFilteredCompanies() {
+  const fs = getFilteredSegments();
+  const segNames = new Set(fs.map(s => s.name));
+  return companies.filter(c => segNames.has(c.sector) || selectedIndustry === 'all');
+}
+
+function renderChart() {
+  if (!chartInstance) return;
+  const opts = {
+    treemap: getTreemapOption(),
+    network: getNetworkOption(),
+    sankey: getSankeyOption(),
+    causal: getCausalOption()
+  };
+  chartInstance.setOption(opts[currentView], true);
+  chartInstance.off('click');
+  chartInstance.on('click', (params) => {
+    if (currentView === 'treemap') {
+      const seg = segments.find(s => s.name === params.name || s.name === params.data?.name);
+      if (seg) openModal(seg);
+    } else if (currentView === 'network') {
+      const name = params.data?.name;
+      const seg = segments.find(s => s.name === name);
+      if (seg) openModal(seg);
+      else { const comp = companies.find(c => c.name === name); if (comp) openCompanyModal(comp); }
+    } else if (currentView === 'sankey') {
+      const name = params.data?.name;
+      const seg = segments.find(s => s.name === name); if (seg) openModal(seg);
+    } else if (currentView === 'causal') {
+      const name = params.data?.name;
+      const seg = segments.find(s => s.name === name); if (seg) openModal(seg);
+    }
+  });
+}
+
+// -------- Treemap --------
+function getTreemapOption() {
+  const fs = getFilteredSegments();
+  const children = fs.map(s => ({
+    name: s.name, value: s.tam,
+    itemStyle: { color: LAYER_COLORS[s.layer] },
+    children: (s.companies || []).map(c => ({ name: c, value: Math.max(1, s.tam / (s.companies.length || 1)) }))
+  }));
+  return {
+    tooltip: {
+      formatter: (p) => `<div style="font-size:13px;font-weight:600;">${p.name}</div><div style="font-size:12px;color:#86868B;margin-top:4px;">TAM: $${p.value}B</div>`
+    },
+    series: [{
+      type: 'treemap', width: '100%', height: '100%',
+      data: children, roam: true, nodeClick: 'zoomToNode',
+      itemStyle: { borderColor: '#FFFFFF', borderWidth: 2, gapWidth: 2, borderRadius: 4 },
+      label: { show: true, formatter: '{b}', fontSize: 13, color: '#FFFFFF', fontWeight: 600 },
+      upperLabel: { show: true, height: 22, color: '#FFFFFF', fontSize: 14, fontWeight: 700 },
+      levels: [
+        { itemStyle: { borderWidth: 0, gapWidth: 2 } },
+        { itemStyle: { borderWidth: 2, gapWidth: 2 }, upperLabel: { show: true } },
+        { itemStyle: { borderWidth: 2, gapWidth: 1 } }
+      ]
+    }]
+  };
+}
+
+// -------- Network --------
+function getNetworkOption() {
+  const fs = getFilteredSegments();
+  const fc = getFilteredCompanies();
+  const nodeMap = new Map();
+  const nodes = [];
+  const links = [];
+  fs.forEach(s => {
+    nodeMap.set(s.name, true);
+    nodes.push({ id: s.name, name: s.name, symbolSize: Math.max(20, Math.sqrt(s.tam) * 2), category: s.layer, itemStyle: { color: LAYER_COLORS[s.layer] }, label: { show: true, fontSize: 11 } });
+  });
+  fc.forEach(c => {
+    if (!nodeMap.has(c.name)) {
+      nodeMap.set(c.name, true);
+      nodes.push({ id: c.name, name: c.name, symbolSize: c.marketCap.includes('T') ? 45 : c.marketCap.includes('B') && parseInt(c.marketCap) > 300 ? 35 : 25, category: c.layer, itemStyle: { color: LAYER_COLORS[c.layer] }, label: { show: true, fontSize: 10 } });
+    }
+  });
+  relations.forEach(r => {
+    const fromComp = companies.find(c => c.id === r.from);
+    const toComp = companies.find(c => c.id === r.to);
+    if (!fromComp || !toComp) return;
+    if (selectedRelation !== 'all' && r.type !== selectedRelation) return;
+    if (!nodeMap.has(fromComp.name) || !nodeMap.has(toComp.name)) return;
+    links.push({
+      source: fromComp.name, target: toComp.name,
+      lineStyle: { color: RELATION_COLORS[r.type], width: Math.max(1, r.strength * 3), type: r.type === 'leads_to' ? 'dashed' : r.type === 'competes_with' ? 'dotted' : 'solid', curveness: 0.2 },
+      label: { show: r.strength > 0.8, formatter: RELATION_NAMES[r.type], fontSize: 10, color: RELATION_COLORS[r.type] }
+    });
+  });
+  return {
+    tooltip: { formatter: (p) => p.dataType === 'node' ? `<strong>${p.name}</strong>` : `${p.data.source} → ${p.data.target}` },
+    series: [{
+      type: 'graph', layout: 'force', roam: true, data: nodes, links: links,
+      force: { repulsion: 300, edgeLength: [40, 120] },
+      emphasis: { focus: 'adjacency', lineStyle: { width: 4 } },
+      label: { position: 'bottom', distance: 5 }
+    }]
+  };
+}
+
+// -------- Sankey --------
+function getSankeyOption() {
+  const fs = getFilteredSegments();
+  const layers = ['L1','L2','L3','L4'];
+  const activeLayers = layers.filter(l => selectedLayers[l]);
+  const nodes = [];
+  const nodeMap = new Map();
+  fs.forEach((s, i) => {
+    nodes.push({ name: s.name, itemStyle: { color: LAYER_COLORS[s.layer] } });
+    nodeMap.set(s.name, s.layer);
+  });
+  const links = [];
+  const added = new Set();
+  relations.forEach(r => {
+    if (r.type !== 'supplies_to' && r.type !== 'leads_to') return;
+    const fromSeg = segments.find(s => s.id === r.from);
+    const toSeg = segments.find(s => s.id === r.to);
+    if (!fromSeg || !toSeg) return;
+    if (!nodeMap.has(fromSeg.name) || !nodeMap.has(toSeg.name)) return;
+    const fromL = parseInt(fromSeg.layer[1]), toL = parseInt(toSeg.layer[1]);
+    if (toL - fromL !== 1) return;
+    const key = fromSeg.name + '->' + toSeg.name;
+    if (!added.has(key)) {
+      added.add(key);
+      links.push({ source: fromSeg.name, target: toSeg.name, value: Math.round(r.strength * 100) });
+    }
+  });
+  return {
+    tooltip: { trigger: 'item', triggerOn: 'mousemove' },
+    series: [{
+      type: 'sankey', layout: 'none', emphasis: { focus: 'adjacency' },
+      data: nodes, links: links, top: '5%', bottom: '5%', left: '5%', right: '5%',
+      lineStyle: { color: 'gradient', curveness: 0.5, opacity: 0.4 },
+      label: { color: '#1D1D1F', fontSize: 12, fontWeight: 500 },
+      itemStyle: { borderWidth: 0 }
+    }]
+  };
+}
+
+// -------- Causal --------
+function getCausalOption() {
+  const fs = getFilteredSegments();
+  const nodes = [];
+  const links = [];
+  const nodeMap = new Map();
+  fs.forEach(s => {
+    nodeMap.set(s.name, true);
+    nodes.push({ id: s.name, name: s.name, symbolSize: Math.max(25, Math.sqrt(s.tam) * 1.5), itemStyle: { color: LAYER_COLORS[s.layer] }, label: { show: true, fontSize: 11 } });
+  });
+  relations.forEach(r => {
+    if (r.type !== 'leads_to') return;
+    const fromSeg = segments.find(s => s.id === r.from);
+    const toSeg = segments.find(s => s.id === r.to);
+    if (!fromSeg || !toSeg) return;
+    if (!nodeMap.has(fromSeg.name) || !nodeMap.has(toSeg.name)) return;
+    links.push({
+      source: fromSeg.name, target: toSeg.name,
+      lineStyle: { color: '#FF9500', width: Math.max(2, r.strength * 4), type: 'dashed', curveness: 0.15 },
+      symbol: ['circle', 'arrow'], symbolSize: [4, 10],
+      label: { show: true, formatter: '传导', fontSize: 10, color: '#FF9500' }
+    });
+  });
+  return {
+    tooltip: { formatter: (p) => p.dataType === 'node' ? `<strong>${p.name}</strong>` : `${p.data.source} → ${p.data.target}` },
+    series: [{
+      type: 'graph', layout: 'force', roam: true, data: nodes, links: links,
+      force: { repulsion: 400, edgeLength: 100 },
+      edgeSymbol: ['none', 'arrow'], edgeSymbolSize: [0, 10],
+      emphasis: { focus: 'adjacency' },
+      label: { position: 'bottom' }
+    }]
+  };
+}
+
+// =========================== MODAL ===========================
+function openModal(seg) {
+  const detail = segmentDetails[seg.id] || getDefaultDetail(seg);
+  document.getElementById('modalTitle').textContent = seg.name + '赛道';
+  document.getElementById('modalSubtitle').textContent = seg.layer + ' ' + (seg.layer==='L1'?'原材料与资源':seg.layer==='L2'?'设备与零部件':seg.layer==='L3'?'核心产品与集成':'终端应用与服务') + ' · ' + (seg.industry==='ai'?'AI算力':'半导体');
+
+  const badge = (conf) => `<span class="confidence-badge confidence-${conf}"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>${conf==='high'?'高置信度':conf==='medium'?'中置信度':'低置信度'}</span>`;
+
+  // Build companies table
+  const compRows = (seg.companies || []).map((cn, i) => {
+    const comp = companies.find(c => c.name === cn);
+    return comp ? `<tr><td>${comp.name}</td><td class="ticker" style="color:#0071E3;font-weight:600;">${comp.ticker}</td><td>$${comp.marketCap}</td><td>${comp.desc}</td></tr>`
+      : `<tr><td>${cn}</td><td>-</td><td>-</td><td>-</td></tr>`;
+  }).join('');
+
+  // Build relations list
+  const relItems = relations.filter(r => {
+    const fromSeg = segments.find(s => s.id === r.from);
+    const toSeg = segments.find(s => s.id === r.to);
+    const fromComp = companies.find(c => c.id === r.from);
+    const toComp = companies.find(c => c.id === r.to);
+    return (fromSeg && fromSeg.name === seg.name) || (toSeg && toSeg.name === seg.name) ||
+           (fromComp && fromComp.sector === seg.name) || (toComp && toComp.sector === seg.name);
+  }).map(r => {
+    const fromComp = companies.find(c => c.id === r.from);
+    const toComp = companies.find(c => c.id === r.to);
+    const fromSeg = segments.find(s => s.id === r.from);
+    const toSeg = segments.find(s => s.id === r.to);
+    const fromName = fromComp ? fromComp.name : (fromSeg ? fromSeg.name : r.from);
+    const toName = toComp ? toComp.name : (toSeg ? toSeg.name : r.to);
+    return `<div class="relation-item">
+      <span class="relation-type" style="background:${RELATION_COLORS[r.type]}20;color:${RELATION_COLORS[r.type]};">${RELATION_NAMES[r.type]}</span>
+      <span style="font-weight:500;">${fromName}</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#86868B" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      <span style="font-weight:500;">${toName}</span>
+      <span style="margin-left:auto;color:#86868B;font-size:11px;">强度: ${(r.strength*100).toFixed(0)}%</span>
+    </div>`;
+  }).join('') || '<div style="color:#86868B;font-size:13px;padding:8px 0;">暂无关联关系</div>';
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>定位与定义</div>${badge(detail.definition.confidence)}</div>
+      <div class="detail-card-body">${detail.definition.text}</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>市场规模</div>${badge(detail.market.confidence)}</div>
+      <div class="detail-card-body">${detail.market.text}</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>价值链分析</div>${badge(detail.valueChain.confidence)}</div>
+      <div class="detail-card-body">${detail.valueChain.text}</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><path d="M7 15l5 5 5-5"/><path d="M7 9l5-5 5 5"/></svg>上下游与传导</div>${badge(detail.upstream.confidence)}</div>
+      <div class="detail-card-body">${detail.upstream.text}</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>竞争格局</div>${badge(detail.competition.confidence)}</div>
+      <div class="detail-card-body">${detail.competition.text}</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>关键趋势</div>${badge(detail.trends.confidence)}</div>
+      <div class="detail-card-body">${detail.trends.text}</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>研报与证据</div>${badge(detail.evidence.confidence)}</div>
+      <div class="detail-card-body">${detail.evidence.text}</div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>公司列表</div>${badge(detail.companies.confidence)}</div>
+      <div class="detail-card-body">
+        <table class="detail-table">
+          <thead><tr><th>公司名称</th><th>代码</th><th>市值</th><th>业务简介</th></tr></thead>
+          <tbody>${compRows || '<tr><td colspan="4" style="color:#86868B;text-align:center;">暂无数据</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0071E3" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>关联关系</div>${badge(detail.relations.confidence)}</div>
+      <div class="detail-card-body">${relItems}</div>
+    </div>
+  `;
+  document.getElementById('detailModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function openCompanyModal(comp) {
+  document.getElementById('modalTitle').textContent = comp.name;
+  document.getElementById('modalSubtitle').textContent = comp.ticker + ' · ' + comp.sector + ' · ' + comp.layer + ' ' + (comp.layer==='L1'?'原材料与资源':comp.layer==='L2'?'设备与零部件':comp.layer==='L3'?'核心产品与集成':'终端应用与服务');
+  const badge = (conf) => `<span class="confidence-badge confidence-${conf}"><span style="width:6px;height:6px;border-radius:50%;background:currentColor;"></span>${conf==='high'?'高置信度':conf==='medium'?'中置信度':'低置信度'}</span>`;
+  const relItems = relations.filter(r => r.from === comp.id || r.to === comp.id).map(r => {
+    const otherId = r.from === comp.id ? r.to : r.from;
+    const other = companies.find(c => c.id === otherId) || segments.find(s => s.id === otherId);
+    const otherName = other ? (other.name || other.name) : otherId;
+    const direction = r.from === comp.id ? '→' : '←';
+    return `<div class="relation-item">
+      <span class="relation-type" style="background:${RELATION_COLORS[r.type]}20;color:${RELATION_COLORS[r.type]};">${RELATION_NAMES[r.type]}</span>
+      <span style="font-weight:500;">${direction === '→' ? comp.name : otherName}</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#86868B" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      <span style="font-weight:500;">${direction === '→' ? otherName : comp.name}</span>
+      <span style="margin-left:auto;color:#86868B;font-size:11px;">强度: ${(r.strength*100).toFixed(0)}%</span>
+    </div>`;
+  }).join('') || '<div style="color:#86868B;font-size:13px;padding:8px 0;">暂无关联关系</div>';
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title">公司概况</div>${badge('high')}</div>
+      <div class="detail-card-body">
+        <p><strong>股票代码：</strong>${comp.ticker}</p>
+        <p><strong>市值：</strong>$${comp.marketCap}</p>
+        <p><strong>所属赛道：</strong>${comp.sector}</p>
+        <p><strong>产业链层级：</strong>${comp.layer}</p>
+        <p><strong>简介：</strong>${comp.desc}</p>
+      </div>
+    </div>
+    <div class="detail-card">
+      <div class="detail-card-header"><div class="detail-card-title">关联关系</div>${badge('high')}</div>
+      <div class="detail-card-body">${relItems}</div>
+    </div>
+  `;
+  document.getElementById('detailModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="theme_index.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◯</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">题材指数</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="research_assistant.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◬</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">投研助手</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="cross_market.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">⬡</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">跨市场助手</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

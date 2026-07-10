@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F3 评分与选股子系统</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --text: #1a1f36;
+    --text2: #6b7280;
+    --accent: #533afd;
+    --navy: #061b31;
+    --up: #dc2626;
+    --down: #16a34a;
+    --tag-g-bg: #dcfce7; --tag-g-tx: #166534;
+    --tag-bl-bg: #dbeafe; --tag-bl-tx: #1e40af;
+    --tag-y-bg: #fef3c7; --tag-y-tx: #92400e;
+    --tag-r-bg: #fee2e2; --tag-r-tx: #991b1b;
+    --tag-p-bg: #ede9fe; --tag-p-tx: #6d28d9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+  }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .stat-card .label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 20px; font-weight: 700; color: var(--text); }
+  .stat-card .sub   { font-size: 11px; color: var(--text2); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    border-radius: 16px; font-size: 12px; font-weight: 600; padding: 7px 18px;
+    cursor: pointer; transition: all .15s; border: 1px solid transparent; white-space: nowrap;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #4229e8; }
+  .btn-outline { background: transparent; border-color: var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .tag {
+    display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; line-height: 1.4;
+  }
+  .tag-green  { background: var(--tag-g-bg); color: var(--tag-g-tx); }
+  .tag-blue   { background: var(--tag-bl-bg); color: var(--tag-bl-tx); }
+  .tag-yellow { background: var(--tag-y-bg); color: var(--tag-y-tx); }
+  .tag-purple { background: var(--tag-p-bg); color: var(--tag-p-tx); }
+  .tag-red    { background: var(--tag-r-bg); color: var(--tag-r-tx); }
+  .nav-tab {
+    padding: 8px 20px; font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer;
+    transition: all .15s; border: none; background: transparent; color: var(--text2);
+  }
+  .nav-tab.active { background: var(--accent); color: #fff; }
+  .nav-tab:hover:not(.active) { background: #eef0f5; color: var(--text); }
+  table.data-table {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+  }
+  table.data-table th {
+    text-align: left; font-size: 10px; font-weight: 700; color: var(--text2);
+    text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 10px;
+    border-bottom: 2px solid var(--border); background: #fafbfc;
+  }
+  table.data-table td {
+    padding: 9px 10px; border-bottom: 1px solid var(--border);
+  }
+  table.data-table tbody tr {
+    cursor: pointer; transition: background .1s;
+  }
+  table.data-table tbody tr:hover { background: #f5f3ff; }
+  .up { color: var(--up); }
+  .down { color: var(--down); }
+  .page { display: none; }
+  .page.active { display: block; }
+  .input-bar {
+    width: 100%; border: 1px solid var(--border); border-radius: 20px; padding: 10px 16px;
+    font-size: 12px; font-family: inherit; background: var(--card); color: var(--text);
+    outline: none; transition: border-color .15s;
+  }
+  .input-bar:focus { border-color: var(--accent); }
+  .heat-cell { text-align: center; font-size: 11px; font-weight: 600; padding: 6px 4px; border-radius: 3px; }
+  .heat-red   { background: #fee2e2; color: #991b1b; }
+  .heat-green { background: #dcfce7; color: #166534; }
+  .heat-neutral { background: #f3f4f6; color: #6b7280; }
+  .mono-box {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 11px;
+    background: #f0f2f5; border: 1px solid var(--border); border-radius: 8px; padding: 14px;
+    white-space: pre-wrap; line-height: 1.7; color: #1e293b;
+  }
+  .toggle-track {
+    width: 40px; height: 22px; border-radius: 11px; background: #d1d5db;
+    position: relative; cursor: pointer; transition: background .2s;
+  }
+  .toggle-track.on { background: var(--accent); }
+  .toggle-track::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 18px; height: 18px; border-radius: 50%; background: #fff;
+    transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.15);
+  }
+  .toggle-track.on::after { transform: translateX(18px); }
+  .chart-box { width: 100%; height: 340px; }
+  .chart-box-sm { width: 100%; height: 280px; }
+  .bullet-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .bullet-card .bullet-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .warn-icon { color: #f59e0b; }
+</style>
+</head>
+<body class="max-w-6xl mx-auto px-4 py-5">
+
+<!-- Header -->
+<div class="flex items-center justify-between mb-5">
+  <div>
+    <h1 class="text-lg font-bold" style="color:var(--navy)">分析与选股子系统</h1>
+    <p class="text-xs" style="color:var(--text2)">F1.4 五因子评分 &middot; F2.4 模拟交易 &middot; F3.2 NL策略回测</p>
+  </div>
+  <div class="flex items-center gap-2">
+    <span class="text-xs" style="color:var(--text2)">数据更新: 2026-07-09 09:32 CST</span>
+    <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+  </div>
+</div>
+
+<!-- Nav Tabs -->
+<div class="flex gap-2 mb-5">
+  <button class="nav-tab active" data-page="scoring">评分榜单</button>
+  <button class="nav-tab" data-page="detail">个股详情</button>
+  <button class="nav-tab" data-page="trading">模拟交易</button>
+  <button class="nav-tab" data-page="backtest">NL策略回测</button>
+</div>
+
+<!-- ======================================================================= -->
+<!-- PAGE 1: 评分榜单 -->
+<!-- ======================================================================= -->
+<div class="page active" id="page-scoring">
+
+  <!-- Stat Cards -->
+  <div class="grid grid-cols-4 gap-3 mb-5">
+    <div class="stat-card">
+      <div class="label">覆盖标的</div>
+      <div class="value">503</div>
+      <div class="sub">A股 + 港股通 + 美股中概</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">S4 主升浪</div>
+      <div class="value" style="color:var(--accent)">8 <span class="text-xs font-normal" style="color:var(--text2)">只</span></div>
+      <div class="sub">较上周 +2</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Top 20 均分</div>
+      <div class="value">82.6</div>
+      <div class="sub">中位数 79.4 &middot; 标准差 6.2</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">LLM 分歧度</div>
+      <div class="value">12<span class="text-sm font-normal">%</span></div>
+      <div class="sub">低分歧 &middot; 模型共识高</div>
+    </div>
+  </div>
+
+  <!-- NL选股 Input -->
+  <div class="card mb-4 flex items-center gap-3">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="input-bar flex-1" type="text" id="nlQuery" placeholder="PE&lt;20且ROE&gt;15%且营收3年增长&gt;20%的A股科技股">
+    <button class="btn btn-primary" onclick="runNLQuery()">搜索</button>
+  </div>
+
+  <!-- Top 10 Table -->
+  <div class="card mb-4" style="overflow-x:auto">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold">Top 10 综合评分</h3>
+      <span class="tag tag-purple">五因子模型 v2.3</span>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th><th>代码</th><th>名称</th><th>终评</th>
+          <th>F1 <span style="font-weight:400;text-transform:none;">资金面</span></th>
+          <th>F2 <span style="font-weight:400;text-transform:none;">宏观</span></th>
+          <th>F3 <span style="font-weight:400;text-transform:none;">情绪</span></th>
+          <th>F4 <span style="font-weight:400;text-transform:none;">基本面</span></th>
+          <th>F5 <span style="font-weight:400;text-transform:none;">技术面</span></th>
+          <th>共识分</th><th>仓位</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">1</td><td>NVDA</td><td>NVIDIA Corp</td>
+          <td class="font-bold" style="color:var(--accent)">92.4</td>
+          <td>88</td><td>95</td><td>93</td><td>91</td><td>90</td>
+          <td><span class="font-bold">88</span> <span class="text-xs" style="color:var(--text2)">低分歧</span></td>
+          <td><span class="tag tag-green">Core</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">2</td><td>300750</td><td>宁德时代</td>
+          <td class="font-bold" style="color:var(--accent)">89.7</td>
+          <td>82</td><td>91</td><td>94</td><td>88</td><td>90</td>
+          <td><span class="font-bold">87</span> <span class="text-xs" style="color:var(--text2)">低分歧</span></td>
+          <td><span class="tag tag-green">Core</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">3</td><td>002594</td><td>比亚迪</td>
+          <td class="font-bold" style="color:var(--accent)">86.3</td>
+          <td>78</td><td>87</td><td>88</td><td>85</td><td>81</td>
+          <td><span class="font-bold">84</span> <span class="text-xs" style="color:var(--text2)">中分歧</span></td>
+          <td><span class="tag tag-blue">Tactical</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">4</td><td>688981</td><td>中芯国际</td>
+          <td class="font-bold">84.1</td>
+          <td>80</td><td>83</td><td>86</td><td>82</td><td>75</td>
+          <td><span class="font-bold">81</span> <span class="text-xs" style="color:var(--text2)">中分歧</span></td>
+          <td><span class="tag tag-green">Core</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">5</td><td>601899</td><td>紫金矿业</td>
+          <td class="font-bold">82.8</td>
+          <td>85</td><td>78</td><td>84</td><td>79</td><td>83</td>
+          <td><span class="font-bold">82</span> <span class="text-xs" style="color:var(--text2)">低分歧</span></td>
+          <td><span class="tag tag-blue">Tactical</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">6</td><td>300124</td><td>汇川技术</td>
+          <td class="font-bold">80.5</td>
+          <td>76</td><td>84</td><td>82</td><td>81</td><td>79</td>
+          <td><span class="font-bold">80</span> <span class="text-xs" style="color:var(--text2)">中分歧</span></td>
+          <td><span class="tag tag-blue">Tactical</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">7</td><td>002230</td><td>科大讯飞</td>
+          <td class="font-bold">78.9</td>
+          <td>72</td><td>82</td><td>79</td><td>80</td><td>76</td>
+          <td><span class="font-bold">78</span> <span class="text-xs" style="color:var(--text2)">高分歧</span></td>
+          <td><span class="tag tag-yellow">Watch</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">8</td><td>600519</td><td>贵州茅台</td>
+          <td class="font-bold">77.2</td>
+          <td>70</td><td>74</td><td>88</td><td>75</td><td>72</td>
+          <td><span class="font-bold">76</span> <span class="text-xs" style="color:var(--text2)">中分歧</span></td>
+          <td><span class="tag tag-yellow">Watch</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">9</td><td>688111</td><td>金山办公</td>
+          <td class="font-bold">75.8</td>
+          <td>68</td><td>79</td><td>76</td><td>77</td><td>74</td>
+          <td><span class="font-bold">74</span> <span class="text-xs" style="color:var(--text2)">低分歧</span></td>
+          <td><span class="tag tag-yellow">Watch</span></td>
+        </tr>
+        <tr onclick="showDetail('NVDA')">
+          <td class="font-bold">10</td><td>300274</td><td>阳光电源</td>
+          <td class="font-bold">74.3</td>
+          <td>66</td><td>77</td><td>74</td><td>75</td><td>71</td>
+          <td><span class="font-bold">73</span> <span class="text-xs" style="color:var(--text2)">中分歧</span></td>
+          <td><span class="tag tag-yellow">Watch</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Signal Subscription -->
+  <div class="card">
+    <h3 class="text-sm font-bold mb-3">信号订阅</h3>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="flex items-center justify-between" style="background:#fafbfc;border-radius:8px;padding:10px 14px;">
+        <div>
+          <div class="text-xs font-semibold">终评突破 85 分</div>
+          <div class="text-xs" style="color:var(--text2)">五因子综合评分超过阈值时触发</div>
+        </div>
+        <div class="toggle-track on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="flex items-center justify-between" style="background:#fafbfc;border-radius:8px;padding:10px 14px;">
+        <div>
+          <div class="text-xs font-semibold">技术面 Veto 触发</div>
+          <div class="text-xs" style="color:var(--text2)">任一因子 Veto 生效时即时推送</div>
+        </div>
+        <div class="toggle-track" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="flex items-center justify-between" style="background:#fafbfc;border-radius:8px;padding:10px 14px;">
+        <div>
+          <div class="text-xs font-semibold">LLM 分歧度飙升</div>
+          <div class="text-xs" style="color:var(--text2)">分歧度单日变化 &gt;15% 时预警</div>
+        </div>
+        <div class="toggle-track on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="flex items-center justify-between" style="background:#fafbfc;border-radius:8px;padding:10px 14px;">
+        <div>
+          <div class="text-xs font-semibold">仓位标签变更</div>
+          <div class="text-xs" style="color:var(--text2)">Core/Tactical/Watch 切换时通知</div>
+        </div>
+        <div class="toggle-track on" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- PAGE 2: 个股评分详情 -->
+<!-- ======================================================================= -->
+<div class="page" id="page-detail">
+  <button class="btn btn-outline mb-4" onclick="switchPage('scoring')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    返回评分榜单
+  </button>
+
+  <div class="flex items-center gap-3 mb-4">
+    <h2 class="text-lg font-bold">NVIDIA Corp</h2>
+    <span class="text-sm" style="color:var(--text2)">NVDA · NASDAQ</span>
+    <span class="tag tag-green">Core</span>
+    <span class="text-sm font-bold" style="color:var(--accent)">终评 92.4</span>
+  </div>
+
+  <!-- Radar Chart + F4/F5 side by side -->
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="card">
+      <h3 class="text-sm font-bold mb-2">五因子雷达图</h3>
+      <div class="chart-box" id="radarChart"></div>
+    </div>
+    <div class="card">
+      <h3 class="text-sm font-bold mb-2">F4 基本面展开</h3>
+      <table class="data-table" style="font-size:11px">
+        <tbody>
+          <tr><td style="color:var(--text2)">PE (TTM)</td><td class="font-bold">45.2x</td><td><span class="tag tag-yellow">分位 62%</span></td></tr>
+          <tr><td style="color:var(--text2)">PB (MRQ)</td><td class="font-bold">22.8x</td><td><span class="tag tag-red">分位 85% ⚠️</span></td></tr>
+          <tr><td style="color:var(--text2)">PEG</td><td class="font-bold">1.12</td><td><span class="tag tag-green">合理</span></td></tr>
+          <tr><td style="color:var(--text2)">EPS (TTM)</td><td class="font-bold">$3.25</td><td><span class="tag tag-green">+285% YoY</span></td></tr>
+          <tr><td style="color:var(--text2)">ROE</td><td class="font-bold">72.3%</td><td><span class="tag tag-green">行业前 5%</span></td></tr>
+          <tr><td style="color:var(--text2)">毛利率</td><td class="font-bold">75.8%</td><td><span class="tag tag-green">高壁垒</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- F5 Technical + LLM Consensus -->
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="card">
+      <h3 class="text-sm font-bold mb-2">F5 技术面展开</h3>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="stat-card">
+          <div class="label">左侧评分</div>
+          <div class="value" style="font-size:18px">82 <span class="text-xs font-normal" style="color:var(--text2)">/100</span></div>
+          <div class="sub">趋势强度 &middot; 超买超卖</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">右侧评分</div>
+          <div class="value" style="font-size:18px">90 <span class="text-xs font-normal" style="color:var(--text2)">/100</span></div>
+          <div class="sub">量价配合 &middot; 资金流向</div>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs font-semibold mb-1">Veto 检查</div>
+        <div class="flex gap-2">
+          <span class="tag tag-green">F1 价值 Veto: PASS</span>
+          <span class="tag tag-green">F2 成长 Veto: PASS</span>
+          <span class="tag tag-green">F3 质量 Veto: PASS</span>
+          <span class="tag tag-green">F4 基本面 Veto: PASS</span>
+          <span class="tag tag-green">F5 技术面 Veto: PASS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 三流派分析 + 交叉验证 -->
+    <div class="card mb-4">
+      <h3 class="text-sm font-bold mb-3">三流派分析 <span style="font-weight:400;font-size:11px;color:var(--text2);">| F2.2 个股深度分析</span></h3>
+      <div class="grid grid-cols-3 gap-3 mb-3">
+        <div class="stat-card" style="border-left:3px solid #3b82f6;">
+          <div class="label" style="color:#3b82f6;">价值派 DCF估值</div>
+          <div class="value" style="font-size:18px;color:var(--up);">$158</div>
+          <div class="sub">较现价 +8% · 安全边际 12%<br>P/E 32x → 公允价值区间 $142-$175</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid #8b5cf6;">
+          <div class="label" style="color:#8b5cf6;">趋势派 动量评分</div>
+          <div class="value" style="font-size:18px;color:var(--accent);">+1.8</div>
+          <div class="sub">均线多头排列 · MACD金叉<br>RSI 62.8 中性偏多 · 量价配合良好</div>
+        </div>
+        <div class="stat-card" style="border-left:3px solid #16a34a;">
+          <div class="label" style="color:#16a34a;">成长派 TAM渗透率</div>
+          <div class="value" style="font-size:18px;color:var(--up);">15%</div>
+          <div class="sub">AI算力TAM $400B · 渗透空间大<br>3年营收CAGR 126% · FCF强劲</div>
+        </div>
+      </div>
+      <div style="background:#f5f3ff;border-radius:8px;padding:12px 16px;border-left:3px solid var(--accent);">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px;">交叉验证结论</div>
+        <p style="font-size:12px;color:var(--text);margin:0;">基本面+技术面双重支持，估值偏高是主要矛盾。DCF$158略高于现价$146，技术面偏多但RSI接近70，成长故事确定性强但需关注竞争格局。建议Core仓位持有，不宜追高。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="text-sm font-bold mb-2">LLM 共识详情</h3>
+      <div class="flex items-center gap-3 mb-3">
+        <div class="stat-card" style="flex:1">
+          <div class="label">共识评分</div>
+          <div class="value" style="font-size:18px">88</div>
+        </div>
+        <div class="stat-card" style="flex:1">
+          <div class="label">分歧度</div>
+          <div class="value" style="font-size:18px">8 <span class="text-xs font-normal" style="color:var(--text2)">低</span></div>
+        </div>
+      </div>
+      <table class="data-table" style="font-size:11px">
+        <thead><tr><th>模型</th><th>评分</th><th>置信度</th><th>方向</th></tr></thead>
+        <tbody>
+          <tr><td>GPT-5.5</td><td class="font-bold">92</td><td>高</td><td><span class="tag tag-green">强烈看多</span></td></tr>
+          <tr><td>DeepSeek-V3</td><td class="font-bold">90</td><td>高</td><td><span class="tag tag-green">看多</span></td></tr>
+          <tr><td>Gemini-3</td><td class="font-bold">88</td><td>高</td><td><span class="tag tag-green">看多</span></td></tr>
+          <tr><td>Qwen3.6</td><td class="font-bold">85</td><td>中</td><td><span class="tag tag-green">看多</span></td></tr>
+          <tr><td>Claude-4</td><td class="font-bold">89</td><td>高</td><td><span class="tag tag-green">看多</span></td></tr>
+          <tr><td>Llama-4</td><td class="font-bold">86</td><td>中</td><td><span class="tag tag-green">看多</span></td></tr>
+          <tr><td>Mistral-Large</td><td class="font-bold">84</td><td>中</td><td><span class="tag tag-green">看多</span></td></tr>
+          <tr><td>Grok-3</td><td class="font-bold">87</td><td>中</td><td><span class="tag tag-green">看多</span></td></tr>
+          <tr><td>Ernie-5</td><td class="font-bold">83</td><td>中</td><td><span class="tag tag-blue">中性偏多</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- PAGE 3: 模拟交易 -->
+<!-- ======================================================================= -->
+<div class="page" id="page-trading">
+
+  <!-- 6 Stat Cards -->
+  <div class="grid grid-cols-6 gap-3 mb-5">
+    <div class="stat-card">
+      <div class="label">初始资金</div>
+      <div class="value" style="font-size:16px">$10M</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">当前净值</div>
+      <div class="value" style="font-size:16px">$12.85M</div>
+      <div class="sub up">+28.5%</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">基准 SPY</div>
+      <div class="value" style="font-size:16px">+14.2%</div>
+      <div class="sub" style="color:var(--accent)">超额 +14.3%</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">胜率</div>
+      <div class="value" style="font-size:16px">72%</div>
+      <div class="sub">盈利 36 / 总 50</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">最大回撤</div>
+      <div class="value" style="font-size:16px" class="down">-8.3%</div>
+      <div class="sub">发生在 2026-04-15</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">夏普比率</div>
+      <div class="value" style="font-size:16px">2.15</div>
+      <div class="sub">年化 &middot; 无风险 4.5%</div>
+    </div>
+  </div>
+
+  <!-- NAV Chart -->
+  <div class="card mb-4">
+    <h3 class="text-sm font-bold mb-2">组合净值 vs 基准 (近90交易日)</h3>
+    <div class="chart-box" id="navChart"></div>
+  </div>
+
+  <!-- T+N Heatmap -->
+  <div class="card mb-4" style="overflow-x:auto">
+    <h3 class="text-sm font-bold mb-2">T+N 回撤热力图</h3>
+    <table class="data-table" style="font-size:11px">
+      <thead>
+        <tr><th>标的</th><th>T+1</th><th>T+3</th><th>T+5</th><th>T+10</th><th>T+20</th><th>T+30</th><th>T+60</th><th>T+90</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-bold">NVDA</td>
+          <td><span class="heat-cell heat-green">+2.1%</span></td>
+          <td><span class="heat-cell heat-green">+5.8%</span></td>
+          <td><span class="heat-cell heat-green">+8.3%</span></td>
+          <td><span class="heat-cell heat-green">+12.5%</span></td>
+          <td><span class="heat-cell heat-green">+18.7%</span></td>
+          <td><span class="heat-cell heat-green">+22.1%</span></td>
+          <td><span class="heat-cell heat-green">+31.4%</span></td>
+          <td><span class="heat-cell heat-green">+45.2%</span></td>
+        </tr>
+        <tr>
+          <td class="font-bold">300750</td>
+          <td><span class="heat-cell heat-green">+1.5%</span></td>
+          <td><span class="heat-cell heat-green">+3.2%</span></td>
+          <td><span class="heat-cell heat-green">+6.8%</span></td>
+          <td><span class="heat-cell heat-red">-2.1%</span></td>
+          <td><span class="heat-cell heat-green">+4.5%</span></td>
+          <td><span class="heat-cell heat-green">+9.2%</span></td>
+          <td><span class="heat-cell heat-green">+15.8%</span></td>
+          <td><span class="heat-cell heat-green">+22.3%</span></td>
+        </tr>
+        <tr>
+          <td class="font-bold">002594</td>
+          <td><span class="heat-cell heat-neutral">0.0%</span></td>
+          <td><span class="heat-cell heat-red">-1.8%</span></td>
+          <td><span class="heat-cell heat-red">-4.5%</span></td>
+          <td><span class="heat-cell heat-green">+3.2%</span></td>
+          <td><span class="heat-cell heat-green">+8.9%</span></td>
+          <td><span class="heat-cell heat-green">+12.4%</span></td>
+          <td><span class="heat-cell heat-green">+18.1%</span></td>
+          <td><span class="heat-cell heat-green">+25.7%</span></td>
+        </tr>
+        <tr>
+          <td class="font-bold">688981</td>
+          <td><span class="heat-cell heat-green">+0.8%</span></td>
+          <td><span class="heat-cell heat-red">-3.2%</span></td>
+          <td><span class="heat-cell heat-red">-5.6%</span></td>
+          <td><span class="heat-cell heat-red">-7.1%</span></td>
+          <td><span class="heat-cell heat-neutral">-0.5%</span></td>
+          <td><span class="heat-cell heat-green">+4.8%</span></td>
+          <td><span class="heat-cell heat-green">+11.2%</span></td>
+          <td><span class="heat-cell heat-green">+19.8%</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Weekly Review -->
+  <div class="card">
+    <h3 class="text-sm font-bold mb-2">周度回顾总结</h3>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="bullet-card">
+        <div class="bullet-num">1</div>
+        <div>
+          <div class="text-xs font-bold mb-1">本周表现</div>
+          <div class="text-xs" style="color:var(--text2)">组合周收益 <span class="up font-bold">+3.2%</span>，跑赢 SPY (+1.1%)。NVDA 贡献最大 (+5.8%)，AI 算力板块持续强势。</div>
+        </div>
+      </div>
+      <div class="bullet-card">
+        <div class="bullet-num">2</div>
+        <div>
+          <div class="text-xs font-bold mb-1">调仓建议</div>
+          <div class="text-xs" style="color:var(--text2)">688981 中芯国际 T+10 回撤 -7.1% 触发观察线，建议减仓至 Tactical。300750 宁德时代维持 Core。</div>
+        </div>
+      </div>
+      <div class="bullet-card">
+        <div class="bullet-num">3</div>
+        <div>
+          <div class="text-xs font-bold mb-1">风险提示</div>
+          <div class="text-xs" style="color:var(--text2)">FOMC 会议临近，科技板块波动率上升。建议总仓位降至 85%，现金储备 15%。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================================= -->
+<!-- PAGE 4: NL策略回测 -->
+<!-- ======================================================================= -->
+<div class="page" id="page-backtest">
+
+  <!-- Strategy Input -->
+  <div class="card mb-4">
+    <h3 class="text-sm font-bold mb-2">策略描述</h3>
+    <div class="mono-box mb-3" contenteditable="true" id="strategyInput">
+# 选股条件
+universe = A股沪深300 + 中证500 + 创业板
+筛选: PE &lt; 30 AND ROE &gt; 15% AND 营收3年CAGR &gt; 20%
+
+# 权重配置
+F1_价值 = 0.20
+F2_成长 = 0.25
+F3_质量 = 0.20
+F4_基本面 = 0.20
+F5_技术面 = 0.15
+
+# 交易规则
+调仓频率 = 月度
+单票上限 = 10%
+止损 = -12%
+止盈 = +35%
+    </div>
+    <div class="flex gap-3">
+      <button class="btn btn-primary" onclick="runBacktest()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        运行回测
+      </button>
+      <button class="btn btn-outline" onclick="runAIOptimize()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        AI 优化
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Grid -->
+  <div class="card mb-4">
+    <h3 class="text-sm font-bold mb-3">回测结果 <span class="text-xs font-normal" style="color:var(--text2)">回测区间: 2024-01-01 ~ 2026-07-09</span></h3>
+    <div class="grid grid-cols-5 gap-3 mb-4">
+      <div class="stat-card">
+        <div class="label">年化收益</div>
+        <div class="value up" style="font-size:18px">+32.5%</div>
+        <div class="sub">vs 沪深300 +8.2%</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">最大回撤</div>
+        <div class="value" style="font-size:18px;color:var(--down)">-18.2%</div>
+        <div class="sub">发生在 2024-09</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">夏普比率</div>
+        <div class="value" style="font-size:18px">1.82</div>
+        <div class="sub">索提诺 2.45</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">胜率</div>
+        <div class="value" style="font-size:18px">68%</div>
+        <div class="sub">月度胜率 14/22</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">超额收益</div>
+        <div class="value" style="font-size:18px;color:var(--accent)">+24.3%</div>
+        <div class="sub">Alpha 19.8%</div>
+      </div>
+    </div>
+
+    <!-- Backtest equity curve -->
+    <div class="chart-box-sm" id="backtestChart"></div>
+  </div>
+
+  <!-- AI Optimization -->
+  <div class="card">
+    <h3 class="text-sm font-bold mb-3">AI 优化建议</h3>
+    <div class="grid grid-cols-1 gap-3">
+      <div class="bullet-card">
+        <div class="bullet-num">1</div>
+        <div>
+          <div class="text-xs font-bold mb-1">提高 F2 成长因子权重至 0.30</div>
+          <div class="text-xs" style="color:var(--text2)">在回测区间内，F2 成长因子 IC 达 0.082，显著高于其他因子。将权重从 0.25 提升至 0.30，预计年化收益提升至 <span class="up font-bold">+35.1%</span>，夏普升至 1.95。风险: 成长风格回撤期可能加大波动。</div>
+        </div>
+      </div>
+      <div class="bullet-card">
+        <div class="bullet-num">2</div>
+        <div>
+          <div class="text-xs font-bold mb-1">缩短调仓周期至双周</div>
+          <div class="text-xs" style="color:var(--text2)">月度调仓在趋势行情中滞后明显。双周调仓可将最大回撤从 -18.2% 降至 <span class="down font-bold">-14.7%</span>，胜率提升至 72%。代价: 换手率从 3.2x 升至 4.8x，交易成本增加约 <span style="color:var(--text2)">0.8%/年</span>。</div>
+        </div>
+      </div>
+      <div class="bullet-card">
+        <div class="bullet-num">3</div>
+        <div>
+          <div class="text-xs font-bold mb-1">引入 F5 技术面 Veto 规则</div>
+          <div class="text-xs" style="color:var(--text2)">当 F5 技术面评分 &lt; 40 时强制排除该标的（即便其他因子优秀）。此规则可过滤 <span class="font-bold">12 次</span> 重大回撤交易，整体最大回撤改善至 <span class="down font-bold">-13.1%</span>。年化收益略降至 +31.8%，但风险调整后收益更优。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Page Switching =====
+function switchPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('[data-page="' + name + '"]').classList.add('active');
+  // Re-render charts for visible page
+  setTimeout(renderVisibleCharts, 100);
+}
+
+document.querySelectorAll('.nav-tab').forEach(btn => {
+  btn.addEventListener('click', function() {
+    switchPage(this.dataset.page);
+  });
+});
+
+// ===== Detail Navigation =====
+function showDetail(code) {
+  switchPage('detail');
+}
+
+// ===== Chart Rendering =====
+function renderVisibleCharts() {
+  if (document.getElementById('page-detail').classList.contains('active')) {
+    renderRadarChart();
+  }
+  if (document.getElementById('page-trading').classList.contains('active')) {
+    renderNavChart();
+  }
+  if (document.getElementById('page-backtest').classList.contains('active')) {
+    renderBacktestChart();
+  }
+}
+
+// -- Radar Chart --
+function renderRadarChart() {
+  var dom = document.getElementById('radarChart');
+  if (!dom || dom.clientWidth === 0) return;
+  var chart = echarts.init(dom);
+  chart.setOption({
+    tooltip: {},
+    legend: { bottom: 0, textStyle: { fontSize: 11 } },
+    radar: {
+      center: ['50%', '48%'],
+      radius: '65%',
+      indicator: [
+        { name: 'F1 资金面', max: 100 },
+        { name: 'F2 宏观', max: 100 },
+        { name: 'F3 情绪', max: 100 },
+        { name: 'F4 基本面', max: 100 },
+        { name: 'F5 技术面', max: 100 }
+      ]
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          value: [88, 95, 93, 91, 90],
+          name: 'NVDA',
+          lineStyle: { color: '#533afd', width: 2 },
+          areaStyle: { color: 'rgba(83,58,253,0.12)' },
+          itemStyle: { color: '#533afd' }
+        },
+        {
+          value: [72, 68, 70, 65, 62],
+          name: '行业均值',
+          lineStyle: { color: '#9ca3af', width: 1.5, type: 'dashed' },
+          areaStyle: { color: 'rgba(156,163,175,0.05)' },
+          itemStyle: { color: '#9ca3af' }
+        }
+      ]
+    }]
+  });
+  dom._echart = chart;
+}
+
+// -- NAV Line Chart --
+function renderNavChart() {
+  var dom = document.getElementById('navChart');
+  if (!dom || dom.clientWidth === 0) return;
+
+  var days = [];
+  var nav = [], spy = [];
+  var baseNav = 1.0, baseSpy = 1.0;
+  for (var i = 0; i < 90; i++) {
+    var d = new Date(2026, 3, 1);
+    d.setDate(d.getDate() + i);
+    days.push(d.toISOString().slice(0, 10));
+    var noise = (Math.random() - 0.45) * 0.02;
+    baseNav *= (1 + 0.003 + noise);
+    nav.push(+(baseNav * 10).toFixed(2));
+    baseSpy *= (1 + 0.0015 + (Math.random() - 0.48) * 0.015);
+    spy.push(+(baseSpy * 10).toFixed(2));
+  }
+
+  var chart = echarts.init(dom);
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    legend: { bottom: 0, textStyle: { fontSize: 11 } },
+    grid: { left: 60, right: 20, top: 10, bottom: 35 },
+    xAxis: { type: 'category', data: days, axisLabel: { show: false } },
+    yAxis: { type: 'value', name: '净值 ($M)', nameTextStyle: { fontSize: 10 } },
+    series: [
+      {
+        name: '组合净值', type: 'line', data: nav, smooth: true,
+        lineStyle: { color: '#533afd', width: 2 },
+        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: 'rgba(83,58,253,0.2)' }, { offset: 1, color: 'rgba(83,58,253,0.02)' }
+        ])},
+        symbol: 'none'
+      },
+      {
+        name: 'SPY 基准', type: 'line', data: spy, smooth: true,
+        lineStyle: { color: '#9ca3af', width: 1.5, type: 'dashed' },
+        itemStyle: { color: '#9ca3af' },
+        symbol: 'none'
+      }
+    ]
+  });
+  dom._echart = chart;
+}
+
+// -- Backtest Equity Curve --
+function renderBacktestChart() {
+  var dom = document.getElementById('backtestChart');
+  if (!dom || dom.clientWidth === 0) return;
+
+  var months = ['2024-01','2024-04','2024-07','2024-10','2025-01','2025-04','2025-07','2025-10','2026-01','2026-04','2026-07'];
+  var strategy = [], benchmark = [];
+  var s = 1.0, b = 1.0;
+  for (var i = 0; i < months.length; i++) {
+    s *= (1 + 0.025 + (Math.random() - 0.42) * 0.05);
+    strategy.push(+(s * 100).toFixed(1));
+    b *= (1 + 0.007 + (Math.random() - 0.48) * 0.03);
+    benchmark.push(+(b * 100).toFixed(1));
+  }
+
+  var chart = echarts.init(dom);
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    legend: { bottom: 0, textStyle: { fontSize: 11 } },
+    grid: { left: 60, right: 20, top: 10, bottom: 35 },
+    xAxis: { type: 'category', data: months, axisLabel: { fontSize: 10, rotate: 30 } },
+    yAxis: { type: 'value', name: '累计收益', nameTextStyle: { fontSize: 10 } },
+    series: [
+      {
+        name: '策略净值', type: 'line', data: strategy, smooth: true,
+        lineStyle: { color: '#533afd', width: 2 },
+        areaStyle: { color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: 'rgba(83,58,253,0.18)' }, { offset: 1, color: 'rgba(83,58,253,0.02)' }
+        ])},
+        symbol: 'none'
+      },
+      {
+        name: '沪深300', type: 'line', data: benchmark, smooth: true,
+        lineStyle: { color: '#9ca3af', width: 1.5, type: 'dashed' },
+        itemStyle: { color: '#9ca3af' },
+        symbol: 'none'
+      }
+    ]
+  });
+  dom._echart = chart;
+}
+
+// -- Resize Handling --
+window.addEventListener('resize', function() {
+  ['radarChart','navChart','backtestChart'].forEach(function(id) {
+    var dom = document.getElementById(id);
+    if (dom && dom._echart) dom._echart.resize();
+  });
+});
+
+// ===== Mock Actions =====
+function runNLQuery() {
+  var q = document.getElementById('nlQuery').value || 'PE<20且ROE>15%';
+  alert('NL 选股查询已提交:\n' + q + '\n\n(原型: 展示交互流程)');
+}
+
+function runBacktest() {
+  alert('回测已启动\n\n回测区间: 2024-01-01 ~ 2026-07-09\n预计耗时: 约 45 秒\n\n(原型: 展示交互流程)');
+}
+
+function runAIOptimize() {
+  alert('AI 优化引擎已启动\n\n分析中...\n- 因子 IC 分析\n- 权重网格搜索\n- Veto 规则回测\n\n(原型: 展示交互流程)');
+}
+
+// ===== Initial Render =====
+window.addEventListener('load', function() {
+  renderVisibleCharts();
+});
+</script>
+
+</body>
+</html>

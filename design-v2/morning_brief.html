@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开盘前简报 - 2025年7月9日 | AI智能投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#1D1D1F',
+        secondary: '#86868B',
+        accent: '#0071E3',
+        bg: '#F5F5F7',
+        card: '#FFFFFF',
+        border: '#E5E5EA',
+        light: '#F2F2F7',
+        up: '#FF3B30',
+        down: '#34C759',
+        warning: '#FF9500',
+        danger: '#FF3B30',
+        safe: '#34C759',
+        neutral: '#8E8E93',
+        info: '#0071E3'
+      },
+      fontFamily: {
+        sans: ['-apple-system','BlinkMacSystemFont','"Segoe UI"','Roboto','"Helvetica Neue"','Arial','"Noto Sans SC"','"PingFang SC"','"Microsoft YaHei"','sans-serif']
+      }
+    }
+  }
+}
+</script>
+<style>
+body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; background:#F5F5F7; }
+.card { background:#FFFFFF; border-radius:12px; border:1px solid #E5E5EA; padding:24px; transition:all 0.3s ease; }
+.card:hover { box-shadow:0 8px 24px rgba(0,0,0,0.12); transform:translateY(-2px); }
+.badge { height:20px; padding:0 8px; border-radius:10px; font-size:11px; font-weight:500; display:inline-flex; align-items:center; }
+.data-l { font-size:32px; font-weight:600; line-height:1.1; letter-spacing:-0.02em; }
+.data-m { font-size:20px; font-weight:600; line-height:1.2; }
+.animate-fade-in { animation:fadeIn 0.5s ease-out; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+.scroll-hidden::-webkit-scrollbar { display:none; }
+.scroll-hidden { -ms-overflow-style:none; scrollbar-width:none; }
+.news-expand { max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+.news-expand.open { max-height:200px; }
+.countdown-digit { font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body class="bg-bg min-h-screen">
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">早晨简报</span>
+  </div>
+</div>
+
+
+<!-- Top Nav -->
+<nav class="fixed top-0 left-0 right-0 h-14 bg-white border-b border-border z-50 flex items-center px-4 lg:px-8">
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
+      <i data-lucide="trending-up" class="w-5 h-5 text-white"></i>
+    </div>
+    <span class="font-semibold text-primary text-base">AI智能投研助手</span>
+  </div>
+  <div class="hidden md:flex flex-1 max-w-md mx-4">
+    <div class="w-full h-10 bg-light rounded-lg flex items-center px-3 gap-2">
+      <i data-lucide="search" class="w-4 h-4 text-secondary"></i>
+      <input type="text" placeholder="搜索股票、概念..." class="bg-transparent outline-none text-sm text-primary w-full">
+    </div>
+  </div>
+  <div class="flex items-center gap-3 ml-auto">
+    <span class="text-sm text-secondary hidden sm:block">2025年7月9日 星期三</span>
+    <button class="w-8 h-8 rounded-full hover:bg-light flex items-center justify-center relative">
+      <i data-lucide="bell" class="w-5 h-5 text-primary"></i>
+      <span class="absolute top-1 right-1 w-2 h-2 bg-accent rounded-full"></span>
+    </button>
+    <div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+      <i data-lucide="user" class="w-4 h-4 text-accent"></i>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<aside class="fixed left-0 top-14 bottom-0 w-60 bg-white border-r border-border z-40 hidden lg:block">
+  <div class="p-4">
+    <div class="text-xs font-semibold uppercase text-secondary mb-2 tracking-wider">每日简报</div>
+    <a href="morning_brief.html" class="flex items-center gap-3 h-12 px-3 rounded-lg bg-light text-accent font-medium relative">
+      <span class="absolute left-0 top-1 bottom-1 w-1 bg-accent rounded-r"></span>
+      <i data-lucide="sunrise" class="w-5 h-5"></i>
+      <span>开盘前简报</span>
+    </a>
+    <a href="closing_review.html" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="sunset" class="w-5 h-5"></i>
+      <span>盘后复盘</span>
+    </a>
+    <div class="text-xs font-semibold uppercase text-secondary mb-2 mt-6 tracking-wider">分析工具</div>
+    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="radar" class="w-5 h-5"></i>
+      <span>个股诊断</span>
+    </a>
+    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="network" class="w-5 h-5"></i>
+      <span>知识图谱</span>
+    </a>
+    <a href="#" class="flex items-center gap-3 h-12 px-3 rounded-lg hover:bg-light text-primary mt-1">
+      <i data-lucide="newspaper" class="w-5 h-5"></i>
+      <span>KOL日报</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Mobile Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-border z-50 lg:hidden flex justify-around items-center px-2">
+  <a href="morning_brief.html" class="flex flex-col items-center gap-1 text-accent">
+    <i data-lucide="sunrise" class="w-5 h-5"></i>
+    <span class="text-xs">晨报</span>
+  </a>
+  <a href="closing_review.html" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="sunset" class="w-5 h-5"></i>
+    <span class="text-xs">复盘</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="radar" class="w-5 h-5"></i>
+    <span class="text-xs">诊断</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="network" class="w-5 h-5"></i>
+    <span class="text-xs">图谱</span>
+  </a>
+  <a href="#" class="flex flex-col items-center gap-1 text-secondary">
+    <i data-lucide="newspaper" class="w-5 h-5"></i>
+    <span class="text-xs">日报</span>
+  </a>
+</nav>
+
+<!-- Main Content -->
+<main class="pt-14 lg:pl-60 pb-20 lg:pb-8">
+  <div class="max-w-6xl mx-auto px-4 lg:px-8 py-6 lg:py-8">
+    
+    <!-- Header -->
+    <div class="animate-fade-in mb-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-bold text-primary tracking-tight">2025年7月9日 开盘前简报</h1>
+          <p class="text-secondary text-sm mt-2">数据截止 07:30 CST | 来源：财联社、Bloomberg、东方财富</p>
+        </div>
+        <div class="flex items-center gap-3 bg-card border border-border rounded-xl px-4 py-3">
+          <i data-lucide="clock" class="w-5 h-5 text-accent"></i>
+          <div>
+            <div class="text-xs text-secondary">距开盘</div>
+            <div class="text-lg font-semibold text-primary countdown-digit" id="countdown">2小时15分</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: 宏观速览 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="globe" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">宏观速览</h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">美股</div>
+          <div class="data-m text-down">+1.2%</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">欧股</div>
+          <div class="data-m text-down">+0.8%</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">日股</div>
+          <div class="data-m text-down">+0.5%</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">韩股</div>
+          <div class="data-m text-down">+0.3%</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">VIX</div>
+          <div class="data-m text-safe">17.5</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">美元指数</div>
+          <div class="data-m text-primary">103.2</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">人民币汇率</div>
+          <div class="data-m text-primary">7.18</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">原油</div>
+          <div class="data-m text-primary">$78.5</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">黄金</div>
+          <div class="data-m text-primary">$2350</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">铜</div>
+          <div class="data-m text-down">+0.6%</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">10Y美债</div>
+          <div class="data-m text-primary">4.28%</div>
+        </div>
+        <div class="card p-4 text-center">
+          <div class="text-xs text-secondary mb-1">BTC</div>
+          <div class="data-m text-down">+1.5%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: 新闻头条 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="headlines" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">新闻头条</h2>
+      </div>
+      <div class="space-y-3">
+        <!-- News 1 -->
+        <div class="card p-5 cursor-pointer" onclick="toggleNews(this)">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge bg-safe/10 text-safe">Tier 1</span>
+                <span class="text-xs text-secondary">Bloomberg</span>
+                <span class="text-xs text-secondary">07:15</span>
+              </div>
+              <h3 class="font-semibold text-primary mb-1">美联储鲍威尔暗示9月可能启动降息，市场预期升温</h3>
+              <p class="text-sm text-secondary">美联储主席鲍威尔在国会证词中表示，通胀正在可持续地回归2%目标，如果经济数据继续向好，9月会议上降息将是合理的...</p>
+            </div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-secondary mt-1 transition-transform news-arrow"></i>
+          </div>
+          <div class="news-expand mt-3 pt-3 border-t border-border">
+            <p class="text-sm text-secondary">鲍威尔指出，劳动力市场虽然仍然强劲，但正在逐步降温，就业增长趋于正常化。核心PCE在过去三个月的年化增速已降至2.1%，接近目标水平。市场目前对9月降息的预期概率从65%升至82%。若9月开启降息周期，将有利于全球风险资产估值修复。</p>
+          </div>
+        </div>
+        <!-- News 2 -->
+        <div class="card p-5 cursor-pointer" onclick="toggleNews(this)">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge bg-safe/10 text-safe">Tier 1</span>
+                <span class="text-xs text-secondary">财联社</span>
+                <span class="text-xs text-secondary">07:08</span>
+              </div>
+              <h3 class="font-semibold text-primary mb-1">中国6月CPI同比+0.3%，PPI同比-0.8%，温和通胀格局延续</h3>
+              <p class="text-sm text-secondary">国家统计局公布6月物价数据，CPI同比上涨0.3%，与上月持平；PPI同比下降0.8%，降幅较上月收窄0.1个百分点...</p>
+            </div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-secondary mt-1 transition-transform news-arrow"></i>
+          </div>
+          <div class="news-expand mt-3 pt-3 border-t border-border">
+            <p class="text-sm text-secondary">CPI分项中，食品价格下降0.9%，非食品价格上涨0.6%。猪肉价格同比上涨18.1%，鲜菜价格下降7.3%。PPI降幅收窄主要受有色金属价格上涨带动，采掘工业价格下降1.3%，原材料工业价格下降0.5%。数据发布后，10年期国债收益率下行2BP至2.23%。</p>
+          </div>
+        </div>
+        <!-- News 3 -->
+        <div class="card p-5 cursor-pointer" onclick="toggleNews(this)">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge bg-warning/10 text-warning">Tier 2</span>
+                <span class="text-xs text-secondary">Reuters</span>
+                <span class="text-xs text-secondary">06:45</span>
+              </div>
+              <h3 class="font-semibold text-primary mb-1">英伟达H200芯片需求超预期，台积电3nm产能满载</h3>
+              <p class="text-sm text-secondary">据供应链消息，英伟达H200 GPU订单量较预期增加30%，台积电3nm产线已满载运行，排期至2026年Q1...</p>
+            </div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-secondary mt-1 transition-transform news-arrow"></i>
+          </div>
+          <div class="news-expand mt-3 pt-3 border-t border-border">
+            <p class="text-sm text-secondary">AI芯片需求持续强劲，英伟达Blackwell架构芯片进度顺利，预计Q4开始量产。台积电表示已与客户协商2025年产能分配，先进封装CoWoS产能扩产至每月4万片。国内方面，中芯国际7nm良率提升至65%，产能利用率维持95%以上。</p>
+          </div>
+        </div>
+        <!-- News 4 -->
+        <div class="card p-5 cursor-pointer" onclick="toggleNews(this)">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge bg-warning/10 text-warning">Tier 2</span>
+                <span class="text-xs text-secondary">36氪</span>
+                <span class="text-xs text-secondary">06:30</span>
+              </div>
+              <h3 class="font-semibold text-primary mb-1">Robotaxi商业化加速，北京、深圳同步开放全无人运营</h3>
+              <p class="text-sm text-secondary">北京市智能网联汽车政策先行区宣布，Robotaxi正式获准在亦庄全域开展全无人商业化运营，首批投放500辆...</p>
+            </div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-secondary mt-1 transition-transform news-arrow"></i>
+          </div>
+          <div class="news-expand mt-3 pt-3 border-t border-border">
+            <p class="text-sm text-secondary">同日，深圳前海片区也开放Robotaxi全无人运营。百度Apollo、小马智行、文远知行已获准运营。预计到2025年底，全国Robotaxi运营车辆将达2万辆。该政策对自动驾驶产业链（激光雷达、高精地图、域控制器）形成重大利好。</p>
+          </div>
+        </div>
+        <!-- News 5 -->
+        <div class="card p-5 cursor-pointer" onclick="toggleNews(this)">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge bg-safe/10 text-safe">Tier 1</span>
+                <span class="text-xs text-secondary">华尔街日报</span>
+                <span class="text-xs text-secondary">05:20</span>
+              </div>
+              <h3 class="font-semibold text-primary mb-1">OPEC+维持减产政策，原油供应紧张预期升温</h3>
+              <p class="text-sm text-secondary">OPEC+部长级会议决定维持当前减产协议，并未如市场预期增产，布伦特原油一度突破$80关口...</p>
+            </div>
+            <i data-lucide="chevron-down" class="w-5 h-5 text-secondary mt-1 transition-transform news-arrow"></i>
+          </div>
+          <div class="news-expand mt-3 pt-3 border-t border-border">
+            <p class="text-sm text-secondary">OPEC+当前减产规模约580万桶/日，约占全球供应量的5.7%。沙特能源大臣表示，市场供需基本面仍脆弱，需要继续减产支持。美国EIA原油库存上周下降340万桶，降幅超预期。夏季出行高峰叠加地缘风险，短期油价维持偏强运行。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: 公告精选 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="file-text" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">公告精选</h2>
+      </div>
+      <div class="card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-light">
+                <th class="text-left text-xs font-medium text-secondary px-4 py-3">时间</th>
+                <th class="text-left text-xs font-medium text-secondary px-4 py-3">公司</th>
+                <th class="text-left text-xs font-medium text-secondary px-4 py-3">类型</th>
+                <th class="text-left text-xs font-medium text-secondary px-4 py-3">摘要</th>
+                <th class="text-right text-xs font-medium text-secondary px-4 py-3">影响</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr class="hover:bg-light/50 transition-colors">
+                <td class="px-4 py-3 text-secondary whitespace-nowrap">07:00</td>
+                <td class="px-4 py-3 font-medium text-primary">宁德时代 300750.SZ</td>
+                <td class="px-4 py-3"><span class="badge bg-safe/10 text-safe">业绩预增</span></td>
+                <td class="px-4 py-3">上半年净利润预计同比增长35%-45%，储能业务放量</td>
+                <td class="px-4 py-3 text-right text-up font-medium">利好</td>
+              </tr>
+              <tr class="hover:bg-light/50 transition-colors">
+                <td class="px-4 py-3 text-secondary whitespace-nowrap">06:30</td>
+                <td class="px-4 py-3 font-medium text-primary">比亚迪 002594.SZ</td>
+                <td class="px-4 py-3"><span class="badge bg-info/10 text-info">重大合同</span></td>
+                <td class="px-4 py-3">与特斯拉签署电池供应协议，金额约120亿元</td>
+                <td class="px-4 py-3 text-right text-up font-medium">利好</td>
+              </tr>
+              <tr class="hover:bg-light/50 transition-colors">
+                <td class="px-4 py-3 text-secondary whitespace-nowrap">06:15</td>
+                <td class="px-4 py-3 font-medium text-primary">中国平安 601318.SH</td>
+                <td class="px-4 py-3"><span class="badge bg-warning/10 text-warning">股权变动</span></td>
+                <td class="px-4 py-3">股东卜蜂集团减持1.2%股份，套现约85亿元</td>
+                <td class="px-4 py-3 text-right text-down font-medium">中性</td>
+              </tr>
+              <tr class="hover:bg-light/50 transition-colors">
+                <td class="px-4 py-3 text-secondary whitespace-nowrap">05:50</td>
+                <td class="px-4 py-3 font-medium text-primary">中芯国际 688981.SH</td>
+                <td class="px-4 py-3"><span class="badge bg-info/10 text-info">重大合同</span></td>
+                <td class="px-4 py-3">获某国际客户7nm芯片代工大单，金额约50亿元</td>
+                <td class="px-4 py-3 text-right text-up font-medium">利好</td>
+              </tr>
+              <tr class="hover:bg-light/50 transition-colors">
+                <td class="px-4 py-3 text-secondary whitespace-nowrap">05:30</td>
+                <td class="px-4 py-3 font-medium text-primary">隆基绿能 601012.SH</td>
+                <td class="px-4 py-3"><span class="badge bg-danger/10 text-danger">监管问询</span></td>
+                <td class="px-4 py-3">收到交易所问询函，要求说明存货跌价准备计提合理性</td>
+                <td class="px-4 py-3 text-right text-down font-medium">利空</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: 美股复盘 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="bar-chart-3" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">美股复盘</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">美股三大指数</div>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-sm text-secondary">道琼斯</span>
+                <span class="text-sm font-semibold text-down">+0.8%</span>
+              </div>
+              <div class="h-2 bg-light rounded-full overflow-hidden">
+                <div class="h-full bg-down rounded-full" style="width:65%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-sm text-secondary">标普500</span>
+                <span class="text-sm font-semibold text-down">+1.1%</span>
+              </div>
+              <div class="h-2 bg-light rounded-full overflow-hidden">
+                <div class="h-full bg-down rounded-full" style="width:72%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-sm text-secondary">纳斯达克</span>
+                <span class="text-sm font-semibold text-down">+1.5%</span>
+              </div>
+              <div class="h-2 bg-light rounded-full overflow-hidden">
+                <div class="h-full bg-down rounded-full" style="width:85%"></div>
+              </div>
+            </div>
+          </div>
+          <div id="usIndexChart" class="mt-4 h-40"></div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">中概股表现</div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-600 font-bold text-xs">BABA</div>
+                <span class="text-sm font-medium">阿里巴巴</span>
+              </div>
+              <span class="text-sm font-semibold text-down">+2.1%</span>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center text-red-600 font-bold text-xs">JD</div>
+                <span class="text-sm font-medium">京东</span>
+              </div>
+              <span class="text-sm font-semibold text-down">+1.5%</span>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-600 font-bold text-xs">PDD</div>
+                <span class="text-sm font-medium">拼多多</span>
+              </div>
+              <span class="text-sm font-semibold text-down">+3.2%</span>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center text-green-600 font-bold text-xs">NIO</div>
+                <span class="text-sm font-medium">蔚来</span>
+              </div>
+              <span class="text-sm font-semibold text-up">-1.8%</span>
+            </div>
+            <div class="flex items-center justify-between p-2 rounded-lg bg-light/50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-600 font-bold text-xs">LI</div>
+                <span class="text-sm font-medium">理想汽车</span>
+              </div>
+              <span class="text-sm font-semibold text-down">+0.9%</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">重要个股异动</div>
+          <div class="space-y-3">
+            <div class="p-3 rounded-lg bg-light/50">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-medium text-sm">NVDA 英伟达</span>
+                <span class="text-sm font-semibold text-down">+4.2%</span>
+              </div>
+              <p class="text-xs text-secondary">H200需求超预期，机构上调目标价至$150</p>
+            </div>
+            <div class="p-3 rounded-lg bg-light/50">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-medium text-sm">TSLA 特斯拉</span>
+                <span class="text-sm font-semibold text-down">+2.8%</span>
+              </div>
+              <p class="text-xs text-secondary">Q2交付量44.2万辆，超市场预期，FSD v12进展</p>
+            </div>
+            <div class="p-3 rounded-lg bg-light/50">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-medium text-sm">AAPL 苹果</span>
+                <span class="text-sm font-semibold text-down">+0.5%</span>
+              </div>
+              <p class="text-xs text-secondary">Apple Intelligence功能获开发者好评，iPhone 16预期</p>
+            </div>
+            <div class="p-3 rounded-lg bg-light/50">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-medium text-sm">AMD 超微</span>
+                <span class="text-sm font-semibold text-up">-0.8%</span>
+              </div>
+              <p class="text-xs text-secondary">MI300供应紧张，但市场份额增长不及预期</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: 欧股/日韩复盘 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="map-pin" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">欧股 / 日韩复盘</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">欧洲市场</div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-secondary">欧洲Stoxx50</span>
+              <span class="text-sm font-semibold text-down">+0.8%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-secondary">德国DAX</span>
+              <span class="text-sm font-semibold text-down">+0.9%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-secondary">法国CAC40</span>
+              <span class="text-sm font-semibold text-down">+0.6%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-secondary">英国FTSE100</span>
+              <span class="text-sm font-semibold text-down">+0.4%</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-light/50 rounded-lg">
+            <div class="text-xs font-medium text-primary mb-1">对A股/港股映射</div>
+            <p class="text-xs text-secondary">欧股上涨主要由能源和银行股带动，与A股相关性较弱。若欧央行跟随美联储降息，将改善全球流动性预期，利好外资流入新兴市场。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4">日韩市场</div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-secondary">日经225</span>
+              <span class="text-sm font-semibold text-down">+0.5%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-secondary">韩国KOSPI</span>
+              <span class="text-sm font-semibold text-down">+0.3%</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-secondary">韩国KOSDAQ</span>
+              <span class="text-sm font-semibold text-up">-0.2%</span>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-light/50 rounded-lg">
+            <div class="text-xs font-medium text-primary mb-1">对A股/港股映射</div>
+            <p class="text-xs text-secondary">日股半导体板块表现强劲，东京电子、爱德万测试均涨超2%，对A股半导体板块有正面情绪传导。韩股三星电子涨1.1%，SK海力士涨2.3%，存储芯片景气度持续。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: 板块前瞻 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="eye" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">板块前瞻</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="card cursor-pointer hover:shadow-lg transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                <i data-lucide="cpu" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <div class="font-semibold text-primary">AI算力</div>
+                <div class="text-xs text-secondary">预期活跃</div>
+              </div>
+            </div>
+            <span class="badge bg-safe/10 text-safe">高关注</span>
+          </div>
+          <p class="text-sm text-secondary mb-3">英伟达H200需求超预期，国内算力基建政策有望落地，资金或持续流入。</p>
+          <div class="flex items-center gap-2 text-xs text-secondary">
+            <i data-lucide="trending-up" class="w-3 h-3 text-down"></i>
+            <span>资金流入预期：强</span>
+          </div>
+        </div>
+        <div class="card cursor-pointer hover:shadow-lg transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                <i data-lucide="microchip" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <div class="font-semibold text-primary">半导体</div>
+                <div class="text-xs text-secondary">预期活跃</div>
+              </div>
+            </div>
+            <span class="badge bg-safe/10 text-safe">高关注</span>
+          </div>
+          <p class="text-sm text-secondary mb-3">台积电3nm满载，中芯国际7nm良率提升，国产替代逻辑强化。</p>
+          <div class="flex items-center gap-2 text-xs text-secondary">
+            <i data-lucide="trending-up" class="w-3 h-3 text-down"></i>
+            <span>资金流入预期：强</span>
+          </div>
+        </div>
+        <div class="card cursor-pointer hover:shadow-lg transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                <i data-lucide="battery-charging" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <div class="font-semibold text-primary">新能源</div>
+                <div class="text-xs text-secondary">关注</div>
+              </div>
+            </div>
+            <span class="badge bg-warning/10 text-warning">中关注</span>
+          </div>
+          <p class="text-sm text-secondary mb-3">宁德时代业绩预增，比亚迪签大合同，但隆基收到问询函，分化加剧。</p>
+          <div class="flex items-center gap-2 text-xs text-secondary">
+            <i data-lucide="minus" class="w-3 h-3 text-neutral"></i>
+            <span>资金流入预期：中性</span>
+          </div>
+        </div>
+        <div class="card cursor-pointer hover:shadow-lg transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                <i data-lucide="car" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <div class="font-semibold text-primary">自动驾驶</div>
+                <div class="text-xs text-secondary">预期活跃</div>
+              </div>
+            </div>
+            <span class="badge bg-safe/10 text-safe">高关注</span>
+          </div>
+          <p class="text-sm text-secondary mb-3">北京、深圳同步开放Robotaxi全无人运营，产业链催化密集。</p>
+          <div class="flex items-center gap-2 text-xs text-secondary">
+            <i data-lucide="trending-up" class="w-3 h-3 text-down"></i>
+            <span>资金流入预期：较强</span>
+          </div>
+        </div>
+        <div class="card cursor-pointer hover:shadow-lg transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                <i data-lucide="building-2" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <div class="font-semibold text-primary">房地产</div>
+                <div class="text-xs text-secondary">谨慎</div>
+              </div>
+            </div>
+            <span class="badge bg-danger/10 text-danger">低关注</span>
+          </div>
+          <p class="text-sm text-secondary mb-3">6月销售数据仍弱，政策效果待验证，短期缺乏催化剂。</p>
+          <div class="flex items-center gap-2 text-xs text-secondary">
+            <i data-lucide="trending-down" class="w-3 h-3 text-up"></i>
+            <span>资金流入预期：弱</span>
+          </div>
+        </div>
+        <div class="card cursor-pointer hover:shadow-lg transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                <i data-lucide="banknote" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <div class="font-semibold text-primary">银行</div>
+                <div class="text-xs text-secondary">防御</div>
+              </div>
+            </div>
+            <span class="badge bg-warning/10 text-warning">中关注</span>
+          </div>
+          <p class="text-sm text-secondary mb-3">高股息策略持续受青睐，但净息差压力仍存，适合防御配置。</p>
+          <div class="flex items-center gap-2 text-xs text-secondary">
+            <i data-lucide="minus" class="w-3 h-3 text-neutral"></i>
+            <span>资金流入预期：中性</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 7: 今日日历 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="calendar" class="w-5 h-5 text-accent"></i>
+        <h2 class="text-lg font-semibold text-primary">今日日历</h2>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart" class="w-4 h-4 text-accent"></i>
+            经济数据
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">10:00</div>
+              <div>
+                <div class="text-sm font-medium">中国6月贸易帐</div>
+                <div class="text-xs text-secondary">预期：顺差5800亿 | 前值：顺差5024亿</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">14:00</div>
+              <div>
+                <div class="text-sm font-medium">德国5月工业产出</div>
+                <div class="text-xs text-secondary">预期：+0.5% | 前值：-0.4%</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">20:30</div>
+              <div>
+                <div class="text-sm font-medium">美国初请失业金人数</div>
+                <div class="text-xs text-secondary">预期：23.8万 | 前值：23.9万</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4 flex items-center gap-2">
+            <i data-lucide="presentation" class="w-4 h-4 text-accent"></i>
+            财报发布
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">盘前</div>
+              <div>
+                <div class="text-sm font-medium">PEP 百事可乐</div>
+                <div class="text-xs text-secondary">Q2营收预期$225亿 | EPS $2.16</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">盘后</div>
+              <div>
+                <div class="text-sm font-medium">DAL 达美航空</div>
+                <div class="text-xs text-secondary">Q2营收预期$155亿 | EPS $2.40</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">盘后</div>
+              <div>
+                <div class="text-sm font-medium">FAST Fastenal</div>
+                <div class="text-xs text-secondary">Q2营收预期$19.8亿 | EPS $0.52</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="text-sm font-medium text-primary mb-4 flex items-center gap-2">
+            <i data-lucide="ticket" class="w-4 h-4 text-accent"></i>
+            新股申购
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">今日</div>
+              <div>
+                <div class="text-sm font-medium">绿联科技 301606.SZ</div>
+                <div class="text-xs text-secondary">创业板 | 发行价¥21.21 | 市盈率24倍</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">今日</div>
+              <div>
+                <div class="text-sm font-medium">安乃达 603350.SH</div>
+                <div class="text-xs text-secondary">沪市主板 | 发行价¥20.60 | 市盈率18倍</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 p-3 rounded-lg bg-light/50">
+              <div class="text-xs text-secondary whitespace-nowrap mt-0.5">明日</div>
+              <div>
+                <div class="text-sm font-medium">科力装备 301603.SZ</div>
+                <div class="text-xs text-secondary">创业板 | 发行价待定</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: 风险提示 -->
+    <section class="animate-fade-in mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="alert-triangle" class="w-5 h-5 text-warning"></i>
+        <h2 class="text-lg font-semibold text-primary">风险提示</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="card border-l-4 border-l-warning">
+          <div class="flex items-center gap-2 mb-2">
+            <i data-lucide="unlock" class="w-4 h-4 text-warning"></i>
+            <span class="font-medium text-primary">大额解禁</span>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>中芯国际 688981.SH</span>
+              <span class="text-warning font-medium">解禁7.2亿股</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span>奇安信 688561.SH</span>
+              <span class="text-warning font-medium">解禁2.1亿股</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span>寒武纪 688256.SH</span>
+              <span class="text-warning font-medium">解禁1.5亿股</span>
+            </div>
+          </div>
+        </div>
+        <div class="card border-l-4 border-l-danger">
+          <div class="flex items-center gap-2 mb-2">
+            <i data-lucide="trending-down" class="w-4 h-4 text-danger"></i>
+            <span class="font-medium text-primary">股东减持</span>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>中国平安 601318.SH</span>
+              <span class="text-danger font-medium">减持1.2%</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span>药明康德 603259.SH</span>
+              <span class="text-danger font-medium">减持0.8%</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span>隆基绿能 601012.SH</span>
+              <span class="text-danger font-medium">减持0.5%</span>
+            </div>
+          </div>
+        </div>
+        <div class="card border-l-4 border-l-info">
+          <div class="flex items-center gap-2 mb-2">
+            <i data-lucide="scale" class="w-4 h-4 text-info"></i>
+            <span class="font-medium text-primary">监管政策</span>
+          </div>
+          <div class="space-y-2">
+            <div class="text-sm text-secondary">• 证监会发布《上市公司减持新规》，从严规范大股东减持</div>
+            <div class="text-sm text-secondary">• 工信部拟出台AI算力中心建设指导意见，明确能耗标准</div>
+            <div class="text-sm text-secondary">• 美国商务部将3家中国量子计算企业列入实体清单</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-secondary py-6">
+      <p>AI智能投研助手 | 本简报由AI自动生成，仅供参考，不构成投资建议</p>
+      <p class="mt-1">数据来源于财联社、Bloomberg、东方财富、同花顺等公开渠道</p>
+    </footer>
+  </div>
+</main>
+
+<script>
+// Initialize Lucide icons
+lucide.createIcons();
+
+// News expand/collapse
+function toggleNews(el) {
+  const expand = el.querySelector('.news-expand');
+  const arrow = el.querySelector('.news-arrow');
+  expand.classList.toggle('open');
+  arrow.style.transform = expand.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+// Countdown timer
+function updateCountdown() {
+  const now = new Date();
+  const target = new Date();
+  target.setHours(9, 30, 0, 0);
+  if (now > target) target.setDate(target.getDate() + 1);
+  const diff = target - now;
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  document.getElementById('countdown').textContent = hours + '小时' + mins + '分';
+}
+setInterval(updateCountdown, 60000);
+updateCountdown();
+
+// US Index Mini Chart
+const usChart = echarts.init(document.getElementById('usIndexChart'));
+const usData = {
+  categories: ['10:00','10:30','11:00','11:30','12:00','13:00','13:30','14:00','14:30','15:00','15:30','16:00'],
+  sp500: [5450,5455,5462,5458,5465,5470,5468,5475,5480,5485,5490,5495],
+  nasdaq: [17800,17820,17850,17840,17880,17900,17890,17920,17950,17980,18000,18020]
+};
+usChart.setOption({
+  grid: { left: 0, right: 0, top: 5, bottom: 20 },
+  xAxis: { type: 'category', data: usData.categories, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { fontSize: 10, color: '#86868B' } },
+  yAxis: { type: 'value', show: false, min: 5440, max: 5505 },
+  series: [
+    { name: '标普500', type: 'line', data: usData.sp500, smooth: true, lineStyle: { color: '#0071E3', width: 2 }, showSymbol: false, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(0,113,227,0.15)' }, { offset: 1, color: 'rgba(0,113,227,0)' }] } } },
+    { name: '纳斯达克', type: 'line', data: usData.nasdaq, smooth: true, lineStyle: { color: '#5856D6', width: 2 }, showSymbol: false, yAxisIndex: 0 }
+  ]
+});
+
+window.addEventListener('resize', () => usChart.resize());
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="closing_review.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◑</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">收盘复盘</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="kol_daily.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">▤</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">KOL日报</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="research_assistant.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◬</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">投研助手</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="cross_market.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">⬡</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">跨市场助手</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟交易 — 组合跟踪</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text2: #64748d; --accent: #533afd; --navy: #061b31;
+  --up: #dc2626; --down: #16a34a; --warn: #f59e0b;
+  --tag-g-bg: #dcfce7; --tag-g-tx: #166534; --tag-bl-bg: #dbeafe; --tag-bl-tx: #1e40af;
+  --tag-y-bg: #fef3c7; --tag-y-tx: #92400e; --tag-r-bg: #fee2e2; --tag-r-tx: #991b1b;
+  --tag-p-bg: #ede9fe; --tag-p-tx: #6d28d9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+}
+.layout { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 220px; background: #0d253d; color: #fff; display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.content { padding: 20px 24px; max-width: 1440px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 7px 18px; cursor: pointer; transition: all .15s; border: none; white-space: nowrap; font-family: inherit; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; line-height: 1.4; }
+.tag-green { background: var(--tag-g-bg); color: var(--tag-g-tx); }
+.tag-blue { background: var(--tag-bl-bg); color: var(--tag-bl-tx); }
+.tag-yellow { background: var(--tag-y-bg); color: var(--tag-y-tx); }
+.tag-purple { background: var(--tag-p-bg); color: var(--tag-p-tx); }
+.tag-red { background: var(--tag-r-bg); color: var(--tag-r-tx); }
+.tag-gray { background: #f3f4f6; color: #374151; }
+.up { color: var(--up); } .down { color: var(--down); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.3px; padding: 10px 12px; border-bottom: 1px solid var(--border); background: #fafbfc; }
+.data-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: #f8fafc; }
+.chart-box { width: 100%; height: 300px; }
+.heat-cell { text-align: center; font-size: 11px; font-weight: 600; padding: 8px 4px; border-radius: 3px; }
+.heat-red { background: #fee2e2; color: #991b1b; }
+.heat-green { background: #dcfce7; color: #166534; }
+.heat-yellow { background: #fef3c7; color: #92400e; }
+.heat-neutral { background: #f3f4f6; color: #6b7280; }
+.stat-big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; }
+
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .layout { height: 100vh !important; min-height: auto !important; }
+body.in-iframe .main { overflow-y: auto !important; height: 100% !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">5Factor <span>AI</span></div>
+    <div class="nav-item"><span class="icon">📊</span>行情与数据</div>
+    <div class="nav-item"><span class="icon">📰</span>内容与信息</div>
+    <div class="nav-item active"><span class="icon">🎯</span>分析与选股</div>
+    <div class="nav-item"><span class="icon">🧬</span>产业链与知识</div>
+    <div class="nav-item"><span class="icon">🤖</span>AI编排层</div>
+    <div class="nav-item"><span class="icon">👥</span>社区与协作</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="font-size:14px;font-weight:600;color:var(--navy);">分析与选股 / 模拟交易</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--text2);">
+        <span>🌙</span><div style="width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;">U</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Portfolio Header Stats -->
+      <div class="card" style="padding:20px 24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div style="font-size:16px;font-weight:600;color:var(--navy);">💼 模拟组合 — Alpha-1</div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline btn-sm">📥 导出</button>
+            <button class="btn btn-primary btn-sm">➕ 新建组合</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
+          <div>
+            <div class="stat-label">初始资金</div>
+            <div class="stat-big">$1,000万</div>
+          </div>
+          <div>
+            <div class="stat-label">当前净值</div>
+            <div class="stat-big" style="color:var(--accent);">$1,123万</div>
+          </div>
+          <div>
+            <div class="stat-label">累计收益率</div>
+            <div class="stat-big" style="color:var(--up);">+12.30%</div>
+          </div>
+          <div>
+            <div class="stat-label">vs 标普500</div>
+            <div class="stat-big" style="color:var(--up);">+4.2%</div>
+            <div style="font-size:11px;color:var(--text2);">基准 +8.1%</div>
+          </div>
+          <div>
+            <div class="stat-label">最大回撤</div>
+            <div class="stat-big" style="color:var(--down);">-3.8%</div>
+          </div>
+          <div>
+            <div class="stat-label">夏普比率</div>
+            <div class="stat-big">1.45</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top 3 Columns -->
+      <div style="display:grid;grid-template-columns:1.2fr 1fr 0.8fr;gap:16px;">
+        <!-- Holdings List -->
+        <div class="card" style="margin-bottom:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">📋 持仓列表</div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>代码</th>
+                <th>名称</th>
+                <th>买入价</th>
+                <th>现价</th>
+                <th>盈亏%</th>
+                <th>盈亏额</th>
+                <th>天数</th>
+                <th>仓位</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:600;">NVDA</td>
+                <td>NVIDIA</td>
+                <td>$118.50</td>
+                <td>$135.42</td>
+                <td class="up" style="font-weight:600;">+14.3%</td>
+                <td class="up">+$169,200</td>
+                <td>45</td>
+                <td><span class="tag tag-green">core</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">TSM</td>
+                <td>台积电</td>
+                <td>$168.20</td>
+                <td>$192.50</td>
+                <td class="up" style="font-weight:600;">+14.4%</td>
+                <td class="up">+$145,600</td>
+                <td>45</td>
+                <td><span class="tag tag-green">core</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">DELL</td>
+                <td>Dell</td>
+                <td>$98.40</td>
+                <td>$112.80</td>
+                <td class="up" style="font-weight:600;">+14.6%</td>
+                <td class="up">+$144,000</td>
+                <td>42</td>
+                <td><span class="tag tag-green">core</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">MU</td>
+                <td>美光</td>
+                <td>$88.60</td>
+                <td>$102.30</td>
+                <td class="up" style="font-weight:600;">+15.5%</td>
+                <td class="up">+$137,000</td>
+                <td>42</td>
+                <td><span class="tag tag-green">core</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">MRVL</td>
+                <td>Marvell</td>
+                <td>$68.20</td>
+                <td>$78.50</td>
+                <td class="up" style="font-weight:600;">+15.1%</td>
+                <td class="up">+$103,000</td>
+                <td>38</td>
+                <td><span class="tag tag-green">core</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">AMAT</td>
+                <td>应用材料</td>
+                <td>$145.00</td>
+                <td>$152.30</td>
+                <td class="up" style="font-weight:600;">+5.0%</td>
+                <td class="up">+$73,000</td>
+                <td>35</td>
+                <td><span class="tag tag-blue">tactical</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">MTSI</td>
+                <td>MACOM</td>
+                <td>$72.50</td>
+                <td>$76.80</td>
+                <td class="up" style="font-weight:600;">+5.9%</td>
+                <td class="up">+$43,000</td>
+                <td>30</td>
+                <td><span class="tag tag-blue">tactical</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">JBL</td>
+                <td>Jabil</td>
+                <td>$142.00</td>
+                <td>$138.50</td>
+                <td class="down" style="font-weight:600;">-2.5%</td>
+                <td class="down">-$35,000</td>
+                <td>28</td>
+                <td><span class="tag tag-blue">tactical</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">ACLS</td>
+                <td>Axcelis</td>
+                <td>$102.00</td>
+                <td>$95.40</td>
+                <td class="down" style="font-weight:600;">-6.5%</td>
+                <td class="down">-$66,000</td>
+                <td>25</td>
+                <td><span class="tag tag-blue">tactical</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">ARM</td>
+                <td>ARM</td>
+                <td>$145.00</td>
+                <td>$138.20</td>
+                <td class="down" style="font-weight:600;">-4.7%</td>
+                <td class="down">-$68,000</td>
+                <td>20</td>
+                <td><span class="tag tag-green">core</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Net Value Chart -->
+        <div class="card" style="margin-bottom:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">📈 净值曲线</div>
+          <div id="netvalue-chart" class="chart-box"></div>
+          <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;">
+            <div style="display:flex;align-items:center;gap:4px;font-size:11px;"><span style="width:10px;height:3px;background:#533afd;border-radius:2px;"></span>组合净值</div>
+            <div style="display:flex;align-items:center;gap:4px;font-size:11px;"><span style="width:10px;height:3px;background:#94a3b8;border-radius:2px;"></span>标普500基准</div>
+          </div>
+        </div>
+
+        <!-- Position Pie -->
+        <div class="card" style="margin-bottom:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">🥧 仓位分布</div>
+          <div id="position-pie" style="width:100%;height:220px;"></div>
+          <div style="margin-top:8px;">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:12px;">Core (核心)</span><span style="font-weight:600;">65%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="font-size:12px;">Tactical (战术)</span><span style="font-weight:600;">28%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="font-size:12px;">Watch (观察)</span><span style="font-weight:600;">7%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T+N Drawdown Matrix -->
+      <div class="card" style="margin-top:16px;">
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">🔥 T+N 回撤检查矩阵</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:12px;">每个检查点记录该日组合净值相对建仓日的回撤幅度。绿色=健康，黄色=注意，红色=预警。</div>
+        <div id="drawdown-heat" style="width:100%;height:280px;"></div>
+        <div style="display:flex;gap:24px;margin-top:12px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;"><span class="heat-cell heat-green" style="width:24px;height:24px;padding:0;display:inline-flex;align-items:center;justify-content:center;">✓</span> 回撤 &lt; 5%</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;"><span class="heat-cell heat-yellow" style="width:24px;height:24px;padding:0;display:inline-flex;align-items:center;justify-content:center;">!</span> 回撤 5%-10%</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;"><span class="heat-cell heat-red" style="width:24px;height:24px;padding:0;display:inline-flex;align-items:center;justify-content:center;">✕</span> 回撤 &gt; 10%</div>
+        </div>
+      </div>
+
+      <!-- Weekly Review -->
+      <div class="card">
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">📝 周度复盘报告摘要</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">本周表现</div>
+            <div style="font-size:12px;line-height:1.7;color:var(--text);">
+              • 组合净值 +2.8%，跑赢标普500(+1.2%)<br>
+              • 最大贡献：NVDA(+4.5%)，DELL(+3.8%)<br>
+              • 最大拖累：ACLS(-5.2%)，ARM(-3.1%)<br>
+              • 无触发T+N预警检查点
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">决策记录</div>
+            <div style="font-size:12px;line-height:1.7;color:var(--text);">
+              • 周一：按信号建仓MTSI，仓位标签tactical<br>
+              • 周三：NVDA F1资金面回升，维持core<br>
+              • 周五：ACLS触发S5回调信号，减仓50%<br>
+              • 下周计划：关注PRM是否进入S4
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px;background:#f8fafc;border-radius:6px;font-size:11px;color:var(--text2);">
+          <strong>复盘验证：</strong>上周判断"AI算力板块F4基本面持续强势"已确认(✓)。上周预警"ARM技术面顶背离"部分成立(⚠)，ARM本周-3.1%但尚未破关键支撑位。
+        </div>
+      </div>
+      <!-- Risk Analysis -->
+      <div class="card">
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">⚠️ 风险分析</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">行业集中度</div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>半导体</span><span style="font-weight:600;">55%</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>AI算力</span><span style="font-weight:600;">25%</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>电子制造</span><span style="font-weight:600;">12%</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>其他</span><span style="font-weight:600;">8%</span></div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text2);">半导体行业集中度较高，建议关注行业ETF波动率。</div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">信号类型分布</div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>S4全共振</span><span class="tag tag-purple">8只</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>S3趋势延续</span><span class="tag tag-blue">1只</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>S2中期启动</span><span class="tag tag-yellow">0只</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>S1小级别反转</span><span class="tag tag-gray">1只</span></div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text2);">S4占比80%，组合整体处于强趋势状态。</div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">仓位预警</div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:10px;">
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>Core上限15%</span><span class="tag tag-green">✓ 合规</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>Tactical上限12%</span><span class="tag tag-green">✓ 合规</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>Watch上限5%</span><span class="tag tag-green">✓ 合规</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>总仓位</span><span class="tag tag-green">93%</span></div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text2);">所有仓位均在规则限制内，无预警。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sector Performance -->
+      <div class="card">
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">📊 分行业收益贡献</div>
+        <div id="sector-bar" style="width:100%;height:220px;"></div>
+      </div>
+
+      <!-- Historical by Signal -->
+      <div class="card">
+        <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">📈 历史表现按信号类型</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>信号类型</th><th>建仓次数</th><th>平均收益率</th><th>胜率</th><th>平均持仓天数</th><th>最佳标的</th><th>最差标的</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="tag tag-purple">S4</span></td><td>32</td><td class="up" style="font-weight:600;">+18.5%</td><td>78.1%</td><td>42天</td><td>NVDA (+45%)</td><td>ACLS (-12%)</td></tr>
+            <tr><td><span class="tag tag-blue">S3</span></td><td>8</td><td class="up" style="font-weight:600;">+8.2%</td><td>62.5%</td><td>28天</td><td>MU (+15%)</td><td>TROW (-5%)</td></tr>
+            <tr><td><span class="tag tag-yellow">S2</span></td><td>5</td><td class="up" style="font-weight:600;">+5.1%</td><td>60.0%</td><td>18天</td><td>AMAT (+12%)</td><td>ELV (-3%)</td></tr>
+            <tr><td><span class="tag tag-gray">S1</span></td><td>3</td><td class="down" style="font-weight:600;">-2.8%</td><td>33.3%</td><td>12天</td><td>CORT (+2%)</td><td>FRD (-8%)</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:10px;padding:10px;background:#f8fafc;border-radius:6px;font-size:11px;color:var(--text2);">
+          <strong>结论：</strong>S4全共振信号历史胜率最高(78.1%)，平均收益+18.5%，显著优于其他信号类型。S1小级别反转信号表现不佳，建议避免单独作为建仓依据。
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Net value area chart
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('netvalue-chart'));
+  const days = 90;
+  const portfolio = [1000];
+  const benchmark = [1000];
+  for (let i = 1; i <= days; i++) {
+    portfolio.push(portfolio[i-1] * (1 + (Math.random() * 0.008 - 0.002)));
+    benchmark.push(benchmark[i-1] * (1 + (Math.random() * 0.006 - 0.0025)));
+  }
+  // Force final values
+  portfolio[days] = 1123;
+  benchmark[days] = 1081;
+
+  chart.setOption({
+    tooltip: {trigger: 'axis'},
+    grid: {left: 50, right: 20, top: 10, bottom: 30},
+    xAxis: {type: 'category', boundaryGap: false, data: Array.from({length: days+1}, (_,i) => i), axisLabel: {show: false}, axisLine: {lineStyle: {color: '#e5e7eb'}}},
+    yAxis: {type: 'value', min: 950, axisLabel: {fontSize: 10, color: '#64748d', formatter: v => '$'+v}, splitLine: {lineStyle: {color: '#f3f4f6'}}},
+    series: [
+      {
+        name: '组合净值', type: 'line', smooth: true, data: portfolio,
+        lineStyle: {color: '#533afd', width: 2},
+        areaStyle: {color: {type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{offset: 0, color: 'rgba(83,58,253,0.2)'}, {offset: 1, color: 'rgba(83,58,253,0.02)'}]}},
+        symbol: 'none'
+      },
+      {
+        name: '标普500', type: 'line', smooth: true, data: benchmark,
+        lineStyle: {color: '#94a3b8', width: 1.5, type: 'dashed'},
+        symbol: 'none'
+      }
+    ]
+  });
+}, 100);
+
+// Position pie
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('position-pie'));
+  chart.setOption({
+    tooltip: {trigger: 'item'},
+    series: [{
+      type: 'pie', radius: ['45%', '70%'], center: ['50%', '50%'],
+      label: {show: false},
+      data: [
+        {value: 65, name: 'Core', itemStyle: {color: '#16a34a'}},
+        {value: 28, name: 'Tactical', itemStyle: {color: '#3b82f6'}},
+        {value: 7, name: 'Watch', itemStyle: {color: '#94a3b8'}}
+      ]
+    }]
+  });
+}, 100);
+
+// T+N Drawdown heatmap
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('drawdown-heat'));
+  const stocks = ['NVDA','TSM','DELL','MU','MRVL','AMAT','MTSI','JBL','ACLS','ARM'];
+  const checkpoints = ['T+1','T+3','T+5','T+10','T+20','T+30','T+60','T+90'];
+  const data = [];
+  for (let i = 0; i < stocks.length; i++) {
+    for (let j = 0; j < checkpoints.length; j++) {
+      let val = (Math.random() * 12 - 2).toFixed(1);
+      if (val > 0) val = -val; // mostly negative or small positive
+      data.push([j, i, parseFloat(val)]);
+    }
+  }
+
+  chart.setOption({
+    tooltip: {position: 'top', formatter: p => `${stocks[p.value[1]]} ${checkpoints[p.value[0]]}<br/>回撤: ${p.value[2]}%`},
+    grid: {left: 70, right: 30, top: 10, bottom: 40},
+    xAxis: {type: 'category', data: checkpoints, splitArea: {show: true}, axisLabel: {fontSize: 11, color: '#64748d'}},
+    yAxis: {type: 'category', data: stocks, splitArea: {show: true}, axisLabel: {fontSize: 11, color: '#64748d'}},
+    visualMap: {
+      min: -15, max: 5, calculable: false, orient: 'horizontal', left: 'center', bottom: 0, show: false,
+      inRange: {color: ['#dc2626', '#f59e0b', '#f3f4f6', '#16a34a']}
+    },
+    series: [{
+      type: 'heatmap', data: data,
+      label: {show: true, fontSize: 10, formatter: p => p.value[2] + '%'},
+      itemStyle: {borderRadius: 3, borderColor: '#fff', borderWidth: 2}
+    }]
+  });
+}, 100);
+
+// Sector performance bar chart
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('sector-bar'));
+  chart.setOption({
+    tooltip: {trigger: 'axis'},
+    grid: {left: 80, right: 20, top: 10, bottom: 20},
+    xAxis: {type: 'value', axisLabel: {fontSize: 10, color: '#64748d', formatter: v => v+'%'}, splitLine: {lineStyle: {color: '#f3f4f6'}}},
+    yAxis: {type: 'category', data: ['其他','电子制造','AI算力','半导体'], axisLabel: {fontSize: 11, color: '#64748d'}},
+    series: [{
+      type: 'bar', data: [2.1, 5.8, 8.5, 14.2],
+      itemStyle: {color: '#533afd', borderRadius: 4},
+      label: {show: true, position: 'right', fontSize: 10, formatter: '{c}%'}
+    }]
+  });
+}, 100);
+</script>
+
+</body>
+</html>

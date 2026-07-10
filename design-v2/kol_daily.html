@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOL日报 — 2025年7月9日</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root { --primary:#1D1D1F; --secondary:#86868B; --accent:#0071E3; --bg:#F5F5F7; --card:#FFFFFF; --border:#E5E5EA; --light:#F2F2F7; --bullish:#34C759; --bearish:#FF3B30; --neutral:#8E8E93; --warning:#FF9500; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--primary); margin:0; }
+  .card { background:var(--card); border-radius:12px; border:1px solid var(--border); padding:24px; transition:all 0.3s ease; }
+  .card-hover:hover { box-shadow:0 8px 24px rgba(0,0,0,0.12); transform:translateY(-2px); }
+  .section-title { font-size:22px; font-weight:600; line-height:1.3; letter-spacing:-0.01em; color:var(--primary); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .btn-primary { background:var(--accent); color:#fff; border-radius:8px; padding:10px 20px; font-size:14px; font-weight:500; border:none; cursor:pointer; transition:opacity 0.2s; }
+  .btn-primary:hover { opacity:0.9; }
+  .badge { height:20px; padding:0 8px; border-radius:10px; font-size:11px; font-weight:500; display:inline-flex; align-items:center; }
+  .badge-bullish { background:var(--bullish); color:#fff; }
+  .badge-bearish { background:var(--bearish); color:#fff; }
+  .badge-neutral { background:var(--neutral); color:#fff; }
+  .badge-warning { background:var(--warning); color:#fff; }
+  .kol-avatar { width:32px; height:32px; border-radius:50%; background:var(--light); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:var(--primary); border:2px solid var(--card); box-shadow:0 2px 4px rgba(0,0,0,0.1); transition:transform 0.2s; cursor:pointer; }
+  .kol-avatar:hover { transform:scale(1.15); z-index:10; }
+  .quote-mark { font-size:48px; line-height:1; color:var(--accent); opacity:0.3; font-family:Georgia,serif; }
+  .audio-progress { height:4px; background:var(--light); border-radius:2px; position:relative; overflow:hidden; }
+  .audio-progress-bar { height:100%; background:var(--accent); width:35%; border-radius:2px; transition:width 0.3s; }
+  .audio-thumb { width:12px; height:12px; background:var(--accent); border-radius:50%; position:absolute; top:50%; transform:translate(-50%,-50%); left:35%; box-shadow:0 2px 4px rgba(0,0,0,0.2); cursor:pointer; }
+  .tab-btn { padding:8px 16px; border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; transition:all 0.2s; background:transparent; color:var(--secondary); border:none; }
+  .tab-btn.active { background:var(--primary); color:#fff; }
+  .collapsible-content { max-height:0; overflow:hidden; transition:max-height 0.5s ease, opacity 0.3s ease; opacity:0; }
+  .collapsible-content.open { max-height:2000px; opacity:1; }
+  .check-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .check-item:last-child { border-bottom:none; }
+  .check-box { width:18px; height:18px; border:2px solid var(--border); border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; flex-shrink:0; }
+  .check-box.checked { background:var(--accent); border-color:var(--accent); }
+  .chart-container { width:100%; height:280px; }
+  @media (max-width:768px) { .card { padding:16px; } .section-title { font-size:18px; } }
+</style>
+</head>
+<body>
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">KOL日报</span>
+  </div>
+</div>
+
+
+<!-- 顶部导航 -->
+<nav style="height:56px; background:#fff; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 32px;">
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div style="width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;">AI</div>
+    <span style="font-size:16px;font-weight:600;">KOL日报</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:24px;">
+    <span style="font-size:14px;color:var(--secondary);">2025年7月9日</span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="badge badge-bullish" style="height:24px;padding:0 10px;">Bullish 65%</span>
+      <span class="badge badge-bearish" style="height:24px;padding:0 10px;">Bearish 20%</span>
+      <span class="badge badge-neutral" style="height:24px;padding:0 10px;">Neutral 15%</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--secondary);background:var(--light);padding:4px 12px;border-radius:8px;">
+      <i data-lucide="activity" style="width:14px;height:14px;"></i>
+      <span>共识度: Medium</span>
+    </div>
+  </div>
+</nav>
+
+<!-- 主内容 -->
+<main style="max-width:1200px; margin:0 auto; padding:32px 32px 64px;">
+
+<!-- Hero板块 -->
+<section class="card" style="margin-bottom:32px; background:linear-gradient(135deg,#1D1D1F 0%,#2C2C2E 100%); color:#fff; border:none;">
+  <div style="font-size:12px; font-weight:500; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">今日市场核心洞察</div>
+  <h1 style="font-size:24px; font-weight:600; line-height:1.4; margin:0 0 16px; max-width:800px;">AI芯片需求持续强劲，美联储降息预期升温，市场聚焦Q2财报季</h1>
+  <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:24px;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="trending-up" style="width:16px;height:16px;color:var(--bullish);"></i> 纳斯达克 +1.28%</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="trending-up" style="width:16px;height:16px;color:var(--bullish);"></i> 标普500 +0.84%</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="trending-down" style="width:16px;height:16px;color:var(--bearish);"></i> 道琼斯 -0.12%</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);"><i data-lucide="activity" style="width:16px;height:16px;color:var(--warning);"></i> VIX 14.2</div>
+  </div>
+</section>
+
+<!-- 主线板块 -->
+<section class="card" style="margin-bottom:32px;">
+  <div class="section-title" style="cursor:pointer;" onclick="toggleSection('mainlines')">
+    <i data-lucide="git-branch" style="width:22px;height:22px;color:var(--accent);"></i>
+    市场主线
+    <span style="margin-left:auto;font-size:12px;color:var(--secondary);display:flex;align-items:center;gap:4px;"><i data-lucide="chevron-down" id="mainlines-icon" style="width:16px;height:16px;"></i></span>
+  </div>
+  <div id="mainlines" class="collapsible-content open">
+    <!-- 主线1 -->
+    <div style="border-bottom:1px solid var(--border); padding:20px 0;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <span class="badge badge-bullish">主线</span>
+        <h3 style="font-size:18px; font-weight:600; margin:0;">AI算力投资逻辑持续验证</h3>
+      </div>
+      <p style="font-size:14px; color:var(--secondary); line-height:1.6; margin:0 0 16px;">英伟达H200需求超预期，Blackwell架构产能爬坡顺利，数据中心收入同比增长147%。台积电CoWoS产能持续紧缺，验证AI算力硬件需求高景气。</p>
+      <div style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">支持观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#E8F5E9;color:#2E7D32;" title="Cathie Wood">CW</div>
+            <div class="kol-avatar" style="background:#E3F2FD;color:#1565C0; margin-left:-8px;" title="Gene Munster">GM</div>
+            <div class="kol-avatar" style="background:#FFF3E0;color:#E65100; margin-left:-8px;" title="Jim Cramer">JC</div>
+            <div class="kol-avatar" style="background:#F3E5F5;color:#6A1B9A; margin-left:-8px;" title="Ross Gerber">RG</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">反对观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#FFEBEE;color:#C62828;" title="Michael Burry">MB</div>
+            <div class="kol-avatar" style="background:#ECEFF1;color:#455A64; margin-left:-8px;" title="David Einhorn">DE</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">相关资产</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge" style="background:var(--light);color:var(--primary);">NVDA</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">AMD</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">TSM</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">AVGO</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 主线2 -->
+    <div style="border-bottom:1px solid var(--border); padding:20px 0;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <span class="badge badge-bullish">主线</span>
+        <h3 style="font-size:18px; font-weight:600; margin:0;">美联储降息预期升温</h3>
+      </div>
+      <p style="font-size:14px; color:var(--secondary); line-height:1.6; margin:0 0 16px;">6月非农数据低于预期，CPI回落至3.0%，市场定价9月降息概率升至78%。CME FedWatch工具显示年内或降息2次，成长股估值承压缓解。</p>
+      <div style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">支持观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#E8F5E9;color:#2E7D32;" title="Mohamed El-Erian">ME</div>
+            <div class="kol-avatar" style="background:#E3F2FD;color:#1565C0; margin-left:-8px;" title="Lawrence Summers">LS</div>
+            <div class="kol-avatar" style="background:#FFF3E0;color:#E65100; margin-left:-8px;" title="Jeremy Siegel">JS</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">反对观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#FFEBEE;color:#C62828;" title="Jeffrey Gundlach">JG</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">相关资产</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge" style="background:var(--light);color:var(--primary);">QQQ</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">TLT</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">GLD</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">DXY</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 主线3 -->
+    <div style="border-bottom:1px solid var(--border); padding:20px 0;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <span class="badge badge-neutral">主线</span>
+        <h3 style="font-size:18px; font-weight:600; margin:0;">Q2财报季前瞻：预期分化</h3>
+      </div>
+      <p style="font-size:14px; color:var(--secondary); line-height:1.6; margin:0 0 16px;">FactSet数据显示标普500 Q2盈利预期同比增长9.2%，但科技七巨头内部出现分化。苹果iPhone销量承压，微软Azure增速放缓，而Meta广告收入强劲。</p>
+      <div style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">支持观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#E8F5E9;color:#2E7D32;" title="Dan Ives">DI</div>
+            <div class="kol-avatar" style="background:#E3F2FD;color:#1565C0; margin-left:-8px;" title="Toni Sacconaghi">TS</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">反对观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#FFEBEE;color:#C62828;" title="Jim Chanos">JC</div>
+            <div class="kol-avatar" style="background:#ECEFF1;color:#455A64; margin-left:-8px;" title="John Hussman">JH</div>
+            <div class="kol-avatar" style="background:#FFF3E0;color:#E65100; margin-left:-8px;" title="David Tepper">DT</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">相关资产</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge" style="background:var(--light);color:var(--primary);">AAPL</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">MSFT</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">META</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">GOOGL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 主线4 -->
+    <div style="border-bottom:1px solid var(--border); padding:20px 0;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <span class="badge badge-bearish">主线</span>
+        <h3 style="font-size:18px; font-weight:600; margin:0;">中概股监管担忧再起</h3>
+      </div>
+      <p style="font-size:14px; color:var(--secondary); line-height:1.6; margin:0 0 16px;">PCAOB审查进展停滞，美国国会再度提出加强中概股审计要求的法案。阿里巴巴、拼多多美股ADR承压，投资者担忧退市风险溢价扩大。</p>
+      <div style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">支持观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#FFEBEE;color:#C62828;" title="Kyle Bass">KB</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">反对观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#E8F5E9;color:#2E7D32;" title="Ray Dalio">RD</div>
+            <div class="kol-avatar" style="background:#E3F2FD;color:#1565C0; margin-left:-8px;" title="Howard Marks">HM</div>
+            <div class="kol-avatar" style="background:#FFF3E0;color:#E65100; margin-left:-8px;" title="Charlie Munger">CM</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">相关资产</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge" style="background:var(--light);color:var(--primary);">BABA</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">PDD</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">JD</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">KWEB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 主线5 -->
+    <div style="padding:20px 0 0;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+        <span class="badge badge-bullish">主线</span>
+        <h3 style="font-size:18px; font-weight:600; margin:0;">加密货币ETF资金持续流入</h3>
+      </div>
+      <p style="font-size:14px; color:var(--secondary); line-height:1.6; margin:0 0 16px;">贝莱德IBIT连续15日净流入，以太坊ETF审批进程加速。机构配置加密货币敞口意愿增强，比特币矿业股随币价反弹。</p>
+      <div style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">支持观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#E8F5E9;color:#2E7D32;" title="Michael Saylor">MS</div>
+            <div class="kol-avatar" style="background:#E3F2FD;color:#1565C0; margin-left:-8px;" title="Anthony Pompliano">AP</div>
+            <div class="kol-avatar" style="background:#FFF3E0;color:#E65100; margin-left:-8px;" title="Cathie Wood">CW</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">反对观点</div>
+          <div style="display:flex; gap:-8px;">
+            <div class="kol-avatar" style="background:#FFEBEE;color:#C62828;" title="Peter Schiff">PS</div>
+            <div class="kol-avatar" style="background:#ECEFF1;color:#455A64; margin-left:-8px;" title="Nouriel Roubini">NR</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:var(--secondary); margin-bottom:8px;">相关资产</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="badge" style="background:var(--light);color:var(--primary);">BTC</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">ETH</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">MSTR</span>
+            <span class="badge" style="background:var(--light);color:var(--primary);">COIN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 分歧与辩论 -->
+<section class="card" style="margin-bottom:32px;">
+  <div class="section-title" style="cursor:pointer;" onclick="toggleSection('debate')">
+    <i data-lucide="scale" style="width:22px;height:22px;color:var(--warning);"></i>
+    分歧与辩论
+    <span style="margin-left:auto;font-size:12px;color:var(--secondary);display:flex;align-items:center;gap:4px;"><i data-lucide="chevron-down" id="debate-icon" style="width:16px;height:16px;"></i></span>
+  </div>
+  <div id="debate" class="collapsible-content open">
+    <div style="background:var(--light); border-radius:8px; padding:16px; margin-bottom:16px; font-size:14px; font-weight:600; color:var(--primary);">🔥 争议焦点：美股是否高估？</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div style="border:1px solid var(--border); border-radius:12px; padding:20px; border-left:4px solid var(--bullish);">
+        <div style="font-size:12px; font-weight:600; color:var(--bullish); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">看多阵营</div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:14px; font-weight:600; color:var(--primary); margin-bottom:4px;">Cathie Wood</div>
+          <div style="font-size:13px; color:var(--secondary); line-height:1.5;">"科技股的估值应放在创新周期的框架下理解。AI带来的生产力革命将重塑全球GDP，当前估值远未反映长期潜力。"</div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:14px; font-weight:600; color:var(--primary); margin-bottom:4px;">Jeremy Siegel</div>
+          <div style="font-size:13px; color:var(--secondary); line-height:1.5;">"当实际利率为负时，股票风险溢价仍然合理。市盈率应相对于债券收益率评估，而非历史绝对水平。"</div>
+        </div>
+        <div>
+          <div style="font-size:14px; font-weight:600; color:var(--primary); margin-bottom:4px;">Gene Munster</div>
+          <div style="font-size:13px; color:var(--secondary); line-height:1.5;">"英伟达30倍远期PE对147%的收入增长来说并不贵。如果AI渗透率继续提升，当前估值可能偏低。"</div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border); border-radius:12px; padding:20px; border-left:4px solid var(--bearish);">
+        <div style="font-size:12px; font-weight:600; color:var(--bearish); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:12px;">看空阵营</div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:14px; font-weight:600; color:var(--primary); margin-bottom:4px;">John Hussman</div>
+          <div style="font-size:13px; color:var(--secondary); line-height:1.5;">"标普500的Shiller PE处于历史前5%分位。任何回归均值的过程都将带来-40%以上的调整。"</div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <div style="font-size:14px; font-weight:600; color:var(--primary); margin-bottom:4px;">Michael Burry</div>
+          <div style="font-size:13px; color:var(--secondary); line-height:1.5;">"科技七巨头的集中度超过2000年互联网泡沫。一旦AI叙事出现裂痕，踩踏将不可避免。"</div>
+        </div>
+        <div>
+          <div style="font-size:14px; font-weight:600; color:var(--primary); margin-bottom:4px;">Jeffrey Gundlach</div>
+          <div style="font-size:13px; color:var(--secondary); line-height:1.5;">"企业利润占GDP比重已处于历史高位。薪资通胀和利率压力将挤压利润率，预期9%的盈利增长过于乐观。"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 今日金句 + 编辑部按 双栏 -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px;">
+  <!-- 今日金句 -->
+  <section class="card card-hover">
+    <div class="section-title" style="cursor:pointer;" onclick="toggleSection('quotes')">
+      <i data-lucide="quote" style="width:22px;height:22px;color:var(--accent);"></i>
+      今日金句
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);display:flex;align-items:center;gap:4px;"><i data-lucide="chevron-down" id="quotes-icon" style="width:16px;height:16px;"></i></span>
+    </div>
+    <div id="quotes" class="collapsible-content open">
+      <div style="position:relative; padding-left:20px; margin-bottom:20px;">
+        <div class="quote-mark" style="position:absolute; left:-8px; top:-8px;">"</div>
+        <div style="font-size:15px; font-weight:500; line-height:1.6; color:var(--primary); margin-bottom:8px;">AI不是泡沫，它是电力。你无法"投资电力"，但你可以投资电网——英伟达就是AI的电网。</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="kol-avatar" style="width:24px;height:24px;font-size:10px;background:#E8F5E9;color:#2E7D32;">CW</div>
+          <span style="font-size:13px; font-weight:600; color:var(--primary);">Cathie Wood</span>
+          <span style="font-size:12px; color:var(--secondary);">— YouTube / ARK Invest</span>
+        </div>
+      </div>
+      <div style="position:relative; padding-left:20px; margin-bottom:20px;">
+        <div class="quote-mark" style="position:absolute; left:-8px; top:-8px;">"</div>
+        <div style="font-size:15px; font-weight:500; line-height:1.6; color:var(--primary); margin-bottom:8px;">当所有人都站在船的同一边时，船就会翻。目前看多的共识度太高了。</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="kol-avatar" style="width:24px;height:24px;font-size:10px;background:#FFEBEE;color:#C62828;">MB</div>
+          <span style="font-size:13px; font-weight:600; color:var(--primary);">Michael Burry</span>
+          <span style="font-size:12px; color:var(--secondary);">— Twitter</span>
+        </div>
+      </div>
+      <div style="position:relative; padding-left:20px;">
+        <div class="quote-mark" style="position:absolute; left:-8px; top:-8px;">"</div>
+        <div style="font-size:15px; font-weight:500; line-height:1.6; color:var(--primary); margin-bottom:8px;">降息不是万能药。如果经济真的衰退了，降息也无法阻止企业盈利下滑。</div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div class="kol-avatar" style="width:24px;height:24px;font-size:10px;background:#ECEFF1;color:#455A64;">JG</div>
+          <span style="font-size:13px; font-weight:600; color:var(--primary);">Jeffrey Gundlach</span>
+          <span style="font-size:12px; color:var(--secondary);">— YouTube / DoubleLine</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 编辑部按 -->
+  <section class="card" style="background:var(--light); border:none;">
+    <div class="section-title" style="cursor:pointer;" onclick="toggleSection('editorial')">
+      <i data-lucide="pen-tool" style="width:22px;height:22px;color:var(--accent);"></i>
+      编辑部按
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);display:flex;align-items:center;gap:4px;"><i data-lucide="chevron-down" id="editorial-icon" style="width:16px;height:16px;"></i></span>
+    </div>
+    <div id="editorial" class="collapsible-content open">
+      <div style="font-size:14px; line-height:1.8; color:var(--primary);">
+        <p style="margin:0 0 12px;">今日市场情绪整体偏暖，但共识度处于中等水平（65% Bullish），这意味着市场仍有分歧空间，而非一致性狂热。</p>
+        <p style="margin:0 0 12px;"><strong style="color:var(--accent);">核心观察：</strong>AI算力链条的叙事从"预期"转向"验证"——英伟达财报、台积电产能、云厂商 capex 指引三要素形成闭环。这是叙事从炒作走向基本面的关键节点。</p>
+        <p style="margin:0 0 12px;"><strong style="color:var(--warning);">风险提示：</strong>美联储降息预期已被充分定价（CME显示9月降息概率78%）。若实际降息路径慢于预期，或通胀数据反弹，高估值成长股可能面临估值压缩。</p>
+        <p style="margin:0;"><strong style="color:var(--bullish);">策略建议：</strong>维持科技核心仓位，但提高现金比例至15-20%。关注Q2财报中云计算增速和AI收入占比的变化，这将是下半年叙事的关键变量。</p>
+      </div>
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:8px;">
+        <span style="font-size:12px; color:var(--secondary);">编辑团队</span>
+        <span style="font-size:12px; color:var(--secondary);">·</span>
+        <span style="font-size:12px; color:var(--secondary);">2025-07-09 06:00 UTC</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 情绪指数 + 资产热度 双栏 -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:32px;">
+  <section class="card">
+    <div class="section-title" style="cursor:pointer;" onclick="toggleSection('sentiment')">
+      <i data-lucide="pie-chart" style="width:22px;height:22px;color:var(--accent);"></i>
+      情绪指数
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);display:flex;align-items:center;gap:4px;"><i data-lucide="chevron-down" id="sentiment-icon" style="width:16px;height:16px;"></i></span>
+    </div>
+    <div id="sentiment" class="collapsible-content open">
+      <div class="chart-container" id="sentiment-chart"></div>
+      <div style="display:flex; justify-content:space-around; margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+        <div style="text-align:center;">
+          <div style="font-size:28px; font-weight:600; color:var(--bullish);">65%</div>
+          <div style="font-size:12px; color:var(--secondary); margin-top:4px;">Bullish</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:28px; font-weight:600; color:var(--bearish);">20%</div>
+          <div style="font-size:12px; color:var(--secondary); margin-top:4px;">Bearish</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:28px; font-weight:600; color:var(--neutral);">15%</div>
+          <div style="font-size:12px; color:var(--secondary); margin-top:4px;">Neutral</div>
+        </div>
+      </div>
+      <div style="margin-top:16px; padding:12px; background:var(--light); border-radius:8px; display:flex; align-items:center; justify-content:space-between;">
+        <span style="font-size:13px; color:var(--secondary);">共识度</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <div style="width:120px; height:6px; background:var(--border); border-radius:3px; overflow:hidden;">
+            <div style="width:55%; height:100%; background:var(--warning); border-radius:3px;"></div>
+          </div>
+          <span style="font-size:13px; font-weight:600; color:var(--warning);">Medium</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="card">
+    <div class="section-title" style="cursor:pointer;" onclick="toggleSection('asset-heat')">
+      <i data-lucide="bar-chart-2" style="width:22px;height:22px;color:var(--accent);"></i>
+      资产提及热度
+      <span style="margin-left:auto;font-size:12px;color:var(--secondary);display:flex;align-items:center;gap:4px;"><i data-lucide="chevron-down" id="asset-heat-icon" style="width:16px;height:16px;"></i></span>
+    </div>
+    <div id="asset-heat" class="collapsible-content open">
+      <div class="chart-container" id="asset-heat-chart"></div>
+    </div>
+  </section>
+</div>
+
+<!-- 追踪清单 -->
+<section class="card" style="margin-bottom:32px;">
+  <div class="section-title" style="cursor:pointer;" onclick="toggleSection('checklist')">
+    <i data-lucide="list-checks" style="width:22px;height:22px;color:var(--accent);"></i>
+    追踪清单 — 明日关注
+    <span style="margin-left:auto;font-size:12px;color:var(--secondary);display:flex;align-items:center;gap:4px;"><i data-lucide="chevron-down" id="checklist-icon" style="width:16px;height:16px;"></i></span>
+  </div>
+  <div id="checklist" class="collapsible-content open">
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px;">
+      <div>
+        <div style="font-size:12px; font-weight:600; color:var(--secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">政策</div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">美联储6月FOMC会议纪要公布</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">中国6月CPI/PPI数据</span></div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:600; color:var(--secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">公告</div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">台积电6月营收公告</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">特斯拉Q2交付量</span></div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:600; color:var(--secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">财报</div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">百事可乐(PEP) Q2财报</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">达美航空(DAL) Q2财报</span></div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:600; color:var(--secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">资金</div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">北向资金流向（A股）</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">IBIT/FBTC ETF资金流入</span></div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:600; color:var(--secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">海外</div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">欧央行利率决议前瞻</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">日本5月机械订单数据</span></div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:600; color:var(--secondary); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:8px;">技术</div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">标普500 50日均线支撑</span></div>
+        <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><span style="font-size:13px;">比特币60,000美元关键位</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 底部音频视频控件 -->
+<section class="card" style="position:sticky; bottom:16px; z-index:50; box-shadow:0 8px 32px rgba(0,0,0,0.15);">
+  <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+    <button id="play-btn" class="btn-primary" style="width:40px;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:50%;" onclick="toggleAudio()">
+      <i data-lucide="play" style="width:18px;height:18px;" id="play-icon"></i>
+    </button>
+    <div style="flex:1; min-width:200px;">
+      <div style="font-size:13px; font-weight:600; color:var(--primary); margin-bottom:4px;">KOL日报音频版</div>
+      <div style="font-size:12px; color:var(--secondary);">2025年7月9日 · 8分32秒</div>
+      <div class="audio-progress" style="margin-top:8px;">
+        <div class="audio-progress-bar" id="audio-bar"></div>
+        <div class="audio-thumb" id="audio-thumb"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:4px; font-size:11px; color:var(--secondary);">
+        <span id="audio-current">02:58</span>
+        <span>08:32</span>
+      </div>
+    </div>
+    <button class="btn-primary" style="background:var(--primary); display:flex;align-items:center;gap:8px;" onclick="alert('视频播放功能将在新标签页打开')">
+      <i data-lucide="video" style="width:16px;height:16px;"></i>
+      <span>播放视频</span>
+    </button>
+    <div style="display:flex; gap:8px;">
+      <button style="width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;" title="下载音频"><i data-lucide="download" style="width:14px;height:14px;color:var(--secondary);"></i></button>
+      <button style="width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;" title="分享"><i data-lucide="share-2" style="width:14px;height:14px;color:var(--secondary);"></i></button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+  // 初始化 Lucide 图标
+  lucide.createIcons();
+
+  // 折叠/展开
+  function toggleSection(id) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById(id + '-icon');
+    if (el.classList.contains('open')) {
+      el.classList.remove('open');
+      if (icon) icon.style.transform = 'rotate(-90deg)';
+    } else {
+      el.classList.add('open');
+      if (icon) icon.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  // 勾选框
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+    if (el.classList.contains('checked')) {
+      el.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    } else {
+      el.innerHTML = '';
+    }
+  }
+
+  // 音频播放模拟
+  let isPlaying = false;
+  let audioProgress = 35;
+  let audioTimer = null;
+  function toggleAudio() {
+    const btn = document.getElementById('play-icon');
+    const bar = document.getElementById('audio-bar');
+    const thumb = document.getElementById('audio-thumb');
+    const time = document.getElementById('audio-current');
+    if (isPlaying) {
+      isPlaying = false;
+      btn.setAttribute('data-lucide', 'play');
+      lucide.createIcons();
+      clearInterval(audioTimer);
+    } else {
+      isPlaying = true;
+      btn.setAttribute('data-lucide', 'pause');
+      lucide.createIcons();
+      audioTimer = setInterval(() => {
+        audioProgress += 0.5;
+        if (audioProgress > 100) audioProgress = 0;
+        bar.style.width = audioProgress + '%';
+        thumb.style.left = audioProgress + '%';
+        const totalSec = 512; // 8:32
+        const curSec = Math.floor(totalSec * audioProgress / 100);
+        const m = Math.floor(curSec / 60).toString().padStart(2, '0');
+        const s = (curSec % 60).toString().padStart(2, '0');
+        time.textContent = m + ':' + s;
+      }, 1000);
+    }
+  }
+
+  // 情绪饼图
+  const sentimentChart = echarts.init(document.getElementById('sentiment-chart'));
+  sentimentChart.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
+    legend: { show: false },
+    series: [{
+      type: 'pie', radius: ['45%', '70%'], center: ['50%', '50%'],
+      avoidLabelOverlap: false,
+      itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 2 },
+      label: { show: false },
+      emphasis: { label: { show: true, fontSize: 14, fontWeight: 'bold' } },
+      data: [
+        { value: 65, name: 'Bullish', itemStyle: { color: '#34C759' } },
+        { value: 20, name: 'Bearish', itemStyle: { color: '#FF3B30' } },
+        { value: 15, name: 'Neutral', itemStyle: { color: '#8E8E93' } }
+      ]
+    }]
+  });
+
+  // 资产热度条形图
+  const assetChart = echarts.init(document.getElementById('asset-heat-chart'));
+  assetChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: '3%', right: '4%', bottom: '3%', top: '3%', containLabel: true },
+    xAxis: { type: 'value', show: false },
+    yAxis: { type: 'category', data: ['BTC', 'TSLA', 'AAPL', 'MSFT', 'META', 'AMD', 'TSM', 'NVDA'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { fontSize: 13, color: '#1D1D1F' } },
+    series: [{
+      type: 'bar', data: [42, 48, 55, 58, 61, 68, 72, 89],
+      barWidth: '60%', itemStyle: { borderRadius: [0, 4, 4, 0], color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [{ offset: 0, color: '#0071E3' }, { offset: 1, color: '#5AC8FA' }]) },
+      label: { show: true, position: 'right', formatter: '{c}', fontSize: 12, color: '#86868B' }
+    }]
+  });
+
+  window.addEventListener('resize', () => { sentimentChart.resize(); assetChart.resize(); });
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="research_assistant.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◬</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">投研助手</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="morning_brief.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◐</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">早晨简报</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="closing_review.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◑</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">收盘复盘</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

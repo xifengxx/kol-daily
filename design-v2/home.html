@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI智能投研助手 — 设计稿预览</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.321.0/font/lucide.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; background: #F5F5F7; }
+  .card-hover { transition: all 0.3s ease; }
+  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+  .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:500; }
+  .badge-green { background:#E8F5E9; color:#2E7D32; }
+  .badge-blue { background:#E3F2FD; color:#1565C0; }
+  .badge-orange { background:#FFF3E0; color:#E65100; }
+  body.in-iframe header#page-header { display: none; }
+  .fade-in { animation: fadeIn 0.6s ease-out; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- iframe 检测 -->
+<script>
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+</script>
+
+<!-- Header -->
+<header id="page-header" class="bg-white border-b border-gray-200 sticky top-0 z-50">
+  <div class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">AI</div>
+      <h1 class="text-lg font-semibold text-gray-900">AI智能投研助手</h1>
+      <span class="text-sm text-gray-400">设计稿预览</span>
+    </div>
+    <div class="flex items-center gap-4 text-sm text-gray-500">
+      <span>v1.0</span>
+      <span class="text-gray-300">|</span>
+      <span>12 个页面</span>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="bg-white border-b border-gray-200">
+  <div class="max-w-[1200px] mx-auto px-6 py-12">
+    <div class="max-w-2xl">
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">产品设计效果图</h2>
+      <p class="text-gray-500 text-base leading-relaxed">
+        基于 Apple 财经风格（Apple Stocks App）设计系统，低饱和暖色调、卡片式布局、清晰层级。
+        所有页面包含完整交互流程（Tab 切换、弹窗、hover 效果、图表渲染等），使用真实模拟数据。
+      </p>
+      <div class="flex items-center gap-4 mt-6">
+        <span class="badge badge-green">Tailwind CSS</span>
+        <span class="badge badge-blue">ECharts 5.6</span>
+        <span class="badge badge-orange">Lucide Icons</span>
+        <span class="badge badge-green">响应式布局</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<main class="max-w-[1200px] mx-auto px-6 py-10">
+
+  <!-- Group 1: 核心工作台 -->
+  <div class="mb-10 fade-in">
+    <div class="flex items-center gap-2 mb-5">
+      <i data-lucide="layout-dashboard" class="w-5 h-5 text-blue-600"></i>
+      <h3 class="text-lg font-semibold text-gray-900">工作台 & 核心分析</h3>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <a href="dashboard.html" data-nav="dashboard" data-key="dashboard" data-title="首页" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-blue">P1</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">首页 / 工作台</h4>
+        <p class="text-sm text-gray-500">统一看板入口，聚合市场指数、自选股、热点追踪、KOL日报摘要、题材指数速览</p>
+      </a>
+      <a href="stock_analysis.html" data-nav="stock_analysis" data-key="stock_analysis" data-title="AI荐股" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-blue">P2</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">AI 荐股 — 个股看板</h4>
+        <p class="text-sm text-gray-500">五因子雷达图 + 因子明细卡片 + LLM 定性分析 + 推荐结论</p>
+      </a>
+      <a href="stock_diagnosis.html" data-nav="stock_diagnosis" data-key="stock_diagnosis" data-title="个股诊断" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-blue">P8</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">个股诊断</h4>
+        <p class="text-sm text-gray-500">四维度全面体检：K线 / 五因子 / 技术面 / 基本面 / 资金面 / 消息面 / AI诊断 / 可比公司</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Group 2: 内容 & 信息 -->
+  <div class="mb-10 fade-in">
+    <div class="flex items-center gap-2 mb-5">
+      <i data-lucide="newspaper" class="w-5 h-5 text-blue-600"></i>
+      <h3 class="text-lg font-semibold text-gray-900">内容 & 信息聚合</h3>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <a href="kol_daily.html" data-nav="kol_daily" data-key="kol_daily" data-title="KOL日报" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-blue">P3</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">KOL 日报</h4>
+        <p class="text-sm text-gray-500">8 板块 PPT 式布局：Hero + 主线 + 分歧 + 金句 + 编辑部 + 情绪指数 + 资产热度 + 追踪清单</p>
+      </a>
+      <a href="research_assistant.html" data-nav="research_assistant" data-key="research_assistant" data-title="AI投研助手" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-blue">P5</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">AI 投研助手</h4>
+        <p class="text-sm text-gray-500">多 Skill 聚合：每日简报 / 知识科普 / 深度分析 / 知识库</p>
+      </a>
+      <a href="morning_brief.html" data-nav="morning_brief" data-key="morning_brief" data-title="早晨简报" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-orange">P6</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">早晨模块 — 开盘前简报</h4>
+        <p class="text-sm text-gray-500">8 大板块：宏观速览 / 新闻头条 / 公告精选 / 美股复盘 / 欧股日韩 / 板块前瞻 / 今日日历 / 风险提示</p>
+      </a>
+      <a href="closing_review.html" data-nav="closing_review" data-key="closing_review" data-title="收盘复盘" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-orange">P7</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">收盘模块 — 盘后复盘</h4>
+        <p class="text-sm text-gray-500">6 大板块：大盘复盘 / 板块轮动 / 个股异动 / 日韩市场 / 港股联动 / 明日策略</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Group 3: 可视化 & 分析 -->
+  <div class="mb-10 fade-in">
+    <div class="flex items-center gap-2 mb-5">
+      <i data-lucide="network" class="w-5 h-5 text-blue-600"></i>
+      <h3 class="text-lg font-semibold text-gray-900">可视化 & 深度分析</h3>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <a href="knowledge_graph.html" data-nav="knowledge_graph" data-key="knowledge_graph" data-title="投资知识图谱" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-blue">P4</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">投资知识图谱</h4>
+        <p class="text-sm text-gray-500">四视图可视化：Treemap 矩形树图 / 关系网络 / Sankey 桑基图 / 因果传导 + 9 张详情卡片弹窗</p>
+      </a>
+      <a href="theme_index.html" data-nav="theme_index" data-key="theme_index" data-title="题材指数" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-orange">P9</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">题材指数</h4>
+        <p class="text-sm text-gray-500">主题投资分析：概览 / K线 / 四维度 / 核心标的 / 产业链 / 资金 / 消息 / AI 诊断</p>
+      </a>
+      <a href="cross_market.html" data-nav="cross_market" data-key="cross_market" data-title="跨市场助手" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-orange">P10</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">跨市场助手</h4>
+        <p class="text-sm text-gray-500">港股通 / ADR 联动 / 估值对比 / 宏观联动 / 外盘复盘</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Group 4: 工具 & 管理 -->
+  <div class="mb-10 fade-in">
+    <div class="flex items-center gap-2 mb-5">
+      <i data-lucide="settings" class="w-5 h-5 text-blue-600"></i>
+      <h3 class="text-lg font-semibold text-gray-900">工具 & 管理</h3>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <a href="watchlist.html" data-nav="watchlist" data-key="watchlist" data-title="自选股管理" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-orange">P11</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">自选股管理</h4>
+        <p class="text-sm text-gray-500">自选股列表、批量诊断、分组管理、持仓统计、添加弹窗</p>
+      </a>
+      <a href="settings.html" data-nav="settings" data-key="settings" data-title="设置" class="block bg-white rounded-xl border border-gray-200 p-6 card-hover">
+        <div class="flex items-center justify-between mb-3">
+          <span class="badge badge-blue">P12</span>
+          <i data-lucide="external-link" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <h4 class="font-semibold text-gray-900 mb-1">设置 / 个人中心</h4>
+        <p class="text-sm text-gray-500">账户信息、通知偏好、数据管理、主题设置、关于我们</p>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-gray-200 bg-white mt-10">
+  <div class="max-w-[1200px] mx-auto px-6 py-6 text-center text-sm text-gray-400">
+    <p>AI 智能投研助手 · 设计稿预览 · 基于 Apple 财经风格设计系统</p>
+    <p class="mt-1">所有页面使用 Tailwind CSS + ECharts + Vanilla JS 构建，单文件离线可用</p>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  // iframe 模式下拦截卡片点击，通过 parent.loadPage 导航
+  document.querySelectorAll('a[data-nav]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      if (window.self !== window.top) {
+        e.preventDefault();
+        var href = this.getAttribute('href');
+        var title = this.getAttribute('data-title');
+        var key = this.getAttribute('data-key');
+        if (parent.loadPage) {
+          parent.loadPage(href, '', title, key);
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5Factor AI · 投研项目导航</title>
+<style>
+:root {
+  --bg: #f5f5f7; --text: #1d1d1f; --text2: #6e6e73;
+  --accent: #533afd; --navy: #061b31; --card: #ffffff; --border: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased;
+}
+.hero {
+  background: var(--navy); color: #fff; text-align: center; padding: 80px 24px 60px;
+}
+.hero h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 12px; }
+.hero h1 span { color: #8b9cf7; }
+.hero p { font-size: 17px; color: rgba(255,255,255,0.65); max-width: 600px; margin: 0 auto; }
+.section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+.section-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+.section-sub { font-size: 14px; color: var(--text2); margin-bottom: 32px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+.card {
+  background: var(--card); border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--border); transition: all 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+  cursor: pointer; text-decoration: none; color: inherit; display: block;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.10); border-color: var(--accent); }
+.card-image {
+  height: 160px; display: flex; align-items: center; justify-content: center;
+  font-size: 56px; position: relative; overflow: hidden;
+}
+.card-image.ai      { background: linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%); }
+.card-image.knowledge { background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%); }
+.card-image.kol     { background: linear-gradient(135deg, #dcfce7 0%, #86efac 100%); }
+.card-image.proto1  { background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%); }
+.card-image.proto2  { background: linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%); }
+.card-image.default { background: linear-gradient(135deg, #f3f4f6 0%, #d1d5db 100%); }
+.card-image .icon-text { font-size: 16px; font-weight: 600; color: rgba(0,0,0,0.25); position: absolute; bottom: 8px; right: 16px; }
+.card-body { padding: 20px 24px 24px; }
+.card-body h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+.card-body p { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+.tag-purple { background: #ede9fe; color: #6d28d9; }
+.tag-blue   { background: #dbeafe; color: #1e40af; }
+.tag-green  { background: #dcfce7; color: #166534; }
+.tag-yellow { background: #fef3c7; color: #92400e; }
+.tag-red    { background: #fee2e2; color: #991b1b; }
+.card-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; color: var(--accent); transition: gap 0.2s; }
+.card:hover .card-link { gap: 8px; }
+.footer { text-align: center; padding: 40px 24px; font-size: 12px; color: var(--text2); border-top: 1px solid var(--border); }
+@media (max-width: 768px) { .hero h1 { font-size: 32px; } .card-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>5<span>Factor</span> AI</h1>
+  <p>金融投研产品原型合集 · 涵盖AI选股、产业链知识图谱、KOL观点速览、多模型投研对话等模块</p>
+</header>
+
+<!-- Section 1: 五因子AI投研平台 · AI生成设计探索 -->
+<section class="section">
+  <h2 class="section-title">五因子AI投研平台 · AI生成设计探索</h2>
+  <p class="section-sub">使用不同大模型（DeepSeek / Kimi / Kimi 简版）生成的五因子AI投研平台设计原型 · 独立模块 + 导航体系</p>
+  <div class="card-grid">
+
+    <a target="_blank" href="prototypes/index.html" class="card">
+      <div class="card-image ai">🧠<span class="icon-text">8 Modules</span></div>
+      <div class="card-body">
+        <h3>五因子设计原型 A</h3>
+        <p>DeepSeek生成 · 8模块整合页面：行情与数据 / 内容与信息 / 分析与选股 / 产业链与知识 / AI编排 / 社区 / 自选股 / 设置 · 多模型AI投研对话</p>
+        <div class="card-tags"><span class="tag tag-purple">DeepSeek</span><span class="tag tag-blue">8合一</span><span class="tag tag-green">AI对话</span></div>
+        <span class="card-link">打开页面 →</span>
+      </div>
+    </a>
+
+    <a target="_blank" href="design-v1/index.html" class="card">
+      <div class="card-image proto1">🏗️<span class="icon-text">Design B · 30 Pages</span></div>
+      <div class="card-body">
+        <h3>五因子设计原型 B</h3>
+        <p>Kimi 大模型生成 · 30个独立HTML页面覆盖全功能：行情中心/知识库/概念卡片/AI对话/KOL摘要/策略回测/个股深度/产业链等</p>
+        <div class="card-tags"><span class="tag tag-purple">Kimi</span><span class="tag tag-blue">30模块</span><span class="tag tag-green">完整体系</span></div>
+        <span class="card-link">打开导航页 →</span>
+      </div>
+    </a>
+
+    <a target="_blank" href="design-v2/index.html" class="card">
+      <div class="card-image proto2">🎯<span class="icon-text">Design C · 15 Pages</span></div>
+      <div class="card-body">
+        <h3>五因子设计原型 C</h3>
+        <p>Kimi 简版生成 · 15个独立HTML页面：投研助手/知识图谱/晨报/个股诊断/KOL日报/跨市场对比/行情面板/设置等</p>
+        <div class="card-tags"><span class="tag tag-red">Kimi 简版</span><span class="tag tag-blue">15模块</span><span class="tag tag-yellow">深度分析</span></div>
+        <span class="card-link">打开导航页 →</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- Section 2: 独立功能模块 -->
+<section class="section">
+  <h2 class="section-title">独立功能模块</h2>
+  <p class="section-sub">各子系统独立页面，可单独浏览查看</p>
+  <div class="card-grid">
+
+    <a target="_blank" href="prototypes/invest_kg.html" class="card">
+      <div class="card-image knowledge">🔗<span class="icon-text">2 Industries · 74 Sectors</span></div>
+      <div class="card-body">
+        <h3>投资知识图谱</h3>
+        <p>AI算力 + 半导体双产业链 · Treemap/关系网络/Sankey/因果传导四视图 · 447家公司 · 571只股票 · 518条关系</p>
+        <div class="card-tags"><span class="tag tag-blue">产业链</span><span class="tag tag-purple">知识图谱</span><span class="tag tag-green">ECharts</span></div>
+        <span class="card-link">打开页面 →</span>
+      </div>
+    </a>
+
+    <a target="_blank" href="prototypes/kol_report_latest.html" class="card">
+      <div class="card-image kol">📡<span class="icon-text">51 Sources</span></div>
+      <div class="card-body">
+        <h3>每日油管观点速览</h3>
+        <p>38个YouTube频道 + 13个Twitter KOL每日采集 · LLM两层摘要 · 4-6条投资主线共识 · 日成本~$0.05</p>
+        <div class="card-tags"><span class="tag tag-green">KOL日报</span><span class="tag tag-blue">LLM摘要</span><span class="tag tag-yellow">多模态</span></div>
+        <span class="card-link">打开页面 →</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- Section 3: 早期原型探索 -->
+<section class="section">
+  <h2 class="section-title">早期原型探索</h2>
+  <p class="section-sub">使用不同大模型生成的五因子评分面板 · 探索不同设计方向</p>
+  <div class="card-grid">
+
+    <a target="_blank" href="prototypes/dashboard_stripe.html" class="card">
+      <div class="card-image proto1">📊<span class="icon-text">Stripe Theme</span></div>
+      <div class="card-body">
+        <h3>五因子看板 · Stripe风格</h3>
+        <p>Stripe浅色主题 · 五因子评分面板 · 模拟交易追踪 · Top 20建仓标的 · 个股详情展开</p>
+        <div class="card-tags"><span class="tag tag-purple">五因子</span><span class="tag tag-yellow">Stripe</span></div>
+        <span class="card-link">打开页面 →</span>
+      </div>
+    </a>
+
+    <a target="_blank" href="prototypes/dashboard_linear.html" class="card">
+      <div class="card-image proto2">📈<span class="icon-text">Linear Theme</span></div>
+      <div class="card-body">
+        <h3>五因子看板 · Linear风格</h3>
+        <p>Linear极简暗色主题 · 五因子雷达图 + 评分排序 · LLM共识详情 · 信号订阅面板</p>
+        <div class="card-tags"><span class="tag tag-purple">五因子</span><span class="tag tag-red">Linear</span></div>
+        <span class="card-link">打开页面 →</span>
+      </div>
+    </a>
+
+    <a target="_blank" href="prototypes/module9_dashboard.html" class="card">
+      <div class="card-image default">💰<span class="icon-text">Trading</span></div>
+      <div class="card-body">
+        <h3>模拟交易看板</h3>
+        <p>Module 9 模拟交易系统 · 持仓追踪 · T+N回撤矩阵 · 周度复盘报告 · 净值曲线</p>
+        <div class="card-tags"><span class="tag tag-green">模拟交易</span><span class="tag tag-purple">Module 9</span></div>
+        <span class="card-link">打开页面 →</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<footer class="footer">5Factor AI Research Platform · Financial Intelligence Prototypes · 2026</footer>
+</body>
+</html>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个股诊断 - NVDA | AI智能投研助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root { --primary:#1D1D1F; --secondary:#86868B; --accent:#0071E3; --bg:#F5F5F7; --card:#FFFFFF; --border:#E5E5EA; --light:#F2F2F7; --up:#FF3B30; --down:#34C759; --warning:#FF9500; --safe:#34C759; --neutral:#8E8E93; }
+  * { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; }
+  body { background: var(--bg); color: var(--primary); margin:0; padding:0; }
+  .page-container { max-width:1200px; margin:0 auto; padding:0 32px; }
+  @media(max-width:768px){ .page-container { padding:0 16px; } }
+  .card { background:var(--card); border-radius:12px; border:1px solid var(--border); padding:24px; }
+  .card-hover:hover { box-shadow:0 8px 24px rgba(0,0,0,0.12); transform:translateY(-2px); transition:all 0.3s ease; }
+  .badge { display:inline-flex; align-items:center; height:20px; padding:0 8px; border-radius:10px; font-size:11px; font-weight:500; }
+  .badge-primary { background:var(--accent); color:#fff; } .badge-success { background:var(--safe); color:#fff; }
+  .badge-warning { background:var(--warning); color:#fff; } .badge-danger { background:var(--up); color:#fff; }
+  .badge-neutral { background:var(--light); color:var(--primary); }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:8px 16px; border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; transition:opacity 0.2s; border:none; background:var(--light); color:var(--primary); border:1px solid var(--border); }
+  .btn:hover { opacity:0.9; } .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn-active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .section-title { font-size:22px; font-weight:600; line-height:1.3; letter-spacing:-0.01em; margin-bottom:16px; }
+  .tab-bar { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+  .tab-bar::-webkit-scrollbar { display:none; }
+  .tab-btn { white-space:nowrap; padding:8px 16px; border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; background:var(--light); color:var(--secondary); border:1px solid var(--border); transition:all 0.2s; }
+  .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .tab-panel { display:none; animation:fadeIn 0.3s ease-out; }
+  .tab-panel.active { display:block; }
+  .fade-in { animation:fadeIn 0.3s ease-out forwards; opacity:0; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+  .table { width:100%; border-collapse:collapse; font-size:14px; }
+  .table th { background:var(--light); color:var(--secondary); font-size:12px; font-weight:500; padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); }
+  .table td { padding:14px 16px; border-bottom:1px solid var(--border); }
+  .table tr:hover td { background:var(--bg); }
+  .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-100%); background:rgba(0,0,0,0.8); color:#fff; padding:12px 20px; border-radius:12px; font-size:14px; z-index:999; transition:transform 0.3s ease; }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+  .wordcloud-tag { display:inline-block; padding:4px 10px; border-radius:8px; font-size:13px; margin:4px; background:var(--light); color:var(--primary); }
+  @media(max-width:768px){ .card { padding:16px; } .section-title { font-size:18px; } .table { font-size:13px; } .table th, .table td { padding:8px 10px; } }
+</style>
+</head>
+<body>
+<!-- Breadcrumb -->
+<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
+    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
+    <span style="color:#C7C7CC;">/</span>
+    <span style="color:#1D1D1F; font-weight:500;">个股诊断</span>
+  </div>
+</div>
+
+<nav style="height:56px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;">
+  <div class="page-container" style="display:flex;align-items:center;justify-content:space-between;height:100%;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      <span style="font-size:16px;font-weight:600;">AI投研助手</span>
+    </div>
+    <div style="flex:1;max-width:400px;margin:0 24px;">
+      <div style="position:relative;">
+        <svg style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--secondary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input class="input" type="text" placeholder="搜索股票..." style="width:100%;padding-left:38px;height:40px;border-radius:8px;background:var(--light);border:1px solid transparent;outline:none;font-size:14px;" value="NVDA">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:13px;color:var(--secondary);">2025-07-09 周三</span>
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;">U</div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-container" style="padding-top:32px;padding-bottom:64px;">
+  <!-- 股票头部 -->
+  <div class="card fade-in" style="margin-bottom:24px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="font-size:28px;font-weight:700;letter-spacing:-0.02em;">NVDA</span>
+          <span class="badge badge-primary">美股</span>
+          <span class="badge badge-success">高置信度</span>
+        </div>
+        <div style="font-size:16px;color:var(--secondary);font-weight:500;">NVIDIA Corporation · 英伟达</div>
+        <div style="font-size:13px;color:var(--secondary);margin-top:4px;">半导体 | AI芯片 | 数据中心 · 纳斯达克</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:32px;font-weight:600;line-height:1.1;">$138.50</div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px;">
+          <svg style="width:16px;height:16px;color:var(--up);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          <span style="font-size:20px;font-weight:600;color:var(--up);">+2.34%</span>
+          <span style="font-size:14px;color:var(--up);">+$3.17</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:32px;margin-top:20px;flex-wrap:wrap;">
+      <div><span style="font-size:12px;color:var(--secondary);">市值</span><div style="font-size:16px;font-weight:600;margin-top:2px;">$3.42万亿</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">PE TTM</span><div style="font-size:16px;font-weight:600;margin-top:2px;">62.5</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">PB</span><div style="font-size:16px;font-weight:600;margin-top:2px;">52.3</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">PS</span><div style="font-size:16px;font-weight:600;margin-top:2px;">28.1</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">股息率</span><div style="font-size:16px;font-weight:600;margin-top:2px;">0.03%</div></div>
+      <div><span style="font-size:12px;color:var(--secondary);">Beta</span><div style="font-size:16px;font-weight:600;margin-top:2px;">1.72</div></div>
+    </div>
+  </div>
+
+  <!-- Tab导航 -->
+  <div class="tab-bar" style="margin-bottom:24px;">
+    <button class="tab-btn active" data-tab="kline" onclick="switchTab(this)">K线图</button>
+    <button class="tab-btn" data-tab="factors" onclick="switchTab(this)">五因子</button>
+    <button class="tab-btn" data-tab="technical" onclick="switchTab(this)">技术面</button>
+    <button class="tab-btn" data-tab="fundamental" onclick="switchTab(this)">基本面</button>
+    <button class="tab-btn" data-tab="capital" onclick="switchTab(this)">资金面</button>
+    <button class="tab-btn" data-tab="news" onclick="switchTab(this)">消息面</button>
+    <button class="tab-btn" data-tab="ai" onclick="switchTab(this)">AI诊断</button>
+    <button class="tab-btn" data-tab="peers" onclick="switchTab(this)">可比公司</button>
+  </div>
+
+  <!-- Tab 1: K线图 -->
+  <div id="tab-kline" class="tab-panel active">
+    <div class="card" style="margin-bottom:24px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+        <div class="section-title" style="margin-bottom:0;">K线走势图</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-active" onclick="setKlinePeriod(this,'day')">日K</button>
+          <button class="btn" onclick="setKlinePeriod(this,'week')">周K</button>
+          <button class="btn" onclick="setKlinePeriod(this,'month')">月K</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="btn btn-active" onclick="setIndicator(this,'macd')">MACD</button>
+        <button class="btn" onclick="setIndicator(this,'rsi')">RSI</button>
+        <button class="btn" onclick="setIndicator(this,'boll')">BOLL</button>
+      </div>
+      <div id="klineChart" style="width:100%;height:480px;"></div>
+    </div>
+  </div>
+
+  <!-- Tab 2: 五因子 -->
+  <div id="tab-factors" class="tab-panel">
+    <div class="card" style="margin-bottom:24px;">
+      <div class="section-title">五因子雷达图</div>
+      <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+        <div id="factorRadarChart" style="flex:1;min-width:300px;height:360px;"></div>
+        <div style="min-width:140px;display:flex;flex-direction:column;align-items:center;gap:12px;">
+          <div style="position:relative;width:120px;height:120px;">
+            <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg);">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="var(--light)" stroke-width="8"/>
+              <circle cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8" stroke-dasharray="261.5 326.7" stroke-linecap="round"/>
+            </svg>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:24px;font-weight:600;color:var(--accent);">78</div>
+          </div>
+          <div style="font-size:13px;color:var(--secondary);text-align:center;">综合评分</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">因子明细</div>
+      <div id="diagnosisFactorList" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+  </div>
+
+  <!-- Tab 3: 技术面 -->
+  <div id="tab-technical" class="tab-panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;">
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">趋势判断</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">短期趋势（5日）</span>
+            <span class="badge badge-success">上升</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">中期趋势（20日）</span>
+            <span class="badge badge-success">上升</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">长期趋势（60日）</span>
+            <span class="badge badge-primary">震荡</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">均线排列</span>
+            <span style="font-size:14px;font-weight:500;">MA5 > MA10 > MA20</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">支撑 / 阻力位</div>
+        <div id="supportResistChart" style="height:220px;"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;">
+          <span style="color:var(--secondary);">强支撑 $128.50</span>
+          <span style="color:var(--secondary);">强阻力 $145.00</span>
+        </div>
+      </div>
+      <div class="card" style="grid-column:1/-1;">
+        <div class="section-title" style="margin-bottom:12px;">形态识别</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;padding:16px;border:1px solid var(--border);border-radius:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:14px;font-weight:600;">上升通道</span>
+              <span class="badge badge-success">确认中</span>
+            </div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">价格沿MA10稳步上行，低点不断抬高。成交量配合温和放大，通道斜率约15°。</div>
+          </div>
+          <div style="flex:1;min-width:200px;padding:16px;border:1px solid var(--border);border-radius:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:14px;font-weight:600;">MACD金叉</span>
+              <span class="badge badge-success">已确认</span>
+            </div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">DIF上穿DEA，柱状图由绿转红。金叉发生在零轴上方，属于强势金叉信号。</div>
+          </div>
+          <div style="flex:1;min-width:200px;padding:16px;border:1px solid var(--border);border-radius:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:14px;font-weight:600;">头肩顶</span>
+              <span class="badge badge-neutral">未识别</span>
+            </div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">当前价格形态不符合头肩顶特征。近期高点呈阶梯式上升，无明显左肩/头部/右肩结构。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: 基本面 -->
+  <div id="tab-fundamental" class="tab-panel">
+    <div class="card" style="margin-bottom:24px;">
+      <div class="section-title">财务摘要</div>
+      <div style="overflow-x:auto;">
+        <table class="table">
+          <thead><tr><th>指标</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>TTM</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:500;">营业收入（亿美元）</td><td>166.8</td><td>269.1</td><td>269.7</td><td>609.2</td><td>1130.5</td><td>1305.0</td></tr>
+            <tr><td style="font-weight:500;">净利润（亿美元）</td><td>43.3</td><td>97.5</td><td>43.7</td><td>297.6</td><td>616.8</td><td>728.0</td></tr>
+            <tr><td style="font-weight:500;">经营现金流（亿美元）</td><td>58.2</td><td>91.2</td><td>56.2</td><td>287.6</td><td>652.0</td><td>785.0</td></tr>
+            <tr><td style="font-weight:500;">毛利率</td><td>62.3%</td><td>64.9%</td><td>56.9%</td><td>72.7%</td><td>74.6%</td><td>75.1%</td></tr>
+            <tr><td style="font-weight:500;">净利率</td><td>26.0%</td><td>36.2%</td><td>16.2%</td><td>48.9%</td><td>54.6%</td><td>55.8%</td></tr>
+            <tr><td style="font-weight:500;">ROE</td><td>23.1%</td><td>42.0%</td><td>14.8%</td><td>69.2%</td><td>78.5%</td><td>82.0%</td></tr>
+            <tr><td style="font-weight:500;">EPS（美元）</td><td>1.73</td><td>3.85</td><td>1.74</td><td>11.93</td><td>24.86</td><td>29.12</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;">
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">杜邦分析</div>
+        <div id="dupontChart" style="height:280px;"></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">估值百分位</div>
+        <div id="valuationPercentileChart" style="height:280px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 5: 资金面 -->
+  <div id="tab-capital" class="tab-panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;">
+      <div class="card" style="grid-column:1/-1;">
+        <div class="section-title" style="margin-bottom:12px;">主力资金流向（20日）</div>
+        <div id="capitalFlowChart" style="height:280px;"></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">北向资金持仓分布</div>
+        <div id="northboundChart" style="height:260px;"></div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">融资融券余额</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;justify-content:space-between;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">融资余额</span><span style="font-size:16px;font-weight:600;">$18.2亿</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">融券余额</span><span style="font-size:16px;font-weight:600;">$2.8亿</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">融资买入额（今日）</span><span style="font-size:16px;font-weight:600;color:var(--up);">+$1.35亿</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:12px;background:var(--light);border-radius:8px;">
+            <span style="font-size:14px;color:var(--secondary);">融券卖出额（今日）</span><span style="font-size:16px;font-weight:600;color:var(--down);">-$0.42亿</span>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="grid-column:1/-1;">
+        <div class="section-title" style="margin-bottom:12px;">大宗交易（近5日）</div>
+        <div style="overflow-x:auto;">
+          <table class="table">
+            <thead><tr><th>日期</th><th>成交价</th><th>成交量</th><th>成交额</th><th>买方</th><th>卖方</th><th>折溢价</th></tr></thead>
+            <tbody>
+              <tr><td>2025-07-08</td><td>$137.80</td><td>150万</td><td>$2.07亿</td><td>机构席位</td><td>券商自营</td><td style="color:var(--down);">-0.51%</td></tr>
+              <tr><td>2025-07-07</td><td>$136.20</td><td>80万</td><td>$1.09亿</td><td>基金专户</td><td>QFII</td><td style="color:var(--up);">+0.15%</td></tr>
+              <tr><td>2025-07-03</td><td>$134.50</td><td>200万</td><td>$2.69亿</td><td>券商资管</td><td>保险资金</td><td style="color:var(--down);">-0.74%</td></tr>
+              <tr><td>2025-07-02</td><td>$135.10</td><td>120万</td><td>$1.62亿</td><td>社保基金</td><td>券商自营</td><td style="color:var(--up);">+0.22%</td></tr>
+              <tr><td>2025-07-01</td><td>$133.80</td><td>90万</td><td>$1.20亿</td><td>QFII</td><td>私募基金</td><td style="color:var(--down);">-0.37%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 6: 消息面 -->
+  <div id="tab-news" class="tab-panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;">
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">近期公告</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="padding:14px;border:1px solid var(--border);border-radius:8px;border-left:4px solid var(--accent);">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;">2025财年Q2财报公告</div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">数据中心收入$88.2亿，同比+154%，环比+28%。毛利率75.1%，EPS $0.68，均超市场预期。</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:6px;">2025-07-01 · 交易所公告</div>
+          </div>
+          <div style="padding:14px;border:1px solid var(--border);border-radius:8px;border-left:4px solid var(--warning);">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;">Blackwell架构量产延期说明</div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">公司确认B200芯片量产时间推迟至2025Q3末，主要由于封装产能爬坡慢于预期。</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:6px;">2025-06-28 · 投资者关系</div>
+          </div>
+          <div style="padding:14px;border:1px solid var(--border);border-radius:8px;border-left:4px solid var(--safe);">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;">与AWS签署扩大合作协议</div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">AWS承诺未来三年采购超过$50亿NVIDIA GPU，用于Trainium和Inferentia之外的AI训练。</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:6px;">2025-06-25 · 公司新闻</div>
+          </div>
+          <div style="padding:14px;border:1px solid var(--border);border-radius:8px;border-left:4px solid var(--accent);">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;">股票分割计划（1拆10）</div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">董事会批准1拆10股票分割，登记日2025-08-15，旨在提高股票流动性。</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:6px;">2025-06-20 · 交易所公告</div>
+          </div>
+          <div style="padding:14px;border:1px solid var(--border);border-radius:8px;border-left:4px solid var(--neutral);">
+            <div style="font-size:14px;font-weight:600;margin-bottom:4px;">SEC 8-K文件：高管股票出售计划</div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">CEO黄仁勋按10b5-1计划出售6万股，为预设的自动交易安排，非基于内部信息。</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:6px;">2025-06-18 · SEC文件</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">新闻舆情词云</div>
+        <div style="padding:16px;background:var(--light);border-radius:8px;">
+          <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;min-height:180px;">
+            <span class="wordcloud-tag" style="font-size:20px;font-weight:600;color:var(--accent);">AI芯片</span>
+            <span class="wordcloud-tag" style="font-size:14px;">数据中心</span>
+            <span class="wordcloud-tag" style="font-size:18px;font-weight:600;color:var(--up);">Blackwell</span>
+            <span class="wordcloud-tag" style="font-size:12px;">GPU</span>
+            <span class="wordcloud-tag" style="font-size:16px;color:var(--warning);">出口管制</span>
+            <span class="wordcloud-tag" style="font-size:20px;font-weight:600;color:var(--safe);">财报超预期</span>
+            <span class="wordcloud-tag" style="font-size:13px;">CUDA</span>
+            <span class="wordcloud-tag" style="font-size:15px;">云厂商</span>
+            <span class="wordcloud-tag" style="font-size:19px;font-weight:600;color:var(--accent);">H200</span>
+            <span class="wordcloud-tag" style="font-size:12px;">推理</span>
+            <span class="wordcloud-tag" style="font-size:17px;color:var(--secondary);">AMD</span>
+            <span class="wordcloud-tag" style="font-size:14px;">自研芯片</span>
+            <span class="wordcloud-tag" style="font-size:16px;color:var(--warning);">地缘政治</span>
+            <span class="wordcloud-tag" style="font-size:18px;font-weight:600;color:var(--safe);">算力</span>
+            <span class="wordcloud-tag" style="font-size:12px;">大模型</span>
+            <span class="wordcloud-tag" style="font-size:15px;">台积电</span>
+            <span class="wordcloud-tag" style="font-size:13px;">CoWoS</span>
+          </div>
+        </div>
+        <div class="section-title" style="margin:20px 0 12px;">研报评级汇总</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="flex:1;text-align:center;padding:16px;background:var(--light);border-radius:8px;">
+            <div style="font-size:28px;font-weight:600;color:var(--safe);">32</div>
+            <div style="font-size:13px;color:var(--secondary);margin-top:4px;">买入</div>
+          </div>
+          <div style="flex:1;text-align:center;padding:16px;background:var(--light);border-radius:8px;">
+            <div style="font-size:28px;font-weight:600;color:var(--accent);">18</div>
+            <div style="font-size:13px;color:var(--secondary);margin-top:4px;">增持</div>
+          </div>
+          <div style="flex:1;text-align:center;padding:16px;background:var(--light);border-radius:8px;">
+            <div style="font-size:28px;font-weight:600;color:var(--neutral);">5</div>
+            <div style="font-size:13px;color:var(--secondary);margin-top:4px;">中性</div>
+          </div>
+          <div style="flex:1;text-align:center;padding:16px;background:var(--light);border-radius:8px;">
+            <div style="font-size:28px;font-weight:600;color:var(--up);">1</div>
+            <div style="font-size:13px;color:var(--secondary);margin-top:4px;">减持</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:12px;background:var(--light);border-radius:8px;text-align:center;">
+          <span style="font-size:14px;font-weight:600;">一致目标价: </span><span style="font-size:18px;font-weight:600;color:var(--accent);">$165.00</span>
+          <span style="font-size:14px;color:var(--secondary);margin-left:8px;">上涨空间 +19.1%</span>
+        </div>
+      </div>
+      <div class="card" style="grid-column:1/-1;">
+        <div class="section-title" style="margin-bottom:12px;">KOL观点</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:260px;padding:16px;border:1px solid var(--border);border-radius:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:14px;font-weight:600;">Cathie Wood</span>
+              <span class="badge badge-success">Bullish</span>
+            </div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">"AI基础设施投资周期仍处于早期阶段，NVIDIA的护城河比我们想象的更深。CUDA生态系统是竞争对手难以复制的核心壁垒。"</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:8px;">2025-07-07 · Ark Invest</div>
+          </div>
+          <div style="flex:1;min-width:260px;padding:16px;border:1px solid var(--border);border-radius:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:14px;font-weight:600;">Ray Dalio</span>
+              <span class="badge badge-primary">Neutral</span>
+            </div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">"半导体行业具有强周期性，当前估值已经反映了大部分乐观预期。建议关注风险分散，不要过度集中于单一赛道。"</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:8px;">2025-07-05 · Bridgewater</div>
+          </div>
+          <div style="flex:1;min-width:260px;padding:16px;border:1px solid var(--border);border-radius:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:14px;font-weight:600;">Jim Cramer</span>
+              <span class="badge badge-success">Bullish</span>
+            </div>
+            <div style="font-size:13px;color:var(--secondary);line-height:1.5;">"Blackwell的推迟只是暂时的噪音，需求基本面依然强劲。每次回调都是买入机会，AI主题远未结束。"</div>
+            <div style="font-size:12px;color:var(--secondary);margin-top:8px;">2025-07-06 · Mad Money</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 7: AI诊断 -->
+  <div id="tab-ai" class="tab-panel">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;">
+      <div class="card" style="border:2px solid var(--accent);">
+        <div class="section-title" style="margin-bottom:12px;">AI 综合诊断</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+          <div style="width:80px;height:80px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700;">B</div>
+          <div>
+            <div style="font-size:22px;font-weight:600;">买入</div>
+            <div style="font-size:14px;color:var(--secondary);margin-top:2px;">综合评级 · 高置信度</div>
+            <div style="font-size:13px;color:var(--warning);margin-top:4px;">风险提示：估值偏高，关注地缘政治</div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.7;color:var(--primary);padding:16px;background:var(--light);border-radius:8px;">
+          <strong>诊断结论：</strong>NVDA当前处于AI基础设施扩张的核心受益位置。五因子综合评分78分，其中基本面估值（82分）和资金面（75分）表现突出。技术面处于金叉初期，短期趋势向上。主要风险在于估值处于历史高位（PE 62.5x）和地缘政治不确定性（出口管制）。建议<strong>核心持仓</strong>配置，但需控制仓位占比，避免单一标的过度集中。Blackwell量产是2025H2关键催化剂。
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:12px;">四维度诊断雷达</div>
+        <div id="aiRadarChart" style="height:300px;"></div>
+      </div>
+      <div class="card" style="grid-column:1/-1;">
+        <div class="section-title" style="margin-bottom:12px;">诊断详情</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">
+          <div style="padding:14px;background:var(--light);border-radius:8px;">
+            <div style="font-size:13px;font-weight:600;color:var(--secondary);margin-bottom:6px;">技术面诊断</div>
+            <div style="font-size:14px;line-height:1.6;">短期上升趋势确认，MACD金叉初期。RSI 55处于健康区间，未超买。建议关注$145阻力位的突破情况。</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--safe);font-weight:500;">得分：75/100</div>
+          </div>
+          <div style="padding:14px;background:var(--light);border-radius:8px;">
+            <div style="font-size:13px;font-weight:600;color:var(--secondary);margin-bottom:6px;">基本面诊断</div>
+            <div style="font-size:14px;line-height:1.6;">GROWTH型，PEG 0.85 < 1，成长性溢价合理。毛利率75%行业顶尖。连续8季度超预期，盈利能力强。</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--safe);font-weight:500;">得分：85/100</div>
+          </div>
+          <div style="padding:14px;background:var(--light);border-radius:8px;">
+            <div style="font-size:13px;font-weight:600;color:var(--secondary);margin-bottom:6px;">资金面诊断</div>
+            <div style="font-size:14px;line-height:1.6;">量比1.8，放量上涨。主力资金连续3日净流入。融资余额增加，市场情绪积极。机构持仓比例稳定在68%。</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--safe);font-weight:500;">得分：78/100</div>
+          </div>
+          <div style="padding:14px;background:var(--light);border-radius:8px;">
+            <div style="font-size:13px;font-weight:600;color:var(--secondary);margin-bottom:6px;">消息面诊断</div>
+            <div style="font-size:14px;line-height:1.6;">Q2财报超预期，AWS大单利好。负面因素：Blackwell延期、高管减持、出口管制。整体舆情偏正面。</div>
+            <div style="margin-top:8px;font-size:12px;color:var(--warning);font-weight:500;">得分：68/100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 8: 可比公司 -->
+  <div id="tab-peers" class="tab-panel">
+    <div class="card" style="margin-bottom:24px;">
+      <div class="section-title">同业对比</div>
+      <div style="overflow-x:auto;">
+        <table class="table" id="peerTable">
+          <thead>
+            <tr>
+              <th style="cursor:pointer;" onclick="sortPeerTable(0)">公司 ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(1)">代码 ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(2)">最新价 ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(3)">月涨幅 ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(4)">市值(亿) ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(5)">PE TTM ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(6)">PB ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(7)">ROE ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(8)">毛利率 ↕</th>
+              <th style="cursor:pointer;" onclick="sortPeerTable(9)">营收增速 ↕</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600;">NVIDIA</td><td>NVDA</td><td>$138.50</td><td style="color:var(--up);font-weight:600;">+8.4%</td><td>34,200</td><td>62.5</td><td>52.3</td><td style="color:var(--safe);font-weight:600;">82.0%</td><td>75.1%</td><td style="color:var(--safe);font-weight:600;">+126%</td></tr>
+            <tr><td style="font-weight:600;">AMD</td><td>AMD</td><td>$162.30</td><td style="color:var(--up);font-weight:600;">+5.2%</td><td>6,240</td><td>48.2</td><td>18.5</td><td>12.3%</td><td>46.8%</td><td style="color:var(--safe);font-weight:600;">+18%</td></tr>
+            <tr><td style="font-weight:600;">Intel</td><td>INTC</td><td>$22.15</td><td style="color:var(--down);font-weight:600;">-3.1%</td><td>9,480</td><td>—</td><td>1.2</td><td>-2.5%</td><td>35.2%</td><td style="color:var(--up);font-weight:600;">-8%</td></tr>
+            <tr><td style="font-weight:600;">Qualcomm</td><td>QCOM</td><td>$198.40</td><td style="color:var(--up);font-weight:600;">+2.8%</td><td>2,210</td><td>18.6</td><td>8.2</td><td>28.4%</td><td>56.3%</td><td>+9%</td></tr>
+            <tr><td style="font-weight:600;">Broadcom</td><td>AVGO</td><td>$185.60</td><td style="color:var(--up);font-weight:600;">+6.7%</td><td>8,650</td><td>35.2</td><td>12.8</td><td>32.1%</td><td>62.5%</td><td>+42%</td></tr>
+            <tr><td style="font-weight:600;">Marvell</td><td>MRVL</td><td>$78.90</td><td style="color:var(--up);font-weight:600;">+4.1%</td><td>6,820</td><td>—</td><td>6.5</td><td>-5.2%</td><td>48.0%</td><td style="color:var(--safe);font-weight:600;">+28%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title" style="margin-bottom:12px;">估值对比图</div>
+      <div id="peerValuationChart" style="height:300px;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+// Tab切换
+function switchTab(btn){ 
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); 
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active')); 
+  btn.classList.add('active'); 
+  document.getElementById('tab-'+btn.dataset.tab).classList.add('active'); 
+  setTimeout(()=>{ initChartsForTab(btn.dataset.tab); },50);
+}
+
+// 各Tab图表初始化
+let charts = {};
+function initChartsForTab(tab){
+  if(tab==='factors' && !charts.factorRadar){
+    charts.factorRadar = echarts.init(document.getElementById('factorRadarChart'));
+    charts.factorRadar.setOption({
+      tooltip:{trigger:'item'}, radar:{shape:'polygon',splitNumber:5,axisName:{color:'#86868B',fontSize:14,fontWeight:500},splitLine:{lineStyle:{color:'#E5E5EA'}},splitArea:{show:true,areaStyle:{color:['#fff','#F5F5F7','#fff','#F5F5F7','#fff']}},axisLine:{lineStyle:{color:'#E5E5EA'}},indicator:[{name:'F1\n资金面',max:100},{name:'F2\n宏观环境',max:100},{name:'F3\n市场情绪',max:100},{name:'F4\n基本面估值',max:100},{name:'F5\n技术面',max:100}]},
+      series:[{type:'radar',data:[{value:[75,60,50,82,70],name:'NVDA',areaStyle:{color:'rgba(0,113,227,0.15)'},lineStyle:{color:'#0071E3',width:2},itemStyle:{color:'#0071E3',borderWidth:2,borderColor:'#fff'},symbolSize:6}]}]
+    });
+    const fl = document.getElementById('diagnosisFactorList');
+    const fdata = [
+      {id:'F1',name:'资金面',w:30,s:75,c:'#0071E3',t:'量比1.8 · MFI 65 · 放量上涨'},
+      {id:'F2',name:'宏观环境',w:15,s:60,c:'#FF9500',t:'VIX 18 · RS Improving · 中性'},
+      {id:'F3',name:'市场情绪',w:15,s:50,c:'#8E8E93',t:'舆情接口预留 · 默认50分'},
+      {id:'F4',name:'基本面估值',w:25,s:82,c:'#34C759',t:'PEG 0.85 · GROWTH型 · 超预期15%'},
+      {id:'F5',name:'技术面',w:15,s:70,c:'#5856D6',t:'RSI 55 · MACD金叉 · 健康'}
+    ];
+    fdata.forEach(f=>{
+      const d=document.createElement('div'); d.style.cssText='display:flex;align-items:center;gap:14px;padding:14px;background:var(--light);border-radius:8px;';
+      d.innerHTML='<div style="width:40px;height:40px;border-radius:8px;background:'+f.c+'15;display:flex;align-items:center;justify-content:center;color:'+f.c+';font-weight:700;font-size:14px;">'+f.id+'</div><div style="flex:1;"><div style="font-size:14px;font-weight:600;">'+f.name+' <span style="font-weight:400;color:var(--secondary);">('+f.w+'%)</span></div><div style="font-size:13px;color:var(--secondary);margin-top:2px;">'+f.t+'</div></div><div style="font-size:22px;font-weight:600;color:'+f.c+';">'+f.s+'</div>';
+      fl.appendChild(d);
+    });
+  }
+  if(tab==='technical' && !charts.support){
+    charts.support = echarts.init(document.getElementById('supportResistChart'));
+    charts.support.setOption({ grid:{top:20,right:20,bottom:30,left:50}, xAxis:{type:'category',data:['S3','S2','S1','现价','R1','R2','R3'],axisLine:{lineStyle:{color:'#E5E5EA'}},axisLabel:{color:'#86868B'}}, yAxis:{type:'value',min:120,max:155,axisLine:{show:false},splitLine:{lineStyle:{color:'#F2F2F7'}},axisLabel:{color:'#86868B'}}, series:[{type:'bar',data:[{value:125,itemStyle:{color:'#34C759'}},{value:128.5,itemStyle:{color:'#5AC8FA'}},{value:132,itemStyle:{color:'#0071E3'}},{value:138.5,itemStyle:{color:'#FF9500'}},{value:145,itemStyle:{color:'#5856D6'}},{value:150,itemStyle:{color:'#AF52DE'}},{value:153.13,itemStyle:{color:'#FF2D55'}}],barWidth:'50%',label:{show:true,position:'top',formatter:function(p){var labels=['S3','S2','S1','现价','R1','R2','R3'];return '$'+p.value;},color:'#1D1D1F',fontWeight:600}}]});
+  }
+  if(tab==='fundamental' && !charts.dupont){
+    charts.dupont = echarts.init(document.getElementById('dupontChart'));
+    charts.dupont.setOption({ tooltip:{trigger:'axis'}, legend:{data:['净利率','资产周转率','权益乘数'],bottom:0,textStyle:{color:'#86868B'}}, grid:{top:20,right:20,bottom:40,left:50}, xAxis:{type:'category',data:['2020','2021','2022','2023','2024'],axisLine:{lineStyle:{color:'#E5E5EA'}},axisLabel:{color:'#86868B'}}, yAxis:{type:'value',axisLine:{show:false},splitLine:{lineStyle:{color:'#F2F2F7'}},axisLabel:{color:'#86868B',formatter:'{value}x'}}, series:[{name:'净利率',type:'bar',data:[0.52,0.72,0.32,0.98,1.09],itemStyle:{color:'#0071E3'}},{name:'资产周转率',type:'bar',data:[0.58,0.68,0.55,0.82,0.78],itemStyle:{color:'#34C759'}},{name:'权益乘数',type:'line',data:[1.54,1.72,1.68,1.86,1.96],lineStyle:{color:'#FF9500',width:2},itemStyle:{color:'#FF9500'},symbolSize:6}]});
+    charts.val = echarts.init(document.getElementById('valuationPercentileChart'));
+    charts.val.setOption({ tooltip:{trigger:'axis',axisPointer:{type:'shadow'}}, grid:{top:20,right:20,bottom:30,left:100}, xAxis:{type:'value',max:100,axisLine:{show:false},splitLine:{lineStyle:{color:'#F2F2F7'}},axisLabel:{color:'#86868B',formatter:'{value}%'}}, yAxis:{type:'category',data:['PE（历史）','PE（同业）','PB（历史）','PB（同业）','PS（历史）','PS（同业）'],axisLine:{lineStyle:{color:'#E5E5EA'}},axisLabel:{color:'#86868B'}}, series:[{type:'bar',data:[{value:85,itemStyle:{color:'#FF3B30'}},{value:78,itemStyle:{color:'#FF9500'}},{value:92,itemStyle:{color:'#FF3B30'}},{value:88,itemStyle:{color:'#FF9500'}},{value:72,itemStyle:{color:'#FF9500'}},{value:65,itemStyle:{color:'#5856D6'}}],barWidth:'50%',label:{show:true,position:'right',formatter:'{c}%',color:'#1D1D1F',fontWeight:600}}]});
+  }
+  if(tab==='capital' && !charts.capflow){
+    charts.capflow = echarts.init(document.getElementById('capitalFlowChart'));
+    charts.capflow.setOption({ tooltip:{trigger:'axis'}, grid:{top:20,right:20,bottom:30,left:60}, xAxis:{type:'category',data:['6/18','6/19','6/20','6/23','6/24','6/25','6/26','6/27','6/30','7/1','7/2','7/3','7/7','7/8','7/9'],axisLine:{lineStyle:{color:'#E5E5EA'}},axisLabel:{color:'#86868B'}}, yAxis:{type:'value',name:'亿元',nameTextStyle:{color:'#86868B'},axisLine:{show:false},splitLine:{lineStyle:{color:'#F2F2F7'}},axisLabel:{color:'#86868B'}}, series:[{type:'bar',data:[-2.1,3.5,-1.2,5.8,2.3,-0.8,4.2,1.5,3.1,-1.5,2.8,4.5,1.2,3.6,5.1],itemStyle:{color:function(p){return p.value>=0?'#34C759':'#FF3B30';}},barWidth:'50%'}]});
+    charts.north = echarts.init(document.getElementById('northboundChart'));
+    charts.north.setOption({ tooltip:{trigger:'item'}, legend:{bottom:0,textStyle:{color:'#86868B'}}, series:[{type:'pie',radius:['45%','75%'],center:['50%','45%'],data:[{value:42,name:'机构持仓',itemStyle:{color:'#0071E3'}},{value:18,name:'北向资金',itemStyle:{color:'#34C759'}},{value:12,name:'基金持仓',itemStyle:{color:'#5856D6'}},{value:8,name:'保险资金',itemStyle:{color:'#FF9500'}},{value:20,name:'散户/其他',itemStyle:{color:'#E5E5EA'}}],label:{color:'#86868B',formatter:'{b}\n{d}%'},emphasis:{itemStyle:{shadowBlur:10,shadowOffsetX:0,shadowColor:'rgba(0,0,0,0.2)'}}}]});
+  }
+  if(tab==='ai' && !charts.aiRadar){
+    charts.aiRadar = echarts.init(document.getElementById('aiRadarChart'));
+    charts.aiRadar.setOption({ tooltip:{trigger:'item'}, radar:{shape:'polygon',splitNumber:5,axisName:{color:'#86868B',fontSize:14,fontWeight:500},splitLine:{lineStyle:{color:'#E5E5EA'}},splitArea:{show:true,areaStyle:{color:['#fff','#F5F5F7','#fff','#F5F5F7','#fff']}},axisLine:{lineStyle:{color:'#E5E5EA'}},indicator:[{name:'技术面',max:100},{name:'基本面',max:100},{name:'资金面',max:100},{name:'消息面',max:100}]}, series:[{type:'radar',data:[{value:[75,85,78,68],name:'NVDA',areaStyle:{color:'rgba(0,113,227,0.15)'},lineStyle:{color:'#0071E3',width:2},itemStyle:{color:'#0071E3',borderWidth:2,borderColor:'#fff'},symbolSize:6}]}]});
+  }
+  if(tab==='peers' && !charts.peerVal){
+    charts.peerVal = echarts.init(document.getElementById('peerValuationChart'));
+    charts.peerVal.setOption({ tooltip:{trigger:'axis'}, legend:{data:['PE TTM','PB'],bottom:0,textStyle:{color:'#86868B'}}, grid:{top:20,right:20,bottom:40,left:50}, xAxis:{type:'category',data:['NVDA','AMD','QCOM','AVGO','MRVL'],axisLine:{lineStyle:{color:'#E5E5EA'}},axisLabel:{color:'#86868B'}}, yAxis:{type:'value',axisLine:{show:false},splitLine:{lineStyle:{color:'#F2F2F7'}},axisLabel:{color:'#86868B'}}, series:[{name:'PE TTM',type:'bar',data:[62.5,48.2,18.6,35.2,null],itemStyle:{color:'#0071E3'}},{name:'PB',type:'bar',data:[52.3,18.5,8.2,12.8,6.5],itemStyle:{color:'#34C759'}}]});
+  }
+}
+
+// K线图
+let klineChart = echarts.init(document.getElementById('klineChart'));
+let klinePeriod = 'day', klineIndicator = 'macd';
+
+function generateKData(period){
+  let count = period==='day'?60:period==='week'?30:24;
+  let base = 115, data = [], vol = [];
+  for(let i=0;i<count;i++){
+    let o = base + (Math.random()-0.4)*8;
+    let c = o + (Math.random()-0.45)*6;
+    let h = Math.max(o,c) + Math.random()*3;
+    let l = Math.min(o,c) - Math.random()*3;
+    let v = Math.floor(Math.random()*50000000)+20000000;
+    data.push([o.toFixed(2),c.toFixed(2),l.toFixed(2),h.toFixed(2)]);
+    vol.push(v);
+    base = c;
+  }
+  let dates = [];
+  for(let i=0;i<count;i++){
+    let d = new Date(); d.setDate(d.getDate()-count+i);
+    dates.push(d.toLocaleDateString('zh-CN',{month:'2-digit',day:'2-digit'}));
+  }
+  return {dates,data,vol};
+}
+
+function renderKline(){
+  let kd = generateKData(klinePeriod);
+  let ma5 = kd.data.map((_,i,a)=>{if(i<4)return null; let s=0;for(let j=0;j<5;j++)s+=parseFloat(a[i-j][1]);return (s/5).toFixed(2);});
+  let ma10 = kd.data.map((_,i,a)=>{if(i<9)return null; let s=0;for(let j=0;j<10;j++)s+=parseFloat(a[i-j][1]);return (s/10).toFixed(2);});
+  let ma20 = kd.data.map((_,i,a)=>{if(i<19)return null; let s=0;for(let j=0;j<20;j++)s+=parseFloat(a[i-j][1]);return (s/20).toFixed(2);});
+  let option = {
+    tooltip:{trigger:'axis',axisPointer:{type:'cross'},backgroundColor:'#fff',borderRadius:8,shadowBlur:10,shadowColor:'rgba(0,0,0,0.15)'},
+    grid:[{left:50,right:20,top:20,height:'55%'},{left:50,right:20,top:'72%',height:'18%'}],
+    xAxis:[{type:'category',data:kd.dates,scale:true,boundaryGap:false,axisLine:{lineStyle:{color:'#E5E5EA'}},axisLabel:{color:'#86868B'},splitLine:{show:false}},{type:'category',gridIndex:1,data:kd.dates,scale:true,boundaryGap:false,axisLine:{show:false},axisLabel:{show:false},splitLine:{show:false}}],
+    yAxis:[{scale:true,axisLine:{show:false},splitLine:{lineStyle:{color:'#F2F2F7'}},axisLabel:{color:'#86868B'}},{scale:true,gridIndex:1,splitNumber:2,axisLine:{show:false},axisLabel:{show:false},axisTick:{show:false},splitLine:{show:false}}],
+    dataZoom:[{type:'inside',xAxisIndex:[0,1],start:50,end:100}],
+    series:[{type:'candlestick',data:kd.data,itemStyle:{color:'#FF3B30',color0:'#34C759',borderColor:'#FF3B30',borderColor0:'#34C759'}},{name:'MA5',type:'line',data:ma5,lineStyle:{color:'#0071E3',width:1.5},symbol:'none',smooth:true},{name:'MA10',type:'line',data:ma10,lineStyle:{color:'#FF9500',width:1.5},symbol:'none',smooth:true},{name:'MA20',type:'line',data:ma20,lineStyle:{color:'#34C759',width:1.5},symbol:'none',smooth:true},{type:'bar',xAxisIndex:1,yAxisIndex:1,data:kd.vol,itemStyle:{color:function(p){let d=kd.data[p.dataIndex];return parseFloat(d[1])>=parseFloat(d[0])?'#FF3B30':'#34C759';}}}]
+  };
+  klineChart.setOption(option,true);
+}
+renderKline();
+window.addEventListener('resize',()=>klineChart.resize());
+
+function setKlinePeriod(btn,period){
+  document.querySelectorAll('#tab-kline .btn').forEach(b=>b.classList.remove('btn-active'));
+  btn.classList.add('btn-active'); klinePeriod=period; renderKline();
+}
+function setIndicator(btn,ind){
+  document.querySelectorAll('#tab-kline .btn').forEach(b=>{
+    if(['MACD','RSI','BOLL'].some(x=>b.textContent.includes(x))) b.classList.remove('btn-active');
+  });
+  btn.classList.add('btn-active'); klineIndicator=ind; showToast('已切换至 '+ind.toUpperCase()+' 指标');
+}
+
+// 表格排序
+let peerSortDir = {};
+function sortPeerTable(col){
+  const table = document.getElementById('peerTable');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  peerSortDir[col] = !peerSortDir[col];
+  rows.sort((a,b)=>{
+    let av = a.cells[col].textContent.replace(/[^0-9.\-+%]/g,'').replace('%','');
+    let bv = b.cells[col].textContent.replace(/[^0-9.\-+%]/g,'').replace('%','');
+    let an = parseFloat(av)||0, bn = parseFloat(bv)||0;
+    return peerSortDir[col] ? an-bn : bn-an;
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+// 初始化可见Tab图表
+setTimeout(()=>{ initChartsForTab('kline'); initChartsForTab('factors'); },100);
+</script>
+<!-- Quick Links -->
+<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid #E5E5EA;">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
+      <a href="stock_analysis.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◉</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">AI荐股</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="watchlist.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">★</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">自选股</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="theme_index.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◯</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">题材指数</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◈</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+      <a href="research_assistant.html" style="display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid #E5E5EA; border-radius:12px; padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='#E5E5EA'">
+        <span style="font-size:18px; color:#0071E3;">◬</span>
+        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">投研助手</span>
+        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
+<style>
+  body.in-iframe header,
+  body.in-iframe nav[role="navigation"],
+  body.in-iframe .sidebar,
+  body.in-iframe [class*="sidebar"],
+  body.in-iframe .breadcrumb-nav,
+  body.in-iframe [class*="breadcrumb"] { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main-content,
+  body.in-iframe [class*="main-content"],
+  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
+  body.in-iframe { padding: 0 !important; }
+</style>
+<script>
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+    // Hide common navigation elements by tag/class
+    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
+    hideSelectors.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
+      });
+    });
+    // Remove body margin/padding if any
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+  }
+})();
+</script>
+
+</body>
+</html>

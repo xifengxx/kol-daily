@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOL观点速览 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa;
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --text-primary: #1a1f36;
+  --text-secondary: #64748d;
+  --accent: #533afd;
+  --navy: #061b31;
+  --up: #dc2626;
+  --down: #16a34a;
+  --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+  --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+  --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+  --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+  --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+  --tag-gray-bg: #f3f4f6; --tag-gray-text: #374151;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+  width: 220px; min-width: 220px; background: #0d253d; color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; }
+.nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-sub.active { color: #8b9cf7; font-weight: 500; }
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.topbar-search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; }
+.topbar-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text-primary); }
+.topbar-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+/* Content */
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+/* Page Header */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--navy); }
+/* Date Navigator */
+.date-nav { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 8px 16px; }
+.date-nav-btn { padding: 6px 12px; border: none; background: transparent; cursor: pointer; font-size: 14px; color: var(--text-secondary); border-radius: 4px; transition: all 0.15s; }
+.date-nav-btn:hover { background: var(--bg); color: var(--accent); }
+.date-nav-current { font-size: 14px; font-weight: 600; color: var(--text-primary); min-width: 100px; text-align: center; }
+/* Layout */
+.kol-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+/* Thread Cards */
+.thread-card { border-radius: 8px; padding: 18px 22px; margin-bottom: 14px; transition: all 0.2s; }
+.thread-card:hover { box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; transform: translateY(-1px); }
+.thread-green { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.thread-blue { background: #eff6ff; border: 1px solid #bfdbfe; }
+.thread-yellow { background: #fffbeb; border: 1px solid #fde68a; }
+.thread-red { background: #fff5f5; border: 1px solid #fecaca; }
+.thread-purple { background: #faf5ff; border: 1px solid #e9d5ff; }
+.thread-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.thread-title { font-size: 16px; font-weight: 700; color: var(--navy); flex: 1; }
+.thread-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+/* Argument section */
+.arg-section { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+.arg-box { background: rgba(255,255,255,0.6); border-radius: 6px; padding: 10px 12px; }
+.arg-box-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 6px; }
+.arg-bull .arg-box-title { color: var(--up); }
+.arg-bear .arg-box-title { color: var(--down); }
+.arg-bull { border-left: 2px solid var(--up); }
+.arg-bear { border-left: 2px solid var(--down); }
+.arg-item { font-size: 12px; color: var(--text-primary); padding: 3px 0; display: flex; align-items: flex-start; gap: 6px; }
+.arg-item::before { content: '•'; font-size: 10px; line-height: 1.5; }
+/* Quote */
+.quote-box { background: rgba(255,255,255,0.5); border-left: 3px solid var(--accent); padding: 10px 14px; margin-top: 10px; border-radius: 0 6px 6px 0; font-size: 12px; font-style: italic; color: var(--text-secondary); line-height: 1.6; }
+.quote-source { font-size: 10px; font-weight: 600; color: var(--accent); margin-top: 4px; font-style: normal; }
+/* Assets Tags */
+.asset-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.asset-tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #fff; border: 1px solid var(--border); color: var(--text-primary); }
+.asset-tag .ticker { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+/* Sidebar Widgets */
+.widget { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.widget-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+/* Ranking List */
+.rank-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+.rank-item:last-child { border-bottom: none; }
+.rank-num { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+.rank-num.top { background: var(--accent); color: #fff; }
+.rank-num { background: var(--bg); color: var(--text-secondary); }
+.rank-name { flex: 1; font-size: 12px; font-weight: 500; }
+.rank-count { font-size: 11px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+.rank-bar { width: 60px; height: 4px; background: var(--bg); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+.rank-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; }
+/* KOL Avatar */
+.kol-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #533afd, #8b5cf6); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+/* Divergence Section */
+.divergence-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.divergence-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.divergence-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.divergence-table th { text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid var(--border); background: #fafbfc; }
+.divergence-table td { padding: 10px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+.divergence-table .side-bull { color: var(--up); font-weight: 700; }
+.divergence-table .side-bear { color: var(--down); font-weight: 700; }
+/* Tags */
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; line-height: 1.5; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.tag-gray { background: var(--tag-gray-bg); color: var(--tag-gray-text); }
+/* Consensus Badge */
+.consensus-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.consensus-high { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.consensus-mid { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.consensus-low { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.sentiment-bull { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.sentiment-bear { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.sentiment-neutral { background: var(--tag-gray-bg); color: var(--tag-gray-text); }
+/* KOL Source List */
+.kol-source-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f3f4f6; }
+.kol-source-item:last-child { border-bottom: none; }
+.kol-source-name { flex: 1; font-size: 12px; }
+.kol-source-lang { font-size: 10px; color: var(--text-secondary); }
+.kol-source-check { font-size: 11px; color: var(--tag-green-text); }
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; border-radius: 6px; cursor: pointer; transition: all 0.15s; border: none; font-family: inherit; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 4px 12px; font-size: 11px; border-radius: 4px; }
+/* Chart Box */
+.chart-box { width: 100%; height: 200px; }
+/* Section Title */
+.section-title { font-size: 16px; font-weight: 700; color: var(--navy); margin: 24px 0 12px; display: flex; align-items: center; gap: 8px; }
+/* ====== IFRAME EMBED MODE: hide sidebar & topbar ====== */
+body.in-iframe .sidebar,
+body.in-iframe .topbar { display: none !important; }
+body.in-iframe .main { margin-left: 0 !important; width: 100% !important; }
+body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">🧠 5Factor <span>AI</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">市场</div>
+    <div class="nav-item"><span class="icon">📊</span> 市场总览</div>
+    <div class="nav-item"><span class="icon">🔍</span> 个股行情</div>
+    <div class="nav-item"><span class="icon">🌍</span> 全球市场</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">内容</div>
+    <div class="nav-item"><span class="icon">📰</span> 每日晨报</div>
+    <div class="nav-item active"><span class="icon">🗣️</span> KOL观点</div>
+    <div class="nav-item"><span class="icon">📑</span> 内容管理</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">选股</div>
+    <div class="nav-item"><span class="icon">⭐</span> 评分榜单</div>
+    <div class="nav-item"><span class="icon">🔬</span> 个股深度</div>
+    <div class="nav-item"><span class="icon">💼</span> 模拟交易</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">知识</div>
+    <div class="nav-item"><span class="icon">🔗</span> 产业链图谱</div>
+    <div class="nav-item"><span class="icon">📚</span> 知识库</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">AI</div>
+    <div class="nav-item"><span class="icon">🤖</span> AI投研对话</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-search">
+      <span style="color:var(--text-secondary);font-size:12px;">🔍</span>
+      <input type="text" placeholder="搜索KOL、观点、标的...">
+    </div>
+    <div class="topbar-user">
+      <span style="font-size:18px;">🔔</span>
+      <div class="topbar-avatar">U</div>
+      <span>用户</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">KOL观点速览</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">聚合 38 位 YouTube + 13 位 Twitter KOL 的每日观点共识</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="date-nav">
+          <button class="date-nav-btn">◀</button>
+          <span class="date-nav-current">2026-01-16</span>
+          <button class="date-nav-btn">▶</button>
+        </div>
+        <button class="btn btn-primary btn-sm">📤 导出</button>
+      </div>
+    </div>
+
+    <div class="kol-layout">
+      <!-- Left: Main Threads -->
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span class="tag tag-purple">📊 今日 5 条观点主线</span>
+          <span style="font-size:11px;color:var(--text-secondary);">由 DeepSeek-V3 两层摘要生成</span>
+        </div>
+
+        <!-- Thread 1: AI算力 -->
+        <div class="thread-card thread-green">
+          <div class="thread-header">
+            <div class="thread-title">AI算力仍是核心主线，英伟达财报预期乐观</div>
+          </div>
+          <div class="thread-meta">
+            <span class="consensus-badge consensus-high">✓ 高共识</span>
+            <span class="consensus-badge sentiment-bull">↗ 偏多</span>
+            <span class="tag tag-blue">提及 18 位KOL</span>
+            <span class="tag tag-gray">置信度 87%</span>
+          </div>
+          <div class="arg-section">
+            <div class="arg-box arg-bull">
+              <div class="arg-box-title">正方论点</div>
+              <div class="arg-item">GB300服务器需求超预期，订单已排至2026Q3</div>
+              <div class="arg-item">CUDA生态护城河短期无法被替代</div>
+              <div class="arg-item">AI推理需求增长将弥补训练 capex 波动</div>
+              <div class="arg-item">软件层（AI Agent）带动硬件需求持续性</div>
+            </div>
+            <div class="arg-box arg-bear">
+              <div class="arg-box-title">反方论点</div>
+              <div class="arg-item">估值处于历史高位，PE 45x 隐含过度乐观</div>
+              <div class="arg-item">中国客户占比下降，地缘风险持续</div>
+              <div class="arg-item">ASIC芯片（谷歌TPU/亚马逊Trainium）分流</div>
+              <div class="arg-item">若AI泡沫破裂，capex 可能断崖式下跌</div>
+            </div>
+          </div>
+          <div class="asset-tags">
+            <span class="asset-tag"><span class="ticker">NVDA</span> 英伟达</span>
+            <span class="asset-tag"><span class="ticker">AMD</span> 超微</span>
+            <span class="asset-tag"><span class="ticker">TSM</span> 台积电</span>
+            <span class="asset-tag"><span class="ticker">AVGO</span> 博通</span>
+            <span class="asset-tag"><span class="ticker">SMCI</span> 超微电脑</span>
+          </div>
+          <div class="quote-box">
+            "AI基础设施的建设才刚刚开始，我们正处于iPhone时刻的前夜。" — 黄仁勋在CES 2026
+            <div class="quote-source">来源：ZipTrader / 牛顿师兄 / 美股研究社 等 18 位KOL共同提及</div>
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:var(--text-secondary);">
+            KOL来源：ZipTrader, Jose Najarro Stocks, 牛顿师兄, 美股研究社, 美股10倍猎手JamChan, 贝拉聊财金, ARK Invest, Meet Kevin, Money or Life 美股频道...
+          </div>
+        </div>
+
+        <!-- Thread 2: 美联储降息 -->
+        <div class="thread-card thread-yellow">
+          <div class="thread-header">
+            <div class="thread-title">美联储降息节奏存分歧，3月 vs 6月成焦点</div>
+          </div>
+          <div class="thread-meta">
+            <span class="consensus-badge consensus-mid">~ 中共识</span>
+            <span class="consensus-badge sentiment-neutral">→ 中性</span>
+            <span class="tag tag-blue">提及 12 位KOL</span>
+            <span class="tag tag-gray">置信度 62%</span>
+          </div>
+          <div class="arg-section">
+            <div class="arg-box arg-bull">
+              <div class="arg-box-title">正方论点（早降）</div>
+              <div class="arg-item">核心PCE已降至2.4%，接近目标区间</div>
+              <div class="arg-item">劳动力市场降温信号明确（初请上升）</div>
+              <div class="arg-item">实际利率仍处于限制性水平</div>
+              <div class="arg-item">若等太久可能重蹈2019年鹰派错误</div>
+            </div>
+            <div class="arg-box arg-bear">
+              <div class="arg-box-title">反方论点（晚降）</div>
+              <div class="arg-item">服务业通胀粘性超预期（PPI +3.3%）</div>
+              <div class="arg-item">特朗普关税政策可能推升通胀</div>
+              <div class="arg-item">股市泡沫化风险需要政策缓冲</div>
+              <div class="arg-item">日本/欧洲央行先降息，美元被动走强</div>
+            </div>
+          </div>
+          <div class="asset-tags">
+            <span class="asset-tag"><span class="ticker">TNX</span> 十年期美债</span>
+            <span class="asset-tag"><span class="ticker">DXY</span> 美元指数</span>
+            <span class="asset-tag"><span class="ticker">GLD</span> 黄金</span>
+            <span class="asset-tag"><span class="ticker">XLF</span> 金融ETF</span>
+          </div>
+          <div class="quote-box">
+            "市场已经price in了3次降息，但美联储的点阵图可能只给2次。这个差距是2026年最大的风险之一。" — Sven Carlin
+            <div class="quote-source">来源：Sven Carlin / The Compound / 躬行交易室 等 12 位KOL</div>
+          </div>
+        </div>
+
+        <!-- Thread 3: 中国资产 -->
+        <div class="thread-card thread-blue">
+          <div class="thread-header">
+            <div class="thread-title">中国资产估值修复，港股通持续流入</div>
+          </div>
+          <div class="thread-meta">
+            <span class="consensus-badge consensus-mid">~ 中共识</span>
+            <span class="consensus-badge sentiment-bull">↗ 偏多</span>
+            <span class="tag tag-blue">提及 10 位KOL</span>
+            <span class="tag tag-gray">置信度 71%</span>
+          </div>
+          <div class="arg-section">
+            <div class="arg-box arg-bull">
+              <div class="arg-box-title">正方论点</div>
+              <div class="arg-item">恒生指数PE仅9.2x，处于历史10%分位</div>
+              <div class="arg-item">南向资金连续15日净流入，累计超800亿</div>
+              <div class="arg-item">互联网平台监管常态化，政策底确认</div>
+              <div class="arg-item">AI应用（字节/阿里/腾讯）有场景优势</div>
+            </div>
+            <div class="arg-box arg-bear">
+              <div class="arg-box-title">反方论点</div>
+              <div class="arg-item">房地产下行压力尚未完全释放</div>
+              <div class="arg-item">中美关系不确定性（关税/技术封锁）</div>
+              <div class="arg-item">通缩风险导致企业盈利增速承压</div>
+              <div class="arg-item">人民币贬值压力制约外资回流</div>
+            </div>
+          </div>
+          <div class="asset-tags">
+            <span class="asset-tag"><span class="ticker">9988.HK</span> 阿里巴巴</span>
+            <span class="asset-tag"><span class="ticker">0700.HK</span> 腾讯</span>
+            <span class="asset-tag"><span class="ticker">3690.HK</span> 美团</span>
+            <span class="asset-tag"><span class="ticker">HSI</span> 恒生指数</span>
+            <span class="asset-tag"><span class="ticker">KWEB</span> 中概互联</span>
+          </div>
+          <div class="quote-box">
+            "如果你相信AI是未来十年的主题，就不能忽视中国。字节跳动的豆包月活已经破亿，这在西方没有对应物。" — ARK Invest
+            <div class="quote-source">来源：ARK Invest / 视野环球财经 / 幂笈投资 等 10 位KOL</div>
+          </div>
+        </div>
+
+        <!-- Thread 4: 比特币/加密 -->
+        <div class="thread-card thread-purple">
+          <div class="thread-header">
+            <div class="thread-title">比特币机构化进程加速，ETF资金持续涌入</div>
+          </div>
+          <div class="thread-meta">
+            <span class="consensus-badge consensus-high">✓ 高共识</span>
+            <span class="consensus-badge sentiment-bull">↗ 偏多</span>
+            <span class="tag tag-blue">提及 9 位KOL</span>
+            <span class="tag tag-gray">置信度 81%</span>
+          </div>
+          <div class="arg-section">
+            <div class="arg-box arg-bull">
+              <div class="arg-box-title">正方论点</div>
+              <div class="arg-item">比特币现货ETF日流入量创历史新高（$2.5B）</div>
+              <div class="arg-item">MicroStrategy持续加仓，成为"企业版HODL"</div>
+              <div class="arg-item">减半后供应收缩效应开始显现</div>
+              <div class="arg-item">特朗普政府支持加密货币政策明朗</div>
+            </div>
+            <div class="arg-box arg-bear">
+              <div class="arg-box-title">反方论点</div>
+              <div class="arg-item">价格已突破$100K，短期过热风险</div>
+              <div class="arg-item">监管不确定性（SEC换届后政策）</div>
+              <div class="arg-item">与传统资产相关性上升，避险属性弱化</div>
+              <div class="arg-item">矿商成本上升，若币价下跌可能引发抛压</div>
+            </div>
+          </div>
+          <div class="asset-tags">
+            <span class="asset-tag"><span class="ticker">BTC</span> 比特币</span>
+            <span class="asset-tag"><span class="ticker">COIN</span> Coinbase</span>
+            <span class="asset-tag"><span class="ticker">MSTR</span> MicroStrategy</span>
+            <span class="asset-tag"><span class="ticker">IBIT</span> 贝莱德ETF</span>
+          </div>
+          <div class="quote-box">
+            "比特币正在从投机品变成机构配置资产。这个转变一旦完成，$100K只是起点。" — Meet Kevin
+            <div class="quote-source">来源：Meet Kevin / Best of Us Investors / 阳光财经 等 9 位KOL</div>
+          </div>
+        </div>
+
+        <!-- Thread 5: 美股是否见顶 -->
+        <div class="thread-card thread-red">
+          <div class="thread-header">
+            <div class="thread-title">美股是否见顶？估值与技术面发出警告信号</div>
+          </div>
+          <div class="thread-meta">
+            <span class="consensus-badge consensus-low">! 低共识</span>
+            <span class="consensus-badge sentiment-neutral">→ 中性</span>
+            <span class="tag tag-blue">提及 15 位KOL</span>
+            <span class="tag tag-gray">⚠️ 分歧度最高</span>
+          </div>
+          <div class="arg-section">
+            <div class="arg-box arg-bull">
+              <div class="arg-box-title">正方论点（未到顶）</div>
+              <div class="arg-item">企业盈利增速+15%，估值有基本面支撑</div>
+              <div class="arg-item">AI资本开支周期才刚刚开始</div>
+              <div class="arg-item">美联储降息周期利好风险资产</div>
+              <div class="arg-item">散户参与度不高，未出现泡沫特征</div>
+            </div>
+            <div class="arg-box arg-bear">
+              <div class="arg-box-title">反方论点（已过热）</div>
+              <div class="arg-item">标普500 Shiller PE 达35x，历史95%分位</div>
+              <div class="arg-item">头部7只科技股集中度创历史新高</div>
+              <div class="arg-item">VIX处于低位，波动性被压制</div>
+              <div class="arg-item">信用利差收窄，风险定价不充分</div>
+            </div>
+          </div>
+          <div class="asset-tags">
+            <span class="asset-tag"><span class="ticker">SPY</span> 标普500</span>
+            <span class="asset-tag"><span class="ticker">QQQ</span> 纳斯达克</span>
+            <span class="asset-tag"><span class="ticker">VIX</span> 波动率</span>
+            <span class="asset-tag"><span class="ticker">TSLA</span> 特斯拉</span>
+          </div>
+          <div class="quote-box">
+            "我不是在预测崩盘，但历史告诉我，当所有人都在谈论'这次不同'时，通常是最危险的时候。" — Sven Carlin
+            <div class="quote-source">来源：Sven Carlin / Crowded Market Report / 躬行交易室 等 15 位KOL（分歧最大）</div>
+          </div>
+        </div>
+
+        <!-- Divergence Highlight Section -->
+        <div class="divergence-card">
+          <div class="divergence-title">⚡ 分歧高亮：美股是否见顶？</div>
+          <table class="divergence-table">
+            <tr>
+              <th style="width:30%;">维度</th>
+              <th style="width:35%;" class="side-bull">🐂 正方（偏多）</th>
+              <th style="width:35%;" class="side-bear">🐻 反方（偏空）</th>
+            </tr>
+            <tr>
+              <td style="font-weight:600;">估值水平</td>
+              <td>PE 22x，与盈利增速匹配，不算离谱</td>
+              <td>Shiller PE 35x，历史95%分位，极度高估</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;">盈利增速</td>
+              <td>2025Q4 EPS同比+15%，基本面强劲</td>
+              <td>增速主要来自AI板块，若AI降温则整体放缓</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;">集中度</td>
+              <td>科技龙头确实强，但传统行业也有修复</td>
+              <td>Mag7占标普市值32%，集中度=风险</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;">散户情绪</td>
+              <td>AAII调查偏空比例仍高，未到狂热</td>
+              <td>期权市场看涨/看跌比创3年新高</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;">技术面</td>
+              <td>标普500站上所有均线，趋势完好</td>
+              <td>RSI 14日>70，短期超买；MACD顶背离</td>
+            </tr>
+            <tr>
+              <td style="font-weight:600;">代表KOL</td>
+              <td>ZipTrader, Meet Kevin, ARK Invest</td>
+              <td>Sven Carlin, Crowded Market Report, 躬行交易室</td>
+            </tr>
+          </table>
+          <div style="margin-top:12px;padding:10px 12px;background:#f8fafc;border-radius:6px;font-size:12px;color:var(--text-secondary);">
+            <strong style="color:var(--navy);">系统判断：</strong>分歧度高（71%），但正方论据更多基于基本面，反方论据更多基于历史估值分位。建议保持中性仓位，关注VIX和信用利差变化作为早期预警。
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Sidebar Widgets -->
+      <div>
+        <!-- Sentiment Overview -->
+        <div class="widget">
+          <div class="widget-title">📊 今日情绪概览</div>
+          <div id="chartSentiment" class="chart-box" style="height:160px;"></div>
+          <div style="display:flex;justify-content:space-around;margin-top:8px;font-size:11px;">
+            <span style="color:var(--up);font-weight:600;">↗ 偏多 18</span>
+            <span style="color:var(--text-secondary);font-weight:600;">→ 中性 12</span>
+            <span style="color:var(--down);font-weight:600;">↘ 偏空 8</span>
+          </div>
+        </div>
+
+        <!-- Top Assets Mentioned -->
+        <div class="widget">
+          <div class="widget-title">🔥 热门标的提及排行</div>
+          <div class="rank-item">
+            <div class="rank-num top">1</div>
+            <div class="rank-name"><strong>NVDA</strong> 英伟达</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:100%;"></div></div>
+            <div class="rank-count">18次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num top">2</div>
+            <div class="rank-name"><strong>BTC</strong> 比特币</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:78%;"></div></div>
+            <div class="rank-count">14次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num top">3</div>
+            <div class="rank-name"><strong>TSLA</strong> 特斯拉</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:67%;"></div></div>
+            <div class="rank-count">12次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">4</div>
+            <div class="rank-name"><strong>AAPL</strong> 苹果</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:56%;"></div></div>
+            <div class="rank-count">10次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">5</div>
+            <div class="rank-name"><strong>TSM</strong> 台积电</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:50%;"></div></div>
+            <div class="rank-count">9次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">6</div>
+            <div class="rank-name"><strong>AMD</strong> 超微</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:44%;"></div></div>
+            <div class="rank-count">8次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">7</div>
+            <div class="rank-name"><strong>GLD</strong> 黄金</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:39%;"></div></div>
+            <div class="rank-count">7次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">8</div>
+            <div class="rank-name"><strong>META</strong> Meta</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:33%;"></div></div>
+            <div class="rank-count">6次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">9</div>
+            <div class="rank-name"><strong>AMZN</strong> 亚马逊</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:28%;"></div></div>
+            <div class="rank-count">5次</div>
+          </div>
+          <div class="rank-item">
+            <div class="rank-num">10</div>
+            <div class="rank-name"><strong>MSFT</strong> 微软</div>
+            <div class="rank-bar"><div class="rank-bar-fill" style="width:22%;"></div></div>
+            <div class="rank-count">4次</div>
+          </div>
+        </div>
+
+        <!-- KOL Source List -->
+        <div class="widget">
+          <div class="widget-title">🎙️ 今日活跃KOL（38位）</div>
+          <div style="max-height:280px;overflow-y:auto;">
+            <div class="kol-source-item">
+              <div class="kol-avatar">牛</div>
+              <div class="kol-source-name">牛顿师兄</div>
+              <span class="kol-source-lang">中文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">Z</div>
+              <div class="kol-source-name">ZipTrader</div>
+              <span class="kol-source-lang">英文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">J</div>
+              <div class="kol-source-name">Jose Najarro Stocks</div>
+              <span class="kol-source-lang">英文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">A</div>
+              <div class="kol-source-name">ARK Invest</div>
+              <span class="kol-source-lang">英文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">美</div>
+              <div class="kol-source-name">美股研究社</div>
+              <span class="kol-source-lang">中文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">M</div>
+              <div class="kol-source-name">Meet Kevin</div>
+              <span class="kol-source-lang">英文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">S</div>
+              <div class="kol-source-name">Sven Carlin</div>
+              <span class="kol-source-lang">英文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">贝</div>
+              <div class="kol-source-name">贝拉聊财金</div>
+              <span class="kol-source-lang">中文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">M</div>
+              <div class="kol-source-name">Money or Life</div>
+              <span class="kol-source-lang">中文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+            <div class="kol-source-item">
+              <div class="kol-avatar">躬</div>
+              <div class="kol-source-name">躬行交易室</div>
+              <span class="kol-source-lang">中文</span>
+              <span class="kol-source-check">✓</span>
+            </div>
+          </div>
+          <div style="margin-top:8px;font-size:10px;color:var(--text-secondary);text-align:center;">+ 28 位更多KOL · 共覆盖 38 YouTube + 13 Twitter</div>
+        </div>
+
+        <!-- Cross-platform Check -->
+        <div class="widget">
+          <div class="widget-title">🔄 跨平台观点校验</div>
+          <div style="font-size:12px;color:var(--text-primary);padding:8px 0;border-bottom:1px solid #f3f4f6;">
+            <strong>ARK Invest</strong>
+            <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">YouTube: 看好AI基础设施 → Twitter: 一致</div>
+            <span class="tag tag-green" style="margin-top:4px;">✓ 一致</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-primary);padding:8px 0;border-bottom:1px solid #f3f4f6;">
+            <strong>Sven Carlin</strong>
+            <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">YouTube: 警告估值风险 → Twitter: 更偏空</div>
+            <span class="tag tag-yellow" style="margin-top:4px;">⚠️ Twitter更偏空</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-primary);padding:8px 0;">
+            <strong>Meet Kevin</strong>
+            <div style="font-size:11px;color:var(--text-secondary);margin-top:2px;">YouTube: 看好加密 → Twitter: 一致</div>
+            <span class="tag tag-green" style="margin-top:4px;">✓ 一致</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Sentiment Pie Chart
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('chartSentiment'));
+  chart.setOption({
+    tooltip: { trigger: 'item' },
+    series: [{
+      type: 'pie', radius: ['50%', '75%'], center: ['50%', '50%'],
+      avoidLabelOverlap: false,
+      itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 },
+      label: { show: false },
+      emphasis: { label: { show: true, fontSize: 14, fontWeight: 'bold' } },
+      data: [
+        { value: 18, name: '偏多', itemStyle: { color: '#dc2626' } },
+        { value: 12, name: '中性', itemStyle: { color: '#94a3b8' } },
+        { value: 8, name: '偏空', itemStyle: { color: '#16a34a' } }
+      ]
+    }]
+  });
+}, 300);
+</script>
+
+
+<script>
+/* iframe embed detection: hide own sidebar & topbar when inside index.html */
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+})();
+</script>
+</body>
+</html>

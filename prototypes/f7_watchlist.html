@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自选股管理 - F1.7</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #fff; --border: #e5e7eb;
+  --text: #1a1f36; --text2: #6b7280; --accent: #533afd; --navy: #061b31;
+  --up: #dc2626; --down: #16a34a;
+  --tag-g-bg: #dcfce7; --tag-g-tx: #166534;
+  --tag-b-bg: #dbeafe; --tag-b-tx: #1e40af;
+  --tag-y-bg: #fef3c7; --tag-y-tx: #92400e;
+  --tag-r-bg: #fee2e2; --tag-r-tx: #991b1b;
+  --tag-p-bg: #ede9fe; --tag-p-tx: #6d28d9;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5; }
+.watchlist-wrap { padding: 20px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 4px; }
+.stat-card .label { font-size: 11px; color: var(--text2); text-transform: uppercase; }
+.stat-card .value { font-size: 20px; font-weight: 700; }
+.stat-card .sub { font-size: 11px; color: var(--text2); }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 18px; border-radius: 18px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; transition: all .15s; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: .9; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 4px 12px; font-size: 11px; border-radius: 14px; }
+.btn-danger { background: #fff; border: 1px solid #fca5a5; color: #dc2626; }
+.btn-danger:hover { background: #fef2f2; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+.tag-green { background: var(--tag-g-bg); color: var(--tag-g-tx); }
+.tag-blue { background: var(--tag-b-bg); color: var(--tag-b-tx); }
+.tag-yellow { background: var(--tag-y-bg); color: var(--tag-y-tx); }
+.tag-red { background: var(--tag-r-bg); color: var(--tag-r-tx); }
+.tag-purple { background: var(--tag-p-bg); color: var(--tag-p-tx); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-align: left; padding: 10px 12px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text2); border-bottom: 2px solid var(--border); background: #fafbfc; }
+.data-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; }
+.data-table tbody tr { cursor: pointer; transition: background .1s; }
+.data-table tbody tr:hover { background: #f5f3ff; }
+.up { color: var(--up); } .down { color: var(--down); }
+.group-tab { padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text2); background: transparent; border: none; transition: all .15s; }
+.group-tab:hover { color: var(--text); background: #f3f4f6; }
+.group-tab.active { background: var(--accent); color: #fff; }
+.input { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; width: 240px; }
+.input:focus { border-color: var(--accent); }
+.expand-row { display: none; background: #fafafe; border-top: 1px solid var(--border); }
+.expand-row.open { display: table-row; }
+.expand-content { padding: 14px 16px; }
+.factor-bar { display: flex; gap: 4px; align-items: center; margin: 4px 0; }
+.factor-bar .fb-seg { height: 6px; border-radius: 3px; }
+.fb-f1 { background: #dc2626; } .fb-f2 { background: #f59e0b; } .fb-f3 { background: #8b5cf6; } .fb-f4 { background: #3b82f6; } .fb-f5 { background: #16a34a; }
+</style>
+</head>
+<body>
+<div class="watchlist-wrap">
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div>
+      <h1 style="font-size:20px; font-weight:700; color:var(--navy);">⭐ 自选股管理</h1>
+      <p style="font-size:12px; color:var(--text2); margin-top:2px;">F1.7 · 实时追踪 + 五因子评分联动</p>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-outline btn-sm" onclick="batchAdd()">📋 批量导入</button>
+      <button class="btn btn-outline btn-sm" onclick="exportCSV()">📥 导出</button>
+      <button class="btn btn-primary btn-sm" onclick="showAddModal()">+ 添加自选</button>
+    </div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;">
+    <div class="stat-card">
+      <div class="label">自选股总数</div>
+      <div class="value">23</div>
+      <div class="sub">3个分组</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">今日上涨</div>
+      <div class="value up">16</div>
+      <div class="sub">占比 69.6%</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">平均 FinalScore</div>
+      <div class="value" style="color:var(--accent);">74.8</div>
+      <div class="sub">较上周 +2.3</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">评分恶化预警</div>
+      <div class="value" style="color:#dc2626;">2</div>
+      <div class="sub">INTC · 中芯国际</div>
+    </div>
+  </div>
+
+  <!-- Group Tabs -->
+  <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+    <button class="group-tab active" data-group="all">全部 (23)</button>
+    <button class="group-tab" data-group="focus">重点关注 (8)</button>
+    <button class="group-tab" data-group="tech">科技股 (10)</button>
+    <button class="group-tab" data-group="dividend">红利股 (5)</button>
+    <span style="color:var(--border);">|</span>
+    <button class="btn btn-outline btn-sm" onclick="newGroup()">+ 新建分组</button>
+  </div>
+
+  <!-- Watchlist Table -->
+  <div class="card" style="overflow-x:auto; padding:0;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>代码</th><th>名称</th><th>最新价</th><th>涨跌幅</th><th>FinalScore</th><th>F1-F5</th><th>仓位</th><th>分组</th><th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="watchlistBody">
+        <!-- Row 1: NVDA -->
+        <tr onclick="toggleExpand(this)" data-symbol="NVDA">
+          <td><b>NVDA</b></td><td>NVIDIA</td>
+          <td><b>$146.82</b></td><td class="up">+3.20%</td>
+          <td><b style="color:var(--accent);">92.4</b></td>
+          <td><div class="factor-bar">
+            <div class="fb-seg fb-f1" style="width:24px;" title="F1资金面 88"></div>
+            <div class="fb-seg fb-f2" style="width:28px;" title="F2宏观 95"></div>
+            <div class="fb-seg fb-f3" style="width:26px;" title="F3情绪 93"></div>
+            <div class="fb-seg fb-f4" style="width:24px;" title="F4基本面 91"></div>
+            <div class="fb-seg fb-f5" style="width:26px;" title="F5技术面 90"></div>
+          </div></td>
+          <td><span class="tag tag-green">Core</span></td>
+          <td><span class="tag tag-purple">重点关注</span></td>
+          <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); analyze('NVDA')">分析</button>
+              <button class="btn btn-danger btn-sm" style="margin-left:4px;" onclick="event.stopPropagation(); removeStock(this,'NVDA')">✕</button></td>
+        </tr>
+        <tr class="expand-row"><td colspan="9"><div class="expand-content">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+            <div><b>F1-F5 详情:</b> F1资金面 88 | F2宏观 95 | F3情绪 93 | F4基本面 91 | F5技术面 90</div>
+            <div><b>LLM共识:</b> 88分 · 低分歧 · 9模型一致看多</div>
+            <div><b>市值:</b> $3.6T · <b>PE:</b> 68.4 · <b>加入日期:</b> 2025-11-15</div>
+          </div>
+        </div></td></tr>
+
+        <!-- Row 2: TSM -->
+        <tr onclick="toggleExpand(this)" data-symbol="TSM">
+          <td><b>TSM</b></td><td>台积电</td>
+          <td><b>$185.24</b></td><td class="up">+2.35%</td>
+          <td><b style="color:var(--accent);">88.1</b></td>
+          <td><div class="factor-bar">
+            <div class="fb-seg fb-f1" style="width:26px;" title="F1 92"></div>
+            <div class="fb-seg fb-f2" style="width:22px;" title="F2 80"></div>
+            <div class="fb-seg fb-f3" style="width:24px;" title="F3 88"></div>
+            <div class="fb-seg fb-f4" style="width:22px;" title="F4 82"></div>
+            <div class="fb-seg fb-f5" style="width:24px;" title="F5 90"></div>
+          </div></td>
+          <td><span class="tag tag-green">Core</span></td>
+          <td><span class="tag tag-purple">重点关注</span></td>
+          <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); analyze('TSM')">分析</button>
+              <button class="btn btn-danger btn-sm" style="margin-left:4px;" onclick="event.stopPropagation(); removeStock(this,'TSM')">✕</button></td>
+        </tr>
+        <tr class="expand-row"><td colspan="9"><div class="expand-content">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+            <div><b>F1-F5 详情:</b> F1资金面 92 | F2宏观 80 | F3情绪 88 | F4基本面 82 | F5技术面 90</div>
+            <div><b>LLM共识:</b> 86分 · 低分歧 · 先进制程垄断</div>
+            <div><b>市值:</b> $9,610亿 · <b>PE:</b> 21.4 · <b>加入日期:</b> 2025-08-20</div>
+          </div>
+        </div></td></tr>
+
+        <!-- Row 3: 300750 宁德时代 -->
+        <tr onclick="toggleExpand(this)" data-symbol="300750">
+          <td><b>300750</b></td><td>宁德时代</td>
+          <td><b>¥198.50</b></td><td class="up">+1.87%</td>
+          <td><b style="color:var(--accent);">89.7</b></td>
+          <td><div class="factor-bar">
+            <div class="fb-seg fb-f1" style="width:22px;" title="F1 82"></div>
+            <div class="fb-seg fb-f2" style="width:24px;" title="F2 91"></div>
+            <div class="fb-seg fb-f3" style="width:26px;" title="F3 94"></div>
+            <div class="fb-seg fb-f4" style="width:24px;" title="F4 88"></div>
+            <div class="fb-seg fb-f5" style="width:26px;" title="F5 90"></div>
+          </div></td>
+          <td><span class="tag tag-green">Core</span></td>
+          <td><span class="tag tag-purple">重点关注</span></td>
+          <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); analyze('300750')">分析</button>
+              <button class="btn btn-danger btn-sm" style="margin-left:4px;" onclick="event.stopPropagation(); removeStock(this,'300750')">✕</button></td>
+        </tr>
+        <tr class="expand-row"><td colspan="9"><div class="expand-content">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+            <div><b>F1-F5 详情:</b> F1资金面 82 | F2宏观 91 | F3情绪 94 | F4基本面 88 | F5技术面 90</div>
+            <div><b>LLM共识:</b> H1净利润预增35-42% · 储能翻倍</div>
+            <div><b>市值:</b> ¥8,720亿 · <b>PE:</b> 25.3 · <b>加入日期:</b> 2025-12-01</div>
+          </div>
+        </div></td></tr>
+
+        <!-- Row 4: 002594 比亚迪 -->
+        <tr onclick="toggleExpand(this)" data-symbol="002594">
+          <td><b>002594</b></td><td>比亚迪</td>
+          <td><b>¥285.60</b></td><td class="down">-0.92%</td>
+          <td><b>86.3</b></td>
+          <td><div class="factor-bar">
+            <div class="fb-seg fb-f1" style="width:20px;" title="F1 78"></div>
+            <div class="fb-seg fb-f2" style="width:24px;" title="F2 87"></div>
+            <div class="fb-seg fb-f3" style="width:24px;" title="F3 88"></div>
+            <div class="fb-seg fb-f4" style="width:22px;" title="F4 85"></div>
+            <div class="fb-seg fb-f5" style="width:22px;" title="F5 81"></div>
+          </div></td>
+          <td><span class="tag tag-blue">Tactical</span></td>
+          <td><span class="tag tag-blue">科技股</span></td>
+          <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); analyze('002594')">分析</button>
+              <button class="btn btn-danger btn-sm" style="margin-left:4px;" onclick="event.stopPropagation(); removeStock(this,'002594')">✕</button></td>
+        </tr>
+        <tr class="expand-row"><td colspan="9"><div class="expand-content">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+            <div><b>F1-F5 详情:</b> F1资金面 78 | F2宏观 87 | F3情绪 88 | F4基本面 85 | F5技术面 81</div>
+            <div><b>LLM共识:</b> 中分歧 · 海外扩张 + 高端化双线推进</div>
+            <div><b>市值:</b> ¥8,350亿 · <b>PE:</b> 30.8 · <b>加入日期:</b> 2026-01-10</div>
+          </div>
+        </div></td></tr>
+
+        <!-- Row 5: INTC (alert) -->
+        <tr onclick="toggleExpand(this)" data-symbol="INTC" style="background:#fff5f5;">
+          <td><b>INTC</b></td><td>Intel <span class="tag tag-red" style="margin-left:4px;">⚠评分恶化</span></td>
+          <td><b>$18.42</b></td><td class="down">-4.12%</td>
+          <td><b style="color:#dc2626;">48.5</b></td>
+          <td><div class="factor-bar">
+            <div class="fb-seg fb-f1" style="width:14px;" title="F1 52"></div>
+            <div class="fb-seg fb-f2" style="width:12px;" title="F2 45"></div>
+            <div class="fb-seg fb-f3" style="width:14px;" title="F3 50"></div>
+            <div class="fb-seg fb-f4" style="width:12px;" title="F4 42"></div>
+            <div class="fb-seg fb-f5" style="width:12px;" title="F5 48"></div>
+          </div></td>
+          <td><span class="tag tag-yellow">Watch</span></td>
+          <td><span class="tag tag-blue">科技股</span></td>
+          <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); analyze('INTC')">分析</button>
+              <button class="btn btn-danger btn-sm" style="margin-left:4px;" onclick="event.stopPropagation(); removeStock(this,'INTC')">✕</button></td>
+        </tr>
+        <tr class="expand-row"><td colspan="9"><div class="expand-content">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+            <div><b>F1-F5 详情:</b> F1资金面 52 | F2宏观 45 | F3情绪 50 | F4基本面 42(盈利预警) | F5技术面 48</div>
+            <div><b>风险评估:</b> 制程落后台积电2代+ · 大规模裁员重组 · 代工业务亏损扩大</div>
+            <div><b>市值:</b> $790亿 · <b>PE:</b> N/A · <b>加入日期:</b> 2025-06-01 · <b>累计亏损:</b> -35.2%</div>
+          </div>
+        </div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Add Stock Modal -->
+<div id="addModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:12px; padding:28px; width:480px; box-shadow:0 20px 60px rgba(0,0,0,0.15);">
+    <h2 style="font-size:16px; font-weight:700; margin-bottom:16px;">添加自选股</h2>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px; color:var(--text2); display:block; margin-bottom:4px;">股票代码</label>
+      <input class="input" type="text" id="addSymbol" placeholder="输入代码，如 AAPL, 600519" style="width:100%;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px; color:var(--text2); display:block; margin-bottom:4px;">添加到分组</label>
+      <select id="addGroup" style="width:100%; padding:8px 14px; border:1px solid var(--border); border-radius:8px; font-size:13px;">
+        <option>重点关注</option><option>科技股</option><option>红利股</option>
+      </select>
+    </div>
+    <div style="font-size:11px; color:var(--text2); margin-bottom:16px;">
+      💡 支持 A股(6位)/港股(5位)/美股(ticker) · 自动识别市场 · 已有数据即时展示 · 新增标的约30-60秒完成首次分析
+    </div>
+    <div style="display:flex; gap:8px; justify-content:flex-end;">
+      <button class="btn btn-outline" onclick="document.getElementById('addModal').style.display='none'">取消</button>
+      <button class="btn btn-primary" onclick="addStock()">添加并分析</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleExpand(row) {
+  var next = row.nextElementSibling;
+  if (next && next.classList.contains('expand-row')) {
+    next.classList.toggle('open');
+  }
+}
+
+function showAddModal() {
+  document.getElementById('addModal').style.display = 'flex';
+  setTimeout(function() { document.getElementById('addSymbol').focus(); }, 100);
+}
+document.getElementById('addModal').addEventListener('click', function(e) {
+  if (e.target === this) this.style.display = 'none';
+});
+
+function addStock() {
+  var symbol = document.getElementById('addSymbol').value.trim().toUpperCase();
+  if (!symbol) { alert('请输入股票代码'); return; }
+  document.getElementById('addModal').style.display = 'none';
+  alert('正在分析 ' + symbol + '...\n\n① 校验代码有效性\n② 查预计算数据 / 从零计算F1-F5\n③ LLM定性分析\n预计耗时: 20-60秒\n\n(原型演示)');
+}
+
+function analyze(symbol) {
+  alert('跳转到 ' + symbol + ' 的深度分析页面\n(集成 F2.2 个股深度分析 + 产业链定位 + 五因子评分)');
+}
+
+function removeStock(btn, symbol) {
+  if (confirm('确定将 ' + symbol + ' 从自选股中移除？')) {
+    var row = btn.closest('tr');
+    row.style.opacity = '0.3';
+    setTimeout(function() {
+      row.remove();
+      if (row.nextElementSibling && row.nextElementSibling.classList.contains('expand-row')) {
+        row.nextElementSibling.remove();
+      }
+    }, 300);
+  }
+}
+
+function batchAdd() { alert('批量导入: 粘贴代码列表(每行一个或逗号分隔)\n支持最多50只股票同时导入\n\n(原型演示)'); }
+function exportCSV() { alert('导出格式: CSV · 包含代码/名称/价格/涨跌幅/F1-F5/分组/加入日期\n\n(原型演示)'); }
+function newGroup() { var name = prompt('新建分组名称:'); if (name) alert('分组 "' + name + '" 已创建\n可在分组管理中进行重命名、删除操作'); }
+
+// Group tabs
+document.querySelectorAll('.group-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.group-tab').forEach(function(b) { b.classList.remove('active'); });
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

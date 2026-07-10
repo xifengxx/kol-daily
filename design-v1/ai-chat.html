@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI投研对话 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text-primary: #1a1f36; --text-secondary: #64748d;
+  --accent: #533afd; --navy: #061b31; --up: #dc2626; --down: #16a34a;
+  --tag-green-bg: #dcfce7; --tag-green-text: #166534;
+  --tag-blue-bg: #dbeafe; --tag-blue-text: #1e40af;
+  --tag-yellow-bg: #fef3c7; --tag-yellow-text: #92400e;
+  --tag-red-bg: #fee2e2; --tag-red-text: #991b1b;
+  --tag-purple-bg: #ede9fe; --tag-purple-text: #6d28d9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 13px; line-height: 1.5;
+  height: 100%;
+}
+body {
+  display: flex;
+  min-height: 100vh;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+
+/* iframe embed: hide own sidebar, fix chat height */
+html.iframe-embed .unified-sidebar { display: none !important; }
+html.iframe-embed .chat-sidebar,
+html.iframe-embed .skill-panel { height: 100vh !important; }
+html.iframe-embed .chat-area { height: 100vh !important; }
+html.iframe-embed .chat-messages { height: calc(100vh - 60px) !important; flex: none !important; overflow-y: auto !important; }
+
+.unified-sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+}
+.unified-sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.unified-sidebar-logo span { color: #8b9cf7; }
+.unified-sidebar-section { padding: 12px 0; }
+.unified-sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.unified-nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.unified-nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.unified-nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.unified-nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.page-title { font-size: 20px; font-weight: 600; color: var(--navy); letter-spacing: -0.5px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.card-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text-primary); border-radius: 6px; padding: 8px 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(83,58,253,0.05); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.chat-sidebar { width: 240px; min-width: 240px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+.chat-sidebar-header { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.chat-sidebar-title { font-size: 14px; font-weight: 600; }
+.chat-list { display: flex; flex-direction: column; gap: 4px; padding: 8px; }
+.chat-item { padding: 10px 12px; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-size: 12px; }
+.chat-item:hover { background: #f8fafc; }
+.chat-item.active { background: rgba(83,58,253,0.08); border-left: 3px solid var(--accent); }
+.chat-item .title { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chat-item .meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+/* Chat area: fixed height, messages scroll internally */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg);
+  overflow: hidden;
+  height: 100vh;
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.chat-messages::-webkit-scrollbar { width: 6px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.chat-bubble { padding: 14px 18px; border-radius: 14px; max-width: 85%; font-size: 13px; line-height: 1.7; }
+.chat-bubble.user { background: var(--accent); color: #fff; align-self: flex-end; margin-left: auto; border-bottom-right-radius: 4px; }
+.chat-bubble.ai { background: var(--card); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: rgba(50,50,93,0.04) 0px 4px 12px; }
+.chat-bubble.ai .ai-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 11px; color: var(--text-secondary); }
+.chat-bubble.ai .ai-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.score-card { background: #fafbfc; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 10px 0; }
+.score-card .score-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.score-card .score-big { font-size: 28px; font-weight: 700; color: var(--accent); }
+.score-card .score-label { font-size: 11px; color: var(--text-secondary); }
+.radar-small { width: 100%; height: 180px; margin: 8px 0; }
+.chat-input-bar { background: var(--card); border-top: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.chat-input-bar input { flex: 1; border: 1px solid var(--border); border-radius: 20px; padding: 10px 16px; font-size: 13px; outline: none; font-family: inherit; }
+.chat-input-bar input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,58,253,0.1); }
+.mention-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; background: var(--accent); color: #fff; margin-right: 4px; cursor: pointer; }
+.skill-panel { width: 260px; min-width: 260px; background: var(--card); border-left: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+.skill-panel-header { padding: 16px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; }
+.skill-item { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: all 0.15s; }
+.skill-item:hover { background: #f8fafc; }
+.skill-item .skill-name { font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; }
+.skill-item .skill-desc { font-size: 11px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+.model-select { padding: 8px 16px; border-bottom: 1px solid var(--border); }
+.model-select label { font-size: 11px; color: var(--text-secondary); display: block; margin-bottom: 6px; }
+.model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.model-btn { padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 11px; text-align: center; cursor: pointer; background: var(--card); transition: all 0.15s; }
+.model-btn:hover { border-color: var(--accent); }
+.model-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0; }
+.data-table th { text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: #fafbfc; }
+.data-table td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; }
+.data-table tr:hover { background: #f8fafc; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');</script>
+<aside class="unified-sidebar">
+  <div class="unified-sidebar-logo">🧠 <span>金融投资</span>AI助手</div>
+  <div class="unified-sidebar-section">
+    <div class="unified-sidebar-title">AI编排层</div>
+    <div class="unified-nav-item"><span class="icon">🤖</span>工作流编排</div>
+    <div class="unified-nav-item"><span class="icon">🎤</span>会议纪要</div>
+    <div class="unified-nav-item"><span class="icon">🔒</span>私域知识</div>
+    <div class="unified-nav-item"><span class="icon">⚙️</span>Prompt管理</div>
+    <div class="unified-nav-item"><span class="icon">🎨</span>多模态</div>
+    <div class="unified-nav-item active"><span class="icon">💬</span>AI投研对话</div>
+  </div>
+</aside>
+<div class="chat-sidebar">
+  <div class="chat-sidebar-header">
+    <div class="chat-sidebar-title">💬 对话历史</div>
+    <button class="btn-primary btn-sm">➕ 新建</button>
+  </div>
+  <div class="chat-list">
+    <div class="chat-item active"><div class="title">NVDA 五因子评分分析</div><div class="meta">2026-07-09 · 12条消息</div></div>
+    <div class="chat-item"><div class="title">AI算力产业链深度问答</div><div class="meta">2026-07-08 · 8条消息</div></div>
+    <div class="chat-item"><div class="title">今日KOL观点汇总</div><div class="meta">2026-07-08 · 5条消息</div></div>
+    <div class="chat-item"><div class="title">半导体行业周期性分析</div><div class="meta">2026-07-07 · 15条消息</div></div>
+    <div class="chat-item"><div class="title">选股策略：低估值+趋势</div><div class="meta">2026-07-06 · 6条消息</div></div>
+    <div class="chat-item"><div class="title">MACD与RSI综合运用</div><div class="meta">2026-07-05 · 10条消息</div></div>
+    <div class="chat-item"><div class="title">TSM vs Samsung代工对比</div><div class="meta">2026-07-04 · 9条消息</div></div>
+    <div class="chat-item"><div class="title">HBM赛道投资机会</div><div class="meta">2026-07-03 · 7条消息</div></div>
+    <div class="chat-item"><div class="title">美股是否见顶？多模型研判</div><div class="meta">2026-07-02 · 11条消息</div></div>
+    <div class="chat-item"><div class="title">复盘：领益智造分析</div><div class="meta">2026-07-01 · 14条消息</div></div>
+  </div>
+</div>
+<div class="chat-area">
+  <div class="chat-messages">
+    <div class="chat-bubble user"><div>帮我分析一下 NVDA 的五因子评分，技术面是不是还在主升浪？</div></div>
+    <div class="chat-bubble ai">
+      <div class="ai-header"><div class="ai-avatar">AI</div><span>金融投资AI助手 · DeepSeek-V3</span></div>
+      <div>
+        <strong>NVIDIA (NVDA)</strong> 当前五因子评分如下：<br><br>
+        <div class="score-card">
+          <div class="score-header">
+            <div><div class="score-big">64.4</div><div class="score-label">FinalScore</div></div>
+            <div><div style="font-size: 14px; font-weight: 600;">S4 主升浪全共振</div><div style="font-size: 11px; color: var(--text-secondary);">日+周+月全部上行</div></div>
+            <div><span class="tag tag-green">Core</span><div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">建议仓位</div></div>
+          </div>
+          <div id="radarChat" class="radar-small"></div>
+          <table class="data-table">
+            <tr><th>因子</th><th>得分</th><th>权重</th><th>加权</th><th>状态</th></tr>
+            <tr><td>F1 资金</td><td class="tabular-nums">26</td><td>30%</td><td class="tabular-nums">7.8</td><td><span class="tag tag-red">偏弱</span></td></tr>
+            <tr><td>F2 宏观</td><td class="tabular-nums">54</td><td>15%</td><td class="tabular-nums">8.1</td><td><span class="tag tag-yellow">中性</span></td></tr>
+            <tr><td>F3 情绪</td><td class="tabular-nums">50</td><td>15%</td><td class="tabular-nums">7.5</td><td><span class="tag tag-yellow">中性</span></td></tr>
+            <tr><td>F4 基本面</td><td class="tabular-nums">100</td><td>25%</td><td class="tabular-nums">25.0</td><td><span class="tag tag-green">满分</span></td></tr>
+            <tr><td>F5 技术</td><td class="tabular-nums">100</td><td>15%</td><td class="tabular-nums">15.0</td><td><span class="tag tag-green">满分</span></td></tr>
+          </table>
+        </div>
+        <strong>技术面判断：</strong><br>
+        • F5 技术面得分 <span class="tabular-nums">100</span>（满分），RSI 处于 65-70 健康区间，MACD 持续扩张<br>
+        • 日线/周线/月线三级趋势全部上行，确认 <strong>S4 主升浪全共振</strong> 信号<br>
+        • 均线排列：MA5 > MA10 > MA20 > MA60，多头排列完好<br>
+        • 风险提示：F1 资金面仅 26 分，因体量巨大导致量比偏低，但非致命缺陷<br><br>
+        <strong>结论：</strong>技术面确实处于主升浪，F4 和 F5 双满分支撑强势格局。F1 偏低纯粹因为体量巨大导致的流动性稀释，不影响核心趋势判断。
+      </div>
+    </div>
+    <div class="chat-bubble user">
+      <div><span class="mention-chip">@五因子评分</span> <span class="mention-chip">@KOL观点</span> 那其他模型怎么看？KOL们有什么分歧吗？</div>
+    </div>
+    <div class="chat-bubble ai">
+      <div class="ai-header"><div class="ai-avatar">AI</div><span>金融投资AI助手 · 9模型共识</span></div>
+      <div>
+        <strong>9个LLM模型独立研判 NVDA：</strong><br><br>
+        <table class="data-table">
+          <tr><th>模型</th><th>评分</th><th>仓位</th><th>核心观点</th></tr>
+          <tr><td>GPT-5.5</td><td class="tabular-nums">94</td><td><span class="tag tag-green">Core</span></td><td>AI生态与CUDA护城河极强</td></tr>
+          <tr><td>GLM-4.7</td><td class="tabular-nums">95</td><td><span class="tag tag-green">Core</span></td><td>行业绝对核心，F1低因体量</td></tr>
+          <tr><td>MiniMax</td><td class="tabular-nums">92</td><td><span class="tag tag-green">Core</span></td><td>AI时代核心标的，五因子匹配</td></tr>
+          <tr><td>Gemini-3</td><td class="tabular-nums">90</td><td><span class="tag tag-green">Core</span></td><td>量化F1低因高位震荡洗盘</td></tr>
+          <tr><td>豆包2.0</td><td class="tabular-nums">90</td><td><span class="tag tag-green">Core</span></td><td>S4全共振，AI绝对领导者</td></tr>
+          <tr><td>Qwen3.6</td><td class="tabular-nums">85</td><td><span class="tag tag-green">Core</span></td><td>AI算力基础设施全产业链龙头</td></tr>
+          <tr><td>Kimi-k2.6</td><td class="tabular-nums">82</td><td><span class="tag tag-green">Core</span></td><td>不可替代，但需警惕资金风险</td></tr>
+          <tr><td>Mimo-v2.5</td><td class="tabular-nums">78</td><td><span class="tag tag-green">Core</span></td><td>S4全共振，F4/F5满分</td></tr>
+          <tr><td>DeepSeek-V3</td><td class="tabular-nums">75</td><td><span class="tag tag-green">Core</span></td><td>S4日线仅持续1天，信号极新鲜</td></tr>
+        </table>
+        <div style="margin-top: 10px; padding: 10px; background: #f0fdf4; border-radius: 6px; border: 1px solid #bbf7d0; font-size: 12px;">
+          <strong>共识统计：</strong>去掉最高分95和最低分75，剩余7个均值 = <strong>87.29</strong>，极差 = 20，方差较小，<strong>高共识</strong>。
+        </div>
+        <br>
+        <strong>KOL观点（今日）：</strong><br>
+        • <strong>FX168美国股市：</strong>"AI算力需求未见顶，NVDA仍是核心持仓"<br>
+        • <strong>ZipTrader：</strong>"技术面强劲，但需关注期权到期带来的波动"<br>
+        • <strong>ARK Invest：</strong>"AI革命仍处于早期，GPU需求将超预期"<br>
+        • <strong>牛顿师兄：</strong>"F1偏低是流动性问题，非基本面问题，可接受"<br><br>
+        <strong>分歧度：</strong>低。9个模型全部给出 Core 仓位，KOL观点一致偏多。
+      </div>
+    </div>
+  </div>
+  <div class="chat-input-bar">
+    <button class="btn-outline btn-sm">@</button>
+    <input type="text" placeholder="输入股票代码或问题，使用 @ 引用 Skill...">
+    <button class="btn-primary btn-sm">发送</button>
+  </div>
+</div>
+<div class="skill-panel">
+  <div class="skill-panel-header">🛠️ Skill 面板</div>
+  <div class="model-select">
+    <label>模型选择</label>
+    <div class="model-grid">
+      <div class="model-btn active">DeepSeek</div>
+      <div class="model-btn">GPT-5.5</div>
+      <div class="model-btn">Claude</div>
+      <div class="model-btn">Gemini</div>
+      <div class="model-btn">Qwen</div>
+      <div class="model-btn">Kimi</div>
+      <div class="model-btn">豆包</div>
+      <div class="model-btn">多模型</div>
+    </div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">📊 五因子评分 <span class="tag tag-green">Core</span></div>
+    <div class="skill-desc">F1-F5五维量化评分 + 三级趋势共振 + 信号分类</div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">🕸️ 产业链图谱 <span class="tag tag-blue">推荐</span></div>
+    <div class="skill-desc">74赛道/398公司/572股票映射，四视图可视化</div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">🎙️ KOL观点 <span class="tag tag-green">今日</span></div>
+    <div class="skill-desc">38位YouTube + 13位Twitter KOL观点聚合</div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">📈 技术指标</div>
+    <div class="skill-desc">MA/MACD/RSI/BOLL/KDJ 多指标综合分析</div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">📰 每日晨报</div>
+    <div class="skill-desc">10大热点 + 公告摘要 + 明日跟踪清单</div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">💡 概念卡片</div>
+    <div class="skill-desc">11模块概念科普，寓言提示法理解抽象概念</div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">📋 财报分析</div>
+    <div class="skill-desc">4阶段12步深度分析：业务→财务→风险→对比</div>
+  </div>
+  <div class="skill-item">
+    <div class="skill-name">🔄 策略回测</div>
+    <div class="skill-desc">NL策略描述 → 自动回测 → 专业报告生成</div>
+  </div>
+  <div style="padding: 16px; border-top: 1px solid var(--border); margin-top: auto;">
+    <button class="btn-primary btn-sm" style="width: 100%;">📄 生成分析报告</button>
+    <div style="margin-top: 10px; display: flex; gap: 8px;">
+      <button class="btn-outline btn-sm" style="flex:1;">🔍 搜索历史</button>
+      <button class="btn-outline btn-sm" style="flex:1;">💾 保存对话</button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // iframe embed detection
+  if (window.self !== window.top) {
+    document.documentElement.classList.add('iframe-embed');
+  }
+
+  var chart = echarts.init(document.getElementById('radarChat'));
+  var option = {
+    radar: {
+      indicator: [
+        { name: 'F1资金', max: 100 },
+        { name: 'F2宏观', max: 100 },
+        { name: 'F3情绪', max: 100 },
+        { name: 'F4基本面', max: 100 },
+        { name: 'F5技术', max: 100 }
+      ],
+      radius: '65%',
+      axisName: { color: '#64748d', fontSize: 10 },
+      splitArea: { areaStyle: { color: ['#fafbfc', '#fff'] } },
+      axisLine: { lineStyle: { color: '#e5e7eb' } },
+      splitLine: { lineStyle: { color: '#e5e7eb' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          value: [26, 54, 50, 100, 100],
+          name: 'NVDA',
+          areaStyle: { color: 'rgba(83,58,253,0.15)' },
+          lineStyle: { color: '#533afd', width: 2 },
+          itemStyle: { color: '#533afd' }
+        },
+        {
+          value: [45, 48, 50, 65, 70],
+          name: '行业均值',
+          lineStyle: { color: '#94a3b8', width: 1, type: 'dashed' },
+          itemStyle: { color: '#94a3b8' },
+          areaStyle: { color: 'transparent' }
+        }
+      ]
+    }]
+  };
+  chart.setOption(option);
+  console.log('AI投研对话页已加载');
+});
+</script>
+</body>
+</html>

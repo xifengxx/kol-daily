@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>评分榜单 — 分析与选股</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text2: #64748d; --accent: #533afd; --navy: #061b31;
+  --up: #dc2626; --down: #16a34a; --warn: #f59e0b;
+  --tag-g-bg: #dcfce7; --tag-g-tx: #166534; --tag-bl-bg: #dbeafe; --tag-bl-tx: #1e40af;
+  --tag-y-bg: #fef3c7; --tag-y-tx: #92400e; --tag-r-bg: #fee2e2; --tag-r-tx: #991b1b;
+  --tag-p-bg: #ede9fe; --tag-p-tx: #6d28d9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+}
+.layout { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 220px; background: #0d253d; color: #fff; display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search-box { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; border: 1px solid var(--border); }
+.search-box input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text); }
+.search-box input::placeholder { color: #94a3b8; }
+.user-area { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text2); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.content { padding: 20px 24px; max-width: 1440px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 7px 18px; cursor: pointer; transition: all .15s; border: none; white-space: nowrap; font-family: inherit; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; line-height: 1.4; }
+.tag-green { background: var(--tag-g-bg); color: var(--tag-g-tx); }
+.tag-blue { background: var(--tag-bl-bg); color: var(--tag-bl-tx); }
+.tag-yellow { background: var(--tag-y-bg); color: var(--tag-y-tx); }
+.tag-purple { background: var(--tag-p-bg); color: var(--tag-p-tx); }
+.tag-red { background: var(--tag-r-bg); color: var(--tag-r-tx); }
+.tag-gray { background: #f3f4f6; color: #374151; }
+.up { color: var(--up); } .down { color: var(--down); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.3px; padding: 10px 12px; border-bottom: 1px solid var(--border); background: #fafbfc; white-space: nowrap; }
+.data-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; font-variant-numeric: tabular-nums; }
+.data-table tbody tr { cursor: pointer; transition: background .1s; }
+.data-table tbody tr:hover { background: #f8fafc; }
+.data-table tbody tr.selected { background: #ede9fe; }
+.expand-row { display: none; background: #f8fafc; }
+.expand-row.open { display: table-row; }
+.expand-cell { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+.factor-bar { height: 6px; border-radius: 3px; background: #e5e7eb; overflow: hidden; margin-top: 4px; }
+.factor-bar .fill { height: 100%; border-radius: 3px; }
+.nl-input { width: 100%; border: 1px solid var(--border); border-radius: 20px; padding: 10px 18px; font-size: 13px; font-family: inherit; background: var(--card); color: var(--text); outline: none; transition: all .15s; }
+.nl-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,58,253,0.1); }
+.filter-group { margin-bottom: 14px; }
+.filter-label { font-size: 11px; color: var(--text2); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+.filter-options { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-chip { padding: 4px 10px; border-radius: 14px; border: 1px solid var(--border); background: #fff; font-size: 11px; cursor: pointer; transition: all .15s; }
+.filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.range-slider { width: 100%; margin-top: 6px; }
+.range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text2); margin-top: 4px; }
+.sub-panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.signal-s4 { color: var(--accent); font-weight: 700; }
+.signal-s1 { color: var(--warn); font-weight: 700; }
+.chart-box { width: 100%; height: 280px; }
+
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .layout { height: 100vh !important; min-height: auto !important; }
+body.in-iframe .main { overflow-y: auto !important; height: 100% !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+<div class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">5Factor <span>AI</span></div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">模块导航</div>
+      <div class="nav-item"><span class="icon">📊</span>行情与数据</div>
+      <div class="nav-item"><span class="icon">📰</span>内容与信息</div>
+      <div class="nav-item active"><span class="icon">🎯</span>分析与选股</div>
+      <div class="nav-item"><span class="icon">🧬</span>产业链与知识</div>
+      <div class="nav-item"><span class="icon">🤖</span>AI编排层</div>
+      <div class="nav-item"><span class="icon">👥</span>社区与协作</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">子页面</div>
+      <div class="nav-item active" style="padding-left:32px;font-size:12px;">评分榜单</div>
+      <div class="nav-item" style="padding-left:32px;font-size:12px;color:rgba(255,255,255,0.45);">个股深度</div>
+      <div class="nav-item" style="padding-left:32px;font-size:12px;color:rgba(255,255,255,0.45);">模拟交易</div>
+      <div class="nav-item" style="padding-left:32px;font-size:12px;color:rgba(255,255,255,0.45);">策略回测</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="font-size:14px;font-weight:600;color:var(--navy);">分析与选股 / 评分榜单</div>
+      <div class="search-box">
+        <span style="color:var(--text2);">🔍</span>
+        <input type="text" placeholder="输入股票代码或名称...">
+      </div>
+      <div class="user-area">
+        <span>🌙</span>
+        <div class="avatar">U</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- NL Search Header -->
+      <div class="card" style="padding:20px 24px;">
+        <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:12px;">🔍 智能选股</div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <input type="text" class="nl-input" placeholder='试试输入自然语言，例如："PE<20 且 ROE>15% 且营收连续3年增长>20% 的科技股，按FinalScore降序排列"' style="flex:1;">
+          <button class="btn btn-primary" style="border-radius:20px;padding:10px 24px;">筛选</button>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;color:var(--text2);">热门条件：</span>
+          <span class="tag tag-blue" style="cursor:pointer;">S4信号</span>
+          <span class="tag tag-blue" style="cursor:pointer;">FinalScore>70</span>
+          <span class="tag tag-blue" style="cursor:pointer;">F4>80</span>
+          <span class="tag tag-blue" style="cursor:pointer;">core仓位</span>
+          <span class="tag tag-blue" style="cursor:pointer;">LLM均分>80</span>
+          <span class="tag tag-yellow" style="cursor:pointer;">高分歧⚡</span>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:16px;">
+        <!-- Left: Filters -->
+        <div style="width:260px;flex-shrink:0;">
+          <div class="card">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:14px;">筛选条件</div>
+            <div class="filter-group">
+              <div class="filter-label">市值范围</div>
+              <div class="filter-options">
+                <span class="filter-chip active">全部</span>
+                <span class="filter-chip">大盘&gt;$100B</span>
+                <span class="filter-chip">中盘$10B-100B</span>
+                <span class="filter-chip">小盘&lt;$10B</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">行业板块</div>
+              <div class="filter-options">
+                <span class="filter-chip active">全部</span>
+                <span class="filter-chip">半导体</span>
+                <span class="filter-chip">AI算力</span>
+                <span class="filter-chip">软件</span>
+                <span class="filter-chip">医疗</span>
+                <span class="filter-chip">金融</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">市场</div>
+              <div class="filter-options">
+                <span class="filter-chip active">全部</span>
+                <span class="filter-chip">美股</span>
+                <span class="filter-chip">港股</span>
+                <span class="filter-chip">A股</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">FinalScore 范围</div>
+              <input type="range" class="range-slider" min="0" max="100" value="50">
+              <div class="range-labels"><span>0</span><span>≥50</span><span>100</span></div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">信号类型</div>
+              <div class="filter-options">
+                <span class="filter-chip active">全部</span>
+                <span class="filter-chip">S4共振</span>
+                <span class="filter-chip">S3延续</span>
+                <span class="filter-chip">S2启动</span>
+              </div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">仓位标签</div>
+              <div class="filter-options">
+                <span class="filter-chip active">全部</span>
+                <span class="filter-chip">Core</span>
+                <span class="filter-chip">Tactical</span>
+                <span class="filter-chip">Watch</span>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:16px;">
+              <button class="btn btn-primary" style="flex:1;">应用筛选</button>
+              <button class="btn btn-outline" style="flex:1;">重置</button>
+            </div>
+          </div>
+
+          <!-- Signal Subscription -->
+          <div class="card">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">📡 信号订阅</div>
+            <div class="sub-panel" style="margin-bottom:10px;">
+              <div style="font-size:12px;font-weight:600;margin-bottom:6px;">条件1：S4新信号</div>
+              <div style="font-size:11px;color:var(--text2);">当任意标的首次出现S4全共振时推送</div>
+              <div style="margin-top:6px;"><span class="tag tag-green">已开启</span> <span style="font-size:10px;color:var(--text2);">推送至App+邮件</span></div>
+            </div>
+            <div class="sub-panel" style="margin-bottom:10px;">
+              <div style="font-size:12px;font-weight:600;margin-bottom:6px;">条件2：FinalScore突破80</div>
+              <div style="font-size:11px;color:var(--text2);">自选股池中评分突破阈值</div>
+              <div style="margin-top:6px;"><span class="tag tag-green">已开启</span></div>
+            </div>
+            <div class="sub-panel">
+              <div style="font-size:12px;font-weight:600;margin-bottom:6px;">条件3：F4恶化&gt;20%</div>
+              <div style="font-size:11px;color:var(--text2);">基本面因子大幅回落预警</div>
+              <div style="margin-top:6px;"><span class="tag tag-gray">已关闭</span></div>
+            </div>
+            <button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%;">+ 新建订阅规则</button>
+          </div>
+        </div>
+
+        <!-- Right: Scoring Table -->
+        <div style="flex:1;min-width:0;">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div>
+                <div style="font-size:16px;font-weight:600;color:var(--navy);">五因子评分榜单</div>
+                <div style="font-size:11px;color:var(--text2);margin-top:4px;">数据日期：2026-05-08 | 共 500+ 只标的 | 评分公式：F1×30% + F2×15% + F3×15% + F4×25% + F5×15%</div>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-outline btn-sm">📥 导出CSV</button>
+                <button class="btn btn-primary btn-sm">🔔 订阅</button>
+              </div>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;">排名</th>
+                  <th>代码</th>
+                  <th>名称</th>
+                  <th>市场</th>
+                  <th style="cursor:pointer;color:var(--accent);">FinalScore ↓</th>
+                  <th>F1资金</th>
+                  <th>F2宏观</th>
+                  <th>F3情绪</th>
+                  <th>F4基本面</th>
+                  <th>F5技术</th>
+                  <th>信号</th>
+                  <th>LLM均分</th>
+                  <th>分歧</th>
+                  <th>仓位</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;color:var(--accent);">1</span></td>
+                  <td style="font-weight:600;">DELL</td>
+                  <td>Dell Technologies</td>
+                  <td><span class="tag tag-gray">NYSE</span></td>
+                  <td style="font-weight:700;color:var(--accent);font-size:13px;">68.2</td>
+                  <td><span class="up">60</span></td>
+                  <td>46</td>
+                  <td>50</td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>79.43</td>
+                  <td>⚡</td>
+                  <td><span class="tag tag-green">core</span></td>
+                </tr>
+                <tr class="expand-row">
+                  <td colspan="14">
+                    <div class="expand-cell">
+                      <div style="display:flex;gap:20px;">
+                        <div style="flex:1;">
+                          <div style="font-size:12px;font-weight:600;margin-bottom:8px;">五因子详情 — Dell Technologies</div>
+                          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                            <div>
+                              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span>F1 资金面</span><span style="font-weight:600;">60/100</span></div>
+                              <div class="factor-bar"><div class="fill" style="width:60%;background:var(--accent);"></div></div>
+                              <div style="font-size:10px;color:var(--text2);margin-top:2px;">量比1.25 | 资金净流入+$1.2M | K线形态修正+5</div>
+                            </div>
+                            <div>
+                              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span>F2 宏观环境</span><span style="font-weight:600;">46/100</span></div>
+                              <div class="factor-bar"><div class="fill" style="width:46%;background:#8b5cf6;"></div></div>
+                              <div style="font-size:10px;color:var(--text2);margin-top:2px;">VIX=14.2 | 板块相对强度+0.8σ</div>
+                            </div>
+                            <div>
+                              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span>F3 市场情绪</span><span style="font-weight:600;">50/100</span></div>
+                              <div class="factor-bar"><div class="fill" style="width:50%;background:#f59e0b;"></div></div>
+                              <div style="font-size:10px;color:var(--text2);margin-top:2px;">舆情中性 | 预留API接口</div>
+                            </div>
+                            <div>
+                              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span>F4 基本面估值</span><span style="font-weight:600;">100/100</span></div>
+                              <div class="factor-bar"><div class="fill" style="width:100%;background:#16a34a;"></div></div>
+                              <div style="font-size:10px;color:var(--text2);margin-top:2px;">PE历史分位12% | PEG=0.88 | EPS超预期+15%</div>
+                            </div>
+                            <div>
+                              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span>F5 技术面</span><span style="font-weight:600;">100/100</span></div>
+                              <div class="factor-bar"><div class="fill" style="width:100%;background:#dc2626;"></div></div>
+                              <div style="font-size:10px;color:var(--text2);margin-top:2px;">右侧轨道：RSI=62 | MACD扩张 | 均线多头排列</div>
+                            </div>
+                            <div>
+                              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px;"><span>LLM共识</span><span style="font-weight:600;">79.43/100</span></div>
+                              <div class="factor-bar"><div class="fill" style="width:79%;background:#06b6d4;"></div></div>
+                              <div style="font-size:10px;color:var(--text2);margin-top:2px;">9模型去极值均值 | 极差28分(⚡高分歧)</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div style="width:220px;">
+                          <div id="radar-dell" style="width:100%;height:200px;"></div>
+                          <div style="display:flex;gap:6px;margin-top:6px;">
+                            <button class="btn btn-primary btn-sm" style="flex:1;">深度分析</button>
+                            <button class="btn btn-outline btn-sm" style="flex:1;">加入自选</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;color:var(--accent);">2</span></td>
+                  <td style="font-weight:600;">MU</td>
+                  <td>Micron Technology</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;color:var(--accent);font-size:13px;">67.2</td>
+                  <td><span class="up">56</span></td>
+                  <td>46</td>
+                  <td>50</td>
+                  <td><span class="up">100</span></td>
+                  <td>45</td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>81.14</td>
+                  <td></td>
+                  <td><span class="tag tag-green">core</span></td>
+                </tr>
+                <tr class="expand-row">
+                  <td colspan="14">
+                    <div class="expand-cell">
+                      <div style="font-size:12px;font-weight:600;margin-bottom:8px;">五因子详情 — Micron Technology</div>
+                      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">56</div><div style="font-size:10px;color:var(--text2);">F1 资金面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">46</div><div style="font-size:10px;color:var(--text2);">F2 宏观</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">50</div><div style="font-size:10px;color:var(--text2);">F3 情绪</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#16a34a;">100</div><div style="font-size:10px;color:var(--text2);">F4 基本面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--warn);">45</div><div style="font-size:10px;color:var(--text2);">F5 技术</div></div>
+                      </div>
+                      <div style="margin-top:10px;font-size:11px;color:var(--text2);">HBM3E产能爬坡驱动，EPS连续3季超预期，但F5技术分偏低因短期涨幅过大触发RSI震荡区间。</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;color:var(--accent);">3</span></td>
+                  <td style="font-weight:600;">MRVL</td>
+                  <td>Marvell Technology</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;color:var(--accent);font-size:13px;">65.2</td>
+                  <td><span class="up">52</span></td>
+                  <td>46</td>
+                  <td>50</td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>78.57</td>
+                  <td>⚡</td>
+                  <td><span class="tag tag-green">core</span></td>
+                </tr>
+                <tr class="expand-row">
+                  <td colspan="14">
+                    <div class="expand-cell">
+                      <div style="font-size:12px;font-weight:600;margin-bottom:8px;">五因子详情 — Marvell Technology</div>
+                      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">52</div><div style="font-size:10px;color:var(--text2);">F1 资金面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">46</div><div style="font-size:10px;color:var(--text2);">F2 宏观</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">50</div><div style="font-size:10px;color:var(--text2);">F3 情绪</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#16a34a;">100</div><div style="font-size:10px;color:var(--text2);">F4 基本面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#16a34a;">100</div><div style="font-size:10px;color:var(--text2);">F5 技术</div></div>
+                      </div>
+                      <div style="margin-top:10px;font-size:11px;color:var(--text2);">定制AI芯片(ASIC)需求爆发，数据中心收入占比超70%，技术面全共振但机构分歧较大(⚡)。</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;color:var(--accent);">4</span></td>
+                  <td style="font-weight:600;">NVDA</td>
+                  <td>NVIDIA Corporation</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;color:var(--accent);font-size:13px;">64.4</td>
+                  <td>26</td>
+                  <td><span class="up">54</span></td>
+                  <td>50</td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>87.29</td>
+                  <td></td>
+                  <td><span class="tag tag-green">core</span></td>
+                </tr>
+                <tr class="expand-row">
+                  <td colspan="14">
+                    <div class="expand-cell">
+                      <div style="font-size:12px;font-weight:600;margin-bottom:8px;">五因子详情 — NVIDIA Corporation</div>
+                      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--warn);">26</div><div style="font-size:10px;color:var(--text2);">F1 资金面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">54</div><div style="font-size:10px;color:var(--text2);">F2 宏观</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">50</div><div style="font-size:10px;color:var(--text2);">F3 情绪</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#16a34a;">100</div><div style="font-size:10px;color:var(--text2);">F4 基本面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#16a34a;">100</div><div style="font-size:10px;color:var(--text2);">F5 技术</div></div>
+                      </div>
+                      <div style="margin-top:10px;font-size:11px;color:var(--text2);">F1极低因体量巨大导致量比稀释，但LLM共识最高(87.29)。AI生态与CUDA护城河极强，9模型一致给出core评级。</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;color:var(--accent);">5</span></td>
+                  <td style="font-weight:600;">TSM</td>
+                  <td>Taiwan Semiconductor</td>
+                  <td><span class="tag tag-gray">NYSE</span></td>
+                  <td style="font-weight:700;color:var(--accent);font-size:13px;">64.4</td>
+                  <td><span class="up">41</span></td>
+                  <td><span class="up">54</span></td>
+                  <td>50</td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="up">85</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>85.00</td>
+                  <td></td>
+                  <td><span class="tag tag-green">core</span></td>
+                </tr>
+                <tr class="expand-row">
+                  <td colspan="14">
+                    <div class="expand-cell">
+                      <div style="font-size:12px;font-weight:600;margin-bottom:8px;">五因子详情 — Taiwan Semiconductor</div>
+                      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">41</div><div style="font-size:10px;color:var(--text2);">F1 资金面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">54</div><div style="font-size:10px;color:var(--text2);">F2 宏观</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">50</div><div style="font-size:10px;color:var(--text2);">F3 情绪</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:#16a34a;">100</div><div style="font-size:10px;color:var(--text2);">F4 基本面</div></div>
+                        <div class="sub-panel" style="text-align:center;"><div style="font-size:20px;font-weight:700;color:var(--accent);">85</div><div style="font-size:10px;color:var(--text2);">F5 技术</div></div>
+                      </div>
+                      <div style="margin-top:10px;font-size:11px;color:var(--text2);">3nm产能满载，AI芯片代工占比快速提升，LLM共识85分，9模型全部推荐core仓位。</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">6</span></td>
+                  <td style="font-weight:600;">PRM</td>
+                  <td>Perimeter Solutions</td>
+                  <td><span class="tag tag-gray">NYSE</span></td>
+                  <td style="font-weight:700;font-size:13px;">72.8</td>
+                  <td><span class="up">78</span></td>
+                  <td><span class="up">72</span></td>
+                  <td>50</td>
+                  <td><span class="up">80</span></td>
+                  <td><span class="up">78</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>70.86</td>
+                  <td>⚠️⚡</td>
+                  <td><span class="tag tag-green">core</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">7</span></td>
+                  <td style="font-weight:600;">MTSI</td>
+                  <td>MACOM Technology</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;font-size:13px;">65.2</td>
+                  <td><span class="up">72</span></td>
+                  <td>46</td>
+                  <td>50</td>
+                  <td><span class="up">80</span></td>
+                  <td><span class="up">60</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>69.00</td>
+                  <td></td>
+                  <td><span class="tag tag-blue">tactical</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">8</span></td>
+                  <td style="font-weight:600;">TDS</td>
+                  <td>Telephone and Data</td>
+                  <td><span class="tag tag-gray">NYSE</span></td>
+                  <td style="font-weight:700;font-size:13px;">72.8</td>
+                  <td><span class="up">78</span></td>
+                  <td><span class="up">72</span></td>
+                  <td>50</td>
+                  <td><span class="up">80</span></td>
+                  <td><span class="up">78</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>58.29</td>
+                  <td>⚡</td>
+                  <td><span class="tag tag-blue">tactical</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">9</span></td>
+                  <td style="font-weight:600;">AMAT</td>
+                  <td>Applied Materials</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;font-size:13px;">60.2</td>
+                  <td><span class="up">60</span></td>
+                  <td>34</td>
+                  <td>50</td>
+                  <td>40</td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>72.14</td>
+                  <td></td>
+                  <td><span class="tag tag-blue">tactical</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">10</span></td>
+                  <td style="font-weight:600;">JBL</td>
+                  <td>Jabil Inc.</td>
+                  <td><span class="tag tag-gray">NYSE</span></td>
+                  <td style="font-weight:700;font-size:13px;">63.0</td>
+                  <td><span class="up">70</span></td>
+                  <td>46</td>
+                  <td>50</td>
+                  <td><span class="up">70</span></td>
+                  <td><span class="up">60</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>67.43</td>
+                  <td></td>
+                  <td><span class="tag tag-blue">tactical</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">11</span></td>
+                  <td style="font-weight:600;">ACLS</td>
+                  <td>Axcelis Technologies</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;font-size:13px;">53.65</td>
+                  <td><span class="up">100</span></td>
+                  <td>46</td>
+                  <td>50</td>
+                  <td>10</td>
+                  <td>45</td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>—</td>
+                  <td></td>
+                  <td><span class="tag tag-blue">tactical</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">12</span></td>
+                  <td style="font-weight:600;">ARM</td>
+                  <td>ARM Holdings</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;font-size:13px;">51.15</td>
+                  <td><span class="up">100</span></td>
+                  <td>46</td>
+                  <td>50</td>
+                  <td>0</td>
+                  <td>45</td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>—</td>
+                  <td></td>
+                  <td><span class="tag tag-green">core</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;">13</span></td>
+                  <td style="font-weight:600;">AZZ</td>
+                  <td>AZZ Inc.</td>
+                  <td><span class="tag tag-gray">NYSE</span></td>
+                  <td style="font-weight:700;font-size:13px;">53.3</td>
+                  <td>19</td>
+                  <td>34</td>
+                  <td>50</td>
+                  <td><span class="up">80</span></td>
+                  <td><span class="up">100</span></td>
+                  <td><span class="signal-s4">S4</span></td>
+                  <td>—</td>
+                  <td></td>
+                  <td><span class="tag tag-blue">tactical</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;color:var(--warn);">14</span></td>
+                  <td style="font-weight:600;">TROW</td>
+                  <td>T. Rowe Price</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;font-size:13px;">39.2</td>
+                  <td>23</td>
+                  <td>22</td>
+                  <td>50</td>
+                  <td><span class="up">80</span></td>
+                  <td>10</td>
+                  <td><span class="signal-s1">S1</span></td>
+                  <td>—</td>
+                  <td></td>
+                  <td><span class="tag tag-blue">tactical</span></td>
+                </tr>
+                <tr onclick="toggleExpand(this)">
+                  <td><span style="font-weight:700;color:var(--warn);">15</span></td>
+                  <td style="font-weight:600;">CORT</td>
+                  <td>Corcept Therapeutics</td>
+                  <td><span class="tag tag-gray">NASDAQ</span></td>
+                  <td style="font-weight:700;font-size:13px;">22.3</td>
+                  <td>25</td>
+                  <td>22</td>
+                  <td>50</td>
+                  <td>10</td>
+                  <td>10</td>
+                  <td><span class="signal-s1">S1</span></td>
+                  <td>—</td>
+                  <td></td>
+                  <td><span class="tag tag-gray">watch</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;">
+              <div style="font-size:11px;color:var(--text2);">显示 1-15 条，共 500+ 条结果</div>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-outline btn-sm">上一页</button>
+                <button class="btn btn-primary btn-sm">1</button>
+                <button class="btn btn-outline btn-sm">2</button>
+                <button class="btn btn-outline btn-sm">3</button>
+                <button class="btn btn-outline btn-sm">...</button>
+                <button class="btn btn-outline btn-sm">34</button>
+                <button class="btn btn-outline btn-sm">下一页</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Consensus Top 10 mini panel -->
+          <div class="card">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">🤖 LLM 共识 Top 10（2026-05-14）</div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">
+              <div class="sub-panel" style="text-align:center;">
+                <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">1. NVDA</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent);">87.29</div>
+                <div class="tag tag-green" style="margin-top:4px;">core</div>
+              </div>
+              <div class="sub-panel" style="text-align:center;">
+                <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">2. TSM</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent);">85.00</div>
+                <div class="tag tag-green" style="margin-top:4px;">core</div>
+              </div>
+              <div class="sub-panel" style="text-align:center;">
+                <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">3. MU</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent);">81.14</div>
+                <div class="tag tag-green" style="margin-top:4px;">core</div>
+              </div>
+              <div class="sub-panel" style="text-align:center;">
+                <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">4. DELL</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent);">79.43</div>
+                <div class="tag tag-green" style="margin-top:4px;">core ⚡</div>
+              </div>
+              <div class="sub-panel" style="text-align:center;">
+                <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">5. MRVL</div>
+                <div style="font-size:18px;font-weight:700;color:var(--accent);">78.57</div>
+                <div class="tag tag-green" style="margin-top:4px;">core ⚡</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--text2);">共识分 = 9模型独立研判后去掉最高最低，取剩余7个分数的均值。极差&gt;30分标记为⚡高分歧。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleExpand(row) {
+  const next = row.nextElementSibling;
+  if (next && next.classList.contains('expand-row')) {
+    next.classList.toggle('open');
+    row.classList.toggle('selected');
+  }
+}
+
+// Init DELL radar chart on first expand
+let dellRadarInit = false;
+document.querySelectorAll('tr').forEach(tr => {
+  tr.addEventListener('click', function() {
+    const next = this.nextElementSibling;
+    if (next && next.classList.contains('open') && !dellRadarInit && next.querySelector('#radar-dell')) {
+      setTimeout(() => {
+        const chart = echarts.init(document.getElementById('radar-dell'));
+        chart.setOption({
+          radar: {
+            indicator: [
+              {name: 'F1资金', max: 100},
+              {name: 'F2宏观', max: 100},
+              {name: 'F3情绪', max: 100},
+              {name: 'F4基本面', max: 100},
+              {name: 'F5技术', max: 100}
+            ],
+            radius: '65%',
+            axisName: {fontSize: 10, color: '#64748d'},
+            splitArea: {areaStyle: {color: ['#fafbfc', '#f3f4f6']}},
+            axisLine: {lineStyle: {color: '#e5e7eb'}},
+            splitLine: {lineStyle: {color: '#e5e7eb'}}
+          },
+          series: [{
+            type: 'radar',
+            data: [
+              {
+                value: [60, 46, 50, 100, 100],
+                name: 'DELL',
+                areaStyle: {color: 'rgba(83,58,253,0.15)'},
+                lineStyle: {color: '#533afd', width: 2},
+                itemStyle: {color: '#533afd'}
+              },
+              {
+                value: [55, 45, 50, 70, 65],
+                name: '行业均值',
+                lineStyle: {color: '#94a3b8', type: 'dashed', width: 1},
+                itemStyle: {color: '#94a3b8'},
+                areaStyle: {color: 'transparent'}
+              }
+            ]
+          }]
+        });
+        dellRadarInit = true;
+      }, 50);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

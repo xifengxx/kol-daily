@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个股关联 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text-secondary: #6b7280; --accent: #533afd;
+  --navy: #061b31; --up: #dc2626; --down: #16a34a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--navy); color: #fff;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: rgba(255,255,255,0.35); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.45); cursor: pointer; font-size: 11px; transition: all 0.15s; }
+.nav-sub:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-sub.active { color: #8b9cf7; font-weight: 500; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 20px; padding: 7px 16px; gap: 8px; }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 12px; color: var(--text); }
+.search input::placeholder { color: var(--text-secondary); }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--navy); letter-spacing: -0.3px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+.tag-green { background: rgba(34,197,94,0.12); color: #16a34a; }
+.tag-blue { background: rgba(59,130,246,0.12); color: #2563eb; }
+.tag-yellow { background: rgba(245,158,11,0.12); color: #b45309; }
+.tag-red { background: rgba(239,68,68,0.12); color: #dc2626; }
+.tag-purple { background: rgba(139,92,246,0.12); color: #7c3aed; }
+.tag-gray { background: #f3f4f6; color: #64748d; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-transform: uppercase; font-size: 10px; color: var(--text-secondary); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--border); background: #fafbfc; letter-spacing: 0.5px; }
+.data-table td { padding: 9px 12px; border-bottom: 1px solid #f3f4f6; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: #f8f9fc; }
+.input-search { width: 100%; padding: 10px 16px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; background: var(--card); outline: none; transition: border-color 0.15s; }
+.input-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,58,253,0.1); }
+.input-search::placeholder { color: #94a3b8; }
+.relation-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-left: 4px; }
+.relation-supplies { background: #dbeafe; color: #1e40af; }
+.relation-customer { background: #dcfce7; color: #166534; }
+.relation-competes { background: #fee2e2; color: #991b1b; }
+.relation-depends { background: #fef3c7; color: #92400e; }
+.relation-partners { background: #ede9fe; color: #6d28d9; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.chain-step { background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; text-align: center; min-width: 120px; }
+.chain-arrow { color: var(--accent); font-size: 20px; font-weight: 700; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5<span>Factor</span> AI</div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon">📊</span> 行情与数据</div>
+    <div class="nav-item"><span class="icon">📰</span> 内容与信息</div>
+    <div class="nav-item"><span class="icon">🎯</span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon">🔗</span> 产业链与知识</div>
+    <div class="nav-sub">产业链全景</div>
+    <div class="nav-sub">赛道详情</div>
+    <div class="nav-sub active">个股深度</div>
+    <div class="nav-sub">概念卡片</div>
+    <div class="nav-sub">知识库</div>
+    <div class="nav-item"><span class="icon">🤖</span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon">👥</span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="输入股票代码或名称...">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Search Header -->
+    <div class="card" style="margin-bottom:16px; padding: 20px 24px;">
+      <div style="display:flex; align-items:center; gap:16px; margin-bottom:12px;">
+        <div style="font-size:28px; font-weight:700; color:var(--navy);">NVDA</div>
+        <div>
+          <div style="font-size:15px; font-weight:600;">NVIDIA Corporation · 英伟达</div>
+          <div style="font-size:12px; color:var(--text-secondary);">NASDAQ · Technology / Semiconductor</div>
+        </div>
+        <div style="margin-left:auto; text-align:right;">
+          <div style="font-size:24px; font-weight:700; color:var(--up); font-variant-numeric:tabular-nums;">$135.42</div>
+          <div style="font-size:12px; color:var(--up); font-weight:600;">+$3.10 (+2.35%)</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="tag tag-green">S4 主升浪全共振</span>
+        <span class="tag tag-blue">Core 仓位</span>
+        <span class="tag tag-purple">AI算力 ▸ L3 核心产品</span>
+        <span class="tag tag-yellow">FinalScore: 64.4</span>
+      </div>
+    </div>
+
+    <!-- 1. Chain Position -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title" style="font-size:15px;">产业链定位</div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; padding: 16px 0;">
+        <div class="chain-step">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">L1 原材料</div>
+          <div style="font-size:13px; font-weight:600;">硅晶圆</div>
+          <div style="font-size:11px; color:var(--text-secondary);">信越/环球晶圆</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">L2 零部件</div>
+          <div style="font-size:13px; font-weight:600;">HBM + CoWoS</div>
+          <div style="font-size:11px; color:var(--text-secondary);">SK海力士/台积电</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step" style="border:2px solid var(--accent); background: rgba(83,58,253,0.05);">
+          <div style="font-size:11px; color:var(--accent); margin-bottom:4px;">L3 核心产品 ★</div>
+          <div style="font-size:13px; font-weight:600; color:var(--accent);">AI GPU</div>
+          <div style="font-size:11px; color:var(--accent);">NVIDIA</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">L3 集成</div>
+          <div style="font-size:13px; font-weight:600;">AI服务器</div>
+          <div style="font-size:11px; color:var(--text-secondary);">Dell/SMCI/联想</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-step">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px;">L4 终端应用</div>
+          <div style="font-size:13px; font-weight:600;">云计算/AI Agent</div>
+          <div style="font-size:11px; color:var(--text-secondary);">Azure/AWS/GCP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Upstream/Downstream Graph -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom:16px;">
+      <div class="card">
+        <div class="card-title" style="font-size:15px;">上下游关系图谱</div>
+        <div id="chart-relation" style="width:100%; height:350px;"></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="font-size:15px;">供应链关系链</div>
+        <div style="font-size:12px; line-height:1.8; color:var(--text-secondary);">
+          <div style="margin-bottom:12px; padding: 10px; background:#f8fafc; border-radius:6px;">
+            <div style="font-weight:600; color:var(--text); margin-bottom:6px;">📦 上游供应 (关键物料)</div>
+            <div>• HBM存储: <strong>SK海力士</strong> (HBM3E主力) <span class="relation-badge relation-supplies">supplies_to</span></div>
+            <div>• HBM存储: <strong>三星电子</strong> (HBM3量产) <span class="relation-badge relation-supplies">supplies_to</span></div>
+            <div>• HBM存储: <strong>美光科技</strong> (HBM3E追赶) <span class="relation-badge relation-supplies">supplies_to</span></div>
+            <div>• CoWoS封装: <strong>台积电</strong> (独占产能) <span class="relation-badge relation-supplies">supplies_to</span></div>
+            <div>• 硅晶圆: <strong>信越化学</strong> (12寸高端) <span class="relation-badge relation-supplies">supplies_to</span></div>
+            <div>• 测试设备: <strong>爱德万</strong> (SoC测试) <span class="relation-badge relation-supplies">supplies_to</span></div>
+          </div>
+          <div style="margin-bottom:12px; padding: 10px; background:#f8fafc; border-radius:6px;">
+            <div style="font-weight:600; color:var(--text); margin-bottom:6px;">🏭 下游客户 (收入占比)</div>
+            <div>• <strong>Microsoft Azure</strong> ~20% <span class="relation-badge relation-customer">customer_of</span></div>
+            <div>• <strong>Meta</strong> ~15% <span class="relation-badge relation-customer">customer_of</span></div>
+            <div>• <strong>Google Cloud</strong> ~12% <span class="relation-badge relation-customer">customer_of</span></div>
+            <div>• <strong>Amazon AWS</strong> ~10% <span class="relation-badge relation-customer">customer_of</span></div>
+            <div>• <strong>Oracle</strong> ~5% <span class="relation-badge relation-customer">customer_of</span></div>
+          </div>
+          <div style="padding: 10px; background:#f8fafc; border-radius:6px;">
+            <div style="font-weight:600; color:var(--text); margin-bottom:6px;">🤝 合作伙伴</div>
+            <div>• <strong>台积电</strong> — 独家CoWoS封装伙伴 <span class="relation-badge relation-partners">partners_with</span></div>
+            <div>• <strong>Arm</strong> — Grace CPU架构授权 <span class="relation-badge relation-partners">partners_with</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Competition Table -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title" style="font-size:15px;">竞争格局对比</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>维度</th><th>NVIDIA</th><th>AMD</th><th>Intel</th><th>Broadcom</th><th>Amazon</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AI GPU市占率</strong></td>
+            <td><span class="tag tag-green">~85%</span></td>
+            <td><span class="tag tag-yellow">~8%</span></td>
+            <td><span class="tag tag-gray">~2%</span></td>
+            <td><span class="tag tag-gray">~3%</span></td>
+            <td><span class="tag tag-gray">自研</span></td>
+          </tr>
+          <tr>
+            <td><strong>旗舰产品</strong></td>
+            <td>H100/B200/GB200</td>
+            <td>MI300X</td>
+            <td>Gaudi3</td>
+            <td>Tomahawk 5</td>
+            <td>Trainium2</td>
+          </tr>
+          <tr>
+            <td><strong>生态护城河</strong></td>
+            <td><span class="tag tag-green">CUDA (极强)</span></td>
+            <td><span class="tag tag-yellow">ROCm</span></td>
+            <td><span class="tag tag-red">oneAPI</span></td>
+            <td><span class="tag tag-yellow">N/A</span></td>
+            <td><span class="tag tag-gray">自研</span></td>
+          </tr>
+          <tr>
+            <td><strong>2026营收增速</strong></td>
+            <td class="up">+68%</td>
+            <td class="up">+45%</td>
+            <td class="up">+12%</td>
+            <td class="up">+35%</td>
+            <td>N/A</td>
+          </tr>
+          <tr>
+            <td><strong>毛利率</strong></td>
+            <td>74%</td>
+            <td>52%</td>
+            <td>43%</td>
+            <td>78%</td>
+            <td>N/A</td>
+          </tr>
+          <tr>
+            <td><strong>五因子评分</strong></td>
+            <td><strong style="color:var(--accent);">64.4</strong></td>
+            <td>52.1</td>
+            <td>38.5</td>
+            <td>48.2</td>
+            <td>N/A</td>
+          </tr>
+          <tr>
+            <td><strong>与NVDA关系</strong></td>
+            <td>—</td>
+            <td><span class="relation-badge relation-competes">competes_with</span></td>
+            <td><span class="relation-badge relation-competes">competes_with</span></td>
+            <td><span class="relation-badge relation-competes">competes_with</span></td>
+            <td><span class="relation-badge relation-competes">competes_with</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4. Related Stocks -->
+    <div class="card">
+      <div class="card-title" style="font-size:15px;">关联概念股</div>
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">TSM</div>
+          <div style="font-size:11px; color:var(--text-secondary);">台积电</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-blue">供应商</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">CoWoS封装</div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">MU</div>
+          <div style="font-size:11px; color:var(--text-secondary);">美光科技</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-blue">供应商</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">HBM3E</div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">DELL</div>
+          <div style="font-size:11px; color:var(--text-secondary);">戴尔科技</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-yellow">客户</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">AI服务器</div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">AMD</div>
+          <div style="font-size:11px; color:var(--text-secondary);">超微半导体</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-red">竞品</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">MI300X</div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">AVGO</div>
+          <div style="font-size:11px; color:var(--text-secondary);">博通</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-red">竞品</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">交换芯片</div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">MRVL</div>
+          <div style="font-size:11px; color:var(--text-secondary);">Marvell</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-blue">供应商</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">光互连</div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">AMAT</div>
+          <div style="font-size:11px; color:var(--text-secondary);">应用材料</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-blue">供应商</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">沉积设备</div>
+        </div>
+        <div style="border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center;">
+          <div style="font-size:14px; font-weight:700;">ARM</div>
+          <div style="font-size:11px; color:var(--text-secondary);">ARM控股</div>
+          <div style="font-size:12px; margin-top:4px;"><span class="tag tag-purple">伙伴</span></div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">Grace CPU</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Relation Graph
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('chart-relation'));
+  const nodes = [
+    { id: '0', name: 'NVIDIA\nNVDA', symbolSize: 70, category: 0, itemStyle: { color: '#533afd' } },
+    { id: '1', name: 'SK海力士', symbolSize: 40, category: 1 },
+    { id: '2', name: '三星', symbolSize: 40, category: 1 },
+    { id: '3', name: '美光', symbolSize: 40, category: 1 },
+    { id: '4', name: '台积电', symbolSize: 45, category: 1 },
+    { id: '5', name: 'AMD', symbolSize: 40, category: 2 },
+    { id: '6', name: 'Intel', symbolSize: 35, category: 2 },
+    { id: '7', name: 'Microsoft', symbolSize: 35, category: 3 },
+    { id: '8', name: 'Meta', symbolSize: 35, category: 3 },
+    { id: '9', name: 'Google', symbolSize: 35, category: 3 },
+    { id: '10', name: 'Dell', symbolSize: 30, category: 4 },
+    { id: '11', name: 'Marvell', symbolSize: 30, category: 1 },
+    { id: '12', name: 'Broadcom', symbolSize: 30, category: 2 },
+    { id: '13', name: 'ARM', symbolSize: 30, category: 5 }
+  ];
+  const links = [
+    { source: '1', target: '0', name: 'supplies_to', lineStyle: { color: '#3b82f6' } },
+    { source: '2', target: '0', name: 'supplies_to', lineStyle: { color: '#3b82f6' } },
+    { source: '3', target: '0', name: 'supplies_to', lineStyle: { color: '#3b82f6' } },
+    { source: '4', target: '0', name: 'supplies_to', lineStyle: { color: '#3b82f6' } },
+    { source: '0', target: '7', name: 'customer_of', lineStyle: { color: '#16a34a' } },
+    { source: '0', target: '8', name: 'customer_of', lineStyle: { color: '#16a34a' } },
+    { source: '0', target: '9', name: 'customer_of', lineStyle: { color: '#16a34a' } },
+    { source: '0', target: '10', name: 'supplies_to', lineStyle: { color: '#3b82f6' } },
+    { source: '5', target: '0', name: 'competes_with', lineStyle: { color: '#dc2626', type: 'dashed' } },
+    { source: '6', target: '0', name: 'competes_with', lineStyle: { color: '#dc2626', type: 'dashed' } },
+    { source: '12', target: '0', name: 'competes_with', lineStyle: { color: '#dc2626', type: 'dashed' } },
+    { source: '11', target: '0', name: 'partners_with', lineStyle: { color: '#8b5cf6' } },
+    { source: '13', target: '0', name: 'partners_with', lineStyle: { color: '#8b5cf6' } }
+  ];
+  const categories = [
+    { name: '目标公司' }, { name: '供应商' }, { name: '竞品' }, { name: '客户' }, { name: '下游' }, { name: '伙伴' }
+  ];
+  chart.setOption({
+    tooltip: { formatter: '{b}' },
+    legend: { data: categories.map(c => c.name), bottom: 0, textStyle: { fontSize: 10 } },
+    series: [{
+      type: 'graph', layout: 'force', data: nodes, links: links, categories: categories,
+      roam: true, label: { show: true, fontSize: 10 },
+      force: { repulsion: 300, edgeLength: 100 },
+      lineStyle: { curveness: 0.2, width: 2 },
+      emphasis: { focus: 'adjacency', lineStyle: { width: 3 } }
+    }]
+  });
+}, 100);
+
+window.addEventListener('resize', () => {
+  const c = echarts.getInstanceByDom(document.getElementById('chart-relation'));
+  if (c) c.resize();
+});
+</script>
+
+</body>
+</html>

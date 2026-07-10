@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个股深度 — NVDA 英伟达</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --card: #ffffff; --border: #e5e7eb;
+  --text: #1a1f36; --text2: #64748d; --accent: #533afd; --navy: #061b31;
+  --up: #dc2626; --down: #16a34a; --warn: #f59e0b;
+  --tag-g-bg: #dcfce7; --tag-g-tx: #166534; --tag-bl-bg: #dbeafe; --tag-bl-tx: #1e40af;
+  --tag-y-bg: #fef3c7; --tag-y-tx: #92400e; --tag-r-bg: #fee2e2; --tag-r-tx: #991b1b;
+  --tag-p-bg: #ede9fe; --tag-p-tx: #6d28d9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.5;
+}
+.layout { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 220px; background: #0d253d; color: #fff; display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.sidebar-logo span { color: #8b9cf7; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 13px; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-item.active { background: rgba(83,58,253,0.15); color: #fff; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.content { padding: 20px 24px; max-width: 1440px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: rgba(50,50,93,0.08) 0px 8px 24px -4px, rgba(0,0,0,0.06) 0px 4px 12px -4px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 6px; font-size: 12px; font-weight: 500; padding: 7px 18px; cursor: pointer; transition: all .15s; border: none; white-space: nowrap; font-family: inherit; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #4128e4; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px; line-height: 1.4; }
+.tag-green { background: var(--tag-g-bg); color: var(--tag-g-tx); }
+.tag-blue { background: var(--tag-bl-bg); color: var(--tag-bl-tx); }
+.tag-yellow { background: var(--tag-y-bg); color: var(--tag-y-tx); }
+.tag-purple { background: var(--tag-p-bg); color: var(--tag-p-tx); }
+.tag-red { background: var(--tag-r-bg); color: var(--tag-r-tx); }
+.tag-gray { background: #f3f4f6; color: #374151; }
+.up { color: var(--up); } .down { color: var(--down); }
+.tab-nav { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+.tab-btn { padding: 10px 20px; font-size: 13px; font-weight: 600; color: var(--text2); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn:hover { color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.3px; padding: 10px 12px; border-bottom: 1px solid var(--border); background: #fafbfc; }
+.data-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: #f8fafc; }
+.chart-box { width: 100%; height: 320px; }
+.chart-box-sm { width: 100%; height: 200px; }
+.kline-dark { background: #0f172a; border-radius: 8px; padding: 12px; }
+.factor-bar { height: 6px; border-radius: 3px; background: #e5e7eb; overflow: hidden; margin-top: 4px; }
+.factor-bar .fill { height: 100%; border-radius: 3px; }
+.progress-step { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
+.progress-step:last-child { border-bottom: none; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-num.done { background: #16a34a; }
+.step-num.pending { background: #94a3b8; }
+.llm-card { border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: #fff; }
+.llm-score { font-size: 20px; font-weight: 700; }
+.moat-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f3f4f6; }
+.moat-item:last-child { border-bottom: none; }
+.school-tab { padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; transition: all .15s; }
+.school-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.school-tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .layout { height: 100vh !important; min-height: auto !important; }
+body.in-iframe .main { overflow-y: auto !important; height: 100% !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">5Factor <span>AI</span></div>
+    <div class="nav-item"><span class="icon">📊</span>行情与数据</div>
+    <div class="nav-item"><span class="icon">📰</span>内容与信息</div>
+    <div class="nav-item active"><span class="icon">🎯</span>分析与选股</div>
+    <div class="nav-item"><span class="icon">🧬</span>产业链与知识</div>
+    <div class="nav-item"><span class="icon">🤖</span>AI编排层</div>
+    <div class="nav-item"><span class="icon">👥</span>社区与协作</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="font-size:14px;font-weight:600;color:var(--navy);">分析与选股 / 个股深度</div>
+      <div class="user-area" style="display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--text2);">
+        <span>🌙</span><div class="avatar" style="width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;">U</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Stock Header -->
+      <div class="card" style="padding:20px 24px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#533afd,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;">N</div>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-size:22px;font-weight:700;color:var(--navy);">NVDA</span>
+                <span style="font-size:14px;color:var(--text2);">NVIDIA Corporation / 英伟达</span>
+                <span class="tag tag-gray">NASDAQ</span>
+                <span class="tag tag-green">core</span>
+                <span class="tag tag-purple">S4共振</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;margin-top:8px;">
+                <span style="font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;">$135.42</span>
+                <span style="font-size:16px;font-weight:600;" class="up">+$3.10 (+2.35%)</span>
+                <span style="font-size:12px;color:var(--text2);">市值 $3.32T</span>
+                <span style="font-size:12px;color:var(--text2);">成交量 2.8亿股</span>
+                <span style="font-size:12px;color:var(--text2);">PE 45.6x</span>
+                <span style="font-size:12px;color:var(--text2);">ROE 52.3%</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;">五因子雷达</div>
+            <div id="header-radar" style="width:160px;height:120px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Four Stages -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:16px;">📋 四阶段12步深度分析</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <div class="school-tab active" onclick="switchStage(this,0)">① 业务透视</div>
+          <div class="school-tab" onclick="switchStage(this,1)">② 财务诊断</div>
+          <div class="school-tab" onclick="switchStage(this,2)">③ 风险排查</div>
+          <div class="school-tab" onclick="switchStage(this,3)">④ 横向对比</div>
+        </div>
+
+        <!-- Stage 1: Business -->
+        <div class="tab-panel active" id="stage-0">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">公司定位</div>
+              <div style="font-size:12px;color:var(--text);line-height:1.7;">
+                全球AI GPU与CUDA生态垄断者。从游戏显卡起步，成功转型数据中心AI计算基础设施，当前数据中心收入占比超80%。一句话：<strong>AI时代的"卖铲人"</strong>。
+              </div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin:14px 0 10px;">产品矩阵</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;"><div style="font-size:11px;font-weight:600;">数据中心GPU</div><div style="font-size:10px;color:var(--text2);">H100/H200/Blackwell</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;"><div style="font-size:11px;font-weight:600;">CUDA生态</div><div style="font-size:10px;color:var(--text2);">400万+开发者</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;"><div style="font-size:11px;font-weight:600;">DGX系统</div><div style="font-size:10px;color:var(--text2);">全栈AI超算</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;"><div style="font-size:11px;font-weight:600;">Omniverse</div><div style="font-size:10px;color:var(--text2);">数字孪生平台</div></div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">五大护城河评分</div>
+              <div class="moat-item"><span>🛡️ 技术壁垒</span><span style="font-weight:700;color:var(--accent);">95/100</span></div>
+              <div class="moat-item"><span>🛡️ 网络效应(CUDA)</span><span style="font-weight:700;color:var(--accent);">98/100</span></div>
+              <div class="moat-item"><span>🛡️ 规模经济</span><span style="font-weight:700;color:var(--accent);">90/100</span></div>
+              <div class="moat-item"><span>🛡️ 客户切换成本</span><span style="font-weight:700;color:var(--accent);">92/100</span></div>
+              <div class="moat-item"><span>🛡️ 品牌/渠道</span><span style="font-weight:700;color:var(--accent);">85/100</span></div>
+              <div style="margin-top:10px;padding:10px;background:#f8fafc;border-radius:6px;font-size:11px;color:var(--text2);">
+                <strong>商业模式：</strong>硬件+软件+生态三位一体。GPU硬件高毛利(75%+)锁定客户，CUDA软件栈形成极高切换成本，Omniverse等平台服务创造持续收入。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 2: Financial -->
+        <div class="tab-panel" id="stage-1">
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">5年三张表核心指标</div>
+              <table class="data-table">
+                <thead><tr><th>指标</th><th>2022</th><th>2023</th><th>2024</th><th>2025E</th><th>2026E</th><th>趋势</th></tr></thead>
+                <tbody>
+                  <tr><td>营收(亿美元)</td><td>269.1</td><td>609.2</td><td>960.2</td><td>1,245</td><td>1,580</td><td class="up">↗</td></tr>
+                  <tr><td>毛利率</td><td>56.5%</td><td>72.7%</td><td>74.6%</td><td>75.2%</td><td>76.0%</td><td class="up">↗</td></tr>
+                  <tr><td>净利润(亿美元)</td><td>43.4</td><td>297.6</td><td>552.3</td><td>720</td><td>950</td><td class="up">↗</td></tr>
+                  <tr><td>ROE</td><td>18.2%</td><td>48.5%</td><td>52.3%</td><td>55.0%</td><td>58.0%</td><td class="up">↗</td></tr>
+                  <tr><td>FCF(亿美元)</td><td>38.5</td><td>276.8</td><td>490.2</td><td>650</td><td>880</td><td class="up">↗</td></tr>
+                  <tr><td>净现金(亿美元)</td><td>102</td><td>258</td><td>420</td><td>580</td><td>750</td><td class="up">↗</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">16项关键比率</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--text2);">PE(TTM)</div><div style="font-size:16px;font-weight:700;">45.6x</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--text2);">PB</div><div style="font-size:16px;font-weight:700;">18.2x</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--text2);">PEG</div><div style="font-size:16px;font-weight:700;color:#16a34a;">1.12</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--text2);">PS</div><div style="font-size:16px;font-weight:700;">35.2x</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--text2);">EV/EBITDA</div><div style="font-size:16px;font-weight:700;">38.5x</div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;"><div style="font-size:10px;color:var(--text2);">负债/资产</div><div style="font-size:16px;font-weight:700;color:#16a34a;">28%</div></div>
+              </div>
+              <div style="margin-top:12px;padding:10px;background:#f8fafc;border-radius:6px;font-size:11px;color:var(--text2);">
+                <strong>杜邦分解：</strong>ROE=净利润率(55.2%)×资产周转率(0.52)×权益乘数(1.82)。高利润率是ROE核心驱动力，资产周转率有提升空间。
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 3: Risk -->
+        <div class="tab-panel" id="stage-2">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">⚠️ 风险排查清单</div>
+              <div class="progress-step"><div class="step-num done">✓</div><div><div style="font-weight:600;">股权结构</div><div style="font-size:11px;color:var(--text2);">无控股股东风险，机构持股65%，黄仁勋持股约3.5%有稳定投票权</div></div></div>
+              <div class="progress-step"><div class="step-num done">✓</div><div><div style="font-weight:600;">管理层稳定性</div><div style="font-size:11px;color:var(--text2);">黄仁勋1993年创立至今，核心团队平均任期10年+，无近期高管离职</div></div></div>
+              <div class="progress-step"><div class="step-num done">✓</div><div><div style="font-weight:600;">法律合规</div><div style="font-size:11px;color:var(--text2);">中美出口管制风险已price-in，已调整中国市场收入占比至&lt;15%</div></div></div>
+              <div class="progress-step"><div class="step-num pending">!</div><div><div style="font-weight:600;">舆情监控</div><div style="font-size:11px;color:var(--text2);">近期争议：反垄断调查(欧盟)、竞争对手ASIC崛起(博通/Marvell)</div></div></div>
+              <div class="progress-step"><div class="step-num pending">!</div><div><div style="font-weight:600;">黑天鹅信号</div><div style="font-size:11px;color:var(--text2);">⚠️ 客户集中风险：MSFT/GOOGL/META合计占数据中心收入~40%</div></div></div>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">🔴 一票否决 Veto 检查</div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;"><span>F4: EPS低于预期&gt;10%</span><span class="tag tag-green">✓ 通过</span></div>
+                <div style="font-size:11px;color:var(--text2);margin-top:4px;">最近季度EPS $0.95 vs 预期$0.91，超预期+4.4%</div>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;"><span>F5: RSI&gt;85</span><span class="tag tag-green">✓ 通过</span></div>
+                <div style="font-size:11px;color:var(--text2);margin-top:4px;">当前RSI(14)=62，处于健康趋势区间</div>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;"><span>F5: MACD高位死叉</span><span class="tag tag-green">✓ 通过</span></div>
+                <div style="font-size:11px;color:var(--text2);margin-top:4px;">MACD柱状线持续扩张，无死叉信号</div>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;"><span>F2: VIX&gt;25且飙升&gt;20%</span><span class="tag tag-green">✓ 通过</span></div>
+                <div style="font-size:11px;color:var(--text2);margin-top:4px;">VIX当前14.2，处于低位</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 4: Comparison -->
+        <div class="tab-panel" id="stage-3">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">对标公司五维雷达对比</div>
+              <div id="compare-radar" class="chart-box"></div>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">关键指标对比</div>
+              <table class="data-table">
+                <thead><tr><th>指标</th><th>NVDA</th><th>AMD</th><th>INTC</th><th>TSM</th></tr></thead>
+                <tbody>
+                  <tr><td>PE(TTM)</td><td>45.6x</td><td>52.3x</td><td>18.5x</td><td>22.1x</td></tr>
+                  <tr><td>毛利率</td><td>74.6%</td><td>52.1%</td><td>42.8%</td><td>53.2%</td></tr>
+                  <tr><td>营收增速(YoY)</td><td>+58%</td><td>+18%</td><td>-8%</td><td>+35%</td></tr>
+                  <tr><td>ROE</td><td>52.3%</td><td>12.5%</td><td>5.2%</td><td>28.6%</td></tr>
+                  <tr><td>AI收入占比</td><td>80%+</td><td>35%</td><td>10%</td><td>N/A</td></tr>
+                  <tr><td>FinalScore</td><td><strong>64.4</strong></td><td>48.2</td><td>32.5</td><td>64.4</td></tr>
+                </tbody>
+              </table>
+              <div style="margin-top:10px;padding:10px;background:#f8fafc;border-radius:6px;font-size:11px;color:var(--text2);">
+                <strong>结论：</strong>NVDA在毛利率、ROE、AI收入占比全面领先，但PE估值也最高。与TSM同为64.4分，但TSM估值更合理，NVDA护城河更深。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three Schools -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:16px;">🏛️ 三流派独立分析</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <div class="school-tab active" onclick="switchSchool(this,0)">价值派</div>
+          <div class="school-tab" onclick="switchSchool(this,1)">趋势派</div>
+          <div class="school-tab" onclick="switchSchool(this,2)">成长派</div>
+        </div>
+
+        <div class="tab-panel active" id="school-0">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+            <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+              <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">Graham 安全边际</div>
+              <div style="font-size:24px;font-weight:700;color:var(--warn);">-15%</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:4px;">当前价高于内在价值预估，无安全边际</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:8px;">合理价区间：$105-$125</div>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+              <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">Buffett 护城河</div>
+              <div style="font-size:24px;font-weight:700;color:#16a34a;">A+</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:4px;">CUDA生态形成极强网络效应，客户切换成本极高</div>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+              <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:8px;">DCF估值</div>
+              <div style="font-size:24px;font-weight:700;color:var(--accent);">$142</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:4px;">WACC=10%, g=5%, 当前价$135.42</div>
+              <div style="font-size:11px;color:var(--text2);margin-top:8px;">隐含上涨空间：+4.9%</div>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:12px;background:#fef3c7;border-radius:8px;font-size:12px;">
+            <strong>价值派结论：</strong>估值偏贵，但护城河极深。传统价值投资者会等待回调至$105以下(安全边际≥20%)再建仓。当前仅适合已持有者继续持有，不建议新建价值仓位。
+          </div>
+        </div>
+
+        <div class="tab-panel" id="school-1">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:10px;color:var(--text2);">多周期趋势</div>
+              <div style="font-size:20px;font-weight:700;color:#16a34a;">+2</div>
+              <div style="font-size:10px;color:var(--text2);">日/周/月全上行</div>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:10px;color:var(--text2);">量价关系</div>
+              <div style="font-size:20px;font-weight:700;color:#16a34a;">+1</div>
+              <div style="font-size:10px;color:var(--text2);">放量突破前高</div>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:10px;color:var(--text2);">情绪指标</div>
+              <div style="font-size:20px;font-weight:700;color:var(--warn);">0</div>
+              <div style="font-size:10px;color:var(--text2);">RSI=62中性</div>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:10px;color:var(--text2);">技术形态</div>
+              <div style="font-size:20px;font-weight:700;color:#16a34a;">+1</div>
+              <div style="font-size:10px;color:var(--text2);">杯柄形态突破</div>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:12px;background:#dcfce7;border-radius:8px;font-size:12px;">
+            <strong>趋势派结论：</strong>综合评分 +4 (强多头)。日线/周线/月线全部上行，S4全共振信号。右侧轨道完好，建议沿MA10持有，跌破MA20减仓。目标价：$150 (前高+10%)。
+          </div>
+        </div>
+
+        <div class="tab-panel" id="school-2">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">成长指标</div>
+              <div class="moat-item"><span>3年营收CAGR</span><span style="font-weight:700;color:var(--accent);">58%</span></div>
+              <div class="moat-item"><span>3年净利润CAGR</span><span style="font-weight:700;color:var(--accent);">120%</span></div>
+              <div class="moat-item"><span>FCF增长率</span><span style="font-weight:700;color:var(--accent);">85%</span></div>
+              <div class="moat-item"><span>R&D/营收</span><span style="font-weight:700;">20.5%</span></div>
+              <div class="moat-item"><span>TAM(数据中心AI)</span><span style="font-weight:700;color:var(--accent);">$300B+</span></div>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:10px;">行业生命周期</div>
+              <div style="padding:12px;background:#f8fafc;border-radius:8px;font-size:12px;line-height:1.7;">
+                AI芯片处于<strong>成长期早期→中期</strong>过渡阶段。渗透率从5%向30%攀升，行业增速50%+。NVDA作为龙头享受最高份额(80%+)，但需警惕2-3年后行业增速放缓至20%时估值收缩风险。
+              </div>
+              <div style="margin-top:10px;padding:12px;background:#f8fafc;border-radius:8px;font-size:12px;line-height:1.7;">
+                <strong>PEG评估：</strong>当前PEG=1.12，对于58%增速的龙头而言合理。成长派投资者认为PEG&lt;1.5的成长股值得持有，NVDA处于舒适区间。
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:12px;background:#dbeafe;border-radius:8px;font-size:12px;">
+            <strong>成长派结论：</strong>AI基础设施需求刚起步，Blackwell架构换代带来新一轮增长。3年内营收有望翻倍至$2000亿。以PEG=1.2反推，合理市值$4.5T，对应股价$183，隐含上涨空间+35%。
+          </div>
+        </div>
+      </div>
+
+      <!-- LLM Consensus -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:14px;">🤖 9模型LLM独立研判</div>
+        <div style="font-size:11px;color:var(--text2);margin-bottom:14px;">每个模型独立搜索研究，输出 conviction评分 + 仓位标签 + 催化剂 + 风险点。共识统计去掉最高最低后取均值。</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">GPT-5.5</span><span class="llm-score" style="color:var(--accent);">94</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">AI生态与CUDA护城河极强，Blackwell换代周期确定性高。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：客户集中度过高</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">GLM-4.7</span><span class="llm-score" style="color:var(--accent);">95</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">行业绝对核心，F1分低纯粹因体量巨大导致量比稀释。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：地缘政治出口管制</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">minimax</span><span class="llm-score" style="color:var(--accent);">92</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">AI时代的核心标的，五因子综合评分与公司实际质量高度匹配。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：估值偏高</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">gemini-3-flash</span><span class="llm-score" style="color:var(--accent);">90</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">量化F1极低是因近期进入高位震荡洗盘，不改变长期趋势。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：短期波动加剧</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">豆包2.0</span><span class="llm-score" style="color:var(--accent);">90</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">S4全共振信号，AI行业绝对领导者，无可替代。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：竞争对手ASIC侵蚀份额</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">qwen3.6</span><span class="llm-score" style="color:var(--accent);">85</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">AI算力基础设施唯一全产业链龙头，从芯片到系统到软件全栈覆盖。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：技术路线迭代风险</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">kimi-k2.6</span><span class="llm-score" style="color:var(--accent);">82</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">AI基础设施不可替代，但需警惕资金面风险(F1仅26)。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：机构持仓拥挤</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">mimo-v2.5-pro</span><span class="llm-score" style="color:var(--accent);">78</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">S4全共振，F4满分、F5满分，基本面技术面均确认。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：增长放缓估值承压</div>
+          </div>
+          <div class="llm-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:12px;font-weight:600;">deepseek-v3</span><span class="llm-score" style="color:var(--accent);">75</span></div>
+            <div class="tag tag-green" style="margin-bottom:6px;">core</div>
+            <div style="font-size:11px;color:var(--text);line-height:1.5;">S4日线仅持续1天，信号极新鲜，需观察持续性。</div>
+            <div style="font-size:10px;color:var(--text2);margin-top:6px;">风险：信号新鲜度不足</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:12px;background:#ede9fe;border-radius:8px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--navy);">共识统计</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;">去掉最高(95)和最低(75)，剩余7个分数均值 = <strong>87.29</strong></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--text2);">极差</div>
+            <div style="font-size:16px;font-weight:700;color:var(--accent);">20</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--text2);">分歧度</div>
+            <div class="tag tag-green">低分歧</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--text2);">一致仓位</div>
+            <div class="tag tag-green">9/9 core</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchStage(el, idx) {
+  document.querySelectorAll('.school-tab').forEach((t,i) => {
+    if (i < 4) { t.classList.remove('active'); }
+  });
+  el.classList.add('active');
+  for (let i = 0; i < 4; i++) {
+    document.getElementById('stage-' + i).classList.remove('active');
+  }
+  document.getElementById('stage-' + idx).classList.add('active');
+  if (idx === 3) {
+    setTimeout(initCompareRadar, 50);
+  }
+}
+
+function switchSchool(el, idx) {
+  document.querySelectorAll('.school-tab').forEach((t,i) => {
+    if (i >= 4) { t.classList.remove('active'); }
+  });
+  el.classList.add('active');
+  for (let i = 0; i < 3; i++) {
+    document.getElementById('school-' + i).classList.remove('active');
+  }
+  document.getElementById('school-' + idx).classList.add('active');
+}
+
+// Header radar
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('header-radar'));
+  chart.setOption({
+    radar: {
+      indicator: [
+        {name: 'F1', max: 100},
+        {name: 'F2', max: 100},
+        {name: 'F3', max: 100},
+        {name: 'F4', max: 100},
+        {name: 'F5', max: 100}
+      ],
+      radius: '65%',
+      axisName: {fontSize: 9, color: '#64748d'},
+      splitArea: {areaStyle: {color: ['rgba(255,255,255,0.05)', 'rgba(255,255,255,0.02)']}},
+      axisLine: {lineStyle: {color: 'rgba(255,255,255,0.1)'}},
+      splitLine: {lineStyle: {color: 'rgba(255,255,255,0.1)'}}
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          value: [26, 54, 50, 100, 100],
+          name: 'NVDA',
+          areaStyle: {color: 'rgba(83,58,253,0.2)'},
+          lineStyle: {color: '#533afd', width: 2},
+          itemStyle: {color: '#533afd'}
+        },
+        {
+          value: [55, 45, 50, 70, 65],
+          name: '行业均值',
+          lineStyle: {color: '#94a3b8', type: 'dashed', width: 1},
+          itemStyle: {color: '#94a3b8'},
+          areaStyle: {color: 'transparent'}
+        }
+      ]
+    }]
+  });
+}, 100);
+
+function initCompareRadar() {
+  const el = document.getElementById('compare-radar');
+  if (!el) return;
+  const chart = echarts.init(el);
+  chart.setOption({
+    radar: {
+      indicator: [
+        {name: 'F1资金', max: 100},
+        {name: 'F2宏观', max: 100},
+        {name: 'F3情绪', max: 100},
+        {name: 'F4基本面', max: 100},
+        {name: 'F5技术', max: 100}
+      ],
+      radius: '65%',
+      axisName: {fontSize: 11, color: '#64748d'},
+      splitArea: {areaStyle: {color: ['#fafbfc', '#f3f4f6']}},
+      axisLine: {lineStyle: {color: '#e5e7eb'}},
+      splitLine: {lineStyle: {color: '#e5e7eb'}}
+    },
+    legend: {data: ['NVDA', 'AMD', 'INTC', 'TSM'], bottom: 0, textStyle: {fontSize: 11}},
+    series: [{
+      type: 'radar',
+      data: [
+        {value: [26, 54, 50, 100, 100], name: 'NVDA', areaStyle: {color: 'rgba(83,58,253,0.15)'}, lineStyle: {color: '#533afd', width: 2}, itemStyle: {color: '#533afd'}},
+        {value: [45, 42, 50, 55, 60], name: 'AMD', areaStyle: {color: 'rgba(59,130,246,0.1)'}, lineStyle: {color: '#3b82f6', width: 2}, itemStyle: {color: '#3b82f6'}},
+        {value: [30, 35, 50, 40, 35], name: 'INTC', areaStyle: {color: 'rgba(148,163,184,0.1)'}, lineStyle: {color: '#94a3b8', width: 2}, itemStyle: {color: '#94a3b8'}},
+        {value: [41, 54, 50, 100, 85], name: 'TSM', areaStyle: {color: 'rgba(16,185,129,0.1)'}, lineStyle: {color: '#10b981', width: 2}, itemStyle: {color: '#10b981'}}
+      ]
+    }]
+  });
+}
+
+setTimeout(initCompareRadar, 200);
+</script>
+
+</body>
+</html>
