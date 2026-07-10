@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日油管观点速览 — 2026-06-18</title>
+<style>
+:root {
+  --navy: #061b31; --label: #273951; --body: #64748d;
+  --border: #e5edf5; --white: #ffffff; --bg: #f6f9fc;
+  --green: #15be53; --green-bg: rgba(21,190,83,0.12);
+  --amber: #f5a623; --amber-bg: rgba(245,166,35,0.12);
+  --red: #ea2261; --red-bg: rgba(234,34,97,0.12);
+  --shadow-sm: 0 2px 6px rgba(50,50,93,0.12), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 14px rgba(50,50,93,0.18), 0 2px 6px rgba(0,0,0,0.08);
+  --font: 'Inter', -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --mono: 'SF Mono', 'Source Code Pro', 'Menlo', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--label);font-size:15px;line-height:1.7}
+/* 固定导航栏 */
+.topnav{
+  position:sticky;top:0;z-index:200;
+  background:var(--navy);color:var(--white);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;height:48px;gap:12px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.15)
+}
+.topnav a,.topnav select{
+  font-size:13px;font-weight:500;text-decoration:none;
+  border-radius:6px;padding:6px 14px;transition:all 0.15s;
+  white-space:nowrap
+}
+.topnav-history,.topnav-kol,.topnav-kg{
+  color:rgba(255,255,255,0.75);border:1px solid rgba(255,255,255,0.2)
+}
+.topnav-history:hover,.topnav-kol:hover,.topnav-kg:hover{
+  background:rgba(255,255,255,0.12);color:#fff;border-color:rgba(255,255,255,0.4)
+}
+.topnav-nav{display:flex;align-items:center;gap:6px}
+.topnav-arrow{
+  color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.2)
+}
+.topnav-arrow:hover{background:rgba(255,255,255,0.12);color:#fff}
+.topnav-arrow.disabled{
+  color:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.08);
+  pointer-events:none;cursor:default
+}
+.topnav-select{
+  background:rgba(255,255,255,0.08);color:#fff;
+  border:1px solid rgba(255,255,255,0.2);cursor:pointer;
+  font-family:var(--font);min-width:130px;text-align:center;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23fff'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+  padding-right:28px
+}
+.topnav-select option{background:var(--navy);color:#fff}
+
+.container{max-width:800px;margin:0 auto;padding:24px}
+
+/* Hero */
+.hero{
+  background:var(--navy);color:var(--white);border-radius:12px;
+  padding:28px 36px;margin-bottom:16px;box-shadow:var(--shadow-md);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px
+}
+.hero-left{}
+.hero .date{font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:1px;text-transform:uppercase}
+.hero h1{font-size:24px;font-weight:700;margin:4px 0 8px}
+.hero .meta{font-size:14px;color:rgba(255,255,255,0.7)}
+
+/* Hero 右侧按钮 */
+.hero-actions{display:flex;gap:10px;flex-shrink:0}
+.hero-btn{
+  padding:10px 18px;border-radius:8px;border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8);
+  cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;
+  white-space:nowrap
+}
+.hero-btn:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.4)}
+.hero-btn.active{background:var(--green);border-color:var(--green);color:#fff}
+
+/* 展开面板 */
+.expand-panel{
+  display:none;background:var(--white);border-radius:12px;padding:20px 24px;
+  box-shadow:var(--shadow-sm);margin-bottom:16px;position:relative
+}
+.expand-panel.open{display:block}
+.expand-panel .panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.expand-panel .panel-label{font-size:14px;font-weight:600;color:var(--navy)}
+.expand-panel .close-btn{
+  padding:4px 14px;border-radius:6px;border:1px solid var(--border);
+  background:var(--white);color:var(--body);cursor:pointer;font-size:13px;transition:all 0.15s
+}
+.expand-panel .close-btn:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}
+.expand-panel audio,.expand-panel video{width:100%;border-radius:6px}
+.expand-panel video{background:#000;max-height:60vh}
+
+.section-title{
+  font-size:18px;font-weight:700;color:var(--navy);
+  margin:32px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--border)
+}
+.theme-card{
+  background:var(--white);border-radius:10px;padding:24px;
+  box-shadow:var(--shadow-sm);margin-bottom:16px;border-left:4px solid var(--navy)
+}
+.theme-card.high{border-left-color:var(--green)}
+.theme-card.medium{border-left-color:var(--amber)}
+.theme-card.low{border-left-color:var(--red)}
+.theme-card h3{font-size:17px;color:var(--navy);margin-bottom:4px}
+.theme-card .consensus{font-size:12px;color:var(--body);margin-bottom:12px}
+.theme-card p{font-size:14px;color:var(--label);line-height:1.7}
+.theme-card blockquote{
+  border-left:2px solid var(--border);padding:8px 16px;
+  margin:16px 0;color:var(--body);font-style:italic;font-size:13px
+}
+.theme-card .assets{font-size:12px;color:var(--body);margin-top:8px}
+.split-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.split-card{background:var(--white);border-radius:8px;padding:20px;box-shadow:var(--shadow-sm)}
+.split-card.green{border-top:3px solid var(--green)}
+.split-card.red{border-top:3px solid var(--red)}
+.split-card h4{font-size:14px;margin-bottom:8px}
+.quote-block{
+  background:var(--white);border-radius:10px;padding:32px;
+  box-shadow:var(--shadow-sm);text-align:center;margin-bottom:24px
+}
+.quote-block .text{font-size:19px;font-weight:500;color:var(--navy);line-height:1.6;font-style:italic}
+.quote-block .attribution{font-size:13px;color:var(--body);margin-top:12px}
+.footer{text-align:center;padding:40px 0;font-size:12px;color:var(--body)}
+
+/* 情绪仪表 */
+.editor-mood{
+  background:var(--white);border-radius:10px;padding:20px 24px;
+  box-shadow:var(--shadow-sm);margin-bottom:16px
+}
+.mood-bar-wrap{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.mood-bar-label{font-size:14px;font-weight:600;color:var(--navy);white-space:nowrap}
+.mood-bar-track{
+  flex:1;height:10px;border-radius:5px;
+  background:linear-gradient(to right,#ea2261,#f5a623,#15be53);
+  position:relative
+}
+.mood-bar-fill{
+  position:absolute;top:0;left:0;height:100%;
+  background:rgba(255,255,255,0.5);border-radius:5px 0 0 5px;
+  transition:width 0.5s
+}
+.mood-bar-dot{
+  position:absolute;top:-5px;width:20px;height:20px;
+  background:var(--white);border:3px solid var(--navy);border-radius:50%;
+  transform:translateX(-50%);transition:left 0.5s
+}
+.mood-bar-value{font-size:14px;font-weight:600;color:var(--navy);white-space:nowrap}
+.editor-label{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.editor-text{font-size:14px;color:var(--body);line-height:1.7}
+
+@media (max-width:640px){
+  .split-layout{grid-template-columns:1fr}
+  .container{padding:16px}
+  .hero{padding:20px;flex-direction:column;align-items:flex-start}
+  .topnav{padding:0 8px;gap:4px}
+  .topnav a,.topnav select{padding:5px 8px;font-size:12px}
+  .topnav-select{min-width:110px}
+}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <a href="history.html" class="topnav-history" title="历史报告列表">📋 历史</a>
+  <div class="topnav-nav">
+    <a href="report_2026-06-17.html" class="topnav-arrow" title="前一天">← 前日</a>
+    <select class="topnav-select" onchange="if(this.value) location.href=this.value">
+<option value="report_2026-06-18.html" selected>2026-06-18</option>
+<option value="report_2026-06-17.html">2026-06-17</option>
+<option value="report_2026-06-16.html">2026-06-16</option>
+<option value="report_2026-06-12.html">2026-06-12</option>
+<option value="report_2026-06-11.html">2026-06-11</option>
+    </select>
+    <a href="report_2026-06-19.html" class="topnav-arrow disabled" >→</a>
+  </div>
+  <a href="invest_kg_viewer.html" class="topnav-kg" title="投资知识图谱">🧠</a>
+  <a href="KOL列表展示.html" class="topnav-kol" title="KOL 追踪列表">⚙️</a>
+</div>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="date">每日油管观点速览</div>
+      <h1>2026-06-18</h1>
+      <div class="meta">37 位博主 | 总体情绪：谨慎偏多（+15）</div>
+    </div>
+    <div class="hero-actions">
+      <button class="hero-btn" onclick="togglePanel('audio')" id="btn-audio">🎧 音频</button>
+      <button class="hero-btn" onclick="togglePanel('video')" id="btn-video">🎬 视频</button>
+    </div>
+  </div>
+
+  <!-- 音频展开面板 -->
+  <div class="expand-panel" id="panel-audio">
+    <div class="panel-header">
+      <span class="panel-label">🎧 AI 中文旁白播报</span>
+      <button class="close-btn" onclick="closePanel('audio')">✕ 关闭</button>
+    </div>
+    <p style='color:var(--body);padding:12px 0'>音频文件未找到，请先生成视频以获取旁白</p>
+  </div>
+
+  <!-- 视频展开面板 -->
+  <div class="expand-panel" id="panel-video">
+    <div class="panel-header">
+      <span class="panel-label">🎬 视频版 · 1080p 中文旁白</span>
+      <button class="close-btn" onclick="closePanel('video')">✕ 关闭</button>
+    </div>
+    <p style='color:var(--body);padding:12px 0'>视频文件未找到，请用 daily_runner（不加 --no-video）生成</p>
+  </div>
+<div class="editor-mood">
+  <div class="editor-label">编辑部按</div><div class="editor-text">今日市场聚焦美联储鹰派转向引发的短期动荡、AI基建遭遇的社区阻力与SpaceX估值泡沫，但长期多头认为宏观指标调整和生产力革命将带来逢低买入的机遇。</div>
+  <div class="mood-bar-wrap">
+    <div class="mood-bar-label">市场情绪</div>
+    <div class="mood-bar-track">
+      <div class="mood-bar-fill" style="width:58%"></div>
+      <div class="mood-bar-dot" style="left:58%"></div>
+    </div>
+    <div class="mood-bar-value">谨慎偏多（+15）</div>
+  </div>
+</div><div class="section-title">今日主线</div>
+<div class="theme-card medium">
+  <h3>主线 1：美联储鹰派转向引发短期波动，长期宽松预期未灭</h3>
+  <div class="consensus">共识度：medium | 看多：Meet Kevin, Financial Education, STOCK UP! with LARRY JONES | 看空：Moneyvest, Stocks with Josh, STOCK UP! with LARRY JONES</div>
+  <p>美联储6月会议维持利率不变，但新主席Warsh移除前瞻指引并展现鹰派立场，点阵图暗示加息预期升温，导致当日美股大跌，纳斯达克下跌300点，标普500下跌88点，七巨头单日蒸发近9000亿美元。然而，多位博主指出Warsh可能改变通胀衡量指标，从PCE转向已接近2%的达拉斯联储trimmed mean通胀，为未来降息铺路。市场对年底加息概率的定价过高，而美联储内部多数官员倾向按兵不动。短期美元走强、收益率上升压制风险资产，但长期来看，Warsh倾向于减少美联储干预，让利润和市场主导定价，这将利好价值投资和成长股。分歧集中在短期调整风险与逢低买入机会的把握上。</p>
+  <blockquote>Bottom line, bullish. Why? cuz this guy is probably going to change which measure of inflation they use.</blockquote>
+  <div class="assets"><strong>相关资产：</strong>SPY, QQQ, TLT, UST2Y, UST10Y</div>
+</div>
+<div class="theme-card medium">
+  <h3>主线 2：AI基础设施：数据中心社区反对与泡沫争议</h3>
+  <div class="consensus">共识度：medium | 看多：ARK Invest, The Compound, Serenity, Jose Najarro | 看空：Best of Us Investors, Sven Carlin, Crowded Market Report, 投资TALK君</div>
+  <p>AI基础设施正面临严重的物理瓶颈：全美范围内社区反对运动在2026年一季度已导致价值1300亿美元的数据中心项目延迟或中止，芯片供货周期远快于数据中心建设周期，导致Nvidia库存天数上升。同时，科技巨头应付账款天数大幅增长，显示流动性压力。AI资本支出与年化收入差距高达4000亿美元，超过2001年电信泡沫时期的差距，引发泡沫担忧。然而，ARK Invest认为AI引发的生产力繁荣与云革命使历史类比失效，光学互联、HBM等关键环节仍存在巨大供给瓶颈和投资机会。Nvidia继续以87%的MLPerf训练提交份额主导市场，AMD虽有进步但仍大幅落后。市场对AI软件股出现过度杀跌，部分公司基本面依然健康。</p>
+  <blockquote>You cannot run a piece of physical hardware without a physical building, and you cannot build a physical building without a local community's permission.</blockquote>
+  <div class="assets"><strong>相关资产：</strong>NVDA, AMD, MU, AAOI, SIVE, SK海力士, IGV</div>
+</div>
+<div class="theme-card high">
+  <h3>主线 3：SpaceX IPO狂热与估值之辩</h3>
+  <div class="consensus">共识度：high | 看多：MarketBeat, ZipTrader, Meet Kevin | 看空：Stocks with Josh, ZipTrader</div>
+  <p>SpaceX以135美元IPO后，因仅约5%的超低流通盘和指数基金被动买入，股价迅速飙升至220美元以上，市值达2.8万亿美元，接近亚马逊。ZipTrader等博主指出，当前估值远超基本面，合理价值可能仅有63美元左右，且未来12个月内锁定期解禁将带来巨大抛压，短期追高风险极高。但该公司基本面确实具有革命性：控制全球80%以上发射份额，Starlink用户超1200万且年增50%，Starship有望将发射成本降低99%，并手握超200亿美元政府合同。因此，长期投资者应等待恐慌性低点再介入，或关注SpaceX可能收购的产业链公司，如频谱和卫星组件供应商。做空SpaceX的ETF也已出现，博弈加剧。</p>
+  <blockquote>SpaceX is a generational life-changing company, but you have to make sure that your life is changed in a positive way by actually buying in at a good price.</blockquote>
+  <div class="assets"><strong>相关资产：</strong>SPCX, SSPC, GSAT, RDW, MDA, FLTCF</div>
+</div>
+<div class="theme-card high">
+  <h3>主线 4：伊朗停火与能源价格剧震</h3>
+  <div class="consensus">共识度：high | 看多：Finding Value Finance, StockInvest.us, Meet Kevin | 看空：—</div>
+  <p>美国-伊朗-以色列达成的10点停火框架重燃霍尔木兹海峡重开预期，布伦特原油价格从117.50美元急剧暴跌，触发风险资产全面反弹，纳斯达克大涨。但停火协议十分脆弱，伊朗随即停止油轮，双方互相指责违规，市场波动持续。然而，从库存周期和供需结构看，美国战略石油储备已降至1980年代水平，页岩油产量增长显著放缓，IEA预测供应短缺将持续至2026年年底。多头认为，石油正处于长期商品牛市的开端，当前油价暴跌是难得的买入机会，石油将引领商品市场的历史性行情。而贵金属受强势美元和利率上升压制，仍在震荡区间，短期承压。</p>
+  <blockquote>Oil could outperform the broad commodity basket by multiples over the coming years.</blockquote>
+  <div class="assets"><strong>相关资产：</strong>WTI, USO, XLE, GLD, SLV</div>
+</div>
+<div class="theme-card medium">
+  <h3>主线 5：逆势价值投资：买入被市场抛弃的优质公司</h3>
+  <div class="consensus">共识度：medium | 看多：Joseph Carlson, Joseph Carlson After Hours, Sven Carlin, Stocks with Josh, 投资TALK君 | 看空：—</div>
+  <p>在AI和SpaceX占据头条、市场情绪分化之际，一批资金流向被低估且基本面良好的公司。Joseph Carlson持续加仓Meta，认为市场因伊朗断网等一次性因素夸大用户流失，当前PE仅18极为便宜，AI资本支出长期将提升效率。Stocks with Josh指出Salesforce已从高点下跌55%，但业绩持续超预期，技术面类似2021年那次200%的反弹。投资TALK君将当前软件板块比作2022年的Meta，认为业绩将证伪市场偏见。同时，多个博主强调国际股票（如EAFE价值股）估值更低、分红更高，正在出现资金轮动。价值投资策略在过去两年取得27%的年化收益，超过Nvidia，证明即使在泡沫期也能获得超额回报。</p>
+  <blockquote>I'm going to keep buying companies the market hates right now, but I actually think are really good companies.</blockquote>
+  <div class="assets"><strong>相关资产：</strong>META, CRM, COST, DG, FTIHX, EFV</div>
+</div>
+<div class="section-title">分歧与辩论</div>
+<div class="split-layout">
+<div class="split-card green"><h4>🟢 看多 — ARK Invest</h4><p>当前AI生产力繁荣、单位劳动力成本极低，且存在云革命和AI突破，与2000年电信泡沫根本不同。</p></div>
+<div class="split-card red"><h4>🔴 看空 — Best of Us Investors</h4><p>AI资本支出与收入差距达46%，超过2001年电信泡沫，且数据中心建设遭社区反对，大量芯片将无处安装。</p></div>
+<div class="split-card green"><h4>🟢 看多 — Meet Kevin</h4><p>Warsh将改用trimmed mean通胀指标，为降息铺路，并利用AI实时数据减少对滞后数据的依赖。</p></div>
+<div class="split-card red"><h4>🔴 看空 — Moneyvest</h4><p>美联储点阵图上调加息预期，移除前瞻指引增加不确定性，市场已出现连续更低的高点，结构转弱。</p></div>
+</div>
+<div class="section-title">今日金句</div>
+<div class="quote-block">
+  <div class="text">"SpaceX is a generational life-changing company, but you have to make sure that your life is changed in a positive way by actually buying in at a good price."</div>
+  <div class="attribution">— ZipTrader | 在SpaceX IPO股价因超低流通盘被推至2.8万亿美元市值之际，ZipTrader提醒投资者长期价值虽大，但未来锁定期解禁将导致大幅回调，耐心等待合理入场点才是关键。</div>
+</div>
+<div class="footer">AI 生成 2026-06-18 &middot; 仅做公开内容梳理，不构成任何建议</div>
+</div>
+
+<script>
+function closeOther(type) {
+  var other = type === 'audio' ? 'video' : 'audio';
+  var otherPanel = document.getElementById('panel-' + other);
+  var otherBtn = document.getElementById('btn-' + other);
+  if (otherPanel) otherPanel.classList.remove('open');
+  if (otherBtn) otherBtn.classList.remove('active');
+  var otherAudio = document.getElementById('audio-player');
+  var otherVideo = document.getElementById('video-player');
+  if (other === 'audio' && otherAudio) otherAudio.pause();
+  if (other === 'video' && otherVideo) otherVideo.pause();
+}
+
+function togglePanel(type) {
+  var panel = document.getElementById('panel-' + type);
+  var btn = document.getElementById('btn-' + type);
+  var isOpen = panel.classList.contains('open');
+
+  if (isOpen) {
+    closePanel(type);
+    return;
+  }
+
+  // 关闭另一个面板
+  closeOther(type);
+
+  // 打开当前面板
+  panel.classList.add('open');
+  btn.classList.add('active');
+
+  // 自动播放
+  if (type === 'audio') {
+    var a = document.getElementById('audio-player');
+    if (a) { a.currentTime = 0; a.play().catch(function(){}); }
+  } else if (type === 'video') {
+    var v = document.getElementById('video-player');
+    if (v) { v.currentTime = 0; v.play().catch(function(){}); }
+  }
+}
+
+function closePanel(type) {
+  var panel = document.getElementById('panel-' + type);
+  var btn = document.getElementById('btn-' + type);
+  panel.classList.remove('open');
+  btn.classList.remove('active');
+  var audio = document.getElementById('audio-player');
+  var video = document.getElementById('video-player');
+  if (type === 'audio' && audio) audio.pause();
+  if (type === 'video' && video) video.pause();
+}
+</script>
+</body>
+</html>

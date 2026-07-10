@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投资分析报告 · 共识看板 (Linear)</title>
+<style>
+/* ============================================================
+   Linear Design System — Dark Mode First, Precision Engineering
+   ============================================================ */
+
+:root {
+  /* Linear Core — Dark Mode First */
+  --bg: #08090a;
+  --surface: #0f1011;
+  --surface-elevated: #191a1b;
+  --surface-hover: #28282c;
+  --text-primary: #f7f8f8;
+  --text-secondary: #d0d6e0;
+  --text-muted: #8a8f98;
+  --text-quaternary: #62666d;
+  --border: rgba(255,255,255,0.08);
+  --border-solid: #23252a;
+  --border-subtle: rgba(255,255,255,0.05);
+  --line-tint: #141516;
+
+  /* Brand — Linear's signature indigo-violet */
+  --accent: #7170ff;
+  --accent-bg: #5e6ad2;
+  --accent-hover: #828fff;
+
+  /* Status Colors */
+  --green: #27a644;
+  --green-bg: rgba(39,166,68,0.15);
+  --green-border: rgba(39,166,68,0.3);
+  --amber: #f5a623;
+  --amber-bg: rgba(245,166,35,0.15);
+  --amber-border: rgba(245,166,35,0.3);
+  --red: #ea4468;
+  --red-bg: rgba(234,68,104,0.15);
+  --red-border: rgba(234,68,104,0.3);
+
+  /* Shadows — luminance stacking on dark */
+  --shadow-sm: rgba(0,0,0,0.2) 0px 0px 12px 0px inset, rgba(0,0,0,0.4) 0px 2px 4px;
+  --shadow-md: rgba(0,0,0,0.3) 0px 0px 16px 0px inset, rgba(0,0,0,0.5) 0px 4px 8px;
+  --shadow-lg: rgba(0,0,0,0.4) 0px 0px 20px 0px inset, rgba(0,0,0,0.6) 0px 8px 16px;
+
+  /* Typography — Inter Variable with OpenType features */
+  --font: 'Inter Variable', 'Inter', -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --mono: 'SF Mono', 'Source Code Pro', 'Menlo', monospace;
+}
+
+/* Reset & Base */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--font);
+  font-weight: 400;
+  color: var(--text-primary);
+  background: var(--bg);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Layout
+   ============================================================ */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ============================================================
+   Header / Nav
+   ============================================================ */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.topbar-inner {
+  max-width: 1200px; margin: 0 auto; padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-brand {
+  font-size: 14px; font-weight: 510; color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+.topbar-brand span { color: var(--accent); font-weight: 590; }
+.topbar-date {
+  font-size: 12px; color: var(--text-muted);
+  font-family: var(--mono);
+  background: var(--surface-elevated); padding: 4px 12px; border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero {
+  padding: 56px 0 40px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 2.5rem; font-weight: 510; color: var(--text-primary);
+  letter-spacing: -1.056px; line-height: 1.00; margin-bottom: 12px;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-sub {
+  font-size: 1.05rem; color: var(--text-muted); max-width: 640px; margin: 0 auto;
+  line-height: 1.6; font-weight: 400;
+}
+
+/* ============================================================
+   Summary Cards
+   ============================================================ */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.summary-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 24px;
+  transition: background 0.2s, border-color 0.2s;
+}
+.summary-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); }
+.summary-card .label {
+  font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 8px; font-weight: 510;
+}
+.summary-card .value {
+  font-size: 1.75rem; font-weight: 510; color: var(--text-primary);
+  letter-spacing: -0.02em; font-family: var(--mono);
+}
+.summary-card .sub {
+  font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;
+}
+
+/* ============================================================
+   Section
+   ============================================================ */
+.section { margin-bottom: 48px; }
+.section-title {
+  font-size: 1.5rem; font-weight: 590; color: var(--text-primary);
+  letter-spacing: -0.5px; margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.section-title .num {
+  color: var(--accent); margin-right: 6px;
+}
+
+/* ============================================================
+   Table
+   ============================================================ */
+.table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+thead { background: rgba(255,255,255,0.03); }
+thead th {
+  padding: 12px 14px;
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 510;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s;
+  border-bottom: 1px solid var(--border);
+}
+thead th:hover { color: var(--text-primary); }
+thead th.sorted { color: var(--text-primary); font-weight: 590; }
+thead th .sort-arrow { margin-left: 4px; font-size: 0.7em; opacity: 0.5; }
+thead th.sorted .sort-arrow { opacity: 1; color: var(--accent); }
+
+tbody tr { border-top: 1px solid var(--border-subtle); cursor: pointer; transition: background 0.15s; }
+tbody tr:nth-child(even) { background: rgba(255,255,255,0.01); }
+tbody tr:hover { background: rgba(255,255,255,0.05); }
+
+tbody td {
+  padding: 12px 14px;
+  vertical-align: middle;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Cell styles */
+.symbol-cell { font-weight: 590; color: var(--text-primary); font-family: var(--mono); font-size: 0.8rem; }
+.company-cell { color: var(--text-secondary); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.score-cell { font-family: var(--mono); font-weight: 510; }
+.score-high { color: var(--green); }
+.score-mid { color: var(--amber); }
+.score-low { color: var(--red); }
+
+/* Rank badge */
+.rank-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  font-size: 0.75rem; font-weight: 510; font-family: var(--mono);
+}
+.rank-1 { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #08090a; }
+.rank-2 { background: linear-gradient(135deg, #c0c0c0, #999); color: #08090a; }
+.rank-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #08090a; }
+.rank-default { background: var(--surface-elevated); color: var(--text-muted); }
+
+/* Badges */
+.badge {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 2px; font-size: 0.7rem; font-weight: 510;
+  letter-spacing: 0.02em; text-transform: uppercase;
+}
+.badge-core { background: var(--green-bg); color: #10b981; border: 1px solid var(--green-border); }
+.badge-tactical { background: var(--amber-bg); color: #f5a623; border: 1px solid var(--amber-border); }
+.badge-watch { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+.warning-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px;
+}
+.warning-dot.high-div { background: var(--red); }
+.warning-dot.tag-conflict { background: var(--amber); }
+
+/* ============================================================
+   Tooltips — ⓘ icon + hover popup
+   ============================================================ */
+.info-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px; height: 15px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 510;
+  font-style: normal;
+  color: var(--text-muted);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  cursor: help;
+  margin-left: 5px;
+  vertical-align: middle;
+  line-height: 1;
+  transition: all 0.15s;
+}
+.info-tip:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(113,112,255,0.1);
+}
+.info-tip.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(113,112,255,0.1);
+}
+/* Global tooltip popup — Linear dark surface */
+#globalTooltip {
+  position: fixed;
+  visibility: hidden;
+  opacity: 0;
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.55;
+  max-width: 320px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  box-shadow: rgba(0,0,0,0.5) 0px 8px 24px;
+  z-index: 10000;
+  pointer-events: none;
+  transition: opacity 0.15s, visibility 0.15s;
+  text-transform: none;
+  letter-spacing: normal;
+}
+#globalTooltip.visible {
+  visibility: visible;
+  opacity: 1;
+}
+#globalTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--surface-elevated);
+}
+
+/* ============================================================
+   Detail Cards (expandable)
+   ============================================================ */
+.detail-panel {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+}
+.detail-panel.open { display: block; }
+
+.detail-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.detail-header .symbol {
+  font-family: var(--mono); font-weight: 590; font-size: 1.1rem; color: var(--text-primary);
+}
+.detail-header .name { color: var(--text-secondary); font-size: 0.9rem; }
+.detail-header .score {
+  margin-left: auto; font-family: var(--mono); font-size: 1.2rem;
+  font-weight: 510; color: var(--accent);
+}
+
+.detail-body { padding: 24px; }
+
+.one-liner {
+  font-size: 0.9rem; color: var(--text-muted); font-style: italic;
+  padding: 10px 16px;
+  background: var(--surface-elevated); border-left: 3px solid var(--accent-bg);
+  border-radius: 0 4px 4px 0; margin-bottom: 20px; line-height: 1.6;
+}
+
+.detail-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px; margin-bottom: 24px;
+}
+.detail-metric {
+  padding: 12px 16px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+}
+.detail-metric .label {
+  font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 4px; font-weight: 510;
+}
+.detail-metric .value {
+  font-size: 1.1rem; font-weight: 510; color: var(--text-primary);
+  font-family: var(--mono);
+}
+
+.risk-list { list-style: none; margin-bottom: 20px; }
+.risk-list li {
+  padding: 6px 0; font-size: 0.85rem; color: var(--text-secondary);
+  border-bottom: 1px dashed var(--border-subtle);
+  padding-left: 16px; position: relative;
+}
+.risk-list li::before {
+  content: '•'; position: absolute; left: 0; color: var(--red);
+}
+
+.catalyst-text {
+  font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;
+  padding: 12px 16px;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+.catalyst-text::before {
+  content: '▸ '; color: var(--green); font-weight: 590;
+}
+
+.llm-section h4 {
+  font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 12px; font-weight: 510;
+}
+.llm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+.llm-item {
+  padding: 10px 14px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.llm-item .llm-name {
+  font-weight: 590; color: var(--text-primary); font-size: 0.78rem;
+}
+.llm-item .llm-score {
+  font-family: var(--mono); font-weight: 500; margin-left: 6px;
+}
+.llm-item .llm-score.high { color: var(--green); }
+.llm-item .llm-score.mid { color: var(--amber); }
+.llm-item .llm-score.low { color: var(--red); }
+.llm-item .llm-tag {
+  font-size: 0.65rem; padding: 1px 6px; border-radius: 3px;
+  margin-left: 6px; text-transform: uppercase;
+}
+.llm-item .llm-reason { color: var(--label); margin-top: 4px; }
+
+/* ============================================================
+   Position Advice
+   ============================================================ */
+.position-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.position-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+}
+.position-card h3 {
+  font-size: 1rem; font-weight: 590; color: var(--text-primary); margin-bottom: 12px;
+}
+.position-card .symbols {
+  font-family: var(--mono); font-size: 0.9rem; color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.position-card .allocation {
+  font-size: 0.8rem; color: var(--accent); font-weight: 510;
+}
+.position-card .reason {
+  font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; line-height: 1.5;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  text-align: center; padding: 40px 0;
+  font-size: 0.75rem; color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 48px;
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.text-center { text-align: center; }
+.text-green { color: var(--green); }
+.text-amber { color: var(--amber); }
+.text-red { color: var(--red); }
+.hidden { display: none; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 1.8rem; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .llm-grid { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: repeat(2, 1fr); }
+  .table-wrap { overflow-x: auto; }
+  table { min-width: 800px; }
+}
+</style>
+</head>
+<body>
+
+<div id="globalTooltip"></div>
+
+<!-- Top Bar -->
+<nav class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand"><span>5因子</span> 共识看板</div>
+    <div class="topbar-date" id="reportDate">—</div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1>投资分析<em>共识报告</em></h1>
+    <p class="hero-sub">
+      Python(信号识别+五因子评分) + LLM×9(定性研判) 混合引擎生成<br>
+      综合质量分 × 60% + LLM conviction去极值均值 × 40%
+    </p>
+  </div>
+</section>
+
+<!-- Summary Cards -->
+<div class="container">
+  <div class="summary-grid" id="summaryCards"></div>
+</div>
+
+<!-- Top 10 Table -->
+<div class="container">
+  <div class="section">
+    <h2 class="section-title"><span class="num">一</span>综合共识 Top 10</h2>
+    <div class="table-wrap">
+      <table id="topTable">
+        <thead>
+          <tr>
+            <th data-sort="rank" style="width:50px"># <span class="sort-arrow">↓</span></th>
+            <th data-sort="symbol">代码 <span class="sort-arrow">↓</span></th>
+            <th>公司</th>
+            <th data-sort="signal">信号<i class="info-tip" data-tip="signal">ⓘ</i></th>
+            <th data-sort="python_score">质量分 <span class="sort-arrow">↓</span><i class="info-tip" data-tip="python_score">ⓘ</i></th>
+            <th data-sort="factor_total">因子总分 <span class="sort-arrow">↓</span><i class="info-tip" data-tip="factor_total">ⓘ</i></th>
+            <th data-sort="llm_avg_conviction">LLM均分 <span class="sort-arrow">↓</span><i class="info-tip" data-tip="llm_avg_conviction">ⓘ</i></th>
+            <th data-sort="conviction_std">分歧 <span class="sort-arrow">↓</span><i class="info-tip" data-tip="conviction_std">ⓘ</i></th>
+            <th data-sort="final_score" class="sorted">综合分 <span class="sort-arrow">↓</span><i class="info-tip" data-tip="final_score">ⓘ</i></th>
+            <th>仓位<i class="info-tip right-align" data-tip="tag_consensus">ⓘ</i></th>
+          </tr>
+        </thead>
+        <tbody id="topBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="section">
+    <div id="detailContainer"></div>
+  </div>
+
+  <!-- Position Advice -->
+  <div class="section">
+    <h2 class="section-title"><span class="num">二</span>仓位建议</h2>
+    <div class="position-grid" id="positionGrid"></div>
+    <div style="margin-top:16px; text-align:center;">
+      <span style="font-size:0.9rem; color:var(--navy); font-weight:400;">总仓位建议：不超过 35%</span>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="container">
+  <div class="footer">
+    本报告由 Python(信号识别+五因子评分) + LLM×9 混合引擎生成 · 仅供参考，不构成投资建议
+  </div>
+</footer>
+
+<script>
+// ============================================================
+// DATA LOADER — 将 consensus_top10_2026-MM-DD.json 的内容粘贴到这里
+// ============================================================
+
+const DATA = {
+  "top_picks": [
+    {
+      "rank": 1,
+      "symbol": "NVDA",
+      "company": "NVIDIA Corporation",
+      "signal": "S4主升浪全共振",
+      "python_score": 71.52,
+      "factor_total": 64.4,
+      "factor_low": "F1资金面(26分)",
+      "llm_avg_conviction": 87.29,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 7.16,
+      "conviction_range": 20,
+      "high_divergence": false,
+      "tag_conflict": false,
+      "final_score": 77.83,
+      "tag_consensus": "core",
+      "tag_detail": "core:9",
+      "merged_risks": [
+        "中国出口管制不确定性(H200获批后又受限)",
+        "出口管制政策不确定性（高端GPU出口限制变化）(citation:17)",
+        "估值已部分反映高增长预期",
+        "供应链高基数增长瓶颈",
+        "估值已高度计入了AI预期",
+        "MFI=47.9中性偏弱，获利盘涌出",
+        "竞争对手AMD/自研芯片(XPU)分流(citation:12)",
+        "估值已price in极高预期",
+        "估值偏高",
+        "F1=26分为Top20最低，量比<1，资金短期流出"
+      ],
+      "best_catalyst": "Blackwell产能爬坡及后续Vera Rubin发布；2026 Q2财报（预计5月底）；与主要云厂商的合作深化；出口管制政策变化",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 94,
+          "tag": "core",
+          "reason": "AI生态与CUDA护城河极强。资金面偏低意味着市场并未完全过热，长期逻辑仍最稳固"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 85,
+          "tag": "core",
+          "reason": "基本面确认顶级质量：AI算力基础设施唯一全产业链龙头，Q4营收+73%仍加速。F1=26分不是基本面问题而是短期资金获利了结（日线刚持续1天=可能刚结束调整）。F5=100分技术面完美（MACD金叉+RSI=65.7健康）。S4全共振刚启动，是核心布局窗口。core持仓。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 90,
+          "tag": "core",
+          "reason": "量化F1极低是因近期进入高位震荡洗盘，量比萎缩。但定性研判显示核心竞争力未变，S4三级共振预示震荡后仍有新高。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 90,
+          "tag": "core",
+          "reason": "S4全共振信号，AI行业绝对领导者，业绩确定性极高，资金面偏弱但不影响长期价值"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 95,
+          "tag": "core",
+          "reason": "行业绝对核心，F1分低纯粹因体量巨大导致量比不明显，不反映真实资金热度。逻辑最强，首选核心。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 82,
+          "tag": "core",
+          "reason": "AI基础设施不可替代的核心，超大规模客户资本支出创纪录。但F1资金面26分为全榜最低之一，量比0.95x和MFI47.9显示资金活跃度极低，与S4全共振信号形成显著矛盾。可能反映大资金在财报前获利了结。定性确信度高但需警惕资金面风险。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 92,
+          "tag": "core",
+          "reason": "AI时代的核心标的，基本面无与伦比。F1资金面26分看似低但RSI65.7处于健康区间，表明上涨动力充足而非过热。五因子综合评分与公司实际质量高度匹配。建议作为核心持仓配置。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 78,
+          "tag": "core",
+          "reason": "S4全共振，F4满分(100)、F5满分(100，MACD金叉确认)。搜索调研高度验证AI算力需求：AI服务器营收TAM $4.96万亿(citation:10)、出货370万台(citation:9)、推理需求占比持续提升(citation:10)。F1资金面26分为最大矛盾——量比0.95x低于均值、MFI=47.9偏弱，但作为$3万亿市值巨头，资金面指标天然不敏感。确信度高，适合作为核心持仓。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 75,
+          "tag": "core",
+          "reason": "S4日线仅持续1天+freshness=94，信号极新鲜。F1 26分与全球AI最刚需标的地位明显矛盾，低量比可能反映财报前观望而非趋势反转。AI芯片绝对龙头地位+即将财报催化，核心持仓。"
+        }
+      ],
+      "one_liner": "全球AI GPU与CUDA生态垄断者，设计并销售数据中心AI训练/推理芯片及游戏GPU，通过软硬一体化平台向云厂商和企业客户收取高毛利溢价"
+    },
+    {
+      "rank": 2,
+      "symbol": "TSM",
+      "company": "Taiwan Semiconductor Manufacturing Company Ltd.",
+      "signal": "S4主升浪全共振",
+      "python_score": 71.52,
+      "factor_total": 64.4,
+      "factor_low": "F1资金面(41分)",
+      "llm_avg_conviction": 85.0,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 6.65,
+      "conviction_range": 17,
+      "high_divergence": false,
+      "tag_conflict": false,
+      "final_score": 76.91,
+      "tag_consensus": "core",
+      "tag_detail": "core:9",
+      "merged_risks": [
+        "F1资金面仅41分，短期资金面偏弱",
+        "资金面偏弱，量比仅1.37x",
+        "ADR折价风险（台积电台湾本地股 vs ADR）",
+        "成熟制程竞争压力",
+        "中美地缘政治风险:特朗普宣布100%芯片关税虽豁免TSMC但仍存变数",
+        "F1资金面41分显示量比偏低(1.37x)",
+        "地缘政治风险（台湾）",
+        "资本支出巨大($52-56B)若AI需求放缓将承压",
+        "F1资金面仅41分，当日下跌0.6%",
+        "地缘风险溢价"
+      ],
+      "best_catalyst": "2026年Q2财报（预计7月）验证AI芯片出货增长；3nm/2nm产能爬坡；先进封装扩产进展；N2制程量产时间表",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 93,
+          "tag": "core",
+          "reason": "全球先进制程绝对龙头，AI周期核心受益者。资金面偏弱不影响长期产业逻辑"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 82,
+          "tag": "core",
+          "reason": "基本面无可挑剔：全球AI芯片代工唯一选择，Q1利润+58%，18/18 Strong Buy，PEG=0.64合理。F5=85分技术面健康（RSI=64未超买）。地缘政治风险是已知的long-term因素，不影响中期趋势。F1偏低但非资金撤离（当日跌幅小）。确认为core持仓，但需控制单一标的仓位上限。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 95,
+          "tag": "core",
+          "reason": "S4共振极佳，基本面满分当之无愧。F1较低主因是巨量权重股波动较小。它是所有AI策略的基石，无需质疑技术指标，建议作为长线底仓。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 86,
+          "tag": "core",
+          "reason": "S4全共振信号，行业绝对龙头，AI需求持续增长，地缘风险可控，长期配置价值高"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 90,
+          "tag": "core",
+          "reason": "行业绝对龙头，护城河极深。F1分低主要因市值大波动相对小，不改变核心多头逻辑，最高确信度。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 78,
+          "tag": "core",
+          "reason": "AI芯片代工不可替代，HPC占营收61%，3nm贡献25%，基本面极其稳固。F1资金面41分与当日下跌显示短期资金犹豫，但与月线持续11天上行形成矛盾。地缘政治是最大定性风险。可作为核心持仓。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 88,
+          "tag": "core",
+          "reason": "AI驱动下的最强确定性标的之一，五因子F4基本面100分、F5技术面85分支撑公司质量。地缘政治风险需关注但公司护城河极深。建议作为核心持仓。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 78,
+          "tag": "core",
+          "reason": "S4全共振，F4满分(100)且搜索调研确认台积电资本开支大幅增长(citation:17)、WFE市场规模跃升至$1.35万亿(citation:2)。作为全球代工绝对龙头，基本面无可挑剔。F1资金面41分为主要担忧（量比1.37x偏低、当日微跌），但属于大盘权重股正常波动。地缘政治风险是最大不确定性，建议作为核心持仓但控制单一标的仓位上限。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 78,
+          "tag": "core",
+          "reason": "S4月线趋势确认11天+基本面为全球芯片代工绝对龙头，全年增速>30%。F1 41分与强劲基本面矛盾，主要受当日微跌-0.6%影响，属于噪音。地缘风险可控(TSMC获关税豁免)，核心持仓标的。"
+        }
+      ],
+      "one_liner": "全球先进制程晶圆代工绝对龙头（市占>60%），为Apple/NVIDIA/AMD等代工3nm/5nm芯片，按代工量+先进封装服务收费"
+    },
+    {
+      "rank": 3,
+      "symbol": "MU",
+      "company": "Micron Technology, Inc.",
+      "signal": "S4主升浪全共振",
+      "python_score": 73.76,
+      "factor_total": 67.2,
+      "factor_low": "F5技术面(45分)",
+      "llm_avg_conviction": 81.14,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 9.72,
+      "conviction_range": 27,
+      "high_divergence": false,
+      "tag_conflict": false,
+      "final_score": 76.71,
+      "tag_consensus": "core",
+      "tag_detail": "core:5, tactical:4",
+      "merged_risks": [
+        "消费电子DRAM需求占比从43%下滑至23%，非AI业务承压(citation:7)",
+        "RSI=83.6严重超买，短期回调风险极高",
+        "估值泡沫担忧(GF Value显示高估125%)",
+        "HBM竞争加剧(三星、SK海力士)",
+        "F5技术面45分显示RSI83.6偏高",
+        "高盛中性评级警告Q3毛利率81%可能触顶",
+        "HBM超级周期可能见顶(参考2018年周期峰后暴跌50%)",
+        "DRAM现货价格开始企稳",
+        "技术面严重超买，RSI达83.6",
+        "当日涨幅15.49%为暴涨行情，追高风险大"
+      ],
+      "best_catalyst": "HBM3E量产爬坡及HBM4开发进展；AI服务器出货量持续超预期（2026年370万台(citation:9)）；下季度财报验证存储涨价传导",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 92,
+          "tag": "core",
+          "reason": "AI内存超级周期逻辑最强之一，基本面、资金与行业叙事形成共振。超买风险存在但未见趋势衰竭"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 78,
+          "tag": "tactical",
+          "reason": "HBM叙事+业绩兑现=基本面confirmed good，llm_conviction给78不低。但技术面是最大问题：RSI=83.6+日线持续16天+单日涨15.5%，这是主升浪中后段特征。F5仅45分与F4的100分形成强烈反差。等回调再布局，当前不建议追高。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 92,
+          "tag": "core",
+          "reason": "典型周期反转+AI红利，F4满分显示盈利预期极强。定性看其技术领先度足以支撑股价突破历史极值，F5低分反映处于严重超买区，建议回调分批建仓。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 88,
+          "tag": "core",
+          "reason": "S4全共振信号，F1资金面95分，HBM供需失衡，业绩持续超预期，技术面超买但不改长期趋势"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 82,
+          "tag": "core",
+          "reason": "存储行业上行周期确立，F1/F4双高。技术面超买（RSI 83.6）是强势常态，基本面支撑强，维持核心判断。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 70,
+          "tag": "tactical",
+          "reason": "HBM产能售罄和DRAM涨价构成强劲基本面，AI存储需求结构性增长。但F5技术面45分与RSI83.6严重超买形成明显矛盾，且内部人大额抛售发出警示信号。GF Value估计高估125%。建议战术性参与，避免追高。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 85,
+          "tag": "core",
+          "reason": "AI存储领域关键参与者，五因子F1资金面95分、F4基本面100分支撑公司质量。与NVDA的深度合作提供增长确定性。RSI偏高但资金面强劲。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 73,
+          "tag": "tactical",
+          "reason": "S4全共振，F1资金面95分显示极强资金流入，F4基本面满分(100)。搜索调研确认存储超级周期(citation:5)(citation:7)(citation:9)(citation:10)与量化评分高度一致。但RSI=83.6严重超买（F5仅45分），当日涨15.49%后短期追高风险极大。建议回调后再加仓，当前仓位适合战术性轻仓参与。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 65,
+          "tag": "tactical",
+          "reason": "S4趋势强劲+F1资金面95分+F4估值100分，量化面优秀。HBM 100%售罄、5年期战略协议锁定需求是核心支撑。但RSI=83.6超买+F5仅45分，内存周期见顶风险需警惕，建议战术性参与。"
+        }
+      ],
+      "one_liner": "美国唯一DRAM/NAND存储芯片IDM，AI驱动的HBM3E高带宽存储器核心供应商，产品销往服务器/PC/手机，价格受供需周期波动"
+    },
+    {
+      "rank": 4,
+      "symbol": "DELL",
+      "company": "Dell Technologies Inc.",
+      "signal": "S4主升浪全共振",
+      "python_score": 74.56,
+      "factor_total": 68.2,
+      "factor_low": "F5技术面(45分)",
+      "llm_avg_conviction": 79.43,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 7.51,
+      "conviction_range": 21,
+      "high_divergence": false,
+      "tag_conflict": true,
+      "final_score": 76.51,
+      "tag_consensus": "core",
+      "tag_detail": "core:7, tactical:2",
+      "merged_risks": [
+        "AI服务器竞争加剧（HPE、联想）",
+        "RSI=77.9偏高，短期存在回调压力",
+        "AI服务器利润率受内存涨价压力，NAND涨108%、DRAM涨138%(citation:10)",
+        "PB为负值(-68.69)反映历史商誉减值遗留",
+        "F5技术面仅45分，RSI=77.9严重超买，短期回调风险大",
+        "AI服务器竞争加剧(Supermicro等)",
+        "供应链部件短缺",
+        "40%+年涨幅后估值扩张空间收窄",
+        "2026下半年可能出现需求破坏风险(citation:10)",
+        "关税冲击：GuruFocus关税韧性评分仅4/10，中国/越南产能面临关税风险"
+      ],
+      "best_catalyst": "FY2026 Q4 EPS $3.89超预期(预期$3.52)，Q1 FY27财报5月20日即将发布；花旗预计营收$800亿超预期",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 89,
+          "tag": "core",
+          "reason": "AI基础设施核心受益者，订单与资本开支逻辑持续强化。F5偏低更多反映高位加速状态"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 72,
+          "tag": "tactical",
+          "reason": "AI服务器叙事强+业绩兑现度高，基本面确认good。但F5技术面45分是硬伤——RSI=77.9超买+单日暴涨13%，短期追高风险大。S4全共振虽好但日线已持续3天，不是刚启动。建议等回调至RSI<70再介入。tactical，非core因为入场时机不佳。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 85,
+          "tag": "core",
+          "reason": "量化模型捕获了资金面满分（F1），反映主力深度介入。定性调研确认其在AI服务器市场的份额扩张，F5低分是因短期涨幅过大导致指标钝化，不改趋势。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 85,
+          "tag": "core",
+          "reason": "S4全共振信号，F1资金面满分，AI服务器业务强劲，仅技术面超买，长期逻辑清晰"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 85,
+          "tag": "core",
+          "reason": "F1资金满分，AI服务器叙事强。F5技术分低仅因RSI超买（77.9），属于强势特征，非动量衰竭，确信度高。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 75,
+          "tag": "core",
+          "reason": "AI基础设施超级周期核心受益者，FY26创纪录业绩且FY27 AI营收指引$500亿。但F5技术面45分与RSI77.9显示短期超买，F2宏观46分也偏弱。量化与定性存在矛盾：基本面极强但技术指标过热。可作为核心持仓但需控制仓位应对回调。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 82,
+          "tag": "core",
+          "reason": "AI驱动的服务器需求强劲，基本面优质。F1资金面100分、F4基本面100分确认公司质量。日线RSI77.9偏高，短期可能波动，但中长期趋势向上。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 72,
+          "tag": "core",
+          "reason": "S4全共振，F1资金面满分(100)显示主力强力介入，当日涨13.11%为业绩驱动。搜索调研确认DELL是AI服务器OEM最大受益者(citation:10)，FY2026营收预计600亿美元。F5技术面仅45分（RSI=77.9偏高）与强基本面形成矛盾，短期追高风险较大，但中期趋势确认，适合作为核心持仓分批建仓。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 68,
+          "tag": "tactical",
+          "reason": "S4+量比2.53x+F1资金面满分，信号极强。公司为AI服务器OEM龙头，$184亿AI订单积压奠定增长基础。但F5仅45分(RSI=77.9超买)且关税风险显著，建议战术性参与，不宜重仓。"
+        }
+      ],
+      "one_liner": "全球AI服务器OEM龙头（x800系列）+ 企业IT基础设施供应商，通过硬件销售+订阅服务盈利，处于AI算力产业链下游集成环节"
+    },
+    {
+      "rank": 5,
+      "symbol": "MRVL",
+      "company": "Marvell Technology, Inc.",
+      "signal": "S4主升浪全共振",
+      "python_score": 72.16,
+      "factor_total": 65.2,
+      "factor_low": "F1资金面(45分)",
+      "llm_avg_conviction": 78.57,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 4.28,
+      "conviction_range": 13,
+      "high_divergence": false,
+      "tag_conflict": true,
+      "final_score": 74.72,
+      "tag_consensus": "core",
+      "tag_detail": "tactical:3, core:6",
+      "merged_risks": [
+        "F1资金面仅45分（量比0.84x低于均值），短期资金观望",
+        "估值偏贵",
+        "数据中心客户集中度高（几大云厂商）",
+        "估值偏高，P/E达54倍",
+        "F1资金面仅45分，量比0.84x偏低，主力参与度不够",
+        "库存调整周期风险",
+        "云厂商资本开支波动",
+        "客户集中度高",
+        "PE=54较高，需要持续高增长支撑",
+        "AI芯片竞争加剧"
+      ],
+      "best_catalyst": "FY2027 Q1指引超预期（$24亿，高于分析师$22.8亿预期）(citation:15)；FY2028总营收上调至$150亿(citation:12)；第二家顶级云厂商XPU项目FY2028量产(citation:12)；Celestial AI/XConn收购整合贡献（FY2028目标$2.5亿）(citation:12)",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 78,
+          "tag": "tactical",
+          "reason": "受益AI网络与ASIC趋势，但护城河弱于核心GPU龙头。资金强度一般限制确定性"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 80,
+          "tag": "core",
+          "reason": "基本面优质+行业叙事正面（AI数据中心芯片），月线刚转上行1天=新共振起点。F1量比偏低是唯一隐忧，但MFI=77.5资金仍在流入。PEG=0.01极低说明增长远快于估值。F5=85分技术面健康（RSI=68.9未超买）。综合定性+量化，确认为core持仓。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 82,
+          "tag": "tactical",
+          "reason": "S4刚启动（月线持续1天），属于确认性入场点。F1低分显示尚未吸引最活跃游资，但定性面上AI互连需求明确，适合左转右波段持有。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 80,
+          "tag": "core",
+          "reason": "S4全共振信号，F4基本面满分，AI和光网络双轮驱动，资金面偏弱但不影响核心逻辑"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 78,
+          "tag": "core",
+          "reason": "F4估值满分，行业赛道极佳。F1资金分低暗示短期量能稍弱，但AI叙事逻辑硬，可逢低布局。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 72,
+          "tag": "core",
+          "reason": "AI光通信核心标的，Barclays等分析师强烈看好光学业务增长。但F1资金面45分与量比0.84x显示资金流入不足，与股价上涨趋势形成矛盾。整体基本面优质，可作为核心持仓但需关注资金面变化。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 80,
+          "tag": "core",
+          "reason": "AI定制芯片领域的领先者，五因子F4基本面100分确认质量。F1资金面45分与量比偏低与公司实际成长性存在矛盾，建议忽略短期资金面指标，看好AI驱动的中长期增长。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 85,
+          "tag": "core",
+          "reason": "S4全共振，F4满分(100)且搜索调研高度验证：FY2026营收$82亿同比增42%，FY2027指引上调至$110亿，FY2028目标$150亿(citation:12)(citation:13)(citation:14)。定制芯片+光互连+交换三大增长引擎确认。F1资金面45分为主要矛盾（量比偏低），但管理层连续上调指引(citation:12)表明基本面远强于短期资金面。确信度最高的标的之一，适合作为核心持仓。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 72,
+          "tag": "tactical",
+          "reason": "S4月线刚启动1天+freshness=100，信号时间价值高。光互连+ASIC双引擎驱动FY26营收+42%，美银/巴克莱上调评级。F1仅45分与强劲基本面矛盾，量比低迷可能是短期盘整而非趋势反转，战术性做多。"
+        }
+      ],
+      "one_liner": "数据中心定制化AI芯片（XPU）与高速光互连芯片设计商，深度绑定顶级云厂商定制需求，通过芯片授权+量产销售收费"
+    },
+    {
+      "rank": 6,
+      "symbol": "PRM",
+      "company": "Perimeter Solutions, SA",
+      "signal": "S4主升浪全共振",
+      "python_score": 78.24,
+      "factor_total": 72.8,
+      "factor_low": "F2宏观(46分)",
+      "llm_avg_conviction": 70.86,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 15.84,
+      "conviction_range": 48,
+      "high_divergence": true,
+      "tag_conflict": true,
+      "final_score": 71.52,
+      "tag_consensus": "core",
+      "tag_detail": "core:4, tactical:3, watch:2",
+      "merged_risks": [
+        "持续净亏损(年亏约$2.06亿)，盈利拐点不确定",
+        "环保法规变化",
+        "季节性气候波动风险",
+        "PE为负(-26.47)盈利质量存疑",
+        "PB百分位100%显示估值处于历史高位",
+        "化学品行业受环保法规趋严风险",
+        "业务季节性明显",
+        "特种化学品行业周期性强",
+        "PE为负(-26.47)反映历史亏损，盈利可持续性待验证",
+        "反垄断潜在审查"
+      ],
+      "best_catalyst": "2026年北美野火季即将来临（5-10月），消防阻燃产品需求有望集中释放；公司可能发布Q1/Q2财报验证盈利改善趋势",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 85,
+          "tag": "core",
+          "reason": "量化与基本面高度一致，行业需求具长期趋势属性。材料板块宏观评分一般，但公司受益于独立景气周期"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 76,
+          "tag": "tactical",
+          "reason": "S4全共振信号刚启动1天，时间价值高。Q1业绩爆炸式增长是亮点，但PE为负+盈利刚转正是主要疑虑。F4给100分过于乐观，PEG=0.10极低但基于负PE计算可靠性存疑。定性确认增长真实，但估值锚定困难，故tactical而非core。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 90,
+          "tag": "core",
+          "reason": "S4信号配合极佳的PEG(0.1)，量化得分极高。定性调研确认其在消防特化市场的绝对定价权，F2低分主因是基础材料板块近期弱于大盘，但公司个体素质优异。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 82,
+          "tag": "core",
+          "reason": "S4全共振信号，F4基本面满分，Q1业绩大幅超预期，仅宏观评分略低，整体确定性高"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 75,
+          "tag": "core",
+          "reason": "S4主升浪，F4满分且EPS惊喜200%，基本面强劲。虽F2宏观分一般，但细分行业逻辑独立，确认核心持仓。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 65,
+          "tag": "tactical",
+          "reason": "Q1营收增长74%和EBITDA增长128%表现强劲，新签政府合同提供能见度。但F4基本面PE为负且PB百分位100%，显示估值与盈利质量存在矛盾。F2宏观46分偏弱，特种化学品行业整体面临不确定性。建议战术性参与而非核心持仓。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 55,
+          "tag": "watch",
+          "reason": "量化综合值82.97排名第一，但公司知名度低，搜索结果有限。F4基本面100分与定性信息不匹配，需警惕量化数据与实际基本面存在信息差。建议仅小仓位试探，重点观察。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 58,
+          "tag": "tactical",
+          "reason": "S4全共振信号强劲，F4基本面满分(100)主要因Growth模式下PEG仅0.10和EPS惊喜200%，但PE仍为负值，盈利基础薄弱。F2宏观仅46分（Basic Materials板块RS仅116.16），行业叙事偏弱。定性研判：公司正经历从亏损到盈利的转折，量化评分高但盈利质量需验证，适合短线参与而非重仓。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 42,
+          "tag": "watch",
+          "reason": "S4全共振信号强劲，F4/F5均100分显示量化看好。但调研发现P/S 6.8x极度高估(DCF仅$3.78)，公司持续年亏损约$2亿，量化评分未反映估值泡沫。基本面与量化分明显矛盾，建议观望。"
+        }
+      ],
+      "one_liner": "特种消防阻燃化学品与泡沫灭火系统供应商，服务工业消防/航空/军事领域，通过政府合同+工业客户长期订单盈利"
+    },
+    {
+      "rank": 7,
+      "symbol": "MTSI",
+      "company": "MACOM Technology Solutions Holdings, Inc.",
+      "signal": "S4主升浪全共振",
+      "python_score": 72.16,
+      "factor_total": 65.2,
+      "factor_low": "F5技术面(45分)",
+      "llm_avg_conviction": 69.0,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 6.34,
+      "conviction_range": 19,
+      "high_divergence": false,
+      "tag_conflict": false,
+      "final_score": 70.9,
+      "tag_consensus": "tactical",
+      "tag_detail": "tactical:8, watch:1",
+      "merged_risks": [
+        "RTP晶圆厂利用率不足可能拖累毛利率",
+        "高度依赖数据中心支出周期",
+        "国防预算削减",
+        "估值PE倍数过高风险",
+        "F5技术面45分显示RSI81.4偏高",
+        "F5仅45分(RSI=81.4超买)",
+        "Needham目标价$400但Susquehanna维持中性",
+        "日线持续5天，非最新信号",
+        "竞争对手退出RF功率市场的收益要到2027年才体现",
+        "PE=152.81极高，估值泡沫风险"
+      ],
+      "best_catalyst": "Q2 FY2026业绩超预期(营收$2.89亿)，book-to-bill 1.5:1创记录；Needham目标价上调至$400",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 73,
+          "tag": "tactical",
+          "reason": "AI光互联逻辑明确，但估值与技术面已较拥挤，更适合趋势参与而非核心重仓"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 74,
+          "tag": "tactical",
+          "reason": "基本面和增长叙事confirmed good，22家分析师上调PT是强信号。但PE=152+RSI=81.4=估值和技术双高，F5仅45分合理。定性看好但定量有风险，tactical仓位。等RSI回落到70以下或财报确认后再考虑加仓。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 70,
+          "tag": "watch",
+          "reason": "量化信号强劲但定性调研显示PE超150x，F5低分也预示技术面透支。行业地位稳固但目前赔率一般，建议等技术回撤后再行介入。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 72,
+          "tag": "tactical",
+          "reason": "S4全共振信号，F1资金面85分，但估值过高，技术面超买，适合短线参与"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 70,
+          "tag": "tactical",
+          "reason": "基本面扎实，但F5显示RSI过高（81.4），短期技术面过热，建议战术性待回调介入。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 68,
+          "tag": "tactical",
+          "reason": "订单出货比1.5:1创历史新高，数据中心和国防需求强劲。但F5技术面45分与RSI81.4超买矛盾突出，PE152.81也显示估值极高。F1资金面85分良好。建议战术性参与，等待回调。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 60,
+          "tag": "tactical",
+          "reason": "公司为射频/光通信领域的重要供应商，基本面尚可但PE偏高。F5技术面45分与RSI81.4显示超买风险。适合短线战术性操作，不宜长期持有。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 55,
+          "tag": "tactical",
+          "reason": "S4信号确认，F4满分(100)但主要因Growth模式下PEG=0.24。PE=152.81和PB=19.05估值明显偏贵，与F5技术面45分（RSI=81.4超买）形成双重风险。行业叙事正面但个股估值过高，短期参与需严格止损，不适合重仓。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 70,
+          "tag": "tactical",
+          "reason": "S4共振+F1资金面85分，量化信号强劲。1.6T光模块需求爆发+book-to-bill历史最高，基本面支撑充分。但RSI超买+部分分析师中性，短期追高风险较大，宜回调后介入。"
+        }
+      ],
+      "one_liner": "射频/光通信芯片设计公司，产品用于数据中心1.6T光模块、5G基站和国防雷达，处于通信产业链上游核心元器件环节"
+    },
+    {
+      "rank": 8,
+      "symbol": "TDS",
+      "company": "Telephone and Data Systems, Inc.",
+      "signal": "S4主升浪全共振",
+      "python_score": 78.24,
+      "factor_total": 72.8,
+      "factor_low": "F2宏观(34分)",
+      "llm_avg_conviction": 58.29,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 8.8,
+      "conviction_range": 28,
+      "high_divergence": false,
+      "tag_conflict": true,
+      "final_score": 70.26,
+      "tag_consensus": "tactical",
+      "tag_detail": "watch:4, tactical:5",
+      "merged_risks": [
+        "Q1营收不及预期（$3.094亿 vs 预期$3.23亿），虽EPS大幅超预期",
+        "负债压力较高",
+        "行业竞争激烈",
+        "历史股价波动大，非稳定成长股",
+        "Array收购整合风险",
+        "营收增长乏力",
+        "电信行业竞争激烈，头部运营商挤压生存空间",
+        "PE为负值，显示盈利能力不稳定",
+        "净利率仍为负值",
+        "F2宏观仅34分板块相对强度偏弱"
+      ],
+      "best_catalyst": "US Cellular无线资产出售交易后续整合进展；光纤业务扩张计划；5G-A商用推进带来的基础设施需求(citation:18)",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 56,
+          "tag": "watch",
+          "reason": "趋势信号较强但行业叙事偏弱，宏观因子与定性方向一致，更偏事件驱动而非长期成长"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 55,
+          "tag": "watch",
+          "reason": "S4全共振但日/周线均仅持续1天，信号刚形成。F2宏观34分+F3情绪50分=基本面之外全偏弱。PEG=0.01极低但PE=46.78不便宜，估值逻辑矛盾。板块跑输大盘+行业叙事平淡，定性面缺乏吸引力。watch，仅因S4信号给予极小仓位试探。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 78,
+          "tag": "tactical",
+          "reason": "信号处于启动初期。F4满分反映了资产账面价值高，但F2宏观评分低显示板块强度不足，建议按资产重组逻辑进行战术性配置。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 68,
+          "tag": "tactical",
+          "reason": "S4全共振信号，F4基本面满分，但宏观评分低，业绩改善持续性存疑，适合短线"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 60,
+          "tag": "tactical",
+          "reason": "F4满分显示低估或业绩反转，但电信行业增长缓慢，F2宏观分低，适合战术性价值修复行情。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 62,
+          "tag": "tactical",
+          "reason": "收购Array可简化公司结构并增强资本灵活性，Q1盈利超预期。但F2宏观34分为五因子最低分，反映通信服务板块相对大盘偏弱。收购交易存在执行风险，且电信行业资本密集度高。适合战术性参与。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 50,
+          "tag": "watch",
+          "reason": "量化综合值82.97排名第二，但F2宏观仅34分。电信行业宏观依赖度高，中小型运营商面临头部挤压。五因子评分与行业基本面存在矛盾，建议回避。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 55,
+          "tag": "tactical",
+          "reason": "S4全共振但F2宏观仅34分为所有标的中偏低水平，通讯板块RS正在改善(Improving)但尚未领先。PEG=0.01极度低估暗示分析师预期高速增长，但PE=46.78偏贵。定性研判：公司处于重大战略转型期，量化信号好但基本面转型不确定性高，建议短线参与。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 52,
+          "tag": "watch",
+          "reason": "S4信号强烈但F2宏观评分34分极低。EPS大超预期是积极信号，但营收miss且净利率为负表明基本面仍有隐忧。信号与基本面存在部分矛盾，建议观望等待业绩持续改善验证。"
+        }
+      ],
+      "one_liner": "美国中型电信运营商（US Cellular母公司）+ 光纤基础设施服务商，通过无线套餐+宽带订阅收费，处于通信服务产业链终端"
+    },
+    {
+      "rank": 9,
+      "symbol": "AMAT",
+      "company": "Applied Materials, Inc.",
+      "signal": "S4主升浪全共振",
+      "python_score": 68.16,
+      "factor_total": 60.2,
+      "factor_low": "F4基本面(40分)",
+      "llm_avg_conviction": 72.14,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 9.06,
+      "conviction_range": 28,
+      "high_divergence": false,
+      "tag_conflict": false,
+      "final_score": 69.75,
+      "tag_consensus": "tactical",
+      "tag_detail": "tactical:6, core:3",
+      "merged_risks": [
+        "出口管制影响中国市场份额",
+        "研发投入周期长",
+        "PE=44.04、PB=15.90均处高位",
+        "F4仅40分为全榜单半导体股中最低",
+        "地缘政治风险(中国出口限制)",
+        "估值偏贵",
+        "5月14日财报前预期已高",
+        "出口管制风险影响中国市场收入",
+        "半导体资本周期波动",
+        "PEG=1.61偏高(F4低分核心原因)"
+      ],
+      "best_catalyst": "FY2027 Q2财报；先进封装扩产订单；NAND升级设备需求；新制程节点设备交付",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 77,
+          "tag": "tactical",
+          "reason": "设备龙头受益AI扩产逻辑，但F4偏低说明估值安全边际下降"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 75,
+          "tag": "tactical",
+          "reason": "基本面确认good：半导体设备绝对龙头，全球芯片扩产直接受益。F4=40分主要因PEG=1.61偏高但这是成长股的正常溢价。F5=100分技术面完美（左轨右轨双100）。F1=65分资金面健康。S4全共振+板块lead。唯一顾虑是半导体设备周期位置，tactical而非core。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 88,
+          "tag": "core",
+          "reason": "量化模型认为F4基本面一般（受PEG>1影响），但定性研判认为其技术壁垒极高，S4全共振且F5满分，是半导体回升周期必配。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 78,
+          "tag": "core",
+          "reason": "S4全共振信号，F5技术面满分，半导体设备龙头，AI扩产需求明确，基本面评分与实际情况有矛盾"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 65,
+          "tag": "tactical",
+          "reason": "公司质量优良，但F4仅40分指出PEG 1.61估值已高，虽F5技术面完美，需警惕估值回调风险。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 70,
+          "tag": "tactical",
+          "reason": "半导体设备龙头直接受益于AI芯片扩产，Citi目标价上调至$520。但F4基本面40分与PEG1.61显示估值偏高，PE43.91x也处于高位。五因子总分60.2与定性判断(基本面好但估值高)部分矛盾。建议战术性参与。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 78,
+          "tag": "core",
+          "reason": "半导体设备核心标的，基本面优质。F4基本面40分显示PEG1.61偏高，但五因子F5技术面100分确认技术优势。AI驱动下的材料工程需求是长期趋势。建议作为核心持仓。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 62,
+          "tag": "tactical",
+          "reason": "S4全共振，F5技术面满分(100)且搜索调研确认半导体设备景气(citation:2)。但F4基本面仅40分（PEG=1.61）为最大矛盾——量化显示估值偏贵，与行业高景气形成张力。WFE市场虽增长(citation:2)但洁净室瓶颈可能限制短期设备需求释放(citation:2)。估值与景气的博弈下，适合战术性参与而非重仓。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 60,
+          "tag": "tactical",
+          "reason": "S4+F5技术面100分，信号强劲。但F4仅40分准确反映了出口管制$6亿损失和PEG偏高问题。AI扩产逻辑长期成立但中国风险是实质性拖累，建议战术性参与并严格风控。"
+        }
+      ],
+      "one_liner": "全球半导体设备龙头（刻蚀/沉积/离子注入），为台积电/三星/英特尔提供晶圆制造设备，按设备销售+售后服务盈利，处于半导体产业链最上游"
+    },
+    {
+      "rank": 10,
+      "symbol": "JBL",
+      "company": "Jabil Inc.",
+      "signal": "S4主升浪全共振",
+      "python_score": 70.4,
+      "factor_total": 63.0,
+      "factor_low": "F1资金面(34分)",
+      "llm_avg_conviction": 67.43,
+      "llm_count": 9,
+      "llm_completeness": 1.0,
+      "conviction_std": 7.09,
+      "conviction_range": 20,
+      "high_divergence": false,
+      "tag_conflict": false,
+      "final_score": 69.21,
+      "tag_consensus": "tactical",
+      "tag_detail": "tactical:7, watch:1, core:1",
+      "merged_risks": [
+        "消费电子需求疲软影响订单",
+        "F1资金面仅34分（量比1.14x偏弱）",
+        "EMS行业利润率低",
+        "日线持续6天，非新信号",
+        "Q2营收同比下降23.1%（部分受剥离影响）",
+        "全球贸易摩擦影响供应链成本",
+        "F1资金面仅34分(当日涨幅仅1.59%，量比1.14x)",
+        "EMS行业利润率长期承压",
+        "F1资金面34分显示量比偏低",
+        "EMS行业竞争激烈"
+      ],
+      "best_catalyst": "Q2 FY2026 EPS $2.69超预期(预期$2.51)，全年营收指引上调至$340亿；巴克莱上调至增持目标$304",
+      "llm_details": [
+        {
+          "llm": "GPT-5.5",
+          "conviction": 74,
+          "tag": "tactical",
+          "reason": "受益AI硬件扩张，但产业地位偏代工属性，资金热度弱于核心AI龙头"
+        },
+        {
+          "llm": "qwen3.6",
+          "conviction": 60,
+          "tag": "watch",
+          "reason": "基本面尚可但F1=34分是硬伤——S4主升浪但资金不跟随，量价背离。PB=28倍极贵，F4给100分主要靠PEG=0.60但PE=46.78绝对值不低。行业叙事正面但资金不买账，定性研判与量化评分存在矛盾（F4过高）。watch，等待资金面确认。"
+        },
+        {
+          "llm": "gemini-3-flash",
+          "conviction": 80,
+          "tag": "tactical",
+          "reason": "月线已持续16天，趋势极其稳健。F1低分主因是换手率较低。定性看管理层运营卓越，是确定性极高的制造业蓝筹。"
+        },
+        {
+          "llm": "豆包2.0专家模型",
+          "conviction": 75,
+          "tag": "core",
+          "reason": "S4全共振信号，F4基本面满分，AI制造业务增长快，资金面偏弱但基本面扎实"
+        },
+        {
+          "llm": "GLM-4.7",
+          "conviction": 65,
+          "tag": "tactical",
+          "reason": "基本面稳健，F5技术面尚可，但F1资金分低显示短期缺乏进攻性，适合防御性配置。"
+        },
+        {
+          "llm": "kimi-k2.6",
+          "conviction": 68,
+          "tag": "tactical",
+          "reason": "AI制造需求强劲且上调全年指引，收购Hanley增强垂直整合。但F1资金面34分与量比1.14x显示资金活跃度不足，与周线持续19天上行形成矛盾。EMS行业毛利率天然较低。建议战术性参与。"
+        },
+        {
+          "llm": "minimax",
+          "conviction": 60,
+          "tag": "tactical",
+          "reason": "EMS行业龙头，基本面稳定但成长性有限。F1资金面34分较低，与综合评分存在矛盾。适合区间操作，不宜追高。"
+        },
+        {
+          "llm": "mimo-v2.5-pro",
+          "conviction": 62,
+          "tag": "tactical",
+          "reason": "S4全共振，F4满分(100)但PE=46.75在EMS行业中偏高。F1资金面34分为低分项需关注。行业叙事正面（ODM占AI服务器84%份额(citation:10)），但公司作为EMS厂商利润率天花板有限。RSI=65.1合理，无超买风险。适合战术性参与AI服务器制造链主题。"
+        },
+        {
+          "llm": "deepseek-v3",
+          "conviction": 68,
+          "tag": "tactical",
+          "reason": "S4共振+周线19天+月线16天，趋势确认时间最长最稳定。AI基础设施外包结构性受益，$5亿本土投资彰显信心。F1 34分与旺盛AI需求矛盾，量价平淡可能反映大资金尚未充分入场，适合战术性布局。"
+        }
+      ],
+      "one_liner": "全球EMS电子制造服务龙头，为AI服务器/医疗/汽车提供代工制造+供应链管理服务，通过规模效应+垂直整合赚取制造差价"
+    }
+  ],
+  "weights": {
+    "python": 0.6,
+    "llm": 0.4,
+    "quality_score_composition": "基础质量20% + 五因子分80% (Phase 1)",
+    "conviction_method": "去极值均值（去掉最高最低各1）",
+    "divergence_threshold": 30
+  },
+  "llm_participation": {
+    "expected": 9,
+    "llms_used": [
+      "GPT-5.5",
+      "qwen3.6",
+      "gemini-3-flash",
+      "豆包2.0专家模型",
+      "GLM-4.7",
+      "kimi-k2.6",
+      "minimax",
+      "mimo-v2.5-pro",
+      "deepseek-v3"
+    ],
+    "all_complete": true
+  }
+};
+
+// ============================================================
+// TOOLTIP DEFINITIONS
+// ============================================================
+const TOOLTIPS = {
+  signal: '趋势信号类型。S4=主升浪全共振（日/周/月三线均上行），是最强的右侧持仓信号。其他类型包括S1小级别反转、S2左侧早期、S3左转右确认等。',
+  python_score: 'Python五因子质量分 = 基础质量×20% + 五因子加权×80%。其中五因子加权 = F1资金面(30%) + F2宏观(15%) + F3情绪(15%) + F4基本面(25%) + F5技术面(15%)。分数越高说明量化指标越优秀。',
+  factor_total: '五因子原始加权总分（不含基础质量分）。即 F1×30% + F2×15% + F4×25% + F5×15% + 7.5（F3默认值）。反映纯五因子维度的综合表现。',
+  llm_avg_conviction: '9个LLM打分去极值均值。去掉最高分和最低分后，取中间7个LLM的conviction平均分。消除单个LLM系统性偏高/偏低的影响。',
+  conviction_std: '9个LLM打分的标准差，反映LLM之间的分歧程度。标准差越大说明各LLM观点越不一致。标准差>10或极差>30标记为"高分歧"，综合分会打95折。',
+  final_score: '最终综合分 = Python质量分×60% + LLM去极值均分×40%。若存在高分歧（conviction极差>30），则此分再×0.95。分数越高越值得配置。',
+  tag_consensus: '仓位建议标签。core=核心持仓（可长期持有）、tactical=战术配置（适合波段参与）、watch=观察名单（存在疑虑或分歧）。由9个LLM多数投票产生。',
+};
+
+// Global tooltip — event delegation to cover both static and dynamic .info-tip elements
+const tipEl = document.getElementById('globalTooltip');
+
+document.addEventListener('mouseover', (e) => {
+  const el = e.target.closest('.info-tip');
+  if (!el) return;
+  const text = TOOLTIPS[el.dataset.tip];
+  if (!text) return;
+  el.classList.add('active');
+  tipEl.textContent = text;
+  tipEl.classList.add('visible');
+  // Position after browser has sized the tooltip
+  requestAnimationFrame(() => {
+    const rect = el.getBoundingClientRect();
+    const tRect = tipEl.getBoundingClientRect();
+    let left = rect.left + rect.width / 2 - tRect.width / 2;
+    let top = rect.top - tRect.height - 8;
+    if (left < 8) left = 8;
+    if (left + tRect.width > window.innerWidth - 8) left = window.innerWidth - tRect.width - 8;
+    if (top < 8) top = rect.bottom + 8;
+    tipEl.style.left = left + 'px';
+    tipEl.style.top = top + 'px';
+  });
+});
+
+document.addEventListener('mouseout', (e) => {
+  const el = e.target.closest('.info-tip');
+  if (!el) return;
+  // Only hide if we truly left the icon
+  if (el.contains(e.relatedTarget)) return;
+  el.classList.remove('active');
+  tipEl.classList.remove('visible');
+});
+
+function initTooltips() {
+  // No-op — delegation handles everything
+}
+
+// ============================================================
+// RENDER ENGINE
+// ============================================================
+
+function scoreColor(val) {
+  if (val >= 75) return 'score-high';
+  if (val >= 60) return 'score-mid';
+  return 'score-low';
+}
+
+function tagBadge(tag) {
+  const cls = tag === 'core' ? 'badge-core' : tag === 'tactical' ? 'badge-tactical' : 'badge-watch';
+  const label = tag === 'core' ? '核心' : tag === 'tactical' ? '战术' : '观察';
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function rankBadge(n) {
+  if (n <= 3) return `rank-${n}`;
+  return 'rank-default';
+}
+
+function scoreClass(val) {
+  if (val >= 75) return 'high';
+  if (val >= 55) return 'mid';
+  return 'low';
+}
+
+// Summary Cards
+function renderSummary() {
+  const picks = DATA.top_picks;
+  const weights = DATA.weights;
+  const llmP = DATA.llm_participation;
+
+  const coreCount = picks.filter(s => s.tag_consensus === 'core').length;
+  const tacticalCount = picks.filter(s => s.tag_consensus === 'tactical').length;
+  const highDiv = picks.filter(s => s.high_divergence).length;
+  const tagConflict = picks.filter(s => s.tag_conflict).length;
+
+  const cards = [
+    { label: '标的数量', value: picks.length, sub: '共识 Top 10' },
+    { label: 'Python权重', value: `${(weights.python * 100).toFixed(0)}%`, sub: `LLM权重 ${(weights.llm * 100).toFixed(0)}%` },
+    { label: '核心标的', value: coreCount, sub: `战术 ${tacticalCount}` },
+    { label: '高分歧', value: highDiv, sub: `tag冲突 ${tagConflict}` },
+    { label: 'LLM参与', value: `${llmP.expected}/${llmP.expected}`, sub: llmP.all_complete ? '完整覆盖' : '部分覆盖' },
+  ];
+
+  const el = document.getElementById('summaryCards');
+  el.innerHTML = cards.map(c => `
+    <div class="summary-card">
+      <div class="label">${c.label}</div>
+      <div class="value">${c.value}</div>
+      <div class="sub">${c.sub}</div>
+    </div>
+  `).join('');
+}
+
+// Table
+let sortKey = 'final_score';
+let sortDir = -1; // -1 = desc, 1 = asc
+
+function renderTable() {
+  const picks = [...DATA.top_picks].sort((a, b) => {
+    const va = a[sortKey], vb = b[sortKey];
+    return (typeof va === 'number' ? va - vb : String(va).localeCompare(String(vb))) * sortDir;
+  });
+
+  const tbody = document.getElementById('topBody');
+  tbody.innerHTML = picks.map(s => {
+    let warnings = '';
+    if (s.high_divergence) warnings += '<span class="warning-dot high-div" title="高分歧"></span>';
+    if (s.tag_conflict) warnings += '<span class="warning-dot tag-conflict" title="tag冲突"></span>';
+
+    return `
+      <tr data-symbol="${s.symbol}" onclick="toggleDetail('${s.symbol}')">
+        <td><span class="rank-badge ${rankBadge(s.rank)}">${s.rank}</span></td>
+        <td class="symbol-cell">${s.symbol}</td>
+        <td class="company-cell" title="${s.company}">${s.company}</td>
+        <td style="font-size:0.78rem; color:var(--body)">${s.signal}</td>
+        <td class="score-cell ${scoreColor(s.python_score)}">${s.python_score.toFixed(2)}</td>
+        <td class="score-cell">${s.factor_total.toFixed(1)}</td>
+        <td class="score-cell ${scoreColor(s.llm_avg_conviction)}">${s.llm_avg_conviction.toFixed(2)}</td>
+        <td class="score-cell" style="color:var(--body)">${s.conviction_std.toFixed(1)}</td>
+        <td class="score-cell ${scoreColor(s.final_score)}"><strong>${s.final_score.toFixed(2)}</strong></td>
+        <td>${tagBadge(s.tag_consensus)} ${warnings}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // Update sort indicators
+  document.querySelectorAll('#topTable thead th').forEach(th => {
+    th.classList.remove('sorted');
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.textContent = '↓';
+    if (th.dataset.sort === sortKey) {
+      th.classList.add('sorted');
+      if (arrow) arrow.textContent = sortDir === -1 ? '↓' : '↑';
+    }
+  });
+}
+
+// Table sorting
+document.querySelectorAll('#topTable thead th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (sortKey === key) { sortDir *= -1; }
+    else { sortKey = key; sortDir = -1; }
+    renderTable();
+  });
+});
+
+// Detail Panel
+let activeSymbol = null;
+
+function toggleDetail(symbol) {
+  const container = document.getElementById('detailContainer');
+  if (activeSymbol === symbol) {
+    container.innerHTML = '';
+    activeSymbol = null;
+    return;
+  }
+  activeSymbol = symbol;
+  const s = DATA.top_picks.find(p => p.symbol === symbol);
+  if (!s) return;
+
+  const llmItems = s.llm_details.map(d => {
+    const sc = scoreClass(d.conviction);
+    const tagCls = d.tag === 'core' ? 'badge-core' : d.tag === 'tactical' ? 'badge-tactical' : 'badge-watch';
+    const tagLabel = d.tag === 'core' ? '核心' : d.tag === 'tactical' ? '战术' : '观察';
+    return `
+      <div class="llm-item">
+        <span class="llm-name">${d.llm}</span>
+        <span class="llm-score ${sc}">${d.conviction}</span>
+        <span class="llm-tag badge ${tagCls}">${tagLabel}</span>
+        <div class="llm-reason">${d.reason}</div>
+      </div>
+    `;
+  }).join('');
+
+  const risks = s.merged_risks.map(r => `<li>${r}</li>`).join('');
+
+  let alerts = '';
+  if (s.high_divergence) {
+    alerts += `<div style="padding:10px 16px;background:var(--red-bg);border-radius:4px;margin-bottom:16px;font-size:0.82rem;color:#c41e4d;">
+      ⚠️ <strong>高分歧</strong>：conviction range=${Math.round(s.conviction_range)}, std=${s.conviction_std.toFixed(2)}（FinalScore已打95折）</div>`;
+  }
+  if (s.tag_conflict) {
+    const avg = s.llm_avg_conviction;
+    const expected = avg >= 80 ? 'core' : avg >= 60 ? 'tactical' : 'watch';
+    alerts += `<div style="padding:10px 16px;background:var(--amber-bg);border-radius:4px;margin-bottom:16px;font-size:0.82rem;color:#b87a15;">
+      ⚡ <strong>tag冲突</strong>：tag_consensus=${s.tag_consensus}, 但avg_conv区间应为${expected}</div>`;
+  }
+
+  container.innerHTML = `
+    <div class="detail-panel open">
+      <div class="detail-header">
+        <span class="symbol">${s.symbol}</span>
+        <span class="name">${s.company}</span>
+        ${tagBadge(s.tag_consensus)}
+        <span class="score">${s.final_score.toFixed(2)}</span>
+      </div>
+      <div class="detail-body">
+        ${s.one_liner ? `<div class="one-liner">${s.one_liner}</div>` : ''}
+        ${alerts}
+        <div class="detail-grid">
+          <div class="detail-metric"><div class="label">信号 <i class="info-tip" data-tip="signal">ⓘ</i></div><div class="value" style="font-size:0.85rem">${s.signal}</div></div>
+          <div class="detail-metric"><div class="label">Python质量分 <i class="info-tip" data-tip="python_score">ⓘ</i></div><div class="value ${scoreColor(s.python_score)}">${s.python_score.toFixed(2)}</div></div>
+          <div class="detail-metric"><div class="label">五因子总分 <i class="info-tip" data-tip="factor_total">ⓘ</i></div><div class="value">${s.factor_total.toFixed(1)}</div></div>
+          <div class="detail-metric"><div class="label">因子短板</div><div class="value" style="font-size:0.85rem;color:var(--red)">${s.factor_low}</div></div>
+          <div class="detail-metric"><div class="label">LLM均分 <i class="info-tip" data-tip="llm_avg_conviction">ⓘ</i></div><div class="value ${scoreColor(s.llm_avg_conviction)}">${s.llm_avg_conviction.toFixed(2)}</div></div>
+          <div class="detail-metric"><div class="label">conviction标准差 <i class="info-tip" data-tip="conviction_std">ⓘ</i></div><div class="value">${s.conviction_std.toFixed(2)}</div></div>
+        </div>
+
+        <h4 style="font-size:0.8rem;color:var(--body);margin-bottom:8px;">▸ 催化剂</h4>
+        <div class="catalyst-text">${s.best_catalyst}</div>
+
+        <h4 style="font-size:0.8rem;color:var(--body);margin-bottom:8px;">▸ 定性风险 (${s.merged_risks.length}项)</h4>
+        <ul class="risk-list">${risks}</ul>
+
+        <div class="llm-section">
+          <h4>▸ 9个LLM研判</h4>
+          <div class="llm-grid">${llmItems}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Position Advice
+function renderPosition() {
+  const picks = DATA.top_picks;
+  const core = picks.filter(s => s.tag_consensus === 'core' && !s.tag_conflict);
+  const tactical = picks.filter(s => s.tag_consensus === 'tactical' && !s.tag_conflict);
+  const conflict = picks.filter(s => s.tag_conflict);
+
+  const groups = [
+    { title: '核心持仓 (core)', color: 'var(--green)', symbols: core.map(s => s.symbol), alloc: '不超过15%', reason: '基本面+技术面双优，LLM一致看好' },
+    { title: '战术配置 (tactical)', color: 'var(--amber)', symbols: tactical.map(s => s.symbol), alloc: '不超过12%', reason: '定性面中性偏正面，适合波段参与' },
+    { title: '存在分歧', color: 'var(--red)', symbols: conflict.map(s => s.symbol), alloc: '小仓位试探', reason: 'tag与conviction不匹配或高分歧' },
+  ];
+
+  const el = document.getElementById('positionGrid');
+  el.innerHTML = groups.filter(g => g.symbols.length > 0).map(g => `
+    <div class="position-card">
+      <h3 style="color:${g.color}">${g.title}</h3>
+      <div class="symbols">${g.symbols.join('、') || '无'}</div>
+      <div class="allocation">建议占比：${g.alloc}</div>
+      <div class="reason">${g.reason}</div>
+    </div>
+  `).join('');
+}
+
+// Init
+function init() {
+  document.getElementById('reportDate').textContent = `报告日期: ${new Date().toLocaleDateString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit'})}`;
+  renderSummary();
+  renderTable();
+  renderPosition();
+  initTooltips();
+}
+
+init();
+</script>
+
+</body>
+</html>
