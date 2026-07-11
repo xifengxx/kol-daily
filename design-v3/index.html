@@ -227,9 +227,9 @@ html, body {
 
 .nav-submenu-item.active {
   color: var(--accent);
-  font-weight: 500;
-  background: var(--active-bg);
-  border-left-color: var(--accent);
+  font-weight: 600;
+  background: rgba(0,113,227,0.06);
+  border-left: 3px solid rgba(0,113,227,0.3);
 }
 
 .sidebar.collapsed .nav-submenu { display: none; }
@@ -625,7 +625,7 @@ html, body {
   <div class="sidebar-nav" id="sidebarNav">
     <!-- 首页 -->
     <div class="nav-module" data-module="home">
-      <div class="nav-module-header active" data-label="首页" onclick="loadPage(this, 'dashboard.html', '首页', '工作台')" role="button" tabindex="0" style="border-left: 4px solid var(--accent);">
+      <div class="nav-module-header active" data-label="首页" data-is-home="true" onclick="loadPage(this, 'dashboard.html', '首页', '工作台')" role="button" tabindex="0">
         <span class="module-icon"><i data-lucide="layout-dashboard" style="width:20px;height:20px;"></i></span>
         <span class="module-label">首页</span>
       </div>
@@ -913,15 +913,18 @@ function loadPage(element, pageUrl, moduleName, pageName) {
   const loading = document.getElementById('loadingOverlay');
   const skeleton = document.getElementById('skeletonLoader');
 
-  // Update active states
+  // Update active states — remove ALL, then selectively re-add
   document.querySelectorAll('.nav-submenu-item.active').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-module-header.active').forEach(el => el.classList.remove('active'));
 
   if (element) {
     element.classList.add('active');
-    // Highlight parent module
-    const moduleEl = element.closest('.nav-module').querySelector('.nav-module-header');
-    moduleEl.classList.add('active');
+    // Highlight parent module (skip home — it's standalone)
+    const parentModule = element.closest('.nav-module');
+    if (parentModule && parentModule.dataset.module !== 'home') {
+      const moduleEl = parentModule.querySelector('.nav-module-header');
+      if (moduleEl && !moduleEl.dataset.isHome) moduleEl.classList.add('active');
+    }
   }
 
   // Update breadcrumbs
