@@ -625,7 +625,7 @@ html, body {
   <div class="sidebar-nav" id="sidebarNav">
     <!-- 首页 -->
     <div class="nav-module" data-module="home">
-      <div class="nav-module-header" data-label="首页" onclick="loadPage(this, 'dashboard.html', '首页', '工作台')" role="button" tabindex="0" style="border-left: 4px solid transparent;">
+      <div class="nav-module-header active" data-label="首页" onclick="loadPage(this, 'dashboard.html', '首页', '工作台')" role="button" tabindex="0" style="border-left: 4px solid var(--accent);">
         <span class="module-icon"><i data-lucide="layout-dashboard" style="width:20px;height:20px;"></i></span>
         <span class="module-label">首页</span>
       </div>
@@ -640,7 +640,7 @@ html, body {
         <span class="module-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
       </div>
       <div class="nav-submenu open" id="sub-market">
-        <div class="nav-submenu-item active" data-page="market-overview" data-label="市场总览" onclick="loadPage(this, 'market-overview.html', '行情与数据', '市场总览')">
+        <div class="nav-submenu-item" data-page="market-overview" data-label="市场总览" onclick="loadPage(this, 'market-overview.html', '行情与数据', '市场总览')">
           <span>市场总览</span>
         </div>
         <div class="nav-submenu-item" data-page="watchlist" data-label="自选股" onclick="loadPage(this, 'watchlist.html', '行情与数据', '自选股')">
@@ -820,9 +820,9 @@ html, body {
 
     <!-- Breadcrumb -->
     <div class="breadcrumb" id="breadcrumb">
-      <span class="crumb-module" id="crumbModule">行情与数据</span>
+      <span class="crumb-module" id="crumbModule">首页</span>
       <span class="crumb-sep">/</span>
-      <span class="crumb-page" id="crumbPage">市场总览</span>
+      <span class="crumb-page" id="crumbPage">工作台</span>
     </div>
 
     <!-- Search -->
