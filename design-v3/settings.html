@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全局设置 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA;
+  --text-primary: #1D1D1F; --text-secondary: #86868B;
+  --accent: #0071E3; --accent-hover: #005BB5; --accent-light: #5AC8FA;
+  --navy: #1D1D1F; --sidebar: #FFFFFF;
+  --up: #FF3B30; --down: #34C759; --warn: #FF9500; --success: #34C759;
+  --shadow: none;
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+  --shadow-dropdown: 0 8px 24px rgba(0,0,0,0.15);
+  --input-bg: #F5F5F7; --hover-bg: #F5F5F7; --selected-bg: #F0F7FF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 14px; line-height: 1.6;
+  display: flex; min-height: 100vh;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; }
+.mono { font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+
+/* ==================== IFRAME HIDE MODE ==================== */
+body.in-iframe .standalone-only { display: none !important; }
+body.in-iframe { display: block; }
+body.in-iframe .main { margin-left: 0; }
+body.in-iframe .content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+
+/* ==================== SIDEBAR (standalone) ==================== */
+.sidebar {
+  width: 260px; min-width: 260px; background: var(--sidebar); color: #1D1D1F;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+  border-right: 1px solid var(--border);
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.sidebar-logo span { color: var(--accent); }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 16px 16px 8px; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border-left: 4px solid transparent; font-size: 14px; }
+.nav-item:hover { background: var(--hover-bg); color: var(--text-primary); }
+.nav-item.active { background: var(--selected-bg); color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+
+/* ==================== TOPBAR (standalone) ==================== */
+.topbar {
+  background: #fff; border-bottom: 1px solid var(--border); height: 56px; padding: 0 24px;
+  display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30;
+}
+.search-box { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 8px; padding: 7px 14px; gap: 8px; border: 1px solid transparent; transition: all 0.15s; }
+.search-box:focus-within { border-color: var(--accent); background: var(--card); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.search-box input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+.search-box input::placeholder { color: #C7C7CC; }
+.user-area { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+
+/* ==================== MAIN & CONTENT ==================== */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.content { padding: 20px 24px; max-width: 1440px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; line-height: 1.2; }
+.page-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+
+/* ==================== CARD ==================== */
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; transition: all 0.3s ease;
+}
+.card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.card-title {
+  font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 16px; line-height: 1.4;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-title .badge {
+  font-size: 11px; font-weight: 500; padding: 0 8px; border-radius: 10px; height: 20px; display: inline-flex; align-items: center;
+  background: #F0F7FF; color: var(--accent);
+}
+
+/* ==================== TABS ==================== */
+.settings-tabs {
+  display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+  background: var(--card); border-radius: 12px 12px 0 0; padding: 0 16px;
+}
+.settings-tabs.underlined {
+  background: transparent; border-radius: 0; padding: 0;
+}
+.tab-btn {
+  padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--text-secondary);
+  background: transparent; border: none; border-bottom: 2px solid transparent;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ==================== FORM ELEMENTS ==================== */
+.form-group { margin-bottom: 20px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-label {
+  display: block; font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;
+}
+.form-label .required { color: var(--up); margin-left: 2px; }
+.form-hint { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+/* Input */
+.form-input {
+  width: 100%; height: 40px; padding: 0 14px; font-size: 14px; color: var(--text-primary);
+  background: var(--input-bg); border: 1px solid transparent; border-radius: 8px;
+  transition: all 0.15s; font-family: inherit;
+}
+.form-input:focus { outline: none; background: #FFFFFF; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.form-input:disabled { background: #F2F2F7; color: #C7C7CC; cursor: not-allowed; }
+.form-input.mono { font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+textarea.form-input { height: auto; padding: 10px 14px; }
+
+/* Select */
+.form-select {
+  width: 100%; height: 40px; padding: 0 32px 0 14px; font-size: 14px; color: var(--text-primary);
+  background: var(--input-bg); border: 1px solid transparent; border-radius: 8px;
+  appearance: none; cursor: pointer; transition: all 0.15s; font-family: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2386868B' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+}
+.form-select:focus { outline: none; background: #FFFFFF; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+
+/* Toggle switch */
+.toggle-wrap { display: flex; align-items: center; gap: 12px; }
+.toggle-switch {
+  position: relative; width: 40px; height: 22px; background: #E5E5EA; border-radius: 11px;
+  cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+}
+.toggle-switch.active { background: var(--accent); }
+.toggle-switch::after {
+  content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+  background: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.toggle-switch.active::after { transform: translateX(18px); }
+.toggle-label { font-size: 14px; color: var(--text-primary); }
+.toggle-desc { font-size: 12px; color: var(--text-secondary); }
+
+/* Checkbox/Radio group */
+.check-group { display: flex; flex-wrap: wrap; gap: 12px; }
+.check-item {
+  display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer; transition: all 0.15s; font-size: 13px;
+}
+.check-item:hover { border-color: var(--accent); background: rgba(0,113,227,0.04); }
+.check-item.selected { border-color: var(--accent); background: rgba(0,113,227,0.08); color: var(--accent); font-weight: 500; }
+.check-item input { display: none; }
+
+/* Slider */
+.slider-wrap { display: flex; align-items: center; gap: 12px; }
+.form-slider {
+  flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: #E5E5EA;
+  border-radius: 2px; outline: none;
+}
+.form-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
+  background: var(--accent); border-radius: 50%; cursor: pointer; border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.slider-value {
+  min-width: 50px; text-align: right; font-size: 14px; font-weight: 600;
+  color: var(--accent); font-family: "SF Mono", monospace;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 10px 20px; font-size: 14px; font-weight: 500; border-radius: 8px;
+  cursor: pointer; transition: all 0.2s; border: none; font-family: inherit;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-secondary { background: #F5F5F7; color: #1D1D1F; border: 1px solid var(--border); }
+.btn-secondary:hover { opacity: 0.9; background: #E5E5EA; }
+.btn-danger { background: var(--up); color: #fff; }
+.btn-danger:hover { opacity: 0.9; }
+.btn-sm { padding: 8px 14px; font-size: 13px; }
+
+/* ==================== SETTINGS GRID ==================== */
+.settings-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; }
+.settings-nav {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 8px 0; height: fit-content; position: sticky; top: 76px;
+}
+.settings-nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s;
+  border-left: 4px solid transparent;
+}
+.settings-nav-item:hover { color: var(--text-primary); background: var(--hover-bg); }
+.settings-nav-item.active { color: var(--accent); background: var(--selected-bg); border-left-color: var(--accent); font-weight: 500; }
+.settings-nav-icon { width: 20px; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+
+.settings-content { min-width: 0; width: 100%; }
+.settings-panel { display: none; }
+.settings-panel.active { display: block; }
+
+/* ==================== SECTION DIVIDER ==================== */
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.section-title { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+
+/* ==================== TAG/CHIP ==================== */
+.tag {
+  display: inline-flex; align-items: center; gap: 4px; padding: 0 8px;
+  border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px;
+}
+.tag-green { background: #34C759; color: #fff; }
+.tag-blue { background: #0071E3; color: #fff; }
+.tag-purple { background: #0071E3; color: #fff; }
+.tag-gray { background: #F2F2F7; color: #86868B; }
+
+/* ==================== DATA TABLE (small) ==================== */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { text-align: left; padding: 12px 16px; background: #F2F2F7; color: var(--text-secondary); font-weight: 500; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.data-table td { padding: 14px 16px; border-bottom: 1px solid #E5E5EA; }
+.data-table tr:hover td { background: var(--hover-bg); }
+.data-table .mono { font-family: "SF Mono", monospace; }
+
+/* ==================== COLOR PREVIEW ==================== */
+.color-dot { width: 14px; height: 14px; border-radius: 4px; display: inline-block; border: 1px solid rgba(0,0,0,0.08); }
+
+/* ==================== UPLOAD AREA ==================== */
+.upload-area {
+  border: 2px dashed var(--border); border-radius: 12px; padding: 24px;
+  text-align: center; transition: all 0.15s; cursor: pointer;
+}
+.upload-area:hover { border-color: var(--accent); background: rgba(0,113,227,0.02); }
+.upload-icon { font-size: 24px; margin-bottom: 8px; }
+.upload-text { font-size: 14px; color: var(--text-primary); font-weight: 500; }
+.upload-hint { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+/* ==================== KEYBOARD SHORTCUT ==================== */
+.kbd {
+  display: inline-block; padding: 2px 6px; font-size: 12px; font-family: monospace;
+  background: #F5F5F7; border: 1px solid #E5E5EA; border-radius: 6px;
+  box-shadow: 0 1px 0 #E5E5EA; color: var(--text-secondary);
+}
+
+/* ==================== PROGRESS BAR ==================== */
+.progress-bar { height: 6px; background: #F2F2F7; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
+
+/* ==================== ALERT BOX ==================== */
+.alert-box {
+  padding: 12px 16px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+}
+.alert-info { background: rgba(0,113,227,0.08); color: #0071E3; border: 1px solid rgba(0,113,227,0.15); }
+.alert-warn { background: rgba(255,149,0,0.08); color: #FF9500; border: 1px solid rgba(255,149,0,0.15); }
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1280px) {
+  .settings-layout { grid-template-columns: 260px minmax(0, 1fr); }
+}
+@media (max-width: 1024px) {
+  .settings-layout { grid-template-columns: 1fr; }
+  .settings-nav { position: static; display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; }
+  .settings-nav-item { border-left: none; border-radius: 8px; padding: 8px 14px; }
+  .settings-nav-item.active { border-left-color: transparent; }
+}
+@media (max-width: 768px) {
+  .content { padding: 16px; }
+  .page-title { font-size: 22px; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add('in-iframe');</script>
+
+<!-- ====== STANDALONE SIDEBAR ====== -->
+<aside class="sidebar standalone-only">
+  <div class="sidebar-logo"><i data-lucide="brain" style="width:20px;height:20px;margin-right:8px;"></i>金融投资<span>AI助手</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">系统</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="settings" style="width:20px;height:20px;"></i></span> 全局设置</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="user" style="width:20px;height:20px;"></i></span> 用户中心</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">行情与数据</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span> 市场总览</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="trending-up" style="width:20px;height:20px;"></i></span> 个股行情</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="globe" style="width:20px;height:20px;"></i></span> 全球市场</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">AI编排层</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span> 工作流编排</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="message-square" style="width:20px;height:20px;"></i></span> AI投研对话</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="file-text" style="width:20px;height:20px;"></i></span> Prompt管理</div>
+  </div>
+</aside>
+
+<!-- ====== MAIN ====== -->
+<div class="main">
+  <!-- Standalone topbar -->
+  <header class="topbar standalone-only">
+    <div style="font-size:14px;font-weight:600;color:var(--navy);">全局设置</div>
+    <div class="search-box">
+      <i data-lucide="search" style="width:16px;height:16px;color:var(--text-secondary);"></i>
+      <input type="text" placeholder="搜索设置项...">
+    </div>
+    <div class="user-area">
+      <i data-lucide="bell" style="width:20px;height:20px;color:var(--text-secondary);"></i>
+      <div class="avatar">投</div>
+      <span>投资者</span>
+    </div>
+  </header>
+
+  <!-- ====== CONTENT ====== -->
+  <div class="content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title"><i data-lucide="settings" style="width:28px;height:28px;vertical-align:middle;margin-right:8px;"></i>全局设置</div>
+        <div class="page-subtitle">管理您的账户、AI模型、数据源、通知偏好及系统参数</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-secondary btn-sm" onclick="resetSettings()"><i data-lucide="refresh-cw" style="width:16px;height:16px;"></i>恢复默认</button>
+        <button class="btn btn-primary btn-sm" onclick="saveSettings()"><i data-lucide="save" style="width:16px;height:16px;"></i>保存更改</button>
+      </div>
+    </div>
+
+    <!-- Settings Layout -->
+    <div class="settings-layout">
+      <!-- Left Nav -->
+      <nav class="settings-nav">
+        <div class="settings-nav-item active" data-panel="account" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="user" style="width:20px;height:20px;"></i></span> 账户设置
+        </div>
+        <div class="settings-nav-item" data-panel="scoring" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="star" style="width:20px;height:20px;"></i></span> 五因子评分
+        </div>
+        <div class="settings-nav-item" data-panel="ai-models" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span> AI模型配置
+        </div>
+        <div class="settings-nav-item" data-panel="data-source" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="globe" style="width:20px;height:20px;"></i></span> 数据源设置
+        </div>
+        <div class="settings-nav-item" data-panel="notification" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="bell" style="width:20px;height:20px;"></i></span> 通知偏好
+        </div>
+        <div class="settings-nav-item" data-panel="trading" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="wallet" style="width:20px;height:20px;"></i></span> 模拟交易参数
+        </div>
+        <div class="settings-nav-item" data-panel="display" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="palette" style="width:20px;height:20px;"></i></span> 显示偏好
+        </div>
+        <div class="settings-nav-item" data-panel="system" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="monitor" style="width:20px;height:20px;"></i></span> 系统信息
+        </div>
+        <div class="settings-nav-item" data-panel="data" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="database" style="width:20px;height:20px;"></i></span> 数据管理
+        </div>
+        <div class="settings-nav-item" data-panel="about" onclick="switchPanel(this)">
+          <span class="settings-nav-icon"><i data-lucide="info" style="width:20px;height:20px;"></i></span> 关于我们
+        </div>
+      </nav>
+
+      <!-- Right Content -->
+      <div class="settings-content">
+
+        <!-- ========== PANEL: 账户设置 ========== -->
+        <div class="settings-panel active" id="panel-account">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="user" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>个人资料</span>
+              <span class="badge">已认证</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">显示名称 <span class="required">*</span></label>
+                <input type="text" class="form-input" value="投资者" id="displayName">
+                <div class="form-hint">此名称将显示在侧边栏和报告落款中</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">登录邮箱 <span class="required">*</span></label>
+                <input type="email" class="form-input" value="investor@example.com" id="userEmail">
+              </div>
+              <div class="form-group">
+                <label class="form-label">手机号码</label>
+                <input type="tel" class="form-input" value="+86 138 **** 8888" id="userPhone">
+              </div>
+              <div class="form-group">
+                <label class="form-label">投资经验</label>
+                <select class="form-select" id="investExp">
+                  <option value="novice">新手（&lt;1年）</option>
+                  <option value="intermediate" selected>进阶（1-3年）</option>
+                  <option value="advanced">资深（3-5年）</option>
+                  <option value="expert">专家（5年+）</option>
+                </select>
+              </div>
+            </div>
+            <hr class="section-divider">
+            <div class="section-title">头像与品牌</div>
+            <div style="display:flex;align-items:center;gap:16px;">
+              <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg, #5856D6, #AF52DE);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;">投</div>
+              <div style="flex:1;">
+                <div class="upload-area" style="padding:12px 16px;text-align:left;display:flex;align-items:center;gap:12px;">
+                  <i data-lucide="upload" style="width:20px;height:20px;color:var(--text-secondary);"></i>
+                  <div>
+                    <div class="upload-text">点击更换头像</div>
+                    <div class="upload-hint">支持 JPG、PNG，最大 2MB</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="lock" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>安全设置</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">当前密码</label>
+                <input type="password" class="form-input" value="********" disabled>
+              </div>
+              <div class="form-group">
+                <label class="form-label">新密码</label>
+                <input type="password" class="form-input" placeholder="输入新密码">
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:12px;">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)" id="mfaToggle"></div>
+                <div>
+                  <div class="toggle-label">启用两步验证 (2FA)</div>
+                  <div class="toggle-desc">登录时需要输入动态验证码，提升账户安全性</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)" id="sessionToggle"></div>
+                <div>
+                  <div class="toggle-label">自动锁定会话</div>
+                  <div class="toggle-desc">30分钟无操作后自动锁定，需重新验证</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="alert-triangle" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>危险区域</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #E5E5EA;">
+              <div>
+                <div style="font-size:14px;font-weight:500;">导出所有数据</div>
+                <div class="form-hint">下载您的所有分析记录、自选股、笔记等数据</div>
+              </div>
+              <button class="btn btn-secondary btn-sm"><i data-lucide="download" style="width:16px;height:16px;"></i>导出 JSON</button>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+              <div>
+                <div style="font-size:14px;font-weight:500;color:var(--up);">注销账户</div>
+                <div class="form-hint">此操作不可逆，所有数据将被永久删除</div>
+              </div>
+              <button class="btn btn-danger btn-sm"><i data-lucide="trash-2" style="width:16px;height:16px;"></i>注销</button>
+            </div>
+          </div>
+
+          <!-- 订阅状态 -->
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title">
+              <span><i data-lucide="crown" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>订阅状态</span>
+              <span class="tag tag-green">生效中</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+              <div>
+                <div style="font-size:16px; font-weight:600; color:var(--text-primary);">专业版年付</div>
+                <div style="font-size:13px; color:var(--text-secondary); margin-top:4px;">到期时间：2026-07-08</div>
+              </div>
+              <span class="tag tag-blue" style="background:linear-gradient(135deg,#0071E3,#5AC8FA);">专业版</span>
+            </div>
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:4px;">
+                <span>剩余天数</span><span class="mono tabular-nums">365 / 365 天</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:100%; background:var(--success);"></div></div>
+            </div>
+            <div style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:4px;">
+                <span>API 调用额度</span><span class="mono tabular-nums">4,230 / 10,000 次</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:42.3%; background:var(--accent);"></div></div>
+            </div>
+            <div style="font-size:13px; color:var(--text-secondary); margin-bottom:16px; line-height:1.6;">
+              包含功能：AI荐股无限次、KOL日报推送、知识图谱全量访问、五因子实时评分、自选股不限数量
+            </div>
+            <button class="btn btn-primary" style="width:100%;" onclick="showToast('续费页面开发中', 'info')"><i data-lucide="arrow-up-circle" style="width:16px;height:16px;"></i>升级 / 续费订阅</button>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 五因子评分 ========== -->
+        <div class="settings-panel" id="panel-scoring">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="star" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>五因子权重配置</span>
+              <span class="badge">默认方案</span>
+            </div>
+            <div class="alert-box alert-info">
+              <i data-lucide="lightbulb" style="width:20px;height:20px;flex-shrink:0;"></i> 当前权重：F1资金30% + F2宏观15% + F3情绪15% + F4基本面25% + F5技术15%
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+              <div class="form-group">
+                <label class="form-label">F1 资金面权重 (%)</label>
+                <div class="slider-wrap">
+                  <input type="range" class="form-slider" min="0" max="100" value="30" id="wF1" oninput="updateWeight(this, 'vF1')">
+                  <span class="slider-value" id="vF1">30%</span>
+                </div>
+                <div class="form-hint">北向资金、龙虎榜、主力资金流向</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">F2 宏观面权重 (%)</label>
+                <div class="slider-wrap">
+                  <input type="range" class="form-slider" min="0" max="100" value="15" id="wF2" oninput="updateWeight(this, 'vF2')">
+                  <span class="slider-value" id="vF2">15%</span>
+                </div>
+                <div class="form-hint">GDP、CPI、M2、PMI、利率政策</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">F3 情绪面权重 (%)</label>
+                <div class="slider-wrap">
+                  <input type="range" class="form-slider" min="0" max="100" value="15" id="wF3" oninput="updateWeight(this, 'vF3')">
+                  <span class="slider-value" id="vF3">15%</span>
+                </div>
+                <div class="form-hint">恐慌贪婪指数、VIX、融资融券、市场情绪</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">F4 基本面权重 (%)</label>
+                <div class="slider-wrap">
+                  <input type="range" class="form-slider" min="0" max="100" value="25" id="wF4" oninput="updateWeight(this, 'vF4')">
+                  <span class="slider-value" id="vF4">25%</span>
+                </div>
+                <div class="form-hint">ROE、PE/PB、PEG、营收增长、毛利率</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">F5 技术面权重 (%)</label>
+                <div class="slider-wrap">
+                  <input type="range" class="form-slider" min="0" max="100" value="15" id="wF5" oninput="updateWeight(this, 'vF5')">
+                  <span class="slider-value" id="vF5">15%</span>
+                </div>
+                <div class="form-hint">均线排列、MACD、RSI、K线形态、支撑压力</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">权重校验</label>
+                <div style="padding:10px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                    <span style="font-size:13px;color:var(--text-secondary);">当前总和</span>
+                    <span class="mono tabular-nums" style="font-size:14px;font-weight:700;color:var(--success);" id="weightTotal">100%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width:100%;background:var(--success);" id="weightBar"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="bar-chart-3" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>信号阈值配置</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">S4 综合分门槛</label>
+                <input type="number" class="form-input mono tabular-nums" value="65" id="s4Threshold">
+                <div class="form-hint">达到此分数且全共振才标记为 S4 主升浪</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">分歧预警阈值</label>
+                <input type="number" class="form-input mono tabular-nums" value="15" id="divergenceThreshold">
+                <div class="form-hint">LLM评分标准差超过此值触发分歧预警</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Veto 条件</label>
+                <select class="form-select" id="vetoRule">
+                  <option value="strict" selected>严格模式（任一模型否决即排除）</option>
+                  <option value="moderate">适中模式（过半否决才排除）</option>
+                  <option value="loose">宽松模式（仅全票否决才排除）</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">评分时间窗口</label>
+                <select class="form-select" id="scoreWindow">
+                  <option value="daily">日度评分</option>
+                  <option value="weekly" selected>周度评分</option>
+                  <option value="biweekly">双周评分</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="tag" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>仓位标签规则</div>
+            <table class="data-table">
+              <thead>
+                <tr><th>标签</th><th>综合分范围</th><th>仓位上限</th><th>颜色</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="tag tag-green">Core 核心</span></td>
+                  <td class="mono tabular-nums">≥ 70</td>
+                  <td class="mono tabular-nums">≤ 15%</td>
+                  <td><span class="color-dot" style="background:#34C759;"></span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-blue">Tactical 战术</span></td>
+                  <td class="mono tabular-nums">60 - 69</td>
+                  <td class="mono tabular-nums">≤ 12%</td>
+                  <td><span class="color-dot" style="background:#0071E3;"></span></td>
+                </tr>
+                <tr>
+                  <td><span class="tag tag-gray">Watch 观察</span></td>
+                  <td class="mono tabular-nums">&lt; 60</td>
+                  <td class="mono tabular-nums">≤ 5%</td>
+                  <td><span class="color-dot" style="background:#86868B;"></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: AI模型配置 ========== -->
+        <div class="settings-panel" id="panel-ai-models">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="brain" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>LLM 共识评审团</span>
+              <span class="badge">9个模型</span>
+            </div>
+            <div class="alert-box alert-info">
+              <i data-lucide="lightbulb" style="width:20px;height:20px;flex-shrink:0;"></i> 当前启用 9 个模型参与评分共识。每个模型独立评分后取均值，标准差大于阈值触发分歧预警。
+            </div>
+            <table class="data-table" style="margin-bottom:16px;">
+              <thead>
+                <tr><th>模型</th><th>提供商</th><th>状态</th><th>权重</th><th>API Key</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:500;">GPT-5.5</td>
+                  <td>OpenAI</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">sk-****-prod</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">qwen3.6</td>
+                  <td>阿里云</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">sk-****-qwen</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">gemini-3-flash</td>
+                  <td>Google</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">AIza****</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">豆包2.0</td>
+                  <td>字节跳动</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">ep-****-dou</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">GLM-4.7</td>
+                  <td>智谱AI</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">sk-****-glm</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">kimi-k2.6</td>
+                  <td>Moonshot</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">sk-****-kimi</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">minimax</td>
+                  <td>MiniMax</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">sk-****-mini</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">mimo-v2.5-pro</td>
+                  <td>Mistral</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">sk-****-mimo</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">deepseek-v3</td>
+                  <td>DeepSeek</td>
+                  <td><span class="tag tag-green">启用</span></td>
+                  <td class="mono tabular-nums">1.0x</td>
+                  <td><span class="mono" style="color:var(--text-secondary);">sk-****-deep</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-secondary btn-sm"><i data-lucide="plus" style="width:16px;height:16px;"></i>添加模型</button>
+              <button class="btn btn-secondary btn-sm"><i data-lucide="refresh-cw" style="width:16px;height:16px;"></i>测试连通性</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="file-text" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>Prompt 模板设置</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">评分分析风格</label>
+                <select class="form-select" id="promptStyle">
+                  <option value="balanced" selected>均衡型（理性与直觉并重）</option>
+                  <option value="quantitative">量化型（侧重数据与指标）</option>
+                  <option value="qualitative">质化型（侧重叙事与逻辑）</option>
+                  <option value="contrarian">逆向型（主动寻找反方论据）</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">输出语言</label>
+                <select class="form-select" id="outputLang">
+                  <option value="zh" selected>中文（简体）</option>
+                  <option value="zh-tw">中文（繁体）</option>
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:12px;">
+              <label class="form-label">自定义系统 Prompt</label>
+              <textarea class="form-input" rows="4" style="resize:vertical;font-family:inherit;" id="customPrompt">你是一位专业的金融投资分析师，擅长多因子选股与技术分析。请基于提供的五因子数据，给出严谨的评分与投资建议。注意：A股上涨为红色、下跌为绿色。</textarea>
+              <div class="form-hint">此 Prompt 将附加在每个模型的系统消息中</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 数据源设置 ========== -->
+        <div class="settings-panel" id="panel-data-source">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="globe" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>行情数据源</span>
+              <span class="badge">多源聚合</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">A股数据源</label>
+                <select class="form-select">
+                  <option value="tushare" selected>Tushare Pro</option>
+                  <option value="akshare">AkShare</option>
+                  <option value="jqdata">聚宽数据</option>
+                  <option value="eastmoney">东方财富</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">美股数据源</label>
+                <select class="form-select">
+                  <option value="polygon" selected>Polygon.io</option>
+                  <option value="alphavantage">Alpha Vantage</option>
+                  <option value="yahoo">Yahoo Finance</option>
+                  <option value="finnhub">Finnhub</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">港股数据源</label>
+                <select class="form-select">
+                  <option value="eastmoney" selected>东方财富</option>
+                  <option value="hs">恒生数据</option>
+                  <option value="bloomberg">Bloomberg API</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">数据刷新频率</label>
+                <select class="form-select">
+                  <option value="5s">5秒（实时）</option>
+                  <option value="15s" selected>15秒（推荐）</option>
+                  <option value="30s">30秒</option>
+                  <option value="60s">1分钟</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:12px;">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">启用数据多源校验</div>
+                  <div class="toggle-desc">当主数据源异常时自动切换备用源并标记差异</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="newspaper" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>资讯与研报源</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">财经快讯源</label>
+                <div class="check-group">
+                  <label class="check-item selected"><input type="checkbox" checked> 财联社</label>
+                  <label class="check-item selected"><input type="checkbox" checked> 华尔街见闻</label>
+                  <label class="check-item"><input type="checkbox"> 雪球</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">研报数据源</label>
+                <div class="check-group">
+                  <label class="check-item selected"><input type="checkbox" checked> 东方财富</label>
+                  <label class="check-item"><input type="checkbox"> 慧博投研</label>
+                  <label class="check-item"><input type="checkbox"> Wind</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">KOL 监测平台</label>
+                <div class="check-group">
+                  <label class="check-item selected"><input type="checkbox" checked> YouTube</label>
+                  <label class="check-item selected"><input type="checkbox" checked> Twitter/X</label>
+                  <label class="check-item"><input type="checkbox"> 雪球社区</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">公告数据源</label>
+                <div class="check-group">
+                  <label class="check-item selected"><input type="checkbox" checked> 巨潮资讯</label>
+                  <label class="check-item selected"><input type="checkbox" checked> SEC EDGAR</label>
+                  <label class="check-item"><input type="checkbox"> HKEX</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 通知偏好 ========== -->
+        <div class="settings-panel" id="panel-notification">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="bell" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>推送通知</span>
+              <span class="badge">自定义</span>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">每日智能晨报推送</div>
+                  <div class="toggle-desc">收盘版（16:00）+ 晨间版（08:30）</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">S4 信号实时提醒</div>
+                  <div class="toggle-desc">当标的进入主升浪全共振时立即推送</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">价格异动预警</div>
+                  <div class="toggle-desc">自选股涨跌幅超过设定阈值时推送</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">KOL 观点更新</div>
+                  <div class="toggle-desc">关注的YouTube/Twitter KOL发布新内容时推送</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">财报日历提醒</div>
+                  <div class="toggle-desc">持仓标的财报披露前1天提醒</div>
+                </div>
+              </div>
+            </div>
+            <hr class="section-divider">
+            <div class="section-title">通知渠道</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">主渠道</label>
+                <select class="form-select">
+                  <option value="feishu" selected>飞书机器人</option>
+                  <option value="wecom">企业微信</option>
+                  <option value="dingtalk">钉钉</option>
+                  <option value="telegram">Telegram</option>
+                  <option value="email">邮件</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Webhook URL</label>
+                <input type="text" class="form-input mono" value="https://open.feishu.cn/open-apis/bot/v2/hook/xxxxx" placeholder="输入Webhook地址">
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="pie-chart" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>静默时段</div>
+            <div class="alert-box alert-warn">
+              <i data-lucide="alert-triangle" style="width:20px;height:20px;flex-shrink:0;"></i> 设定时段内仅推送 S4 信号和紧急预警，其他通知将在时段结束后汇总发送。
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">开始时间</label>
+                <input type="time" class="form-input" value="23:00">
+              </div>
+              <div class="form-group">
+                <label class="form-label">结束时间</label>
+                <input type="time" class="form-input" value="07:30">
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:8px;">
+              <label class="form-label">工作日</label>
+              <div class="check-group">
+                <label class="check-item selected"><input type="checkbox" checked> 周一</label>
+                <label class="check-item selected"><input type="checkbox" checked> 周二</label>
+                <label class="check-item selected"><input type="checkbox" checked> 周三</label>
+                <label class="check-item selected"><input type="checkbox" checked> 周四</label>
+                <label class="check-item selected"><input type="checkbox" checked> 周五</label>
+                <label class="check-item"><input type="checkbox"> 周六</label>
+                <label class="check-item"><input type="checkbox"> 周日</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 模拟交易参数 ========== -->
+        <div class="settings-panel" id="panel-trading">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="wallet" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>模拟交易资金配置</span>
+              <span class="badge">虚拟资金</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">初始资金 (USD)</label>
+                <input type="text" class="form-input mono tabular-nums" value="10,000,000" id="initialCapital">
+                <div class="form-hint">模拟账户起始资金，可随时重置</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">每日交易预算 (USD)</label>
+                <input type="text" class="form-input mono tabular-nums" value="1,000,000" id="dailyBudget">
+                <div class="form-hint">单日最大可投入金额</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Core 仓位上限 (%)</label>
+                <input type="number" class="form-input mono tabular-nums" value="15" max="100">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tactical 仓位上限 (%)</label>
+                <input type="number" class="form-input mono tabular-nums" value="12" max="100">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Watch 仓位上限 (%)</label>
+                <input type="number" class="form-input mono tabular-nums" value="5" max="100">
+              </div>
+              <div class="form-group">
+                <label class="form-label">基准对比指数</label>
+                <select class="form-select">
+                  <option value="sp500" selected>标普 500 (SPX)</option>
+                  <option value="csi300">沪深 300</option>
+                  <option value="nasdaq">纳斯达克 100</option>
+                  <option value="both">双基准对比</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="calendar" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>检查点提醒</div>
+            <div class="alert-box alert-info">
+              <i data-lucide="lightbulb" style="width:20px;height:20px;flex-shrink:0;"></i> 买入后自动创建检查点，到达时间点时系统会推送复盘提醒。
+            </div>
+            <div class="form-group">
+              <label class="form-label">启用检查点</label>
+              <div class="check-group">
+                <label class="check-item selected"><input type="checkbox" checked> T+1</label>
+                <label class="check-item selected"><input type="checkbox" checked> T+3</label>
+                <label class="check-item selected"><input type="checkbox" checked> T+5</label>
+                <label class="check-item selected"><input type="checkbox" checked> T+10</label>
+                <label class="check-item selected"><input type="checkbox" checked> T+20</label>
+                <label class="check-item"><input type="checkbox"> T+30</label>
+                <label class="check-item"><input type="checkbox"> T+60</label>
+                <label class="check-item"><input type="checkbox"> T+90</label>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:12px;">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">自动止损</div>
+                  <div class="toggle-desc">当单票亏损超过设定阈值时自动发出预警</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">止损阈值 (%)</label>
+              <div class="slider-wrap">
+                <input type="range" class="form-slider" min="5" max="30" value="10" oninput="this.nextElementSibling.textContent = this.value + '%'">
+                <span class="slider-value">10%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 显示偏好 ========== -->
+        <div class="settings-panel" id="panel-display">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="palette" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>界面主题</span>
+              <span class="badge">跟随系统</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">主题模式</label>
+                <select class="form-select" id="themeMode">
+                  <option value="light" selected>浅色模式</option>
+                  <option value="dark">深色模式</option>
+                  <option value="auto">跟随系统</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">侧边栏默认状态</label>
+                <select class="form-select" id="sidebarDefault">
+                  <option value="expanded" selected>展开</option>
+                  <option value="collapsed">收起</option>
+                  <option value="auto">记忆上次</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">默认首页</label>
+                <select class="form-select" id="defaultPage">
+                  <option value="market-overview" selected>市场总览</option>
+                  <option value="scoring-list">评分榜单</option>
+                  <option value="daily-briefing">每日晨报</option>
+                  <option value="ai-chat">AI投研对话</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">页面切换动画</label>
+                <select class="form-select">
+                  <option value="fade" selected>淡入淡出</option>
+                  <option value="slide">滑动</option>
+                  <option value="none">无动画</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="trending-up" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>金融数据显示</div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)" id="colorToggle"></div>
+                <div>
+                  <div class="toggle-label">A股红涨绿跌</div>
+                  <div class="toggle-desc">关闭后切换为国际惯例（绿涨红跌）</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">千分位分隔符</div>
+                  <div class="toggle-desc">数字显示为 1,234.56 格式</div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="toggle-wrap">
+                <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                <div>
+                  <div class="toggle-label">数字对齐 (tabular-nums)</div>
+                  <div class="toggle-desc">表格中数字等宽对齐，便于纵向比较</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px;">
+              <div class="form-group">
+                <label class="form-label">价格精度</label>
+                <select class="form-select">
+                  <option value="2" selected>2位小数</option>
+                  <option value="3">3位小数</option>
+                  <option value="4">4位小数</option>
+                  <option value="auto">自动</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">涨跌幅显示</label>
+                <select class="form-select">
+                  <option value="both" selected>数值 + 百分比</option>
+                  <option value="percent">仅百分比</option>
+                  <option value="value">仅数值</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="keyboard" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>快捷键</div>
+            <table class="data-table">
+              <thead>
+                <tr><th>操作</th><th>快捷键</th><th>状态</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>全局搜索</td><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td><span class="tag tag-green">启用</span></td></tr>
+                <tr><td>收起/展开侧边栏</td><td><kbd>Ctrl</kbd> + <kbd>B</kbd></td><td><span class="tag tag-green">启用</span></td></tr>
+                <tr><td>快速切换页面</td><td><kbd>Alt</kbd> + <kbd>1~9</kbd></td><td><span class="tag tag-green">启用</span></td></tr>
+                <tr><td>AI投研对话</td><td><kbd>/</kbd></td><td><span class="tag tag-green">启用</span></td></tr>
+                <tr><td>保存设置</td><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td><span class="tag tag-green">启用</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 系统信息 ========== -->
+        <div class="settings-panel" id="panel-system">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="monitor" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>系统状态</span>
+              <span class="tag tag-green">运行正常</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label class="form-label">系统版本</label>
+                <div style="padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                  <span class="mono tabular-nums" style="font-size:14px;font-weight:600;">v3.2.1-release</span>
+                  <span style="font-size:13px;color:var(--text-secondary);margin-left:8px;">(2026-07-09)</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">数据更新</label>
+                <div style="padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                  <span style="font-size:14px;"><i data-lucide="clock" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"></i>上次更新 </span>
+                  <span class="mono tabular-nums" style="font-size:14px;font-weight:600;">14:32:18</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">API 服务</label>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <span class="tag tag-green"><i data-lucide="check" style="width:12px;height:12px;"></i>行情</span>
+                  <span class="tag tag-green"><i data-lucide="check" style="width:12px;height:12px;"></i>LLM</span>
+                  <span class="tag tag-green"><i data-lucide="check" style="width:12px;height:12px;"></i>KOL</span>
+                  <span class="tag tag-green"><i data-lucide="check" style="width:12px;height:12px;"></i>数据</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">缓存状态</label>
+                <div style="padding:10px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                  <span class="mono tabular-nums" style="font-size:14px;font-weight:600;">1,247</span>
+                  <span style="font-size:12px;color:var(--text-secondary);margin-left:4px;">条缓存 · 占用 86MB</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:16px;">
+              <button class="btn btn-secondary btn-sm"><i data-lucide="refresh-cw" style="width:16px;height:16px;"></i>检查更新</button>
+              <button class="btn btn-secondary btn-sm"><i data-lucide="broom" style="width:16px;height:16px;"></i>清理缓存</button>
+              <button class="btn btn-secondary btn-sm"><i data-lucide="clipboard-list" style="width:16px;height:16px;"></i>复制诊断信息</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="bar-chart-3" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>数据统计</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+              <div style="text-align:center;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div class="mono tabular-nums" style="font-size:20px;font-weight:600;color:var(--accent);">398</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">公司实体</div>
+              </div>
+              <div style="text-align:center;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div class="mono tabular-nums" style="font-size:20px;font-weight:600;color:var(--accent);">572</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">股票映射</div>
+              </div>
+              <div style="text-align:center;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div class="mono tabular-nums" style="font-size:20px;font-weight:600;color:var(--accent);">74</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">赛道节点</div>
+              </div>
+              <div style="text-align:center;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div class="mono tabular-nums" style="font-size:20px;font-weight:600;color:var(--accent);">518</div>
+                <div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">关系边</div>
+              </div>
+            </div>
+            <div style="margin-top:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:12px;color:var(--text-secondary);">数据覆盖度</span>
+                <span class="mono tabular-nums" style="font-size:13px;font-weight:600;">94.2%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:94.2%;background:var(--accent);"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="scroll-text" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>开源许可与致谢</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.8;">
+              <p>本平台基于以下开源项目构建：</p>
+              <p style="margin-top:8px;">
+                • <strong>Tailwind CSS</strong> — MIT License<br>
+                • <strong>ECharts 5.6</strong> — Apache-2.0 License<br>
+                • <strong>Lightweight Charts 4.1</strong> — Apache-2.0 License<br>
+                • <strong>AkShare</strong> — BSD-3-Clause License<br>
+                • <strong>Tushare Pro</strong> — 商业数据许可
+              </p>
+              <p style="margin-top:8px;">金融数据来源于东方财富、Tushare、Yahoo Finance 等公开渠道，仅供研究参考，不构成投资建议。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 数据管理 ========== -->
+        <div class="settings-panel" id="panel-data">
+          <div class="card">
+            <div class="card-title">
+              <span><i data-lucide="database" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>数据导出</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--bg); border-radius:8px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <i data-lucide="download" style="width:20px; height:20px; color:var(--accent);"></i>
+                  <div>
+                    <div style="font-size:14px; font-weight:500; color:var(--text-primary);">导出自选股数据</div>
+                    <div style="font-size:12px; color:var(--text-secondary);">CSV 格式，包含评分与备注</div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('开始导出自选股...', 'info')"><i data-lucide="download" style="width:16px;height:16px;"></i>导出</button>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--bg); border-radius:8px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <i data-lucide="file-text" style="width:20px; height:20px; color:var(--accent);"></i>
+                  <div>
+                    <div style="font-size:14px; font-weight:500; color:var(--text-primary);">导出分析报告</div>
+                    <div style="font-size:12px; color:var(--text-secondary);">PDF 格式，包含所有历史报告</div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('开始导出报告...', 'info')"><i data-lucide="download" style="width:16px;height:16px;"></i>导出</button>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--bg); border-radius:8px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <i data-lucide="table" style="width:20px; height:20px; color:var(--accent);"></i>
+                  <div>
+                    <div style="font-size:14px; font-weight:500; color:var(--text-primary);">导出交易记录</div>
+                    <div style="font-size:12px; color:var(--text-secondary);">Excel 格式，包含模拟交易全部记录</div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('开始导出交易记录...', 'info')"><i data-lucide="download" style="width:16px;height:16px;"></i>导出</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="trash-2" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>数据清理与缓存</div>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--bg); border-radius:8px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <i data-lucide="hard-drive" style="width:20px; height:20px; color:var(--up);"></i>
+                  <div>
+                    <div style="font-size:14px; font-weight:500; color:var(--text-primary);">清理本地缓存</div>
+                    <div style="font-size:12px; color:var(--text-secondary);">本地缓存 128MB，可清理释放空间</div>
+                  </div>
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="showClearCacheModal()"><i data-lucide="trash-2" style="width:16px;height:16px;"></i>清理</button>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--bg); border-radius:8px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <i data-lucide="eraser" style="width:20px; height:20px; color:var(--warn);"></i>
+                  <div>
+                    <div style="font-size:14px; font-weight:500; color:var(--text-primary);">清除搜索历史</div>
+                    <div style="font-size:12px; color:var(--text-secondary);">删除所有搜索关键词记录</div>
+                  </div>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('搜索历史已清除', 'success')"><i data-lucide="eraser" style="width:16px;height:16px;"></i>清除</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="archive" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>备份与恢复</div>
+            <div class="alert-box alert-info">
+              <i data-lucide="info" style="width:20px;height:20px;flex-shrink:0;"></i> 定期备份您的设置和自选股数据，以便在更换设备时快速恢复。
+            </div>
+            <div style="display:flex; gap:12px; margin-top:12px;">
+              <button class="btn btn-secondary btn-sm" onclick="showToast('备份文件生成中...', 'info')"><i data-lucide="archive" style="width:16px;height:16px;"></i>立即备份</button>
+              <button class="btn btn-secondary btn-sm" onclick="showToast('恢复功能开发中', 'info')"><i data-lucide="upload" style="width:16px;height:16px;"></i>从备份恢复</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========== PANEL: 关于我们 ========== -->
+        <div class="settings-panel" id="panel-about">
+          <div class="card" style="text-align:center;">
+            <div style="width:64px; height:64px; background:linear-gradient(135deg,#0071E3,#5AC8FA); border-radius:16px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:24px; margin:0 auto 16px;">
+              <i data-lucide="brain" style="width:32px;height:32px;"></i>
+            </div>
+            <div style="font-size:20px; font-weight:600; color:var(--text-primary); margin-bottom:4px;">AI智能投研助手</div>
+            <div style="font-size:14px; color:var(--text-secondary); margin-bottom:16px;">版本 3.2.1 (Build 20260709)</div>
+            <div style="font-size:13px; color:var(--text-secondary); max-width:480px; margin:0 auto 24px; line-height:1.6;">
+              通过AI技术将碎片化的投资信息转化为结构化的知识资产，实现"从信息收集到投资决策"的完整工作流自动化。
+            </div>
+            <div style="display:flex; justify-content:center; gap:12px;">
+              <button class="btn btn-secondary btn-sm" onclick="showToast('检查更新中...', 'info')"><i data-lucide="refresh-cw" style="width:16px;height:16px;"></i>检查更新</button>
+              <button class="btn btn-secondary btn-sm" onclick="showToast('反馈页面开发中', 'info')"><i data-lucide="message-circle" style="width:16px;height:16px;"></i>意见反馈</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="phone" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>联系方式</div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg); border-radius:8px;">
+                <i data-lucide="mail" style="width:18px; height:18px; color:var(--accent);"></i>
+                <div>
+                  <div style="font-size:13px; color:var(--text-secondary);">邮箱</div>
+                  <div style="font-size:14px; font-weight:500; color:var(--text-primary);">support@airesearch.io</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg); border-radius:8px;">
+                <i data-lucide="globe" style="width:18px; height:18px; color:var(--accent);"></i>
+                <div>
+                  <div style="font-size:13px; color:var(--text-secondary);">官网</div>
+                  <div style="font-size:14px; font-weight:500; color:var(--text-primary);">https://airesearch.io</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg); border-radius:8px;">
+                <i data-lucide="github" style="width:18px; height:18px; color:var(--accent);"></i>
+                <div>
+                  <div style="font-size:13px; color:var(--text-secondary);">GitHub</div>
+                  <div style="font-size:14px; font-weight:500; color:var(--text-primary);">github.com/airesearch-platform</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="shield" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>法律信息</div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border);">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <i data-lucide="file-lock" style="width:18px; height:18px; color:var(--accent);"></i>
+                  <span style="font-size:14px; font-weight:500; color:var(--text-primary);">隐私政策</span>
+                </div>
+                <a href="#" style="color:var(--accent); font-size:13px; text-decoration:none;" onclick="showToast('隐私政策页面开发中', 'info')">查看 <i data-lucide="chevron-right" style="width:14px;height:14px;vertical-align:middle;"></i></a>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <i data-lucide="scroll-text" style="width:18px; height:18px; color:var(--accent);"></i>
+                  <span style="font-size:14px; font-weight:500; color:var(--text-primary);">服务条款</span>
+                </div>
+                <a href="#" style="color:var(--accent); font-size:13px; text-decoration:none;" onclick="showToast('服务条款页面开发中', 'info')">查看 <i data-lucide="chevron-right" style="width:14px;height:14px;vertical-align:middle;"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title"><i data-lucide="alert-circle" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i>免责声明</div>
+            <div style="font-size:13px; color:var(--text-secondary); line-height:1.8; max-height:240px; overflow-y:auto; padding-right:8px;">
+              <p style="margin:0 0 12px;">1. 本软件提供的所有数据、分析、观点仅供信息参考之用，不构成任何投资建议或承诺。</p>
+              <p style="margin:0 0 12px;">2. 投资有风险，入市需谨慎。用户应基于自身独立判断做出投资决策，并自行承担全部投资风险。</p>
+              <p style="margin:0 0 12px;">3. 本软件中的AI生成内容可能存在不准确或过时信息，用户应交叉验证关键数据，不可仅依赖AI输出进行投资。</p>
+              <p style="margin:0 0 12px;">4. 历史数据回测结果不代表未来收益表现，市场有风险，投资需谨慎。</p>
+              <p style="margin:0 0 12px;">5. 本软件不对第三方数据源（如交易所、yfinance、东方财富等）的数据准确性、完整性、及时性作出任何担保。</p>
+              <p style="margin:0;">6. 使用本软件即表示您同意本免责声明的全部条款。如有疑问，请咨询持牌投资顾问。</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /settings-content -->
+    </div><!-- /settings-layout -->
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// ====== IFRAME DETECTION ======
+(function() {
+  try {
+    if (window.self !== window.top) {
+      document.body.classList.add('in-iframe');
+    }
+  } catch (e) {
+    document.body.classList.add('in-iframe');
+  }
+})();
+
+// ====== PANEL SWITCHING ======
+function switchPanel(el) {
+  // Update nav
+  document.querySelectorAll('.settings-nav-item').forEach(item => item.classList.remove('active'));
+  el.classList.add('active');
+
+  // Update panel
+  const panelId = 'panel-' + el.dataset.panel;
+  document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+}
+
+// ====== TOGGLE SWITCH ======
+function toggleSwitch(el) {
+  el.classList.toggle('active');
+}
+
+// ====== CHECK ITEM SELECT ======
+document.querySelectorAll('.check-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    if (e.target.tagName === 'INPUT') return;
+    const cb = this.querySelector('input[type="checkbox"], input[type="radio"]');
+    if (cb) {
+      cb.checked = !cb.checked;
+      this.classList.toggle('selected', cb.checked);
+    }
+  });
+});
+
+// ====== WEIGHT SLIDER ======
+function updateWeight(slider, valueId) {
+  document.getElementById(valueId).textContent = slider.value + '%';
+  validateWeights();
+}
+
+function validateWeights() {
+  const w1 = parseInt(document.getElementById('wF1').value) || 0;
+  const w2 = parseInt(document.getElementById('wF2').value) || 0;
+  const w3 = parseInt(document.getElementById('wF3').value) || 0;
+  const w4 = parseInt(document.getElementById('wF4').value) || 0;
+  const w5 = parseInt(document.getElementById('wF5').value) || 0;
+  const total = w1 + w2 + w3 + w4 + w5;
+
+  const totalEl = document.getElementById('weightTotal');
+  const barEl = document.getElementById('weightBar');
+
+  totalEl.textContent = total + '%';
+  barEl.style.width = Math.min(total, 100) + '%';
+
+  if (total === 100) {
+    totalEl.style.color = 'var(--success)';
+    barEl.style.background = 'var(--success)';
+  } else if (total > 100) {
+    totalEl.style.color = 'var(--up)';
+    barEl.style.background = 'var(--up)';
+  } else {
+    totalEl.style.color = 'var(--warn)';
+    barEl.style.background = 'var(--warn)';
+  }
+}
+
+// ====== SAVE SETTINGS ======
+function saveSettings() {
+  // Collect all settings
+  const settings = {
+    displayName: document.getElementById('displayName')?.value,
+    email: document.getElementById('userEmail')?.value,
+    investExp: document.getElementById('investExp')?.value,
+    weights: {
+      f1: document.getElementById('wF1')?.value,
+      f2: document.getElementById('wF2')?.value,
+      f3: document.getElementById('wF3')?.value,
+      f4: document.getElementById('wF4')?.value,
+      f5: document.getElementById('wF5')?.value,
+    },
+    s4Threshold: document.getElementById('s4Threshold')?.value,
+    promptStyle: document.getElementById('promptStyle')?.value,
+    outputLang: document.getElementById('outputLang')?.value,
+    themeMode: document.getElementById('themeMode')?.value,
+    sidebarDefault: document.getElementById('sidebarDefault')?.value,
+    defaultPage: document.getElementById('defaultPage')?.value,
+    aRedGreen: document.getElementById('colorToggle')?.classList.contains('active'),
+    mfa: document.getElementById('mfaToggle')?.classList.contains('active'),
+    sessionLock: document.getElementById('sessionToggle')?.classList.contains('active'),
+  };
+
+  localStorage.setItem('5factorSettings', JSON.stringify(settings));
+
+  // Show toast
+  showToast('设置已保存', 'success');
+}
+
+// ====== RESET SETTINGS ======
+function resetSettings() {
+  if (!confirm('确定要恢复默认设置吗？当前配置将被覆盖。')) return;
+  localStorage.removeItem('5factorSettings');
+
+  // Reset sliders
+  document.getElementById('wF1').value = 30;
+  document.getElementById('wF2').value = 15;
+  document.getElementById('wF3').value = 15;
+  document.getElementById('wF4').value = 25;
+  document.getElementById('wF5').value = 15;
+  ['vF1','vF2','vF3','vF4','vF5'].forEach((id, i) => {
+    const vals = [30,15,15,25,15];
+    document.getElementById(id).textContent = vals[i] + '%';
+  });
+  validateWeights();
+
+  showToast('已恢复默认设置', 'info');
+}
+
+// ====== TOAST ======
+function showToast(msg, type) {
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position:fixed; top:20px; right:20px; z-index:9999;
+    padding:10px 18px; border-radius:8px; font-size:13px; font-weight:500;
+    background:${type==='success'?'#34C759':type==='error'?'#FF3B30':'#0071E3'};
+    color:#fff; box-shadow:var(--shadow-dropdown);
+    animation:fadeIn 0.3s ease;
+  `;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; }, 2000);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+// ====== CLEAR CACHE MODAL ======
+function showClearCacheModal() {
+  if (confirm('清理缓存将删除本地存储的行情数据、分析结果和临时文件，但不会影响您的账户数据和自选股列表。操作不可撤销。')) {
+    showToast('缓存已清理，释放 128MB 空间', 'success');
+  }
+}
+
+// ====== KEYBOARD SHORTCUTS ======
+document.addEventListener('keydown', function(e) {
+  // Ctrl+S save
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    saveSettings();
+  }
+});
+
+// ====== LOAD SAVED SETTINGS ======
+document.addEventListener('DOMContentLoaded', function() {
+  lucide.createIcons();
+  const saved = localStorage.getItem('5factorSettings');
+  if (saved) {
+    try {
+      const s = JSON.parse(saved);
+      if (s.displayName) document.getElementById('displayName').value = s.displayName;
+      if (s.email) document.getElementById('userEmail').value = s.email;
+      if (s.investExp) document.getElementById('investExp').value = s.investExp;
+      if (s.themeMode) document.getElementById('themeMode').value = s.themeMode;
+      if (s.sidebarDefault) document.getElementById('sidebarDefault').value = s.sidebarDefault;
+      if (s.defaultPage) document.getElementById('defaultPage').value = s.defaultPage;
+      if (s.promptStyle) document.getElementById('promptStyle').value = s.promptStyle;
+      if (s.outputLang) document.getElementById('outputLang').value = s.outputLang;
+      if (s.s4Threshold) document.getElementById('s4Threshold').value = s.s4Threshold;
+      if (s.weights) {
+        document.getElementById('wF1').value = s.weights.f1 || 30;
+        document.getElementById('wF2').value = s.weights.f2 || 15;
+        document.getElementById('wF3').value = s.weights.f3 || 15;
+        document.getElementById('wF4').value = s.weights.f4 || 25;
+        document.getElementById('wF5').value = s.weights.f5 || 15;
+        ['vF1','vF2','vF3','vF4','vF5'].forEach((id, i) => {
+          const vals = [s.weights.f1||30, s.weights.f2||15, s.weights.f3||15, s.weights.f4||25, s.weights.f5||15];
+          document.getElementById(id).textContent = vals[i] + '%';
+        });
+        validateWeights();
+      }
+      if (s.mfa === false) document.getElementById('mfaToggle')?.classList.remove('active');
+      if (s.sessionLock === false) document.getElementById('sessionToggle')?.classList.remove('active');
+      if (s.aRedGreen === false) document.getElementById('colorToggle')?.classList.remove('active');
+    } catch (e) { console.error('Failed to load settings:', e); }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI投研对话 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7;
+  --bg-secondary: #FFFFFF;
+  --card: #FFFFFF;
+  --card-hover: #F5F5F7;
+  --border: #E5E5EA;
+  --border-light: #E5E5EA;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #C7C7CC;
+  --accent: #0071E3;
+  --accent-hover: #0071E3;
+  --accent-soft: rgba(0,113,227,0.15);
+  --up: #FF3B30;
+  --down: #34C759;
+  --warning: #FF9500;
+  --purple: #AF52DE;
+  --teal: #5AC8FA;
+  --tag-green-bg: rgba(52,199,89,0.15);
+  --tag-green-text: #34C759;
+  --tag-blue-bg: rgba(0,113,227,0.15);
+  --tag-blue-text: #0071E3;
+  --tag-yellow-bg: rgba(255,149,0,0.15);
+  --tag-yellow-text: #FF9500;
+  --tag-red-bg: rgba(255,59,48,0.15);
+  --tag-red-text: #FF3B30;
+  --tag-purple-bg: rgba(175,82,222,0.15);
+  --tag-purple-text: #AF52DE;
+  --hover-bg: #F5F5F7;
+  --active-bg: rgba(0,113,227,0.15);
+  --bubble-user: #0071E3;
+  --bubble-ai: #FFFFFF;
+  --scrollbar: #E5E5EA;
+  --scrollbar-track: transparent;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  height: 100%;
+}
+body {
+  display: flex;
+  min-height: 100vh;
+  padding: 24px;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+
+/* iframe embed adjustments */
+html.iframe-embed body { min-height: 100vh; padding: 0; flex-direction: column; }
+html.iframe-embed .chat-page-title { display: block !important; padding: 20px 24px 0; }
+html.iframe-embed .chat-wrapper { display: flex; flex: 1; padding: 0 24px 24px; }
+html.iframe-embed .skill-panel { height: 80vh; border-radius: 12px 0 0 12px; }
+html.iframe-embed .chat-area { height: 80vh; border-radius: 0 12px 12px 0; }
+
+/* ===== Left Skill Panel ===== */
+.skill-panel {
+  width: 240px;
+  min-width: 240px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  overflow-y: auto;
+}
+.skill-panel::-webkit-scrollbar { width: 4px; }
+.skill-panel::-webkit-scrollbar-track { background: transparent; }
+.skill-panel::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 2px; }
+.skill-panel-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.skill-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.skill-panel-header i { color: var(--accent); }
+.skill-import-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.skill-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-section-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 4px;
+}
+
+.skill-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.skill-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-color: #D1D1D6;
+}
+.skill-card.disabled {
+  opacity: 0.7;
+}
+.skill-card.disabled:hover {
+  opacity: 0.9;
+}
+
+.skill-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.skill-card-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.skill-card-name i { color: var(--text-secondary); width: 14px; height: 14px; }
+
+.skill-card-desc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding: 0 2px;
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  height: 20px;
+}
+.skill-tag-enabled {
+  background: var(--tag-green-bg);
+  color: var(--tag-green-text);
+}
+.skill-tag-import {
+  background: var(--hover-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.skill-panel-footer {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.btn-import-skill {
+  width: 100%;
+  justify-content: center;
+  background: transparent;
+  border: 1px dashed var(--border);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-import-skill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--active-bg);
+}
+
+/* ===== Right Chat Area ===== */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg-secondary);
+  overflow: hidden;
+  height: 80vh;
+  border-radius: 0 12px 12px 0;
+  border: 1px solid var(--border);
+  border-left: none;
+}
+
+/* Chat Messages */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.chat-messages::-webkit-scrollbar { width: 6px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+
+/* Message Bubbles */
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 88%;
+}
+.message-row.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.message-row.ai {
+  align-self: flex-start;
+}
+
+.message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.message-avatar.user {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.message-avatar.ai {
+  background: var(--accent);
+  color: #fff;
+}
+
+.chat-bubble {
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.chat-bubble.user {
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.chat-bubble.ai {
+  background: var(--bubble-ai);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-bottom-left-radius: 4px;
+}
+.chat-bubble.ai .ai-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.chat-bubble.ai .ai-header i { color: var(--accent); width: 14px; height: 14px; }
+
+/* ===== Enabled Skills Bar (NEW) ===== */
+.enabled-skills-bar {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.enabled-skills-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-right: 4px;
+}
+.enabled-skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-soft);
+  user-select: none;
+}
+.enabled-skill-tag i { width: 10px; height: 10px; }
+
+/* ===== Model Selector Bar ===== */
+.model-selector-bar {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.model-selector-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.model-selector-label i { width: 14px; height: 14px; }
+
+.model-mode-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+}
+.model-mode-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: color 0.15s;
+}
+.model-mode-label:hover { color: var(--text-primary); }
+.model-mode-label input[type="radio"] {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+.model-mode-label.active { color: var(--accent); font-weight: 500; }
+
+.model-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.model-chip {
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+.model-chip:hover {
+  border-color: var(--border-light);
+  color: var(--text-primary);
+}
+.model-chip.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.model-chip .chip-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+.model-chip.active .chip-indicator {
+  background: var(--accent);
+}
+.model-chip .chip-count {
+  font-size: 10px;
+  background: var(--accent);
+  color: #fff;
+  padding: 1px 5px;
+  border-radius: 8px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ===== Chat Input Bar ===== */
+.chat-input-bar {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.chat-input-bar input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+  background: var(--card);
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+.chat-input-bar input::placeholder { color: var(--text-tertiary); }
+.chat-input-bar input:focus {
+  background: var(--card-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+}
+.mention-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--accent-soft);
+  color: var(--accent);
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+/* ===== Components ===== */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  height: 20px;
+}
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--active-bg);
+}
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-icon:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+.btn-icon i { width: 16px; height: 16px; }
+
+.score-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 10px 0;
+}
+.score-card .score-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.score-card .score-big {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.score-card .score-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.radar-small { width: 100%; height: 180px; margin: 8px 0; }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+.data-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+.data-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+}
+.data-table tr:hover { background: var(--hover-bg); }
+
+.welcome-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 8px;
+}
+.welcome-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.welcome-card h3 i { color: var(--accent); width: 18px; height: 18px; }
+.welcome-card ul {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.9;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.welcome-card ul li { cursor: pointer; transition: color 0.15s; }
+.welcome-card ul li:hover { color: var(--accent); }
+
+/* Consensus stats bar */
+.consensus-bar {
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--active-bg);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.consensus-bar strong { color: var(--text-primary); }
+
+/* Skill citation tag in AI messages */
+.skill-citation {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.skill-citation i { width: 12px; height: 12px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  body { padding: 0; }
+  .skill-panel { display: none; border-radius: 0; }
+  .chat-area { border-radius: 0; height: 80vh; border-left: 1px solid var(--border); }
+  .chat-messages { padding: 16px; }
+  .model-selector-bar { padding: 10px 16px; }
+  .chat-input-bar { padding: 10px 16px; }
+}
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');</script>
+
+<!-- Page Title (iframe mode) -->
+<div class="chat-page-title" style="display:none;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div>
+      <div style="font-size:28px;font-weight:700;color:var(--navy);letter-spacing:-0.02em;line-height:1.2;">AI投研对话</div>
+      <div style="font-size:14px;color:var(--text-secondary);margin-top:4px;">选择技能库 + 配置模型 → 基于您的私域知识库多模型协同问答</div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-outline btn-sm" onclick="clearChat()"><i data-lucide="trash-2" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:4px;"></i>清空对话</button>
+      <button class="btn-primary btn-sm"><i data-lucide="download" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:4px;"></i>导出记录</button>
+    </div>
+  </div>
+</div>
+
+<!-- Chat Wrapper -->
+<div class="chat-wrapper">
+
+<!-- ===== LEFT: Skill Panel ===== -->
+<aside class="skill-panel">
+  <div class="skill-panel-header">
+    <div class="skill-panel-header-left">
+      <i data-lucide="box" style="width:18px;height:18px;"></i>
+      技能库
+    </div>
+    <span class="skill-import-count">已导入 4/7</span>
+  </div>
+  <div class="skill-list">
+    <!-- 已启用 -->
+    <div class="skill-section-title">已启用</div>
+    <div class="skill-card enabled" data-skill="earnings" onclick="toggleSkillEnabled(this)">
+      <div class="skill-card-header">
+        <div class="skill-card-name">
+          <i data-lucide="clipboard-list" style="width:14px;height:14px;"></i> 财报分析
+        </div>
+        <span class="skill-tag skill-tag-enabled">已启用</span>
+      </div>
+      <div class="skill-card-desc">4阶段12步深度分析：业务→财务→风险→对比</div>
+    </div>
+    <div class="skill-card enabled" data-skill="scoring" onclick="toggleSkillEnabled(this)">
+      <div class="skill-card-header">
+        <div class="skill-card-name">
+          <i data-lucide="bar-chart-3" style="width:14px;height:14px;"></i> 五因子评分
+        </div>
+        <span class="skill-tag skill-tag-enabled">已启用</span>
+      </div>
+      <div class="skill-card-desc">F1-F5五维量化评分 + 三级趋势共振 + 信号分类</div>
+    </div>
+    <div class="skill-card enabled" data-skill="valuation" onclick="toggleSkillEnabled(this)">
+      <div class="skill-card-header">
+        <div class="skill-card-name">
+          <i data-lucide="scale" style="width:14px;height:14px;"></i> 估值检查
+        </div>
+        <span class="skill-tag skill-tag-enabled">已启用</span>
+      </div>
+      <div class="skill-card-desc">多维度估值对比：PE/PB/PS/PEG/DCF模型</div>
+    </div>
+    <div class="skill-card enabled" data-skill="trend" onclick="toggleSkillEnabled(this)">
+      <div class="skill-card-header">
+        <div class="skill-card-name">
+          <i data-lucide="trending-up" style="width:14px;height:14px;"></i> 趋势分析
+        </div>
+        <span class="skill-tag skill-tag-enabled">已启用</span>
+      </div>
+      <div class="skill-card-desc">MA/MACD/RSI/BOLL/KDJ 多指标综合分析</div>
+    </div>
+
+    <!-- 未导入 -->
+    <div class="skill-section-title">未导入</div>
+    <div class="skill-card disabled" data-skill="sentiment" onclick="importSkill(this)">
+      <div class="skill-card-header">
+        <div class="skill-card-name">
+          <i data-lucide="activity" style="width:14px;height:14px;"></i> 舆情监测
+        </div>
+        <span class="skill-tag skill-tag-import">点击导入</span>
+      </div>
+      <div class="skill-card-desc">实时新闻情绪追踪 + 社交媒体热度分析</div>
+    </div>
+    <div class="skill-card disabled" data-skill="report-quick" onclick="importSkill(this)">
+      <div class="skill-card-header">
+        <div class="skill-card-name">
+          <i data-lucide="file-text" style="width:14px;height:14px;"></i> 研报速读
+        </div>
+        <span class="skill-tag skill-tag-import">点击导入</span>
+      </div>
+      <div class="skill-card-desc">机构研报智能摘要 + 评级跟踪 + 目标价对比</div>
+    </div>
+    <div class="skill-card disabled" data-skill="announcement" onclick="importSkill(this)">
+      <div class="skill-card-header">
+        <div class="skill-card-name">
+          <i data-lucide="bell" style="width:14px;height:14px;"></i> 公告追踪
+        </div>
+        <span class="skill-tag skill-tag-import">点击导入</span>
+      </div>
+      <div class="skill-card-desc">上市公司公告实时监控 + 重要事件自动提炼</div>
+    </div>
+  </div>
+  <div class="skill-panel-footer">
+    <button class="btn-import-skill">
+      <i data-lucide="plus" style="width:14px;height:14px;"></i> 导入自定义技能
+    </button>
+  </div>
+</aside>
+
+<!-- ===== RIGHT: Chat Area ===== -->
+<div class="chat-area">
+  <!-- Chat Messages -->
+  <div class="chat-messages" id="chatMessages">
+    <!-- Welcome -->
+    <div class="message-row ai">
+      <div class="message-avatar ai">AI</div>
+      <div>
+        <div class="chat-bubble ai">
+          <div class="ai-header">
+            <i data-lucide="bot" style="width:14px;height:14px;"></i>
+            <span>金融投资AI助手</span>
+          </div>
+          <div class="welcome-card">
+            <h3><i data-lucide="sparkles" style="width:18px;height:18px;"></i> 你好，我是AI投研助手</h3>
+            <p style="color:var(--text-secondary); font-size:13px; margin-bottom:10px;">我已经为你加载了4项投研技能。你可以直接提问，或使用 <code style="background:var(--bg);padding:1px 6px;border-radius:4px;font-size:12px;">@</code> 引用特定技能。</p>
+            <ul>
+              <li onclick="fillInput('分析一下NVDA的五因子评分')">"分析一下NVDA的五因子评分"</li>
+              <li onclick="fillInput('半导体行业最新趋势如何？')">"半导体行业最新趋势如何？"</li>
+              <li onclick="fillInput('对比TSMC和三星的估值水平')">"对比TSMC和三星的估值水平"</li>
+              <li onclick="fillInput('我的持仓组合风险如何？')">"我的持仓组合风险如何？"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Round 1: User -->
+    <div class="message-row user">
+      <div class="message-avatar user">U</div>
+      <div class="chat-bubble user">
+        帮我分析一下 NVDA 的五因子评分，技术面是不是还在主升浪？
+      </div>
+    </div>
+
+    <!-- Round 1: AI -->
+    <div class="message-row ai">
+      <div class="message-avatar ai">AI</div>
+      <div>
+        <div class="chat-bubble ai">
+          <div class="ai-header">
+            <i data-lucide="bot" style="width:14px;height:14px;"></i>
+            <span>金融投资AI助手 · DeepSeek-V3</span>
+          </div>
+          <div class="skill-citation">
+            <i data-lucide="zap" style="width:12px;height:12px;"></i>
+            已调用：五因子评分 Skill
+          </div>
+          <div>
+            <strong style="color:var(--text-primary);">NVIDIA (NVDA)</strong> 当前五因子评分如下：<br><br>
+            <div class="score-card">
+              <div class="score-header">
+                <div><div class="score-big">64.4</div><div class="score-label">FinalScore</div></div>
+                <div><div style="font-size:14px; font-weight:600;">S4 主升浪全共振</div><div style="font-size:11px; color:var(--text-secondary);">日+周+月全部上行</div></div>
+                <div><span class="tag tag-green">Core</span><div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">建议仓位</div></div>
+              </div>
+              <div id="radarChat" class="radar-small"></div>
+              <table class="data-table">
+                <tr><th>因子</th><th>得分</th><th>权重</th><th>加权</th><th>状态</th></tr>
+                <tr><td>F1 资金</td><td class="tabular-nums">26</td><td>30%</td><td class="tabular-nums">7.8</td><td><span class="tag tag-red">偏弱</span></td></tr>
+                <tr><td>F2 宏观</td><td class="tabular-nums">54</td><td>15%</td><td class="tabular-nums">8.1</td><td><span class="tag tag-yellow">中性</span></td></tr>
+                <tr><td>F3 情绪</td><td class="tabular-nums">50</td><td>15%</td><td class="tabular-nums">7.5</td><td><span class="tag tag-yellow">中性</span></td></tr>
+                <tr><td>F4 基本面</td><td class="tabular-nums">100</td><td>25%</td><td class="tabular-nums">25.0</td><td><span class="tag tag-green">满分</span></td></tr>
+                <tr><td>F5 技术</td><td class="tabular-nums">100</td><td>15%</td><td class="tabular-nums">15.0</td><td><span class="tag tag-green">满分</span></td></tr>
+              </table>
+            </div>
+            <strong>技术面判断：</strong><br>
+            <ul style="padding-left:18px; line-height:1.8; color:var(--text-secondary);">
+              <li>F5 技术面得分 <span class="tabular-nums">100</span>（满分），RSI 处于 65-70 健康区间，MACD 持续扩张</li>
+              <li>日线/周线/月线三级趋势全部上行，确认 <strong style="color:var(--text-primary);">S4 主升浪全共振</strong> 信号</li>
+              <li>均线排列：MA5 > MA10 > MA20 > MA60，多头排列完好</li>
+              <li>风险提示：F1 资金面仅 26 分，因体量巨大导致量比偏低，但非致命缺陷</li>
+            </ul><br>
+            <strong style="color:var(--text-primary);">结论：</strong><span style="color:var(--text-secondary);">技术面确实处于主升浪，F4 和 F5 双满分支撑强势格局。F1 偏低纯粹因为体量巨大导致的流动性稀释，不影响核心趋势判断。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Round 2: User -->
+    <div class="message-row user">
+      <div class="message-avatar user">U</div>
+      <div class="chat-bubble user">
+        <span class="mention-chip">@五因子评分</span>
+        <span class="mention-chip">@估值检查</span>
+        那其他模型怎么看？估值还合理吗？
+      </div>
+    </div>
+
+    <!-- Round 2: AI (Multi-model consensus) -->
+    <div class="message-row ai">
+      <div class="message-avatar ai">AI</div>
+      <div>
+        <div class="chat-bubble ai">
+          <div class="ai-header">
+            <i data-lucide="bot" style="width:14px;height:14px;"></i>
+            <span>金融投资AI助手 · 9模型共识</span>
+          </div>
+          <div class="skill-citation">
+            <i data-lucide="zap" style="width:12px;height:12px;"></i>
+            已调用：多模型共识模式 · 估值检查 Skill
+          </div>
+          <div>
+            <strong style="color:var(--text-primary);">9个LLM模型独立研判 NVDA：</strong><br><br>
+            <table class="data-table">
+              <tr><th>模型</th><th>评分</th><th>仓位</th><th>核心观点</th></tr>
+              <tr><td>GPT-5.5</td><td class="tabular-nums">94</td><td><span class="tag tag-green">Core</span></td><td>AI生态与CUDA护城河极强</td></tr>
+              <tr><td>GLM-4.7</td><td class="tabular-nums">95</td><td><span class="tag tag-green">Core</span></td><td>行业绝对核心，F1低因体量</td></tr>
+              <tr><td>MiniMax</td><td class="tabular-nums">92</td><td><span class="tag tag-green">Core</span></td><td>AI时代核心标的，五因子匹配</td></tr>
+              <tr><td>Gemini-3</td><td class="tabular-nums">90</td><td><span class="tag tag-green">Core</span></td><td>量化F1低因高位震荡洗盘</td></tr>
+              <tr><td>豆包2.0</td><td class="tabular-nums">90</td><td><span class="tag tag-green">Core</span></td><td>S4全共振，AI绝对领导者</td></tr>
+              <tr><td>Qwen3.6</td><td class="tabular-nums">85</td><td><span class="tag tag-green">Core</span></td><td>AI算力基础设施全产业链龙头</td></tr>
+              <tr><td>Kimi-k2.6</td><td class="tabular-nums">82</td><td><span class="tag tag-green">Core</span></td><td>不可替代，但需警惕资金风险</td></tr>
+              <tr><td>Mimo-v2.5</td><td class="tabular-nums">78</td><td><span class="tag tag-green">Core</span></td><td>S4全共振，F4/F5满分</td></tr>
+              <tr><td>DeepSeek-V3</td><td class="tabular-nums">75</td><td><span class="tag tag-green">Core</span></td><td>S4日线仅持续1天，信号极新鲜</td></tr>
+            </table>
+            <div class="consensus-bar">
+              <strong>共识统计：</strong>去掉最高分95和最低分75，剩余7个均值 = <strong style="color:var(--accent);">87.29</strong>，极差 = 20，方差较小，<strong style="color:var(--up);">高共识</strong>。
+            </div>
+            <br>
+            <strong style="color:var(--text-primary);">估值分析：</strong><br>
+            <ul style="padding-left:18px; line-height:1.8; color:var(--text-secondary);">
+              <li><strong style="color:var(--text-primary);">当前PE(TTM):</strong> 62.3x，高于半导体行业均值45x</li>
+              <li><strong style="color:var(--text-primary);">PEG:</strong> 1.15，处于合理区间（<1.5为合理）</li>
+              <li><strong style="color:var(--text-primary);">PS:</strong> 28x，反映高成长性溢价</li>
+              <li><strong style="color:var(--text-primary);">DCF隐含价:</strong> $142，当前溢价约15%</li>
+            </ul><br>
+            <strong style="color:var(--text-primary);">分歧度：</strong><span style="color:var(--text-secondary);">低。9个模型全部给出 Core 仓位，估值普遍接受高溢价。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Enabled Skills Bar (NEW) ===== -->
+  <div class="enabled-skills-bar" id="enabledSkillsBar">
+    <span class="enabled-skills-label">已启用技能</span>
+    <span class="enabled-skill-tag"><i data-lucide="check" style="width:10px;height:10px;"></i> 财报分析</span>
+    <span class="enabled-skill-tag"><i data-lucide="check" style="width:10px;height:10px;"></i> 五因子评分</span>
+    <span class="enabled-skill-tag"><i data-lucide="check" style="width:10px;height:10px;"></i> 估值检查</span>
+    <span class="enabled-skill-tag"><i data-lucide="check" style="width:10px;height:10px;"></i> 趋势分析</span>
+  </div>
+
+  <!-- ===== Model Selector Bar ===== -->
+  <div class="model-selector-bar" id="modelSelectorBar">
+    <div class="model-selector-label">
+      <i data-lucide="cpu" style="width:14px;height:14px;"></i>
+      调用模型
+    </div>
+    <div class="model-mode-group">
+      <label class="model-mode-label active" id="modeSingle">
+        <input type="radio" name="modelMode" value="single" checked onchange="switchModelMode('single')">
+        单模型
+      </label>
+      <label class="model-mode-label" id="modeMulti">
+        <input type="radio" name="modelMode" value="multi" onchange="switchModelMode('multi')">
+        多模型共识
+      </label>
+    </div>
+    <div class="model-chips" id="modelChips">
+      <span class="model-chip active" data-model="deepseek" onclick="toggleModel(this)">
+        <span class="chip-indicator"></span>
+        DeepSeek-V3
+      </span>
+      <span class="model-chip" data-model="gpt4o" onclick="toggleModel(this)">
+        <span class="chip-indicator"></span>
+        GPT-4o
+      </span>
+      <span class="model-chip" data-model="claude" onclick="toggleModel(this)">
+        <span class="chip-indicator"></span>
+        Claude 4
+      </span>
+      <span class="model-chip" data-model="gemini" onclick="toggleModel(this)">
+        <span class="chip-indicator"></span>
+        Gemini 2.5
+      </span>
+      <span class="model-chip" data-model="kimi" onclick="toggleModel(this)">
+        <span class="chip-indicator"></span>
+        Kimi K2
+      </span>
+      <span class="model-chip" data-model="qwen" onclick="toggleModel(this)">
+        <span class="chip-indicator"></span>
+        Qwen3
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== Chat Input Bar ===== -->
+  <div class="chat-input-bar">
+    <button class="btn-icon" title="引用技能" onclick="toggleAtMenu()">
+      <i data-lucide="at-sign" style="width:16px;height:16px;"></i>
+    </button>
+    <input type="text" id="chatInput" placeholder="输入股票代码或问题，使用 @ 引用 Skill..." onkeydown="if(event.key==='Enter')sendMessage()">
+    <button class="btn-icon" title="上传附件">
+      <i data-lucide="paperclip" style="width:16px;height:16px;"></i>
+    </button>
+    <button class="btn-primary btn-sm" onclick="sendMessage()">
+      <i data-lucide="send" style="width:14px;height:14px;"></i>
+      发送
+    </button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ========== iframe detection ==========
+if (window.self !== window.top) {
+  document.documentElement.classList.add('iframe-embed');
+}
+
+// ========== Skill toggle / import ==========
+function toggleSkillEnabled(card) {
+  var tag = card.querySelector('.skill-tag');
+  if (card.classList.contains('enabled')) {
+    card.classList.remove('enabled');
+    card.classList.add('disabled');
+    tag.textContent = '已禁用';
+    tag.className = 'skill-tag skill-tag-import';
+  } else if (card.classList.contains('disabled') && tag.textContent === '已禁用') {
+    card.classList.remove('disabled');
+    card.classList.add('enabled');
+    tag.textContent = '已启用';
+    tag.className = 'skill-tag skill-tag-enabled';
+  }
+  updateEnabledSkillsBar();
+  updateImportCount();
+}
+
+function importSkill(card) {
+  card.classList.remove('disabled');
+  card.classList.add('enabled');
+  var tag = card.querySelector('.skill-tag');
+  tag.textContent = '已启用';
+  tag.className = 'skill-tag skill-tag-enabled';
+  card.onclick = function() { toggleSkillEnabled(card); };
+  updateEnabledSkillsBar();
+  updateImportCount();
+}
+
+function updateEnabledSkillsBar() {
+  var bar = document.getElementById('enabledSkillsBar');
+  var enabledCards = document.querySelectorAll('.skill-card.enabled');
+  var html = '<span class="enabled-skills-label">已启用技能</span>';
+  enabledCards.forEach(function(card) {
+    var name = card.querySelector('.skill-card-name').textContent.trim();
+    html += '<span class="enabled-skill-tag"><i data-lucide="check" style="width:10px;height:10px;"></i> ' + name + '</span>';
+  });
+  bar.innerHTML = html;
+  lucide.createIcons();
+}
+
+function updateImportCount() {
+  var total = document.querySelectorAll('.skill-card').length;
+  var enabled = document.querySelectorAll('.skill-card.enabled').length;
+  document.querySelector('.skill-import-count').textContent = '已导入 ' + enabled + '/' + total;
+}
+
+// ========== Model Selector Logic ==========
+var modelMode = 'single';
+var selectedModels = ['deepseek'];
+
+function switchModelMode(mode) {
+  modelMode = mode;
+  document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
+  document.getElementById('modeMulti').classList.toggle('active', mode === 'multi');
+
+  var chips = document.querySelectorAll('.model-chip');
+  if (mode === 'single') {
+    selectedModels = [selectedModels[0] || 'deepseek'];
+    chips.forEach(function(chip) {
+      var m = chip.getAttribute('data-model');
+      chip.classList.toggle('active', selectedModels.indexOf(m) !== -1);
+    });
+  }
+  updateChipCount();
+}
+
+function toggleModel(chip) {
+  var model = chip.getAttribute('data-model');
+  if (modelMode === 'single') {
+    selectedModels = [model];
+    document.querySelectorAll('.model-chip').forEach(function(c) {
+      c.classList.remove('active');
+    });
+    chip.classList.add('active');
+  } else {
+    var idx = selectedModels.indexOf(model);
+    if (idx !== -1) {
+      if (selectedModels.length > 1) {
+        selectedModels.splice(idx, 1);
+        chip.classList.remove('active');
+      }
+    } else {
+      selectedModels.push(model);
+      chip.classList.add('active');
+    }
+  }
+  updateChipCount();
+}
+
+function updateChipCount() {
+  if (modelMode === 'multi' && selectedModels.length > 1) {
+    var countBadge = document.querySelector('.model-chip-count');
+    if (!countBadge) {
+      countBadge = document.createElement('span');
+      countBadge.className = 'model-chip-count';
+      document.getElementById('modelSelectorBar').appendChild(countBadge);
+    }
+    countBadge.textContent = '已选 ' + selectedModels.length + ' 个';
+  } else {
+    var countBadge = document.querySelector('.model-chip-count');
+    if (countBadge) countBadge.remove();
+  }
+}
+
+// ========== Chat Input ==========
+function fillInput(text) {
+  document.getElementById('chatInput').value = text;
+  document.getElementById('chatInput').focus();
+}
+
+function sendMessage() {
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if (!text) return;
+
+  var messages = document.getElementById('chatMessages');
+  var userRow = document.createElement('div');
+  userRow.className = 'message-row user';
+  userRow.innerHTML = '<div class="message-avatar user">U</div><div class="chat-bubble user">' + escapeHtml(text) + '</div>';
+  messages.appendChild(userRow);
+
+  messages.scrollTop = messages.scrollHeight;
+  input.value = '';
+
+  setTimeout(function() {
+    var aiRow = document.createElement('div');
+    aiRow.className = 'message-row ai';
+    var modelLabel = modelMode === 'multi'
+      ? '多模型共识 (' + selectedModels.length + '模型)'
+      : getModelLabel(selectedModels[0]);
+    aiRow.innerHTML = '<div class="message-avatar ai">AI</div>' +
+      '<div><div class="chat-bubble ai">' +
+      '<div class="ai-header"><i data-lucide="bot" style="width:14px;height:14px;"></i><span>金融投资AI助手 · ' + modelLabel + '</span></div>' +
+      '<div style="color:var(--text-secondary);">正在分析中，请稍候...</div>' +
+      '</div></div>';
+    messages.appendChild(aiRow);
+    messages.scrollTop = messages.scrollHeight;
+    lucide.createIcons();
+  }, 400);
+}
+
+function getModelLabel(model) {
+  var labels = {
+    deepseek: 'DeepSeek-V3',
+    gpt4o: 'GPT-4o',
+    claude: 'Claude 4',
+    gemini: 'Gemini 2.5',
+    kimi: 'Kimi K2',
+    qwen: 'Qwen3'
+  };
+  return labels[model] || model;
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function toggleAtMenu() {
+  var input = document.getElementById('chatInput');
+  input.value = input.value + '@';
+  input.focus();
+}
+
+// ========== ECharts Radar ==========
+document.addEventListener('DOMContentLoaded', function() {
+  var chart = echarts.init(document.getElementById('radarChat'));
+  var option = {
+    radar: {
+      indicator: [
+        { name: 'F1资金', max: 100 },
+        { name: 'F2宏观', max: 100 },
+        { name: 'F3情绪', max: 100 },
+        { name: 'F4基本面', max: 100 },
+        { name: 'F5技术', max: 100 }
+      ],
+      radius: '65%',
+      axisName: { color: '#86868B', fontSize: 10 },
+      splitArea: { areaStyle: { color: ['#FFFFFF', '#F5F5F7'] } },
+      axisLine: { lineStyle: { color: '#E5E5EA' } },
+      splitLine: { lineStyle: { color: '#E5E5EA' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          value: [26, 54, 50, 100, 100],
+          name: 'NVDA',
+          areaStyle: { color: 'rgba(0,113,227,0.2)' },
+          lineStyle: { color: '#0071E3', width: 2 },
+          itemStyle: { color: '#0071E3' }
+        },
+        {
+          value: [45, 48, 50, 65, 70],
+          name: '行业均值',
+          lineStyle: { color: '#86868B', width: 1, type: 'dashed' },
+          itemStyle: { color: '#86868B' },
+          areaStyle: { color: 'transparent' }
+        }
+      ]
+    }]
+  };
+  chart.setOption(option);
+  lucide.createIcons();
+
+  var messages = document.getElementById('chatMessages');
+  messages.scrollTop = messages.scrollHeight;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赛道分析 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --card-hover: #F5F5F7;
+  --text: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #C7C7CC;
+  --border: #E5E5EA;
+  --accent: #0071E3;
+  --accent-light: #5AC8FA;
+  --accent-bg: #F0F7FF;
+  --navy: #1D1D1F;
+  --up: #FF3B30;
+  --down: #34C759;
+  --hover-bg: #F5F5F7;
+  --active-bg: #0071E31A;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  font-variant-numeric: tabular-nums;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.sidebar {
+  width: 240px; min-width: 240px; background: var(--card); color: var(--text);
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+  border-right: 1px solid var(--border);
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.sidebar-logo .brand-icon { width: 28px; height: 28px; background: linear-gradient(135deg, #0071E3, #5AC8FA); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; }
+.sidebar-logo .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+.sidebar-logo .brand-text .main { font-size: 15px; font-weight: 700; }
+.sidebar-logo .brand-text .sub { font-size: 10px; color: var(--accent); font-weight: 500; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 16px 16px 8px; color: var(--text-secondary); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border-left: 4px solid transparent; font-size: 14px; font-weight: 500; }
+.nav-item:hover { background: var(--hover-bg); color: var(--text); }
+.nav-item.active { background: var(--active-bg); color: var(--accent); border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+.nav-sub { padding: 8px 14px 8px 46px; display: flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; font-size: 13px; transition: all 0.15s; border-left: 4px solid transparent; }
+.nav-sub:hover { color: var(--text); background: var(--hover-bg); }
+.nav-sub.active { color: var(--accent); font-weight: 500; background: var(--active-bg); border-left-color: var(--accent); }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: #F5F5F7; border-radius: 10px; padding: 7px 14px; gap: 8px; height: 40px; transition: all 0.15s; border: 1px solid transparent; }
+.search:focus-within { border-color: var(--accent); background: #E5E5EA; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text); font-family: inherit; }
+.search input::placeholder { color: #86868B; }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+.content { padding: 24px 32px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+.card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--navy); line-height: 1.4; }
+.tag { display: inline-flex; align-items: center; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; }
+.tag-success { background: #34C759; color: #000; }
+.tag-primary { background: #0071E3; color: #fff; }
+.tag-warning { background: #FF9F0A; color: #000; }
+.tag-danger { background: #FF3B30; color: #fff; }
+.tag-neutral { background: #E5E5EA; color: #1D1D1F; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); background: #F5F5F7; color: var(--text-secondary); font-size: 12px; font-weight: 500; letter-spacing: 0.01em; }
+.data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; color: var(--text); }
+.data-table tbody tr:hover { background: #F5F5F7; }
+.data-table tbody tr.selected { border-left: 4px solid var(--accent); }
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; transition: all 0.3s ease; }
+.stat-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.stat-value { font-size: 32px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1.1; letter-spacing: -0.02em; }
+.stat-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); margin-top: 6px; letter-spacing: 0.02em; }
+.stat-change { font-size: 12px; font-weight: 600; margin-top: 4px; }
+.up { color: var(--up); }
+.down { color: var(--down); }
+.tab-row { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+.tab-btn { padding: 10px 20px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn:hover { color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.radar-box { width: 100%; height: 280px; }
+.progress-bar { width: 100%; height: 6px; background: #E5E5EA; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; }
+.heat-cell { text-align: center; font-size: 11px; font-weight: 500; padding: 6px 4px; border-radius: 4px; }
+.heat-red { background: #FF3B301A; color: #FF3B30; }
+.heat-green { background: #34C7591A; color: #34C759; }
+.heat-neutral { background: #E5E5EA; color: #86868B; }
+.conduction-flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.conduction-step { padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; background: #F5F5F7; color: #1D1D1F; border: 1px solid #E5E5EA; }
+.conduction-arrow { color: var(--text-secondary); font-size: 14px; }
+.badge { display: inline-flex; align-items: center; padding: 0 6px; border-radius: 4px; font-size: 10px; font-weight: 500; margin-left: 4px; height: 16px; }
+.badge-high { background: #34C759; color: #000; }
+.badge-mid { background: #FF9F0A; color: #000; }
+.badge-low { background: #FF3B30; color: #fff; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* New Module Styles */
+.module-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 16px; }
+.module-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: all 0.3s ease; }
+.module-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.module-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.module-icon { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #0071E3, #5AC8FA); display: flex; align-items: center; justify-content: center; color: #fff; }
+.module-title { font-size: 16px; font-weight: 600; color: var(--text); }
+.module-body { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+.module-body strong { color: var(--text); }
+.pie-box { width: 100%; height: 240px; }
+.bar-box { width: 100%; height: 240px; }
+.relation-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.relation-item:last-child { border-bottom: none; }
+.relation-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.relation-name { font-weight: 600; color: var(--text); font-size: 13px; }
+.relation-desc { font-size: 12px; color: var(--text-secondary); }
+.relation-badge { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; margin-left: auto; flex-shrink: 0; }
+.evidence-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.evidence-item:last-child { border-bottom: none; }
+.evidence-num { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.evidence-text { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.evidence-text a { color: var(--accent); text-decoration: none; }
+.evidence-text a:hover { text-decoration: underline; }
+.share-bar { display: flex; align-items: center; gap: 8px; }
+.share-segment { height: 24px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #fff; display: flex; align-items: center; justify-content: center; padding: 0 8px; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .stat-grid { grid-template-columns: repeat(3, 1fr); }
+  .module-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); position: fixed; left: 0; top: 0; z-index: 100; }
+  .sidebar.mobile-open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .content { padding: 16px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-2col { grid-template-columns: 1fr !important; }
+  .grid-3col { grid-template-columns: 1fr !important; }
+  .tab-btn { padding: 10px 14px; font-size: 13px; }
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand-icon">5</div>
+    <div class="brand-text">
+      <span class="main">5Factor AI</span>
+      <span class="sub">智投AI</span>
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span> 行情与数据</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="newspaper" style="width:20px;height:20px;"></i></span> 内容与信息</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="target" style="width:20px;height:20px;"></i></span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="network" style="width:20px;height:20px;"></i></span> 产业链与知识</div>
+    <div class="nav-sub">产业链全景</div>
+    <div class="nav-sub active">赛道详情</div>
+    <div class="nav-sub">个股深度</div>
+    <div class="nav-sub">概念卡片</div>
+    <div class="nav-sub">知识库</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="users" style="width:20px;height:20px;"></i></span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <i data-lucide="search" style="width:16px;height:16px;color:#86868B;"></i>
+      <input type="text" placeholder="搜索赛道...">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h1 style="font-size:28px; font-weight:700; color:var(--text); letter-spacing:-0.02em; line-height:1.2;">HBM高带宽存储赛道</h1>
+        <p style="font-size:14px; color:var(--text-secondary); margin-top:6px;">AI算力 ▸ L2 设备与零部件 · 当前热度: <span class="up"><i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px;"></i><i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px;"></i><i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px;"></i> 极高</span></p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <span class="tag tag-success">置信度: 高</span>
+        <span class="tag tag-primary">审核通过</span>
+      </div>
+    </div>
+
+    <!-- Tab -->
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="overview">基本面总览</button>
+      <button class="tab-btn" data-tab="tech">技术面分析</button>
+      <button class="tab-btn" data-tab="capital">资金面分析</button>
+      <button class="tab-btn" data-tab="stocks">核心标的</button>
+    </div>
+
+    <!-- === PANEL: OVERVIEW === -->
+    <div id="overview" class="tab-panel active fade-in">
+      <!-- Stats Row -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-value">$18.0B</div>
+          <div class="stat-label">TAM 2026</div>
+          <div class="stat-change up">+45% CAGR</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">68%</div>
+          <div class="stat-label">CAGR 23-26</div>
+          <div class="stat-change up">行业高速增长</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">50-60%</div>
+          <div class="stat-label">毛利率</div>
+          <div class="stat-change up">高附加值</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">20%</div>
+          <div class="stat-label">AI服务器成本占比</div>
+          <div class="stat-change up">逐年提升</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">寡头玩家</div>
+          <div class="stat-change">CR3 = 100%</div>
+        </div>
+      </div>
+
+      <!-- Module 1: 定位与定义 -->
+      <div class="module-card" style="margin-bottom:16px;">
+        <div class="module-header">
+          <div class="module-icon"><i data-lucide="map-pin" style="width:18px;height:18px;"></i></div>
+          <div class="module-title">定位与定义</div>
+        </div>
+        <div class="module-body">
+          <p style="margin-bottom:12px;"><strong>HBM（High Bandwidth Memory，高带宽内存）</strong>通过<strong>硅通孔（TSV）技术垂直堆叠多层DRAM芯片</strong>，带宽比DDR5高10-20倍，功耗降低60%，是AI芯片不可或缺的核心内存。</p>
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px;">
+            <div style="background: #F5F5F7; border-radius:12px; padding:16px; text-align:center;">
+              <i data-lucide="layers" style="width:24px;height:24px;color:#0071E3;margin-bottom:8px;"></i>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">TSV垂直堆叠</div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">12-16层DRAM芯片堆叠</div>
+            </div>
+            <div style="background: #F5F5F7; border-radius:12px; padding:16px; text-align:center;">
+              <i data-lucide="zap" style="width:24px;height:24px;color:#FF9F0A;margin-bottom:8px;"></i>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">超高带宽</div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">带宽为DDR5的10-20倍</div>
+            </div>
+            <div style="background: #F5F5F7; border-radius:12px; padding:16px; text-align:center;">
+              <i data-lucide="battery-charging" style="width:24px;height:24px;color:#34C759;margin-bottom:8px;"></i>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">低功耗</div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">功耗降低约60%</div>
+            </div>
+          </div>
+          <div style="margin-top:16px; padding:12px; background:#0071E31A; border-radius:8px; border-left:3px solid var(--accent);">
+            <span style="font-size:12px; color:var(--text-secondary);">NVIDIA H100使用6颗HBM3提供3.35TB/s带宽。HBM4预计2026年量产——2048-bit接口替代1024-bit，带宽跃升至2TB/s+，单堆栈容量64GB。</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 2 & 3 Row -->
+      <div class="module-grid">
+        <!-- Module 2: 价值链分析 -->
+        <div class="module-card">
+          <div class="module-header">
+            <div class="module-icon"><i data-lucide="pie-chart" style="width:18px;height:18px;"></i></div>
+            <div class="module-title">价值链分析</div>
+          </div>
+          <div class="module-body">
+            <p style="margin-bottom:12px;">HBM在AI服务器中<strong>成本占比约20%</strong>，利润池占比<strong>12%</strong>。价值链高度集中于设计和封装环节。</p>
+            <div id="chart-value-chain" class="pie-box"></div>
+            <div style="margin-top:8px;">
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <span style="width:80px; font-size:12px; color:var(--text-secondary);">HBM设计</span>
+                <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:45%; background:#0071E3;"></div></div>
+                <span style="font-size:12px; font-variant-numeric:tabular-nums; width:40px; text-align:right; font-weight:600; color:var(--text);">45%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <span style="width:80px; font-size:12px; color:var(--text-secondary);">TSV/封装</span>
+                <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:30%; background:#5856D6;"></div></div>
+                <span style="font-size:12px; font-variant-numeric:tabular-nums; width:40px; text-align:right; font-weight:600; color:var(--text);">30%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                <span style="width:80px; font-size:12px; color:var(--text-secondary);">存储颗粒</span>
+                <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:18%; background:#5AC8FA;"></div></div>
+                <span style="font-size:12px; font-variant-numeric:tabular-nums; width:40px; text-align:right; font-weight:600; color:var(--text);">18%</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="width:80px; font-size:12px; color:var(--text-secondary);">测试/材料</span>
+                <div class="progress-bar" style="flex:1;"><div class="progress-fill" style="width:7%; background:#A2845E;"></div></div>
+                <span style="font-size:12px; font-variant-numeric:tabular-nums; width:40px; text-align:right; font-weight:600; color:var(--text);">7%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 3: 上下游与传导 -->
+        <div class="module-card">
+          <div class="module-header">
+            <div class="module-icon"><i data-lucide="git-branch" style="width:18px;height:18px;"></i></div>
+            <div class="module-title">上下游与传导</div>
+          </div>
+          <div class="module-body">
+            <div style="margin-bottom:16px;">
+              <div style="font-size:12px; font-weight:600; color:var(--accent); margin-bottom:8px; display:flex; align-items:center; gap:6px;"><i data-lucide="arrow-up-from-line" style="width:14px;height:14px;"></i> 上游供应</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <span class="tag tag-neutral">高纯硅料 (11N+)</span>
+                <span class="tag tag-neutral">DRAM颗粒</span>
+                <span class="tag tag-neutral">TSV刻蚀设备</span>
+                <span class="tag tag-neutral">微凸块材料</span>
+                <span class="tag tag-neutral">硅中介层</span>
+              </div>
+            </div>
+            <div style="margin-bottom:16px;">
+              <div style="font-size:12px; font-weight:600; color:var(--down); margin-bottom:8px; display:flex; align-items:center; gap:6px;"><i data-lucide="arrow-down-to-line" style="width:14px;height:14px;"></i> 下游客户</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <span class="tag tag-primary">NVIDIA GPU</span>
+                <span class="tag tag-primary">AMD GPU</span>
+                <span class="tag tag-primary">Google TPU</span>
+                <span class="tag tag-primary">Amazon Trainium</span>
+                <span class="tag tag-primary">AI服务器</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:12px; font-weight:600; color:#FF9F0A; margin-bottom:8px; display:flex; align-items:center; gap:6px;"><i data-lucide="arrow-left-right" style="width:14px;height:14px;"></i> 价格传导链</div>
+              <div class="conduction-flow">
+                <span class="conduction-step">HBM涨价</span>
+                <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+                <span class="conduction-step">GPU成本↑</span>
+                <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+                <span class="conduction-step">AI服务器价↑</span>
+                <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:14px;height:14px;"></i></span>
+                <span class="conduction-step">云服务价↑</span>
+              </div>
+              <p style="margin-top:10px; font-size:12px; color:var(--text-secondary);">HBM3E供不应求，SK Hynix独家供应NVIDIA → GPU产能受HBM供给约束 → AI服务器交付延迟 → 云厂商被迫提前锁定订单并接受涨价。HBM价格每涨10% ⇒ AI服务器总成本增加约2%。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 4: 竞争格局 -->
+      <div class="module-card" style="margin-bottom:16px;">
+        <div class="module-header">
+          <div class="module-icon"><i data-lucide="swords" style="width:18px;height:18px;"></i></div>
+          <div class="module-title">竞争格局</div>
+        </div>
+        <div class="module-body">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- 全球市场结构 -->
+            <div>
+              <div style="font-size:13px; font-weight:600; color:var(--text); margin-bottom:12px;">全球市场结构 (CR3 = 100%)</div>
+              <div id="chart-market-share" class="bar-box"></div>
+              <div style="margin-top:8px;">
+                <div class="share-bar">
+                  <div class="share-segment" style="width:62%; background:linear-gradient(90deg, #0071E3, #5AC8FA);">SK Hynix 62%</div>
+                  <div class="share-segment" style="width:21%; background:linear-gradient(90deg, #FF3B30, #FF6B6B);">Micron 21%</div>
+                  <div class="share-segment" style="width:17%; background:linear-gradient(90deg, #FF9F0A, #FFD60A);">Samsung 17%</div>
+                </div>
+              </div>
+            </div>
+            <!-- 进入壁垒 & 技术代差 -->
+            <div>
+              <div style="font-size:13px; font-weight:600; color:var(--text); margin-bottom:12px;">进入壁垒与技术代差</div>
+              <table class="data-table" style="font-size:13px;">
+                <tr>
+                  <td style="display:flex; align-items:center; gap:6px;"><i data-lucide="lock" style="width:14px;height:14px;color:var(--text-secondary);"></i> TSV硅通孔</td>
+                  <td style="text-align:right;"><span class="badge badge-high">极高</span></td>
+                  <td style="color:var(--text-secondary);">10μm级精度</td>
+                </tr>
+                <tr>
+                  <td style="display:flex; align-items:center; gap:6px;"><i data-lucide="layers" style="width:14px;height:14px;color:var(--text-secondary);"></i> 堆叠键合</td>
+                  <td style="text-align:right;"><span class="badge badge-high">极高</span></td>
+                  <td style="color:var(--text-secondary);">12-16层工艺</td>
+                </tr>
+                <tr>
+                  <td style="display:flex; align-items:center; gap:6px;"><i data-lucide="thermometer" style="width:14px;height:14px;color:var(--text-secondary);"></i> 散热管理</td>
+                  <td style="text-align:right;"><span class="badge badge-mid">高</span></td>
+                  <td style="color:var(--text-secondary);">堆叠越高散热越难</td>
+                </tr>
+                <tr>
+                  <td style="display:flex; align-items:center; gap:6px;"><i data-lucide="shield-check" style="width:14px;height:14px;color:var(--text-secondary);"></i> 客户认证</td>
+                  <td style="text-align:right;"><span class="badge badge-high">极高</span></td>
+                  <td style="color:var(--text-secondary);">周期2年+</td>
+                </tr>
+                <tr>
+                  <td style="display:flex; align-items:center; gap:6px;"><i data-lucide="cpu" style="width:14px;height:14px;color:var(--text-secondary);"></i> 技术代差</td>
+                  <td style="text-align:right;"><span class="badge badge-mid">1代+</span></td>
+                  <td style="color:var(--text-secondary);">SK Hynix领先三星</td>
+                </tr>
+              </table>
+              <div style="margin-top:12px; padding:10px; background:#FF3B301A; border-radius:8px; border-left:3px solid #FF3B30;">
+                <span style="font-size:12px; color:#FF3B30;"><strong>中国追赶:</strong> 长鑫存储DDR5量产，但HBM需要TSV硅通孔和混合键合技术，短期内无法自主供应，差距5-7年。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 5: 关键趋势 -->
+      <div class="module-card" style="margin-bottom:16px;">
+        <div class="module-header">
+          <div class="module-icon"><i data-lucide="trending-up" style="width:18px;height:18px;"></i></div>
+          <div class="module-title">关键趋势</div>
+        </div>
+        <div class="module-body">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+              <div style="font-size:13px; font-weight:600; color:var(--accent); margin-bottom:12px; display:flex; align-items:center; gap:6px;"><i data-lucide="flame" style="width:14px;height:14px;"></i> 技术趋势</div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="padding:12px; background: #F5F5F7; border-radius:10px;">
+                  <div style="font-weight:600; font-size:13px; color:var(--text);">HBM4 2026年量产</div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">2048-bit接口替代1024-bit，单堆栈带宽从1.2TB/s跃升至2TB/s+</div>
+                </div>
+                <div style="padding:12px; background: #F5F5F7; border-radius:10px;">
+                  <div style="font-weight:600; font-size:13px; color:var(--text);">堆叠层数持续增加</div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">从12层向16层、20层演进，单GPU HBM容量从80GB→192GB提升</div>
+                </div>
+                <div style="padding:12px; background: #F5F5F7; border-radius:10px;">
+                  <div style="font-weight:600; font-size:13px; color:var(--text);">CoWoS封装产能瓶颈</div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">TSMC CoWoS产能决定HBM交付上限，2025年翻倍仍供不应求</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px; font-weight:600; color:var(--down); margin-bottom:12px; display:flex; align-items:center; gap:6px;"><i data-lucide="globe" style="width:14px;height:14px;"></i> 市场趋势</div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="padding:12px; background: #F5F5F7; border-radius:10px;">
+                  <div style="font-weight:600; font-size:13px; color:var(--text);">ASIC客户多元化</div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Amazon Trainium/Google TPU/Broadcom定制ASIC 2026年将占HBM总需求33%</div>
+                </div>
+                <div style="padding:12px; background: #F5F5F7; border-radius:10px;">
+                  <div style="font-weight:600; font-size:13px; color:var(--text);">HBM价格持续上涨</div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">HBM3E单GB价格$20+，HBM4预计$30+，压缩GPU利润率</div>
+                </div>
+                <div style="padding:12px; background: #F5F5F7; border-radius:10px;">
+                  <div style="font-weight:600; font-size:13px; color:var(--text);">三星份额暴跌</div>
+                  <div style="font-size:12px; color:var(--text-secondary); margin-top:4px;">因HBM3E未通过NVIDIA验证，份额从41%跌至17%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module 6 & 7 Row -->
+      <div class="module-grid">
+        <!-- Module 6: 关联关系 -->
+        <div class="module-card">
+          <div class="module-header">
+            <div class="module-icon"><i data-lucide="link" style="width:18px;height:18px;"></i></div>
+            <div class="module-title">关联关系</div>
+          </div>
+          <div class="module-body">
+            <div class="relation-item">
+              <div class="relation-dot" style="background:#0071E3;"></div>
+              <div>
+                <div class="relation-name">GPU / AI芯片</div>
+                <div class="relation-desc">HBM是GPU的必需内存，NVIDIA/AMD/Intel等所有AI芯片厂商都是HBM客户</div>
+              </div>
+              <span class="relation-badge" style="background:#0071E31A; color:#0071E3;">核心依赖</span>
+            </div>
+            <div class="relation-item">
+              <div class="relation-dot" style="background:#5856D6;"></div>
+              <div>
+                <div class="relation-name">先进封装 CoWoS</div>
+                <div class="relation-desc">HBM与GPU通过CoWoS封装集成，TSMC产能决定HBM交付上限</div>
+              </div>
+              <span class="relation-badge" style="background:#5856D61A; color:#5856D6;">强耦合</span>
+            </div>
+            <div class="relation-item">
+              <div class="relation-dot" style="background:#34C759;"></div>
+              <div>
+                <div class="relation-name">AI服务器</div>
+                <div class="relation-desc">每台AI服务器搭载8颗GPU，每颗GPU配多颗HBM，HBM占服务器成本约20%</div>
+              </div>
+              <span class="relation-badge" style="background:#34C7591A; color:#34C759;">下游应用</span>
+            </div>
+            <div class="relation-item">
+              <div class="relation-dot" style="background:#FF9F0A;"></div>
+              <div>
+                <div class="relation-name">高纯硅料与硅片</div>
+                <div class="relation-desc">HBM制造依赖11N+超高纯硅片，日本信越/SUMCO为上游关键供应商</div>
+              </div>
+              <span class="relation-badge" style="background:#FF9F0A1A; color:#FF9F0A;">上游供应</span>
+            </div>
+            <div class="relation-item">
+              <div class="relation-dot" style="background:#FF3B30;"></div>
+              <div>
+                <div class="relation-name">光模块 / 光互连</div>
+                <div class="relation-desc">HBM解决片内内存带宽，光模块解决片间互联带宽，共同构成AI算力基础设施</div>
+              </div>
+              <span class="relation-badge" style="background:#FF3B301A; color:#FF3B30;">协同互补</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Module 7: 研报与证据 -->
+        <div class="module-card">
+          <div class="module-header">
+            <div class="module-icon"><i data-lucide="file-text" style="width:18px;height:18px;"></i></div>
+            <div class="module-title">研报与证据</div>
+          </div>
+          <div class="module-body">
+            <div class="evidence-item">
+              <div class="evidence-num">1</div>
+              <div class="evidence-text">
+                <strong style="color:var(--text);">Counterpoint《Global HBM Market Share Q2 2025》</strong><br>
+                SK Hynix市场份额62%，Micron跃升至21%，三星跌至17%。<br>
+                <a href="https://counterpointresearch.com" target="_blank">counterpointresearch.com</a>
+              </div>
+            </div>
+            <div class="evidence-item">
+              <div class="evidence-num">2</div>
+              <div class="evidence-text">
+                <strong style="color:var(--text);">TrendForce《HBM Demand from ASICs》Jul 2025</strong><br>
+                ASIC客户2026年将占HBM总需求33%（2024年仅15%）。<br>
+                <a href="https://www.trendforce.com" target="_blank">trendforce.com</a>
+              </div>
+            </div>
+            <div class="evidence-item">
+              <div class="evidence-num">3</div>
+              <div class="evidence-text">
+                <strong style="color:var(--text);">SK Hynix FY2025 Earnings Report</strong><br>
+                HBM收入同比增长超过300%，HBM3E独家供应NVIDIA，HBM4 2026年送样。
+              </div>
+            </div>
+            <div class="evidence-item">
+              <div class="evidence-num">4</div>
+              <div class="evidence-text">
+                <strong style="color:var(--text);">SEMI World Fab Forecast 2025</strong><br>
+                全球300mm硅片出货量2025年同比增长12%，AI芯片对11N+超高纯硅片需求翻倍。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Price Conduction (existing) -->
+      <div class="card" style="margin-top:24px;">
+        <div class="card-title" style="font-size:18px;">价格传导链</div>
+        <div class="conduction-flow">
+          <span class="conduction-step">硅料涨价</span>
+          <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+          <span class="conduction-step">晶圆成本↑</span>
+          <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+          <span class="conduction-step">HBM颗粒↑</span>
+          <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+          <span class="conduction-step">GPU BOM↑</span>
+          <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+          <span class="conduction-step">AI服务器价↑</span>
+          <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+          <span class="conduction-step">云厂商capex↑</span>
+          <span class="conduction-arrow"><i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+          <span class="conduction-step">终端AI应用</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: TECH === -->
+    <div id="tech" class="tab-panel fade-in">
+      <div class="grid-2col" style="display:grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+        <div class="card">
+          <div class="card-title" style="font-size:18px;">HBM ETF 日K线走势</div>
+          <div id="chart-kline" style="width:100%; height:350px;"></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="font-size:18px;">技术面综合评分</div>
+          <div style="margin-bottom:16px;">
+            <div style="font-size:14px; font-weight:600; margin-bottom:12px;">Top 5 标的综合趋势</div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <span>SK海力士 (000660.KS)</span>
+                  <span class="up">强势上涨 +5.2%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:85%; background:var(--up);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <span>三星电子 (005930.KS)</span>
+                  <span class="up">温和上涨 +1.8%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:62%; background:var(--up);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <span>美光科技 (MU)</span>
+                  <span class="up">突破前高 +3.4%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:78%; background:var(--up);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <span>通富微电 (002156.SZ)</span>
+                  <span class="down">回调 -2.1%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:35%; background:var(--down);"></div></div>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+                  <span>深科技 (000021.SZ)</span>
+                  <span class="up">盘整 +0.5%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width:48%; background:#FF9F0A;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div style="border-top:1px solid var(--border); padding-top:16px;">
+            <div style="font-size:14px; font-weight:600; margin-bottom:12px;">技术指标汇总</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; font-size:13px;">
+              <div class="heat-cell heat-green">MACD: 多头</div>
+              <div class="heat-cell heat-green">RSI: 62 (健康)</div>
+              <div class="heat-cell heat-green">均线: 多头排列</div>
+              <div class="heat-cell heat-neutral">BOLL: 上轨附近</div>
+              <div class="heat-cell heat-green">成交量: 放大</div>
+              <div class="heat-cell heat-red">Veto: 无</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: CAPITAL === -->
+    <div id="capital" class="tab-panel fade-in">
+      <div class="card" style="margin-bottom:24px;">
+        <div class="card-title" style="font-size:18px;">赛道资金净流入趋势</div>
+        <div id="chart-capital" style="width:100%; height:300px;"></div>
+      </div>
+      <div class="grid-3col" style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;">
+        <div class="card">
+          <div style="font-size:11px; font-weight:500; color:var(--text-secondary); margin-bottom:6px; letter-spacing:0.02em;">北向资金 (近5日)</div>
+          <div style="font-size:32px; font-weight:600; color:var(--up); font-variant-numeric:tabular-nums; line-height:1.1; letter-spacing:-0.02em;">+12.5亿</div>
+          <div style="font-size:12px; color:var(--text-secondary); margin-top:6px;">连续3日净流入</div>
+        </div>
+        <div class="card">
+          <div style="font-size:11px; font-weight:500; color:var(--text-secondary); margin-bottom:6px; letter-spacing:0.02em;">融资余额变化</div>
+          <div style="font-size:32px; font-weight:600; color:var(--up); font-variant-numeric:tabular-nums; line-height:1.1; letter-spacing:-0.02em;">+8.3亿</div>
+          <div style="font-size:12px; color:var(--text-secondary); margin-top:6px;">杠杆资金加仓</div>
+        </div>
+        <div class="card">
+          <div style="font-size:11px; font-weight:500; color:var(--text-secondary); margin-bottom:6px; letter-spacing:0.02em;">ETF资金流入</div>
+          <div style="font-size:32px; font-weight:600; color:var(--up); font-variant-numeric:tabular-nums; line-height:1.1; letter-spacing:-0.02em;">+5.1亿</div>
+          <div style="font-size:12px; color:var(--text-secondary); margin-top:6px;">半导体ETF</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === PANEL: STOCKS === -->
+    <div id="stocks" class="tab-panel fade-in">
+      <div class="card">
+        <div class="card-title" style="font-size:18px;">核心标的列表（含五因子评分）</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>排名</th><th>代码</th><th>公司名称</th><th>市场</th><th>FinalScore</th>
+              <th>F1</th><th>F2</th><th>F3</th><th>F4</th><th>F5</th>
+              <th>LLM共识</th><th>仓位</th><th>分歧</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td><td><strong>MU</strong></td><td>Micron 美光科技</td><td><span class="tag tag-primary">NASDAQ</span></td>
+              <td><strong style="color:var(--accent);">67.2</strong></td>
+              <td>56</td><td>46</td><td>50</td><td>100</td><td>45</td>
+              <td>81.1</td><td><span class="tag tag-success">Core</span></td><td></td>
+            </tr>
+            <tr>
+              <td>2</td><td><strong>000660.KS</strong></td><td>SK海力士</td><td><span class="tag tag-warning">KOSPI</span></td>
+              <td><strong style="color:var(--accent);">72.5</strong></td>
+              <td>78</td><td>52</td><td>55</td><td>95</td><td>82</td>
+              <td>85.3</td><td><span class="tag tag-success">Core</span></td><td></td>
+            </tr>
+            <tr>
+              <td>3</td><td><strong>005930.KS</strong></td><td>三星电子</td><td><span class="tag tag-warning">KOSPI</span></td>
+              <td><strong style="color:var(--accent);">58.3</strong></td>
+              <td>45</td><td>48</td><td>50</td><td>78</td><td>70</td>
+              <td>72.1</td><td><span class="tag tag-primary">Tactical</span></td><td><i data-lucide="zap" style="width:16px;height:16px;color:#FF9F0A;"></i></td>
+            </tr>
+            <tr>
+              <td>4</td><td><strong>002156.SZ</strong></td><td>通富微电</td><td><span class="tag tag-danger">深交所</span></td>
+              <td><strong style="color:var(--accent);">45.2</strong></td>
+              <td>38</td><td>42</td><td>48</td><td>55</td><td>48</td>
+              <td>58.6</td><td><span class="tag tag-warning">Watch</span></td><td><i data-lucide="alert-triangle" style="width:16px;height:16px;color:#FF9F0A;"></i></td>
+            </tr>
+            <tr>
+              <td>5</td><td><strong>000021.SZ</strong></td><td>深科技</td><td><span class="tag tag-danger">深交所</span></td>
+              <td><strong style="color:var(--accent);">42.8</strong></td>
+              <td>35</td><td>40</td><td>45</td><td>52</td><td>46</td>
+              <td>55.2</td><td><span class="tag tag-warning">Watch</span></td><td></td>
+            </tr>
+            <tr>
+              <td>6</td><td><strong>300046.SZ</strong></td><td>台基股份</td><td><span class="tag tag-danger">深交所</span></td>
+              <td><strong style="color:var(--accent);">38.5</strong></td>
+              <td>32</td><td>38</td><td>42</td><td>48</td><td>42</td>
+              <td>52.1</td><td><span class="tag tag-neutral">Watch</span></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Initialize Lucide icons
+lucide.createIcons();
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById(this.dataset.tab).classList.add('active');
+    if (this.dataset.tab === 'overview') { initRadar(); initValueChain(); initMarketShare(); }
+    if (this.dataset.tab === 'tech') initKline();
+    if (this.dataset.tab === 'capital') initCapital();
+  });
+});
+
+// Radar Chart
+function initRadar() {
+  const chart = echarts.init(document.getElementById('radar-sector'));
+  chart.setOption({
+    tooltip: {},
+    legend: { data: ['HBM赛道', '行业均值'], bottom: 0, textStyle: { fontSize: 12, color: '#86868B' } },
+    radar: {
+      indicator: [
+        { name: 'F1 资金面', max: 100 },
+        { name: 'F2 宏观', max: 100 },
+        { name: 'F3 情绪', max: 100 },
+        { name: 'F4 基本面', max: 100 },
+        { name: 'F5 技术', max: 100 }
+      ],
+      radius: '65%', axisName: { fontSize: 12, color: '#86868B' },
+      splitArea: { areaStyle: { color: ['#FFFFFF', '#F5F5F7'] } },
+      axisLine: { lineStyle: { color: '#E5E5EA' } },
+      splitLine: { lineStyle: { color: '#E5E5EA' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        { value: [72, 58, 65, 85, 78], name: 'HBM赛道', areaStyle: { color: 'rgba(0,113,227,0.15)' }, lineStyle: { color: '#0071E3', width: 2 } },
+        { value: [45, 45, 50, 55, 50], name: '行业均值', lineStyle: { color: '#86868B', type: 'dashed', width: 1 } }
+      ]
+    }]
+  });
+}
+
+// Value Chain Pie Chart
+function initValueChain() {
+  const chart = echarts.init(document.getElementById('chart-value-chain'));
+  chart.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
+    legend: { bottom: 0, textStyle: { fontSize: 11, color: '#86868B' }, itemWidth: 10, itemHeight: 10 },
+    series: [{
+      type: 'pie',
+      radius: ['40%', '70%'],
+      center: ['50%', '45%'],
+      avoidLabelOverlap: false,
+      itemStyle: { borderRadius: 6, borderColor: '#FFFFFF', borderWidth: 2 },
+      label: { show: false },
+      emphasis: { label: { show: true, fontSize: 13, fontWeight: 'bold', color: '#1D1D1F' } },
+      data: [
+        { value: 45, name: 'HBM设计', itemStyle: { color: '#0071E3' } },
+        { value: 30, name: 'TSV/封装', itemStyle: { color: '#5856D6' } },
+        { value: 18, name: '存储颗粒', itemStyle: { color: '#5AC8FA' } },
+        { value: 7, name: '测试/材料', itemStyle: { color: '#A2845E' } }
+      ]
+    }]
+  });
+}
+
+// Market Share Bar Chart
+function initMarketShare() {
+  const chart = echarts.init(document.getElementById('chart-market-share'));
+  chart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true },
+    xAxis: { type: 'value', max: 100, axisLabel: { formatter: '{value}%', color: '#86868B', fontSize: 11 }, splitLine: { lineStyle: { color: '#E5E5EA' } }, axisLine: { lineStyle: { color: '#E5E5EA' } } },
+    yAxis: { type: 'category', data: ['Samsung', 'Micron', 'SK Hynix'], axisLabel: { color: '#86868B', fontSize: 12 }, axisLine: { lineStyle: { color: '#E5E5EA' } } },
+    series: [{
+      type: 'bar',
+      data: [
+        { value: 17, itemStyle: { color: '#FF9F0A', borderRadius: [0, 4, 4, 0] } },
+        { value: 21, itemStyle: { color: '#FF3B30', borderRadius: [0, 4, 4, 0] } },
+        { value: 62, itemStyle: { color: '#0071E3', borderRadius: [0, 4, 4, 0] } }
+      ],
+      barWidth: 24,
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#1D1D1F', fontSize: 12, fontWeight: 'bold' }
+    }]
+  });
+}
+
+// K-line Chart
+function initKline() {
+  const chart = echarts.init(document.getElementById('chart-kline'));
+  const dates = [];
+  const data = [];
+  let base = 100;
+  for (let i = 0; i < 60; i++) {
+    const date = new Date(2026, 4, 1 + i);
+    dates.push(date.toISOString().slice(0, 10));
+    const open = base + (Math.random() - 0.45) * 5;
+    const close = open + (Math.random() - 0.4) * 6;
+    const low = Math.min(open, close) - Math.random() * 2;
+    const high = Math.max(open, close) + Math.random() * 2;
+    base = close;
+    data.push([open.toFixed(2), close.toFixed(2), low.toFixed(2), high.toFixed(2)]);
+  }
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: '3%', right: '3%', bottom: '10%', top: '10%', containLabel: true },
+    xAxis: { data: dates, axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { fontSize: 11, color: '#86868B' } },
+    yAxis: { scale: true, axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { fontSize: 11, color: '#86868B' }, splitLine: { lineStyle: { color: '#E5E5EA' } } },
+    dataZoom: [{ type: 'inside', start: 50, end: 100 }],
+    series: [{
+      type: 'candlestick', data: data,
+      itemStyle: { color: '#FF3B30', color0: '#34C759', borderColor: '#FF3B30', borderColor0: '#34C759' }
+    }]
+  });
+}
+
+// Capital flow chart
+function initCapital() {
+  const chart = echarts.init(document.getElementById('chart-capital'));
+  const weeks = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12'];
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+    xAxis: { type: 'category', data: weeks, axisLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { fontSize: 12, color: '#86868B' } },
+    yAxis: { type: 'value', name: '亿元', axisLine: { lineStyle: { color: '#E5E5EA' } }, splitLine: { lineStyle: { color: '#E5E5EA' } }, axisLabel: { fontSize: 12, color: '#86868B' } },
+    series: [
+      { name: '主力资金', type: 'bar', data: [12, 8, -3, 15, 22, 18, -5, 28, 35, 20, 12, 15], itemStyle: { color: '#0071E3', borderRadius: [3, 3, 0, 0] } },
+      { name: '北向资金', type: 'line', data: [5, 8, 3, 10, 12, 15, 8, 18, 22, 15, 12, 14], lineStyle: { color: '#34C759', width: 2 }, symbol: 'circle', symbolSize: 6, itemStyle: { color: '#34C759' } }
+    ]
+  });
+}
+
+// Init on load
+setTimeout(() => { initRadar(); initKline(); initCapital(); initValueChain(); initMarketShare(); }, 100);
+
+window.addEventListener('resize', () => {
+  ['radar-sector', 'chart-kline', 'chart-capital', 'chart-value-chain', 'chart-market-share'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const c = echarts.getInstanceByDom(el);
+      if (c) c.resize();
+    }
+  });
+});
+
+// Notify parent frame when loaded inside iframe
+if (window.self !== window.top) {
+  window.parent.postMessage({ page: 'sector-analysis', title: '赛道分析', module: '产业链与知识' }, '*');
+}
+</script>
+
+</body>
+</html>

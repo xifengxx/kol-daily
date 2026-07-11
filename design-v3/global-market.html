@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球市场 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --accent: #0071E3;
+  --navy: #1D1D1F;
+  --sidebar: #FFFFFF;
+  --up: #FF3B30;
+  --down: #34C759;
+  --warn: #FF9500;
+  --hover-bg: #F5F5F7;
+  --active-bg: #F0F7FF;
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 14px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; }
+.mono { font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+.up { color: var(--up); }
+.down { color: var(--down); }
+
+/* Sidebar */
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--sidebar); color: var(--text-primary);
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+  border-right: 1px solid var(--border);
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.sidebar-logo span { color: var(--accent); }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 16px 16px 8px; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 14px; }
+.nav-item:hover { background: var(--hover-bg); color: var(--text-primary); }
+.nav-item.active { background: var(--active-bg); color: var(--accent); border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
+.nav-item.active .icon { color: var(--accent); }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar {
+  background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px;
+  display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30;
+}
+.search-box { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 8px; padding: 7px 16px; gap: 8px; border: 1px solid transparent; height: 40px; transition: all 0.15s; }
+.search-box:focus-within { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.search-box input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+.user-area { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+
+/* Content */
+.content { padding: 24px 24px; max-width: 1440px; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; line-height: 1.2; }
+
+/* Region Tabs */
+.region-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+.region-tab { padding: 12px 28px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.region-tab:hover { color: var(--accent); }
+.region-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Cards */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+.card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+.card-title { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; line-height: 1.4; }
+
+/* Index cards grid */
+.index-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.index-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; transition: all 0.3s ease; }
+.index-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+.index-flag { font-size: 24px; margin-bottom: 8px; }
+.index-name { font-size: 13px; color: var(--text-secondary); font-weight: 500; margin-bottom: 4px; }
+.index-price { font-size: 32px; font-weight: 600; color: var(--navy); margin-bottom: 4px; letter-spacing: -0.02em; line-height: 1.1; }
+.index-change { font-size: 14px; font-weight: 600; }
+.index-volume { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+
+/* Two/Three col */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+
+/* FX / Commodity table */
+.fx-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.fx-table th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; border-bottom: 1px solid var(--border); background: #F2F2F7; letter-spacing: 0.3px; }
+.fx-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.fx-table tr:hover { background: #F5F5F7; }
+.fx-pair { display: flex; align-items: center; gap: 8px; }
+.fx-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; background: #F2F2F7; color: var(--text-secondary); }
+.fx-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+.fx-code { font-size: 12px; color: var(--text-secondary); }
+
+/* Sentiment gauge */
+.gauge-container { display: flex; justify-content: center; align-items: center; height: 200px; }
+.sentiment-label { text-align: center; margin-top: -20px; }
+.sentiment-score { font-size: 32px; font-weight: 700; color: var(--navy); }
+.sentiment-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+/* VIX card */
+.vix-card { display: flex; align-items: center; gap: 20px; padding: 24px; background: #fff; border-radius: 12px; border: 1px solid var(--border); }
+.vix-value { font-size: 36px; font-weight: 700; color: var(--navy); }
+.vix-label { font-size: 12px; color: var(--text-secondary); }
+.vix-bar { flex: 1; height: 8px; background: #F2F2F7; border-radius: 4px; overflow: hidden; }
+.vix-fill { height: 100%; width: 42%; background: linear-gradient(90deg, #34C759, #FF9500); border-radius: 4px; }
+.vix-levels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 11px; color: var(--text-secondary); }
+
+/* Commodity cards */
+.comm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.comm-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 14px; transition: all 0.3s ease; }
+.comm-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+.comm-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #F2F2F7; color: var(--text-secondary); }
+.comm-info { flex: 1; }
+.comm-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+.comm-price { font-size: 20px; font-weight: 600; margin-top: 2px; line-height: 1.2; }
+.comm-change { font-size: 13px; font-weight: 600; margin-top: 2px; }
+
+/* Trend sparkline */
+.sparkline { width: 60px; height: 30px; }
+
+/* Time tag */
+.time-tag { font-size: 12px; color: var(--text-secondary); background: #F2F2F7; padding: 2px 8px; border-radius: 10px; }
+
+/* Tags */
+.tag { display: inline-block; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; line-height: 20px; }
+.tag-green { background: #34C759; color: #fff; }
+.tag-blue { background: #0071E3; color: #fff; }
+.tag-purple { background: #5856D6; color: #fff; }
+.tag-red { background: #FF3B30; color: #fff; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .index-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+  .comm-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .index-grid { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+  .comm-grid { grid-template-columns: 1fr; }
+  .content { padding: 16px; }
+}
+/* ====== IFRAME EMBED MODE: hide sidebar & topbar ====== */
+body.in-iframe .sidebar,
+body.in-iframe .topbar { display: none !important; }
+body.in-iframe .main { margin-left: 0 !important; width: 100% !important; }
+body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><i data-lucide="brain" style="width:20px;height:20px;"></i> 金融投资<span>AI助手</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">行情与数据</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:18px;height:18px;"></i></span> 市场总览</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="trending-up" style="width:18px;height:18px;"></i></span> 个股行情</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="globe" style="width:18px;height:18px;"></i></span> 全球市场</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">内容与信息</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="newspaper" style="width:18px;height:18px;"></i></span> 每日晨报</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="mic" style="width:18px;height:18px;"></i></span> KOL观点</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">分析与选股</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="star" style="width:18px;height:18px;"></i></span> 评分榜单</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="search" style="width:18px;height:18px;"></i></span> 个股深度</div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div style="font-size:14px;font-weight:600;color:var(--navy);">全球市场</div>
+    <div class="search-box">
+      <span style="color:var(--text-secondary);display:flex;align-items:center;"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <input type="text" placeholder="搜索指数、汇率、商品...">
+    </div>
+    <div class="user-area">
+      <span style="color:var(--text-secondary);display:flex;align-items:center;cursor:pointer;"><i data-lucide="bell" style="width:18px;height:18px;"></i></span>
+      <div class="avatar">投</div>
+      <span>投资者</span>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="page-header">
+      <div>
+        <div class="page-title">全球市场</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin-top:4px;">亚太 · 欧洲 · 美洲 三大区域实时追踪</div>
+      </div>
+      <div class="time-tag">数据更新: 2026-07-09 14:32:18 CST</div>
+    </div>
+
+    <!-- Region Tabs -->
+    <div class="region-tabs">
+      <button class="region-tab active" onclick="switchTab('asia')"><i data-lucide="globe" style="width:16px;height:16px;vertical-align:text-bottom;margin-right:4px;"></i> 亚太地区</button>
+      <button class="region-tab" onclick="switchTab('europe')"><i data-lucide="globe" style="width:16px;height:16px;vertical-align:text-bottom;margin-right:4px;"></i> 欧洲市场</button>
+      <button class="region-tab" onclick="switchTab('america')"><i data-lucide="globe" style="width:16px;height:16px;vertical-align:text-bottom;margin-right:4px;"></i> 美洲市场</button>
+    </div>
+
+    <!-- Asia Panel -->
+    <div id="panel-asia" class="tab-panel active">
+      <div class="index-grid">
+        <div class="index-card">
+          <div class="index-flag">🇨🇳</div>
+          <div class="index-name">上证指数</div>
+          <div class="index-price mono tabular-nums">3,452.18</div>
+          <div class="index-change up">+28.35 +0.83%</div>
+          <div class="index-volume">成交额 4,856亿</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇨🇳</div>
+          <div class="index-name">深证成指</div>
+          <div class="index-price mono tabular-nums">11,234.56</div>
+          <div class="index-change up">+89.12 +0.80%</div>
+          <div class="index-volume">成交额 6,234亿</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇨🇳</div>
+          <div class="index-name">创业板指</div>
+          <div class="index-price mono tabular-nums">2,187.43</div>
+          <div class="index-change up">+18.76 +0.86%</div>
+          <div class="index-volume">成交额 2,156亿</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇨🇳</div>
+          <div class="index-name">科创50</div>
+          <div class="index-price mono tabular-nums">1,023.56</div>
+          <div class="index-change up">+12.34 +1.22%</div>
+          <div class="index-volume">成交额 892亿</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇭🇰</div>
+          <div class="index-name">恒生指数</div>
+          <div class="index-price mono tabular-nums">19,876.54</div>
+          <div class="index-change up">+156.78 +0.79%</div>
+          <div class="index-volume">成交额 1,245亿HKD</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇭🇰</div>
+          <div class="index-name">恒生科技</div>
+          <div class="index-price mono tabular-nums">4,567.89</div>
+          <div class="index-change up">+67.45 +1.50%</div>
+          <div class="index-volume">成交额 456亿HKD</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇯🇵</div>
+          <div class="index-name">日经225</div>
+          <div class="index-price mono tabular-nums">39,876.54</div>
+          <div class="index-change up">+345.67 +0.88%</div>
+          <div class="index-volume">成交额 2.1万亿JPY</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇰🇷</div>
+          <div class="index-name">韩国KOSPI</div>
+          <div class="index-price mono tabular-nums">2,876.54</div>
+          <div class="index-change up">+23.45 +0.82%</div>
+          <div class="index-volume">成交额 8.5万亿KRW</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Europe Panel -->
+    <div id="panel-europe" class="tab-panel">
+      <div class="index-grid">
+        <div class="index-card">
+          <div class="index-flag">🇬🇧</div>
+          <div class="index-name">英国富时100</div>
+          <div class="index-price mono tabular-nums">8,234.56</div>
+          <div class="index-change up">+56.78 +0.69%</div>
+          <div class="index-volume">成交额 45亿GBP</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇩🇪</div>
+          <div class="index-name">德国DAX</div>
+          <div class="index-price mono tabular-nums">20,123.45</div>
+          <div class="index-change up">+178.90 +0.90%</div>
+          <div class="index-volume">成交额 82亿EUR</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇫🇷</div>
+          <div class="index-name">法国CAC40</div>
+          <div class="index-price mono tabular-nums">7,654.32</div>
+          <div class="index-change up">+45.67 +0.60%</div>
+          <div class="index-volume">成交额 38亿EUR</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇪🇺</div>
+          <div class="index-name">欧洲斯托克50</div>
+          <div class="index-price mono tabular-nums">4,892.15</div>
+          <div class="index-change up">+32.18 +0.66%</div>
+          <div class="index-volume">成交额 52亿EUR</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇨🇭</div>
+          <div class="index-name">瑞士SMI</div>
+          <div class="index-price mono tabular-nums">11,456.78</div>
+          <div class="index-change up">+78.45 +0.69%</div>
+          <div class="index-volume">成交额 12亿CHF</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇸🇪</div>
+          <div class="index-name">瑞典OMX30</div>
+          <div class="index-price mono tabular-nums">2,456.89</div>
+          <div class="index-change up">+18.23 +0.75%</div>
+          <div class="index-volume">成交额 8.5亿SEK</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇳🇱</div>
+          <div class="index-name">荷兰AEX</div>
+          <div class="index-price mono tabular-nums">845.23</div>
+          <div class="index-change up">+5.67 +0.68%</div>
+          <div class="index-volume">成交额 6.2亿EUR</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇪🇸</div>
+          <div class="index-name">西班牙IBEX35</div>
+          <div class="index-price mono tabular-nums">11,234.56</div>
+          <div class="index-change up">+89.12 +0.80%</div>
+          <div class="index-volume">成交额 15亿EUR</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- America Panel -->
+    <div id="panel-america" class="tab-panel">
+      <div class="index-grid">
+        <div class="index-card">
+          <div class="index-flag">🇺🇸</div>
+          <div class="index-name">道琼斯</div>
+          <div class="index-price mono tabular-nums">42,345.67</div>
+          <div class="index-change up">+312.45 +0.74%</div>
+          <div class="index-volume">成交额 345亿USD</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇺🇸</div>
+          <div class="index-name">标普500</div>
+          <div class="index-price mono tabular-nums">5,678.90</div>
+          <div class="index-change up">+45.67 +0.81%</div>
+          <div class="index-volume">成交额 456亿USD</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇺🇸</div>
+          <div class="index-name">纳斯达克</div>
+          <div class="index-price mono tabular-nums">18,765.43</div>
+          <div class="index-change up">+234.56 +1.27%</div>
+          <div class="index-volume">成交额 628亿USD</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇺🇸</div>
+          <div class="index-name">罗素2000</div>
+          <div class="index-price mono tabular-nums">2,156.78</div>
+          <div class="index-change up">+18.34 +0.86%</div>
+          <div class="index-volume">成交额 98亿USD</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇨🇦</div>
+          <div class="index-name">加拿大TSX</div>
+          <div class="index-price mono tabular-nums">24,567.89</div>
+          <div class="index-change up">+156.78 +0.64%</div>
+          <div class="index-volume">成交额 45亿CAD</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇧🇷</div>
+          <div class="index-name">巴西BOVESPA</div>
+          <div class="index-price mono tabular-nums">128,456.78</div>
+          <div class="index-change up">+1,234.56 +0.97%</div>
+          <div class="index-volume">成交额 125亿BRL</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇲🇽</div>
+          <div class="index-name">墨西哥IPC</div>
+          <div class="index-price mono tabular-nums">54,678.90</div>
+          <div class="index-change up">+345.67 +0.64%</div>
+          <div class="index-volume">成交额 28亿MXN</div>
+        </div>
+        <div class="index-card">
+          <div class="index-flag">🇦🇷</div>
+          <div class="index-name">阿根廷MERVAL</div>
+          <div class="index-price mono tabular-nums">2,345,678.90</div>
+          <div class="index-change up">+12,345.67 +0.53%</div>
+          <div class="index-volume">成交额 15亿ARS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FX & Commodities -->
+    <div class="two-col">
+      <!-- 汇率面板 -->
+      <div class="card">
+        <div class="card-title">
+          <span><i data-lucide="arrow-left-right" style="width:18px;height:18px;vertical-align:text-bottom;margin-right:6px;"></i>主要汇率</span>
+          <span class="time-tag">实时</span>
+        </div>
+        <table class="fx-table">
+          <thead>
+            <tr><th>货币对</th><th>最新价</th><th>涨跌</th><th>涨跌幅</th><th>趋势</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="fx-pair"><div class="fx-icon">🇺🇸🇨🇳</div><div><div class="fx-name">USD/CNY</div><div class="fx-code">美元/人民币</div></div></div></td>
+              <td class="mono tabular-nums">7.2456</td>
+              <td class="down mono">-0.0123</td>
+              <td class="down">-0.17%</td>
+              <td><div id="spark-usd" class="sparkline"></div></td>
+            </tr>
+            <tr>
+              <td><div class="fx-pair"><div class="fx-icon">🇪🇺🇺🇸</div><div><div class="fx-name">EUR/USD</div><div class="fx-code">欧元/美元</div></div></div></td>
+              <td class="mono tabular-nums">1.0856</td>
+              <td class="up mono">+0.0045</td>
+              <td class="up">+0.42%</td>
+              <td><div id="spark-eur" class="sparkline"></div></td>
+            </tr>
+            <tr>
+              <td><div class="fx-pair"><div class="fx-icon">🇺🇸🇯🇵</div><div><div class="fx-name">USD/JPY</div><div class="fx-code">美元/日元</div></div></div></td>
+              <td class="mono tabular-nums">156.78</td>
+              <td class="up mono">+0.45</td>
+              <td class="up">+0.29%</td>
+              <td><div id="spark-jpy" class="sparkline"></div></td>
+            </tr>
+            <tr>
+              <td><div class="fx-pair"><div class="fx-icon">🇺🇸🇭🇰</div><div><div class="fx-name">USD/HKD</div><div class="fx-code">美元/港币</div></div></div></td>
+              <td class="mono tabular-nums">7.8234</td>
+              <td class="up mono">+0.0002</td>
+              <td class="up">+0.00%</td>
+              <td><div id="spark-hkd" class="sparkline"></div></td>
+            </tr>
+            <tr>
+              <td><div class="fx-pair"><div class="fx-icon">🇺🇸🇨🇳</div><div><div class="fx-name">USD/CNH</div><div class="fx-code">美元/离岸人民币</div></div></div></td>
+              <td class="mono tabular-nums">7.2512</td>
+              <td class="down mono">-0.0089</td>
+              <td class="down">-0.12%</td>
+              <td><div id="spark-cnh" class="sparkline"></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 商品面板 -->
+      <div class="card">
+        <div class="card-title">
+          <span><i data-lucide="package" style="width:18px;height:18px;vertical-align:text-bottom;margin-right:6px;"></i>大宗商品</span>
+          <span class="time-tag">实时</span>
+        </div>
+        <div class="comm-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="comm-card">
+            <div class="comm-icon" style="background:#F2F2F7;color:#FF9500;"><i data-lucide="gem" style="width:20px;height:20px;"></i></div>
+            <div class="comm-info">
+              <div class="comm-name">黄金</div>
+              <div class="comm-price mono">$2,456.78</div>
+              <div class="comm-change up">+12.45 +0.51%</div>
+            </div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-icon" style="background:#F2F2F7;color:#1D1D1F;"><i data-lucide="droplet" style="width:20px;height:20px;"></i></div>
+            <div class="comm-info">
+              <div class="comm-name">WTI原油</div>
+              <div class="comm-price mono">$78.45</div>
+              <div class="comm-change up">+0.85 +1.10%</div>
+            </div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-icon" style="background:#F0F7FF;color:#0071E3;"><i data-lucide="bitcoin" style="width:20px;height:20px;"></i></div>
+            <div class="comm-info">
+              <div class="comm-name">比特币</div>
+              <div class="comm-price mono">$67,890.12</div>
+              <div class="comm-change up">+1,234.56 +1.85%</div>
+            </div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-icon" style="background:#F2F2F7;color:#A2845E;"><i data-lucide="hexagon" style="width:20px;height:20px;"></i></div>
+            <div class="comm-info">
+              <div class="comm-name">铜</div>
+              <div class="comm-price mono">$4.56</div>
+              <div class="comm-change up">+0.05 +1.11%</div>
+            </div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-icon" style="background:#F2F2F7;color:#86868B;"><i data-lucide="disc" style="width:20px;height:20px;"></i></div>
+            <div class="comm-info">
+              <div class="comm-name">白银</div>
+              <div class="comm-price mono">$28.45</div>
+              <div class="comm-change up">+0.35 +1.24%</div>
+            </div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-icon" style="background:#F2F2F7;color:#FF3B30;"><i data-lucide="flame" style="width:20px;height:20px;"></i></div>
+            <div class="comm-info">
+              <div class="comm-name">天然气</div>
+              <div class="comm-price mono">$2.85</div>
+              <div class="comm-change down">-0.08 -2.73%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Market Sentiment -->
+    <div class="three-col">
+      <div class="card">
+        <div class="card-title"><i data-lucide="alert-triangle" style="width:18px;height:18px;vertical-align:text-bottom;margin-right:6px;"></i>VIX 恐慌指数</div>
+        <div class="vix-card">
+          <div>
+            <div class="vix-value mono">14.25</div>
+            <div class="vix-label">当前值</div>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">市场恐慌程度: <span style="color:var(--down);font-weight:700;">低</span></div>
+            <div class="vix-bar"><div class="vix-fill"></div></div>
+            <div class="vix-levels"><span>极度恐慌</span><span>恐慌</span><span>中性</span><span>贪婪</span></div>
+          </div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:12px;font-size:11px;color:var(--text-secondary);">
+          <span>5日: 15.82</span><span>20日: 16.45</span><span>52周低: 12.30</span><span>52周高: 28.56</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i data-lucide="pie-chart" style="width:18px;height:18px;vertical-align:text-bottom;margin-right:6px;"></i>恐惧贪婪指数</div>
+        <div id="chart-fear" style="width:100%;height:180px;"></div>
+        <div style="text-align:center;margin-top:-10px;">
+          <span style="font-size:24px;font-weight:700;color:var(--accent);">72</span>
+          <span style="font-size:12px;color:var(--text-secondary);margin-left:6px;">贪婪</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i data-lucide="trending-up" style="width:18px;height:18px;vertical-align:text-bottom;margin-right:6px;"></i>市场情绪概览</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>散户情绪</span><span class="up" style="font-weight:700;">偏多 65%</span></div>
+            <div style="height:6px;background:#F2F2F7;border-radius:3px;"><div style="width:65%;height:100%;background:var(--up);border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>机构情绪</span><span class="up" style="font-weight:700;">偏多 58%</span></div>
+            <div style="height:6px;background:#F2F2F7;border-radius:3px;"><div style="width:58%;height:100%;background:var(--up);border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>北向资金</span><span class="up" style="font-weight:700;">净流入 +45.2亿</span></div>
+            <div style="height:6px;background:#F2F2F7;border-radius:3px;"><div style="width:72%;height:100%;background:var(--up);border-radius:3px;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>融资余额</span><span class="down" style="font-weight:700;">减少 -12.3亿</span></div>
+            <div style="height:6px;background:#F2F2F7;border-radius:3px;"><div style="width:35%;height:100%;background:var(--down);border-radius:3px;"></div></div>
+          </div>
+          <div style="border-top:1px solid var(--border);padding-top:10px;">
+            <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">全球资金流向(近5日)</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span class="tag tag-purple">美股 +$128亿</span>
+              <span class="tag tag-green">日股 +$45亿</span>
+              <span class="tag tag-blue">欧股 +$32亿</span>
+              <span class="tag tag-green">A股 +$28亿</span>
+              <span class="tag tag-red">新兴市场 -$12亿</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(region) {
+  document.querySelectorAll('.region-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  var btn = event.target.closest('.region-tab');
+  if (btn) btn.classList.add('active');
+  document.getElementById('panel-' + region).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+
+  // Sparklines for FX
+  var sparkIds = ['spark-usd','spark-eur','spark-jpy','spark-hkd','spark-cnh'];
+  sparkIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var vals = [];
+    for (var i = 0; i < 20; i++) vals.push(Math.random() * 10 + 40 + (Math.random() - 0.5) * 5);
+    echarts.init(el, null, { renderer: 'svg' }).setOption({
+      grid: { left: 0, right: 0, top: 0, bottom: 0 },
+      xAxis: { show: false, type: 'category' },
+      yAxis: { show: false, type: 'value', min: 30, max: 60 },
+      series: [{ type: 'line', data: vals, smooth: true, symbol: 'none', lineStyle: { color: '#0071E3', width: 1.5 }, areaStyle: { color: { type: 'linear', x:0,y:0,x2:0,y2:1, colorStops:[{offset:0,color:'rgba(0,113,227,0.08)'},{offset:1,color:'rgba(0,113,227,0)'}] } } }]
+    });
+  });
+
+  // Fear & Greed gauge
+  var gauge = echarts.init(document.getElementById('chart-fear'));
+  gauge.setOption({
+    series: [{
+      type: 'gauge',
+      startAngle: 180, endAngle: 0,
+      min: 0, max: 100,
+      splitNumber: 5,
+      radius: '90%',
+      center: ['50%', '70%'],
+      axisLine: { lineStyle: { width: 12, color: [[0.2, '#34C759'], [0.4, '#5AC8FA'], [0.6, '#FF9500'], [0.8, '#FF3B30'], [1, '#FF3B30']] } },
+      pointer: { length: '55%', width: 5, itemStyle: { color: '#0071E3' } },
+      axisTick: { show: false },
+      splitLine: { show: false },
+      axisLabel: { show: false },
+      detail: { show: false },
+      data: [{ value: 72 }]
+    }]
+  });
+
+  window.addEventListener('resize', function() { gauge.resize(); });
+});
+</script>
+
+
+<script>
+/* iframe embed detection: hide own sidebar & topbar when inside index.html */
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+})();
+</script>
+</body>
+</html>

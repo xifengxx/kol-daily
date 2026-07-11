@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>功能导航</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #F5F5F7;
+    color: #1D1D1F;
+  }
+
+  .nav-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E5EA;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .nav-card:hover {
+    background: #F5F5F7;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .nav-card:active {
+    transform: translateY(-1px);
+  }
+
+  .nav-card .icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(0, 113, 227, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nav-card .icon-wrap svg {
+    width: 20px;
+    height: 20px;
+    color: #0071E3;
+    stroke-width: 2;
+  }
+
+  .nav-card .card-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-card .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1D1D1F;
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+
+  .nav-card .card-desc {
+    font-size: 13px;
+    color: #86868B;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-card .arrow {
+    color: #86868B;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
+
+  .nav-card:hover .arrow {
+    color: #0071E3;
+  }
+
+  .group-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1D1D1F;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .group-title .group-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0071E3;
+  }
+
+  .group-section {
+    margin-bottom: 36px;
+  }
+
+  .page-header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #E5E5EA;
+  }
+
+  .page-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1D1D1F;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+
+  .page-header p {
+    font-size: 15px;
+    color: #86868B;
+    line-height: 1.5;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-out both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Staggered animation for groups */
+  .group-section:nth-child(1) { animation-delay: 0.05s; }
+  .group-section:nth-child(2) { animation-delay: 0.10s; }
+  .group-section:nth-child(3) { animation-delay: 0.15s; }
+  .group-section:nth-child(4) { animation-delay: 0.20s; }
+  .group-section:nth-child(5) { animation-delay: 0.25s; }
+  .group-section:nth-child(6) { animation-delay: 0.30s; }
+  .group-section:nth-child(7) { animation-delay: 0.35s; }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 1024px) {
+    .card-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+  @media (max-width: 768px) {
+    .card-grid { grid-template-columns: 1fr !important; gap: 12px !important; padding: 16px !important; }
+    .page-header { padding: 16px !important; }
+    .page-header h1 { font-size: 22px !important; }
+    .group-title { font-size: 16px !important; }
+  }
+</style>
+
+<!-- iframe 检测与隐藏侧边栏 -->
+<script>
+if (window.self !== window.top) {
+  document.documentElement.classList.add('in-iframe');
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('in-iframe');
+  });
+}
+</script>
+<style>
+body.in-iframe header,
+body.in-iframe nav,
+body.in-iframe aside,
+body.in-iframe .sidebar {
+  display: none !important;
+}
+body.in-iframe main,
+body.in-iframe .main-content {
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 24px !important;
+}
+</style>
+</head>
+
+<body class="min-h-screen">
+
+<main class="max-w-[1200px] mx-auto px-5 py-8">
+
+  <!-- Page Header -->
+  <div class="page-header fade-in">
+    <h1>功能导航</h1>
+    <p>快速访问所有模块</p>
+  </div>
+
+  <!-- Group 1: 行情与数据 -->
+  <section class="group-section fade-in">
+    <div class="group-title"><span class="group-dot"></span>行情与数据</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      <a class="nav-card" href="market-overview.html" data-nav="market-overview" data-group="行情与数据" data-title="市场总览">
+        <div class="icon-wrap"><i data-lucide="bar-chart-3"></i></div>
+        <div class="card-content">
+          <div class="card-title">市场总览</div>
+          <div class="card-desc">大盘指数与板块全景</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="watchlist.html" data-nav="watchlist" data-group="行情与数据" data-title="自选股">
+        <div class="icon-wrap"><i data-lucide="star"></i></div>
+        <div class="card-content">
+          <div class="card-title">自选股</div>
+          <div class="card-desc">关注股票实时监控</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="stock-detail.html" data-nav="stock-detail" data-group="行情与数据" data-title="个股行情">
+        <div class="icon-wrap"><i data-lucide="trending-up"></i></div>
+        <div class="card-content">
+          <div class="card-title">个股行情</div>
+          <div class="card-desc">详细K线与分时走势</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="global-market.html" data-nav="global-market" data-group="行情与数据" data-title="全球市场">
+        <div class="icon-wrap"><i data-lucide="globe"></i></div>
+        <div class="card-content">
+          <div class="card-title">全球市场</div>
+          <div class="card-desc">美股欧股亚太联动</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="theme-index.html" data-nav="theme-index" data-group="行情与数据" data-title="题材指数">
+        <div class="icon-wrap"><i data-lucide="layers"></i></div>
+        <div class="card-content">
+          <div class="card-title">题材指数</div>
+          <div class="card-desc">热门题材与概念追踪</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="cross-market.html" data-nav="cross-market" data-group="行情与数据" data-title="跨市场助手">
+        <div class="icon-wrap"><i data-lucide="shuffle"></i></div>
+        <div class="card-content">
+          <div class="card-title">跨市场助手</div>
+          <div class="card-desc">AH股与ADR联动分析</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="macro-calendar.html" data-nav="macro-calendar" data-group="行情与数据" data-title="宏观事件日历">
+        <div class="icon-wrap"><i data-lucide="calendar"></i></div>
+        <div class="card-content">
+          <div class="card-title">宏观事件日历</div>
+          <div class="card-desc">经济数据与政策节点</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Group 2: 内容与信息 -->
+  <section class="group-section fade-in">
+    <div class="group-title"><span class="group-dot"></span>内容与信息</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      <a class="nav-card" href="daily-briefing.html" data-nav="daily-briefing" data-group="内容与信息" data-title="每日智能晨报">
+        <div class="icon-wrap"><i data-lucide="sunrise"></i></div>
+        <div class="card-content">
+          <div class="card-title">每日智能晨报</div>
+          <div class="card-desc">AI生成的开盘前简报</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="kol-digest.html" data-nav="kol-digest" data-group="内容与信息" data-title="KOL观点">
+        <div class="icon-wrap"><i data-lucide="users"></i></div>
+        <div class="card-content">
+          <div class="card-title">KOL观点</div>
+          <div class="card-desc">市场意见领袖精华汇总</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="content-manage.html" data-nav="content-manage" data-group="内容与信息" data-title="内容管理">
+        <div class="icon-wrap"><i data-lucide="folder-open"></i></div>
+        <div class="card-content">
+          <div class="card-title">内容管理</div>
+          <div class="card-desc">研报与资讯归档整理</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Group 3: 分析与选股 -->
+  <section class="group-section fade-in">
+    <div class="group-title"><span class="group-dot"></span>分析与选股</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      <a class="nav-card" href="scoring-list.html" data-nav="scoring-list" data-group="分析与选股" data-title="评分榜单">
+        <div class="icon-wrap"><i data-lucide="award"></i></div>
+        <div class="card-content">
+          <div class="card-title">评分榜单</div>
+          <div class="card-desc">多因子综合评分排行</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="stock-deep.html" data-nav="stock-deep" data-group="分析与选股" data-title="个股深度">
+        <div class="icon-wrap"><i data-lucide="search"></i></div>
+        <div class="card-content">
+          <div class="card-title">个股深度</div>
+          <div class="card-desc">全方位深度诊断分析</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="sim-trading.html" data-nav="sim-trading" data-group="分析与选股" data-title="模拟交易">
+        <div class="icon-wrap"><i data-lucide="gamepad-2"></i></div>
+        <div class="card-content">
+          <div class="card-title">模拟交易</div>
+          <div class="card-desc">零风险策略验证环境</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="strategy-backtest.html" data-nav="strategy-backtest" data-group="分析与选股" data-title="策略回测">
+        <div class="icon-wrap"><i data-lucide="rotate-ccw"></i></div>
+        <div class="card-content">
+          <div class="card-title">策略回测</div>
+          <div class="card-desc">历史数据策略验证</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Group 4: 产业链与知识 -->
+  <section class="group-section fade-in">
+    <div class="group-title"><span class="group-dot"></span>产业链与知识</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      <a class="nav-card" href="industry-chain.html" data-nav="industry-chain" data-group="产业链与知识" data-title="产业链图谱">
+        <div class="icon-wrap"><i data-lucide="network"></i></div>
+        <div class="card-content">
+          <div class="card-title">产业链图谱</div>
+          <div class="card-desc">上下游关系可视化</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="sector-analysis.html" data-nav="sector-analysis" data-group="产业链与知识" data-title="赛道分析">
+        <div class="icon-wrap"><i data-lucide="route"></i></div>
+        <div class="card-content">
+          <div class="card-title">赛道分析</div>
+          <div class="card-desc">行业赛道景气度追踪</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="stock-relation.html" data-nav="stock-relation" data-group="产业链与知识" data-title="个股关联">
+        <div class="icon-wrap"><i data-lucide="git-branch"></i></div>
+        <div class="card-content">
+          <div class="card-title">个股关联</div>
+          <div class="card-desc">相关性分析与联动图谱</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="concept-card.html" data-nav="concept-card" data-group="产业链与知识" data-title="概念卡片">
+        <div class="icon-wrap"><i data-lucide="layout-grid"></i></div>
+        <div class="card-content">
+          <div class="card-title">概念卡片</div>
+          <div class="card-desc">投资概念速查卡片库</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="knowledge-base.html" data-nav="knowledge-base" data-group="产业链与知识" data-title="知识库">
+        <div class="icon-wrap"><i data-lucide="book-open"></i></div>
+        <div class="card-content">
+          <div class="card-title">知识库</div>
+          <div class="card-desc">投研知识与方法论沉淀</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Group 5: AI编排层 -->
+  <section class="group-section fade-in">
+    <div class="group-title"><span class="group-dot"></span>AI编排层</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      <a class="nav-card" href="workflow.html" data-nav="workflow" data-group="AI编排层" data-title="工作流编排">
+        <div class="icon-wrap"><i data-lucide="workflow"></i></div>
+        <div class="card-content">
+          <div class="card-title">工作流编排</div>
+          <div class="card-desc">自定义AI分析流水线</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="meeting-minutes.html" data-nav="meeting-minutes" data-group="AI编排层" data-title="会议纪要">
+        <div class="icon-wrap"><i data-lucide="file-text"></i></div>
+        <div class="card-content">
+          <div class="card-title">会议纪要</div>
+          <div class="card-desc">智能会议记录与摘要</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="private-knowledge.html" data-nav="private-knowledge" data-group="AI编排层" data-title="私域知识">
+        <div class="icon-wrap"><i data-lucide="lock"></i></div>
+        <div class="card-content">
+          <div class="card-title">私域知识</div>
+          <div class="card-desc">个人专属知识库管理</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="prompt-manage.html" data-nav="prompt-manage" data-group="AI编排层" data-title="Prompt管理">
+        <div class="icon-wrap"><i data-lucide="terminal"></i></div>
+        <div class="card-content">
+          <div class="card-title">Prompt管理</div>
+          <div class="card-desc">提示词模板库与优化</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="multimodal.html" data-nav="multimodal" data-group="AI编排层" data-title="多模态">
+        <div class="icon-wrap"><i data-lucide="image"></i></div>
+        <div class="card-content">
+          <div class="card-title">多模态</div>
+          <div class="card-desc">图文音视频AI分析</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="ai-chat.html" data-nav="ai-chat" data-group="AI编排层" data-title="AI投研对话">
+        <div class="icon-wrap"><i data-lucide="message-square"></i></div>
+        <div class="card-content">
+          <div class="card-title">AI投研对话</div>
+          <div class="card-desc">智能问答与深度研讨</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Group 6: 社区与协作 -->
+  <section class="group-section fade-in">
+    <div class="group-title"><span class="group-dot"></span>社区与协作</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      <a class="nav-card" href="strategy-square.html" data-nav="strategy-square" data-group="社区与协作" data-title="策略广场">
+        <div class="icon-wrap"><i data-lucide="rocket"></i></div>
+        <div class="card-content">
+          <div class="card-title">策略广场</div>
+          <div class="card-desc">优质策略发现与分享</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="notes-share.html" data-nav="notes-share" data-group="社区与协作" data-title="笔记分享">
+        <div class="icon-wrap"><i data-lucide="share-2"></i></div>
+        <div class="card-content">
+          <div class="card-title">笔记分享</div>
+          <div class="card-desc">投研笔记协作与共享</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+      <a class="nav-card" href="concept-collab.html" data-nav="concept-collab" data-group="社区与协作" data-title="概念协作">
+        <div class="icon-wrap"><i data-lucide="handshake"></i></div>
+        <div class="card-content">
+          <div class="card-title">概念协作</div>
+          <div class="card-desc">概念定义与共创编辑</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Group 7: 系统 -->
+  <section class="group-section fade-in">
+    <div class="group-title"><span class="group-dot"></span>系统</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      <a class="nav-card" href="settings.html" data-nav="settings" data-group="系统" data-title="系统设置">
+        <div class="icon-wrap"><i data-lucide="settings"></i></div>
+        <div class="card-content">
+          <div class="card-title">系统设置</div>
+          <div class="card-desc">账户偏好与系统配置</div>
+        </div>
+        <i data-lucide="chevron-right" class="arrow" style="width:18px;height:18px;stroke-width:2;"></i>
+      </a>
+
+    </div>
+  </section>
+
+</main>
+
+<script>
+// Initialize Lucide icons
+lucide.createIcons();
+
+// Intercept card clicks in iframe mode → use parent.loadPage()
+document.querySelectorAll('.nav-card').forEach(function(card) {
+  card.addEventListener('click', function(e) {
+    if (window.self !== window.top && parent.loadPage) {
+      e.preventDefault();
+      var href   = this.getAttribute('href');
+      var title  = this.getAttribute('data-title');
+      var group  = this.getAttribute('data-group');
+      parent.loadPage(null, href, group, title);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

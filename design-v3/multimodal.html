@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多模态 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+/* ====== APPLE DESIGN SYSTEM ====== */
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --accent: #0071E3;
+  --navy: #1D1D1F;
+  --up: #FF3B30;
+  --down: #34C759;
+  --tag-green-bg: #E8F5E9;
+  --tag-green-text: #2E7D32;
+  --tag-blue-bg: #F0F7FF;
+  --tag-blue-text: #0051D5;
+  --tag-yellow-bg: #FFF8E1;
+  --tag-yellow-text: #B76E00;
+  --tag-red-bg: #FFEBEE;
+  --tag-red-text: #C62828;
+  --tag-purple-bg: #F3E5F5;
+  --tag-purple-text: #6A1B9A;
+  --hover-bg: #F5F5F7;
+  --active-bg: #F0F7FF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  display: flex;
+  min-height: 100vh;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+
+/* ====== SIDEBAR ====== */
+.unified-sidebar {
+  width: 220px; min-width: 220px;
+  background: #FFFFFF;
+  color: var(--text-primary);
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+  border-right: 1px solid var(--border);
+}
+.unified-sidebar-logo {
+  padding: 20px 16px;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: -0.3px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+}
+.unified-sidebar-logo .brand-icon {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, #0071E3, #5AC8FA);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: #fff;
+  flex-shrink: 0;
+}
+.unified-sidebar-logo .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+.unified-sidebar-logo .brand-text .main { font-size: 15px; font-weight: 700; }
+.unified-sidebar-logo .brand-text .sub { font-size: 10px; color: var(--accent); font-weight: 500; }
+.unified-sidebar-section { padding: 12px 0; }
+.unified-sidebar-title {
+  padding: 8px 16px;
+  color: var(--text-secondary);
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.unified-nav-item {
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-left: 4px solid transparent;
+  font-size: 14px; font-weight: 500;
+  border-radius: 8px;
+  margin: 0 8px;
+}
+.unified-nav-item:hover { background: var(--hover-bg); color: var(--text-primary); }
+.unified-nav-item.active {
+  background: var(--active-bg);
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+.unified-nav-item .icon {
+  width: 20px; text-align: center;
+  font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+}
+.unified-nav-item.active .icon { color: var(--accent); }
+
+/* ====== MAIN ====== */
+.unified-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.unified-topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 16px;
+  position: sticky; top: 0; z-index: 30;
+}
+.unified-search {
+  flex: 1; max-width: 480px;
+  display: flex; align-items: center;
+  background: var(--bg);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 7px 14px;
+  gap: 10px;
+  height: 40px;
+  transition: all 0.15s;
+}
+.unified-search:focus-within {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+}
+.unified-search input {
+  border: none; background: transparent; outline: none; flex: 1;
+  font-size: 14px; color: var(--text-primary); font-family: inherit;
+}
+.unified-search input::placeholder { color: #C7C7CC; }
+.unified-user {
+  display: flex; align-items: center; gap: 8px;
+  margin-left: auto;
+  font-size: 14px; color: var(--text-secondary);
+}
+.unified-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #5856D6, #AF52DE);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+}
+
+/* ====== TYPOGRAPHY ====== */
+.page-title { font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; line-height: 1.2; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+.card-title {
+  font-size: 18px; font-weight: 600; color: var(--navy);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+  line-height: 1.4;
+}
+
+/* ====== BUTTONS ====== */
+.btn-primary {
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s ease;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-outline {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s ease;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--active-bg); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+
+/* ====== TAGS ====== */
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 0 8px; height: 20px;
+  border-radius: 10px;
+  font-size: 11px; font-weight: 500;
+}
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+
+/* ====== MULTIMODAL ZONES ====== */
+.mm-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 32px; text-align: center;
+  background: #F5F5F7;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.mm-zone:hover {
+  border-color: var(--accent);
+  background: var(--active-bg);
+}
+.mm-result {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 120px;
+}
+.mm-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+}
+.voice-btn {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  border: none;
+  font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto; cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,113,227,0.3);
+}
+.voice-btn:hover { transform: scale(1.05); }
+.voice-btn.recording {
+  animation: pulse-red 1.5s infinite;
+  background: var(--up);
+}
+@keyframes pulse-red {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,59,48,0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(255,59,48,0); }
+}
+.waveform {
+  display: flex; align-items: center; justify-content: center;
+  gap: 3px; height: 40px; margin: 12px 0;
+}
+.wave-bar {
+  width: 4px; background: var(--accent);
+  border-radius: 2px;
+  animation: wave 1s ease-in-out infinite;
+}
+.wave-bar:nth-child(1) { height: 12px; animation-delay: 0s; }
+.wave-bar:nth-child(2) { height: 20px; animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { height: 28px; animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { height: 36px; animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { height: 24px; animation-delay: 0.4s; }
+.wave-bar:nth-child(6) { height: 16px; animation-delay: 0.5s; }
+.wave-bar:nth-child(7) { height: 32px; animation-delay: 0.6s; }
+.wave-bar:nth-child(8) { height: 20px; animation-delay: 0.7s; }
+.wave-bar:nth-child(9) { height: 14px; animation-delay: 0.8s; }
+@keyframes wave {
+  0%,100% { transform: scaleY(0.5); opacity: 0.5; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+.kline-preview {
+  width: 100%; height: 160px;
+  background: #fff;
+  border-radius: 12px;
+  position: relative; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.kline-preview .overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--text-secondary);
+  z-index: 1;
+}
+
+/* ====== TABLE ====== */
+.mm-result table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.mm-result table tr { border-bottom: 1px solid var(--border); }
+.mm-result table tr:last-child { border-bottom: none; }
+.mm-result table td { padding: 10px 0; }
+.mm-result table td:first-child { color: var(--text-secondary); }
+.mm-result table td:last-child { text-align: right; font-weight: 600; }
+
+/* ====== IFRAME EMBED MODE ====== */
+</style>
+<style>
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; overflow-y: auto !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+
+<aside class="unified-sidebar">
+  <div class="unified-sidebar-logo">
+    <div class="brand-icon">5</div>
+    <div class="brand-text">
+      <span class="main">金融投资</span>
+      <span class="sub">AI助手</span>
+    </div>
+  </div>
+  <div class="unified-sidebar-section">
+    <div class="unified-sidebar-title">AI编排层</div>
+    <div class="unified-nav-item">
+      <span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span>
+      <span>工作流编排</span>
+    </div>
+    <div class="unified-nav-item">
+      <span class="icon"><i data-lucide="mic" style="width:20px;height:20px;"></i></span>
+      <span>会议纪要</span>
+    </div>
+    <div class="unified-nav-item">
+      <span class="icon"><i data-lucide="lock" style="width:20px;height:20px;"></i></span>
+      <span>私域知识</span>
+    </div>
+    <div class="unified-nav-item">
+      <span class="icon"><i data-lucide="settings" style="width:20px;height:20px;"></i></span>
+      <span>Prompt管理</span>
+    </div>
+    <div class="unified-nav-item active">
+      <span class="icon"><i data-lucide="image" style="width:20px;height:20px;"></i></span>
+      <span>多模态</span>
+    </div>
+    <div class="unified-nav-item">
+      <span class="icon"><i data-lucide="message-square" style="width:20px;height:20px;"></i></span>
+      <span>AI投研对话</span>
+    </div>
+  </div>
+</aside>
+
+<div class="unified-main">
+  <div class="unified-topbar">
+    <div class="unified-search">
+      <span style="color:var(--text-secondary);display:flex;align-items:center;"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <input type="text" placeholder="搜索...">
+    </div>
+    <div class="unified-user">
+      <span style="display:flex;align-items:center;color:var(--text-secondary);cursor:pointer;"><i data-lucide="bell" style="width:20px;height:20px;"></i></span>
+      <div class="unified-avatar">投</div>
+      <span>投研用户</span>
+    </div>
+  </div>
+
+  <div style="padding: 24px 24px; max-width: 1440px; margin: 0 auto;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+      <div>
+        <div class="page-title">多模态</div>
+        <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5;">截图K线分析 · 拍照财报提取 · 语音搜索</div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+      <!-- 截图K线分析 -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card-title">
+          <i data-lucide="camera" style="width:20px;height:20px;color:var(--accent);"></i>
+          截图K线分析
+        </div>
+        <div class="mm-zone">
+          <div class="mm-icon"><i data-lucide="camera" style="width:36px;height:36px;"></i></div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary);">上传K线截图或拖拽到此处</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">支持 PNG / JPG / GIF</div>
+        </div>
+        <div class="kline-preview">
+          <div class="overlay">K线预览区域</div>
+          <div style="position: absolute; bottom: 30px; left: 20px; width: 8px; height: 40px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 40px; width: 8px; height: 25px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 35px; left: 60px; width: 8px; height: 55px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 80px; width: 8px; height: 30px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 100px; width: 8px; height: 45px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 120px; width: 8px; height: 20px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 140px; width: 8px; height: 50px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 160px; width: 8px; height: 35px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 180px; width: 8px; height: 40px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 200px; width: 8px; height: 60px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 220px; width: 8px; height: 25px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 240px; width: 8px; height: 45px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 260px; width: 8px; height: 30px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 280px; width: 8px; height: 55px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 300px; width: 8px; height: 20px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 320px; width: 8px; height: 40px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 340px; width: 8px; height: 30px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 360px; width: 8px; height: 50px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 380px; width: 8px; height: 25px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 400px; width: 8px; height: 55px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 420px; width: 8px; height: 35px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 440px; width: 8px; height: 20px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 460px; width: 8px; height: 45px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 480px; width: 8px; height: 60px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 500px; width: 8px; height: 30px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 520px; width: 8px; height: 50px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 540px; width: 8px; height: 25px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 560px; width: 8px; height: 40px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 580px; width: 8px; height: 30px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 600px; width: 8px; height: 55px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 620px; width: 8px; height: 20px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 640px; width: 8px; height: 45px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 660px; width: 8px; height: 35px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 680px; width: 8px; height: 60px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 700px; width: 8px; height: 25px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 720px; width: 8px; height: 50px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 65px; left: 740px; width: 8px; height: 30px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 45px; left: 760px; width: 8px; height: 55px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 70px; left: 780px; width: 8px; height: 20px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 55px; left: 800px; width: 8px; height: 45px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 60px; left: 820px; width: 8px; height: 35px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 40px; left: 840px; width: 8px; height: 60px; background: var(--up); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 75px; left: 860px; width: 8px; height: 25px; background: var(--down); border-radius: 1px;"></div>
+          <div style="position: absolute; bottom: 50px; left: 880px; width: 8px; height: 50px; background: var(--up); border-radius: 1px;"></div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px; display:flex;align-items:center;gap:6px;">
+            <i data-lucide="search" style="width:16px;height:16px;color:var(--accent);"></i>
+            技术形态识别结果
+          </div>
+          <div style="margin-bottom: 8px; display:flex; gap:6px; flex-wrap:wrap;">
+            <span class="tag tag-purple">头肩顶</span>
+            <span class="tag tag-yellow">置信度 78%</span>
+            <span class="tag tag-red" style="display:inline-flex;align-items:center;gap:4px;"><i data-lucide="alert-triangle" style="width:12px;height:12px;"></i>看跌信号</span>
+          </div>
+          <div style="color: var(--text-secondary); line-height: 1.7; font-size: 14px;">
+            • 左肩高点：$142.50（2026-06-20）<br>
+            • 头部高点：$145.80（2026-07-01）<br>
+            • 右肩高点：$141.20（2026-07-08）<br>
+            • 颈线位：$135.00（已跌破）<br>
+            • 量度跌幅目标：$128.50 - $130.00<br>
+            • 建议：关注反抽颈线确认，若无法站回则确认形态成立
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-outline btn-sm" style="flex:1;">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>下载报告
+          </button>
+          <button class="btn-primary btn-sm" style="flex:1;">
+            <i data-lucide="clipboard-list" style="width:14px;height:14px;"></i>复制分析
+          </button>
+        </div>
+      </div>
+
+      <!-- 拍照财报提取 -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card-title">
+          <i data-lucide="file-image" style="width:20px;height:20px;color:var(--accent);"></i>
+          拍照财报提取
+        </div>
+        <div class="mm-zone">
+          <div class="mm-icon"><i data-lucide="file-text" style="width:36px;height:36px;"></i></div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary);">上传财报截图或拍照</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">支持财报/公告/研报截图</div>
+        </div>
+        <div class="kline-preview" style="background: #fff; display: flex; align-items: center; justify-content: center;">
+          <div style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+            <div style="display:flex;justify-content:center;margin-bottom:8px;"><i data-lucide="bar-chart-3" style="width:28px;height:28px;color:var(--accent);"></i></div>
+            <div>财报预览区域</div>
+          </div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px; display:flex;align-items:center;gap:6px;">
+            <i data-lucide="clipboard-list" style="width:16px;height:16px;color:var(--accent);"></i>
+            关键数据提取
+          </div>
+          <table>
+            <tr><td>营收</td><td class="tabular-nums">$38.7B</td></tr>
+            <tr><td>同比增长</td><td class="tabular-nums" style="color: var(--up);">+56%</td></tr>
+            <tr><td>净利润</td><td class="tabular-nums">$19.2B</td></tr>
+            <tr><td>毛利率</td><td class="tabular-nums">78.4%</td></tr>
+            <tr><td>EPS</td><td class="tabular-nums">$0.78</td></tr>
+            <tr><td>下季指引</td><td class="tabular-nums">$42.0B</td></tr>
+            <tr><td>ROE</td><td class="tabular-nums">52.3%</td></tr>
+          </table>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-outline btn-sm" style="flex:1;">
+            <i data-lucide="download" style="width:14px;height:14px;"></i>导出Excel
+          </button>
+          <button class="btn-primary btn-sm" style="flex:1;">
+            <i data-lucide="check-circle" style="width:14px;height:14px;"></i>确认数据
+          </button>
+        </div>
+      </div>
+
+      <!-- 语音搜索 -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card-title">
+          <i data-lucide="mic" style="width:20px;height:20px;color:var(--accent);"></i>
+          语音搜索
+        </div>
+        <div style="text-align: center; padding: 20px 0;">
+          <button class="voice-btn"><i data-lucide="mic" style="width:24px;height:24px;"></i></button>
+          <div style="font-size: 14px; color: var(--text-secondary); margin-top: 12px;">点击开始录音</div>
+        </div>
+        <div class="waveform">
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px; display:flex;align-items:center;gap:6px;">
+            <i data-lucide="file-text" style="width:16px;height:16px;color:var(--accent);"></i>
+            转写文字
+          </div>
+          <div style="font-size: 14px; color: var(--text-primary); line-height: 1.7;">
+            "帮我查一下英伟达最近五因子的评分怎么样，技术面是不是还在主升浪？"
+          </div>
+        </div>
+        <div class="mm-result">
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px; display:flex;align-items:center;gap:6px;">
+            <i data-lucide="search" style="width:16px;height:16px;color:var(--accent);"></i>
+            搜索结果
+          </div>
+          <div style="color: var(--text-primary); line-height: 1.7; font-size: 14px;">
+            <strong>NVIDIA (NVDA)</strong> 五因子评分：<br>
+            • FinalScore：<span class="tabular-nums" style="color: var(--accent); font-weight: 700;">64.4</span>（S4 主升浪全共振）<br>
+            • F1 资金：<span class="tabular-nums">26</span>（量比偏低，体量巨大）<br>
+            • F2 宏观：<span class="tabular-nums">54</span>（宏观环境中性偏暖）<br>
+            • F3 情绪：<span class="tabular-nums">50</span>（情绪中性）<br>
+            • F4 基本面：<span class="tabular-nums">100</span>（满分）<br>
+            • F5 技术：<span class="tabular-nums">100</span>（满分）<br>
+            • 仓位标签：<span class="tag tag-green">Core</span><br>
+            • 9模型LLM共识：87.29分，一致推荐 core 仓位
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-outline btn-sm" style="flex:1;">
+            <i data-lucide="volume-2" style="width:14px;height:14px;"></i>语音播报
+          </button>
+          <button class="btn-primary btn-sm" style="flex:1;">
+            <i data-lucide="clipboard-list" style="width:14px;height:14px;"></i>复制结果
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // iframe embed detection
+  console.log('多模态页已加载');
+  // Init Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+});
+</script>
+</body>
+</html>

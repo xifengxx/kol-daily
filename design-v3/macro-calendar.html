@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>宏观事件日历</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #F5F5F7;
+      --bg-secondary: #FFFFFF;
+      --bg-tertiary: #F5F5F7;
+      --accent: #0071E3;
+      --accent-light: #5AC8FA;
+      --text-primary: #1D1D1F;
+      --text-secondary: #86868B;
+      --text-tertiary: #C7C7CC;
+      --border: #E5E5EA;
+      --high: #FF3B30;
+      --medium: #FF9500;
+      --low: #34C759;
+      --green: #34C759;
+      --red: #FF3B30;
+      --chart-line: #0071E3;
+      --chart-area: rgba(0,113,227,0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+    /* ===== HEADER / MONTH NAV ===== */
+    .header {
+      padding: 24px 28px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-title .icon-wrapper {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-title .icon-wrapper svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    .header-title h1 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 4px;
+    }
+
+    .month-nav button {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .month-nav button:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .month-nav button svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .month-current {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding: 0 16px;
+      min-width: 140px;
+      text-align: center;
+      letter-spacing: -0.2px;
+    }
+
+    .today-btn {
+      margin-left: 12px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(0,113,227,0.1);
+      border: 1px solid rgba(0,113,227,0.2);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .today-btn:hover {
+      background: rgba(0,113,227,0.2);
+    }
+
+    /* ===== LEGEND ===== */
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.high { background: var(--high); }
+    .legend-dot.medium { background: var(--medium); }
+    .legend-dot.low { background: var(--low); }
+
+    /* ===== CALENDAR ===== */
+    .calendar-wrapper {
+      padding: 20px 28px 40px;
+    }
+
+    .calendar-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .weekday-label {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      padding: 8px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1.1;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      min-height: 90px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .calendar-day:hover {
+      background: var(--bg-tertiary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .calendar-day.other-month {
+      opacity: 0.35;
+    }
+
+    .calendar-day.today {
+      box-shadow: inset 0 0 0 1.5px var(--accent);
+    }
+
+    .calendar-day.selected {
+      background: rgba(0,113,227,0.12);
+      box-shadow: inset 0 0 0 1.5px var(--accent);
+    }
+
+    .day-number {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .calendar-day.today .day-number {
+      color: var(--accent);
+    }
+
+    .day-events {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .day-event-chip {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 6px;
+      border-radius: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .day-event-chip .chip-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .day-event-chip.high { background: rgba(255,59,48,0.12); color: #FF3B30; }
+    .day-event-chip.medium { background: rgba(255,149,0,0.12); color: #FFB340; }
+    .day-event-chip.low { background: rgba(52,199,89,0.12); color: #4CD964; }
+
+    .day-event-chip.high .chip-dot { background: var(--high); }
+    .day-event-chip.medium .chip-dot { background: var(--medium); }
+    .day-event-chip.low .chip-dot { background: var(--low); }
+
+    .day-event-count {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: auto;
+      padding-top: 2px;
+    }
+
+    /* ===== SIDE PANEL ===== */
+    .side-panel {
+      position: fixed;
+      top: 0;
+      right: -460px;
+      width: 460px;
+      height: 100vh;
+      background: var(--bg-primary);
+      border-left: 1px solid var(--border);
+      z-index: 200;
+      transition: right 0.35s cubic-bezier(0.16,1,0.3,1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-panel.open { right: 0; }
+
+    .panel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .panel-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .panel-header {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .panel-date-info {
+      flex: 1;
+    }
+
+    .panel-date-info .date-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+
+    .panel-date-info .date-value {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .panel-date-info .date-weekday {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .panel-close {
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .panel-close:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .panel-close svg { width: 18px; height: 18px; }
+
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px 32px;
+    }
+
+    .panel-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-section-title svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Event Card in Panel */
+    .event-card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .event-card:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .event-card.high { border-left-color: var(--high); }
+    .event-card.medium { border-left-color: var(--medium); }
+    .event-card.low { border-left-color: var(--low); }
+
+    .event-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .event-time-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .event-time-row svg {
+      width: 13px;
+      height: 13px;
+      color: var(--text-tertiary);
+    }
+
+    .event-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .event-badge.high { background: rgba(255,59,48,0.15); color: #FF3B30; }
+    .event-badge.medium { background: rgba(255,149,0,0.15); color: #FFB340; }
+    .event-badge.low { background: rgba(52,199,89,0.15); color: #4CD964; }
+
+    .event-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .event-values {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .value-box {
+      background: var(--bg-primary);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .value-box .value-label {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .value-box .value-num {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .value-box .value-num.good { color: var(--green); }
+    .value-box .value-num.bad { color: var(--red); }
+
+    .event-source {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .event-source svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Empty State */
+    .empty-day {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-tertiary);
+    }
+
+    .empty-day svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px;
+      opacity: 0.4;
+    }
+
+    .empty-day p {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* ===== UPCOMING STRIP ===== */
+    .upcoming-strip {
+      padding: 0 28px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .upcoming-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+    }
+
+    .upcoming-list {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .upcoming-card {
+      flex-shrink: 0;
+      width: 220px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .upcoming-card:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--border);
+    }
+
+    .upcoming-card .upcoming-date {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .upcoming-card .upcoming-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .upcoming-card .upcoming-meta {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .upcoming-card .upcoming-priority {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    /* ===== MARKET STATUS BAR ===== */
+    .market-bar {
+      padding: 14px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+    }
+
+    .market-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .market-flag {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .market-info {
+      line-height: 1.3;
+    }
+
+    .market-name {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+    }
+
+    .market-status {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .market-status.open { color: var(--green); }
+    .market-status.closed { color: var(--red); }
+    .market-status.upcoming { color: var(--medium); }
+
+    /* ===== MINI CHARTS IN PANEL ===== */
+    .mini-chart {
+      height: 100px;
+      margin-top: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .side-panel { width: 400px; right: -400px; }
+    }
+
+    @media (max-width: 768px) {
+      .calendar-grid { gap: 3px; }
+      .calendar-day { border-radius: 10px; padding: 6px; min-height: 60px; }
+      .day-number { font-size: 13px; }
+      .day-event-chip { font-size: 9px; padding: 2px 4px; }
+      .side-panel { width: 100vw; right: -100vw; }
+      .header { padding: 16px; }
+      .calendar-wrapper { padding: 12px 16px 30px; }
+      .legend-bar { padding: 10px 16px; }
+      .upcoming-strip { padding: 0 16px 16px; }
+      .market-bar { padding: 10px 16px; }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .calendar-day { animation: fadeInUp 0.3s ease forwards; }
+
+    .event-card {
+      animation: fadeInUp 0.3s ease forwards;
+    }
+
+    /* ===== LOADING ===== */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-title">
+      <div class="icon-wrapper">
+        <i data-lucide="calendar-days"></i>
+      </div>
+      <h1>宏观事件日历</h1>
+    </div>
+    <div style="display:flex;align-items:center;">
+      <div class="month-nav">
+        <button id="prevMonth" title="上一月"><i data-lucide="chevron-left"></i></button>
+        <span class="month-current" id="monthDisplay"></span>
+        <button id="nextMonth" title="下一月"><i data-lucide="chevron-right"></i></button>
+      </div>
+      <button class="today-btn" id="todayBtn">今天</button>
+    </div>
+  </div>
+
+  <!-- Market Status Bar -->
+  <div class="market-bar" id="marketBar"></div>
+
+  <!-- Legend -->
+  <div class="legend-bar">
+    <div class="legend-item"><span class="legend-dot high"></span>高重要性</div>
+    <div class="legend-item"><span class="legend-dot medium"></span>中重要性</div>
+    <div class="legend-item"><span class="legend-dot low"></span>低重要性</div>
+    <div class="legend-item" style="margin-left:auto;"><i data-lucide="landmark" style="width:12px;height:12px;color:var(--text-tertiary);"></i>央行决议</div>
+    <div class="legend-item"><i data-lucide="bar-chart-3" style="width:12px;height:12px;color:var(--text-tertiary);"></i>经济数据</div>
+    <div class="legend-item"><i data-lucide="users" style="width:12px;height:12px;color:var(--text-tertiary);"></i>会议</div>
+    <div class="legend-item"><i data-lucide="trending-up" style="width:12px;height:12px;color:var(--text-tertiary);"></i>财报季</div>
+  </div>
+
+  <!-- Upcoming High-Priority Events -->
+  <div class="upcoming-strip" id="upcomingStrip"></div>
+
+  <!-- Calendar -->
+  <div class="calendar-wrapper">
+    <div class="calendar-header" id="weekdayHeader"></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+  </div>
+
+  <!-- Side Panel Overlay -->
+  <div class="panel-overlay" id="panelOverlay"></div>
+
+  <!-- Side Panel -->
+  <div class="side-panel" id="sidePanel">
+    <div class="panel-header">
+      <div class="panel-date-info">
+        <div class="date-label">选中日期</div>
+        <div class="date-value" id="panelDate"></div>
+        <div class="date-weekday" id="panelWeekday"></div>
+      </div>
+      <button class="panel-close" id="panelClose"><i data-lucide="x"></i></button>
+    </div>
+    <div class="panel-body" id="panelBody"></div>
+  </div>
+
+  <script>
+    // ============================================================
+    // DATA STORE
+    // ============================================================
+
+    const macroEvents = {
+      // ===== JUNE 2026 =====
+      '2026-06-01': [
+        { name: '中国5月财新制造业PMI', time: '09:45', importance: 'high', type: 'pmi', source: '财新网', prev: '50.7', expect: '50.9', actual: '' },
+        { name: '欧元区5月制造业PMI终值', time: '17:00', importance: 'medium', type: 'pmi', source: 'IHS Markit', prev: '48.4', expect: '48.4', actual: '' }
+      ],
+      '2026-06-02': [
+        { name: '美国5月ISM制造业PMI', time: '22:00', importance: 'high', type: 'pmi', source: '美国供应管理协会', prev: '49.2', expect: '49.5', actual: '' }
+      ],
+      '2026-06-03': [
+        { name: '澳大利亚央行利率决议', time: '12:30', importance: 'medium', type: 'rate', source: '澳洲联储', prev: '3.85%', expect: '3.85%', actual: '' }
+      ],
+      '2026-06-04': [
+        { name: '美国5月ADP就业人数', time: '20:15', importance: 'medium', type: 'employment', source: 'ADP', prev: '+18.9万', expect: '+16.5万', actual: '' },
+        { name: '美国当周EIA原油库存', time: '22:30', importance: 'low', type: 'commodity', source: 'EIA', prev: '-280万桶', expect: '-150万桶', actual: '' }
+      ],
+      '2026-06-05': [
+        { name: '美国5月非农就业报告', time: '20:30', importance: 'high', type: 'employment', source: '美国劳工部', prev: '+17.7万', expect: '+16.0万', actual: '' },
+        { name: '美国5月失业率', time: '20:30', importance: 'high', type: 'employment', source: '美国劳工部', prev: '4.2%', expect: '4.2%', actual: '' },
+        { name: '加拿大5月就业数据', time: '20:30', importance: 'medium', type: 'employment', source: '加拿大统计局', prev: '+0.9万', expect: '+1.5万', actual: '' }
+      ],
+      '2026-06-08': [
+        { name: '中国5月进出口数据', time: '10:00', importance: 'high', type: 'trade', source: '海关总署', prev: '出口+8.1%', expect: '出口+7.5%', actual: '' },
+        { name: '欧元区6月Sentix投资者信心指数', time: '16:30', importance: 'low', type: 'sentiment', source: 'Sentix', prev: '-8.5', expect: '-6.0', actual: '' }
+      ],
+      '2026-06-09': [
+        { name: '日本第一季度GDP修正值', time: '07:50', importance: 'medium', type: 'gdp', source: '内阁府', prev: '-0.2%', expect: '-0.1%', actual: '' }
+      ],
+      '2026-06-10': [
+        { name: '中国5月CPI', time: '09:30', importance: 'high', type: 'inflation', source: '国家统计局', prev: '+0.3%', expect: '+0.4%', actual: '' },
+        { name: '中国5月PPI', time: '09:30', importance: 'medium', type: 'inflation', source: '国家统计局', prev: '-1.8%', expect: '-1.6%', actual: '' }
+      ],
+      '2026-06-11': [
+        { name: '美国5月CPI', time: '20:30', importance: 'high', type: 'inflation', source: '美国劳工部', prev: '+2.4%', expect: '+2.5%', actual: '' },
+        { name: '欧洲央行利率决议', time: '20:15', importance: 'high', type: 'rate', source: '欧洲央行', prev: '2.00%', expect: '1.75%', actual: '' },
+        { name: '欧洲央行新闻发布会', time: '20:45', importance: 'high', type: 'rate', source: '欧洲央行', prev: '', expect: '', actual: '' }
+      ],
+      '2026-06-12': [
+        { name: '美国6月密歇根大学消费者信心指数初值', time: '22:00', importance: 'medium', type: 'sentiment', source: '密歇根大学', prev: '74.0', expect: '75.0', actual: '' }
+      ],
+      '2026-06-15': [
+        { name: '中国5月社会融资规模', time: '10:00', importance: 'medium', type: 'credit', source: '央行', prev: '2.36万亿', expect: '2.20万亿', actual: '' },
+        { name: '中国5月M2货币供应', time: '10:00', importance: 'medium', type: 'money', source: '央行', prev: '+8.0%', expect: '+7.9%', actual: '' }
+      ],
+      '2026-06-16': [
+        { name: '美国5月零售销售', time: '20:30', importance: 'high', type: 'consumption', source: '美国商务部', prev: '+0.1%', expect: '+0.3%', actual: '' },
+        { name: '美国5月工业产出', time: '21:15', importance: 'medium', type: 'industry', source: '美联储', prev: '+0.4%', expect: '+0.2%', actual: '' }
+      ],
+      '2026-06-17': [
+        { name: '美国5月新屋开工', time: '20:30', importance: 'medium', type: 'housing', source: '美国商务部', prev: '136.1万', expect: '135.0万', actual: '' },
+        { name: '英国5月CPI', time: '14:00', importance: 'medium', type: 'inflation', source: '英国统计局', prev: '+2.6%', expect: '+2.7%', actual: '' }
+      ],
+      '2026-06-18': [
+        { name: '美联储利率决议', time: '02:00', importance: 'high', type: 'rate', source: '美联储', prev: '4.25-4.50%', expect: '4.00-4.25%', actual: '' },
+        { name: '美联储主席新闻发布会', time: '02:30', importance: 'high', type: 'rate', source: '美联储', prev: '', expect: '', actual: '' }
+      ],
+      '2026-06-19': [
+        { name: '日本5月CPI', time: '07:30', importance: 'medium', type: 'inflation', source: '日本统计局', prev: '+3.5%', expect: '+3.3%', actual: '' },
+        { name: '欧元区5月CPI终值', time: '17:00', importance: 'medium', type: 'inflation', source: '欧盟统计局', prev: '+1.9%', expect: '+1.9%', actual: '' }
+      ],
+      '2026-06-22': [
+        { name: '欧元区6月消费者信心指数初值', time: '17:00', importance: 'low', type: 'sentiment', source: '欧盟委员会', prev: '-14.0', expect: '-13.0', actual: '' }
+      ],
+      '2026-06-23': [
+        { name: '美国5月成屋销售', time: '22:00', importance: 'medium', type: 'housing', source: '全美地产经纪商协会', prev: '411万', expect: '410万', actual: '' }
+      ],
+      '2026-06-24': [
+        { name: '德国6月IFO商业景气指数', time: '16:00', importance: 'medium', type: 'sentiment', source: 'IFO研究所', prev: '86.9', expect: '87.5', actual: '' }
+      ],
+      '2026-06-25': [
+        { name: '美国第一季度GDP终值', time: '20:30', importance: 'medium', type: 'gdp', source: '美国商务部', prev: '+2.1%', expect: '+2.1%', actual: '' },
+        { name: '美国当周初请失业金人数', time: '20:30', importance: 'medium', type: 'employment', source: '美国劳工部', prev: '23.5万', expect: '23.8万', actual: '' }
+      ],
+      '2026-06-26': [
+        { name: '美国5月核心PCE物价指数', time: '20:30', importance: 'high', type: 'inflation', source: '美国经济分析局', prev: '+2.7%', expect: '+2.6%', actual: '' },
+        { name: '美国5月个人收入/支出', time: '20:30', importance: 'medium', type: 'consumption', source: '美国经济分析局', prev: '+0.3%/+0.4%', expect: '+0.4%/+0.3%', actual: '' }
+      ],
+      '2026-06-29': [
+        { name: '中国6月官方制造业PMI', time: '09:00', importance: 'high', type: 'pmi', source: '国家统计局', prev: '49.5', expect: '49.7', actual: '' },
+        { name: '中国6月非制造业PMI', time: '09:00', importance: 'medium', type: 'pmi', source: '国家统计局', prev: '50.3', expect: '50.5', actual: '' }
+      ],
+      '2026-06-30': [
+        { name: '日本5月工业生产', time: '12:30', importance: 'low', type: 'industry', source: '日本经产省', prev: '-0.9%', expect: '+0.5%', actual: '' },
+        { name: '欧元区6月CPI初值', time: '17:00', importance: 'high', type: 'inflation', source: '欧盟统计局', prev: '+1.9%', expect: '+1.8%', actual: '' }
+      ],
+
+      // ===== JULY 2026 =====
+      '2026-07-01': [
+        { name: '中国6月财新制造业PMI', time: '09:45', importance: 'high', type: 'pmi', source: '财新网', prev: '50.9', expect: '51.0', actual: '' },
+        { name: '美国6月ISM制造业PMI', time: '22:00', importance: 'high', type: 'pmi', source: '美国供应管理协会', prev: '49.5', expect: '49.8', actual: '' }
+      ],
+      '2026-07-02': [
+        { name: '美国6月ADP就业人数', time: '20:15', importance: 'medium', type: 'employment', source: 'ADP', prev: '+16.5万', expect: '+15.0万', actual: '' },
+        { name: '美国当周EIA原油库存', time: '22:30', importance: 'low', type: 'commodity', source: 'EIA', prev: '-150万桶', expect: '-200万桶', actual: '' }
+      ],
+      '2026-07-03': [
+        { name: '美国6月非农就业报告', time: '20:30', importance: 'high', type: 'employment', source: '美国劳工部', prev: '+16.0万', expect: '+15.5万', actual: '' },
+        { name: '美国6月失业率', time: '20:30', importance: 'high', type: 'employment', source: '美国劳工部', prev: '4.2%', expect: '4.3%', actual: '' },
+        { name: '加拿大6月就业数据', time: '20:30', importance: 'medium', type: 'employment', source: '加拿大统计局', prev: '+1.5万', expect: '+1.0万', actual: '' }
+      ],
+      '2026-07-04': [
+        { name: '美国独立日假期', time: '全天', importance: 'low', type: 'holiday', source: '', prev: '', expect: '', actual: '' }
+      ],
+      '2026-07-07': [
+        { name: '中国6月外汇储备', time: '10:00', importance: 'medium', type: 'reserves', source: '央行', prev: '3.28万亿', expect: '3.27万亿', actual: '' }
+      ],
+      '2026-07-08': [
+        { name: '中国6月CPI', time: '09:30', importance: 'high', type: 'inflation', source: '国家统计局', prev: '+0.4%', expect: '+0.5%', actual: '' },
+        { name: '中国6月PPI', time: '09:30', importance: 'medium', type: 'inflation', source: '国家统计局', prev: '-1.6%', expect: '-1.4%', actual: '' }
+      ],
+      '2026-07-09': [
+        { name: '美联储会议纪要', time: '02:00', importance: 'high', type: 'policy', source: '美联储', prev: '', expect: '', actual: '' }
+      ],
+      '2026-07-10': [
+        { name: '美国6月PPI', time: '20:30', importance: 'medium', type: 'inflation', source: '美国劳工部', prev: '+2.2%', expect: '+2.3%', actual: '' },
+        { name: '加拿大6月失业率', time: '20:30', importance: 'medium', type: 'employment', source: '加拿大统计局', prev: '6.8%', expect: '6.9%', actual: '' }
+      ],
+      '2026-07-13': [
+        { name: '中国第二季度GDP', time: '10:00', importance: 'high', type: 'gdp', source: '国家统计局', prev: '+5.4%', expect: '+5.2%', actual: '' },
+        { name: '中国6月社零总额', time: '10:00', importance: 'medium', type: 'consumption', source: '国家统计局', prev: '+4.1%', expect: '+4.3%', actual: '' }
+      ],
+      '2026-07-14': [
+        { name: '德国7月ZEW经济景气指数', time: '17:00', importance: 'medium', type: 'sentiment', source: 'ZEW', prev: '47.5', expect: '48.0', actual: '' },
+        { name: '美国6月NFIB小企业乐观指数', time: '18:00', importance: 'low', type: 'sentiment', source: 'NFIB', prev: '95.1', expect: '95.5', actual: '' }
+      ],
+      '2026-07-15': [
+        { name: '美国6月CPI', time: '20:30', importance: 'high', type: 'inflation', source: '美国劳工部', prev: '+2.5%', expect: '+2.6%', actual: '' },
+        { name: '新西兰第二季度CPI', time: '06:45', importance: 'medium', type: 'inflation', source: '新西兰统计局', prev: '+0.5%', expect: '+0.6%', actual: '' }
+      ],
+      '2026-07-16': [
+        { name: '美国6月零售销售', time: '20:30', importance: 'high', type: 'consumption', source: '美国商务部', prev: '+0.3%', expect: '+0.2%', actual: '' },
+        { name: '美国6月工业产出', time: '21:15', importance: 'medium', type: 'industry', source: '美联储', prev: '+0.2%', expect: '+0.3%', actual: '' },
+        { name: '欧洲央行利率决议', time: '20:15', importance: 'high', type: 'rate', source: '欧洲央行', prev: '1.75%', expect: '1.50%', actual: '' }
+      ],
+      '2026-07-17': [
+        { name: '美国6月新屋开工', time: '20:30', importance: 'medium', type: 'housing', source: '美国商务部', prev: '135.0万', expect: '134.0万', actual: '' },
+        { name: '美国7月费城联储制造业指数', time: '20:30', importance: 'low', type: 'pmi', source: '费城联储', prev: '6.4', expect: '5.0', actual: '' }
+      ],
+      '2026-07-20': [
+        { name: '中国7月LPR报价', time: '09:15', importance: 'medium', type: 'rate', source: '央行', prev: '1Y:3.45%/5Y:3.95%', expect: '持平', actual: '' },
+        { name: '日本6月贸易帐', time: '07:50', importance: 'low', type: 'trade', source: '财务省', prev: '-1.2万亿', expect: '-0.9万亿', actual: '' }
+      ],
+      '2026-07-21': [
+        { name: '澳大利亚央行会议纪要', time: '09:30', importance: 'low', type: 'policy', source: '澳洲联储', prev: '', expect: '', actual: '' }
+      ],
+      '2026-07-22': [
+        { name: '英国6月CPI', time: '14:00', importance: 'high', type: 'inflation', source: '英国统计局', prev: '+2.7%', expect: '+2.8%', actual: '' }
+      ],
+      '2026-07-23': [
+        { name: '美国当周初请失业金人数', time: '20:30', importance: 'medium', type: 'employment', source: '美国劳工部', prev: '23.8万', expect: '24.0万', actual: '' },
+        { name: '美国6月成屋销售', time: '22:00', importance: 'medium', type: 'housing', source: '全美地产经纪商协会', prev: '410万', expect: '408万', actual: '' }
+      ],
+      '2026-07-24': [
+        { name: '欧元区7月制造业PMI初值', time: '16:30', importance: 'high', type: 'pmi', source: 'IHS Markit', prev: '48.0', expect: '48.5', actual: '' },
+        { name: '美国7月Markit制造业PMI初值', time: '21:45', importance: 'medium', type: 'pmi', source: 'S&P Global', prev: '49.7', expect: '50.0', actual: '' }
+      ],
+      '2026-07-27': [
+        { name: '中国6月规模以上工业企业利润', time: '10:00', importance: 'low', type: 'industry', source: '国家统计局', prev: '+1.4%', expect: '+1.6%', actual: '' }
+      ],
+      '2026-07-28': [
+        { name: '美国7月谘商会消费者信心指数', time: '22:00', importance: 'medium', type: 'sentiment', source: '谘商会', prev: '102.0', expect: '103.0', actual: '' },
+        { name: '美国6月耐用品订单', time: '20:30', importance: 'medium', type: 'industry', source: '美国商务部', prev: '+0.8%', expect: '+0.5%', actual: '' }
+      ],
+      '2026-07-29': [
+        { name: '美国7月ADP就业人数', time: '20:15', importance: 'medium', type: 'employment', source: 'ADP', prev: '+15.0万', expect: '+14.5万', actual: '' },
+        { name: '日本央行利率决议', time: '11:00', importance: 'high', type: 'rate', source: '日本央行', prev: '0.50%', expect: '0.50%', actual: '' }
+      ],
+      '2026-07-30': [
+        { name: '美国第二季度GDP初值', time: '20:30', importance: 'high', type: 'gdp', source: '美国商务部', prev: '+2.1%', expect: '+2.3%', actual: '' },
+        { name: '美国当周初请失业金人数', time: '20:30', importance: 'medium', type: 'employment', source: '美国劳工部', prev: '24.0万', expect: '24.2万', actual: '' }
+      ],
+      '2026-07-31': [
+        { name: '中国7月官方制造业PMI', time: '09:00', importance: 'high', type: 'pmi', source: '国家统计局', prev: '49.7', expect: '50.0', actual: '' },
+        { name: '欧元区7月CPI初值', time: '17:00', importance: 'high', type: 'inflation', source: '欧盟统计局', prev: '+1.8%', expect: '+1.7%', actual: '' },
+        { name: '美国6月核心PCE物价指数', time: '20:30', importance: 'high', type: 'inflation', source: '美国经济分析局', prev: '+2.6%', expect: '+2.7%', actual: '' }
+      ],
+
+      // ===== AUGUST 2026 =====
+      '2026-08-03': [
+        { name: '中国7月财新制造业PMI', time: '09:45', importance: 'high', type: 'pmi', source: '财新网', prev: '51.0', expect: '51.2', actual: '' }
+      ],
+      '2026-08-04': [
+        { name: '美国7月ISM制造业PMI', time: '22:00', importance: 'high', type: 'pmi', source: '美国供应管理协会', prev: '49.8', expect: '50.0', actual: '' }
+      ],
+      '2026-08-05': [
+        { name: '澳大利亚央行利率决议', time: '12:30', importance: 'medium', type: 'rate', source: '澳洲联储', prev: '3.85%', expect: '3.60%', actual: '' }
+      ],
+      '2026-08-06': [
+        { name: '美国7月ADP就业人数', time: '20:15', importance: 'medium', type: 'employment', source: 'ADP', prev: '+14.5万', expect: '+14.0万', actual: '' }
+      ],
+      '2026-08-07': [
+        { name: '美国7月非农就业报告', time: '20:30', importance: 'high', type: 'employment', source: '美国劳工部', prev: '+15.5万', expect: '+14.5万', actual: '' },
+        { name: '美国7月失业率', time: '20:30', importance: 'high', type: 'employment', source: '美国劳工部', prev: '4.3%', expect: '4.3%', actual: '' }
+      ],
+      '2026-08-10': [
+        { name: '中国7月进出口数据', time: '10:00', importance: 'high', type: 'trade', source: '海关总署', prev: '出口+7.5%', expect: '出口+7.0%', actual: '' }
+      ],
+      '2026-08-11': [
+        { name: '中国7月CPI', time: '09:30', importance: 'high', type: 'inflation', source: '国家统计局', prev: '+0.5%', expect: '+0.6%', actual: '' },
+        { name: '中国7月PPI', time: '09:30', importance: 'medium', type: 'inflation', source: '国家统计局', prev: '-1.4%', expect: '-1.2%', actual: '' }
+      ],
+      '2026-08-12': [
+        { name: '美国7月CPI', time: '20:30', importance: 'high', type: 'inflation', source: '美国劳工部', prev: '+2.6%', expect: '+2.7%', actual: '' }
+      ],
+      '2026-08-13': [
+        { name: '美国当周初请失业金人数', time: '20:30', importance: 'medium', type: 'employment', source: '美国劳工部', prev: '24.2万', expect: '24.5万', actual: '' }
+      ],
+      '2026-08-14': [
+        { name: '美国7月零售销售', time: '20:30', importance: 'high', type: 'consumption', source: '美国商务部', prev: '+0.2%', expect: '+0.3%', actual: '' }
+      ],
+      '2026-08-17': [
+        { name: '中国7月社会融资规模', time: '10:00', importance: 'medium', type: 'credit', source: '央行', prev: '2.20万亿', expect: '2.10万亿', actual: '' }
+      ],
+      '2026-08-18': [
+        { name: '美国7月新屋开工', time: '20:30', importance: 'medium', type: 'housing', source: '美国商务部', prev: '134.0万', expect: '133.0万', actual: '' }
+      ],
+      '2026-08-19': [
+        { name: '美联储会议纪要', time: '02:00', importance: 'high', type: 'policy', source: '美联储', prev: '', expect: '', actual: '' },
+        { name: '英国7月CPI', time: '14:00', importance: 'high', type: 'inflation', source: '英国统计局', prev: '+2.8%', expect: '+2.9%', actual: '' }
+      ],
+      '2026-08-20': [
+        { name: '欧洲央行7月货币政策会议纪要', time: '19:30', importance: 'medium', type: 'policy', source: '欧洲央行', prev: '', expect: '', actual: '' }
+      ],
+      '2026-08-21': [
+        { name: '日本7月CPI', time: '07:30', importance: 'medium', type: 'inflation', source: '日本统计局', prev: '+3.3%', expect: '+3.1%', actual: '' }
+      ],
+      '2026-08-24': [
+        { name: '美国7月成屋销售', time: '22:00', importance: 'medium', type: 'housing', source: '全美地产经纪商协会', prev: '408万', expect: '406万', actual: '' }
+      ],
+      '2026-08-25': [
+        { name: '美国7月耐用品订单', time: '20:30', importance: 'medium', type: 'industry', source: '美国商务部', prev: '+0.5%', expect: '+0.3%', actual: '' }
+      ],
+      '2026-08-26': [
+        { name: '美国当周初请失业金人数', time: '20:30', importance: 'medium', type: 'employment', source: '美国劳工部', prev: '24.5万', expect: '24.3万', actual: '' }
+      ],
+      '2026-08-27': [
+        { name: '美联储主席鲍威尔杰克逊霍尔讲话', time: '22:00', importance: 'high', type: 'policy', source: '美联储', prev: '', expect: '', actual: '' },
+        { name: '美国第二季度GDP修正值', time: '20:30', importance: 'medium', type: 'gdp', source: '美国商务部', prev: '+2.3%', expect: '+2.3%', actual: '' }
+      ],
+      '2026-08-28': [
+        { name: '美国7月核心PCE物价指数', time: '20:30', importance: 'high', type: 'inflation', source: '美国经济分析局', prev: '+2.7%', expect: '+2.8%', actual: '' }
+      ],
+      '2026-08-31': [
+        { name: '中国8月官方制造业PMI', time: '09:00', importance: 'high', type: 'pmi', source: '国家统计局', prev: '50.0', expect: '50.2', actual: '' },
+        { name: '欧元区8月CPI初值', time: '17:00', importance: 'high', type: 'inflation', source: '欧盟统计局', prev: '+1.7%', expect: '+1.6%', actual: '' }
+      ]
+    };
+
+    // Market status data
+    const marketStatus = [
+      { name: '上证指数', region: 'CN', status: 'open', time: '交易中', change: '+0.42%' },
+      { name: '恒生指数', region: 'HK', status: 'open', time: '交易中', change: '+0.18%' },
+      { name: '日经225', region: 'JP', status: 'closed', time: '已收盘', change: '-0.33%' },
+      { name: '标普500', region: 'US', status: 'upcoming', time: '盘前', change: '+0.25%' },
+      { name: '纳斯达克', region: 'US', status: 'upcoming', time: '盘前', change: '+0.31%' },
+      { name: '欧洲50', region: 'EU', status: 'closed', time: '已收盘', change: '-0.12%' }
+    ];
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let currentYear = 2026;
+    let currentMonth = 6; // July = 6 (0-indexed)
+    let selectedDate = null;
+
+    const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    const weekDays = ['周日','周一','周二','周三','周四','周五','周六'];
+    const weekDaysShort = ['日','一','二','三','四','五','六'];
+
+    // ============================================================
+    // DOM REFS
+    // ============================================================
+    const monthDisplay = document.getElementById('monthDisplay');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const weekdayHeader = document.getElementById('weekdayHeader');
+    const sidePanel = document.getElementById('sidePanel');
+    const panelOverlay = document.getElementById('panelOverlay');
+    const panelDate = document.getElementById('panelDate');
+    const panelWeekday = document.getElementById('panelWeekday');
+    const panelBody = document.getElementById('panelBody');
+    const marketBar = document.getElementById('marketBar');
+    const upcomingStrip = document.getElementById('upcomingStrip');
+
+    // ============================================================
+    // HELPERS
+    // ============================================================
+    function formatDateKey(y, m, d) {
+      return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    function getEvents(dateKey) {
+      return macroEvents[dateKey] || [];
+    }
+
+    function getImportanceColor(imp) {
+      return imp === 'high' ? 'var(--high)' : imp === 'medium' ? 'var(--medium)' : 'var(--low)';
+    }
+
+    function getEventIcon(type) {
+      const map = {
+        rate: 'landmark',
+        inflation: 'bar-chart-3',
+        pmi: 'activity',
+        gdp: 'trending-up',
+        employment: 'users',
+        trade: 'globe',
+        sentiment: 'smile',
+        housing: 'home',
+        industry: 'factory',
+        consumption: 'shopping-cart',
+        commodity: 'fuel',
+        reserves: 'circle-dollar-sign',
+        money: 'banknote',
+        credit: 'credit-card',
+        policy: 'file-text',
+        holiday: 'calendar-off',
+        meeting: 'users-round',
+        earnings: 'chart-line'
+      };
+      return map[type] || 'circle';
+    }
+
+    // ============================================================
+    // MARKET BAR
+    // ============================================================
+    function renderMarketBar() {
+      marketBar.innerHTML = marketStatus.map(m => {
+        const stClass = m.status;
+        const stText = m.time;
+        return `
+          <div class="market-item">
+            <div class="market-flag" style="background:${m.region==='CN'?'#FF3B30':m.region==='HK'?'#0071E3':m.region==='JP'?'#FF9500':m.region==='US'?'#34C759':'#AF52DE'};color:#fff;font-size:9px;">${m.region}</div>
+            <div class="market-info">
+              <div class="market-name">${m.name}</div>
+              <div class="market-status ${stClass}">${stText}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ============================================================
+    // UPCOMING STRIP
+    // ============================================================
+    function renderUpcomingStrip() {
+      const today = new Date();
+      const todayKey = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+      let upcoming = [];
+      for (let d = 0; d <= 14; d++) {
+        const dt = new Date(today);
+        dt.setDate(today.getDate() + d);
+        const key = formatDateKey(dt.getFullYear(), dt.getMonth(), dt.getDate());
+        const evs = getEvents(key);
+        if (evs.length) {
+          evs.forEach(e => {
+            upcoming.push({ ...e, date: dt, dateKey: key });
+          });
+        }
+      }
+
+      upcoming = upcoming.filter(e => e.importance === 'high').slice(0, 6);
+
+      if (!upcoming.length) {
+        upcomingStrip.innerHTML = '';
+        return;
+      }
+
+      upcomingStrip.innerHTML = `
+        <div class="upcoming-title">即将发生 · 高重要性事件</div>
+        <div class="upcoming-list">
+          ${upcoming.map(e => `
+            <div class="upcoming-card" onclick="openPanel('${e.dateKey}')">
+              <div class="upcoming-date">${e.date.getMonth()+1}月${e.date.getDate()}日 ${e.time}</div>
+              <div class="upcoming-name">${e.name}</div>
+              <div class="upcoming-meta">
+                ${e.source} · 预期 ${e.expect}
+                <span class="upcoming-priority" style="background:var(--${e.importance})"></span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // ============================================================
+    // CALENDAR
+    // ============================================================
+    function renderCalendar() {
+      // Weekday headers
+      weekdayHeader.innerHTML = weekDaysShort.map(w =>
+        `<div class="weekday-label">${w}</div>`
+      ).join('');
+
+      // Month info
+      monthDisplay.textContent = `${currentYear}年 ${monthNames[currentMonth]}`;
+
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      const startOffset = firstDay.getDay(); // 0=Sunday
+      const daysInMonth = lastDay.getDate();
+
+      // Previous month filler
+      const prevMonthLast = new Date(currentYear, currentMonth, 0).getDate();
+
+      const today = new Date();
+      const todayKey = formatDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+      let html = '';
+
+      // Previous month days
+      for (let i = startOffset - 1; i >= 0; i--) {
+        const d = prevMonthLast - i;
+        const key = formatDateKey(currentYear, currentMonth - 1, d);
+        const evs = getEvents(key);
+        html += renderDayCell(d, true, key === todayKey, false, evs, key);
+      }
+
+      // Current month days
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = formatDateKey(currentYear, currentMonth, d);
+        const evs = getEvents(key);
+        html += renderDayCell(d, false, key === todayKey, selectedDate === key, evs, key);
+      }
+
+      // Next month filler
+      const totalCells = startOffset + daysInMonth;
+      const remaining = (7 - (totalCells % 7)) % 7;
+      for (let d = 1; d <= remaining; d++) {
+        const key = formatDateKey(currentYear, currentMonth + 1, d);
+        const evs = getEvents(key);
+        html += renderDayCell(d, true, key === todayKey, false, evs, key);
+      }
+
+      calendarGrid.innerHTML = html;
+
+      // Stagger animation
+      calendarGrid.querySelectorAll('.calendar-day').forEach((el, i) => {
+        el.style.animationDelay = `${i * 15}ms`;
+      });
+
+      lucide.createIcons();
+    }
+
+    function renderDayCell(dayNum, isOtherMonth, isToday, isSelected, events, dateKey) {
+      const maxChips = 3;
+      const chips = events.slice(0, maxChips).map(e =>
+        `<div class="day-event-chip ${e.importance}">
+          <span class="chip-dot"></span>
+          <span>${e.name.slice(0, 7)}${e.name.length > 7 ? '...' : ''}</span>
+        </div>`
+      ).join('');
+
+      const moreCount = events.length > maxChips ? events.length - maxChips : 0;
+      const moreText = moreCount > 0 ? `<div class="day-event-count">+${moreCount} 项</div>` : '';
+
+      return `
+        <div class="calendar-day ${isOtherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}"
+             onclick="openPanel('${dateKey}')">
+          <div class="day-number">${dayNum}</div>
+          <div class="day-events">
+            ${chips}
+            ${moreText}
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================================
+    // SIDE PANEL
+    // ============================================================
+    window.openPanel = function(dateKey) {
+      selectedDate = dateKey;
+      const [y, m, d] = dateKey.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+
+      panelDate.textContent = `${m}月${d}日`;
+      panelWeekday.textContent = `${weekDays[dateObj.getDay()]} · ${y}年`;
+
+      const events = getEvents(dateKey);
+
+      if (!events.length) {
+        panelBody.innerHTML = `
+          <div class="empty-day">
+            <i data-lucide="calendar-x"></i>
+            <p>该日暂无宏观事件安排</p>
+          </div>
+        `;
+      } else {
+        panelBody.innerHTML = `
+          <div class="panel-section-title">
+            <i data-lucide="calendar-check"></i>
+            共 ${events.length} 项事件
+          </div>
+          ${events.map((e, i) => renderEventCard(e, i)).join('')}
+        `;
+      }
+
+      renderCalendar(); // refresh selection
+      sidePanel.classList.add('open');
+      panelOverlay.classList.add('active');
+      lucide.createIcons();
+    };
+
+    function renderEventCard(e, idx) {
+      const actualDisplay = e.actual
+        ? `<div class="value-box">
+             <div class="value-label">实际值</div>
+             <div class="value-num ${parseValueTrend(e.actual, e.expect)}">${e.actual}</div>
+           </div>`
+        : '';
+
+      const iconName = getEventIcon(e.type);
+
+      return `
+        <div class="event-card ${e.importance}" style="animation-delay:${idx*80}ms">
+          <div class="event-card-header">
+            <div class="event-time-row">
+              <i data-lucide="clock"></i>
+              ${e.time}
+            </div>
+            <span class="event-badge ${e.importance}">
+              ${e.importance === 'high' ? '高' : e.importance === 'medium' ? '中' : '低'}
+            </span>
+          </div>
+          <div class="event-name">
+            ${e.name}
+          </div>
+          <div class="event-values">
+            <div class="value-box">
+              <div class="value-label">前值</div>
+              <div class="value-num">${e.prev || '-'}</div>
+            </div>
+            <div class="value-box">
+              <div class="value-label">预期值</div>
+              <div class="value-num">${e.expect || '-'}</div>
+            </div>
+            ${actualDisplay}
+          </div>
+          ${e.source ? `
+            <div class="event-source">
+              <i data-lucide="building-2"></i>
+              数据来源: ${e.source}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function parseValueTrend(actual, expect) {
+      if (!actual || !expect) return '';
+      const a = parseFloat(actual.replace(/[^0-9.\-]/g, ''));
+      const e = parseFloat(expect.replace(/[^0-9.\-]/g, ''));
+      if (isNaN(a) || isNaN(e)) return '';
+      return a > e ? 'good' : a < e ? 'bad' : '';
+    }
+
+    function closePanel() {
+      sidePanel.classList.remove('open');
+      panelOverlay.classList.remove('active');
+      selectedDate = null;
+      renderCalendar();
+    }
+
+    // ============================================================
+    // NAVIGATION
+    // ============================================================
+    document.getElementById('prevMonth').addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      renderCalendar();
+    });
+
+    document.getElementById('nextMonth').addEventListener('click', () => {
+      currentMonth++;
+      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      renderCalendar();
+    });
+
+    document.getElementById('todayBtn').addEventListener('click', () => {
+      const t = new Date();
+      currentYear = t.getFullYear();
+      currentMonth = t.getMonth();
+      renderCalendar();
+    });
+
+    document.getElementById('panelClose').addEventListener('click', closePanel);
+    document.getElementById('panelOverlay').addEventListener('click', closePanel);
+
+    // ESC close
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closePanel();
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    renderMarketBar();
+    renderUpcomingStrip();
+    renderCalendar();
+    lucide.createIcons();
+  </script>
+
+  <!-- iframe embed detection -->
+  <script>
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+  </script>
+  <style>
+  body.in-iframe header,
+  body.in-iframe nav,
+  body.in-iframe aside { display: none !important; }
+  body.in-iframe main,
+  body.in-iframe .main { margin-left: 0 !important; padding-top: 24px !important; }
+  </style>
+</body>
+</html>

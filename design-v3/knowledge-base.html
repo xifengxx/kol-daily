@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识库 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --card-hover: #F5F5F7;
+  --text: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #C7C7CC;
+  --border: #E5E5EA;
+  --accent: #0071E3;
+  --accent-light: #5AC8FA;
+  --accent-bg: #F0F7FF;
+  --navy: #1D1D1F;
+  --up: #FF3B30;
+  --down: #34C759;
+  --warning: #FF9500;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.sidebar {
+  width: 220px; min-width: 220px; background: #FFFFFF; color: #1D1D1F;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50; border-right: 1px solid #E5E5EA;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid #E5E5EA; color: #1D1D1F; }
+.sidebar-logo span { color: #0071E3; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 16px 16px 8px; color: #86868B; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: #86868B; cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 14px; }
+.nav-item:hover { background: #F5F5F7; color: #1D1D1F; }
+.nav-item.active { background: #F0F7FF; color: #0071E3; border-left-color: #0071E3; }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: #86868B; cursor: pointer; font-size: 13px; transition: all 0.15s; border-radius: 8px; margin: 0 8px; }
+.nav-sub:hover { color: #1D1D1F; background: #F5F5F7; }
+.nav-sub.active { color: #0071E3; font-weight: 500; background: #F0F7FF; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #FFFFFF; border-bottom: 1px solid #E5E5EA; padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: #F5F5F7; border-radius: 8px; padding: 7px 14px; gap: 10px; height: 40px; border: 1px solid transparent; transition: all 0.15s; }
+.search:focus-within { border-color: #0071E3; background: #FFFFFF; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: #1D1D1F; font-family: inherit; }
+.search input::placeholder { color: #C7C7CC; }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: #86868B; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+.content { padding: 24px 32px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+.card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--navy); line-height: 1.4; }
+.tag { display: inline-flex; align-items: center; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; }
+.tag-green { background: #34C759; color: #FFFFFF; }
+.tag-blue { background: #0071E3; color: #FFFFFF; }
+.tag-yellow { background: #FF9500; color: #FFFFFF; }
+.tag-red { background: #FF3B30; color: #FFFFFF; }
+.tag-purple { background: #5856D6; color: #FFFFFF; }
+.tag-gray { background: #F2F2F7; color: #1D1D1F; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table th { text-transform: uppercase; font-size: 12px; color: #86868B; font-weight: 500; text-align: left; padding: 12px 16px; border-bottom: 1px solid #E5E5EA; background: #F2F2F7; letter-spacing: 0.5px; }
+.data-table td { padding: 14px 16px; border-bottom: 1px solid #E5E5EA; }
+.data-table tbody tr:hover { background: #F5F5F7; }
+.data-table tbody tr { transition: background 0.15s; }
+.tree-item { padding: 6px 10px; cursor: pointer; border-radius: 8px; transition: all 0.15s; display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.tree-item:hover { background: #F5F5F7; }
+.tree-item.active { background: #F0F7FF; color: #0071E3; font-weight: 600; }
+.tree-folder { font-weight: 600; }
+.tree-level-1 { padding-left: 10px; }
+.tree-level-2 { padding-left: 24px; }
+.tree-level-3 { padding-left: 38px; }
+.tree-level-4 { padding-left: 52px; font-size: 11px; color: #86868B; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.status-confirm { background: #34C759; }
+.status-partial { background: #FF9500; }
+.status-false { background: #FF3B30; }
+.status-pending { background: #86868B; }
+.status-expired { background: #86868B; }
+.status-invalid { background: #C7C7CC; }
+.review-bar { display: flex; height: 24px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.review-bar .rb-segment { font-size: 10px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 600; }
+.review-bar .rb-confirm { background: #34C759; }
+.review-bar .rb-partial { background: #FF9500; }
+.review-bar .rb-false { background: #FF3B30; }
+.review-bar .rb-pending { background: #86868B; }
+.review-bar .rb-expired { background: #86868B; }
+.review-bar .rb-invalid { background: #C7C7CC; color: #86868B; }
+.preview-panel { background: #FFFFFF; border: 1px solid #E5E5EA; border-radius: 12px; padding: 24px; font-size: 14px; line-height: 1.8; }
+.preview-panel h3 { font-size: 18px; font-weight: 600; color: #1D1D1F; margin-bottom: 8px; line-height: 1.4; }
+.preview-panel .meta { font-size: 12px; color: #86868B; margin-bottom: 12px; }
+.knowledge-status { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; }
+.ks-indexed { background: #34C759; color: #FFFFFF; }
+.ks-pending { background: #FF9500; color: #FFFFFF; }
+.ks-failed { background: #FF3B30; color: #FFFFFF; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Tree panel fixed height */
+.tree-panel { max-height: 800px; overflow-y: auto; }
+.preview-container { max-height: 800px; overflow-y: auto; }
+
+/* Flow chart styles */
+.flow-section { margin-top: 24px; }
+.flow-container { display: flex; align-items: center; justify-content: center; gap: 0; padding: 24px 0; }
+.flow-step { flex: 1; max-width: 200px; background: #FFFFFF; border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px; text-align: center; position: relative; transition: all 0.3s ease; }
+.flow-step:hover { box-shadow: 0 4px 16px rgba(0,113,227,0.12); transform: translateY(-2px); border-color: var(--accent); }
+.flow-step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #FFFFFF; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.flow-step-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.flow-step-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+.flow-arrow { display: flex; align-items: center; justify-content: center; padding: 0 8px; color: var(--accent); flex-shrink: 0; }
+.flow-arrow svg { width: 20px; height: 20px; }
+.flow-stats { display: flex; justify-content: center; gap: 40px; padding: 16px 0 8px; border-top: 1px solid var(--border); margin-top: 8px; }
+.flow-stat { text-align: center; }
+.flow-stat-value { font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
+.flow-stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5<span>Factor</span> AI</div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span> 行情与数据</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="newspaper" style="width:20px;height:20px;"></i></span> 内容与信息</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="target" style="width:20px;height:20px;"></i></span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="link" style="width:20px;height:20px;"></i></span> 产业链与知识</div>
+    <div class="nav-sub">产业链全景</div>
+    <div class="nav-sub">赛道详情</div>
+    <div class="nav-sub">个股深度</div>
+    <div class="nav-sub">概念卡片</div>
+    <div class="nav-sub active">知识库</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="users" style="width:20px;height:20px;"></i></span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <i data-lucide="search" style="width:16px;height:16px;color:#86868B;flex-shrink:0;"></i>
+      <input type="text" placeholder="搜索知识库...">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div>
+        <h1 style="font-size:28px; font-weight:700; color:var(--navy); letter-spacing:-0.02em; line-height:1.2;">知识库</h1>
+        <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">产业链知识图谱 · 四层全景 · 6大产业 · 74赛道</p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <span class="tag tag-blue">v2.3</span>
+        <span class="tag tag-green">实时更新</span>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-bottom:20px;">
+      <div class="card" style="text-align:center; padding:24px 16px;">
+        <div style="font-size:36px; font-weight:700; color:var(--accent); letter-spacing:-0.02em;">447</div>
+        <div style="font-size:13px; color:var(--text-secondary); margin-top:6px;">知识文件</div>
+        <div style="font-size:11px; color:#C7C7CC; margin-top:2px;">58 + 389</div>
+      </div>
+      <div class="card" style="text-align:center; padding:24px 16px;">
+        <div style="font-size:36px; font-weight:700; color:var(--accent); letter-spacing:-0.02em;">74</div>
+        <div style="font-size:13px; color:var(--text-secondary); margin-top:6px;">赛道卡片</div>
+        <div style="font-size:11px; color:#C7C7CC; margin-top:2px;">AI 40 + 半导体 34</div>
+      </div>
+      <div class="card" style="text-align:center; padding:24px 16px;">
+        <div style="font-size:36px; font-weight:700; color:var(--accent); letter-spacing:-0.02em;">15</div>
+        <div style="font-size:13px; color:var(--text-secondary); margin-top:6px;">分析报告</div>
+        <div style="font-size:11px; color:#C7C7CC; margin-top:2px;">深度 + 专题</div>
+      </div>
+      <div class="card" style="text-align:center; padding:24px 16px;">
+        <div style="font-size:36px; font-weight:700; color:#FF9500; letter-spacing:-0.02em;">42</div>
+        <div style="font-size:13px; color:var(--text-secondary); margin-top:6px;">待验证判断</div>
+        <div style="font-size:11px; color:#C7C7CC; margin-top:2px;">复盘跟踪中</div>
+      </div>
+    </div>
+
+    <!-- Main Layout: 2 Columns -->
+    <div style="display:flex; gap:16px;">
+      <!-- Left: Industry Chain Tree -->
+      <div class="card tree-panel" style="width:340px; flex-shrink:0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div class="card-title" style="font-size:16px; margin:0;">产业链知识库结构</div>
+        </div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+          一级产业 → 二级赛道 → 三级细分 → 四级公司
+        </div>
+
+        <!-- AI算力 -->
+        <div class="tree-item tree-folder tree-level-1" style="color:var(--accent); font-weight:700;">
+          <i data-lucide="folder-open" style="width:16px;height:16px;flex-shrink:0;"></i> AI算力
+        </div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 原材料与资源
+        </div>
+        <div class="tree-item tree-level-3" data-id="silicon-wafer"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#94a3b8;"></i> 高纯硅料与硅片</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> 信越化学, SUMCO, 沪硅产业</div>
+        <div class="tree-item tree-level-3" data-id="specialty-gas"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#94a3b8;"></i> 电子特气</div>
+        <div class="tree-item tree-level-3" data-id="photoresist"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#94a3b8;"></i> 光刻胶与湿化学品</div>
+
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 设备与零部件
+        </div>
+        <div class="tree-item tree-level-3" data-id="lithography"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 光刻机</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> ASML, Nikon, Canon</div>
+        <div class="tree-item tree-level-3" data-id="etching"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 刻蚀设备</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> 泛林, 东京电子, 中微公司</div>
+        <div class="tree-item tree-level-3" data-id="thin-film"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 薄膜沉积设备</div>
+        <div class="tree-item tree-level-3" data-id="cowos"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 先进封装CoWoS</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> TSMC, 长电科技, 通富微电</div>
+        <div class="tree-item tree-level-3" data-id="optical-module"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 800G/1.6T光模块</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> 中际旭创, Coherent, 天孚通信</div>
+
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 核心产品与集成
+        </div>
+        <div class="tree-item tree-level-3 active" data-id="gpu-arch"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> GPU架构设计</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> NVIDIA, AMD, Intel, 华为昇腾</div>
+        <div class="tree-item tree-level-3" data-id="gpu-fab"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> GPU制造代工</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> TSMC, 三星, Intel</div>
+        <div class="tree-item tree-level-3" data-id="hbm"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> HBM高带宽内存</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> SK海力士, 三星, 美光</div>
+        <div class="tree-item tree-level-3" data-id="ai-server"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> AI服务器</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> 工业富联, 超微电脑, 戴尔</div>
+        <div class="tree-item tree-level-3" data-id="asic"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> ASIC/AI定制芯片</div>
+
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 终端应用与服务
+        </div>
+        <div class="tree-item tree-level-3" data-id="cloud-iaas"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#fb923c;"></i> 云计算IaaS</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> AWS, Azure, Google Cloud, 阿里云</div>
+        <div class="tree-item tree-level-3" data-id="ai-api"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#fb923c;"></i> AI推理API服务</div>
+        <div class="tree-item tree-level-3" data-id="autonomous"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#fb923c;"></i> 自动驾驶</div>
+
+        <!-- 半导体 -->
+        <div class="tree-item tree-folder tree-level-1" style="margin-top:8px; color:var(--accent); font-weight:700;">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 半导体
+        </div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 制造
+        </div>
+        <div class="tree-item tree-level-3" data-id="advanced-fab"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 晶圆代工(先进制程)</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> TSMC, 三星, Intel</div>
+        <div class="tree-item tree-level-3" data-id="mature-fab"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 成熟制程代工</div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 设备
+        </div>
+        <div class="tree-item tree-level-3" data-id="inspection"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#60a5fa;"></i> 检测设备</div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 设计
+        </div>
+        <div class="tree-item tree-level-3" data-id="cpu-server"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> CPU(服务器级)</div>
+        <div class="tree-item tree-level-3" data-id="memory-chip"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 存储芯片(DRAM/NAND)</div>
+        <div class="tree-item tree-level-4"><i data-lucide="building-2" style="width:12px;height:12px;flex-shrink:0;color:#86868B;"></i> 三星, SK海力士, 美光, 长鑫</div>
+
+        <!-- 新能源车 -->
+        <div class="tree-item tree-folder tree-level-1" style="margin-top:8px; color:var(--accent); font-weight:700;">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 新能源车
+        </div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 动力电池
+        </div>
+        <div class="tree-item tree-level-3" data-id="cathode"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 正极材料</div>
+        <div class="tree-item tree-level-3" data-id="anode"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 负极材料</div>
+        <div class="tree-item tree-level-3" data-id="electrolyte"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 电解液</div>
+        <div class="tree-item tree-level-3" data-id="separator"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 隔膜</div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 电机电控
+        </div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 智能驾驶
+        </div>
+
+        <!-- 光伏储能 -->
+        <div class="tree-item tree-folder tree-level-1" style="margin-top:8px; color:var(--accent); font-weight:700;">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 光伏储能
+        </div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 光伏
+        </div>
+        <div class="tree-item tree-level-3" data-id="silicon-material"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 硅料</div>
+        <div class="tree-item tree-level-3" data-id="silicon-ingot"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 硅片</div>
+        <div class="tree-item tree-level-3" data-id="solar-cell"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 电池片</div>
+        <div class="tree-item tree-level-3" data-id="solar-module"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 组件</div>
+        <div class="tree-item tree-folder tree-level-2">
+          <i data-lucide="folder" style="width:16px;height:16px;flex-shrink:0;"></i> 储能
+        </div>
+        <div class="tree-item tree-level-3" data-id="energy-storage"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 储能系统</div>
+        <div class="tree-item tree-level-3" data-id="inverter"><i data-lucide="circle" style="width:8px;height:8px;flex-shrink:0;color:#4ade80;"></i> 逆变器</div>
+      </div>
+
+      <!-- Right: File Preview Panel -->
+      <div class="preview-panel preview-container" id="preview-panel" style="flex:1; overflow-y:auto;">
+        <div class="fade-in" id="preview-content">
+          <!-- Default preview content will be injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Knowledge Pipeline Flow Chart -->
+    <div class="card flow-section">
+      <div class="card-title" style="font-size:16px; margin-bottom:4px;">知识沉淀流水线</div>
+      <p style="font-size:12px; color:var(--text-secondary); margin-bottom:8px;">从信息摄入到知识库归档的全链路自动化处理</p>
+      
+      <div class="flow-container">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <div class="flow-step-title">摄入</div>
+          <div class="flow-step-desc">新闻 · 公告 · 财报 · 研报 · 专利 · 社交媒体</div>
+        </div>
+        <div class="flow-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">2</div>
+          <div class="flow-step-title">解析</div>
+          <div class="flow-step-desc">OCR识别 · NLP提取 · 多模态理解 · 噪声过滤</div>
+        </div>
+        <div class="flow-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-title">结构化</div>
+          <div class="flow-step-desc">实体抽取 · 关系构建 · 标签分类 · 知识融合</div>
+        </div>
+        <div class="flow-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">4</div>
+          <div class="flow-step-title">索引</div>
+          <div class="flow-step-desc">向量嵌入 · 图谱关联 · 语义检索 · 增量更新</div>
+        </div>
+        <div class="flow-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">5</div>
+          <div class="flow-step-title">归档</div>
+          <div class="flow-step-desc">知识库入库 · 版本管理 · 质量审核 · 关联推荐</div>
+        </div>
+      </div>
+      
+      <div class="flow-stats">
+        <div class="flow-stat">
+          <div class="flow-stat-value">2026-07-02 14:32</div>
+          <div class="flow-stat-label">最近处理时间</div>
+        </div>
+        <div class="flow-stat">
+          <div class="flow-stat-value">12<span style="font-size:14px; color:var(--text-secondary); font-weight:500;"> 文件/小时</span></div>
+          <div class="flow-stat-label">处理速度</div>
+        </div>
+        <div class="flow-stat">
+          <div class="flow-stat-value">96.5<span style="font-size:14px; color:var(--text-secondary); font-weight:500;">%</span></div>
+          <div class="flow-stat-label">成功率</div>
+        </div>
+        <div class="flow-stat">
+          <div class="flow-stat-value">1,247<span style="font-size:14px; color:var(--text-secondary); font-weight:500;"> 条</span></div>
+          <div class="flow-stat-label">今日处理量</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom: Review Engine -->
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title" style="font-size:16px;">复盘验证引擎 · 6状态标注</div>
+      <div style="display:flex; gap:16px; margin-bottom:12px;">
+        <div style="flex:1;">
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:4px; font-weight:500;">复盘状态分布</div>
+          <div class="review-bar">
+            <div class="rb-segment rb-confirm" style="width:35%;">确认 35%</div>
+            <div class="rb-segment rb-partial" style="width:20%;">部分 20%</div>
+            <div class="rb-segment rb-pending" style="width:25%;">待验证 25%</div>
+            <div class="rb-segment rb-false" style="width:8%;">证伪 8%</div>
+            <div class="rb-segment rb-expired" style="width:7%;">已过期 7%</div>
+            <div class="rb-segment rb-invalid" style="width:5%;">已失效 5%</div>
+          </div>
+        </div>
+      </div>
+      <table class="data-table" style="font-size:12px;">
+        <thead>
+          <tr><th>日期</th><th>判断句</th><th>来源</th><th>T+N</th><th>实际结果</th><th>状态</th><th>失败根因</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2026-06-15</td>
+            <td>"HBM3E供不应求将持续至Q3"</td>
+            <td>晨报</td>
+            <td>T+30</td>
+            <td>SK海力士HBM收入+35% QoQ</td>
+            <td><span class="status-dot status-confirm"></span> 确认</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>2026-06-20</td>
+            <td>"NVDA F1资金面偏低，警惕回调"</td>
+            <td>五因子</td>
+            <td>T+15</td>
+            <td>股价横盘震荡，未回调</td>
+            <td><span class="status-dot status-partial"></span> 部分</td>
+            <td>时机错误</td>
+          </tr>
+          <tr>
+            <td>2026-05-28</td>
+            <td>"CPO概念将在6月全面爆发"</td>
+            <td>KOL</td>
+            <td>T+30</td>
+            <td>仅龙头涨，二线未跟</td>
+            <td><span class="status-dot status-partial"></span> 部分</td>
+            <td>市场情绪</td>
+          </tr>
+          <tr>
+            <td>2026-05-10</td>
+            <td>"固态电池Q2量产将改变格局"</td>
+            <td>研报</td>
+            <td>T+60</td>
+            <td>量产延迟至Q4</td>
+            <td><span class="status-dot status-false"></span> 证伪</td>
+            <td>数据错误</td>
+          </tr>
+          <tr>
+            <td>2026-06-01</td>
+            <td>"美联储6月降息25bp"</td>
+            <td>宏观</td>
+            <td>T+30</td>
+            <td>会议维持利率不变</td>
+            <td><span class="status-dot status-expired"></span> 已过期</td>
+            <td>前提变化</td>
+          </tr>
+          <tr>
+            <td>2026-04-15</td>
+            <td>"某AI公司将在5月发布GPT-5级模型"</td>
+            <td>舆情</td>
+            <td>T+45</td>
+            <td>窗口已过，无发布</td>
+            <td><span class="status-dot status-invalid"></span> 已失效</td>
+            <td>反身性</td>
+          </tr>
+          <tr>
+            <td>2026-07-01</td>
+            <td>"台积电CoWoS产能Q3翻倍"</td>
+            <td>产业链</td>
+            <td>T+90</td>
+            <td>—</td>
+            <td><span class="status-dot status-pending"></span> 待验证</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px; padding:12px; background:#F5F5F7; border-radius:8px; font-size:11px; color:var(--text-secondary);">
+        <strong>7种失败根因:</strong> 逻辑错误 / 前提变化 / 黑天鹅 / 时机错误 / 数据错误 / 市场情绪 / 反身性
+        <span style="margin-left:16px;"><strong>确认率:</strong> <span style="color:var(--accent); font-weight:600;">55%</span></span>
+        <span style="margin-left:16px;"><strong>主要错误模式:</strong> 时机错误 (32%) + 数据错误 (24%)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Preview data for each track/segment
+const previewData = {
+  'gpu-arch': {
+    title: 'GPU架构设计 赛道详情',
+    tags: [{text:'L3 核心产品', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 芯片设计层 · TAM: $130B · CAGR: 40%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['NVIDIA','>80%','CUDA锁定 / NVLink / Blackwell→Rubin','<span class="tag tag-green">基准</span>'],
+         ['AMD','~12%','ROCm生态 / MI300→MI400','<span class="tag tag-yellow">2-3年</span>'],
+         ['Intel','<3%','Falcon Shores / OneAPI','<span class="tag tag-yellow">3-5年</span>'],
+         ['华为昇腾','—','Ascend 910B / 政府运营商','<span class="tag tag-yellow">软件>5年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'Blackwell架构B200/B300 GPU量产，单卡FP8算力达20PFLOPS',
+         'Rubin架构2026年发布，1年迭代周期加速',
+         '中国出口管制下，国产GPU替代加速但软件生态差距仍大',
+         '客户自研芯片(TPU/Trainium)长期替代风险'
+       ]}
+    ]
+  },
+  'silicon-wafer': {
+    title: '高纯硅料与硅片 赛道详情',
+    tags: [{text:'L3 原材料', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 半导体上游材料 · TAM: $18B · CAGR: 6%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['信越化学','~30%','超高纯硅料 / 12英寸大硅片','<span class="tag tag-green">基准</span>'],
+         ['SUMCO','~25%','SOI硅片 / 汽车级硅片','<span class="tag tag-green">基准</span>'],
+         ['沪硅产业','~5%','12英寸国产替代 / 大基金支持','<span class="tag tag-yellow">3-5年</span>'],
+         ['环球晶圆','~15%','并购Siltronic / 全球布局','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '12英寸硅片供不应求，2026年价格持续上涨',
+         '国产12英寸硅片良率突破90%，进入主流客户供应链',
+         '碳化硅(SiC)衬底在功率器件领域快速替代硅片',
+         'AI芯片对高纯硅料纯度要求提升至11N级'
+       ]}
+    ]
+  },
+  'specialty-gas': {
+    title: '电子特气 赛道详情',
+    tags: [{text:'L3 原材料', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 晶圆制造核心耗材 · TAM: $6.5B · CAGR: 8%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心产品','差距'],
+       rows: [
+         ['林德集团','~25%','全品类特气 / 现场制气','<span class="tag tag-green">基准</span>'],
+         ['空气化工','~20%','NF3/WF6/高纯氮','<span class="tag tag-green">基准</span>'],
+         ['大阳日酸','~15%','日本本土优势 / 高纯气体','<span class="tag tag-green">基准</span>'],
+         ['南大光电','~3%','ArF光刻胶配套特气','<span class="tag tag-yellow">5-8年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '先进制程对特气纯度要求从6N提升至7N-8N',
+         '国产替代加速，刻蚀气体(CF4/SF6)已突破',
+         '俄乌冲突导致氦气供应紧张，价格翻倍',
+         '现场制气(On-site)模式成为晶圆厂首选'
+       ]}
+    ]
+  },
+  'photoresist': {
+    title: '光刻胶与湿化学品 赛道详情',
+    tags: [{text:'L3 原材料', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 光刻工艺核心材料 · TAM: $4.2B · CAGR: 5%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心产品','差距'],
+       rows: [
+         ['JSR','~20%','ArF/KrF光刻胶 / EUV胶','<span class="tag tag-green">基准</span>'],
+         ['东京应化','~18%','EUV光刻胶领先','<span class="tag tag-green">基准</span>'],
+         ['信越化学','~15%','i线/g线 / 封装胶','<span class="tag tag-green">基准</span>'],
+         ['南大光电','<1%','ArF光刻胶验证中','<span class="tag tag-red">>10年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'EUV光刻胶被JSR、东京应化、信越三家垄断',
+         '国产ArF光刻胶仅南大光电、上海新阳在验证',
+         '湿化学品(硫酸/氢氟酸)国产替代率已达30%',
+         '先进封装用光刻胶需求快速增长'
+       ]}
+    ]
+  },
+  'lithography': {
+    title: '光刻机 赛道详情',
+    tags: [{text:'L3 设备', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 晶圆制造核心设备 · TAM: $24B · CAGR: 8%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['ASML','~85%','EUV垄断 / 13.5nm光源','<span class="tag tag-green">基准</span>'],
+         ['Nikon','~10%','ArF/i线 / 面板光刻','<span class="tag tag-yellow">10年+</span>'],
+         ['Canon','~5%','i线/g线 / 封装光刻','<span class="tag tag-yellow">20年+</span>'],
+         ['上海微电子','<1%','90nm干法 / 研发中','<span class="tag tag-red">>20年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'ASML High-NA EUV(EXE:5000)2025年交付，NA从0.33提升至0.55',
+         'EUV光刻机单台成本超$350M，交付周期18-24个月',
+         '中国大陆DUV进口受限，成熟制程扩产受阻',
+         'NIL(纳米压印)技术作为EUV替代方案在存储领域验证'
+       ]}
+    ]
+  },
+  'etching': {
+    title: '刻蚀设备 赛道详情',
+    tags: [{text:'L3 设备', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 图形转移核心设备 · TAM: $14B · CAGR: 7%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['泛林(Lam)','~50%','CCP/ICP双垄断 / 原子级刻蚀','<span class="tag tag-green">基准</span>'],
+         ['东京电子','~25%','ICP领先 /  batch处理','<span class="tag tag-green">基准</span>'],
+         ['中微公司','~3%','CCP 5nm / 存储用刻蚀','<span class="tag tag-yellow">3-5年</span>'],
+         ['北方华创','~2%','ICP/PECVD组合','<span class="tag tag-yellow">5-8年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '3D NAND堆叠层数突破300层，高深宽比刻蚀需求激增',
+         'GAA晶体管结构推动原子层刻蚀(ALE)技术',
+         '中微公司5nm CCP刻蚀机进入台积电供应链',
+         '国产刻蚀设备在存储和逻辑产线份额持续提升'
+       ]}
+    ]
+  },
+  'thin-film': {
+    title: '薄膜沉积设备 赛道详情',
+    tags: [{text:'L3 设备', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 晶圆制造核心设备 · TAM: $16B · CAGR: 8%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['应用材料(AMAT)','~45%','CVD/PVD/ALD全平台','<span class="tag tag-green">基准</span>'],
+         ['泛林(Lam)','~20%','ALD/电镀 / 选择性沉积','<span class="tag tag-green">基准</span>'],
+         ['东京电子','~15%','批式ALD / 热处理','<span class="tag tag-green">基准</span>'],
+         ['北方华创','~2%','PECVD/PVD突破','<span class="tag tag-yellow">5-10年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'GAA晶体管需要更多ALD步骤，薄膜沉积价值量提升',
+         'EUV光刻胶薄膜(EPL)和Low-k介质薄膜需求增长',
+         '国产PECVD在成熟制程产线替代率超20%',
+         '先进封装RDL和TSV沉积设备需求爆发'
+       ]}
+    ]
+  },
+  'cowos': {
+    title: '先进封装CoWoS 赛道详情',
+    tags: [{text:'L3 设备', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 2.5D/3D封装核心工艺 · TAM: $8B · CAGR: 25%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['TSMC','~60%','CoWoS发明者 / 唯一量产3D封装','<span class="tag tag-green">基准</span>'],
+         ['长电科技','~15%','XDFOI / 国内最大封测','<span class="tag tag-yellow">3-5年</span>'],
+         ['通富微电','~10%','AMD绑定 / 7nm封装','<span class="tag tag-yellow">3-5年</span>'],
+         ['Intel','~8%','Foveros / EMIB技术','<span class="tag tag-yellow">2-3年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'AI芯片需求驱动CoWoS产能2024-2025年翻倍扩张',
+         'TSMC CoWoS-L/S封装技术向6倍光罩尺寸演进',
+         '国内长电、通富微电2.5D封装良率突破85%',
+         '玻璃基板(Glass Core)技术成为下一代封装方向'
+       ]}
+    ]
+  },
+  'optical-module': {
+    title: '800G/1.6T光模块 赛道详情',
+    tags: [{text:'L3 设备', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 数据中心光互连核心 · TAM: $12B · CAGR: 30%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['中际旭创','~30%','800G先发 / 谷歌/英伟达核心','<span class="tag tag-green">基准</span>'],
+         ['Coherent','~20%','垂直整合 / 激光器+模块','<span class="tag tag-green">基准</span>'],
+         ['天孚通信','~10%','光引擎 / 无源器件','<span class="tag tag-yellow">2-3年</span>'],
+         ['Fabrinet','~8%','代工龙头 /  Thai工厂','<span class="tag tag-yellow">—</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '1.6T光模块2025年小批量，2026年放量',
+         'LPO/CPO技术路线之争，LPO率先商用',
+         '硅光技术渗透率提升，降低功耗和成本',
+         '1.6T DSP芯片成为瓶颈，Marvell/Broadcom垄断'
+       ]}
+    ]
+  },
+  'gpu-fab': {
+    title: 'GPU制造代工 赛道详情',
+    tags: [{text:'L3 制造', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 先进制程晶圆代工 · TAM: $45B · CAGR: 15%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['TSMC','>90%','3nm/2nm领先 / CoWoS整合','<span class="tag tag-green">基准</span>'],
+         ['三星','~8%','3nm GAA / 自研+外部','<span class="tag tag-yellow">3-5年</span>'],
+         ['Intel','<2%','18A工艺 / 政府补贴','<span class="tag tag-red">5年+</span>'],
+         ['中芯国际','—','N+2工艺受限 / 14nm量产','<span class="tag tag-red">10年+</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'TSMC 2nm 2025年量产，2026年产能爬坡',
+         'Blackwell GPU采用TSMC 4NP工艺，晶体管密度提升',
+         '三星3nm GAA工艺良率问题导致客户流失',
+         'Intel 18A工艺目标2025年量产，试图夺回份额'
+       ]}
+    ]
+  },
+  'hbm': {
+    title: 'HBM高带宽内存 赛道详情',
+    tags: [{text:'L3 核心产品', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: AI芯片关键存储器 · TAM: $20B · CAGR: 50%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['SK海力士','~50%','HBM3E首发 / 绑定英伟达','<span class="tag tag-green">基准</span>'],
+         ['三星','~40%','HBM3量产 / 垂直整合','<span class="tag tag-green">基准</span>'],
+         ['美光','~10%','HBM3E追赶 / 美国本土化','<span class="tag tag-yellow">1-2年</span>'],
+         ['长鑫存储','—','HBM2研发中 / 设备受限','<span class="tag tag-red">5年+</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'HBM3E 12H 2024年量产，单堆叠36GB容量',
+         'HBM4 2026年发布，接口带宽提升至2TB/s',
+         'SK海力士良率领先，供不应求至2025年底',
+         '美光HBM3E通过英伟达验证，份额有望提升'
+       ]}
+    ]
+  },
+  'ai-server': {
+    title: 'AI服务器 赛道详情',
+    tags: [{text:'L3 核心产品', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: AI算力基础设施 · TAM: $80B · CAGR: 35%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['工业富联','~35%','英伟达HGX/GB200全系列','<span class="tag tag-green">基准</span>'],
+         ['超微电脑','~20%','液冷技术 / 模块化设计','<span class="tag tag-green">基准</span>'],
+         ['戴尔','~15%','企业渠道 / 品牌优势','<span class="tag tag-yellow">—</span>'],
+         ['浪潮信息','~8%','国内最大 / 阿里腾讯核心','<span class="tag tag-yellow">1-2年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'GB200 NVL72整机柜方案成为主流，单机柜120kW功率',
+         '液冷渗透率从2023年10%提升至2026年50%',
+         '白牌服务器(ODM Direct)份额持续提升',
+         '国产AI服务器受芯片供应限制，增速放缓'
+       ]}
+    ]
+  },
+  'asic': {
+    title: 'ASIC/AI定制芯片 赛道详情',
+    tags: [{text:'L3 核心产品', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 云厂商自研AI芯片 · TAM: $15B · CAGR: 45%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','产品','场景','差距'],
+       rows: [
+         ['Google','TPU v5p','训练+推理 / GCP','<span class="tag tag-green">基准</span>'],
+         ['Amazon','Trainium2/Inferentia2','AWS训练/推理','<span class="tag tag-yellow">2-3年</span>'],
+         ['Microsoft','Maia 100','Azure内部使用','<span class="tag tag-yellow">3-5年</span>'],
+         ['阿里巴巴','含光800/平头哥','阿里云推理','<span class="tag tag-yellow">3-5年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '云厂商自研芯片降低对NVIDIA依赖，但软件生态差距大',
+         'TPU v5p算力追平H100，在推荐场景性价比更优',
+         '博通/Marvell成为ASIC设计核心合作伙伴，收入暴增',
+         '边缘AI ASIC(手机/IoT)市场快速增长'
+       ]}
+    ]
+  },
+  'cloud-iaas': {
+    title: '云计算IaaS 赛道详情',
+    tags: [{text:'L3 应用', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 算力基础设施服务 · TAM: $180B · CAGR: 20%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['AWS','~32%','先发优势 / 服务最全 / 企业客户','<span class="tag tag-green">基准</span>'],
+         ['Azure','~25%','企业渠道 / OpenAI合作','<span class="tag tag-green">基准</span>'],
+         ['Google Cloud','~11%','AI/数据优势 / 价格竞争','<span class="tag tag-yellow">—</span>'],
+         ['阿里云','~4%','国内最大 / 亚太优势','<span class="tag tag-yellow">—</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'AI云收入增速超50%，成为增长核心驱动力',
+         'GPU即服务(GPUaaS)模式降低AI创业门槛',
+         '主权云/区域合规要求推动本地部署需求',
+         '算力租赁价格战加剧，毛利率承压'
+       ]}
+    ]
+  },
+  'ai-api': {
+    title: 'AI推理API服务 赛道详情',
+    tags: [{text:'L3 应用', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: 大模型能力输出层 · TAM: $25B · CAGR: 60%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','产品','定价','差距'],
+       rows: [
+         ['OpenAI','GPT-4o/GPT-5','$5-15/M tokens','<span class="tag tag-green">基准</span>'],
+         ['Anthropic','Claude 3.5/4','$3-15/M tokens','<span class="tag tag-green">基准</span>'],
+         ['Google','Gemini 1.5 Pro','$3.5-7/M tokens','<span class="tag tag-yellow">—</span>'],
+         ['智谱AI','GLM-4','￥0.5-5/M tokens','<span class="tag tag-yellow">1-2年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'API价格战白热化，GPT-4o mini免费策略冲击市场',
+         '多模态API(图像/视频/语音)成为新增长点',
+         '企业私有化部署需求上升，API+私有化混合模式',
+         '推理成本每年下降10倍，推动应用层爆发'
+       ]}
+    ]
+  },
+  'autonomous': {
+    title: '自动驾驶 赛道详情',
+    tags: [{text:'L3 应用', cls:'tag-green'}, {text:'AI算力', cls:'tag-blue'}],
+    meta: '定位: AI最大单体应用场景 · TAM: $300B · CAGR: 25%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','方案','进度','差距'],
+       rows: [
+         ['特斯拉','FSD v12端到端','北美L2++量产','<span class="tag tag-green">基准</span>'],
+         ['Waymo','Robotaxi','旧金山/凤凰城运营','<span class="tag tag-green">基准</span>'],
+         ['百度Apollo','ASD/萝卜快跑','武汉全无人运营','<span class="tag tag-yellow">2-3年</span>'],
+         ['华为ADS','ADS 3.0','问界/智界搭载','<span class="tag tag-yellow">2-3年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '端到端大模型成为主流，规则代码减少90%',
+         'L3级自动驾驶2024-202年在中国规模化落地',
+         '激光雷达成本降至$500以下，纯视觉vs融合路线并存',
+         'Robotaxi商业化拐点临近，Waymo每周10万单'
+       ]}
+    ]
+  },
+  'advanced-fab': {
+    title: '晶圆代工(先进制程) 赛道详情',
+    tags: [{text:'L3 制造', cls:'tag-green'}, {text:'半导体', cls:'tag-blue'}],
+    meta: '定位: 芯片制造核心环节 · TAM: $90B · CAGR: 12%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','技术节点','差距'],
+       rows: [
+         ['TSMC','~60%','3nm/2nm量产','<span class="tag tag-green">基准</span>'],
+         ['三星','~15%','3nm GAA / 良率爬坡','<span class="tag tag-yellow">2-3年</span>'],
+         ['Intel','~5%','18A目标2025','<span class="tag tag-red">3-5年</span>'],
+         ['中芯国际','<1%','N+2受限','<span class="tag tag-red">10年+</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '2nm工艺2025年量产，GAA晶体管成为标配',
+         'TSMC亚利桑那厂2025年投产，海外产能占比提升',
+         '先进制程资本密度持续上升，5nm以下单万片投资$20B+',
+         'Chiplet架构降低对先进制程依赖，成熟制程价值重估'
+       ]}
+    ]
+  },
+  'mature-fab': {
+    title: '成熟制程代工 赛道详情',
+    tags: [{text:'L3 制造', cls:'tag-green'}, {text:'半导体', cls:'tag-blue'}],
+    meta: '定位: 物联网/汽车/功率芯片制造 · TAM: $40B · CAGR: 5%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','优势领域','差距'],
+       rows: [
+         ['TSMC','~30%','28nm/40nm / 良率领先','<span class="tag tag-green">基准</span>'],
+         ['UMC','~15%','28nm/22nm / 性价比','<span class="tag tag-green">基准</span>'],
+         ['中芯国际','~10%','28nm国产 / 产能扩张','<span class="tag tag-yellow">3-5年</span>'],
+         ['华虹半导体','~5%','特色工艺 / 功率器件','<span class="tag tag-yellow">3-5年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '28nm及以上成熟制程产能过剩，价格战激烈',
+         '汽车芯片/功率器件需求支撑成熟制程利用率',
+         '国产代工在MCU/PMIC领域替代率超30%',
+         '特色工艺(BCD/SOI)成为差异化竞争焦点'
+       ]}
+    ]
+  },
+  'inspection': {
+    title: '检测设备 赛道详情',
+    tags: [{text:'L3 设备', cls:'tag-green'}, {text:'半导体', cls:'tag-blue'}],
+    meta: '定位: 良率保障核心设备 · TAM: $10B · CAGR: 7%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心产品','差距'],
+       rows: [
+         ['KLA','~55%','量测+检测垄断 / 5nm以下','<span class="tag tag-green">基准</span>'],
+         ['Applied Materials','~15%','电子束检测 / Review','<span class="tag tag-green">基准</span>'],
+         ['日立高新','~10%','CD-SEM / 缺陷检测','<span class="tag tag-yellow">—</span>'],
+         ['精测电子','<1%','膜厚/OCD量测','<span class="tag tag-yellow">5-8年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '先进制程检测步骤数翻倍，设备价值量占比提升',
+         'EUV光刻掩模检测成为新增长点',
+         '国产量测设备在成熟制程部分替代，验证周期缩短',
+         'AI辅助缺陷分类(ADC)提升检测效率和准确率'
+       ]}
+    ]
+  },
+  'cpu-server': {
+    title: 'CPU(服务器级) 赛道详情',
+    tags: [{text:'L3 设计', cls:'tag-green'}, {text:'半导体', cls:'tag-blue'}],
+    meta: '定位: 数据中心计算核心 · TAM: $35B · CAGR: 8%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心架构','差距'],
+       rows: [
+         ['Intel','~70%','Xeon / 企业生态锁定','<span class="tag tag-green">基准</span>'],
+         ['AMD','~25%','EPYC / 核心数/性价比','<span class="tag tag-green">基准</span>'],
+         ['Ampere','~3%','ARM云原生 / 128核','<span class="tag tag-yellow">新兴</span>'],
+         ['华为鲲鹏','<1%','ARM / 信创替代','<span class="tag tag-yellow">3-5年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'AMD EPYC份额持续提升，数据中心超过25%',
+         'ARM服务器CPU(Ampere/Grace)在云场景渗透率提升',
+         'Intel Granite Rapids 2024年发布，试图夺回份额',
+         '国产ARM CPU在政务/金融信创市场快速替代'
+       ]}
+    ]
+  },
+  'memory-chip': {
+    title: '存储芯片(DRAM/NAND) 赛道详情',
+    tags: [{text:'L3 设计', cls:'tag-green'}, {text:'半导体', cls:'tag-blue'}],
+    meta: '定位: 数据存储核心器件 · TAM: $120B · CAGR: 10%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心产品','差距'],
+       rows: [
+         ['三星','~40%','DRAM+NAND全品类','<span class="tag tag-green">基准</span>'],
+         ['SK海力士','~25%','DRAM/HBM领先','<span class="tag tag-green">基准</span>'],
+         ['美光','~20%','美国本土 / 政府补贴','<span class="tag tag-green">基准</span>'],
+         ['长鑫存储','<3%','DRAM国产 / LPDDR5','<span class="tag tag-yellow">5-8年</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '存储周期2024年触底反弹，DDR5价格回升',
+         'HBM成为DRAM最大增长驱动力，占比超20%',
+         '3D NAND堆叠层数突破300层，QLC成为主流',
+         '国产长鑫/长江存储扩产受设备限制，替代进程缓慢'
+       ]}
+    ]
+  },
+  'cathode': {
+    title: '正极材料 赛道详情',
+    tags: [{text:'L3 材料', cls:'tag-green'}, {text:'新能源车', cls:'tag-blue'}],
+    meta: '定位: 动力电池核心材料 · TAM: $45B · CAGR: 15%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心产品','差距'],
+       rows: [
+         ['容百科技','~15%','高镍三元 / 韩国基地','<span class="tag tag-green">基准</span>'],
+         ['当升科技','~12%','单晶/高镍 / 海外客户','<span class="tag tag-green">基准</span>'],
+         ['湖南裕能','~10%','磷酸铁锂龙头','<span class="tag tag-green">基准</span>'],
+         ['L&F(韩)','~8%','全球市占第一','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '磷酸铁锂(LFP)全球份额超60%，成本优势显著',
+         '高镍三元(NCM811)能量密度提升，高端车型首选',
+         '富锂锰基、磷酸锰铁锂(LMFP)等新材料验证中',
+         '正极材料产能过剩，加工费持续下行'
+       ]}
+    ]
+  },
+  'anode': {
+    title: '负极材料 赛道详情',
+    tags: [{text:'L3 材料', cls:'tag-green'}, {text:'新能源车', cls:'tag-blue'}],
+    meta: '定位: 动力电池关键材料 · TAM: $18B · CAGR: 12%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心产品','差距'],
+       rows: [
+         ['贝特瑞','~20%','人造石墨 / 硅基负极','<span class="tag tag-green">基准</span>'],
+         ['杉杉股份','~15%','人造石墨 / 一体化','<span class="tag tag-green">基准</span>'],
+         ['璞泰来','~12%','石墨化自供 / 高端','<span class="tag tag-green">基准</span>'],
+         ['日立化成','~10%','海外龙头 / 技术领先','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '人造石墨仍是主流，硅基负极渗透率提升至5%',
+         '硅碳负极(Si/C)能量密度突破500mAh/g',
+         '石墨化产能从云南/四川向低成本地区转移',
+         '负极材料一体化(矿石-石墨化-成品)成趋势'
+       ]}
+    ]
+  },
+  'electrolyte': {
+    title: '电解液 赛道详情',
+    tags: [{text:'L3 材料', cls:'tag-green'}, {text:'新能源车', cls:'tag-blue'}],
+    meta: '定位: 电池离子传导介质 · TAM: $8B · CAGR: 10%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['天赐材料','~25%','六氟磷酸锂自供 / 成本','<span class="tag tag-green">基准</span>'],
+         ['新宙邦','~15%','添加剂配方 / 海外','<span class="tag tag-green">基准</span>'],
+         ['国泰华荣','~10%','LG/三星核心供应商','<span class="tag tag-green">基准</span>'],
+         ['三菱化学','~8%','日本高端市场','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '六氟磷酸锂价格从60万/吨跌至6万/吨，行业洗牌',
+         'LiFSI新型锂盐渗透率提升，性能更优但成本高',
+         '固态电解质(硫化物/氧化物)成为长期方向',
+         '电解液配方差异化减弱，成本竞争白热化'
+       ]}
+    ]
+  },
+  'separator': {
+    title: '隔膜 赛道详情',
+    tags: [{text:'L3 材料', cls:'tag-green'}, {text:'新能源车', cls:'tag-blue'}],
+    meta: '定位: 电池安全核心材料 · TAM: $7B · CAGR: 10%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['恩捷股份','~35%','湿法隔膜 / 涂覆技术','<span class="tag tag-green">基准</span>'],
+         ['星源材质','~15%','干法/湿法双路线','<span class="tag tag-green">基准</span>'],
+         ['日本旭化成','~12%','干法隔膜发明者','<span class="tag tag-green">基准</span>'],
+         ['东丽','~10%','湿法隔膜 / 海外客户','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '湿法隔膜占主流，涂覆(陶瓷/PVDF)成为标配',
+         '隔膜厚度从12μm向7-9μm演进，提升能量密度',
+         '固态电池不需要隔膜，长期替代风险存在',
+         '国产隔膜全球份额超70%，出口持续增长'
+       ]}
+    ]
+  },
+  'silicon-material': {
+    title: '硅料 赛道详情',
+    tags: [{text:'L3 材料', cls:'tag-green'}, {text:'光伏储能', cls:'tag-blue'}],
+    meta: '定位: 光伏产业链上游 · TAM: $25B · CAGR: 5%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['通威股份','~25%','多晶硅龙头 / 成本最低','<span class="tag tag-green">基准</span>'],
+         ['协鑫科技','~15%','颗粒硅 / 能耗优势','<span class="tag tag-green">基准</span>'],
+         ['大全能源','~10%','新疆基地 /  purity高','<span class="tag tag-green">基准</span>'],
+         ['Wacker(德)','~8%','欧洲品质 / 价格 premium','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '硅料价格从30万/吨跌至4万/吨，行业亏损严重',
+         'N型硅料需求占比提升至40%，溢价明显',
+         '颗粒硅技术成熟，成本比棒状硅低20%',
+         '一体化企业(硅料-组件)抗风险能力更强'
+       ]}
+    ]
+  },
+  'silicon-ingot': {
+    title: '硅片 赛道详情',
+    tags: [{text:'L3 材料', cls:'tag-green'}, {text:'光伏储能', cls:'tag-blue'}],
+    meta: '定位: 光伏电池基底材料 · TAM: $20B · CAGR: 6%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心壁垒','差距'],
+       rows: [
+         ['TCL中环','~25%','210大硅片 / 半导体级','<span class="tag tag-green">基准</span>'],
+         ['隆基绿能','~20%','单晶硅片发明者','<span class="tag tag-green">基准</span>'],
+         ['晶科能源','~15%','一体化布局 / N型','<span class="tag tag-green">基准</span>'],
+         ['上机数控','~10%','独立第三方 / 切片','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'N型硅片渗透率2024年超50%，替代P型',
+         '210mm大硅片成为主流，降低成本和BOS',
+         '硅片薄片化从150μm向130μm演进',
+         '石英坩埚(高纯砂)成为硅片产能瓶颈'
+       ]}
+    ]
+  },
+  'solar-cell': {
+    title: '电池片 赛道详情',
+    tags: [{text:'L3 制造', cls:'tag-green'}, {text:'光伏储能', cls:'tag-blue'}],
+    meta: '定位: 光电转换核心环节 · TAM: $30B · CAGR: 12%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','技术路线','差距'],
+       rows: [
+         ['通威股份','~15%','TOPCon / 电池专业户','<span class="tag tag-green">基准</span>'],
+         ['爱旭股份','~8%','ABC / 全背接触','<span class="tag tag-yellow">新兴</span>'],
+         ['晶科能源','~10%','TOPCon一体化','<span class="tag tag-green">基准</span>'],
+         ['隆基绿能','~8%','HPBC / 单结晶硅','<span class="tag tag-yellow">—</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         'TOPCon成为主流N型技术，量产效率超25%',
+         'HJT成本下降，银包铜+0BB技术推动降本',
+         'BC(背接触)电池效率高但工艺复杂',
+         '钙钛矿叠层电池实验室效率超33%，量产待验证'
+       ]}
+    ]
+  },
+  'solar-module': {
+    title: '组件 赛道详情',
+    tags: [{text:'L3 制造', cls:'tag-green'}, {text:'光伏储能', cls:'tag-blue'}],
+    meta: '定位: 光伏终端产品 · TAM: $50B · CAGR: 10%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心优势','差距'],
+       rows: [
+         ['晶科能源','~15%','N型TOPCon / 海外渠道','<span class="tag tag-green">基准</span>'],
+         ['隆基绿能','~12%','品牌/渠道 / HPBC','<span class="tag tag-green">基准</span>'],
+         ['天合光能','~10%','210组件 / 跟踪支架','<span class="tag tag-green">基准</span>'],
+         ['晶澳科技','~10%','一体化 / 成本优势','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '组件价格跌破0.1$/W，行业进入淘汰赛',
+         'N型组件占比超60%，PERC产能加速退出',
+         '美国/欧洲本土组件产能建设，贸易摩擦加剧',
+         '组件+储能系统解决方案成为新竞争维度'
+       ]}
+    ]
+  },
+  'energy-storage': {
+    title: '储能系统 赛道详情',
+    tags: [{text:'L3 系统', cls:'tag-green'}, {text:'光伏储能', cls:'tag-blue'}],
+    meta: '定位: 新型电力系统核心 · TAM: $60B · CAGR: 25%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心优势','差距'],
+       rows: [
+         ['特斯拉','~20%','Powerwall/Megapack / 品牌','<span class="tag tag-green">基准</span>'],
+         ['Fluence','~15%','系统集成 / 软件优化','<span class="tag tag-green">基准</span>'],
+         ['阳光电源','~12%','PCS+电池 / 国内最大','<span class="tag tag-green">基准</span>'],
+         ['宁德时代','~10%','电池+系统 / 280Ah','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '全球储能装机2024年超150GWh，同比增长80%',
+         '大储(电网侧)占比超60%，独立储能模式兴起',
+         '314Ah/560Ah大电芯成为主流，系统成本下降',
+         '构网型储能(Grid-forming)技术要求提升'
+       ]}
+    ]
+  },
+  'inverter': {
+    title: '逆变器 赛道详情',
+    tags: [{text:'L3 设备', cls:'tag-green'}, {text:'光伏储能', cls:'tag-blue'}],
+    meta: '定位: 电能转换核心设备 · TAM: $18B · CAGR: 12%',
+    sections: [
+      {title: '竞争格局', icon: 'target', type: 'table',
+       headers: ['厂商','份额','核心优势','差距'],
+       rows: [
+         ['华为','~25%','组串式逆变器 / 智能','<span class="tag tag-green">基准</span>'],
+         ['阳光电源','~20%','地面电站 / 储能PCS','<span class="tag tag-green">基准</span>'],
+         ['锦浪科技','~10%','分布式 / 户用','<span class="tag tag-green">基准</span>'],
+         ['SMA(德)','~8%','欧洲品牌 / 品质','<span class="tag tag-green">基准</span>']
+       ]},
+      {title: '核心趋势', icon: 'trending-up', type: 'list',
+       items: [
+         '组串式替代集中式成为主流，占比超70%',
+         '光储一体化逆变器(混合逆变器)快速增长',
+         '微型逆变器(Enphase)在户用市场渗透率提升',
+         'IGBT向SiC切换，提升效率和功率密度'
+       ]}
+    ]
+  }
+};
+
+function renderPreview(data) {
+  let html = '<div class="flex-between" style="margin-bottom:12px;">';
+  html += '<h3>' + data.title + '</h3>';
+  html += '<div style="display:flex; gap:6px;">';
+  data.tags.forEach(t => {
+    html += '<span class="tag ' + t.cls + '">' + t.text + '</span>';
+  });
+  html += '</div></div>';
+  html += '<div class="meta">' + data.meta + '</div>';
+  html += '<div style="border-top:1px solid var(--border); padding-top:12px;">';
+  
+  data.sections.forEach(sec => {
+    html += '<div style="font-size:14px; font-weight:600; margin-bottom:8px; color:var(--navy);">';
+    html += '<i data-lucide="' + sec.icon + '" style="width:16px;height:16px;display:inline-block;vertical-align:-2px;margin-right:4px;"></i>';
+    html += sec.title + '</div>';
+    
+    if (sec.type === 'table') {
+      html += '<table class="data-table" style="margin-bottom:16px;"><thead><tr>';
+      sec.headers.forEach(h => { html += '<th>' + h + '</th>'; });
+      html += '</tr></thead><tbody>';
+      sec.rows.forEach(row => {
+        html += '<tr>';
+        row.forEach(cell => { html += '<td>' + cell + '</td>'; });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+    } else if (sec.type === 'list') {
+      html += '<div style="font-size:13px; color:var(--text-secondary); line-height:1.8; margin-bottom:16px;">';
+      sec.items.forEach(item => {
+        html += '<div>• ' + item + '</div>';
+      });
+      html += '</div>';
+    }
+  });
+  
+  html += '</div>';
+  return html;
+}
+
+// Initialize preview with default active item
+const defaultId = document.querySelector('.tree-item.active[data-id]')?.dataset.id || 'gpu-arch';
+const previewContent = document.getElementById('preview-content');
+if (previewData[defaultId]) {
+  previewContent.innerHTML = renderPreview(previewData[defaultId]);
+}
+
+// Tree item click handler
+document.querySelectorAll('.tree-item[data-id]').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+    const id = this.dataset.id;
+    if (previewData[id]) {
+      previewContent.innerHTML = renderPreview(previewData[id]);
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    }
+  });
+});
+
+// Initialize Lucide icons
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+</script>
+
+</body>
+</html>

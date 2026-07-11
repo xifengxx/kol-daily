@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>策略回测 — NL策略引擎</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA;
+  --text: #1D1D1F; --text2: #86868B; --accent: #0071E3; --navy: #1D1D1F;
+  --up: #FF3B30; --down: #34C759; --warn: #FF9500;
+  --tag-g-bg: #34C759; --tag-g-tx: #FFFFFF; --tag-bl-bg: #0071E3; --tag-bl-tx: #FFFFFF;
+  --tag-y-bg: #FF9500; --tag-y-tx: #FFFFFF; --tag-r-bg: #FF3B30; --tag-r-tx: #FFFFFF;
+  --tag-p-bg: #AF52DE; --tag-p-tx: #FFFFFF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+}
+.layout { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 220px; background: #FFFFFF; color: #1D1D1F; display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0;
+  border-right: 1px solid var(--border);
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid var(--border); color: #1D1D1F; }
+.sidebar-logo span { color: #0071E3; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: #86868B; cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 14px; font-weight: 500; }
+.nav-item:hover { background: #F5F5F7; color: #1D1D1F; }
+.nav-item.active { background: #F0F7FF; color: #0071E3; border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.content { padding: 24px 32px; max-width: 1440px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; transition: all 0.3s ease; }
+.card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; font-size: 14px; font-weight: 500; padding: 10px 20px; cursor: pointer; transition: all .2s; border: none; white-space: nowrap; font-family: inherit; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+.tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; line-height: 1; }
+.tag-green { background: var(--tag-g-bg); color: var(--tag-g-tx); }
+.tag-blue { background: var(--tag-bl-bg); color: var(--tag-bl-tx); }
+.tag-yellow { background: var(--tag-y-bg); color: var(--tag-y-tx); }
+.tag-purple { background: var(--tag-p-bg); color: var(--tag-p-tx); }
+.tag-red { background: var(--tag-r-bg); color: var(--tag-r-tx); }
+.tag-gray { background: #F2F2F7; color: #1D1D1F; }
+.up { color: var(--up); } .down { color: var(--down); }
+.nl-input { width: 100%; border: 1px solid transparent; border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: inherit; background: #F5F5F7; color: var(--text); outline: none; transition: all .15s; height: 40px; }
+.nl-input:focus { background: #FFFFFF; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th { text-align: left; font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.3px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: #F2F2F7; }
+.data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: #F5F5F7; }
+.chart-box { width: 100%; height: 300px; }
+.param-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F2F2F7; }
+.param-row:last-child { border-bottom: none; }
+.stat-big { font-size: 32px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.1; }
+.stat-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+.ai-suggestion { background: #F0F7FF; border: 1px solid rgba(0,113,227,0.2); border-radius: 12px; padding: 16px; }
+
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .layout { height: 100vh !important; min-height: auto !important; }
+body.in-iframe .main { overflow-y: auto !important; height: 100% !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">5Factor <span>AI</span></div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span>行情与数据</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="newspaper" style="width:20px;height:20px;"></i></span>内容与信息</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="target" style="width:20px;height:20px;"></i></span>分析与选股</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="dna" style="width:20px;height:20px;"></i></span>产业链与知识</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span>AI编排层</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="users" style="width:20px;height:20px;"></i></span>社区与协作</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="font-size:14px;font-weight:600;color:var(--navy);">分析与选股 / 策略回测</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-left:auto;font-size:12px;color:var(--text2);">
+        <i data-lucide="moon" style="width:16px;height:16px;"></i><div style="width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;">U</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- NL Strategy Input -->
+      <div class="card" style="padding:24px;">
+        <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:14px;"><i data-lucide="brain" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 自然语言策略回测</div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <input type="text" class="nl-input" value='PE<15 且 ROE>20% 且 F5>60 且 信号类型=S4，每月第一个交易日调仓，等权重，剔除市值<$1B'>
+          <button class="btn btn-primary" style="border-radius:8px;padding:10px 20px;white-space:nowrap;"><i data-lucide="play" style="width:14px;height:14px;"></i> 运行回测</button>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:11px;color:var(--text2);">示例策略：</span>
+          <span class="tag tag-blue" style="cursor:pointer;">高ROE+低PE价值策略</span>
+          <span class="tag tag-blue" style="cursor:pointer;">S4全共振动量策略</span>
+          <span class="tag tag-blue" style="cursor:pointer;">F4基本面最优策略</span>
+          <span class="tag tag-blue" style="cursor:pointer;">LLM共识高分策略</span>
+          <span class="tag tag-purple" style="cursor:pointer;">我的策略 #3</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <!-- Left: Parameters + Results -->
+        <div>
+          <!-- Parameters -->
+          <div class="card">
+            <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:12px;"><i data-lucide="settings" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 回测参数</div>
+            <div class="param-row">
+              <span style="font-size:14px;">调仓频率</span>
+              <select style="border:1px solid transparent;border-radius:8px;padding:6px 10px;font-size:14px;font-family:inherit;height:32px;background:#F5F5F7;">
+                <option>每月第一个交易日</option>
+                <option>每周一</option>
+                <option>每季度</option>
+                <option>每日</option>
+              </select>
+            </div>
+            <div class="param-row">
+              <span style="font-size:14px;">权重规则</span>
+              <select style="border:1px solid transparent;border-radius:8px;padding:6px 10px;font-size:14px;font-family:inherit;height:32px;background:#F5F5F7;">
+                <option>等权重</option>
+                <option>按FinalScore加权</option>
+                <option>按市值加权</option>
+                <option>风险平价</option>
+              </select>
+            </div>
+            <div class="param-row">
+              <span style="font-size:14px;">剔除规则</span>
+              <div style="display:flex;gap:6px;">
+                <span class="tag tag-green">市值&lt;$1B</span>
+                <span class="tag tag-green">日均成交&lt;$100万</span>
+                <span class="tag tag-gray" style="cursor:pointer;">+</span>
+              </div>
+            </div>
+            <div class="param-row">
+              <span style="font-size:14px;">回测区间</span>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <input type="date" value="2023-01-01" style="border:1px solid transparent;border-radius:8px;padding:6px 10px;font-size:14px;font-family:inherit;height:32px;background:#F5F5F7;">
+                <span>至</span>
+                <input type="date" value="2026-05-08" style="border:1px solid transparent;border-radius:8px;padding:6px 10px;font-size:14px;font-family:inherit;height:32px;background:#F5F5F7;">
+              </div>
+            </div>
+            <div class="param-row">
+              <span style="font-size:14px;">基准对比</span>
+              <select style="border:1px solid transparent;border-radius:8px;padding:6px 10px;font-size:14px;font-family:inherit;height:32px;background:#F5F5F7;">
+                <option>标普500 (SPY)</option>
+                <option>纳斯达克100 (QQQ)</option>
+                <option>沪深300</option>
+                <option>恒生指数</option>
+              </select>
+            </div>
+            <div class="param-row">
+              <span style="font-size:14px;">滑点/手续费</span>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <span style="font-size:11px;color:var(--text2);">滑点 0.05%</span>
+                <span style="font-size:11px;color:var(--text2);">佣金 0.03%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Metrics -->
+          <div class="card">
+            <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:14px;"><i data-lucide="bar-chart-3" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 回测结果核心指标</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+              <div style="text-align:center;padding:12px;background:#F5F5F7;border-radius:12px;">
+                <div class="stat-label">年化收益率</div>
+                <div class="stat-big" style="color:var(--up);">+28.5%</div>
+                <div style="font-size:11px;color:var(--text2);">基准 +12.3%</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:#F5F5F7;border-radius:12px;">
+                <div class="stat-label">最大回撤</div>
+                <div class="stat-big" style="color:var(--down);">-18.2%</div>
+                <div style="font-size:11px;color:var(--text2);">2024-03</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:#F5F5F7;border-radius:12px;">
+                <div class="stat-label">夏普比率</div>
+                <div class="stat-big" style="color:var(--accent);">1.68</div>
+                <div style="font-size:11px;color:var(--text2);">基准 0.95</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:#F5F5F7;border-radius:12px;">
+                <div class="stat-label">胜率</div>
+                <div class="stat-big">62.4%</div>
+                <div style="font-size:11px;color:var(--text2);">月度</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:#F5F5F7;border-radius:12px;">
+                <div class="stat-label">盈亏比</div>
+                <div class="stat-big">1.85</div>
+                <div style="font-size:11px;color:var(--text2);">平均盈利/亏损</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:#F5F5F7;border-radius:12px;">
+                <div class="stat-label">Calmar</div>
+                <div class="stat-big">1.56</div>
+                <div style="font-size:11px;color:var(--text2);">年化/最大回撤</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Charts -->
+        <div>
+          <!-- Equity Curve -->
+          <div class="card" style="margin-bottom:16px;">
+            <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:10px;"><i data-lucide="trending-up" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 策略净值曲线</div>
+            <div id="equity-chart" class="chart-box"></div>
+          </div>
+
+          <!-- Monthly Return Heatmap -->
+          <div class="card">
+            <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:10px;"><i data-lucide="flame" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 月度收益分布热力图</div>
+            <div id="monthly-heat" style="width:100%;height:240px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Optimization -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:14px;"><i data-lucide="brain" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> AI 优化建议</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="ai-suggestion">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;"><i data-lucide="lightbulb" style="width:16px;height:16px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 参数敏感性分析</div>
+            <div style="font-size:14px;line-height:1.7;color:var(--text);">
+              当前PE阈值=15，回测显示PE&lt;20时年化收益从28.5%提升至31.2%，但最大回撤从-18.2%扩大至-22.5%。建议将PE阈值放宽至18，以获取更高收益弹性。
+            </div>
+          </div>
+          <div class="ai-suggestion">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;"><i data-lucide="lightbulb" style="width:16px;height:16px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 信号叠加优化</div>
+            <div style="font-size:14px;line-height:1.7;color:var(--text);">
+              在现有"PE+ROE+F5"基础上叠加LLM共识&gt;75分，年化收益可提升至34.8%，夏普比率提升至1.92。但样本量减少30%，需注意过拟合风险。
+            </div>
+          </div>
+          <div class="ai-suggestion">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;"><i data-lucide="alert-triangle" style="width:16px;height:16px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 风险警示</div>
+            <div style="font-size:14px;line-height:1.7;color:var(--text);">
+              策略在2024年3月回撤-18.2%主要由半导体板块系统性下跌引发。建议增加F2宏观因子过滤：当VIX&gt;20时自动降低仓位至50%。
+            </div>
+          </div>
+          <div class="ai-suggestion">
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;"><i data-lucide="refresh-cw" style="width:16px;height:16px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 策略迭代建议</div>
+            <div style="font-size:14px;line-height:1.7;color:var(--text);">
+              将调仓频率从"每月"改为"每半月"，可捕捉更多中期动量信号。回测显示收益提升3.2%，但交易成本增加1.1%，净收益+2.1%。
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:10px;">
+          <button class="btn btn-primary"><i data-lucide="sparkles" style="width:14px;height:14px;"></i> 一键应用优化参数</button>
+          <button class="btn btn-outline"><i data-lucide="download" style="width:14px;height:14px;"></i> 保存策略到广场</button>
+          <button class="btn btn-outline"><i data-lucide="clipboard-list" style="width:14px;height:14px;"></i> 生成详细报告</button>
+        </div>
+      </div>
+
+      <!-- Trade History -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:12px;"><i data-lucide="clipboard-list" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 最近调仓记录</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>日期</th><th>操作</th><th>代码</th><th>名称</th><th>价格</th><th>数量</th><th>原因</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2026-05-01</td><td><span class="tag tag-green">买入</span></td><td>MTSI</td><td>MACOM</td><td>$72.50</td><td>1,200</td><td>F5突破60 + S4信号</td></tr>
+            <tr><td>2026-05-01</td><td><span class="tag tag-red">卖出</span></td><td>ACLS</td><td>Axcelis</td><td>$102.00</td><td>800</td><td>触发S5回调，止盈</td></tr>
+            <tr><td>2026-04-01</td><td><span class="tag tag-green">买入</span></td><td>JBL</td><td>Jabil</td><td>$142.00</td><td>900</td><td>LLM共识67.43 + 低估值</td></tr>
+            <tr><td>2026-04-01</td><td><span class="tag tag-green">买入</span></td><td>AMAT</td><td>Applied Materials</td><td>$145.00</td><td>1,000</td><td>F5技术满分 + 基本面修复</td></tr>
+            <tr><td>2026-03-03</td><td><span class="tag tag-red">卖出</span></td><td>CORT</td><td>Corcept</td><td>$25.40</td><td>500</td><td>F4恶化，剔除池</td></tr>
+            <tr><td>2026-03-03</td><td><span class="tag tag-green">买入</span></td><td>DELL</td><td>Dell</td><td>$98.40</td><td>1,500</td><td>全因子共振 + LLM高分</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Additional Analysis -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:14px;"><i data-lucide="bar-chart-3" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 深度分析</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:10px;">因子归因分析</div>
+            <div id="factor-attrib" style="width:100%;height:220px;"></div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:10px;">回撤恢复时间分布</div>
+            <table class="data-table">
+              <thead><tr><th>回撤区间</th><th>次数</th><th>平均恢复(天)</th><th>最长恢复</th></tr></thead>
+              <tbody>
+                <tr><td>0-5%</td><td>12</td><td>8</td><td>15</td></tr>
+                <tr><td>5-10%</td><td>6</td><td>18</td><td>32</td></tr>
+                <tr><td>10-15%</td><td>3</td><td>35</td><td>48</td></tr>
+                <tr><td>15-20%</td><td>1</td><td>62</td><td>62</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:10px;padding:10px;background:#F5F5F7;border-radius:8px;font-size:12px;color:var(--text2);">
+              策略历史上共经历22次回撤，其中87%在1个月内恢复，仅1次回撤超过15%（2024年3月半导体板块系统性调整）。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy Comparison -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:14px;"><i data-lucide="refresh-cw" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 策略对比</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>策略</th><th>年化</th><th>最大回撤</th><th>夏普</th><th>胜率</th><th>调仓频率</th><th>标的数量</th></tr>
+          </thead>
+          <tbody>
+            <tr style="background:#F0F7FF;"><td><strong>当前策略</strong></td><td class="up" style="font-weight:600;">+28.5%</td><td class="down">-18.2%</td><td style="font-weight:600;color:var(--accent);">1.68</td><td>62.4%</td><td>月度</td><td>8-12</td></tr>
+            <tr><td>纯S4策略</td><td class="up">+32.1%</td><td class="down">-22.5%</td><td>1.52</td><td>71.2%</td><td>月度</td><td>5-8</td></tr>
+            <tr><td>纯价值策略</td><td class="up">+18.3%</td><td class="down">-12.8%</td><td>1.45</td><td>58.6%</td><td>季度</td><td>10-15</td></tr>
+            <tr><td>纯动量策略</td><td class="up">+24.6%</td><td class="down">-20.1%</td><td>1.28</td><td>55.3%</td><td>双周</td><td>6-10</td></tr>
+            <tr><td>等权SPY</td><td class="up">+12.3%</td><td class="down">-14.5%</td><td>0.95</td><td>—</td><td>—</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- More Trade History -->
+      <div class="card">
+        <div style="font-size:16px;font-weight:600;color:var(--navy);margin-bottom:12px;"><i data-lucide="clipboard-list" style="width:18px;height:18px;display:inline-block;vertical-align:text-bottom;margin-right:4px;"></i> 完整调仓记录 (最近12个月)</div>
+        <table class="data-table">
+          <thead>
+            <tr><th>日期</th><th>操作</th><th>代码</th><th>名称</th><th>价格</th><th>数量</th><th>信号</th><th>原因</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>2026-05-01</td><td><span class="tag tag-green">买入</span></td><td>MTSI</td><td>MACOM</td><td>$72.50</td><td>1,200</td><td>S4</td><td>F5突破60 + S4信号</td></tr>
+            <tr><td>2026-05-01</td><td><span class="tag tag-red">卖出</span></td><td>ACLS</td><td>Axcelis</td><td>$102.00</td><td>800</td><td>S5</td><td>触发S5回调，止盈</td></tr>
+            <tr><td>2026-04-01</td><td><span class="tag tag-green">买入</span></td><td>JBL</td><td>Jabil</td><td>$142.00</td><td>900</td><td>S4</td><td>LLM共识67.43 + 低估值</td></tr>
+            <tr><td>2026-04-01</td><td><span class="tag tag-green">买入</span></td><td>AMAT</td><td>Applied Materials</td><td>$145.00</td><td>1,000</td><td>S4</td><td>F5技术满分 + 基本面修复</td></tr>
+            <tr><td>2026-03-03</td><td><span class="tag tag-red">卖出</span></td><td>CORT</td><td>Corcept</td><td>$25.40</td><td>500</td><td>S1</td><td>F4恶化，剔除池</td></tr>
+            <tr><td>2026-03-03</td><td><span class="tag tag-green">买入</span></td><td>DELL</td><td>Dell</td><td>$98.40</td><td>1,500</td><td>S4</td><td>全因子共振 + LLM高分</td></tr>
+            <tr><td>2026-02-03</td><td><span class="tag tag-green">买入</span></td><td>MU</td><td>Micron</td><td>$88.60</td><td>1,800</td><td>S4</td><td>HBM3E产能驱动 + F4满分</td></tr>
+            <tr><td>2026-02-03</td><td><span class="tag tag-red">卖出</span></td><td>ELV</td><td>Elevance</td><td>$412.00</td><td>200</td><td>S1</td><td>信号衰减，止损</td></tr>
+            <tr><td>2026-01-06</td><td><span class="tag tag-green">买入</span></td><td>MRVL</td><td>Marvell</td><td>$68.20</td><td>1,500</td><td>S4</td><td>ASIC定制芯片需求爆发</td></tr>
+            <tr><td>2026-01-06</td><td><span class="tag tag-green">买入</span></td><td>NVDA</td><td>NVIDIA</td><td>$118.50</td><td>1,200</td><td>S4</td><td>Blackwell架构换代周期</td></tr>
+            <tr><td>2025-12-02</td><td><span class="tag tag-red">卖出</span></td><td>AZZ</td><td>AZZ Inc.</td><td>$185.00</td><td>600</td><td>S5</td><td>技术面回调，保护利润</td></tr>
+            <tr><td>2025-12-02</td><td><span class="tag tag-green">买入</span></td><td>ARM</td><td>ARM Holdings</td><td>$145.00</td><td>900</td><td>S4</td><td>IP授权模式高毛利</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Equity curve
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('equity-chart'));
+  const months = 30;
+  const strategy = [100];
+  const benchmark = [100];
+  for (let i = 1; i <= months; i++) {
+    strategy.push(strategy[i-1] * (1 + (Math.random() * 0.08 - 0.025)));
+    benchmark.push(benchmark[i-1] * (1 + (Math.random() * 0.05 - 0.018)));
+  }
+
+  chart.setOption({
+    tooltip: {trigger: 'axis'},
+    legend: {data: ['策略净值', '基准'], bottom: 0, textStyle: {fontSize: 11}},
+    grid: {left: 50, right: 20, top: 10, bottom: 30},
+    xAxis: {type: 'category', data: Array.from({length: months+1}, (_,i) => 'M'+i), axisLabel: {show: false}, axisLine: {lineStyle: {color: '#E5E5EA'}}},
+    yAxis: {type: 'value', axisLabel: {fontSize: 10, color: '#86868B'}, splitLine: {lineStyle: {color: '#F2F2F7'}}},
+    series: [
+      {name: '策略净值', type: 'line', data: strategy, smooth: true, lineStyle: {color: '#0071E3', width: 2}, itemStyle: {color: '#0071E3'}, symbol: 'none', areaStyle: {color: 'rgba(0,113,227,0.08)'}},
+      {name: '基准', type: 'line', data: benchmark, smooth: true, lineStyle: {color: '#86868B', width: 1.5, type: 'dashed'}, itemStyle: {color: '#86868B'}, symbol: 'none'}
+    ]
+  });
+}, 100);
+
+// Monthly heatmap
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('monthly-heat'));
+  const years = ['2023','2024','2025','2026'];
+  const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const data = [];
+  for (let i = 0; i < years.length; i++) {
+    for (let j = 0; j < months.length; j++) {
+      if (i === 3 && j > 4) continue; // 2026 only up to May
+      let val = (Math.random() * 14 - 5).toFixed(1);
+      data.push([j, i, parseFloat(val)]);
+    }
+  }
+
+  chart.setOption({
+    tooltip: {position: 'top', formatter: p => `${years[p.value[1]]}年${months[p.value[0]]}<br/>收益: ${p.value[2]}%`},
+    grid: {left: 50, right: 20, top: 10, bottom: 30},
+    xAxis: {type: 'category', data: months, splitArea: {show: true}, axisLabel: {fontSize: 10, color: '#86868B'}},
+    yAxis: {type: 'category', data: years, splitArea: {show: true}, axisLabel: {fontSize: 11, color: '#86868B'}},
+    visualMap: {
+      min: -10, max: 15, calculable: false, orient: 'horizontal', left: 'center', bottom: 0, show: false,
+      inRange: {color: ['#FF3B30', '#FF9500', '#F2F2F7', '#34C759', '#0071E3']}
+    },
+    series: [{
+      type: 'heatmap', data: data,
+      label: {show: true, fontSize: 10, formatter: p => p.value[2] + '%'},
+      itemStyle: {borderRadius: 4, borderColor: '#fff', borderWidth: 2}
+    }]
+  });
+}, 100);
+
+// Factor attribution chart
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('factor-attrib'));
+  chart.setOption({
+    tooltip: {trigger: 'axis'},
+    legend: {data: ['策略', '基准'], bottom: 0, textStyle: {fontSize: 10}},
+    grid: {left: 50, right: 20, top: 10, bottom: 30},
+    xAxis: {type: 'category', data: ['F1资金','F2宏观','F3情绪','F4基本面','F5技术'], axisLabel: {fontSize: 10, color: '#86868B'}, axisLine: {lineStyle: {color: '#E5E5EA'}}},
+    yAxis: {type: 'value', axisLabel: {fontSize: 10, color: '#86868B', formatter: v => v+'%'}, splitLine: {lineStyle: {color: '#F2F2F7'}}},
+    series: [
+      {name: '策略', type: 'bar', data: [8.2, 2.5, 1.8, 12.5, 3.5], itemStyle: {color: '#0071E3', borderRadius: [4, 4, 0, 0]}},
+      {name: '基准', type: 'bar', data: [3.1, 1.2, 0.5, 5.8, 1.7], itemStyle: {color: '#86868B', borderRadius: [4, 4, 0, 0]}}
+    ]
+  });
+}, 100);
+
+// Initialize Lucide icons
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+</script>
+
+</body>
+</html>

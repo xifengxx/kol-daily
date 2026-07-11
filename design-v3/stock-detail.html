@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个股行情 — NVDA — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA;
+  --text-primary: #1D1D1F; --text-secondary: #86868B;
+  --accent: #0071E3; --navy: #1D1D1F; --sidebar: #FFFFFF;
+  --up: #FF3B30; --down: #34C759; --warn: #FF9500;
+  --shadow: none;
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+  --hover-bg: #F5F5F7;
+  --active-bg: #F0F7FF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 14px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+.tabular-nums { font-variant-numeric: tabular-nums; }
+.mono { font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--sidebar); color: var(--text-primary);
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+.sidebar-logo span { color: var(--accent); }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 8px 16px; color: var(--text-secondary); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border-left: 4px solid transparent; font-size: 14px; font-weight: 500; }
+.nav-item:hover { background: var(--hover-bg); color: var(--text-primary); }
+.nav-item.active { background: var(--active-bg); color: var(--accent); border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar {
+  background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px;
+  display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30;
+}
+.search-box { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 8px; padding: 7px 14px; gap: 8px; border: 1px solid transparent; height: 40px; transition: all 0.15s; }
+.search-box:focus-within { background: var(--card); border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .search-box input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+.user-area { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+
+/* Content */
+.content { padding: 20px 24px; max-width: 1440px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+  .card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.card-title { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; line-height: 1.4; }
+
+/* Stock Header */
+.stock-header {
+  background: var(--card); border-radius: 12px; padding: 20px 24px; color: var(--text-primary); margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border);
+}
+.stock-header-left { display: flex; align-items: center; gap: 16px; }
+.stock-symbol { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); }
+.stock-name { font-size: 14px; color: var(--text-secondary); margin-top: 2px; }
+.stock-market { font-size: 11px; color: var(--text-secondary); background: var(--hover-bg); padding: 2px 8px; border-radius: 10px; display: inline-block; margin-top: 4px; font-weight: 500; }
+.stock-header-right { text-align: right; }
+.stock-price { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; color: var(--text-primary); }
+.stock-change { font-size: 20px; font-weight: 600; margin-top: 4px; line-height: 1.2; }
+.stock-meta { font-size: 12px; color: var(--text-secondary); margin-top: 6px; display: flex; gap: 16px; justify-content: flex-end; }
+
+/* Layout */
+.two-col { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+
+/* K-line area - dark */
+.kline-area { background: var(--card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
+.kline-tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+.kline-tab { padding: 4px 12px; border-radius: 8px; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; cursor: pointer; transition: all 0.15s; }
+.kline-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .kline-tab:hover { background: var(--hover-bg); color: var(--text-primary); }
+  .kline-tab.active:hover { background: var(--accent); color: #fff; }
+#chart-kline { width: 100%; height: 380px; }
+
+/* Indicator cards */
+.indicator-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.indicator-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+  .indicator-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.indicator-name { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; font-weight: 600; }
+.indicator-value { font-size: 20px; font-weight: 600; color: var(--navy); line-height: 1.2; }
+.indicator-signal { font-size: 11px; margin-top: 4px; font-weight: 600; }
+.up { color: var(--up); }
+  .down { color: var(--down); }
+  .signal-buy { color: var(--up); }
+.signal-sell { color: var(--down); }
+.signal-neutral { color: var(--warn); }
+
+/* Mini charts */
+.mini-chart { width: 100%; height: 60px; margin-top: 8px; }
+
+/* Fund data */
+.fund-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.fund-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+  .fund-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.fund-title { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 12px; line-height: 1.4; }
+.fund-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.fund-row:last-child { border-bottom: none; }
+.fund-label { font-size: 14px; color: var(--text-secondary); }
+.fund-value { font-size: 14px; font-weight: 600; }
+
+/* Order book */
+.orderbook { display: flex; gap: 16px; }
+.orderbook-side { flex: 1; }
+.orderbook-header { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 6px; padding: 0 4px; }
+.order-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; border-radius: 4px; font-size: 12px; }
+.order-row:nth-child(even) { background: #F5F5F7; }
+.order-price { font-weight: 600; }
+.order-vol { color: var(--text-secondary); font-size: 11px; }
+.bid-price { color: var(--up); }
+.ask-price { color: var(--down); }
+
+/* News */
+.news-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.news-item:last-child { border-bottom: none; }
+.news-title { font-size: 14px; color: var(--text-primary); font-weight: 500; line-height: 1.6; }
+.news-meta { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+.news-tag { display: inline-block; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; margin-left: 6px; height: 20px; line-height: 20px; }
+
+/* Compare table */
+.compare-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.compare-table th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; border-bottom: 1px solid var(--border); background: #F2F2F7; }
+.compare-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.compare-table tr:hover { background: #F5F5F7; }
+
+/* Tags */
+.tag { display: inline-block; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; line-height: 20px; }
+.tag-green { background: #34C759; color: #FFFFFF; }
+.tag-blue { background: #0071E3; color: #FFFFFF; }
+.tag-purple { background: #5856D6; color: #FFFFFF; }
+.tag-red { background: #FF3B30; color: #FFFFFF; }
+.tag-gray { background: #F2F2F7; color: #1D1D1F; }
+
+@media (max-width: 1280px) {
+  .two-col { grid-template-columns: 1fr; }
+  .indicator-grid { grid-template-columns: repeat(2, 1fr); }
+}
+/* ====== IFRAME EMBED MODE: hide sidebar & topbar ====== */
+body.in-iframe .sidebar,
+body.in-iframe .topbar { display: none !important; }
+body.in-iframe .main { margin-left: 0 !important; width: 100% !important; }
+body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><i data-lucide="brain" style="width:20px;height:20px;"></i> 金融投资<span>AI助手</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">行情与数据</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span> 市场总览</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="trending-up" style="width:20px;height:20px;"></i></span> 个股行情</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="globe" style="width:20px;height:20px;"></i></span> 全球市场</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">分析与选股</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="star" style="width:20px;height:20px;"></i></span> 评分榜单</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="search" style="width:20px;height:20px;"></i></span> 个股深度</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="wallet" style="width:20px;height:20px;"></i></span> 模拟交易</div>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div style="font-size:14px;font-weight:600;color:var(--navy);">个股行情</div>
+    <div class="search-box">
+      <span><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <input type="text" placeholder="搜索股票代码或名称..." value="NVDA">
+    </div>
+    <div class="user-area">
+      <span><i data-lucide="bell" style="width:20px;height:20px;"></i></span>
+      <div class="avatar">投</div>
+      <span>投资者</span>
+    </div>
+  </header>
+
+  <div class="content">
+    <!-- Stock Header -->
+    <div class="stock-header">
+      <div class="stock-header-left">
+        <div>
+          <div class="stock-symbol">NVDA</div>
+          <div class="stock-name">NVIDIA Corporation / 英伟达</div>
+          <span class="stock-market">NASDAQ</span>
+          <span class="stock-market" style="margin-left:6px;">Technology / Semiconductor</span>
+        </div>
+      </div>
+      <div class="stock-header-right">
+        <div class="stock-price mono tabular-nums">$135.42</div>
+        <div class="stock-change up">+$3.10 (+2.35%)</div>
+        <div class="stock-meta">
+          <span>市值 $3.32T</span>
+          <span>成交量 2.8亿股</span>
+          <span>PE 45.6x</span>
+          <span>PB 18.2x</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- K-Line + Order Book -->
+    <div class="two-col">
+      <div class="kline-area">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div class="kline-tabs">
+            <button class="kline-tab active">日K</button>
+            <button class="kline-tab">周K</button>
+            <button class="kline-tab">月K</button>
+            <button class="kline-tab">分时</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-secondary);">
+            MA5 <span style="color:#0071E3;">●</span> MA10 <span style="color:#FF9500;">●</span> MA20 <span style="color:#34C759;">●</span> MA60 <span style="color:#5856D6;">●</span>
+          </div>
+        </div>
+        <div id="chart-kline"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-top:12px;">
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:var(--text-secondary);">MACD</div>
+            <div id="chart-macd" style="width:100%;height:60px;"></div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:var(--text-secondary);">RSI(14)</div>
+            <div id="chart-rsi" style="width:100%;height:60px;"></div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:var(--text-secondary);">BOLL</div>
+            <div id="chart-boll" style="width:100%;height:60px;"></div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:10px;color:var(--text-secondary);">成交量</div>
+            <div id="chart-volume" style="width:100%;height:60px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <!-- Order Book -->
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-title">五档盘口</div>
+          <div class="orderbook">
+            <div class="orderbook-side">
+              <div class="orderbook-header"><span>卖盘</span><span>价格 / 数量</span></div>
+              <div class="order-row"><span class="order-vol">8.2万</span><span class="order-price ask-price mono">135.48</span></div>
+              <div class="order-row"><span class="order-vol">12.5万</span><span class="order-price ask-price mono">135.45</span></div>
+              <div class="order-row"><span class="order-vol">6.8万</span><span class="order-price ask-price mono">135.42</span></div>
+              <div class="order-row"><span class="order-vol">15.3万</span><span class="order-price ask-price mono">135.40</span></div>
+              <div class="order-row"><span class="order-vol">9.1万</span><span class="order-price ask-price mono">135.38</span></div>
+            </div>
+            <div class="orderbook-side">
+              <div class="orderbook-header"><span>买盘</span><span>价格 / 数量</span></div>
+              <div class="order-row"><span class="order-price bid-price mono">135.35</span><span class="order-vol">11.2万</span></div>
+              <div class="order-row"><span class="order-price bid-price mono">135.32</span><span class="order-vol">7.6万</span></div>
+              <div class="order-row"><span class="order-price bid-price mono">135.30</span><span class="order-vol">14.8万</span></div>
+              <div class="order-row"><span class="order-price bid-price mono">135.28</span><span class="order-vol">5.4万</span></div>
+              <div class="order-row"><span class="order-price bid-price mono">135.25</span><span class="order-vol">18.9万</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fund Data -->
+        <div class="card">
+          <div class="card-title">资金面数据</div>
+          <div class="fund-row">
+            <span class="fund-label">主力资金净流入</span>
+            <span class="fund-value up mono">+$12.8亿</span>
+          </div>
+          <div class="fund-row">
+            <span class="fund-label">大单净额</span>
+            <span class="fund-value up mono">+$8.5亿</span>
+          </div>
+          <div class="fund-row">
+            <span class="fund-label">中单净额</span>
+            <span class="fund-value up mono">+$3.2亿</span>
+          </div>
+          <div class="fund-row">
+            <span class="fund-label">小单净额</span>
+            <span class="fund-value down mono">-$0.9亿</span>
+          </div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+            <div style="font-size:11px;color:var(--text-secondary);margin-bottom:6px;">资金分布</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="flex:45;height:8px;background:var(--up);border-radius:4px 0 0 4px;"></div>
+              <div style="flex:30;height:8px;background:#FF9500;border-radius:0;"></div>
+              <div style="flex:25;height:8px;background:var(--down);border-radius:0 4px 4px 0;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text-secondary);">
+              <span>大单 45%</span><span>中单 30%</span><span>小单 25%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Indicators -->
+    <div class="indicator-grid">
+      <div class="indicator-card">
+        <div class="indicator-name">MACD</div>
+        <div class="indicator-value mono">+0.82</div>
+        <div class="indicator-signal signal-buy">金叉 · 看多</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">DIF: +0.45 | DEA: -0.37</div>
+      </div>
+      <div class="indicator-card">
+        <div class="indicator-name">RSI(14)</div>
+        <div class="indicator-value mono">62.5</div>
+        <div class="indicator-signal signal-neutral">中性偏多</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">未超买(>70) 未超卖(<30)</div>
+      </div>
+      <div class="indicator-card">
+        <div class="indicator-name">BOLL(20)</div>
+        <div class="indicator-value mono">138.2</div>
+        <div class="indicator-signal signal-neutral">中轨附近</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">上轨142.8 | 下轨129.5</div>
+      </div>
+      <div class="indicator-card">
+        <div class="indicator-name">五因子评分</div>
+        <div class="indicator-value mono">64.4</div>
+        <div class="indicator-signal signal-buy">S4 主升浪</div>
+        <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">F1:26 F2:54 F3:50 F4:100 F5:100</div>
+      </div>
+    </div>
+
+    <!-- News + Compare -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><i data-lucide="newspaper" style="width:20px;height:20px;margin-right:8px;"></i> 相关新闻</div>
+        <div class="news-item">
+          <div class="news-title">英伟达Blackwell架构芯片量产加速，Q3营收预期上调15%</div>
+          <div class="news-meta">财联社 · 2小时前 <span class="news-tag" style="background:#F0F7FF;color:#0071E3;">业绩</span></div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">台积电确认承接NVDA 3nm订单，产能利用率突破95%</div>
+          <div class="news-meta">华尔街见闻 · 4小时前 <span class="news-tag" style="background:#F5F3FF;color:#AF52DE;">产业链</span></div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">AI服务器需求持续旺盛，戴尔、惠普同步上调全年指引</div>
+          <div class="news-meta">36氪 · 6小时前 <span class="news-tag" style="background:#E8F5E9;color:#34C759;">行业</span></div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">美国商务部确认H20出口许可，中国市场恢复供应</div>
+          <div class="news-meta">Reuters · 8小时前 <span class="news-tag" style="background:#FFF8E1;color:#FF9500;">政策</span></div>
+        </div>
+        <div class="news-item">
+          <div class="news-title">ARK Invest增持NVDA，Cathie Wood称AI仍是未来十年最大主题</div>
+          <div class="news-meta">Bloomberg · 12小时前 <span class="news-tag" style="background:#FFF0F0;color:#FF3B30;">机构</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><i data-lucide="scale" style="width:20px;height:20px;margin-right:8px;"></i> 同类股票对比</div>
+        <table class="compare-table">
+          <thead>
+            <tr><th>代码</th><th>名称</th><th>价格</th><th>涨跌</th><th>PE</th><th>评分</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>NVDA</strong></td><td>英伟达</td><td class="mono">$135.42</td><td class="up">+2.35%</td><td class="mono">45.6</td><td><span class="tag tag-purple">64.4</span></td></tr>
+            <tr><td><strong>AMD</strong></td><td>超威</td><td class="mono">$142.18</td><td class="up">+1.82%</td><td class="mono">38.2</td><td><span class="tag tag-blue">58.2</span></td></tr>
+            <tr><td><strong>INTC</strong></td><td>英特尔</td><td class="mono">$22.45</td><td class="down">-0.65%</td><td class="mono">—</td><td><span class="tag tag-gray">32.5</span></td></tr>
+            <tr><td><strong>AVGO</strong></td><td>博通</td><td class="mono">$178.92</td><td class="up">+0.95%</td><td class="mono">28.4</td><td><span class="tag tag-blue">56.8</span></td></tr>
+            <tr><td><strong>MRVL</strong></td><td>Marvell</td><td class="mono">$68.74</td><td class="up">+3.12%</td><td class="mono">—</td><td><span class="tag tag-purple">65.2</span></td></tr>
+            <tr><td><strong>TSM</strong></td><td>台积电</td><td class="mono">$168.35</td><td class="up">+1.45%</td><td class="mono">22.8</td><td><span class="tag tag-purple">64.4</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Generate 6 months of simulated daily K-line data
+  var data = [];
+  var basePrice = 110;
+  var ma5 = [], ma10 = [], ma20 = [], ma60 = [];
+  for (var i = 0; i < 180; i++) {
+    var date = new Date(2026, 1, 1);
+    date.setDate(date.getDate() + i);
+    var change = (Math.random() - 0.48) * 4;
+    basePrice = Math.max(80, basePrice + change);
+    var open = basePrice + (Math.random() - 0.5) * 2;
+    var close = basePrice + (Math.random() - 0.5) * 2;
+    var high = Math.max(open, close) + Math.random() * 2;
+    var low = Math.min(open, close) - Math.random() * 2;
+    var vol = Math.floor(Math.random() * 50000000 + 20000000);
+    data.push({
+      time: date.toISOString().split('T')[0],
+      open: parseFloat(open.toFixed(2)),
+      high: parseFloat(high.toFixed(2)),
+      low: parseFloat(low.toFixed(2)),
+      close: parseFloat(close.toFixed(2)),
+      volume: vol
+    });
+  }
+
+  // Lightweight Charts K-line
+  var chart = LightweightCharts.createChart(document.getElementById('chart-kline'), {
+    width: document.getElementById('chart-kline').clientWidth,
+    height: 380,
+    layout: { background: { color: '#FFFFFF' }, textColor: '#86868B' },
+    grid: { vertLines: { color: '#F2F2F7' }, horzLines: { color: '#F2F2F7' } },
+    rightPriceScale: { borderColor: '#E5E5EA' },
+    timeScale: { borderColor: '#E5E5EA' },
+  });
+
+  var candleSeries = chart.addCandlestickSeries({
+    upColor: '#FF3B30', downColor: '#34C759', borderUpColor: '#FF3B30', borderDownColor: '#34C759',
+    wickUpColor: '#FF3B30', wickDownColor: '#34C759'
+  });
+  candleSeries.setData(data);
+
+  // MA lines
+  function calcMA(data, period) {
+    var result = [];
+    for (var i = 0; i < data.length; i++) {
+      if (i < period - 1) { result.push({ time: data[i].time, value: null }); continue; }
+      var sum = 0;
+      for (var j = 0; j < period; j++) sum += data[i - j].close;
+      result.push({ time: data[i].time, value: sum / period });
+    }
+    return result;
+  }
+  var ma5Data = calcMA(data, 5), ma10Data = calcMA(data, 10), ma20Data = calcMA(data, 20), ma60Data = calcMA(data, 60);
+  chart.addLineSeries({ color: '#0071E3', lineWidth: 1 }).setData(ma5Data);
+  chart.addLineSeries({ color: '#FF9500', lineWidth: 1 }).setData(ma10Data);
+  chart.addLineSeries({ color: '#34C759', lineWidth: 1 }).setData(ma20Data);
+  chart.addLineSeries({ color: '#5856D6', lineWidth: 1 }).setData(ma60Data);
+  chart.timeScale().fitContent();
+
+  // Mini indicator charts using ECharts
+  var miniOpt = function(values, color, title) {
+    return {
+      grid: { left: 0, right: 0, top: 2, bottom: 2 },
+      xAxis: { show: false, type: 'category', data: values.map(function(_,i){return i;}) },
+      yAxis: { show: false, type: 'value' },
+      series: [{ type: 'line', data: values, smooth: true, symbol: 'none', lineStyle: { color: color, width: 1.5 }, areaStyle: { color: { type: 'linear', x:0,y:0,x2:0,y2:1, colorStops:[{offset:0,color:color.startsWith('#') ? color + '4D' : color.replace(')','').replace('rgb','rgba')+',0.3)'},{offset:1,color:'transparent'}] } } }]
+    };
+  };
+  var macdVals = data.map(function(d,i){ return Math.sin(i*0.1)*2 + Math.random()*0.5; });
+  var rsiVals = data.map(function(d,i){ return 50 + Math.sin(i*0.08)*20 + Math.random()*10; });
+  var bollVals = data.map(function(d,i){ return d.close; });
+  var volVals = data.map(function(d){ return d.volume/1000000; });
+  echarts.init(document.getElementById('chart-macd')).setOption(miniOpt(macdVals.slice(-60), '#FF3B30'));
+  echarts.init(document.getElementById('chart-rsi')).setOption(miniOpt(rsiVals.slice(-60), '#FF9500'));
+  echarts.init(document.getElementById('chart-boll')).setOption(miniOpt(bollVals.slice(-60), '#5856D6'));
+  echarts.init(document.getElementById('chart-volume')).setOption({
+    grid: { left: 0, right: 0, top: 2, bottom: 2 },
+    xAxis: { show: false, type: 'category', data: volVals.slice(-60).map(function(_,i){return i;}) },
+    yAxis: { show: false, type: 'value' },
+    series: [{ type: 'bar', data: volVals.slice(-60), barWidth: '60%', itemStyle: { color: '#0071E3' } }]
+  });
+
+  window.addEventListener('resize', function() { chart.resize(); });
+  lucide.createIcons();
+});
+</script>
+
+
+<script>
+/* iframe embed detection: hide own sidebar & topbar when inside index.html */
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+})();
+</script>
+</body>
+</html>

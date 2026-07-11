@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产业链图谱 — 5Factor AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --text: #1D1D1F;
+  --text-secondary: #86868B;
+  --accent: #0071E3;
+  --accent-light: #5AC8FA;
+  --navy: #F5F5F7;
+  --up: #FF3B30;
+  --down: #34C759;
+  --hover-bg: #F5F5F7;
+  --active-bg: rgba(0,113,227,0.15);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+  font-variant-numeric: tabular-nums;
+}
+.sidebar {
+  width: 240px; min-width: 240px; background: var(--card); color: var(--text);
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50; border-right: 1px solid var(--border);
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; color: var(--text); }
+.sidebar-logo span { color: var(--accent); }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 16px 16px 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease; border-left: 4px solid transparent; font-size: 14px; font-weight: 500; margin: 0 8px; border-radius: 8px; }
+.nav-item:hover { background: var(--hover-bg); color: var(--text); }
+.nav-item.active { background: var(--active-bg); color: var(--accent); border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+.nav-sub { padding: 8px 14px 8px 48px; display: flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; font-size: 13px; transition: all 0.15s ease; border-left: 4px solid transparent; margin: 0 8px; border-radius: 8px; }
+.nav-sub:hover { color: var(--text); background: var(--hover-bg); }
+.nav-sub.active { color: var(--accent); font-weight: 500; background: var(--active-bg); border-left-color: var(--accent); }
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--bg); }
+.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; height: 56px; }
+.search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 10px; padding: 7px 14px; gap: 10px; height: 40px; border: 1px solid var(--border); transition: all 0.15s; }
+.search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.2); }
+.search input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text); font-family: inherit; }
+.search input::placeholder { color: #86868B; }
+.user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+.content { padding: 24px 32px; max-width: 1440px; margin: 0 auto; width: 100%; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+.card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--text); letter-spacing: -0.01em; line-height: 1.4; }
+.card-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+.tab-row { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+.tab-btn { padding: 10px 20px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn:hover { color: var(--accent-light); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.industry-switcher { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.industry-btn { padding: 6px 16px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); cursor: pointer; font-size: 13px; font-family: inherit; color: var(--text-secondary); transition: all 0.2s; font-weight: 500; }
+.industry-btn:hover { border-color: var(--accent); color: var(--accent); }
+.industry-btn.active { background: var(--accent); color: #FFFFFF; border-color: var(--accent); }
+.tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+.tag-green { background: rgba(52,199,89,0.2); color: #34C759; }
+.tag-blue { background: rgba(0,113,227,0.2); color: #0071E3; }
+.tag-yellow { background: rgba(255,204,0,0.2); color: #FF9500; }
+.tag-red { background: rgba(255,59,48,0.2); color: #FF3B30; }
+.tag-purple { background: rgba(175,82,222,0.2); color: #BF5AF2; }
+.tag-gray { background: #E5E5EA; color: var(--text); }
+.tree-item { padding: 6px 10px; cursor: pointer; border-radius: 8px; transition: all 0.15s; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
+.tree-item:hover { background: var(--hover-bg); color: var(--text); }
+.tree-item.active { background: var(--active-bg); color: var(--accent); font-weight: 600; }
+.tree-level-1 { padding-left: 10px; font-weight: 600; color: var(--text); }
+.tree-level-2 { padding-left: 24px; }
+.tree-level-3 { padding-left: 38px; font-size: 12px; }
+.tree-level-4 { padding-left: 52px; font-size: 12px; }
+.stat-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
+.stat-value { font-size: 20px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1.2; }
+.stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; font-weight: 500; letter-spacing: 0.02em; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th { text-transform: uppercase; font-size: 12px; color: var(--text-secondary); font-weight: 500; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--border); background: var(--hover-bg); letter-spacing: 0.5px; }
+.data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+.data-table tbody tr:hover { background: var(--hover-bg); }
+.chart-container { width: 100%; height: 100%; min-height: 500px; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.3s ease; }
+.tree-header { font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.click-hint { font-size: 12px; color: var(--text-secondary); margin-top: 8px; font-style: italic; }
+
+/* iframe embed: hide own sidebar & topbar */
+html.iframe-embed .sidebar,
+html.iframe-embed .topbar {
+  display: none !important;
+}
+html.iframe-embed .main {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .content { padding: 20px 24px; }
+  .stat-grid { grid-template-columns: repeat(3, 1fr); }
+  .two-col-layout { flex-direction: column !important; height: auto !important; }
+  .left-panel { width: 100% !important; max-height: 300px; }
+  .right-panel { min-height: 400px; }
+}
+@media (max-width: 640px) {
+  .sidebar { display: none; }
+  .main { width: 100%; }
+  .content { padding: 16px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">5<span>Factor</span> AI</div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">核心模块</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span> 行情与数据</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="newspaper" style="width:20px;height:20px;"></i></span> 内容与信息</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="target" style="width:20px;height:20px;"></i></span> 分析与选股</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="network" style="width:20px;height:20px;"></i></span> 产业链与知识</div>
+    <div class="nav-sub active">产业链全景</div>
+    <div class="nav-sub">赛道详情</div>
+    <div class="nav-sub">个股深度</div>
+    <div class="nav-sub">概念卡片</div>
+    <div class="nav-sub">知识库</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span> AI编排与智能体</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="users" style="width:20px;height:20px;"></i></span> 社区与协作</div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <i data-lucide="search" style="width:16px;height:16px;color:#86868B;"></i>
+      <input type="text" placeholder="搜索赛道、公司、概念...（如：HBM、台积电、AI算力）">
+    </div>
+    <div class="user">
+      <span>研究员_Zhang</span>
+      <div class="avatar">Z</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Header -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h1 style="font-size:28px; font-weight:700; color:var(--text); letter-spacing:-0.02em; line-height:1.2;">产业链图谱</h1>
+        <p style="font-size:14px; color:var(--text-secondary); margin-top:4px;">投资知识图谱 F2.1 · 74赛道 / 398公司 / 572股票映射 / 518条关系</p>
+      </div>
+      <div style="font-size:12px; color:var(--text-secondary);">数据更新: 2026-07-09</div>
+    </div>
+
+    <!-- Industry Switcher -->
+    <div class="industry-switcher" id="industrySwitcher">
+      <button class="industry-btn active" data-industry="ai">AI算力</button>
+      <button class="industry-btn" data-industry="semi">半导体</button>
+      <button class="industry-btn" data-industry="nev">新能源车</button>
+      <button class="industry-btn" data-industry="pv">光伏储能</button>
+      <button class="industry-btn" data-industry="robot">机器人</button>
+      <button class="industry-btn" data-industry="evtol">低空经济</button>
+    </div>
+
+    <!-- Tab: 4 Views -->
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="treemap">Treemap 规模</button>
+      <button class="tab-btn" data-tab="graph">关系网络</button>
+      <button class="tab-btn" data-tab="sankey">Sankey 流向</button>
+      <button class="tab-btn" data-tab="causal">因果传导</button>
+    </div>
+
+    <!-- Main Layout: 2 Columns -->
+    <div class="two-col-layout" style="display:flex; gap:16px; height: calc(100vh - 300px); min-height: 500px;">
+      <!-- Left: Tree Nav -->
+      <div class="card left-panel" style="width:280px; flex-shrink:0; overflow-y:auto; display:flex; flex-direction:column;">
+        <div class="card-title" style="font-size:16px; font-weight:600; line-height:1.4; margin-bottom:4px;" id="treeTitle">AI算力产业树</div>
+        <div class="tree-header" id="treeSubtitle">四层结构 · 点击赛道查看详情</div>
+        <div id="treeContainer" style="flex:1; overflow-y:auto;">
+          <!-- Tree items will be generated by JS -->
+        </div>
+        <div class="click-hint"><i data-lucide="mouse-pointer-click" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:4px;"></i>左侧点击高亮对应节点，右侧图表点击跳转赛道分析</div>
+      </div>
+
+      <!-- Right: Chart Area -->
+      <div class="card right-panel" style="flex:1; display:flex; flex-direction:column;">
+        <div class="flex-between" style="margin-bottom:12px;">
+          <div class="card-title" style="font-size:16px; margin:0; line-height:1.4;" id="chartTitle">产业链全景</div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span class="tag tag-green">置信度: 高</span>
+            <span class="tag tag-blue">来源: 5-8条</span>
+          </div>
+        </div>
+        <div id="chart-main" class="chart-container" style="flex:1;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// INDUSTRY DATA (from V4 f4_chain.html)
+// ═══════════════════════════════════════════════════
+
+const industryNames = {
+  ai: 'AI算力', semi: '半导体', nev: '新能源车',
+  pv: '光伏储能', robot: '机器人', evtol: '低空经济'
+};
+
+const industryStructure = {
+  ai: {
+    layers: [
+      { name: 'L1 原材料与资源', sectors: ['高纯硅料与硅片','电子特气','光刻胶与湿化学品','溅射靶材','封装基板材料'] },
+      { name: 'L2 设备与零部件', sectors: ['光刻机','刻蚀设备','薄膜沉积设备','检测量测设备','EDA与IP核','HBM高带宽内存','先进封装CoWoS','800G/1.6T光模块','Chiplet与异构集成','PCB与IC载板','散热液冷系统','高速连接器与铜缆','服务器电源与UPS'] },
+      { name: 'L3 核心产品与集成', sectors: ['GPU架构设计','GPU制造代工','ASIC/AI定制芯片','CPU(服务器级)','AI服务器','AI训练集群/超算','网络交换芯片','FPGA','DPU/SmartNIC','NVMe/存储芯片','DSP与光芯片','RISC-V AI芯片'] },
+      { name: 'L4 终端应用与服务', sectors: ['云计算IaaS','AI推理API服务','数据中心IDC','AI模型训练平台','自动驾驶','边缘AI','AI Agent','AI开发者工具'] }
+    ]
+  },
+  semi: {
+    layers: [
+      { name: 'L1 原材料', sectors: ['高纯硅料与硅片','电子特气','光刻胶与湿化学品','封装基板材料','CMP抛光液与抛光垫','光掩模版','前驱体与ALD/CVD材料'] },
+      { name: 'L2 设备', sectors: ['光刻机','刻蚀设备','薄膜沉积设备','检测量测设备','EDA与IP核','清洗设备','涂胶显影设备(Track)','CMP设备','离子注入设备'] },
+      { name: 'L3 制造与设计', sectors: ['晶圆代工(先进制程)','成熟制程代工','AI芯片设计(Fabless)','IC设计服务(Fabless)','存储芯片(DRAM/NAND)','CPU(服务器级)','MCU与嵌入式处理器','CIS图像传感器','FPGA','功率半导体','先进封装(CoWoS/3D)','Chiplet与异构集成','半导体设备零部件'] },
+      { name: 'L4 封测与应用', sectors: ['封装测试(OSAT)','高速连接器与铜缆','RISC-V AI芯片'] }
+    ]
+  },
+  nev: {
+    layers: [
+      { name: 'L1 上游资源', sectors: ['锂资源','正极材料','负极材料','电解液','隔膜'] },
+      { name: 'L2 核心部件', sectors: ['动力电池','电机电控','热管理','轻量化'] },
+      { name: 'L3 系统集成', sectors: ['智能驾驶','整车制造'] },
+      { name: 'L4 基础设施', sectors: ['充电桩'] }
+    ]
+  },
+  pv: {
+    layers: [
+      { name: 'L1 原材料', sectors: ['硅料','银浆','胶膜','光伏玻璃'] },
+      { name: 'L2 中游制造', sectors: ['硅片','电池片','组件','逆变器','支架'] },
+      { name: 'L3 系统应用', sectors: ['储能系统'] }
+    ]
+  },
+  robot: {
+    layers: [
+      { name: 'L1 核心零部件', sectors: ['减速器','伺服电机','控制器','传感器','力控传感器','机器视觉'] },
+      { name: 'L2 模组集成', sectors: ['关节模组','灵巧手','AI算法'] },
+      { name: 'L3 整机应用', sectors: ['整机集成'] }
+    ]
+  },
+  evtol: {
+    layers: [
+      { name: 'L1 核心系统', sectors: ['飞控系统','通信导航','动力电池','电机电控'] },
+      { name: 'L2 机体制造', sectors: ['eVTOL主机','复合材料'] },
+      { name: 'L3 运营服务', sectors: ['起降场','空管系统','适航认证','运营服务'] }
+    ]
+  }
+};
+
+// Treemap data from V4
+const treemapData = {
+  ai: [
+    { name: '云计算IaaS', value: 420, itemStyle: { color: '#fb923c' } },
+    { name: 'AI服务器', value: 220, itemStyle: { color: '#4ade80' } },
+    { name: '晶圆代工(先进制程)', value: 170, itemStyle: { color: '#60a5fa' } },
+    { name: 'GPU', value: 130, itemStyle: { color: '#4ade80' } },
+    { name: 'AI推理API服务', value: 106, itemStyle: { color: '#fb923c' } },
+    { name: '数据中心IDC', value: 83, itemStyle: { color: '#fb923c' } },
+    { name: 'AI训练集群/超算', value: 80, itemStyle: { color: '#4ade80' } },
+    { name: 'GPU架构设计', value: 65, itemStyle: { color: '#4ade80' } },
+    { name: 'ASIC/AI定制芯片', value: 60, itemStyle: { color: '#4ade80' } },
+    { name: 'HBM高带宽内存', value: 55, itemStyle: { color: '#60a5fa' } },
+    { name: 'GPU制造代工', value: 55, itemStyle: { color: '#4ade80' } },
+    { name: 'CPU(服务器级)', value: 40, itemStyle: { color: '#4ade80' } },
+    { name: '自动驾驶', value: 40, itemStyle: { color: '#fb923c' } },
+    { name: '光刻机', value: 33, itemStyle: { color: '#60a5fa' } },
+    { name: '先进封装CoWoS', value: 30, itemStyle: { color: '#60a5fa' } },
+    { name: '800G/1.6T光模块', value: 26, itemStyle: { color: '#60a5fa' } },
+    { name: '刻蚀设备', value: 25, itemStyle: { color: '#60a5fa' } },
+    { name: '边缘AI', value: 25, itemStyle: { color: '#fb923c' } },
+    { name: 'AI模型训练平台', value: 20, itemStyle: { color: '#fb923c' } },
+    { name: '薄膜沉积设备', value: 20, itemStyle: { color: '#60a5fa' } },
+    { name: 'EDA与IP核', value: 18, itemStyle: { color: '#60a5fa' } },
+    { name: '高纯硅料与硅片', value: 15, itemStyle: { color: '#94a3b8' } },
+    { name: 'Chiplet与异构集成', value: 14, itemStyle: { color: '#60a5fa' } },
+    { name: '检测量测设备', value: 13, itemStyle: { color: '#60a5fa' } },
+    { name: '网络交换芯片', value: 12, itemStyle: { color: '#4ade80' } },
+    { name: 'PCB与IC载板', value: 12, itemStyle: { color: '#60a5fa' } },
+    { name: 'AI Agent', value: 11, itemStyle: { color: '#fb923c' } },
+    { name: 'FPGA', value: 9, itemStyle: { color: '#4ade80' } },
+    { name: 'AI开发者工具', value: 8, itemStyle: { color: '#fb923c' } },
+    { name: '电子特气', value: 6, itemStyle: { color: '#94a3b8' } },
+    { name: 'DPU/SmartNIC', value: 6, itemStyle: { color: '#4ade80' } },
+    { name: 'NVMe/存储芯片', value: 6, itemStyle: { color: '#4ade80' } },
+    { name: '光刻胶与湿化学品', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '封装基板材料', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '高速连接器与铜缆', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: '散热液冷系统', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: '服务器电源与UPS', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: 'DSP与光芯片', value: 3, itemStyle: { color: '#60a5fa' } },
+    { name: '溅射靶材', value: 2.5, itemStyle: { color: '#94a3b8' } },
+    { name: 'RISC-V AI芯片', value: 2.5, itemStyle: { color: '#4ade80' } }
+  ],
+  semi: [
+    { name: '晶圆代工(先进制程)', value: 170, itemStyle: { color: '#4ade80' } },
+    { name: '存储芯片(DRAM/NAND)', value: 120, itemStyle: { color: '#4ade80' } },
+    { name: '模拟芯片', value: 95, itemStyle: { color: '#fb923c' } },
+    { name: '成熟制程代工', value: 45, itemStyle: { color: '#4ade80' } },
+    { name: '封装测试(OSAT)', value: 42, itemStyle: { color: '#4ade80' } },
+    { name: '功率半导体', value: 42, itemStyle: { color: '#4ade80' } },
+    { name: 'CPU(服务器级)', value: 40, itemStyle: { color: '#4ade80' } },
+    { name: '光刻机', value: 33, itemStyle: { color: '#60a5fa' } },
+    { name: '先进封装(CoWoS/3D)', value: 30, itemStyle: { color: '#4ade80' } },
+    { name: 'MCU与嵌入式处理器', value: 26, itemStyle: { color: '#fb923c' } },
+    { name: '刻蚀设备', value: 25, itemStyle: { color: '#60a5fa' } },
+    { name: 'AI芯片设计(Fabless)', value: 25, itemStyle: { color: '#fb923c' } },
+    { name: '半导体设备零部件', value: 25, itemStyle: { color: '#fb923c' } },
+    { name: 'CIS图像传感器', value: 21, itemStyle: { color: '#fb923c' } },
+    { name: '薄膜沉积设备', value: 20, itemStyle: { color: '#60a5fa' } },
+    { name: 'EDA与IP核', value: 18, itemStyle: { color: '#60a5fa' } },
+    { name: '高纯硅料与硅片', value: 15, itemStyle: { color: '#94a3b8' } },
+    { name: 'IC设计服务(Fabless)', value: 15, itemStyle: { color: '#fb923c' } },
+    { name: 'Chiplet与异构集成', value: 14, itemStyle: { color: '#60a5fa' } },
+    { name: '检测量测设备', value: 13, itemStyle: { color: '#60a5fa' } },
+    { name: 'FPGA', value: 9, itemStyle: { color: '#4ade80' } },
+    { name: '电子特气', value: 6, itemStyle: { color: '#94a3b8' } },
+    { name: '清洗设备', value: 5.5, itemStyle: { color: '#60a5fa' } },
+    { name: '光掩模版', value: 5.5, itemStyle: { color: '#94a3b8' } },
+    { name: '光刻胶与湿化学品', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '封装基板材料', value: 5, itemStyle: { color: '#94a3b8' } },
+    { name: '高速连接器与铜缆', value: 5, itemStyle: { color: '#60a5fa' } },
+    { name: '涂胶显影设备(Track)', value: 4, itemStyle: { color: '#60a5fa' } },
+    { name: 'CMP抛光液与抛光垫', value: 3.5, itemStyle: { color: '#94a3b8' } },
+    { name: 'CMP设备', value: 3.5, itemStyle: { color: '#60a5fa' } },
+    { name: '溅射靶材', value: 2.5, itemStyle: { color: '#94a3b8' } },
+    { name: '离子注入设备', value: 2.5, itemStyle: { color: '#60a5fa' } },
+    { name: 'RISC-V AI芯片', value: 2.5, itemStyle: { color: '#fb923c' } },
+    { name: '前驱体与ALD/CVD材料', value: 2.2, itemStyle: { color: '#94a3b8' } }
+  ],
+  nev: [
+    { name: '动力电池', value: 150, itemStyle: { color: '#0071E3' } },
+    { name: '电机电控', value: 60, itemStyle: { color: '#5AC8FA' } },
+    { name: '整车制造', value: 300, itemStyle: { color: '#BF5AF2' } },
+    { name: '充电桩', value: 25, itemStyle: { color: '#5AC8FA' } },
+    { name: '智能驾驶', value: 35, itemStyle: { color: '#FF9F0A' } },
+    { name: '热管理', value: 12, itemStyle: { color: '#FF3B30' } },
+    { name: '轻量化', value: 18, itemStyle: { color: '#A2845E' } },
+    { name: '正极材料', value: 40, itemStyle: { color: '#34C759' } },
+    { name: '负极材料', value: 20, itemStyle: { color: '#5AC8FA' } },
+    { name: '电解液', value: 15, itemStyle: { color: '#5AC8FA' } },
+    { name: '隔膜', value: 10, itemStyle: { color: '#0071E3' } },
+    { name: '锂资源', value: 8, itemStyle: { color: '#86868B' } }
+  ],
+  pv: [
+    { name: '硅料', value: 30, itemStyle: { color: '#0071E3' } },
+    { name: '硅片', value: 45, itemStyle: { color: '#5AC8FA' } },
+    { name: '电池片', value: 55, itemStyle: { color: '#BF5AF2' } },
+    { name: '组件', value: 80, itemStyle: { color: '#5AC8FA' } },
+    { name: '逆变器', value: 25, itemStyle: { color: '#FF9F0A' } },
+    { name: '储能系统', value: 60, itemStyle: { color: '#FF3B30' } },
+    { name: '光伏玻璃', value: 12, itemStyle: { color: '#A2845E' } },
+    { name: '胶膜', value: 8, itemStyle: { color: '#34C759' } },
+    { name: '支架', value: 10, itemStyle: { color: '#5AC8FA' } },
+    { name: '银浆', value: 5, itemStyle: { color: '#86868B' } }
+  ],
+  robot: [
+    { name: '减速器', value: 12, itemStyle: { color: '#0071E3' } },
+    { name: '伺服电机', value: 18, itemStyle: { color: '#5AC8FA' } },
+    { name: '控制器', value: 10, itemStyle: { color: '#BF5AF2' } },
+    { name: '传感器', value: 15, itemStyle: { color: '#5AC8FA' } },
+    { name: 'AI算法', value: 20, itemStyle: { color: '#FF9F0A' } },
+    { name: '整机集成', value: 35, itemStyle: { color: '#FF3B30' } },
+    { name: '灵巧手', value: 5, itemStyle: { color: '#A2845E' } },
+    { name: '关节模组', value: 8, itemStyle: { color: '#34C759' } },
+    { name: '力控传感器', value: 3, itemStyle: { color: '#5AC8FA' } },
+    { name: '机器视觉', value: 6, itemStyle: { color: '#86868B' } }
+  ],
+  evtol: [
+    { name: 'eVTOL主机', value: 18, itemStyle: { color: '#0071E3' } },
+    { name: '飞控系统', value: 8, itemStyle: { color: '#5AC8FA' } },
+    { name: '动力电池', value: 22, itemStyle: { color: '#BF5AF2' } },
+    { name: '电机电控', value: 12, itemStyle: { color: '#5AC8FA' } },
+    { name: '空管系统', value: 10, itemStyle: { color: '#FF9F0A' } },
+    { name: '起降场', value: 7, itemStyle: { color: '#FF3B30' } },
+    { name: '复合材料', value: 9, itemStyle: { color: '#A2845E' } },
+    { name: '通信导航', value: 6, itemStyle: { color: '#34C759' } },
+    { name: '运营服务', value: 15, itemStyle: { color: '#5AC8FA' } },
+    { name: '适航认证', value: 4, itemStyle: { color: '#86868B' } }
+  ]
+};
+
+// Supply chain relationships (from V4)
+const suppliesData = {
+  ai: [
+    { source: '高纯硅料与硅片', target: '晶圆代工(先进制程)' },
+    { source: '电子特气', target: '晶圆代工(先进制程)' },
+    { source: '光刻胶与湿化学品', target: '晶圆代工(先进制程)' },
+    { source: '溅射靶材', target: '晶圆代工(先进制程)' },
+    { source: '光刻机', target: '晶圆代工(先进制程)' },
+    { source: '刻蚀设备', target: '晶圆代工(先进制程)' },
+    { source: '薄膜沉积设备', target: '晶圆代工(先进制程)' },
+    { source: '检测量测设备', target: '晶圆代工(先进制程)' },
+    { source: 'EDA与IP核', target: 'GPU架构设计' },
+    { source: 'EDA与IP核', target: 'ASIC/AI定制芯片' },
+    { source: '晶圆代工(先进制程)', target: 'GPU制造代工' },
+    { source: '晶圆代工(先进制程)', target: 'ASIC/AI定制芯片' },
+    { source: '晶圆代工(先进制程)', target: 'CPU(服务器级)' },
+    { source: 'HBM高带宽内存', target: 'GPU' },
+    { source: '先进封装CoWoS', target: 'GPU' },
+    { source: '先进封装CoWoS', target: 'ASIC/AI定制芯片' },
+    { source: 'GPU', target: 'AI服务器' },
+    { source: 'AI服务器', target: '云计算IaaS' },
+    { source: 'AI训练集群/超算', target: 'AI模型训练平台' },
+    { source: '数据中心IDC', target: '云计算IaaS' },
+    { source: 'DSP与光芯片', target: '800G/1.6T光模块' }
+  ],
+  semi: [
+    { source: '高纯硅料与硅片', target: '晶圆代工(先进制程)' },
+    { source: '光刻胶与湿化学品', target: '晶圆代工(先进制程)' },
+    { source: '光刻机', target: '晶圆代工(先进制程)' },
+    { source: '刻蚀设备', target: '晶圆代工(先进制程)' },
+    { source: '薄膜沉积设备', target: '晶圆代工(先进制程)' },
+    { source: 'EDA与IP核', target: 'IC设计服务(Fabless)' },
+    { source: '晶圆代工(先进制程)', target: 'AI芯片设计(Fabless)' },
+    { source: '晶圆代工(先进制程)', target: 'CPU(服务器级)' },
+    { source: '先进封装(CoWoS/3D)', target: 'AI芯片设计(Fabless)' },
+    { source: 'CMP抛光液与抛光垫', target: '晶圆代工(先进制程)' }
+  ]
+};
+
+const competesData = {
+  ai: [
+    { source: 'GPU', target: 'ASIC/AI定制芯片' },
+    { source: 'GPU', target: 'FPGA' }
+  ],
+  semi: []
+};
+
+const causalData = {
+  ai: [
+    { source: 'AI模型训练平台', target: 'AI推理API服务' },
+    { source: 'AI Agent', target: 'AI推理API服务' },
+    { source: 'HBM高带宽内存', target: 'GPU' },
+    { source: '先进封装CoWoS', target: 'GPU' },
+    { source: '晶圆代工(先进制程)', target: 'GPU' },
+    { source: 'GPU', target: 'AI服务器' },
+    { source: 'AI服务器', target: 'AI训练集群/超算' },
+    { source: 'AI服务器', target: '数据中心IDC' },
+    { source: 'HBM高带宽内存', target: 'AI服务器' },
+    { source: 'AI推理API服务', target: 'AI Agent' },
+    { source: '云计算IaaS', target: 'AI推理API服务' },
+    { source: '800G/1.6T光模块', target: 'AI训练集群/超算' },
+    { source: '散热液冷系统', target: '数据中心IDC' },
+    { source: '自动驾驶', target: '边缘AI' }
+  ],
+  semi: [
+    { source: '晶圆代工(先进制程)', target: 'AI芯片设计(Fabless)' },
+    { source: '存储芯片(DRAM/NAND)', target: 'AI芯片设计(Fabless)' },
+    { source: '先进封装(CoWoS/3D)', target: 'AI芯片设计(Fabless)' },
+    { source: 'EDA与IP核', target: 'IC设计服务(Fabless)' },
+    { source: '半导体设备零部件', target: '光刻机' }
+  ]
+};
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let currentIndustry = 'ai';
+let currentView = 'treemap';
+let chartInstance = null;
+let allSegmentNames = {};
+
+// Build segment name map for validation
+function buildSegmentNameMap() {
+  allSegmentNames = {};
+  for (const ind in treemapData) {
+    treemapData[ind].forEach(s => { allSegmentNames[s.name] = true; });
+  }
+}
+buildSegmentNameMap();
+
+// ═══════════════════════════════════════════════════
+// TREE GENERATION
+// ═══════════════════════════════════════════════════
+function renderTree(industry) {
+  const container = document.getElementById('treeContainer');
+  const structure = industryStructure[industry];
+  const name = industryNames[industry];
+  document.getElementById('treeTitle').textContent = name + '产业树';
+
+  if (!structure) {
+    container.innerHTML = '<div style="color:var(--text-secondary);padding:12px;">暂无层级数据，点击Treemap查看赛道</div>';
+    return;
+  }
+
+  let html = '';
+  structure.layers.forEach((layer, li) => {
+    html += `<div class="tree-item tree-level-1" data-layer="${li}"><i data-lucide="folder" style="width:14px;height:14px;"></i> ${layer.name} <span style="margin-left:auto;font-size:11px;color:var(--text-secondary);">${layer.sectors.length}赛道</span></div>`;
+    layer.sectors.forEach((sector, si) => {
+      const isLast = si === layer.sectors.length - 1;
+      const prefix = isLast ? '└─' : '├─';
+      html += `<div class="tree-item tree-level-2" data-sector="${sector}" data-layer="${li}">${prefix} ${sector}</div>`;
+    });
+  });
+
+  container.innerHTML = html;
+
+  // Add click handlers — LEFT tree only HIGHLIGHTS, does NOT navigate
+  container.querySelectorAll('[data-sector]').forEach(item => {
+    item.addEventListener('click', function() {
+      const sector = this.dataset.sector;
+      // Highlight tree item
+      container.querySelectorAll('.tree-item.active').forEach(el => el.classList.remove('active'));
+      this.classList.add('active');
+      // Highlight corresponding chart node
+      highlightSectorInChart(sector);
+    });
+  });
+  // Re-init icons
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function highlightSectorInChart(sectorName) {
+  if (!chartInstance) return;
+  chartInstance.dispatchAction({ type: 'downplay' });
+  chartInstance.dispatchAction({ type: 'highlight', name: sectorName });
+  chartInstance.dispatchAction({ type: 'showTip', name: sectorName });
+}
+
+function navigateToSector(sectorName) {
+  const encoded = encodeURIComponent(sectorName);
+  window.location.href = `sector-analysis.html?sector=${encoded}&industry=${currentIndustry}`;
+}
+
+// ═══════════════════════════════════════════════════
+// CHART RENDERING
+// ═══════════════════════════════════════════════════
+function initChart() {
+  const dom = document.getElementById('chart-main');
+  if (chartInstance) chartInstance.dispose();
+  chartInstance = echarts.init(dom);
+  renderChart(currentView);
+}
+
+function getBaseOption() {
+  return {
+    backgroundColor: 'transparent',
+    textStyle: { fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif' },
+    tooltip: {
+      backgroundColor: 'rgba(255,255,255,0.95)',
+      borderColor: '#E5E5EA',
+      textStyle: { color: '#1D1D1F', fontSize: 13 }
+    }
+  };
+}
+
+function renderTreemap() {
+  const data = treemapData[currentIndustry] || treemapData.ai;
+  const opt = getBaseOption();
+  opt.tooltip = {
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#E5E5EA',
+    textStyle: { color: '#1D1D1F', fontSize: 13 },
+    formatter: function(info) {
+      return '<strong>' + info.name + '</strong><br/>TAM: $' + info.value + 'B<br/><small style="color:#86868B">点击查看赛道详情</small>';
+    }
+  };
+  opt.series = [{
+    type: 'treemap',
+    width: '100%', height: '100%',
+    roam: false, nodeClick: false,
+    breadcrumb: { show: false },
+    label: {
+      show: true,
+      formatter: function(p) {
+        return p.name + '\n$' + p.value + 'B';
+      },
+      fontSize: 11, fontWeight: 'bold', color: '#1D1D1F',
+      textShadowBlur: 3, textShadowColor: 'rgba(0,0,0,0.1)'
+    },
+    upperLabel: { show: false },
+    itemStyle: { borderColor: '#E5E5EA', borderWidth: 2, gapWidth: 2 },
+    levels: [
+      { itemStyle: { borderColor: '#E5E5EA', borderWidth: 3, gapWidth: 3 } },
+      { colorSaturation: [0.3, 0.6], itemStyle: { borderColorSaturation: 0.5, gapWidth: 2 } }
+    ],
+    data: data
+  }];
+  chartInstance.setOption(opt, true);
+
+  // Click to navigate
+  chartInstance.off('click');
+  chartInstance.on('click', function(params) {
+    if (params.name) navigateToSector(params.name);
+  });
+}
+
+function renderGraph() {
+  const segments = treemapData[currentIndustry] || treemapData.ai;
+  const nodes = segments.map(s => ({
+    name: s.name,
+    symbolSize: Math.max(12, Math.min(50, s.value * 0.35)),
+    itemStyle: s.itemStyle || { color: '#0071E3' }
+  }));
+
+  const edgeMap = {};
+  const sEdges = suppliesData[currentIndustry] || [];
+  const cEdges = competesData[currentIndustry] || [];
+
+  sEdges.forEach(e => {
+    const key = e.source + '|||' + e.target;
+    if (allSegmentNames[e.source] && allSegmentNames[e.target] && !edgeMap[key]) {
+      edgeMap[key] = { source: e.source, target: e.target, lineStyle: { color: '#0071E3', curveness: 0.2, width: 1.5 } };
+    }
+  });
+  cEdges.forEach(e => {
+    const key = e.source + '|||' + e.target;
+    if (allSegmentNames[e.source] && allSegmentNames[e.target] && !edgeMap[key]) {
+      edgeMap[key] = { source: e.source, target: e.target, lineStyle: { color: '#FF3B30', curveness: 0.3, width: 1, type: 'dashed' } };
+    }
+  });
+
+  const opt = getBaseOption();
+  opt.tooltip = {
+    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: '#E5E5EA',
+    textStyle: { color: '#1D1D1F' },
+    formatter: function(p) {
+      return p.dataType === 'node' ? '<b>' + p.name + '</b>' : p.source + ' → ' + p.target;
+    }
+  };
+  opt.series = [{
+    type: 'graph', layout: 'force', roam: true, draggable: true,
+    force: { repulsion: 350, edgeLength: [80, 280], gravity: 0.1 },
+    data: nodes, edges: Object.values(edgeMap),
+    label: { show: true, fontSize: 10, color: '#1D1D1F', formatter: p => p.name.length > 8 ? p.name.slice(0,8)+'…' : p.name },
+    emphasis: { focus: 'adjacency', lineStyle: { width: 3 } }
+  }];
+  chartInstance.setOption(opt, true);
+
+  chartInstance.off('click');
+  chartInstance.on('click', function(params) {
+    if (params.dataType === 'node' && params.name) navigateToSector(params.name);
+  });
+}
+
+function renderSankey() {
+  const edges = suppliesData[currentIndustry] || [];
+  const nodeSet = {};
+  const links = [];
+  edges.forEach(e => {
+    if (allSegmentNames[e.source] && allSegmentNames[e.target]) {
+      nodeSet[e.source] = true; nodeSet[e.target] = true;
+      links.push({ source: e.source, target: e.target, value: 5 });
+    }
+  });
+  // Fallback: if no links, create linear flow from first few nodes
+  if (links.length === 0) {
+    const segs = treemapData[currentIndustry] || [];
+    for (let i = 0; i < Math.min(segs.length - 1, 8); i++) {
+      nodeSet[segs[i].name] = true; nodeSet[segs[i+1].name] = true;
+      links.push({ source: segs[i].name, target: segs[i+1].name, value: 5 });
+    }
+  }
+  const nodes = Object.keys(nodeSet).map(n => ({ name: n }));
+
+  const opt = getBaseOption();
+  opt.tooltip = { trigger: 'item', triggerOn: 'mousemove', backgroundColor: 'rgba(255,255,255,0.95)', borderColor: '#E5E5EA', textStyle: { color: '#1D1D1F' } };
+  opt.series = [{
+    type: 'sankey', emphasis: { focus: 'adjacency' },
+    nodeWidth: 18, nodeGap: 10, layoutIterations: 32,
+    data: nodes, links: links,
+    label: { fontSize: 10, color: '#1D1D1F', position: 'right' },
+    lineStyle: { color: 'gradient', curveness: 0.5 }
+  }];
+  chartInstance.setOption(opt, true);
+
+  // Click to navigate
+  chartInstance.off('click');
+  chartInstance.on('click', function(params) {
+    if (params.name) navigateToSector(params.name);
+  });
+}
+
+function renderCausal() {
+  const edges = causalData[currentIndustry] || [];
+  const nodeSet = {};
+  const graphEdges = [];
+  edges.forEach(e => {
+    if (allSegmentNames[e.source] && allSegmentNames[e.target]) {
+      nodeSet[e.source] = true; nodeSet[e.target] = true;
+      graphEdges.push({
+        source: e.source, target: e.target,
+        lineStyle: { color: '#FF9F0A', width: 2.5, curveness: 0.2 },
+        label: { show: true, formatter: '传导', fontSize: 8, color: '#FF9F0A' }
+      });
+    }
+  });
+  // Fallback
+  if (graphEdges.length === 0) {
+    const segs = treemapData[currentIndustry] || [];
+    for (let i = 0; i < Math.min(segs.length - 1, 6); i++) {
+      nodeSet[segs[i].name] = true; nodeSet[segs[i+1].name] = true;
+      graphEdges.push({
+        source: segs[i].name, target: segs[i+1].name,
+        lineStyle: { color: '#FF9F0A', width: 2.5, curveness: 0.2 }
+      });
+    }
+  }
+  const nodes = Object.keys(nodeSet).map(n => ({
+    name: n, symbolSize: 26,
+    itemStyle: { color: 'rgba(255,159,10,0.15)', borderColor: '#FF9F0A', borderWidth: 2 }
+  }));
+
+  const opt = getBaseOption();
+  opt.tooltip = {
+    backgroundColor: 'rgba(255,255,255,0.95)', borderColor: '#E5E5EA', textStyle: { color: '#1D1D1F' },
+    formatter: function(p) {
+      return p.dataType === 'node' ? '<b>' + p.name + '</b>' : '<b>' + p.source + '</b> → <b>' + p.target + '</b>';
+    }
+  };
+  opt.series = [{
+    type: 'graph', layout: 'force', roam: true,
+    force: { repulsion: 500, edgeLength: [120, 350], gravity: 0.06 },
+    data: nodes, edges: graphEdges,
+    label: { show: true, fontSize: 10, color: '#1D1D1F', formatter: p => p.name.length > 10 ? p.name.slice(0,10)+'…' : p.name },
+    emphasis: { focus: 'adjacency', lineStyle: { width: 5 } }
+  }];
+  chartInstance.setOption(opt, true);
+
+  // Click to navigate
+  chartInstance.off('click');
+  chartInstance.on('click', function(params) {
+    if (params.dataType === 'node' && params.name) navigateToSector(params.name);
+  });
+}
+
+
+function renderChart(type) {
+  currentView = type;
+  if (!chartInstance) initChart();
+  switch (type) {
+    case 'treemap': renderTreemap(); break;
+    case 'graph': renderGraph(); break;
+    case 'sankey': renderSankey(); break;
+    case 'causal': renderCausal(); break;
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// EVENT HANDLERS
+// ═══════════════════════════════════════════════════
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    renderChart(this.dataset.tab);
+  });
+});
+
+// Industry switching
+document.getElementById('industrySwitcher').addEventListener('click', function(e) {
+  const btn = e.target.closest('.industry-btn');
+  if (!btn) return;
+  document.querySelectorAll('#industrySwitcher .industry-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentIndustry = btn.dataset.industry;
+  document.getElementById('chartTitle').textContent = industryNames[currentIndustry] + '产业链全景';
+  renderTree(currentIndustry);
+  renderChart(currentView);
+});
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+  renderTree('ai');
+  initChart();
+
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (chartInstance) chartInstance.resize();
+});
+</script>
+
+</body>
+</html>

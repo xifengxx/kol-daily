@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>私域知识 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ====== Apple Stocks App Light Theme ====== */
+:root {
+  --bg: #F5F5F7;
+  --bg-secondary: #F5F5F7;
+  --card: #FFFFFF;
+  --card-hover: #F5F5F7;
+  --border: #E5E5EA;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --text-tertiary: #C7C7CC;
+  --accent: #0071E3;
+  --accent-secondary: #5E5CE6;
+  --navy: #1D1D1F;
+  --up: #FF3B30;
+  --down: #34C759;
+  --tag-green-bg: #34C759;
+  --tag-green-text: #000000;
+  --tag-blue-bg: #0071E3;
+  --tag-blue-text: #FFFFFF;
+  --tag-yellow-bg: #FF9F0A;
+  --tag-yellow-text: #000000;
+  --tag-red-bg: #FF3B30;
+  --tag-red-text: #FFFFFF;
+  --tag-purple-bg: #BF5AF2;
+  --tag-purple-text: #FFFFFF;
+  --bubble-user-bg: #0071E3;
+  --bubble-ai-bg: #F5F5F7;
+  --input-bg: #F5F5F7;
+  --hover-bg: #E5E5EA;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+  display: flex;
+  min-height: 100vh;
+}
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
+}
+
+/* ====== Layout ====== */
+.unified-sidebar {
+  width: 240px; min-width: 240px; background: var(--bg-secondary); color: var(--text-primary);
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; z-index: 50;
+  border-right: 1px solid var(--border);
+}
+.unified-sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; color: var(--text-primary); }
+.unified-sidebar-logo span { color: var(--accent); }
+.unified-sidebar-section { padding: 12px 0; }
+.unified-sidebar-title { padding: 16px 16px 8px; color: var(--text-secondary); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.unified-nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s ease; border-left: 4px solid transparent; font-size: 14px; font-weight: 500; margin: 0 8px; border-radius: 8px; }
+.unified-nav-item:hover { background: var(--hover-bg); color: var(--text-primary); }
+.unified-nav-item.active { background: rgba(0,113,227,0.15); color: var(--accent); border-left-color: var(--accent); }
+.unified-nav-item .icon { width: 20px; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+.unified-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.unified-topbar { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.unified-search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--input-bg); border-radius: 8px; padding: 7px 14px; gap: 10px; border: 1px solid transparent; height: 40px; transition: all 0.15s; }
+.unified-search:focus-within { border-color: var(--accent); background: var(--card-hover); box-shadow: 0 0 0 3px rgba(0,113,227,0.2); }
+.unified-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+.unified-search input::placeholder { color: var(--text-tertiary); }
+.unified-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
+.unified-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #0071E3, #5AC8FA); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+
+/* ====== Components ====== */
+.page-title { font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; line-height: 1.2; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+.card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+.card-title { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; line-height: 1.4; }
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,113,227,0.1); }
+.btn-sm { padding: 6px 14px; font-size: 13px; }
+.btn-ghost {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.btn-ghost:hover { color: var(--text-primary); background: var(--hover-bg); }
+.tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+
+/* ====== Upload Zone ====== */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  background: var(--bg-secondary);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.upload-zone:hover { border-color: var(--accent); background: rgba(0,113,227,0.08); }
+.upload-zone.dragover { border-color: var(--accent); background: rgba(0,113,227,0.12); }
+
+/* ====== Document List ====== */
+.doc-list { display: flex; flex-direction: column; gap: 8px; }
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  transition: all 0.2s ease;
+}
+.doc-item:hover { background: var(--card-hover); border-color: var(--accent); }
+.doc-item .icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.doc-item .icon-pdf { background: #FF3B30; color: #FFFFFF; }
+.doc-item .icon-excel { background: #34C759; color: #000000; }
+.doc-item .icon-word { background: #0071E3; color: #FFFFFF; }
+.doc-item .icon-img { background: #FF9F0A; color: #000000; }
+.doc-item .info { flex: 1; min-width: 0; }
+.doc-item .name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-primary); }
+.doc-item .meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ====== Chat Bubbles ====== */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: 10px;
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1;
+}
+.chat-bubble {
+  padding: 12px 16px;
+  border-radius: 18px;
+  max-width: 85%;
+  font-size: 14px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+.chat-bubble.user {
+  background: var(--bubble-user-bg);
+  color: #fff;
+  align-self: flex-end;
+  border-radius: 18px 18px 4px 18px;
+  margin-left: auto;
+}
+.chat-bubble.ai {
+  background: var(--bubble-ai-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  align-self: flex-start;
+  border-radius: 18px 18px 18px 4px;
+}
+.chat-bubble.ai .source {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.chat-bubble.ai .citation {
+  background: rgba(0,113,227,0.2);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-right: 4px;
+}
+.chat-timestamp {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  margin-bottom: 12px;
+}
+.chat-timestamp.user { align-self: flex-end; }
+.chat-timestamp.ai { align-self: flex-start; }
+
+/* ====== Stats ====== */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.stat-box {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.stat-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ====== Document Type Bars ====== */
+.type-bar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.type-bar-track {
+  width: 100%;
+  height: 5px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.type-bar-fill {
+  height: 5px;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+/* ====== Data Table ====== */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+.data-table tr:hover td { background: var(--bg-secondary); }
+.data-table tr:last-child td { border-bottom: none; }
+
+/* ====== Recent Upload Cards ====== */
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.recent-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+.recent-card:hover { background: var(--card-hover); border-color: var(--accent); }
+.recent-card .icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.recent-card .info { flex: 1; min-width: 0; }
+.recent-card .name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-primary); }
+.recent-card .meta { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ====== Privacy Banner ====== */
+.privacy-banner {
+  background: rgba(0,113,227,0.1);
+  color: var(--text-primary);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0,113,227,0.2);
+}
+.privacy-banner .shield { color: var(--accent); display: flex; align-items: center; justify-content: center; }
+
+/* ====== Input Area ====== */
+.chat-input-wrap {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.chat-input {
+  flex: 1;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: all 0.15s;
+  height: 42px;
+}
+.chat-input::placeholder { color: var(--text-tertiary); }
+.chat-input:focus {
+  border-color: var(--accent);
+  background: var(--card-hover);
+  box-shadow: 0 0 0 3px rgba(0,113,227,0.2);
+}
+
+/* ====== Scrollbar (light) ====== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+/* ====== Responsive ====== */
+@media (max-width: 1024px) {
+  .two-col-layout { flex-direction: column !important; }
+  .two-col-left, .two-col-right { width: 100% !important; flex: none !important; }
+}
+@media (max-width: 640px) {
+  body { flex-direction: column; }
+  .unified-sidebar { display: none; }
+}
+
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; overflow-y: auto !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+
+<!-- Sidebar (hidden in iframe) -->
+<aside class="unified-sidebar">
+  <div class="unified-sidebar-logo"><i data-lucide="brain" style="width:20px;height:20px;color:var(--accent);"></i> <span>金融投资</span>AI助手</div>
+  <div class="unified-sidebar-section">
+    <div class="unified-sidebar-title">AI编排层</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="brain" style="width:18px;height:18px;"></i></span>工作流编排</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="mic" style="width:18px;height:18px;"></i></span>会议纪要</div>
+    <div class="unified-nav-item active"><span class="icon"><i data-lucide="lock" style="width:18px;height:18px;"></i></span>私域知识</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="settings" style="width:18px;height:18px;"></i></span>Prompt管理</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="palette" style="width:18px;height:18px;"></i></span>多模态</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="message-square" style="width:18px;height:18px;"></i></span>AI投研对话</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="unified-main">
+  <!-- Topbar (hidden in iframe) -->
+  <div class="unified-topbar">
+    <div class="unified-search">
+      <span style="color:var(--text-secondary);display:flex;align-items:center;"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <input type="text" placeholder="搜索私域知识库...">
+    </div>
+    <div class="unified-user">
+      <span style="display:flex;align-items:center;cursor:pointer;"><i data-lucide="bell" style="width:18px;height:18px;"></i></span>
+      <div class="unified-avatar">投</div>
+      <span>投研用户</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div style="padding: 24px 32px; max-width: 1440px; margin: 0 auto;">
+    <!-- Header -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+      <div>
+        <div class="page-title">私域知识</div>
+        <div style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">上传个人研究材料 → AI索引解析 → 私域问答检索</div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-outline btn-sm"><i data-lucide="settings" style="width:14px;height:14px;"></i> 设置</button>
+        <button class="btn-primary btn-sm" onclick="document.getElementById('fileInput').click();">
+          <i data-lucide="upload" style="width:14px;height:14px;"></i> 上传文档
+        </button>
+        <input type="file" id="fileInput" style="display:none;" multiple>
+      </div>
+    </div>
+
+    <!-- Privacy Banner -->
+    <div class="privacy-banner" style="margin-bottom: 20px;">
+      <div class="shield"><i data-lucide="shield-check" style="width:22px;height:22px;"></i></div>
+      <div style="flex:1;">
+        <div style="font-weight: 600; margin-bottom: 2px; font-size: 14px;">AES-256 端到端加密</div>
+        <div style="color: var(--text-secondary); font-size: 13px;">您的文档在上传后即时加密，索引存储于隔离容器。除您本人外，包括平台运营方在内的任何第三方均无法访问原始内容。</div>
+      </div>
+      <span class="tag" style="background: var(--accent); color: #fff;">已启用</span>
+    </div>
+
+    <!-- ====== TWO-COLUMN LAYOUT ====== -->
+    <div class="two-col-layout" style="display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start;">
+      <!-- LEFT COLUMN: Chat (~70%) -->
+      <div class="two-col-left" style="flex: 0 0 70%; display: flex; flex-direction: column;">
+        <div class="card" style="display: flex; flex-direction: column; padding: 16px;">
+          <div class="card-title" style="margin-bottom: 12px;">
+            <i data-lucide="message-square" style="width:18px;height:18px;color:var(--accent);"></i>
+            私域问答
+            <span style="margin-left: auto; font-size: 12px; color: var(--text-secondary); font-weight: 400; display: flex; align-items: center; gap: 4px;">
+              <i data-lucide="lock" style="width:12px;height:12px;"></i> 仅访问您的知识库
+            </span>
+          </div>
+
+          <!-- Chat Messages -->
+          <div class="chat-container" id="chatContainer">
+            <!-- User Message 1 -->
+            <div class="chat-bubble user">我上传的半导体研报中，对HBM产能的观点是什么？</div>
+            <div class="chat-timestamp user">07-09 14:22</div>
+
+            <!-- AI Message 1 -->
+            <div class="chat-bubble ai">
+              根据您上传的《中金公司_2026年科技行业展望》和《摩根士丹利_半导体周期报告》，两份研报对HBM产能的观点如下：<br><br>
+              <strong>1. 当前供需状态</strong><br>
+              HBM3e处于<span style="color: var(--up); font-weight: 600;">供不应求</span>状态，SK海力士、三星、美光三家的产能已被锁定至2026Q4。<span class="citation">[引用1]</span><br><br>
+              <strong>2. 产能释放节奏</strong><br>
+              <span style="display:inline-block;margin-right:8px;">•</span>SK海力士：2026Q3月产能提升至 <span class="tabular-nums">12万片</span>（12英寸等效）<span class="citation">[引用2]</span><br>
+              <span style="display:inline-block;margin-right:8px;">•</span>三星：2026Q4 开始 HBM4 试产，产能爬坡需 <span class="tabular-nums">6-8个月</span><span class="citation">[引用3]</span><br>
+              <span style="display:inline-block;margin-right:8px;">•</span>美光：1β制程良率仍低于 <span class="tabular-nums">60%</span>，产能贡献有限<span class="citation">[引用4]</span><br><br>
+              <strong>3. 结论</strong><br>
+              研报认为HBM供需紧张将持续至2026年底，2027年随着HBM4量产可能缓解。
+              <div class="source">
+                <i data-lucide="book-open" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:4px;"></i>
+                来源：中金公司_2026年科技行业展望.pdf (p.12-15) · 摩根士丹利_半导体周期报告.pdf (p.28-31)
+              </div>
+            </div>
+            <div class="chat-timestamp ai">07-09 14:22 · 基于您的私域知识库</div>
+
+            <!-- User Message 2 -->
+            <div class="chat-bubble user">台积电技术路线图中，2nm的进展如何？</div>
+            <div class="chat-timestamp user">07-09 14:25</div>
+
+            <!-- AI Message 2 -->
+            <div class="chat-bubble ai">
+              根据您上传的《台积电_2026年技术路线图.pdf》，2nm（N2）技术进展如下：<br><br>
+              <span style="display:inline-block;margin-right:8px;">•</span>2026年Q4开始风险试产，2027年H1量产<span class="citation">[引用1]</span><br>
+              <span style="display:inline-block;margin-right:8px;">•</span>采用GAA（Nanosheet）晶体管结构，密度提升 <span class="tabular-nums">1.15x</span> vs N3<span class="citation">[引用2]</span><br>
+              <span style="display:inline-block;margin-right:8px;">•</span>性能提升 <span class="tabular-nums">10-15%</span>，功耗降低 <span class="tabular-nums">25-30%</span><span class="citation">[引用3]</span><br>
+              <span style="display:inline-block;margin-right:8px;">•</span>首批客户：Apple（A19 Pro）、NVIDIA（Rubin架构GPU）<span class="citation">[引用4]</span><br><br>
+              研报认为台积电在2nm节点仍保持对三星的 <span class="tabular-nums">1.5-2年</span> 技术领先。
+              <div class="source">
+                <i data-lucide="book-open" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:4px;"></i>
+                来源：台积电_2026年技术路线图.pdf (p.8-12)
+              </div>
+            </div>
+            <div class="chat-timestamp ai">07-09 14:25 · 基于您的私域知识库</div>
+
+            <!-- User Message 3 -->
+            <div class="chat-bubble user">帮我生成一个对比表格：我的所有持仓 vs 最新的五因子评分，标注哪些偏离了我的买入逻辑</div>
+            <div class="chat-timestamp user">07-09 14:28</div>
+
+            <!-- AI Message 3 -->
+            <div class="chat-bubble ai">
+              已检索您的持仓快照 (2026-07-08) 和最新五因子评分，对比如下：<br><br>
+              <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:6px;">
+                <tr style="border-bottom:1px solid var(--border);">
+                  <th style="text-align:left; padding:6px 8px; color:var(--text-secondary); font-weight:600;">标的</th>
+                  <th style="text-align:left; padding:6px 8px; color:var(--text-secondary); font-weight:600;">您的逻辑</th>
+                  <th style="text-align:left; padding:6px 8px; color:var(--text-secondary); font-weight:600;">五因子评分</th>
+                  <th style="text-align:left; padding:6px 8px; color:var(--text-secondary); font-weight:600;">偏离</th>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:6px 8px; color:var(--up); font-weight:500;">宁德时代</td>
+                  <td style="padding:6px 8px;">全球龙头溢价</td>
+                  <td style="padding:6px 8px;">B+ (68/100)</td>
+                  <td style="padding:6px 8px; color:var(--up); font-weight:600;"><i data-lucide="alert-triangle" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:2px;"></i> 高</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:6px 8px; color:var(--down); font-weight:500;">TSMC</td>
+                  <td style="padding:6px 8px;">先进制程垄断</td>
+                  <td style="padding:6px 8px;">A (88/100)</td>
+                  <td style="padding:6px 8px; color:var(--down); font-weight:600;"><i data-lucide="check-circle" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:2px;"></i> 低</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <td style="padding:6px 8px; color:var(--up); font-weight:500;">中芯国际</td>
+                  <td style="padding:6px 8px;">国产替代</td>
+                  <td style="padding:6px 8px;">C+ (52/100)</td>
+                  <td style="padding:6px 8px; color:var(--up); font-weight:600;"><i data-lucide="alert-triangle" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:2px;"></i> 中</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 8px; color:var(--down); font-weight:500;">ASML</td>
+                  <td style="padding:6px 8px;">EUV不可替代</td>
+                  <td style="padding:6px 8px;">A- (82/100)</td>
+                  <td style="padding:6px 8px; color:var(--down); font-weight:600;"><i data-lucide="check-circle" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:2px;"></i> 低</td>
+                </tr>
+              </table>
+              <br>宁德时代和中芯国际已偏离您的原始买入逻辑，建议阅读详细偏离分析报告。
+              <div class="source">
+                <i data-lucide="book-open" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:4px;"></i>
+                来源：持仓快照 2026-07-08, 五因子评分矩阵 v2026-07, 个人投资日志 2025-2026
+              </div>
+            </div>
+            <div class="chat-timestamp ai">07-09 14:28 · 基于您的私域知识库</div>
+          </div>
+          <!-- Chat Input -->
+          <div class="chat-input-wrap">
+            <button class="btn-ghost" title="附加文件">
+              <i data-lucide="paperclip" style="width:18px;height:18px;"></i>
+            </button>
+            <input type="text" class="chat-input" id="chatInput" placeholder="基于私域知识提问...">
+            <button class="btn-primary btn-sm" id="sendBtn" onclick="sendMessage()">
+              <i data-lucide="send" style="width:14px;height:14px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Stats + Chart + Upload (~30%) -->
+      <div class="two-col-right" style="flex: 0 0 30%; display: flex; flex-direction: column; gap: 16px;">
+        <!-- Knowledge Stats -->
+        <div class="card">
+          <div class="card-title">
+            <i data-lucide="bar-chart-2" style="width:18px;height:18px;color:var(--accent);"></i>
+            知识库统计
+          </div>
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="stat-number">247</div>
+              <div class="stat-label">已索引文档</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">1,842</div>
+              <div class="stat-label">向量片段</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">38.2</div>
+              <div class="stat-label">存储容量 (MB)</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">156</div>
+              <div class="stat-label">问答交互</div>
+            </div>
+          </div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <i data-lucide="clock" style="width:12px;height:12px;"></i>
+            最后索引时间: 2026-07-09 03:00
+          </div>
+        </div>
+
+        <!-- Document Type Distribution (ECharts) -->
+        <div class="card">
+          <div class="card-title">
+            <i data-lucide="pie-chart" style="width:18px;height:18px;color:var(--accent);"></i>
+            文档类型分布
+          </div>
+          <div id="docTypeChart" style="width:100%; height:220px;"></div>
+        </div>
+
+        <!-- Upload Panel -->
+        <div class="card">
+          <div class="card-title">
+            <i data-lucide="upload-cloud" style="width:18px;height:18px;color:var(--accent);"></i>
+            上传面板
+          </div>
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click();"
+               ondragover="event.preventDefault();this.classList.add('dragover');"
+               ondragleave="this.classList.remove('dragover');"
+               ondrop="event.preventDefault();this.classList.remove('dragover');">
+            <div style="display:flex; justify-content:center; color:var(--text-secondary); margin-bottom:10px;">
+              <i data-lucide="folder-open" style="width:36px;height:36px;"></i>
+            </div>
+            <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary);">拖拽文件到此处或点击上传</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">支持 PDF / Excel / Word / 图片</div>
+          </div>
+          <div style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 10px;">单文件最大 50MB，支持批量上传</div>
+        </div>
+
+        <!-- Security Card -->
+        <div class="card" style="background: rgba(255,159,10,0.08); border-color: rgba(255,159,10,0.25);">
+          <div style="display: flex; align-items: flex-start; gap: 10px;">
+            <div style="color: #FF9F0A; margin-top: 2px;">
+              <i data-lucide="shield" style="width:20px;height:20px;"></i>
+            </div>
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: #FF9F0A;">安全承诺</div>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5;">
+                AES-256加密 · 平台无法解密 · 跨用户不可检索 · 索引全量加密向量
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====== BELOW CHAT: Document List & Recent Uploads ====== -->
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <!-- Document List Table -->
+      <div class="card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <div class="card-title" style="margin-bottom: 0;">
+            <i data-lucide="library" style="width:18px;height:18px;color:var(--accent);"></i>
+            文档列表
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-outline btn-sm" style="padding: 5px 12px;">全部</button>
+            <button class="btn-outline btn-sm" style="padding: 5px 12px;">PDF</button>
+            <button class="btn-outline btn-sm" style="padding: 5px 12px;">Excel</button>
+            <button class="btn-outline btn-sm" style="padding: 5px 12px;">Word</button>
+            <button class="btn-outline btn-sm" style="padding: 5px 12px;">图片</button>
+          </div>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>文件名</th>
+                <th>类型</th>
+                <th>大小</th>
+                <th>页数/工作表</th>
+                <th>上传时间</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-pdf" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">中金公司_2026年科技行业展望.pdf</span>
+                  </div>
+                </td>
+                <td>PDF</td>
+                <td>4.8 MB</td>
+                <td>48页</td>
+                <td>2026-06-28</td>
+                <td><span class="tag tag-green">已索引</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-pdf" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">高盛_Global_Equity_Outlook_2026.pdf</span>
+                  </div>
+                </td>
+                <td>PDF</td>
+                <td>6.2 MB</td>
+                <td>72页</td>
+                <td>2026-06-25</td>
+                <td><span class="tag tag-green">已索引</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-excel" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="bar-chart-3" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">五因子评分历史数据_2026H1.xlsx</span>
+                  </div>
+                </td>
+                <td>Excel</td>
+                <td>1.5 MB</td>
+                <td>12张表</td>
+                <td>2026-06-20</td>
+                <td><span class="tag tag-green">已索引</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-word" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">AI产业链调研笔记_深圳行.docx</span>
+                  </div>
+                </td>
+                <td>Word</td>
+                <td>890 KB</td>
+                <td>28页</td>
+                <td>2026-06-15</td>
+                <td><span class="tag tag-green">已索引</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-pdf" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">台积电_2026年技术路线图.pdf</span>
+                  </div>
+                </td>
+                <td>PDF</td>
+                <td>3.1 MB</td>
+                <td>35页</td>
+                <td>2026-06-10</td>
+                <td><span class="tag tag-green">已索引</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-img" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="image" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">HBM供需分析_手绘图.png</span>
+                  </div>
+                </td>
+                <td>图片</td>
+                <td>2.8 MB</td>
+                <td>-</td>
+                <td>2026-06-05</td>
+                <td><span class="tag tag-yellow">解析中</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-excel" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="bar-chart-3" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">个股财务模型_NVDA_2026.xlsx</span>
+                  </div>
+                </td>
+                <td>Excel</td>
+                <td>2.1 MB</td>
+                <td>8张表</td>
+                <td>2026-05-28</td>
+                <td><span class="tag tag-green">已索引</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="icon icon-pdf" style="width:28px;height:28px;border-radius:6px;"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div>
+                    <span style="font-weight:500;">摩根士丹利_半导体周期报告.pdf</span>
+                  </div>
+                </td>
+                <td>PDF</td>
+                <td>5.5 MB</td>
+                <td>60页</td>
+                <td>2026-05-20</td>
+                <td><span class="tag tag-green">已索引</span></td>
+                <td><button class="btn-ghost"><i data-lucide="more-vertical" style="width:14px;height:14px;"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="border-top: 1px solid var(--border); padding-top: 14px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+          <span style="color: var(--text-secondary);">共 15 个文档 · 占用 38.2 MB</span>
+          <button class="btn-outline btn-sm"><i data-lucide="download" style="width:14px;height:14px;"></i> 批量导出</button>
+        </div>
+      </div>
+
+      <!-- Recent Uploads -->
+      <div class="card">
+        <div class="card-title" style="margin-bottom: 14px;">
+          <i data-lucide="clock" style="width:18px;height:18px;color:var(--accent);"></i>
+          最近上传
+        </div>
+        <div class="recent-grid">
+          <div class="recent-card">
+            <div class="icon icon-pdf"><i data-lucide="file-text" style="width:16px;height:16px;"></i></div>
+            <div class="info">
+              <div class="name">半导体行业深度研报_2026Q2.pdf</div>
+              <div class="meta">2.4 MB · 2026-07-08 14:32</div>
+            </div>
+            <span class="tag tag-green" style="flex-shrink:0;">已索引</span>
+          </div>
+          <div class="recent-card">
+            <div class="icon icon-excel"><i data-lucide="bar-chart-3" style="width:16px;height:16px;"></i></div>
+            <div class="info">
+              <div class="name">自选股跟踪表_2026.xlsx</div>
+              <div class="meta">856 KB · 2026-07-07 09:15</div>
+            </div>
+            <span class="tag tag-green" style="flex-shrink:0;">已索引</span>
+          </div>
+          <div class="recent-card">
+            <div class="icon icon-word"><i data-lucide="file-text" style="width:16px;height:16px;"></i></div>
+            <div class="info">
+              <div class="name">NVDA投资备忘录_最新.docx</div>
+              <div class="meta">1.2 MB · 2026-07-06 16:48</div>
+            </div>
+            <span class="tag tag-yellow" style="flex-shrink:0;">解析中</span>
+          </div>
+          <div class="recent-card">
+            <div class="icon icon-img"><i data-lucide="image" style="width:16px;height:16px;"></i></div>
+            <div class="info">
+              <div class="name">K线形态截图_集合.png</div>
+              <div class="meta">3.8 MB · 2026-07-05 11:22</div>
+            </div>
+            <span class="tag tag-green" style="flex-shrink:0;">已索引</span>
+          </div>
+          <div class="recent-card">
+            <div class="icon icon-pdf"><i data-lucide="file-text" style="width:16px;height:16px;"></i></div>
+            <div class="info">
+              <div class="name">高盛_全球宏观展望_2026H2.pdf</div>
+              <div class="meta">5.1 MB · 2026-07-04 10:05</div>
+            </div>
+            <span class="tag tag-green" style="flex-shrink:0;">已索引</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer spacer -->
+    <div style="height: 24px;"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  // Scroll chat to bottom on load
+  const chatContainer = document.getElementById('chatContainer');
+  if (chatContainer) {
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  // Init ECharts donut chart for document types
+  initDocTypeChart();
+});
+
+// ECharts Document Type Distribution
+function initDocTypeChart() {
+  const chartDom = document.getElementById('docTypeChart');
+  if (!chartDom) return;
+
+  const myChart = echarts.init(chartDom);
+  const option = {
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'item',
+      backgroundColor: '#FFFFFF',
+      borderColor: '#E5E5EA',
+      textStyle: { color: '#1D1D1F', fontSize: 12 },
+      formatter: '{b}: {c}篇 ({d}%)'
+    },
+    legend: {
+      orient: 'horizontal',
+      bottom: 0,
+      itemWidth: 10,
+      itemHeight: 10,
+      textStyle: { color: '#86868B', fontSize: 11 },
+      itemGap: 12
+    },
+    series: [
+      {
+        name: '文档类型',
+        type: 'pie',
+        radius: ['42%', '68%'],
+        center: ['50%', '45%'],
+        avoidLabelOverlap: true,
+        itemStyle: {
+          borderRadius: 6,
+          borderColor: '#FFFFFF',
+          borderWidth: 2
+        },
+        label: {
+          show: true,
+          fontSize: 11,
+          color: '#1D1D1F',
+          formatter: '{d}%'
+        },
+        labelLine: {
+          length: 8,
+          length2: 6,
+          lineStyle: { color: '#E5E5EA' }
+        },
+        emphasis: {
+          label: { show: true, fontSize: 13, fontWeight: 'bold' },
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+        data: [
+          { value: 86, name: '投资笔记', itemStyle: { color: '#0071E3' } },
+          { value: 52, name: '研报摘要', itemStyle: { color: '#5E5CE6' } },
+          { value: 38, name: '会议纪要', itemStyle: { color: '#BF5AF2' } },
+          { value: 31, name: 'DCF模型', itemStyle: { color: '#FF9F0A' } },
+          { value: 24, name: '持仓日志', itemStyle: { color: '#34C759' } },
+          { value: 16, name: '其他', itemStyle: { color: '#86868B' } }
+        ]
+      }
+    ]
+  };
+  myChart.setOption(option);
+
+  // Resize on window resize
+  window.addEventListener('resize', function() {
+    myChart.resize();
+  });
+}
+
+// Send message function
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const container = document.getElementById('chatContainer');
+  const text = input.value.trim();
+  if (!text || !container) return;
+
+  const now = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit', month:'2-digit', day:'2-digit'}).replace('/', '-');
+
+  // User bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble user';
+  userBubble.textContent = text;
+  container.appendChild(userBubble);
+
+  const userTime = document.createElement('div');
+  userTime.className = 'chat-timestamp user';
+  userTime.textContent = now;
+  container.appendChild(userTime);
+
+  // AI thinking bubble
+  const aiBubble = document.createElement('div');
+  aiBubble.className = 'chat-bubble ai';
+  aiBubble.innerHTML = '<span style="color:var(--text-secondary);">正在检索您的私域知识库...</span>';
+  container.appendChild(aiBubble);
+
+  const aiTime = document.createElement('div');
+  aiTime.className = 'chat-timestamp ai';
+  aiTime.textContent = now + ' · 基于您的私域知识库';
+  container.appendChild(aiTime);
+
+  input.value = '';
+  container.scrollTop = container.scrollHeight;
+
+  // Re-init lucide icons for new elements
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  // Simulate AI response (prototype)
+  setTimeout(function() {
+    aiBubble.innerHTML = '已找到与您问题相关的 <strong>3</strong> 篇文档，正在生成回答...<br><br><span style="color:var(--text-secondary); font-size:12px;"><i data-lucide="book-open" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:4px;"></i>引用: 您的私域知识库 (RAG检索)</span>';
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  }, 1200);
+}
+
+// Enter key to send
+document.addEventListener('DOMContentLoaded', function() {
+  const chatInput = document.getElementById('chatInput');
+  if (chatInput) {
+    chatInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  }
+});
+
+// Sync left chat card height to match right column total height
+function syncChatHeight() {
+  var rightCol = document.querySelector('.two-col-right');
+  var leftCard = document.querySelector('.two-col-left .card');
+  if (rightCol && leftCard) {
+    var rightHeight = rightCol.offsetHeight;
+    leftCard.style.height = rightHeight + 'px';
+    leftCard.style.maxHeight = rightHeight + 'px';
+    leftCard.style.flex = 'none';
+  }
+}
+window.addEventListener('load', syncChatHeight);
+window.addEventListener('resize', syncChatHeight);
+
+</script>
+</body>
+</html>

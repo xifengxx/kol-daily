@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "updated": "2026-07-11T09:50:01.425Z",
+  "patterns": [
+    {
+      "id": "pattern-001",
+      "category": "deploy",
+      "language": "unknown",
+      "description": "index.html — deploy 패턴 (unknown)",
+      "score": 50,
+      "success_count": 1,
+      "failure_count": 0,
+      "tags": [
+        "deploy"
+      ],
+      "created": "2026-07-11T09:50:01.425Z",
+      "updated": "2026-07-11T09:50:01.425Z"
+    }
+  ],
+  "anti_patterns": []
+}

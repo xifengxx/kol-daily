@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日智能晨报 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --accent: #0071E3;
+  --navy: #1D1D1F;
+  --up: #FF3B30;
+  --down: #34C759;
+  --tag-green-bg: #E8F5E9; --tag-green-text: #1B5E20;
+  --tag-blue-bg: #E3F2FD; --tag-blue-text: #0D47A1;
+  --tag-yellow-bg: #FFF8E1; --tag-yellow-text: #E65100;
+  --tag-red-bg: #FFEBEE; --tag-red-text: #C62828;
+  --tag-purple-bg: #F3E5F5; --tag-purple-text: #6A1B9A;
+  --tag-gray-bg: #F5F5F5; --tag-gray-text: #424242;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 14px; line-height: 1.5;
+  display: flex; min-height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+  width: 220px; min-width: 220px; background: #FFFFFF; color: #1D1D1F;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+  border-right: 1px solid var(--border);
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; color: var(--navy); }
+.sidebar-logo .brand-icon { width: 28px; height: 28px; background: linear-gradient(135deg, #0071E3, #5AC8FA); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.sidebar-logo span { color: var(--accent); }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 16px 16px 8px; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 14px; font-weight: 500; }
+.nav-item:hover { background: #F5F5F7; color: var(--text-primary); }
+.nav-item.active { background: #F0F7FF; color: var(--accent); border-left-color: var(--accent); }
+.nav-item .icon { width: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; font-size: 13px; transition: all 0.15s; border-left: 2px solid transparent; }
+.nav-sub:hover { color: var(--text-primary); background: #F5F5F7; }
+.nav-sub.active { color: var(--accent); font-weight: 500; background: #F0F7FF; border-left-color: var(--accent); }
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.topbar-search { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 8px; padding: 7px 16px; gap: 8px; height: 40px; border: 1px solid transparent; transition: all 0.15s; }
+.topbar-search:focus-within { border-color: var(--accent); background: #FFFFFF; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.topbar-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+.topbar-search input::placeholder { color: #C7C7CC; }
+.topbar-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
+.topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+/* Content */
+.content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
+/* Tab Navigation */
+.tab-nav { display: flex; gap: 0; background: #fff; border-bottom: 1px solid var(--border); margin-bottom: 16px; border-radius: 12px 12px 0 0; padding: 0 16px; }
+.tab-btn { padding: 12px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+/* Cards */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+.card-title { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.card-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
+/* Stat Grid */
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: center; }
+.stat-value { font-size: 20px; font-weight: 600; color: var(--navy); font-variant-numeric: tabular-nums; }
+.stat-label { font-size: 11px; font-weight: 500; color: var(--text-secondary); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.02em; }
+.stat-change { font-size: 12px; font-weight: 600; margin-top: 2px; }
+/* Tags */
+.tag { display: inline-flex; align-items: center; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; line-height: 20px; height: 20px; gap: 4px; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.tag-gray { background: var(--tag-gray-bg); color: var(--tag-gray-text); }
+/* Apple badge overrides for .tag elements */
+.tag.tag-green { background: #34C759; color: #1D1D1F; }
+.tag.tag-blue { background: #0071E3; color: #1D1D1F; }
+.tag.tag-yellow { background: #FF9500; color: #1D1D1F; }
+.tag.tag-red { background: #FF3B30; color: #1D1D1F; }
+.tag.tag-purple { background: #AF52DE; color: #1D1D1F; }
+.tag.tag-gray { background: #F2F2F7; color: #1D1D1F; }
+/* Hotspot Cards */
+.hotspot-card { position: relative; border-left: 3px solid var(--accent); background: #FFFFFF; border-radius: 12px; padding: 18px 20px 18px 56px; margin-bottom: 14px; transition: all 0.3s ease; border: 1px solid var(--border); }
+.hotspot-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.hotspot-num { position: absolute; top: 8px; left: 12px; font-size: 28px; font-weight: 800; color: rgba(0,113,227,0.12); }
+.hotspot-title { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+.hotspot-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.hotspot-section { margin-bottom: 8px; }
+.hotspot-section-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.hotspot-section-text { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
+/* Announcement */
+.ann-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.ann-item:last-child { border-bottom: none; }
+.ann-badge { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.ann-content { flex: 1; }
+.ann-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+.ann-source { font-size: 12px; color: var(--text-secondary); }
+/* Track List */
+.track-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.track-item:last-child { border-bottom: none; }
+.track-checkbox { width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--border); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--tag-green-text); }
+.track-text { flex: 1; font-size: 14px; color: var(--text-primary); }
+.track-type { font-size: 11px; font-weight: 500; padding: 0 8px; border-radius: 10px; height: 20px; line-height: 20px; flex-shrink: 0; display: inline-flex; align-items: center; }
+/* Date Picker */
+.date-picker { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 14px; color: var(--text-primary); cursor: pointer; }
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-sm { padding: 4px 12px; font-size: 11px; border-radius: 8px; }
+/* Chart Box */
+.chart-box { width: 100%; height: 260px; }
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.data-table th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 500; text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid var(--border); letter-spacing: 0.05em; background: #F2F2F7; }
+.data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.data-table tbody tr:hover { background: #F5F5F7; }
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+/* US Market Summary */
+.us-summary-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.us-summary-title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+.us-summary-item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; }
+.us-summary-label { color: var(--text-secondary); }
+.us-summary-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+/* Macro data */
+.macro-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.macro-item:last-child { border-bottom: none; }
+.macro-flag { font-size: 18px; }
+.macro-content { flex: 1; }
+.macro-title { font-size: 14px; font-weight: 500; }
+.macro-desc { font-size: 12px; color: var(--text-secondary); }
+.macro-tag { font-size: 11px; font-weight: 500; padding: 0 8px; border-radius: 10px; height: 20px; line-height: 20px; flex-shrink: 0; display: inline-flex; align-items: center; }
+/* Header Section */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.page-title { font-size: 28px; font-weight: 700; color: var(--navy); line-height: 1.2; letter-spacing: -0.02em; }
+.version-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; }
+.version-badge.evening { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.version-badge.morning { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+/* ===== Dark Theme Styles ===== */
+.dark-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E5EA;
+  border-radius: 12px;
+  padding: 24px;
+  color: #1D1D1F;
+}
+.dark-card .card-title { color: #1D1D1F; }
+.dark-card .card-subtitle { color: #86868B; }
+.dark-stat-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E5EA;
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.dark-stat-card .stat-label { color: #86868B; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.02em; }
+.dark-stat-card .stat-value { font-size: 20px; font-weight: 600; color: #1D1D1F; font-variant-numeric: tabular-nums; margin-top: 4px; }
+.dark-stat-card .stat-change { font-size: 12px; font-weight: 600; margin-top: 2px; }
+.dark-tag {
+  display: inline-flex; align-items: center; padding: 0 8px;
+  border-radius: 10px; font-size: 11px; font-weight: 500;
+  line-height: 20px; height: 20px; gap: 4px;
+}
+.dark-tag-green { background: #34C759; color: #1D1D1F; }
+.dark-tag-blue { background: #0071E3; color: #1D1D1F; }
+.dark-tag-yellow { background: #FF9F0A; color: #1D1D1F; }
+.dark-tag-red { background: #FF3B30; color: #1D1D1F; }
+.dark-tag-purple { background: #BF5AF2; color: #1D1D1F; }
+.dark-tag-gray { background: #F2F2F7; color: #1D1D1F; }
+.dark-news-item {
+  background: #FFFFFF; border: 1px solid #E5E5EA;
+  border-radius: 12px; padding: 18px 20px;
+  margin-bottom: 12px; cursor: pointer; transition: all 0.3s ease;
+}
+.dark-news-item:hover { border-color: #0071E3; }
+.dark-news-item h3 { color: #1D1D1F; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.dark-news-item p { color: #86868B; font-size: 13px; line-height: 1.6; }
+.dark-news-meta { display: flex; gap: 8px; margin-bottom: 8px; }
+.dark-ann-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dark-ann-table th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 500; text-transform: uppercase; color: #86868B; border-bottom: 1px solid #E5E5EA; letter-spacing: 0.05em; background: #F2F2F7; }
+.dark-ann-table td { padding: 12px; border-bottom: 1px solid #E5E5EA; color: #1D1D1F; }
+.dark-ann-table tbody tr:hover { background: #F2F2F7; }
+.dark-section-title { font-size: 18px; font-weight: 600; color: #1D1D1F; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.dark-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.dark-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.dark-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.dark-risk-card { background: #FFFFFF; border: 1px solid #E5E5EA; border-radius: 12px; padding: 18px; color: #1D1D1F; }
+.dark-risk-card.border-warning { border-left: 4px solid #FF9F0A; }
+.dark-risk-card.border-danger { border-left: 4px solid #FF3B30; }
+.dark-risk-card.border-info { border-left: 4px solid #0071E3; }
+.dark-sector-card { background: #FFFFFF; border: 1px solid #E5E5EA; border-radius: 12px; padding: 18px; color: #1D1D1F; cursor: pointer; transition: all 0.3s ease; }
+.dark-sector-card:hover { border-color: #0071E3; }
+.dark-sector-card h3 { color: #1D1D1F; font-size: 15px; font-weight: 600; }
+.dark-sector-card p { color: #86868B; font-size: 13px; line-height: 1.6; margin: 8px 0; }
+#daily-brief { background: #F5F5F7; border-radius: 12px; padding: 24px; }
+#daily-brief .section-title { font-size: 18px; font-weight: 600; color: #1D1D1F; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+#daily-brief .data-card { background: #FFFFFF; border-radius: 12px; padding: 16px; text-align: center; }
+#daily-brief .data-card .label { font-size: 11px; color: #86868B; margin-bottom: 4px; }
+#daily-brief .data-card .value { font-size: 20px; font-weight: 600; color: #1D1D1F; }
+#daily-brief .content-card { background: #FFFFFF; border-radius: 12px; padding: 18px; margin-bottom: 12px; }
+#daily-brief .content-card h3 { color: #1D1D1F; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+#daily-brief .content-card p { color: #86868B; font-size: 13px; line-height: 1.6; }
+#daily-brief .badge { height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; display: inline-flex; align-items: center; }
+#daily-brief .badge-green { background: #34C759; color: #1D1D1F; }
+#daily-brief .badge-yellow { background: #FF9F0A; color: #1D1D1F; }
+#daily-brief .badge-red { background: #FF3B30; color: #1D1D1F; }
+#daily-brief .badge-blue { background: #0071E3; color: #1D1D1F; }
+#daily-brief .badge-gray { background: #F2F2F7; color: #1D1D1F; }
+#daily-brief .info-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+#daily-brief .info-table th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 500; color: #86868B; border-bottom: 1px solid #E5E5EA; background: #F2F2F7; }
+#daily-brief .info-table td { padding: 12px; border-bottom: 1px solid #E5E5EA; color: #1D1D1F; }
+#daily-brief .info-table tbody tr:hover { background: #F2F2F7; }
+#daily-brief .risk-card { background: #FFFFFF; border-radius: 12px; padding: 18px; border-left: 4px solid; }
+#daily-brief .risk-card.border-orange { border-left-color: #FF9F0A; }
+#daily-brief .risk-card.border-red { border-left-color: #FF3B30; }
+#daily-brief .risk-card.border-blue { border-left-color: #0071E3; }
+/* ====== IFRAME EMBED MODE: hide sidebar & topbar ====== */
+body.in-iframe .sidebar,
+body.in-iframe .topbar { display: none !important; }
+body.in-iframe .main { margin-left: 0 !important; width: 100% !important; }
+body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 1024px) {
+  #daily-brief .grid-2 { grid-template-columns: 1fr !important; }
+  #daily-brief .grid-3 { grid-template-columns: 1fr 1fr !important; }
+  #daily-brief .grid-4 { grid-template-columns: 1fr 1fr !important; }
+  #daily-brief .sidebar { display: none !important; }
+  #daily-brief .main { margin-left: 0 !important; width: 100% !important; }
+}
+@media (max-width: 768px) {
+  #daily-brief .grid-2,
+  #daily-brief .grid-3,
+  #daily-brief .grid-4 { grid-template-columns: 1fr !important; }
+  #daily-brief .stat-grid { grid-template-columns: 1fr 1fr !important; }
+  #daily-brief .content { padding: 16px !important; }
+  #daily-brief .tab-nav { overflow-x: auto; flex-wrap: nowrap; }
+  #daily-brief .tab-btn { white-space: nowrap; flex-shrink: 0; }
+  #daily-brief .table-wrap { overflow-x: auto; }
+  #daily-brief .hot-card { padding: 16px !important; }
+  #daily-brief h2 { font-size: 18px !important; }
+  #daily-brief h3 { font-size: 16px !important; }
+}
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand-icon">5</div>
+    <span>5Factor <span>AI</span></span>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">市场</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span> 市场总览</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="search" style="width:20px;height:20px;"></i></span> 个股行情</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="globe" style="width:20px;height:20px;"></i></span> 全球市场</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">内容</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="newspaper" style="width:20px;height:20px;"></i></span> 每日晨报</div>
+    <div class="nav-sub active">收盘版</div>
+    <div class="nav-sub">晨间版</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="message-square" style="width:20px;height:20px;"></i></span> KOL观点</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="file-text" style="width:20px;height:20px;"></i></span> 内容管理</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">选股</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="star" style="width:20px;height:20px;"></i></span> 评分榜单</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="microscope" style="width:20px;height:20px;"></i></span> 个股深度</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="briefcase" style="width:20px;height:20px;"></i></span> 模拟交易</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">知识</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="link" style="width:20px;height:20px;"></i></span> 产业链图谱</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="book-open" style="width:20px;height:20px;"></i></span> 知识库</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">AI</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span> AI投研对话</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-search">
+      <span style="color:var(--text-secondary);display:flex;align-items:center;"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <input type="text" placeholder="搜索股票、概念、研报...">
+    </div>
+    <div class="topbar-user">
+      <span style="display:flex;align-items:center;"><i data-lucide="bell" style="width:20px;height:20px;"></i></span>
+      <div class="topbar-avatar">U</div>
+      <span>用户</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <div class="page-title">每日智能晨报</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin-top:4px;">2026年1月16日（周四） · 由 8 个 Skill 自动聚合生成</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="date-picker">
+          <span style="display:flex;align-items:center;"><i data-lucide="calendar" style="width:16px;height:16px;"></i></span>
+          <span>2026-01-16</span>
+          <span style="color:var(--text-secondary);display:flex;align-items:center;"><i data-lucide="chevron-down" style="width:16px;height:16px;"></i></span>
+        </div>
+        <button class="btn btn-primary btn-sm"><i data-lucide="upload" style="width:14px;height:14px;"></i> 导出PDF</button>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('evening')"><i data-lucide="clipboard-list" style="width:16px;height:16px;"></i> 收盘版</button>
+      <button class="tab-btn" onclick="switchTab('morning')"><i data-lucide="sunrise" style="width:16px;height:16px;"></i> 晨间版</button>
+      <button class="tab-btn" onclick="switchTab('daily-brief')"><i data-lucide="newspaper" style="width:16px;height:16px;"></i> 每日简报</button>
+    </div>
+
+    <!-- ==================== 收盘版 Tab ==================== -->
+    <div id="evening" class="tab-panel active">
+      <!-- 市场概览 -->
+      <div class="card">
+        <div class="card-title"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i> 市场概览</div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label">上证指数</div>
+            <div class="stat-value" style="color:var(--up);">3,452.18</div>
+            <div class="stat-change" style="color:var(--up);">+28.35 +0.83%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">深证成指</div>
+            <div class="stat-value" style="color:var(--up);">11,234.56</div>
+            <div class="stat-change" style="color:var(--up);">+89.12 +0.80%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">创业板指</div>
+            <div class="stat-value" style="color:var(--up);">2,187.43</div>
+            <div class="stat-change" style="color:var(--up);">+18.76 +0.86%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">科创50</div>
+            <div class="stat-value" style="color:var(--up);">1,023.56</div>
+            <div class="stat-change" style="color:var(--up);">+12.34 +1.22%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">两市成交额</div>
+            <div class="stat-value" style="color:var(--text-primary);">1.28万亿</div>
+            <div class="stat-change" style="color:var(--up);">+8.5% 放量</div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="card-subtitle">涨跌分布</div>
+            <div id="chartUpDown" class="chart-box" style="height:180px;"></div>
+          </div>
+          <div>
+            <div class="card-subtitle">板块资金净流入 TOP5</div>
+            <div id="chartSectorFlow" class="chart-box" style="height:180px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10大热点 -->
+      <div class="card-title" style="margin-top:24px;"><i data-lucide="flame" style="width:20px;height:20px;"></i> 今日十大热点</div>
+
+      <!-- Hotspot 1 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">01</div>
+        <div class="hotspot-title">AI算力芯片禁令升级，国产替代加速</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-red">政策驱动</span>
+          <span class="tag tag-purple">持续性：数周</span>
+          <span class="tag tag-yellow"><i data-lucide="alert-triangle" style="width:12px;height:12px;"></i> 风险：政策反复</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">美国商务部最新出口管制清单将14nm以下先进制程设备纳入限制范围，直接影响国内3家在建晶圆厂设备交付。市场迅速反应，国产设备/材料/EDA替代逻辑强化。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：半导体设备（刻蚀/薄膜/量测）→ 中游：晶圆代工（成熟制程扩产）→ 下游：AI芯片设计（IP自主化）</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：北方华创</span>
+            <span class="tag tag-green">弹性：中微公司</span>
+            <span class="tag tag-gray">概念：华大九天</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 2 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">02</div>
+        <div class="hotspot-title">碳酸锂价格触底反弹，锂电产业链回暖</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-green">业绩驱动</span>
+          <span class="tag tag-purple">持续性：数月</span>
+          <span class="tag tag-yellow"><i data-lucide="alert-triangle" style="width:12px;height:12px;"></i> 风险：需求不及预期</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">电池级碳酸锂价格从7.5万元/吨回升至8.2万元/吨，连续两周上涨。澳洲锂矿减产+国内新能源车市占率突破40%形成供需共振。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：锂矿/盐湖提锂 → 中游：正极材料/电解液 → 下游：动力电池/储能电池</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：宁德时代</span>
+            <span class="tag tag-green">弹性：天齐锂业</span>
+            <span class="tag tag-gray">概念：融捷股份</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 3 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">03</div>
+        <div class="hotspot-title">CPO（共封装光学）技术 breakthrough，光模块升级</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-blue">事件驱动</span>
+          <span class="tag tag-purple">持续性：数周</span>
+          <span class="tag tag-yellow"><i data-lucide="alert-triangle" style="width:12px;height:12px;"></i> 风险：量产延迟</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">台积电在北美技术研讨会上展示CPO封装方案，可将光模块功耗降低30%、带宽密度提升8倍。英伟达/博通同步发布CPO技术路线图，1.6T光模块需求前置。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：光芯片/硅光 → 中游：光模块封装 → 下游：AI服务器/交换机</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：中际旭创</span>
+            <span class="tag tag-green">弹性：新易盛</span>
+            <span class="tag tag-gray">概念：天孚通信</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 4 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">04</div>
+        <div class="hotspot-title">低空经济政策密集出台，eVTOL适航认证提速</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-red">政策驱动</span>
+          <span class="tag tag-purple">持续性：数月</span>
+          <span class="tag tag-yellow"><i data-lucide="alert-triangle" style="width:12px;height:12px;"></i> 风险：空域管理瓶颈</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">民航局发布《低空经济适航审定标准（征求意见稿）》，明确eVTOL适航路径。深圳/合肥/成都三地试点城市空域开放范围扩大，亿航智能获全球首张eVTOL适航证。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：碳纤维/电机/电池 → 中游：飞控/导航/机体 → 下游：运营/培训/空管</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：亿航智能</span>
+            <span class="tag tag-green">弹性：万丰奥威</span>
+            <span class="tag tag-gray">概念：中信海直</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 5 -->
+      <div class="hotspot-card">
+        <div class="hotspot-num">05</div>
+        <div class="hotspot-title">存储芯片涨价潮蔓延，HBM供不应求</div>
+        <div class="hotspot-meta">
+          <span class="tag tag-green">业绩驱动</span>
+          <span class="tag tag-purple">持续性：数周</span>
+          <span class="tag tag-yellow"><i data-lucide="alert-triangle" style="width:12px;height:12px;"></i> 风险：产能释放</span>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">触发逻辑</div>
+          <div class="hotspot-section-text">SK海力士和三星电子宣布HBM3E产能已被2026年Q2订单锁定，现货价格较合约价溢价40%。AI服务器厂商（戴尔/超微）加大囤货力度。</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">产业链映射</div>
+          <div class="hotspot-section-text">上游：DRAM颗粒/TSV设备 → 中游：HBM封装（CoWoS）→ 下游：GPU/AI服务器</div>
+        </div>
+        <div class="hotspot-section">
+          <div class="hotspot-section-label">典型标的</div>
+          <div class="hotspot-section-text" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <span class="tag tag-blue">龙头：SK海力士</span>
+            <span class="tag tag-green">弹性：美光科技</span>
+            <span class="tag tag-gray">概念：通富微电</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hotspot 6-10 condensed -->
+      <div class="grid-2">
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:14px;font-weight:600;">06 机器人Figure-02量产在即</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-blue">事件驱动</span>
+            <span class="tag tag-purple">数周</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:14px;">Figure AI宣布与宝马合作产线落地，人形机器人零部件（谐波减速器/力矩传感器）供应商直接受益。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:14px;font-weight:600;">07 高股息策略继续跑赢</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-green">业绩驱动</span>
+            <span class="tag tag-purple">数月</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:14px;">险资/社保持续增配高股息标的，银行/煤炭/电力板块近一月平均涨幅+5.2%，显著跑赢大盘。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:14px;font-weight:600;">08 光伏组件出口数据回暖</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-green">业绩驱动</span>
+            <span class="tag tag-purple">数月</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:14px;">12月光伏组件出口量环比增长18%，欧洲库存去化完成。一体化龙头开工率回升至70%以上。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:14px;font-weight:600;">09 国产大飞机C919订单突破</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-red">政策驱动</span>
+            <span class="tag tag-purple">数月</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:14px;">东航增订100架C919，总订单超300架。航空钛合金/复合材料/航电系统供应商订单能见度提升。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px;">
+          <div class="hotspot-title" style="font-size:14px;font-weight:600;">10 数据要素政策落地</div>
+          <div class="hotspot-meta" style="margin-bottom:6px;">
+            <span class="tag tag-red">政策驱动</span>
+            <span class="tag tag-purple">数周</span>
+          </div>
+          <div class="hotspot-section-text" style="font-size:14px;">国家数据局发布《数据要素市场化配置改革总体方案》，数据确权/交易/定价框架确立。</div>
+        </div>
+        <div class="hotspot-card" style="padding-left:20px; border-left-color:var(--border);">
+          <div class="hotspot-title" style="font-size:14px;font-weight:600;">…</div>
+          <div class="hotspot-section-text" style="font-size:14px;color:var(--text-secondary);">更多热点在完整版中查看</div>
+        </div>
+      </div>
+
+      <!-- Announcements + Tomorrow Track -->
+      <div class="grid-2" style="margin-top:24px;">
+        <div class="card">
+          <div class="card-title"><i data-lucide="megaphone" style="width:20px;height:20px;"></i> 盘后公告摘要</div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--up);"></div>
+            <div class="ann-content">
+              <div class="ann-title">宁德时代：2025年度净利润预增 15%-25%</div>
+              <div class="ann-source">来源：深交所公告 · 16:32</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--up);"></div>
+            <div class="ann-content">
+              <div class="ann-title">北方华创：中标某晶圆厂刻蚀设备订单，金额约12亿元</div>
+              <div class="ann-source">来源：上交所公告 · 16:15</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--accent);"></div>
+            <div class="ann-content">
+              <div class="ann-title">中际旭创：控股股东拟减持不超过2%股份</div>
+              <div class="ann-source">来源：深交所公告 · 15:58</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--tag-blue-bg);"></div>
+            <div class="ann-content">
+              <div class="ann-title">隆基绿能：与某央企签订50GW组件长单供应协议</div>
+              <div class="ann-source">来源：公司公告 · 15:20</div>
+            </div>
+          </div>
+          <div class="ann-item">
+            <div class="ann-badge" style="background:var(--tag-yellow-bg);"></div>
+            <div class="ann-content">
+              <div class="ann-title">国家数据局：发布数据要素市场化配置改革总体方案</div>
+              <div class="ann-source">来源：政府公告 · 14:00</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i data-lucide="pin" style="width:20px;height:20px;"></i> 明日跟踪清单</div>
+          <div class="track-item">
+            <div class="track-checkbox" style="background:var(--tag-green-bg);border-color:var(--tag-green-text);color:var(--tag-green-text);"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
+            <div class="track-text">政策推进：关注数据要素改革配套细则发布时间</div>
+            <span class="track-type tag-gray">政策</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">公告后续：宁德时代业绩预告机构解读与评级调整</div>
+            <span class="track-type tag-blue">公告</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">财报日历：明日披露——迈瑞医疗、立讯精密、海康威视</div>
+            <span class="track-type tag-yellow">财报</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox" style="background:var(--tag-green-bg);border-color:var(--tag-green-text);color:var(--tag-green-text);"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
+            <div class="track-text">资金异动：北向资金连续5日净流入半导体板块</div>
+            <span class="track-type tag-purple">资金</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">海外联动：美国12月CPI数据发布（北京时间21:30）</div>
+            <span class="track-type tag-red">海外</span>
+          </div>
+          <div class="track-item">
+            <div class="track-checkbox"></div>
+            <div class="track-text">技术关键位：上证指数3450支撑位/3500压力位</div>
+            <span class="track-type tag-gray">技术</span>
+          </div>
+        </div>
+      </div>
+      <!-- 日韩市场 -->
+      <div class="section-title" style="margin-top:32px;"><i data-lucide="globe-2" style="width:20px;height:20px;color:#0071E3;"></i> 日韩市场</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:16px;">日本市场</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div>
+              <div style="font-size:12px;color:#86868B;">日经225</div>
+              <div style="font-size:20px;font-weight:600;color:#FF3B30;">+0.8%</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px;color:#86868B;">收盘</div>
+              <div style="font-size:14px;font-weight:500;color:#1D1D1F;">41,250.30</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding:12px;background:#F2F2F7;border-radius:8px;">
+            <div style="font-size:12px;font-weight:600;color:#1D1D1F;margin-bottom:4px;">对次日A股/港股影响</div>
+            <p style="font-size:12px;color:#86868B;line-height:1.5;">日股半导体板块表现强劲，东京电子涨3.2%，爱德万测试涨2.8%，对A股半导体板块有正面情绪传导。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:16px;">韩国市场</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div>
+              <div style="font-size:12px;color:#86868B;">KOSPI</div>
+              <div style="font-size:20px;font-weight:600;color:#FF3B30;">+0.5%</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px;color:#86868B;">收盘</div>
+              <div style="font-size:14px;font-weight:500;color:#1D1D1F;">2,850.15</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding:12px;background:#F2F2F7;border-radius:8px;">
+            <div style="font-size:12px;font-weight:600;color:#1D1D1F;margin-bottom:4px;">对次日A股/港股影响</div>
+            <p style="font-size:12px;color:#86868B;line-height:1.5;">韩股三星电子涨1.1%，SK海力士涨2.3%，存储芯片景气度持续，对A股存储芯片板块有正面影响。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 明日策略 -->
+      <div class="section-title"><i data-lucide="target" style="width:20px;height:20px;color:#0071E3;"></i> 明日策略</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:16px;">关键点位</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <i data-lucide="shield" style="width:16px;height:16px;color:#FF3B30;"></i>
+                <span style="font-size:14px;font-weight:500;">强支撑</span>
+              </div>
+              <span style="font-size:14px;font-weight:600;">3310</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <i data-lucide="shield-half" style="width:16px;height:16px;color:#34C759;"></i>
+                <span style="font-size:14px;font-weight:500;">弱支撑</span>
+              </div>
+              <span style="font-size:14px;font-weight:600;">3340</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <i data-lucide="swords" style="width:16px;height:16px;color:#FF9500;"></i>
+                <span style="font-size:14px;font-weight:500;">弱阻力</span>
+              </div>
+              <span style="font-size:14px;font-weight:600;">3400</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <i data-lucide="sword" style="width:16px;height:16px;color:#FF3B30;"></i>
+                <span style="font-size:14px;font-weight:500;">强阻力</span>
+              </div>
+              <span style="font-size:14px;font-weight:600;">3450</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:16px;">关键观察点</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <i data-lucide="eye" style="width:16px;height:16px;color:#0071E3;flex-shrink:0;margin-top:2px;"></i>
+              <div>
+                <div style="font-size:14px;font-weight:500;color:#1D1D1F;">北向资金动向</div>
+                <div style="font-size:12px;color:#86868B;margin-top:2px;">今日净流入45.2亿，明日若继续流入，支撑科技成长板块</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <i data-lucide="eye" style="width:16px;height:16px;color:#0071E3;flex-shrink:0;margin-top:2px;"></i>
+              <div>
+                <div style="font-size:14px;font-weight:500;color:#1D1D1F;">半导体板块持续性</div>
+                <div style="font-size:12px;color:#86868B;margin-top:2px;">英伟达产业链催化，观察封测、设备板块是否接力</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <i data-lucide="eye" style="width:16px;height:16px;color:#0071E3;flex-shrink:0;margin-top:2px;"></i>
+              <div>
+                <div style="font-size:14px;font-weight:500;color:#1D1D1F;">量能变化</div>
+                <div style="font-size:12px;color:#86868B;margin-top:2px;">今日成交额7,373亿，明日需维持在7,000亿以上</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#F2F2F7;border-radius:8px;">
+              <i data-lucide="eye" style="width:16px;height:16px;color:#0071E3;flex-shrink:0;margin-top:2px;"></i>
+              <div>
+                <div style="font-size:14px;font-weight:500;color:#1D1D1F;">解禁股表现</div>
+                <div style="font-size:12px;color:#86868B;margin-top:2px;">中芯国际7.2亿股解禁，观察抛压是否超预期</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:24px;">
+        <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:16px;">策略建议</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+          <div style="padding:16px;background:#E8F5E9;border-radius:12px;border:1px solid #34C75933;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <i data-lucide="trending-up" style="width:20px;height:20px;color:#34C759;"></i>
+              <span style="font-weight:600;color:#1D1D1F;">进攻方向</span>
+            </div>
+            <p style="font-size:13px;color:#86868B;line-height:1.5;">AI算力、半导体设备、存储芯片。受益英伟达产业链催化，国产替代逻辑强化。</p>
+          </div>
+          <div style="padding:16px;background:#FFF8E1;border-radius:12px;border:1px solid #FF950033;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <i data-lucide="shield" style="width:20px;height:20px;color:#FF9500;"></i>
+              <span style="font-weight:600;color:#1D1D1F;">防御方向</span>
+            </div>
+            <p style="font-size:13px;color:#86868B;line-height:1.5;">高股息银行、电力、运营商。若市场波动加大，资金或回流防御板块。</p>
+          </div>
+          <div style="padding:16px;background:#FFEBEE;border-radius:12px;border:1px solid #FF3B3033;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <i data-lucide="alert-triangle" style="width:20px;height:20px;color:#FF3B30;"></i>
+              <span style="font-weight:600;color:#1D1D1F;">回避方向</span>
+            </div>
+            <p style="font-size:13px;color:#86868B;line-height:1.5;">光伏组件、房地产、部分消费。隆基问询函拖累光伏情绪，房地产数据仍弱。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ==================== 晨间版 Tab ==================== -->
+    <div id="morning" class="tab-panel">
+      <!-- 隔夜美股 -->
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span class="version-badge morning"><i data-lucide="moon" style="width:12px;height:12px;"></i> 隔夜美股</span>
+          <span style="font-size:14px;color:var(--text-secondary);">2026-01-16 收盘</span>
+        </div>
+        <div class="grid-4">
+          <div class="stat-card">
+            <div class="stat-label">道琼斯</div>
+            <div class="stat-value" style="color:var(--up);">42,678.12</div>
+            <div class="stat-change" style="color:var(--up);">+332.45 +0.78%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">标普500</div>
+            <div class="stat-value" style="color:var(--up);">5,724.56</div>
+            <div class="stat-change" style="color:var(--up);">+45.66 +0.80%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">纳斯达克</div>
+            <div class="stat-value" style="color:var(--up);">18,999.99</div>
+            <div class="stat-change" style="color:var(--up);">+234.56 +1.25%</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">VIX恐慌指数</div>
+            <div class="stat-value" style="color:var(--down);">14.32</div>
+            <div class="stat-change" style="color:var(--down);">-1.28 -8.2%</div>
+          </div>
+        </div>
+        <div class="card-subtitle" style="margin-top:12px;">板块表现</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="tag tag-green">半导体 +2.8%</span>
+          <span class="tag tag-green">AI算力 +2.5%</span>
+          <span class="tag tag-green">云计算 +1.9%</span>
+          <span class="tag tag-red">能源 -0.6%</span>
+          <span class="tag tag-red">公用事业 -0.3%</span>
+        </div>
+        <div class="card-subtitle" style="margin-top:12px;">市场主线</div>
+        <div style="font-size:14px;color:var(--text-primary);line-height:1.7;">
+          1. <strong>英伟达再创新高</strong>：CEO黄仁勋CES演讲发布RTX 50系列显卡+GB300 AI服务器路线图，股价涨+3.2%至$139.75，市值突破$3.4万亿。<br>
+          2. <strong>台积电ADR涨+1.8%</strong>：CPO封装技术展示获机构看好，高盛上调目标价至$200。<br>
+          3. <strong>AI应用层爆发</strong>：Palantir/Adobe/Salesforce等AI软件股集体上涨，AI Agent落地预期升温。
+        </div>
+      </div>
+
+      <!-- 隔夜欧股 + 宏观 -->
+      <div class="grid-2">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <span class="version-badge morning"><i data-lucide="globe" style="width:14px;height:14px;"></i> 隔夜欧股</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">英国富时100</span>
+            <span class="us-summary-value" style="color:var(--up);">8,234.56 +0.69%</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">德国DAX</span>
+            <span class="us-summary-value" style="color:var(--up);">20,123.45 +0.90%</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">法国CAC40</span>
+            <span class="us-summary-value" style="color:var(--up);">7,654.32 +0.60%</span>
+          </div>
+          <div class="us-summary-item">
+            <span class="us-summary-label">斯托克600</span>
+            <span class="us-summary-value" style="color:var(--up);">512.34 +0.55%</span>
+          </div>
+          <div class="card-subtitle" style="margin-top:10px;">市场主线</div>
+          <div style="font-size:14px;color:var(--text-primary);line-height:1.6;">
+            欧洲央行管委暗示3月可能降息，欧股全线收涨。奢侈品板块（LVMH/爱马仕）反弹，能源股受油价下跌拖累小幅收跌。
+          </div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <span class="version-badge morning"><i data-lucide="trending-up" style="width:12px;height:12px;"></i> 宏观数据新增</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag"><i data-lucide="globe" style="width:14px;height:14px;"></i></span>
+            <div class="macro-content">
+              <div class="macro-title">美国12月PPI同比 +3.3%</div>
+              <div class="macro-desc">高于预期+3.0%，前值+3.0%</div>
+            </div>
+            <span class="macro-tag tag-red">通胀压力</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag"><i data-lucide="globe" style="width:14px;height:14px;"></i></span>
+            <div class="macro-content">
+              <div class="macro-title">美国初请失业金 21.5万</div>
+              <div class="macro-desc">高于预期21.0万，前值20.8万</div>
+            </div>
+            <span class="macro-tag tag-yellow">就业放缓</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag"><i data-lucide="globe" style="width:14px;height:14px;"></i></span>
+            <div class="macro-content">
+              <div class="macro-title">中国12月出口同比 +10.7%</div>
+              <div class="macro-desc">高于预期+7.5%，前值+6.7%</div>
+            </div>
+            <span class="macro-tag tag-green">超预期</span>
+          </div>
+          <div class="macro-item">
+            <span class="macro-flag"><i data-lucide="globe" style="width:14px;height:14px;"></i></span>
+            <div class="macro-content">
+              <div class="macro-title">欧元区11月工业产出 -0.6%</div>
+              <div class="macro-desc">低于预期-0.2%，前值-0.1%</div>
+            </div>
+            <span class="macro-tag tag-red">走弱</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 今日关注清单 -->
+      <div class="card">
+        <div class="card-title"><i data-lucide="target" style="width:20px;height:20px;"></i> 今日关注清单</div>
+        <div class="grid-2">
+          <div>
+            <div class="card-subtitle">A股市场</div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">关注AI芯片禁令升级后的国产替代板块持续性（半导体设备/材料/EDA）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">碳酸锂价格反弹对锂电产业链的带动效应（宁德时代/天齐锂业）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">CPO技术突破对光模块板块的催化（中际旭创/新易盛）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">低空经济政策试点城市进展（亿航智能/万丰奥威）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">数据要素改革配套细则落地预期（数据要素概念股）</div>
+            </div>
+          </div>
+          <div>
+            <div class="card-subtitle">海外市场</div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">美国12月CPI数据（21:30）——若超预期可能引发市场波动</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">英伟达GB300服务器供应链进展（CoWoS/光模块/PCB）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">美联储多位官员讲话（关注降息预期指引）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">中东地缘局势对油价的影响（布油能否守住$80）</div>
+            </div>
+            <div class="track-item">
+              <div class="track-checkbox"></div>
+              <div class="track-text">日本央行行长讲话（加息预期升温）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 新闻头条 -->
+      <div class="dark-card" style="margin-top:24px;">
+        <div class="dark-section-title"><i data-lucide="radio" style="width:20px;height:20px;color:#0071E3;"></i> 新闻头条</div>
+        <div class="dark-news-item" onclick="toggleNews(this)">
+          <div class="dark-news-meta">
+            <span class="dark-tag dark-tag-green">Tier 1</span>
+            <span style="font-size:12px;color:#86868B;">财联社</span>
+            <span style="font-size:12px;color:#86868B;">07:15</span>
+          </div>
+          <h3>AI算力芯片禁令升级，国产替代加速</h3>
+          <p>美国商务部最新出口管制清单将14nm以下先进制程设备纳入限制范围，直接影响国内3家在建晶圆厂设备交付...</p>
+        </div>
+        <div class="dark-news-item" onclick="toggleNews(this)">
+          <div class="dark-news-meta">
+            <span class="dark-tag dark-tag-green">Tier 1</span>
+            <span style="font-size:12px;color:#86868B;">Bloomberg</span>
+            <span style="font-size:12px;color:#86868B;">06:45</span>
+          </div>
+          <h3>碳酸锂价格触底反弹，锂电产业链回暖</h3>
+          <p>电池级碳酸锂价格从7.5万元/吨回升至8.2万元/吨，连续两周上涨。澳洲锂矿减产+国内新能源车市占率突破40%...</p>
+        </div>
+        <div class="dark-news-item" onclick="toggleNews(this)">
+          <div class="dark-news-meta">
+            <span class="dark-tag dark-tag-yellow">Tier 2</span>
+            <span style="font-size:12px;color:#86868B;">Reuters</span>
+            <span style="font-size:12px;color:#86868B;">06:30</span>
+          </div>
+          <h3>CPO技术突破，光模块升级周期前置</h3>
+          <p>台积电展示CPO封装方案，可将光模块功耗降低30%、带宽密度提升8倍。英伟达/博通同步发布技术路线图...</p>
+        </div>
+        <div class="dark-news-item" onclick="toggleNews(this)">
+          <div class="dark-news-meta">
+            <span class="dark-tag dark-tag-yellow">Tier 2</span>
+            <span style="font-size:12px;color:#86868B;">36氪</span>
+            <span style="font-size:12px;color:#86868B;">06:00</span>
+          </div>
+          <h3>低空经济政策密集出台，eVTOL适航认证提速</h3>
+          <p>民航局发布适航审定标准征求意见稿，深圳/合肥/成都试点城市空域开放范围扩大，亿航智能获全球首张适航证...</p>
+        </div>
+        <div class="dark-news-item" onclick="toggleNews(this)">
+          <div class="dark-news-meta">
+            <span class="dark-tag dark-tag-green">Tier 1</span>
+            <span style="font-size:12px;color:#86868B;">华尔街日报</span>
+            <span style="font-size:12px;color:#86868B;">05:20</span>
+          </div>
+          <h3>存储芯片涨价潮蔓延，HBM供不应求</h3>
+          <p>SK海力士和三星电子宣布HBM3E产能已被2026年Q2订单锁定，现货价格较合约价溢价40%...</p>
+        </div>
+      </div>
+
+      <!-- 公告精选 -->
+      <div class="dark-card" style="margin-top:24px;">
+        <div class="dark-section-title"><i data-lucide="file-text" style="width:20px;height:20px;color:#0071E3;"></i> 公告精选</div>
+        <div style="overflow-x:auto;">
+          <table class="dark-ann-table">
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>公司</th>
+                <th>类型</th>
+                <th>摘要</th>
+                <th style="text-align:right;">影响</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color:#86868B;white-space:nowrap;">16:32</td>
+                <td style="font-weight:500;">宁德时代 300750.SZ</td>
+                <td><span class="dark-tag dark-tag-green">业绩预增</span></td>
+                <td>2025年度净利润预增15%-25%，储能业务放量</td>
+                <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+              </tr>
+              <tr>
+                <td style="color:#86868B;white-space:nowrap;">16:15</td>
+                <td style="font-weight:500;">北方华创 002371.SZ</td>
+                <td><span class="dark-tag dark-tag-blue">重大合同</span></td>
+                <td>中标某晶圆厂刻蚀设备订单，金额约12亿元</td>
+                <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+              </tr>
+              <tr>
+                <td style="color:#86868B;white-space:nowrap;">15:58</td>
+                <td style="font-weight:500;">中际旭创 300308.SZ</td>
+                <td><span class="dark-tag dark-tag-yellow">股权变动</span></td>
+                <td>控股股东拟减持不超过2%股份</td>
+                <td style="text-align:right;color:#34C759;font-weight:500;">利空</td>
+              </tr>
+              <tr>
+                <td style="color:#86868B;white-space:nowrap;">15:20</td>
+                <td style="font-weight:500;">隆基绿能 601012.SH</td>
+                <td><span class="dark-tag dark-tag-blue">重大合同</span></td>
+                <td>与某央企签订50GW组件长单供应协议</td>
+                <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+              </tr>
+              <tr>
+                <td style="color:#86868B;white-space:nowrap;">14:00</td>
+                <td style="font-weight:500;">国家数据局</td>
+                <td><span class="dark-tag dark-tag-red">政策发布</span></td>
+                <td>发布数据要素市场化配置改革总体方案</td>
+                <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- ==================== 每日简报 Tab ==================== -->
+    <div id="daily-brief" class="tab-panel">
+      <!-- 宏观速览 -->
+      <div class="section-title"><i data-lucide="globe" style="width:20px;height:20px;color:#0071E3;"></i> 宏观速览</div>
+      <div class="grid-4" style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:24px;">
+        <div class="data-card">
+          <div class="label">美股</div>
+          <div class="value" style="color:#FF3B30;">+0.8%</div>
+        </div>
+        <div class="data-card">
+          <div class="label">欧股</div>
+          <div class="value" style="color:#FF3B30;">+0.6%</div>
+        </div>
+        <div class="data-card">
+          <div class="label">日股</div>
+          <div class="value" style="color:#FF3B30;">+0.3%</div>
+        </div>
+        <div class="data-card">
+          <div class="label">韩股</div>
+          <div class="value" style="color:#FF3B30;">+0.7%</div>
+        </div>
+        <div class="data-card">
+          <div class="label">VIX</div>
+          <div class="value" style="color:#34C759;">14.3</div>
+        </div>
+        <div class="data-card">
+          <div class="label">美元指数</div>
+          <div class="value">103.2</div>
+        </div>
+        <div class="data-card">
+          <div class="label">人民币汇率</div>
+          <div class="value">7.18</div>
+        </div>
+        <div class="data-card">
+          <div class="label">原油</div>
+          <div class="value">$78.5</div>
+        </div>
+        <div class="data-card">
+          <div class="label">黄金</div>
+          <div class="value">$2,650</div>
+        </div>
+        <div class="data-card">
+          <div class="label">铜</div>
+          <div class="value" style="color:#FF3B30;">+0.6%</div>
+        </div>
+        <div class="data-card">
+          <div class="label">10Y美债</div>
+          <div class="value">4.28%</div>
+        </div>
+        <div class="data-card">
+          <div class="label">BTC</div>
+          <div class="value" style="color:#FF3B30;">+1.5%</div>
+        </div>
+      </div>
+
+            <div class="section-title"><i data-lucide="radio" style="width:20px;height:20px;color:#0071E3;"></i> 新闻头条</div>
+      <div style="margin-bottom:24px;">
+        <div class="content-card" style="cursor:pointer;" onclick="toggleNews(this)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="badge badge-green">Tier 1</span>
+            <span style="font-size:12px;color:#86868B;">财联社</span>
+            <span style="font-size:12px;color:#86868B;">07:15</span>
+          </div>
+          <h3>AI算力芯片禁令升级，国产替代加速</h3>
+          <p>美国商务部最新出口管制清单将14nm以下先进制程设备纳入限制范围，直接影响国内3家在建晶圆厂设备交付...</p>
+        </div>
+        <div class="content-card" style="cursor:pointer;" onclick="toggleNews(this)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="badge badge-green">Tier 1</span>
+            <span style="font-size:12px;color:#86868B;">Bloomberg</span>
+            <span style="font-size:12px;color:#86868B;">06:45</span>
+          </div>
+          <h3>碳酸锂价格触底反弹，锂电产业链回暖</h3>
+          <p>电池级碳酸锂价格从7.5万元/吨回升至8.2万元/吨，连续两周上涨。澳洲锂矿减产+国内新能源车市占率突破40%...</p>
+        </div>
+        <div class="content-card" style="cursor:pointer;" onclick="toggleNews(this)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="badge badge-yellow">Tier 2</span>
+            <span style="font-size:12px;color:#86868B;">Reuters</span>
+            <span style="font-size:12px;color:#86868B;">06:30</span>
+          </div>
+          <h3>CPO技术突破，光模块升级周期前置</h3>
+          <p>台积电展示CPO封装方案，可将光模块功耗降低30%、带宽密度提升8倍。英伟达/博通同步发布技术路线图...</p>
+        </div>
+        <div class="content-card" style="cursor:pointer;" onclick="toggleNews(this)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="badge badge-yellow">Tier 2</span>
+            <span style="font-size:12px;color:#86868B;">36氪</span>
+            <span style="font-size:12px;color:#86868B;">06:00</span>
+          </div>
+          <h3>低空经济政策密集出台，eVTOL适航认证提速</h3>
+          <p>民航局发布适航审定标准征求意见稿，深圳/合肥/成都试点城市空域开放范围扩大，亿航智能获全球首张适航证...</p>
+        </div>
+        <div class="content-card" style="cursor:pointer;" onclick="toggleNews(this)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="badge badge-green">Tier 1</span>
+            <span style="font-size:12px;color:#86868B;">华尔街日报</span>
+            <span style="font-size:12px;color:#86868B;">05:20</span>
+          </div>
+          <h3>存储芯片涨价潮蔓延，HBM供不应求</h3>
+          <p>SK海力士和三星电子宣布HBM3E产能已被2026年Q2订单锁定，现货价格较合约价溢价40%...</p>
+        </div>
+      </div>
+      <div class="section-title"><i data-lucide="file-text" style="width:20px;height:20px;color:#0071E3;"></i> 公告精选</div>
+      <div style="margin-bottom:24px;overflow-x:auto;">
+        <table class="info-table">
+          <thead>
+            <tr>
+              <th>时间</th>
+              <th>公司</th>
+              <th>类型</th>
+              <th>摘要</th>
+              <th style="text-align:right;">影响</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:#86868B;white-space:nowrap;">16:32</td>
+              <td style="font-weight:500;">宁德时代 300750.SZ</td>
+              <td><span class="badge badge-green">业绩预增</span></td>
+              <td>2025年度净利润预增15%-25%，储能业务放量</td>
+              <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+            </tr>
+            <tr>
+              <td style="color:#86868B;white-space:nowrap;">16:15</td>
+              <td style="font-weight:500;">北方华创 002371.SZ</td>
+              <td><span class="badge badge-blue">重大合同</span></td>
+              <td>中标某晶圆厂刻蚀设备订单，金额约12亿元</td>
+              <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+            </tr>
+            <tr>
+              <td style="color:#86868B;white-space:nowrap;">15:58</td>
+              <td style="font-weight:500;">中际旭创 300308.SZ</td>
+              <td><span class="badge badge-yellow">股权变动</span></td>
+              <td>控股股东拟减持不超过2%股份</td>
+              <td style="text-align:right;color:#34C759;font-weight:500;">利空</td>
+            </tr>
+            <tr>
+              <td style="color:#86868B;white-space:nowrap;">15:20</td>
+              <td style="font-weight:500;">隆基绿能 601012.SH</td>
+              <td><span class="badge badge-blue">重大合同</span></td>
+              <td>与某央企签订50GW组件长单供应协议</td>
+              <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+            </tr>
+            <tr>
+              <td style="color:#86868B;white-space:nowrap;">14:00</td>
+              <td style="font-weight:500;">国家数据局</td>
+              <td><span class="badge badge-red">政策发布</span></td>
+              <td>发布数据要素市场化配置改革总体方案</td>
+              <td style="text-align:right;color:#FF3B30;font-weight:500;">利好</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 美股复盘 -->
+      <div class="section-title"><i data-lucide="bar-chart-3" style="width:20px;height:20px;color:#0071E3;"></i> 美股复盘</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div class="content-card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:12px;">美股三大指数</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;color:#86868B;">道琼斯</span>
+                <span style="font-size:13px;font-weight:600;color:#FF3B30;">+0.78%</span>
+              </div>
+              <div style="height:6px;background:#F2F2F7;border-radius:3px;overflow:hidden;">
+                <div style="height:100%;background:#FF3B30;border-radius:3px;width:65%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;color:#86868B;">标普500</span>
+                <span style="font-size:13px;font-weight:600;color:#FF3B30;">+0.80%</span>
+              </div>
+              <div style="height:6px;background:#F2F2F7;border-radius:3px;overflow:hidden;">
+                <div style="height:100%;background:#FF3B30;border-radius:3px;width:72%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-size:13px;color:#86868B;">纳斯达克</span>
+                <span style="font-size:13px;font-weight:600;color:#FF3B30;">+1.25%</span>
+              </div>
+              <div style="height:6px;background:#F2F2F7;border-radius:3px;overflow:hidden;">
+                <div style="height:100%;background:#FF3B30;border-radius:3px;width:85%;"></div>
+              </div>
+            </div>
+          </div>
+          <div id="usIndexChartMini" style="width:100%;height:140px;margin-top:12px;"></div>
+        </div>
+        <div class="content-card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:12px;">中概股表现</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:6px;background:#FF9500/10;display:flex;align-items:center;justify-content:center;color:#FF9500;font-size:10px;font-weight:700;">BABA</div>
+                <span style="font-size:13px;">阿里巴巴</span>
+              </div>
+              <span style="font-size:13px;font-weight:600;color:#FF3B30;">+2.1%</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:6px;background:#FF3B30/10;display:flex;align-items:center;justify-content:center;color:#FF3B30;font-size:10px;font-weight:700;">JD</div>
+                <span style="font-size:13px;">京东</span>
+              </div>
+              <span style="font-size:13px;font-weight:600;color:#FF3B30;">+1.5%</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:6px;background:#0071E3/10;display:flex;align-items:center;justify-content:center;color:#0071E3;font-size:10px;font-weight:700;">PDD</div>
+                <span style="font-size:13px;">拼多多</span>
+              </div>
+              <span style="font-size:13px;font-weight:600;color:#FF3B30;">+3.2%</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:28px;height:28px;border-radius:6px;background:#34C759/10;display:flex;align-items:center;justify-content:center;color:#34C759;font-size:10px;font-weight:700;">NIO</div>
+                <span style="font-size:13px;">蔚来</span>
+              </div>
+              <span style="font-size:13px;font-weight:600;color:#34C759;">-1.8%</span>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:12px;">重要个股异动</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+                <span style="font-size:13px;font-weight:500;">NVDA 英伟达</span>
+                <span style="font-size:13px;font-weight:600;color:#FF3B30;">+3.2%</span>
+              </div>
+              <p style="font-size:11px;color:#86868B;">CEO CES演讲发布RTX 50系列+GB300路线图</p>
+            </div>
+            <div style="padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+                <span style="font-size:13px;font-weight:500;">TSLA 特斯拉</span>
+                <span style="font-size:13px;font-weight:600;color:#FF3B30;">+2.1%</span>
+              </div>
+              <p style="font-size:11px;color:#86868B;">Q4交付量超预期，FSD v13进展</p>
+            </div>
+            <div style="padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+                <span style="font-size:13px;font-weight:500;">TSM 台积电</span>
+                <span style="font-size:13px;font-weight:600;color:#FF3B30;">+1.8%</span>
+              </div>
+              <p style="font-size:11px;color:#86868B;">CPO封装技术展示，高盛上调目标价</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 欧股/日韩复盘 -->
+      <div class="section-title"><i data-lucide="map-pin" style="width:20px;height:20px;color:#0071E3;"></i> 欧股 / 日韩复盘</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px;">
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:16px;">欧洲市场</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;font-size:14px;">
+              <span style="color:#86868B;">欧洲Stoxx50</span>
+              <span style="font-weight:600;color:#FF3B30;">+0.8%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;">
+              <span style="color:#86868B;">德国DAX</span>
+              <span style="font-weight:600;color:#FF3B30;">+0.9%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;">
+              <span style="color:#86868B;">法国CAC40</span>
+              <span style="font-weight:600;color:#FF3B30;">+0.6%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;">
+              <span style="color:#86868B;">英国FTSE100</span>
+              <span style="font-weight:600;color:#FF3B30;">+0.4%</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding:12px;background:#F2F2F7;border-radius:8px;">
+            <div style="font-size:12px;font-weight:600;color:#1D1D1F;margin-bottom:4px;">对A股/港股映射</div>
+            <p style="font-size:12px;color:#86868B;line-height:1.5;">欧股上涨主要由能源和银行股带动，与A股相关性较弱。若欧央行跟随美联储降息，将改善全球流动性预期，利好外资流入新兴市场。</p>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:16px;">日韩市场</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;font-size:14px;">
+              <span style="color:#86868B;">日经225</span>
+              <span style="font-weight:600;color:#FF3B30;">+0.5%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;">
+              <span style="color:#86868B;">韩国KOSPI</span>
+              <span style="font-weight:600;color:#FF3B30;">+0.3%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:14px;">
+              <span style="color:#86868B;">韩国KOSDAQ</span>
+              <span style="font-weight:600;color:#34C759;">-0.2%</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding:12px;background:#F2F2F7;border-radius:8px;">
+            <div style="font-size:12px;font-weight:600;color:#1D1D1F;margin-bottom:4px;">对A股/港股映射</div>
+            <p style="font-size:12px;color:#86868B;line-height:1.5;">日股半导体板块表现强劲，东京电子、爱德万测试均涨超2%，对A股半导体板块有正面情绪传导。韩股三星电子涨1.1%，SK海力士涨2.3%，存储芯片景气度持续。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 板块前瞻 -->
+      <div class="section-title"><i data-lucide="eye" style="width:20px;height:20px;color:#0071E3;"></i> 板块前瞻</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+        <div class="dark-sector-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:36px;height:36px;border-radius:10px;background:#0071E3/15;display:flex;align-items:center;justify-content:center;">
+                <i data-lucide="cpu" style="width:18px;height:18px;color:#0071E3;"></i>
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">AI算力</div>
+                <div style="font-size:11px;color:#86868B;">预期活跃</div>
+              </div>
+            </div>
+            <span class="badge badge-green">高关注</span>
+          </div>
+          <p style="font-size:13px;color:#86868B;line-height:1.5;">英伟达H200需求超预期，国内算力基建政策有望落地，资金或持续流入。</p>
+        </div>
+        <div class="dark-sector-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:36px;height:36px;border-radius:10px;background:#0071E3/15;display:flex;align-items:center;justify-content:center;">
+                <i data-lucide="microchip" style="width:18px;height:18px;color:#0071E3;"></i>
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">半导体</div>
+                <div style="font-size:11px;color:#86868B;">预期活跃</div>
+              </div>
+            </div>
+            <span class="badge badge-green">高关注</span>
+          </div>
+          <p style="font-size:13px;color:#86868B;line-height:1.5;">国产替代逻辑强化，中芯国际7nm良率提升，设备/材料/EDA板块受益。</p>
+        </div>
+        <div class="dark-sector-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:36px;height:36px;border-radius:10px;background:#0071E3/15;display:flex;align-items:center;justify-content:center;">
+                <i data-lucide="battery-charging" style="width:18px;height:18px;color:#0071E3;"></i>
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">新能源</div>
+                <div style="font-size:11px;color:#86868B;">关注</div>
+              </div>
+            </div>
+            <span class="badge badge-yellow">中关注</span>
+          </div>
+          <p style="font-size:13px;color:#86868B;line-height:1.5;">宁德时代业绩预增，碳酸锂价格反弹，但板块分化加剧需精选标的。</p>
+        </div>
+        <div class="dark-sector-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:36px;height:36px;border-radius:10px;background:#0071E3/15;display:flex;align-items:center;justify-content:center;">
+                <i data-lucide="plane" style="width:18px;height:18px;color:#0071E3;"></i>
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">低空经济</div>
+                <div style="font-size:11px;color:#86868B;">预期活跃</div>
+              </div>
+            </div>
+            <span class="badge badge-green">高关注</span>
+          </div>
+          <p style="font-size:13px;color:#86868B;line-height:1.5;">试点城市空域开放扩大，eVTOL适航认证提速，产业链催化密集。</p>
+        </div>
+        <div class="dark-sector-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:36px;height:36px;border-radius:10px;background:#0071E3/15;display:flex;align-items:center;justify-content:center;">
+                <i data-lucide="database" style="width:18px;height:18px;color:#0071E3;"></i>
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">数据要素</div>
+                <div style="font-size:11px;color:#86868B;">关注</div>
+              </div>
+            </div>
+            <span class="badge badge-yellow">中关注</span>
+          </div>
+          <p style="font-size:13px;color:#86868B;line-height:1.5;">市场化配置改革总体方案发布，确权/交易/定价框架确立，配套细则可期。</p>
+        </div>
+        <div class="dark-sector-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:36px;height:36px;border-radius:10px;background:#0071E3/15;display:flex;align-items:center;justify-content:center;">
+                <i data-lucide="landmark" style="width:18px;height:18px;color:#0071E3;"></i>
+              </div>
+              <div>
+                <div style="font-size:14px;font-weight:600;">银行</div>
+                <div style="font-size:11px;color:#86868B;">防御</div>
+              </div>
+            </div>
+            <span class="badge badge-gray">低关注</span>
+          </div>
+          <p style="font-size:13px;color:#86868B;line-height:1.5;">高股息策略持续受青睐，但净息差压力仍存，适合防御配置。</p>
+        </div>
+      </div>
+
+      <!-- 今日日历 -->
+      <div class="section-title"><i data-lucide="calendar" style="width:20px;height:20px;color:#0071E3;"></i> 今日日历</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div class="content-card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+            <i data-lucide="bar-chart" style="width:16px;height:16px;color:#0071E3;"></i> 经济数据
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="font-size:11px;color:#86868B;white-space:nowrap;margin-top:1px;">10:00</div>
+              <div>
+                <div style="font-size:13px;">中国12月贸易帐</div>
+                <div style="font-size:11px;color:#86868B;">预期：顺差5800亿 | 前值：顺差5024亿</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="font-size:11px;color:#86868B;white-space:nowrap;margin-top:1px;">21:30</div>
+              <div>
+                <div style="font-size:13px;">美国12月CPI同比</div>
+                <div style="font-size:11px;color:#86868B;">预期：+2.9% | 前值：+2.7%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+            <i data-lucide="presentation" style="width:16px;height:16px;color:#0071E3;"></i> 财报发布
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="font-size:11px;color:#86868B;white-space:nowrap;margin-top:1px;">盘前</div>
+              <div>
+                <div style="font-size:13px;">JPM 摩根大通</div>
+                <div style="font-size:11px;color:#86868B;">Q4 EPS预期$4.20 | 营收预期$420亿</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="font-size:11px;color:#86868B;white-space:nowrap;margin-top:1px;">盘后</div>
+              <div>
+                <div style="font-size:13px;">TSLA 特斯拉</div>
+                <div style="font-size:11px;color:#86868B;">Q4交付量已公布，关注毛利率指引</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div style="font-size:14px;font-weight:600;color:#1D1D1F;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+            <i data-lucide="ticket" style="width:16px;height:16px;color:#0071E3;"></i> 新股申购
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="font-size:11px;color:#86868B;white-space:nowrap;margin-top:1px;">今日</div>
+              <div>
+                <div style="font-size:13px;">某科技 301XXX.SZ</div>
+                <div style="font-size:11px;color:#86868B;">创业板 | 发行价待定 | 市盈率25倍</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:#F2F2F7;border-radius:8px;">
+              <div style="font-size:11px;color:#86868B;white-space:nowrap;margin-top:1px;">明日</div>
+              <div>
+                <div style="font-size:13px;">某装备 603XXX.SH</div>
+                <div style="font-size:11px;color:#86868B;">沪市主板 | 发行价待定</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 风险提示 -->
+      <div class="section-title"><i data-lucide="alert-triangle" style="width:20px;height:20px;color:#FF9F0A;"></i> 风险提示</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div class="risk-card border-orange">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <i data-lucide="unlock" style="width:14px;height:14px;color:#FF9F0A;"></i>
+            <span style="font-size:14px;font-weight:500;">大额解禁</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:13px;">
+              <span>某半导体 688XXX.SH</span>
+              <span style="color:#FF9F0A;font-weight:500;">解禁5.2亿股</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;">
+              <span>某芯片 688XXX.SH</span>
+              <span style="color:#FF9F0A;font-weight:500;">解禁2.1亿股</span>
+            </div>
+          </div>
+        </div>
+        <div class="risk-card border-red">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <i data-lucide="trending-down" style="width:14px;height:14px;color:#FF3B30;"></i>
+            <span style="font-size:14px;font-weight:500;">股东减持</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:13px;">
+              <span>中际旭创 300308.SZ</span>
+              <span style="color:#FF3B30;font-weight:500;">减持2.0%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;">
+              <span>某医药 603XXX.SH</span>
+              <span style="color:#FF3B30;font-weight:500;">减持1.5%</span>
+            </div>
+          </div>
+        </div>
+        <div class="risk-card border-blue">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+            <i data-lucide="scale" style="width:14px;height:14px;color:#0071E3;"></i>
+            <span style="font-size:14px;font-weight:500;">监管政策</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:13px;color:#86868B;">• 证监会减持新规从严规范大股东减持</div>
+            <div style="font-size:13px;color:#86868B;">• 美国商务部新增出口管制清单</div>
+            <div style="font-size:13px;color:#86868B;">• 工信部拟出台AI算力能耗标准</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;font-size:12px;color:#86868B;padding:16px 0;">
+        <p>AI智能投研助手 | 本简报由AI自动生成，仅供参考，不构成投资建议</p>
+        <p style="margin-top:4px;">数据来源于财联社、Bloomberg、东方财富、同花顺等公开渠道</p>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById(tab).classList.add('active');
+}
+
+// ECharts — 涨跌分布
+setTimeout(() => {
+  const chart1 = echarts.init(document.getElementById('chartUpDown'));
+  chart1.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: 50, right: 20, top: 10, bottom: 25 },
+    xAxis: { type: 'category', data: ['涨停', '>7%', '5-7%', '3-5%', '1-3%', '0-1%', '平', '-0-1%', '-1-3%', '-3-5%', '-5-7%', '<-7%', '跌停'], axisLabel: { fontSize: 11, color: '#86868B' }, axisLine: { lineStyle: { color: '#86868B' } } },
+    yAxis: { type: 'value', axisLabel: { fontSize: 11, color: '#86868B' }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+    series: [{
+      type: 'bar', barWidth: '60%',
+      data: [
+        { value: 45, itemStyle: { color: '#FF3B30' } },
+        { value: 128, itemStyle: { color: '#FF5C5C' } },
+        { value: 215, itemStyle: { color: '#FF7D7D' } },
+        { value: 456, itemStyle: { color: '#FF9E9E' } },
+        { value: 892, itemStyle: { color: '#FFBFBF' } },
+        { value: 1024, itemStyle: { color: '#FFDEDE' } },
+        { value: 180, itemStyle: { color: '#86868B' } },
+        { value: 987, itemStyle: { color: '#C8F5D6' } },
+        { value: 654, itemStyle: { color: '#A3EDB8' } },
+        { value: 321, itemStyle: { color: '#7EE59A' } },
+        { value: 156, itemStyle: { color: '#59DD7C' } },
+        { value: 67, itemStyle: { color: '#34C759' } },
+        { value: 12, itemStyle: { color: '#2DAF4D' } }
+      ]
+    }]
+  });
+
+  // ECharts — 板块资金流向
+  const chart2 = echarts.init(document.getElementById('chartSectorFlow'));
+  chart2.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: 90, right: 30, top: 10, bottom: 25 },
+    xAxis: { type: 'value', axisLabel: { fontSize: 11, color: '#86868B', formatter: '{value}亿' }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+    yAxis: { type: 'category', data: ['电力', '银行', '医药', '汽车', '半导体'], axisLabel: { fontSize: 11, color: '#1D1D1F' }, axisLine: { lineStyle: { color: '#86868B' } } },
+    series: [{
+      type: 'bar', barWidth: '50%',
+      data: [
+        { value: -12.5, itemStyle: { color: '#34C759' } },
+        { value: -8.3, itemStyle: { color: '#34C759' } },
+        { value: 15.6, itemStyle: { color: '#FF3B30' } },
+        { value: 28.4, itemStyle: { color: '#FF3B30' } },
+        { value: 45.2, itemStyle: { color: '#FF3B30' } }
+      ],
+      label: { show: true, position: 'right', fontSize: 11, color: '#86868B', formatter: '{c}亿' }
+    }]
+  });
+}, 300);
+
+// News expand/collapse for dark cards
+function toggleNews(el) {
+  const expand = el.querySelector('.news-expand');
+  const arrow = el.querySelector('.news-arrow');
+  if (expand) {
+    expand.classList.toggle('open');
+    if (arrow) arrow.style.transform = expand.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+}
+
+
+// Initialize Lucide icons
+lucide.createIcons();
+</script>
+
+
+<script>
+/* iframe embed detection: hide own sidebar & topbar when inside index.html */
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+})();
+</script>
+</body>
+</html>

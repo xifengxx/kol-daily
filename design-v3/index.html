@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5Factor AI — 智投AI金融投研平台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ====== APPLE DESIGN SYSTEM ====== */
+:root {
+  --sidebar-bg: #FFFFFF;
+  --sidebar-text: #1D1D1F;
+  --sidebar-text-dim: #86868B;
+  --sidebar-text-faint: #C7C7CC;
+  --accent: #0071E3;
+  --accent-light: #5AC8FA;
+  --accent-bg: #F0F7FF;
+  --navy: #1D1D1F;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --border: #E5E5EA;
+  --bg-page: #F5F5F7;
+  --up: #FF3B30;
+  --down: #34C759;
+  --card-bg: #FFFFFF;
+  --hover-bg: #F5F5F7;
+  --active-bg: #F0F7FF;
+  --topbar-height: 56px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 60px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  font-variant-numeric: tabular-nums;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+/* ====== LAYOUT ====== */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ====== SIDEBAR ====== */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0;
+  height: 100vh;
+  z-index: 100;
+  transition: width 0.25s ease, min-width 0.25s ease;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed);
+  min-width: var(--sidebar-collapsed);
+}
+
+.sidebar-logo {
+  padding: 20px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar-logo .brand-icon {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, #0071E3, #5AC8FA);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.sidebar-logo .brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.sidebar-logo .brand-text .main { font-size: 15px; font-weight: 700; }
+.sidebar-logo .brand-text .sub { font-size: 10px; color: var(--accent); font-weight: 500; }
+
+.sidebar.collapsed .brand-text { display: none; }
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
+/* Scrollbar styling */
+.sidebar-nav::-webkit-scrollbar { width: 5px; }
+.sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: #D1D1D6; border-radius: 3px; }
+.sidebar-nav::-webkit-scrollbar-thumb:hover { background: #8E8E93; }
+
+/* Module group */
+.nav-module {
+  margin-bottom: 4px;
+}
+
+.nav-module-header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-left: 4px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sidebar-text);
+  white-space: nowrap;
+  border-radius: 8px;
+  margin: 0 8px;
+}
+
+.nav-module-header:hover {
+  background: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.nav-module-header.active {
+  background: var(--active-bg);
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+
+.nav-module-header .module-icon {
+  width: 20px; text-align: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.nav-module-header.active .module-icon {
+  color: var(--accent);
+}
+
+.nav-module-header .module-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-module-header .module-arrow {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.nav-module-header.expanded .module-arrow {
+  transform: rotate(180deg);
+}
+
+.sidebar.collapsed .module-label,
+.sidebar.collapsed .module-arrow { display: none; }
+
+.sidebar.collapsed .nav-module-header {
+  justify-content: center;
+  padding: 12px 0;
+  margin: 0 4px;
+}
+
+/* Submenu */
+.nav-submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease;
+}
+
+.nav-submenu.open {
+  max-height: 400px;
+}
+
+.nav-submenu-item {
+  padding: 8px 14px 8px 48px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 13px;
+  color: var(--sidebar-text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+  margin: 0 8px;
+}
+
+.nav-submenu-item:hover {
+  color: var(--text-primary);
+  background: var(--hover-bg);
+}
+
+.nav-submenu-item.active {
+  color: var(--accent);
+  font-weight: 500;
+  background: var(--active-bg);
+  border-left-color: var(--accent);
+}
+
+.sidebar.collapsed .nav-submenu { display: none; }
+
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-footer .collapse-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: var(--hover-bg);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+
+.sidebar-footer .collapse-btn:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+.sidebar.collapsed .sidebar-footer { justify-content: center; }
+.sidebar.collapsed .collapse-btn { transform: rotate(180deg); }
+
+/* ====== TOP BAR ====== */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  height: var(--topbar-height);
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  z-index: 90;
+  transition: left 0.25s ease;
+}
+
+.sidebar.collapsed ~ .main-area .top-bar {
+  left: var(--sidebar-collapsed);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.breadcrumb .crumb-module {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.breadcrumb .crumb-sep { color: #C7C7CC; font-size: 11px; }
+
+.breadcrumb .crumb-page { color: var(--text-primary); }
+
+/* Search */
+.top-search {
+  flex: 1;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-page);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 7px 14px;
+  margin: 0 auto;
+  transition: all 0.15s;
+  height: 40px;
+}
+
+.top-search:focus-within {
+  border-color: var(--accent);
+  background: var(--card-bg);
+  box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+}
+
+.top-search .search-icon {
+  color: var(--text-secondary);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.top-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+.top-search input::placeholder { color: #C7C7CC; }
+
+/* Right actions */
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.top-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 16px;
+  position: relative;
+  transition: all 0.15s;
+}
+
+.top-btn:hover { background: var(--bg-page); color: var(--text-primary); }
+
+.top-btn .badge {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 8px; height: 8px;
+  background: var(--up);
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.user-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5856D6, #AF52DE);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ====== MAIN AREA ====== */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.25s ease;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-page);
+}
+
+.sidebar.collapsed ~ .main-area {
+  margin-left: var(--sidebar-collapsed);
+}
+
+/* Content wrapper */
+.content-wrapper {
+  flex: 1;
+  position: relative;
+  margin-top: var(--topbar-height);
+  overflow: hidden;
+}
+
+/* Iframe */
+.main-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: var(--bg-page);
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-page);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  transition: opacity 0.2s ease;
+}
+
+.loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #E5E5EA;
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Skeleton loader */
+.skeleton-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  display: none;
+}
+
+.skeleton-container.visible { display: block; }
+
+.skeleton-header {
+  height: 24px;
+  width: 200px;
+  background: linear-gradient(90deg, #E5E5EA 25%, #F2F2F7 50%, #E5E5EA 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.skeleton-card {
+  height: 100px;
+  background: linear-gradient(90deg, #E5E5EA 25%, #F2F2F7 50%, #E5E5EA 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+}
+
+.skeleton-table {
+  height: 300px;
+  background: linear-gradient(90deg, #E5E5EA 25%, #F2F2F7 50%, #E5E5EA 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tooltip for collapsed sidebar */
+.sidebar.collapsed .nav-module-header:hover::after {
+  content: attr(data-label);
+  position: fixed;
+  left: 68px;
+  background: var(--navy);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 200;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+
+/* Responsive: mobile overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 99;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay.mobile-open {
+    display: block;
+  }
+  .main-area, .top-bar {
+    margin-left: 0 !important;
+    left: 0 !important;
+  }
+  .top-search {
+    max-width: 200px;
+  }
+  .breadcrumb { display: none; }
+}
+
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+  display: none;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-toggle { display: flex; }
+}
+
+/* Keyboard focus styles */
+.nav-module-header:focus-visible,
+.nav-submenu-item:focus-visible,
+.top-btn:focus-visible,
+.collapse-btn:focus-visible,
+.mobile-menu-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.nav-submenu-item:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Sidebar section title */
+.sidebar-section-title {
+  padding: 16px 16px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar" aria-label="主导航">
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <div class="brand-icon">5</div>
+    <div class="brand-text">
+      <span class="main">5Factor AI</span>
+      <span class="sub">智投AI</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="sidebar-nav" id="sidebarNav">
+    <!-- 首页 -->
+    <div class="nav-module" data-module="home">
+      <div class="nav-module-header" data-label="首页" onclick="loadPage(this, 'dashboard.html', '首页', '工作台')" role="button" tabindex="0" style="border-left: 4px solid transparent;">
+        <span class="module-icon"><i data-lucide="layout-dashboard" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">首页</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section-title">工作台</div>
+    <!-- A: 行情与数据 -->
+    <div class="nav-module" data-module="market">
+      <div class="nav-module-header" data-label="行情与数据" onclick="toggleModule(this, 'market')" role="button" tabindex="0" aria-expanded="true">
+        <span class="module-icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">行情与数据</span>
+        <span class="module-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="nav-submenu open" id="sub-market">
+        <div class="nav-submenu-item active" data-page="market-overview" data-label="市场总览" onclick="loadPage(this, 'market-overview.html', '行情与数据', '市场总览')">
+          <span>市场总览</span>
+        </div>
+        <div class="nav-submenu-item" data-page="watchlist" data-label="自选股" onclick="loadPage(this, 'watchlist.html', '行情与数据', '自选股')">
+          <span>自选股</span>
+        </div>
+        <div class="nav-submenu-item" data-page="stock-detail" data-label="个股行情" onclick="loadPage(this, 'stock-detail.html', '行情与数据', '个股行情')">
+          <span>个股行情</span>
+        </div>
+        <div class="nav-submenu-item" data-page="global-market" data-label="全球市场" onclick="loadPage(this, 'global-market.html', '行情与数据', '全球市场')">
+          <span>全球市场</span>
+        </div>
+        <div class="nav-submenu-item" data-page="theme-index" data-label="题材指数" onclick="loadPage(this, 'theme-index.html', '行情与数据', '题材指数')">
+          <span>题材指数</span>
+        </div>
+        <div class="nav-submenu-item" data-page="cross-market" data-label="跨市场助手" onclick="loadPage(this, 'cross-market.html', '行情与数据', '跨市场助手')">
+          <span>跨市场助手</span>
+        </div>
+        <div class="nav-submenu-item" data-page="macro-calendar" data-label="宏观事件日历" onclick="loadPage(this, 'macro-calendar.html', '行情与数据', '宏观事件日历')">
+          <span>宏观事件日历</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- B: 内容与信息 -->
+    <div class="nav-module" data-module="content">
+      <div class="nav-module-header" data-label="内容与信息" onclick="toggleModule(this, 'content')" role="button" tabindex="0" aria-expanded="false">
+        <span class="module-icon"><i data-lucide="newspaper" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">内容与信息</span>
+        <span class="module-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="nav-submenu" id="sub-content">
+        <div class="nav-submenu-item" data-page="daily-briefing" onclick="loadPage(this, 'daily-briefing.html', '内容与信息', '每日智能晨报')">
+          <span>每日智能晨报</span>
+        </div>
+        <div class="nav-submenu-item" data-page="kol-digest" onclick="loadPage(this, 'kol-digest.html', '内容与信息', 'KOL观点')">
+          <span>KOL观点</span>
+        </div>
+        <div class="nav-submenu-item" data-page="content-manage" onclick="loadPage(this, 'content-manage.html', '内容与信息', '内容管理')">
+          <span>内容管理</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- C: 分析与选股 -->
+    <div class="nav-module" data-module="scoring">
+      <div class="nav-module-header" data-label="分析与选股" onclick="toggleModule(this, 'scoring')" role="button" tabindex="0" aria-expanded="false">
+        <span class="module-icon"><i data-lucide="target" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">分析与选股</span>
+        <span class="module-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="nav-submenu" id="sub-scoring">
+        <div class="nav-submenu-item" data-page="scoring-list" onclick="loadPage(this, 'scoring-list.html', '分析与选股', '评分榜单')">
+          <span>评分榜单</span>
+        </div>
+        <div class="nav-submenu-item" data-page="stock-deep" onclick="loadPage(this, 'stock-deep.html', '分析与选股', '个股深度')">
+          <span>个股深度</span>
+        </div>
+        <div class="nav-submenu-item" data-page="sim-trading" onclick="loadPage(this, 'sim-trading.html', '分析与选股', '模拟交易')">
+          <span>模拟交易</span>
+        </div>
+        <div class="nav-submenu-item" data-page="strategy-backtest" onclick="loadPage(this, 'strategy-backtest.html', '分析与选股', '策略回测')">
+          <span>策略回测</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- D: 产业链与知识 -->
+    <div class="nav-module" data-module="chain">
+      <div class="nav-module-header" data-label="产业链与知识" onclick="toggleModule(this, 'chain')" role="button" tabindex="0" aria-expanded="false">
+        <span class="module-icon"><i data-lucide="network" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">产业链与知识</span>
+        <span class="module-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="nav-submenu" id="sub-chain">
+        <div class="nav-submenu-item" data-page="industry-chain" onclick="loadPage(this, 'industry-chain.html', '产业链与知识', '产业链图谱')">
+          <span>产业链图谱</span>
+        </div>
+        <div class="nav-submenu-item" data-page="sector-analysis" onclick="loadPage(this, 'sector-analysis.html', '产业链与知识', '赛道分析')">
+          <span>赛道分析</span>
+        </div>
+        <div class="nav-submenu-item" data-page="stock-relation" onclick="loadPage(this, 'stock-relation.html', '产业链与知识', '个股关联')">
+          <span>个股关联</span>
+        </div>
+        <div class="nav-submenu-item" data-page="concept-card" onclick="loadPage(this, 'concept-card.html', '产业链与知识', '概念卡片')">
+          <span>概念卡片</span>
+        </div>
+        <div class="nav-submenu-item" data-page="knowledge-base" onclick="loadPage(this, 'knowledge-base.html', '产业链与知识', '知识库')">
+          <span>知识库</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- E: AI编排层 -->
+    <div class="nav-module" data-module="agent">
+      <div class="nav-module-header" data-label="AI编排层" onclick="toggleModule(this, 'agent')" role="button" tabindex="0" aria-expanded="false">
+        <span class="module-icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">AI编排层</span>
+        <span class="module-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="nav-submenu" id="sub-agent">
+        <div class="nav-submenu-item" data-page="workflow" onclick="loadPage(this, 'workflow.html', 'AI编排层', '工作流编排')">
+          <span>工作流编排</span>
+        </div>
+        <div class="nav-submenu-item" data-page="meeting-minutes" onclick="loadPage(this, 'meeting-minutes.html', 'AI编排层', '会议纪要')">
+          <span>会议纪要</span>
+        </div>
+        <div class="nav-submenu-item" data-page="private-knowledge" onclick="loadPage(this, 'private-knowledge.html', 'AI编排层', '私域知识')">
+          <span>私域知识</span>
+        </div>
+        <div class="nav-submenu-item" data-page="prompt-manage" onclick="loadPage(this, 'prompt-manage.html', 'AI编排层', 'Prompt管理')">
+          <span>Prompt管理</span>
+        </div>
+        <div class="nav-submenu-item" data-page="multimodal" onclick="loadPage(this, 'multimodal.html', 'AI编排层', '多模态')">
+          <span>多模态</span>
+        </div>
+        <div class="nav-submenu-item" data-page="ai-chat" onclick="loadPage(this, 'ai-chat.html', 'AI编排层', 'AI投研对话')">
+          <span>AI投研对话</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- F: 社区与协作 -->
+    <div class="nav-module" data-module="community">
+      <div class="nav-module-header" data-label="社区与协作" onclick="toggleModule(this, 'community')" role="button" tabindex="0" aria-expanded="false">
+        <span class="module-icon"><i data-lucide="users" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">社区与协作</span>
+        <span class="module-arrow"><i data-lucide="chevron-down" style="width:14px;height:14px;"></i></span>
+      </div>
+      <div class="nav-submenu" id="sub-community">
+        <div class="nav-submenu-item" data-page="strategy-square" onclick="loadPage(this, 'strategy-square.html', '社区与协作', '策略广场')">
+          <span>策略广场</span>
+        </div>
+        <div class="nav-submenu-item" data-page="notes-share" onclick="loadPage(this, 'notes-share.html', '社区与协作', '笔记分享')">
+          <span>笔记分享</span>
+        </div>
+        <div class="nav-submenu-item" data-page="concept-collab" onclick="loadPage(this, 'concept-collab.html', '社区与协作', '概念协作')">
+          <span>概念协作</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分隔线 -->
+    <div style="border-top: 1px solid var(--border); margin: 8px 12px;"></div>
+
+    <!-- G: 系统设置 -->
+    <div class="nav-module" data-module="settings">
+      <div class="nav-module-header" data-label="系统设置" onclick="loadSettings()" role="button" tabindex="0" style="border-left: 4px solid transparent;">
+        <span class="module-icon"><i data-lucide="settings" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">系统设置</span>
+      </div>
+    </div>
+
+    <!-- 导航图 -->
+    <div class="nav-module" data-module="navigation">
+      <div class="nav-module-header" data-label="导航图" onclick="loadPage(this, 'navigation-map.html', '导航', '导航图')" role="button" tabindex="0" style="border-left: 4px solid transparent;">
+        <span class="module-icon"><i data-lucide="map" style="width:20px;height:20px;"></i></span>
+        <span class="module-label">导航图</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer">
+    <button class="collapse-btn" onclick="toggleSidebar()" title="收起/展开侧边栏" aria-label="收起侧边栏">
+      <i data-lucide="chevron-left" style="width:16px;height:16px;"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN AREA -->
+<main class="main-area">
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <button class="mobile-menu-toggle" onclick="toggleMobileSidebar()" aria-label="打开菜单">
+      <i data-lucide="menu" style="width:20px;height:20px;"></i>
+    </button>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" id="breadcrumb">
+      <span class="crumb-module" id="crumbModule">行情与数据</span>
+      <span class="crumb-sep">/</span>
+      <span class="crumb-page" id="crumbPage">市场总览</span>
+    </div>
+
+    <!-- Search -->
+    <div class="top-search">
+      <span class="search-icon"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <input type="text" placeholder="搜索股票、概念、研报..." aria-label="全局搜索" id="globalSearch">
+    </div>
+
+    <!-- Actions -->
+    <div class="top-actions">
+      <button class="top-btn" title="通知" aria-label="通知">
+        <i data-lucide="bell" style="width:20px;height:20px;"></i>
+        <span class="badge"></span>
+      </button>
+      <div class="user-avatar" title="用户中心" onclick="loadSettings()">投</div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content-wrapper" id="contentWrapper">
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">正在加载...</div>
+    </div>
+
+    <!-- Skeleton (shown briefly) -->
+    <div class="skeleton-container" id="skeletonLoader">
+      <div class="skeleton-header"></div>
+      <div class="skeleton-grid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+      <div class="skeleton-table"></div>
+    </div>
+
+    <!-- Iframe -->
+    <iframe class="main-iframe" id="mainIframe" src="dashboard.html" title="主内容区"></iframe>
+  </div>
+</main>
+
+<script>
+// ====== STATE ======
+let currentModule = 'market';
+let currentPage = 'market-overview';
+let sidebarCollapsed = false;
+
+// ====== SIDEBAR COLLAPSE ======
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebarCollapsed = !sidebarCollapsed;
+  sidebar.classList.toggle('collapsed', sidebarCollapsed);
+  localStorage.setItem('sidebarCollapsed', sidebarCollapsed);
+}
+
+// ====== MOBILE SIDEBAR ======
+function toggleMobileSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.toggle('mobile-open');
+  overlay.classList.toggle('mobile-open');
+}
+
+// ====== MODULE TOGGLE ======
+function toggleModule(header, moduleId) {
+  const submenu = document.getElementById('sub-' + moduleId);
+  const isOpen = submenu.classList.contains('open');
+
+  // Close all other modules
+  document.querySelectorAll('.nav-submenu.open').forEach(el => {
+    if (el !== submenu) el.classList.remove('open');
+  });
+  document.querySelectorAll('.nav-module-header.expanded').forEach(el => {
+    if (el !== header) el.classList.remove('expanded');
+  });
+
+  // Toggle current
+  submenu.classList.toggle('open', !isOpen);
+  header.classList.toggle('expanded', !isOpen);
+  header.setAttribute('aria-expanded', String(!isOpen));
+}
+
+// ====== LOAD PAGE ======
+function loadPage(element, pageUrl, moduleName, pageName) {
+  const iframe = document.getElementById('mainIframe');
+  const loading = document.getElementById('loadingOverlay');
+  const skeleton = document.getElementById('skeletonLoader');
+
+  // Update active states
+  document.querySelectorAll('.nav-submenu-item.active').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-module-header.active').forEach(el => el.classList.remove('active'));
+
+  if (element) {
+    element.classList.add('active');
+    // Highlight parent module
+    const moduleEl = element.closest('.nav-module').querySelector('.nav-module-header');
+    moduleEl.classList.add('active');
+  }
+
+  // Update breadcrumbs
+  document.getElementById('crumbModule').textContent = moduleName;
+  document.getElementById('crumbPage').textContent = pageName;
+
+  // Show loading
+  loading.classList.remove('hidden');
+  skeleton.classList.add('visible');
+
+  // Load iframe
+  iframe.src = pageUrl;
+
+  // Update state
+  currentPage = element ? element.dataset.page : '';
+  currentModule = element ? element.closest('.nav-module').dataset.module : '';
+
+  // Close mobile sidebar
+  if (window.innerWidth <= 768) {
+    toggleMobileSidebar();
+  }
+
+  // Save to localStorage
+  localStorage.setItem('lastPage', pageUrl);
+  localStorage.setItem('lastModule', moduleName);
+  localStorage.setItem('lastPageName', pageName);
+  localStorage.setItem('lastPageId', currentPage);
+  localStorage.setItem('lastModuleId', currentModule);
+}
+
+// ====== IFRAME LOAD EVENTS ======
+const iframe = document.getElementById('mainIframe');
+const loading = document.getElementById('loadingOverlay');
+const skeleton = document.getElementById('skeletonLoader');
+
+iframe.addEventListener('load', function() {
+  // Hide loading after a brief delay for smooth transition
+  setTimeout(() => {
+    loading.classList.add('hidden');
+    skeleton.classList.remove('visible');
+  }, 200);
+});
+
+// Handle iframe load errors
+iframe.addEventListener('error', function() {
+  loading.classList.add('hidden');
+  skeleton.classList.remove('visible');
+});
+
+// ====== IFRAME MESSAGE LISTENER ======
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.page !== 'sector-analysis') return;
+
+  // Highlight sector-analysis nav
+  document.querySelectorAll('.nav-submenu-item.active').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-module-header.active').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-submenu.open').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.nav-module-header.expanded').forEach(el => el.classList.remove('expanded'));
+
+  const sectorEl = document.querySelector('.nav-submenu-item[data-page="sector-analysis"]');
+  if (sectorEl) {
+    sectorEl.classList.add('active');
+    const moduleEl = sectorEl.closest('.nav-module');
+    const moduleHeader = moduleEl.querySelector('.nav-module-header');
+    const submenu = moduleEl.querySelector('.nav-submenu');
+
+    submenu.classList.add('open');
+    moduleHeader.classList.add('expanded', 'active');
+    moduleHeader.setAttribute('aria-expanded', 'true');
+
+    // Update breadcrumbs
+    document.getElementById('crumbModule').textContent = e.data.module || '产业链与知识';
+    document.getElementById('crumbPage').textContent = e.data.title || '赛道分析';
+
+    // Update state
+    currentPage = 'sector-analysis';
+    currentModule = 'chain';
+
+    // Save to localStorage
+    localStorage.setItem('lastPage', 'sector-analysis.html');
+    localStorage.setItem('lastModule', '产业链与知识');
+    localStorage.setItem('lastPageName', '赛道分析');
+    localStorage.setItem('lastPageId', 'sector-analysis');
+    localStorage.setItem('lastModuleId', 'chain');
+  }
+});
+
+// ====== KEYBOARD SUPPORT ======
+iframe.addEventListener('error', function() {
+  loading.classList.add('hidden');
+  skeleton.classList.remove('visible');
+});
+
+// ====== KEYBOARD SUPPORT ======
+document.querySelectorAll('.nav-module-header').forEach(header => {
+  header.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const moduleId = header.closest('.nav-module').dataset.module;
+      toggleModule(header, moduleId);
+    }
+  });
+});
+
+// ====== SEARCH ======
+const searchInput = document.getElementById('globalSearch');
+searchInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    const query = this.value.trim();
+    if (query) {
+      console.log('Search:', query);
+    }
+  }
+});
+
+// ====== RESTORE STATE ======
+function restoreState() {
+  // Restore sidebar collapse
+  const savedCollapsed = localStorage.getItem('sidebarCollapsed');
+  if (savedCollapsed === 'true') {
+    sidebarCollapsed = true;
+    document.getElementById('sidebar').classList.add('collapsed');
+  }
+
+  // Restore last page
+  const lastPageId = localStorage.getItem('lastPageId');
+  const lastModuleId = localStorage.getItem('lastModuleId');
+  const lastPage = localStorage.getItem('lastPage');
+  const lastModule = localStorage.getItem('lastModule') || '行情与数据';
+  const lastPageName = localStorage.getItem('lastPageName') || '市场总览';
+
+  if (lastPageId && lastPage) {
+    // Find and activate the saved page
+    const pageEl = document.querySelector('.nav-submenu-item[data-page="' + lastPageId + '"]');
+    if (pageEl) {
+      // Open parent module
+      const moduleEl = pageEl.closest('.nav-module');
+      const moduleHeader = moduleEl.querySelector('.nav-module-header');
+      const submenu = moduleEl.querySelector('.nav-submenu');
+
+      // Close all
+      document.querySelectorAll('.nav-submenu').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.nav-module-header').forEach(el => el.classList.remove('expanded', 'active'));
+      document.querySelectorAll('.nav-submenu-item').forEach(el => el.classList.remove('active'));
+
+      // Open saved module
+      submenu.classList.add('open');
+      moduleHeader.classList.add('expanded', 'active');
+      moduleHeader.setAttribute('aria-expanded', 'true');
+      pageEl.classList.add('active');
+
+      // Update breadcrumbs
+      document.getElementById('crumbModule').textContent = lastModule;
+      document.getElementById('crumbPage').textContent = lastPageName;
+
+      // Load iframe
+      iframe.src = lastPage;
+      currentPage = lastPageId;
+      currentModule = lastModuleId;
+    }
+  }
+}
+
+// ====== INIT ======
+document.addEventListener('DOMContentLoaded', function() {
+  // Set initial active state for market module
+  const marketHeader = document.querySelector('.nav-module[data-module="home"] .nav-module-header');
+  if (marketHeader) {
+    marketHeader.classList.add('active');
+    marketHeader.setAttribute('aria-expanded', 'true');
+  }
+
+  // Init Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+
+  // Restore previous state
+  restoreState();
+});
+
+// ====== WINDOW RESIZE ======
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 768) {
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('sidebarOverlay').classList.remove('mobile-open');
+  }
+});
+
+// ====== SHORTCUTS ======
+document.addEventListener('keydown', function(e) {
+  // Ctrl/Cmd + B to toggle sidebar
+  if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+    e.preventDefault();
+    toggleSidebar();
+  }
+  // Ctrl/Cmd + K to focus search
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('globalSearch').focus();
+  }
+});
+
+// ====== LOAD SETTINGS ======
+function loadSettings() {
+  const iframe = document.getElementById('mainIframe');
+  const loading = document.getElementById('loadingOverlay');
+  const skeleton = document.getElementById('skeletonLoader');
+
+  // Clear all active states
+  document.querySelectorAll('.nav-submenu-item.active').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-module-header.active').forEach(el => el.classList.remove('active'));
+  
+  // Highlight settings module
+  const settingsHeader = document.querySelector('.nav-module[data-module="settings"] .nav-module-header');
+  if (settingsHeader) settingsHeader.classList.add('active');
+
+  // Update breadcrumbs
+  document.getElementById('crumbModule').textContent = '系统';
+  document.getElementById('crumbPage').textContent = '系统设置';
+
+  // Show loading
+  loading.classList.remove('hidden');
+  skeleton.classList.add('visible');
+
+  // Load settings page
+  iframe.src = 'settings.html';
+
+  // Update state
+  currentPage = 'settings';
+  currentModule = 'settings';
+
+  // Close mobile sidebar
+  if (window.innerWidth <= 768) {
+    toggleMobileSidebar();
+  }
+
+  // Save to localStorage
+  localStorage.setItem('lastPage', 'settings.html');
+  localStorage.setItem('lastModule', '系统');
+  localStorage.setItem('lastPageName', '系统设置');
+  localStorage.setItem('lastPageId', 'settings');
+  localStorage.setItem('lastModuleId', 'settings');
+}
+</script>
+
+</body>
+</html>

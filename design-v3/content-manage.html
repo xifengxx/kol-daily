@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>内容管理 — 金融投资AI助手</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --text-primary: #1D1D1F;
+  --text-secondary: #86868B;
+  --accent: #0071E3;
+  --navy: #1D1D1F;
+  --up: #FF3B30;
+  --down: #34C759;
+  --tag-green-bg: #34C759; --tag-green-text: #FFFFFF;
+  --tag-blue-bg: #0071E3; --tag-blue-text: #FFFFFF;
+  --tag-yellow-bg: #FF9500; --tag-yellow-text: #FFFFFF;
+  --tag-red-bg: #FF3B30; --tag-red-text: #FFFFFF;
+  --tag-purple-bg: #AF52DE; --tag-purple-text: #FFFFFF;
+  --tag-gray-bg: #F2F2F7; --tag-gray-text: #1D1D1F;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+  background: var(--bg); color: var(--text-primary); font-size: 14px; line-height: 1.6;
+  display: flex; min-height: 100vh;
+}
+/* Sidebar */
+.sidebar {
+  width: 220px; min-width: 220px; background: #FFFFFF; color: #1D1D1F;
+  display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; z-index: 50;
+  border-right: 1px solid #E5E5EA;
+}
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid #E5E5EA; display: flex; align-items: center; gap: 8px; color: #1D1D1F; }
+.sidebar-logo span { color: #0071E3; }
+.sidebar-section { padding: 12px 0; }
+.sidebar-title { padding: 16px 16px 8px; color: #86868B; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: #1D1D1F; cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent; font-size: 14px; }
+.nav-item:hover { background: #F5F5F7; color: #1D1D1F; }
+.nav-item.active { background: #F0F7FF; color: #0071E3; border-left-color: #0071E3; }
+.nav-item .icon { width: 20px; text-align: center; font-size: 15px; display: flex; align-items: center; justify-content: center; color: #86868B; }
+.nav-item.active .icon { color: #0071E3; }
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+.topbar-search { flex: 1; max-width: 480px; display: flex; align-items: center; background: #F5F5F7; border-radius: 8px; padding: 7px 16px; gap: 8px; border: 1px solid transparent; transition: all 0.15s; }
+.topbar-search:focus-within { border-color: #0071E3; background: #fff; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.topbar-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+.topbar-search input::placeholder { color: #C7C7CC; }
+.topbar-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
+.topbar-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+/* Content */
+.content { padding: 24px 32px; max-width: 1440px; margin: 0 auto; width: 100%; }
+/* Layout */
+.manage-layout { display: grid; grid-template-columns: 260px 1fr 320px; gap: 20px; }
+/* Left Panel */
+.left-panel { display: flex; flex-direction: column; gap: 16px; }
+.widget { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+.widget:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.widget-title { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+/* Mini Calendar */
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.calendar-month { font-size: 14px; font-weight: 600; }
+.calendar-nav { display: flex; gap: 4px; }
+.calendar-nav-btn { width: 24px; height: 24px; border-radius: 6px; border: none; background: #F5F5F7; cursor: pointer; font-size: 12px; color: #86868B; display: flex; align-items: center; justify-content: center; }
+.calendar-nav-btn:hover { background: #0071E3; color: #fff; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; font-size: 12px; }
+.calendar-weekday { font-size: 11px; font-weight: 500; color: #86868B; padding: 4px 0; }
+.calendar-day { padding: 6px 0; border-radius: 6px; cursor: pointer; color: var(--text-primary); position: relative; }
+.calendar-day:hover { background: #F5F5F7; }
+.calendar-day.other { color: #C7C7CC; }
+.calendar-day.today { background: #0071E3; color: #fff; font-weight: 600; }
+.calendar-day.has-content::after { content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: #0071E3; }
+.calendar-day.today.has-content::after { background: #fff; }
+.calendar-day.selected { background: #F0F7FF; color: #0071E3; font-weight: 600; }
+/* Filter Tags */
+.filter-list { display: flex; flex-direction: column; gap: 6px; }
+.filter-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-size: 13px; }
+.filter-item:hover { background: #F5F5F7; }
+.filter-item.active { background: #F0F7FF; color: #0071E3; font-weight: 600; }
+.filter-check { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+.filter-item.active .filter-check { background: #0071E3; border-color: #0071E3; color: #fff; }
+.filter-count { margin-left: auto; font-size: 11px; color: #86868B; background: #F5F5F7; padding: 2px 6px; border-radius: 10px; }
+/* Content List (Center) */
+.content-list-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.content-list-title { font-size: 22px; font-weight: 600; color: var(--navy); letter-spacing: -0.01em; display: flex; align-items: center; gap: 6px; }
+.content-search { display: flex; align-items: center; gap: 8px; background: #F5F5F7; border: 1px solid transparent; border-radius: 8px; padding: 6px 14px; flex: 1; max-width: 360px; margin-left: 16px; transition: all 0.15s; }
+.content-search:focus-within { border-color: #0071E3; background: #fff; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+.content-search input { border: none; background: transparent; outline: none; flex: 1; font-size: 13px; color: var(--text-primary); font-family: inherit; }
+.content-search input::placeholder { color: #C7C7CC; }
+/* Content List Table */
+.content-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.content-table th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 500; text-transform: uppercase; color: #86868B; border-bottom: 1px solid var(--border); letter-spacing: 0.3px; background: #F2F2F7; }
+.content-table td { padding: 14px 16px; border-bottom: 1px solid #F2F2F7; vertical-align: top; }
+.content-table tbody tr:hover { background: #F5F5F7; }
+.content-table tbody tr { cursor: pointer; transition: all 0.1s; }
+.content-type-badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; }
+.content-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+.content-meta { font-size: 12px; color: var(--text-secondary); }
+.content-status { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; }
+.status-ready { color: #34C759; }
+.status-pending { color: #FF9500; }
+.status-generating { color: #0071E3; }
+.status-failed { color: #FF3B30; }
+/* Right Panel */
+.right-panel { display: flex; flex-direction: column; gap: 16px; }
+.push-time-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #F2F2F7; }
+.push-time-row:last-child { border-bottom: none; }
+.push-label { font-size: 13px; color: var(--text-primary); display: flex; align-items: center; gap: 6px; }
+.push-value { font-size: 13px; font-weight: 600; color: #0071E3; font-variant-numeric: tabular-nums; }
+/* Toggle Switch */
+.toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.toggle-track { width: 36px; height: 20px; border-radius: 10px; background: #D1D1D6; position: relative; transition: all 0.2s; flex-shrink: 0; }
+.toggle-track.on { background: #0071E3; }
+.toggle-track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.toggle-track.on::after { transform: translateX(16px); }
+.toggle-label { font-size: 13px; color: var(--text-primary); }
+/* Channel Grid */
+.channel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.channel-item { display: flex; align-items: center; gap: 8px; padding: 10px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; background: #fff; }
+.channel-item:hover { border-color: #0071E3; }
+.channel-item.active { border-color: #0071E3; background: #F0F7FF; }
+.channel-icon { font-size: 16px; display: flex; align-items: center; justify-content: center; color: #86868B; }
+.channel-item.active .channel-icon { color: #0071E3; }
+.channel-name { font-size: 12px; font-weight: 600; }
+.channel-desc { font-size: 11px; color: #86868B; }
+/* Topic Tags */
+.topic-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.topic-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; background: #F5F5F7; border: 1px solid #E5E5EA; cursor: pointer; transition: all 0.15s; color: #1D1D1F; }
+.topic-tag:hover { border-color: #0071E3; color: #0071E3; }
+.topic-tag.active { background: #0071E3; color: #fff; border-color: #0071E3; }
+.topic-tag .remove { font-size: 10px; margin-left: 2px; opacity: 0.7; }
+/* Tags */
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; line-height: 1.5; height: 20px; }
+.tag-green { background: #34C759; color: #fff; }
+.tag-blue { background: #0071E3; color: #fff; }
+.tag-yellow { background: #FF9500; color: #fff; }
+.tag-red { background: #FF3B30; color: #fff; }
+.tag-purple { background: #AF52DE; color: #fff; }
+.tag-gray { background: #F2F2F7; color: #1D1D1F; }
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: none; font-family: inherit; }
+.btn-primary { background: #0071E3; color: #fff; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-outline { background: #F5F5F7; border: 1px solid #E5E5EA; color: #1D1D1F; }
+.btn-outline:hover { border-color: #0071E3; color: #0071E3; }
+.btn-sm { padding: 4px 12px; font-size: 12px; border-radius: 8px; }
+.btn-block { width: 100%; justify-content: center; margin-top: 12px; }
+/* Section */
+.section-title { font-size: 18px; font-weight: 600; color: var(--navy); margin: 16px 0 10px; display: flex; align-items: center; gap: 6px; }
+/* Pagination */
+.pagination { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 16px; padding: 16px 0; }
+.page-btn { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); font-size: 12px; cursor: pointer; color: var(--text-primary); }
+.page-btn:hover { border-color: #0071E3; color: #0071E3; }
+.page-btn.active { background: #0071E3; color: #fff; border-color: #0071E3; }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+/* Stats row */
+.stats-row { display: flex; gap: 12px; margin-bottom: 16px; }
+.stats-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; flex: 1; text-align: center; transition: all 0.3s ease; }
+.stats-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.stats-value { font-size: 20px; font-weight: 600; color: var(--navy); font-variant-numeric: tabular-nums; line-height: 1.2; }
+.stats-label { font-size: 11px; color: #86868B; margin-top: 2px; font-weight: 500; letter-spacing: 0.02em; }
+/* Timeline */
+.timeline { position: relative; padding-left: 16px; }
+.timeline::before { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; background: #E5E5EA; }
+.timeline-item { position: relative; padding: 8px 0 8px 16px; }
+.timeline-item::before { content: ''; position: absolute; left: -12px; top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #0071E3; border: 2px solid #fff; }
+.timeline-item.done::before { background: #34C759; }
+.timeline-item.pending::before { background: #FF9500; }
+.timeline-item.failed::before { background: #FF3B30; }
+.timeline-time { font-size: 11px; color: #86868B; }
+.timeline-text { font-size: 13px; color: var(--text-primary); }
+/* Search history */
+.search-history { display: flex; flex-wrap: wrap; gap: 6px; }
+.history-tag { padding: 4px 10px; border-radius: 10px; font-size: 11px; background: #F5F5F7; color: #86868B; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+.history-tag:hover { background: #F0F7FF; color: #0071E3; border-color: rgba(0,113,227,0.2); }
+/* ====== IFRAME EMBED MODE: hide sidebar & topbar ====== */
+body.in-iframe .sidebar,
+body.in-iframe .topbar { display: none !important; }
+body.in-iframe .main { margin-left: 0 !important; width: 100% !important; overflow-y: auto !important; }
+body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo"><i data-lucide="brain" style="width:20px;height:20px;"></i> 5Factor <span>AI</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">市场</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:16px;height:16px;"></i></span> 市场总览</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="search" style="width:16px;height:16px;"></i></span> 个股行情</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="globe" style="width:16px;height:16px;"></i></span> 全球市场</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">内容</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="newspaper" style="width:16px;height:16px;"></i></span> 每日晨报</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="message-square" style="width:16px;height:16px;"></i></span> KOL观点</div>
+    <div class="nav-item active"><span class="icon"><i data-lucide="file-text" style="width:16px;height:16px;"></i></span> 内容管理</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">选股</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="star" style="width:16px;height:16px;"></i></span> 评分榜单</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="target" style="width:16px;height:16px;"></i></span> 个股深度</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="wallet" style="width:16px;height:16px;"></i></span> 模拟交易</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">知识</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="link" style="width:16px;height:16px;"></i></span> 产业链图谱</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="book" style="width:16px;height:16px;"></i></span> 知识库</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">AI</div>
+    <div class="nav-item"><span class="icon"><i data-lucide="brain" style="width:16px;height:16px;"></i></span> AI投研对话</div>
+  </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-search">
+      <span style="color:#86868B;font-size:14px;"><i data-lucide="search" style="width:16px;height:16px;"></i></span>
+      <input type="text" placeholder="搜索内容、热点、标的...">
+    </div>
+    <div class="topbar-user">
+      <span style="font-size:18px;"><i data-lucide="bell" style="width:20px;height:20px;"></i></span>
+      <div class="topbar-avatar">U</div>
+      <span>用户</span>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Page Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-size:28px;font-weight:700;color:var(--navy);line-height:1.2;letter-spacing:-0.02em;">内容管理</div>
+        <div style="font-size:14px;color:var(--text-secondary);margin-top:4px;">管理每日晨报、KOL观点、公告与研报的内容生产与推送</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm"><i data-lucide="download" style="width:14px;height:14px;"></i> 批量导出</button>
+        <button class="btn btn-primary btn-sm"><i data-lucide="zap" style="width:14px;height:14px;"></i> 立即生成</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stats-card">
+        <div class="stats-value">1,247</div>
+        <div class="stats-label">累计内容</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-value">98.2%</div>
+        <div class="stats-label">生成成功率</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-value">156</div>
+        <div class="stats-label">本月推送</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-value">2.3万</div>
+        <div class="stats-label">累计阅读</div>
+      </div>
+    </div>
+
+    <div class="manage-layout">
+      <!-- Left: Calendar + Filters -->
+      <div class="left-panel">
+        <!-- Calendar -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="calendar" style="width:20px;height:20px;"></i> 日历</div>
+          <div class="calendar-header">
+            <div class="calendar-month">2026年 1月</div>
+            <div class="calendar-nav">
+              <button class="calendar-nav-btn"><i data-lucide="chevron-left" style="width:12px;height:12px;"></i></button>
+              <button class="calendar-nav-btn"><i data-lucide="chevron-right" style="width:12px;height:12px;"></i></button>
+            </div>
+          </div>
+          <div class="calendar-grid">
+            <div class="calendar-weekday">日</div>
+            <div class="calendar-weekday">一</div>
+            <div class="calendar-weekday">二</div>
+            <div class="calendar-weekday">三</div>
+            <div class="calendar-weekday">四</div>
+            <div class="calendar-weekday">五</div>
+            <div class="calendar-weekday">六</div>
+            <div class="calendar-day other">29</div>
+            <div class="calendar-day other">30</div>
+            <div class="calendar-day other">31</div>
+            <div class="calendar-day">1</div>
+            <div class="calendar-day">2</div>
+            <div class="calendar-day has-content">3</div>
+            <div class="calendar-day has-content">4</div>
+            <div class="calendar-day has-content">5</div>
+            <div class="calendar-day has-content">6</div>
+            <div class="calendar-day has-content">7</div>
+            <div class="calendar-day has-content">8</div>
+            <div class="calendar-day has-content">9</div>
+            <div class="calendar-day has-content">10</div>
+            <div class="calendar-day has-content">11</div>
+            <div class="calendar-day has-content">12</div>
+            <div class="calendar-day has-content">13</div>
+            <div class="calendar-day has-content">14</div>
+            <div class="calendar-day has-content">15</div>
+            <div class="calendar-day selected today has-content">16</div>
+            <div class="calendar-day">17</div>
+            <div class="calendar-day">18</div>
+            <div class="calendar-day">19</div>
+            <div class="calendar-day">20</div>
+            <div class="calendar-day">21</div>
+            <div class="calendar-day">22</div>
+            <div class="calendar-day">23</div>
+            <div class="calendar-day">24</div>
+            <div class="calendar-day">25</div>
+            <div class="calendar-day">26</div>
+            <div class="calendar-day">27</div>
+            <div class="calendar-day">28</div>
+            <div class="calendar-day">29</div>
+            <div class="calendar-day">30</div>
+            <div class="calendar-day">31</div>
+            <div class="calendar-day other">1</div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:12px;justify-content:center;font-size:11px;color:var(--text-secondary);">
+            <span><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0071E3;margin-right:4px;"></span>有内容</span>
+            <span><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0071E3;border:2px solid #fff;box-shadow:0 0 0 1px #0071E3;margin-right:4px;"></span>今日</span>
+          </div>
+        </div>
+
+        <!-- Content Type Filter -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="folder-open" style="width:20px;height:20px;"></i> 内容类型</div>
+          <div class="filter-list">
+            <div class="filter-item active">
+              <div class="filter-check"><i data-lucide="check" style="width:10px;height:10px;"></i></div>
+              <span>全部内容</span>
+              <span class="filter-count">1,247</span>
+            </div>
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span>每日晨报</span>
+              <span class="filter-count">312</span>
+            </div>
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span>KOL观点</span>
+              <span class="filter-count">298</span>
+            </div>
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span>公告摘要</span>
+              <span class="filter-count">456</span>
+            </div>
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span>研报精选</span>
+              <span class="filter-count">181</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i> 生成状态</div>
+          <div class="filter-list">
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已完成</span>
+              <span class="filter-count">1,224</span>
+            </div>
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span><i data-lucide="refresh-cw" style="width:14px;height:14px;"></i> 生成中</span>
+              <span class="filter-count">3</span>
+            </div>
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span><i data-lucide="alert-triangle" style="width:14px;height:14px;"></i> 失败</span>
+              <span class="filter-count">5</span>
+            </div>
+            <div class="filter-item">
+              <div class="filter-check"></div>
+              <span><i data-lucide="file-text" style="width:14px;height:14px;"></i> 草稿</span>
+              <span class="filter-count">15</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Search -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="search" style="width:20px;height:20px;"></i> 热点搜索</div>
+          <div class="content-search" style="max-width:100%;margin-left:0;margin-bottom:12px;">
+            <span style="color:#86868B;font-size:14px;"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
+            <input type="text" placeholder="按热点主题跨日期搜索...">
+          </div>
+          <div class="search-history">
+            <span class="history-tag">AI算力</span>
+            <span class="history-tag">半导体</span>
+            <span class="history-tag">CPO</span>
+            <span class="history-tag">低空经济</span>
+            <span class="history-tag">碳酸锂</span>
+            <span class="history-tag">美联储</span>
+            <span class="history-tag">比特币</span>
+            <span class="history-tag">高股息</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Content List -->
+      <div>
+        <div class="content-list-header">
+          <div style="display:flex;align-items:center;">
+            <div class="content-list-title"><i data-lucide="file-text" style="width:20px;height:20px;"></i> 内容列表</div>
+            <div class="content-search">
+              <span style="color:#86868B;font-size:14px;"><i data-lucide="search" style="width:14px;height:14px;"></i></span>
+              <input type="text" placeholder="搜索标题、标的...">
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <select style="padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-primary);background:var(--card);">
+              <option>全部日期</option>
+              <option>最近7天</option>
+              <option>最近30天</option>
+              <option>2026年1月</option>
+            </select>
+            <select style="padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-primary);background:var(--card);">
+              <option>按时间倒序</option>
+              <option>按时间正序</option>
+              <option>按热度</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="widget" style="padding:0;overflow:hidden;">
+          <table class="content-table">
+            <thead>
+              <tr>
+                <th style="width:40px;"><input type="checkbox" style="cursor:pointer;"></th>
+                <th>内容</th>
+                <th style="width:80px;">类型</th>
+                <th style="width:100px;">来源</th>
+                <th style="width:80px;">状态</th>
+                <th style="width:60px;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">每日智能晨报 · 收盘版（2026-01-16）</div>
+                  <div class="content-meta">10大热点 | 3条公告 | 6项跟踪 | 生成时间 16:05</div>
+                </td>
+                <td><span class="content-type-badge tag-blue">晨报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">8 Skills</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已推送</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">KOL观点速览 · 2026-01-16</div>
+                  <div class="content-meta">5条主线 | 38位KOL | 高共识:AI算力 | 低共识:美股见顶</div>
+                </td>
+                <td><span class="content-type-badge tag-purple">KOL</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">38 YouTube</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已推送</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">宁德时代：2025年度净利润预增15%-25%</div>
+                  <div class="content-meta">深交所公告 | 业绩预告 | 16:32</div>
+                </td>
+                <td><span class="content-type-badge tag-green">公告</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">深交所</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已收录</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">北方华创：中标某晶圆厂刻蚀设备订单，金额约12亿元</div>
+                  <div class="content-meta">上交所公告 | 重大合同 | 16:15</div>
+                </td>
+                <td><span class="content-type-badge tag-green">公告</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">上交所</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已收录</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">AI算力产业链深度研报：CPO技术突破与光模块升级</div>
+                  <div class="content-meta">中金公司 | 行业深度 | 40页 | 评级：推荐</div>
+                </td>
+                <td><span class="content-type-badge tag-yellow">研报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">中金公司</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已收录</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">中际旭创：控股股东拟减持不超过2%股份</div>
+                  <div class="content-meta">深交所公告 | 增减持 | 15:58</div>
+                </td>
+                <td><span class="content-type-badge tag-green">公告</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">深交所</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已收录</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">每日智能晨报 · 晨间版（2026-01-16）</div>
+                  <div class="content-meta">隔夜美股/欧股 | 宏观数据 | 今日关注 | 生成时间 08:32</div>
+                </td>
+                <td><span class="content-type-badge tag-blue">晨报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">8 Skills</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已推送</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">隆基绿能：与某央企签订50GW组件长单供应协议</div>
+                  <div class="content-meta">公司公告 | 重大合同 | 15:20</div>
+                </td>
+                <td><span class="content-type-badge tag-green">公告</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">公司公告</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已收录</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">半导体设备国产化进程跟踪报告（2026Q1）</div>
+                  <div class="content-meta">华泰证券 | 行业跟踪 | 28页 | 评级：增持</div>
+                </td>
+                <td><span class="content-type-badge tag-yellow">研报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">华泰证券</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已收录</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">低空经济适航审定标准发布，eVTOL商业化提速</div>
+                  <div class="content-meta">政策解读 | 行业催化 | 民航局</div>
+                </td>
+                <td><span class="content-type-badge tag-blue">晨报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">政策来源</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已收录</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">KOL观点速览 · 2026-01-15</div>
+                  <div class="content-meta">4条主线 | 38位KOL | 高共识:AI算力 | 分歧:美联储</div>
+                </td>
+                <td><span class="content-type-badge tag-purple">KOL</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">38 YouTube</td>
+                <td><span class="content-status status-ready"><i data-lucide="check-circle" style="width:14px;height:14px;"></i> 已推送</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">存储芯片涨价潮跟踪：HBM3E供不应求，现货溢价40%</div>
+                  <div class="content-meta">行业动态 | 价格追踪 | 供需分析</div>
+                </td>
+                <td><span class="content-type-badge tag-blue">晨报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">多源聚合</td>
+                <td><span class="content-status status-generating"><i data-lucide="refresh-cw" style="width:14px;height:14px;"></i> 生成中</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">查看</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">碳酸锂价格触底反弹，锂电产业链回暖分析</div>
+                  <div class="content-meta">价格跟踪 | 产业链分析 | 景气度</div>
+                </td>
+                <td><span class="content-type-badge tag-blue">晨报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">多源聚合</td>
+                <td><span class="content-status status-pending"><i data-lucide="file-text" style="width:14px;height:14px;"></i> 草稿</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">编辑</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" style="cursor:pointer;"></td>
+                <td>
+                  <div class="content-title">新能源车企2025年销量回顾与2026年展望</div>
+                  <div class="content-meta">中信证券 | 行业策略 | 35页 | 评级：强于大市</div>
+                </td>
+                <td><span class="content-type-badge tag-yellow">研报</span></td>
+                <td style="font-size:13px;color:var(--text-secondary);">中信证券</td>
+                <td><span class="content-status status-failed"><i data-lucide="x-circle" style="width:14px;height:14px;"></i> 解析失败</span></td>
+                <td><span style="color:#0071E3;cursor:pointer;font-size:13px;">重试</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <button class="page-btn" disabled>上一页</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn">...</button>
+            <button class="page-btn">89</button>
+            <button class="page-btn">下一页</button>
+          </div>
+        </div>
+
+        <!-- Production Pipeline -->
+        <div class="widget" style="margin-top:16px;">
+          <div class="widget-title"><i data-lucide="refresh-cw" style="width:20px;height:20px;"></i> 内容生产流水线</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
+            <div class="stats-card" style="padding:10px;">
+              <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">今日已生成</div>
+              <div style="font-size:20px;font-weight:600;color:var(--navy);line-height:1.2;">4</div>
+            </div>
+            <div class="stats-card" style="padding:10px;">
+              <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">生成中</div>
+              <div style="font-size:20px;font-weight:600;color:#0071E3;line-height:1.2;">1</div>
+            </div>
+            <div class="stats-card" style="padding:10px;">
+              <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">待推送</div>
+              <div style="font-size:20px;font-weight:600;color:#FF9500;line-height:1.2;">2</div>
+            </div>
+            <div class="stats-card" style="padding:10px;">
+              <div style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">失败</div>
+              <div style="font-size:20px;font-weight:600;color:#FF3B30;line-height:1.2;">0</div>
+            </div>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item done">
+              <div class="timeline-time">08:30</div>
+              <div class="timeline-text">晨间版晨报已生成并推送</div>
+            </div>
+            <div class="timeline-item done">
+              <div class="timeline-time">08:45</div>
+              <div class="timeline-text">KOL观点速览已生成并推送</div>
+            </div>
+            <div class="timeline-item done">
+              <div class="timeline-time">16:05</div>
+              <div class="timeline-text">收盘版晨报已生成并推送</div>
+            </div>
+            <div class="timeline-item pending">
+              <div class="timeline-time">17:00</div>
+              <div class="timeline-text">公告摘要自动聚合（预计17:15完成）</div>
+            </div>
+            <div class="timeline-item pending">
+              <div class="timeline-time">20:00</div>
+              <div class="timeline-text">美股开盘跟踪（21:30自动启动）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Push Settings -->
+      <div class="right-panel">
+        <!-- Push Schedule -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="clock" style="width:20px;height:20px;"></i> 推送设置</div>
+          <div class="push-time-row">
+            <span class="push-label"><i data-lucide="sunrise" style="width:14px;height:14px;"></i> 晨间版晨报</span>
+            <span class="push-value">08:30</span>
+          </div>
+          <div class="push-time-row">
+            <span class="push-label"><i data-lucide="clipboard-list" style="width:14px;height:14px;"></i> 收盘版晨报</span>
+            <span class="push-value">16:05</span>
+          </div>
+          <div class="push-time-row">
+            <span class="push-label"><i data-lucide="message-square" style="width:14px;height:14px;"></i> KOL观点</span>
+            <span class="push-value">08:45</span>
+          </div>
+          <div class="push-time-row">
+            <span class="push-label"><i data-lucide="megaphone" style="width:14px;height:14px;"></i> 公告摘要</span>
+            <span class="push-value">17:15</span>
+          </div>
+          <div class="push-time-row">
+            <span class="push-label"><i data-lucide="bar-chart-3" style="width:14px;height:14px;"></i> 收盘小结</span>
+            <span class="push-value">15:30</span>
+          </div>
+          <div class="push-time-row">
+            <span class="push-label"><i data-lucide="moon" style="width:14px;height:14px;"></i> 美股复盘</span>
+            <span class="push-value">22:00</span>
+          </div>
+          <button class="btn btn-outline btn-sm btn-block"><i data-lucide="clock" style="width:14px;height:14px;"></i> 修改推送时间</button>
+        </div>
+
+        <!-- Channels -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="radio" style="width:20px;height:20px;"></i> 推送渠道</div>
+          <div class="channel-grid">
+            <div class="channel-item active">
+              <span class="channel-icon"><i data-lucide="message-square" style="width:16px;height:16px;"></i></span>
+              <div>
+                <div class="channel-name">App Push</div>
+                <div class="channel-desc">已启用</div>
+              </div>
+            </div>
+            <div class="channel-item active">
+              <span class="channel-icon"><i data-lucide="mail" style="width:16px;height:16px;"></i></span>
+              <div>
+                <div class="channel-name">邮件</div>
+                <div class="channel-desc">已启用</div>
+              </div>
+            </div>
+            <div class="channel-item">
+              <span class="channel-icon"><i data-lucide="brain" style="width:16px;height:16px;"></i></span>
+              <div>
+                <div class="channel-name">微信</div>
+                <div class="channel-desc">未配置</div>
+              </div>
+            </div>
+            <div class="channel-item">
+              <span class="channel-icon"><i data-lucide="smartphone" style="width:16px;height:16px;"></i></span>
+              <div>
+                <div class="channel-name">短信</div>
+                <div class="channel-desc">未配置</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscribe Topics -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="pin" style="width:20px;height:20px;"></i> 订阅主题</div>
+          <div class="topic-tags">
+            <span class="topic-tag active">AI算力</span>
+            <span class="topic-tag active">半导体</span>
+            <span class="topic-tag active">新能源</span>
+            <span class="topic-tag">低空经济</span>
+            <span class="topic-tag active">美股</span>
+            <span class="topic-tag">港股</span>
+            <span class="topic-tag">宏观</span>
+            <span class="topic-tag active">比特币</span>
+            <span class="topic-tag">医药</span>
+            <span class="topic-tag">消费</span>
+            <span class="topic-tag active">高股息</span>
+            <span class="topic-tag">机器人</span>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:var(--text-secondary);">已订阅 6 个主题，未订阅 6 个主题</div>
+        </div>
+
+        <!-- Toggles -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="settings" style="width:20px;height:20px;"></i> 推送选项</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="toggle">
+              <div class="toggle-track on"></div>
+              <span class="toggle-label">仅推送重要内容</span>
+            </div>
+            <div class="toggle">
+              <div class="toggle-track on"></div>
+              <span class="toggle-label">周末也推送</span>
+            </div>
+            <div class="toggle">
+              <div class="toggle-track"></div>
+              <span class="toggle-label">推送含音频版</span>
+            </div>
+            <div class="toggle">
+              <div class="toggle-track on"></div>
+              <span class="toggle-label">异常时短信告警</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Stats Chart -->
+        <div class="widget">
+          <div class="widget-title"><i data-lucide="trending-up" style="width:20px;height:20px;"></i> 内容产出趋势</div>
+          <div id="chartContentTrend" style="width:100%;height:180px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Content trend chart
+setTimeout(() => {
+  const chart = echarts.init(document.getElementById('chartContentTrend'));
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: 10, right: 10, top: 10, bottom: 20 },
+    xAxis: { type: 'category', data: ['1/9','1/10','1/11','1/12','1/13','1/14','1/15','1/16'], axisLabel: { fontSize: 11, color: '#86868B' }, axisLine: { lineStyle: { color: '#E5E5EA' } } },
+    yAxis: { type: 'value', axisLabel: { fontSize: 11, color: '#86868B' }, splitLine: { lineStyle: { color: '#F2F2F7' } } },
+    series: [
+      { name: '晨报', type: 'bar', stack: 'total', barWidth: '50%', data: [2,2,2,2,2,2,2,2], itemStyle: { color: '#0071E3' } },
+      { name: 'KOL', type: 'bar', stack: 'total', barWidth: '50%', data: [1,1,1,1,1,1,1,1], itemStyle: { color: '#AF52DE' } },
+      { name: '公告', type: 'bar', stack: 'total', barWidth: '50%', data: [3,4,2,5,4,3,6,4], itemStyle: { color: '#34C759' } },
+      { name: '研报', type: 'bar', stack: 'total', barWidth: '50%', data: [2,1,3,2,1,2,1,2], itemStyle: { color: '#FF9500' } }
+    ]
+  });
+}, 300);
+
+// Toggle switch functionality
+document.querySelectorAll('.toggle').forEach(toggle => {
+  toggle.addEventListener('click', () => {
+    const track = toggle.querySelector('.toggle-track');
+    track.classList.toggle('on');
+  });
+});
+
+// Initialize Lucide icons
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+</script>
+
+
+<script>
+/* iframe embed detection: hide own sidebar & topbar when inside index.html */
+(function(){
+  if (window.self !== window.top) {
+    document.body.classList.add('in-iframe');
+  }
+})();
+</script>
+</body>
+</html>

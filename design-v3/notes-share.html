@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>笔记分享 — 5Factor AI 社区</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root {
+    --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA;
+    --text-primary: #1D1D1F; --text-secondary: #86868B;
+    --accent: #0071E3; --navy: #1D1D1F;
+    --up: #FF3B30; --down: #34C759; --warning: #FF9500;
+    --tag-green-bg: rgba(52,199,89,0.1); --tag-green-text: #34C759;
+    --tag-blue-bg: rgba(0,113,227,0.1); --tag-blue-text: #0071E3;
+    --tag-yellow-bg: rgba(255,149,0,0.1); --tag-yellow-text: #FF9500;
+    --tag-red-bg: rgba(255,59,48,0.1); --tag-red-text: #FF3B30;
+    --tag-purple-bg: rgba(175,82,222,0.1); --tag-purple-text: #AF52DE;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+    background: var(--bg); color: var(--text-primary); font-size: 14px; line-height: 1.6;
+    display: flex; min-height: 100vh;
+  }
+  .sidebar {
+    width: 220px; min-width: 220px; background: #FFFFFF; color: #1D1D1F;
+    display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+    overflow-y: auto; z-index: 50; flex-shrink: 0;
+    border-right: 1px solid var(--border);
+  }
+  .sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; border-bottom: 1px solid var(--border); color: #1D1D1F; }
+  .sidebar-logo span { color: var(--accent); }
+  .sidebar-section { padding: 12px 0; }
+  .sidebar-title { padding: 8px 16px; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .nav-item { padding: 10px 16px; display: flex; align-items: center; gap: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border-left: 4px solid transparent; font-size: 14px; text-decoration: none; }
+  .nav-item:hover { background: #F5F5F7; color: var(--text-primary); }
+  .nav-item.active { background: #F0F7FF; color: var(--accent); border-left-color: var(--accent); }
+  .nav-item .icon { width: 20px; text-align: center; display: flex; align-items: center; justify-content: center; }
+  .nav-sub { padding: 7px 16px 7px 46px; display: flex; align-items: center; gap: 6px; color: var(--text-secondary); cursor: pointer; font-size: 13px; transition: all 0.15s; text-decoration: none; border-left: 4px solid transparent; }
+  .nav-sub:hover { color: var(--text-primary); background: #F5F5F7; }
+  .nav-sub.active { color: var(--accent); font-weight: 500; background: #F0F7FF; border-left-color: var(--accent); }
+  .topbar { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 30; }
+  .search-box { flex: 1; max-width: 480px; display: flex; align-items: center; background: var(--bg); border-radius: 8px; padding: 7px 14px; gap: 10px; border: 1px solid transparent; transition: all 0.15s; }
+  .search-box:focus-within { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .search-box input { border: none; background: transparent; outline: none; flex: 1; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+  .search-box input::placeholder { color: #C7C7CC; }
+  .user-area { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #5856D6, #AF52DE); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .content { padding: 20px 24px; max-width: 1440px; display: flex; gap: 20px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
+  .card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.12); transform: translateY(-2px); }
+  .btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-outline { background: #F5F5F7; color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-outline:hover { background: #E5E5EA; }
+  .btn-sm { padding: 4px 12px; font-size: 12px; border-radius: 8px; }
+  .btn-ghost { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 14px; font-family: inherit; padding: 4px 8px; transition: color 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .btn-ghost:hover { color: var(--accent); }
+  .tag { display: inline-flex; align-items: center; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 500; height: 20px; }
+  .tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+  .tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+  .tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+  .tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+  .tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+  .tag-gray { background: #F2F2F7; color: #1D1D1F; }
+  .up { color: var(--up); } .down { color: var(--down); }
+  .note-author { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .note-author .a-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0071E3, #5AC8FA); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .note-author .a-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .note-author .a-meta { font-size: 12px; color: var(--text-secondary); }
+  .note-title { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 8px; line-height: 1.4; cursor: pointer; }
+  .note-title:hover { color: var(--accent); }
+  .note-summary { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .note-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .note-actions { display: flex; gap: 16px; align-items: center; padding-top: 12px; border-top: 1px solid var(--border); }
+  .note-action { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-secondary); cursor: pointer; transition: color 0.15s; user-select: none; }
+  .note-action:hover { color: var(--accent); }
+  .note-action.active { color: var(--accent); }
+  .left-col { width: 260px; flex-shrink: 0; }
+  .center-col { flex: 1; min-width: 0; }
+  .right-col { width: 280px; flex-shrink: 0; }
+  .follow-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .follow-item:last-child { border-bottom: none; }
+  .follow-item .f-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #0071E3, #5AC8FA); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+  .follow-item .f-name { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+  .follow-item .f-count { font-size: 12px; color: var(--text-secondary); }
+  .follow-btn { margin-left: auto; font-size: 12px; padding: 4px 12px; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+  .follow-btn:hover { background: var(--accent); color: #fff; }
+  .follow-btn.following { background: var(--accent); color: #fff; }
+  .hot-tag { display: inline-block; padding: 4px 10px; background: #F2F2F7; border-radius: 10px; font-size: 12px; color: var(--text-secondary); margin: 0 4px 6px 0; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+  .hot-tag:hover { background: var(--accent); color: #fff; }
+  .rec-author { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .rec-author:last-child { border-bottom: none; }
+  .rec-author .r-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #0071E3, #5AC8FA); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0; }
+  .rec-author .r-info { flex: 1; min-width: 0; }
+  .rec-author .r-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .rec-author .r-desc { font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rec-author .r-score { font-size: 12px; color: var(--accent); font-weight: 600; }
+  .comment-section { display: none; padding: 16px; background: #F5F5F7; border-radius: 12px; margin-top: 12px; }
+  .comment-section.open { display: block; }
+  .comment-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-item .c-avatar { width: 28px; height: 28px; border-radius: 50%; background: #E5E5EA; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+  .comment-item .c-text { font-size: 14px; color: var(--text-primary); line-height: 1.5; }
+  .comment-item .c-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .comment-input { width: 100%; padding: 8px 12px; border: 1px solid transparent; border-radius: 8px; font-size: 14px; font-family: inherit; margin-bottom: 8px; background: #F5F5F7; transition: all 0.15s; }
+  .comment-input:focus { outline: none; background: #FFFFFF; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  textarea { background: #F5F5F7; border: 1px solid transparent; transition: all 0.15s; }
+  textarea:focus { background: #FFFFFF; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.15); outline: none; }
+  .stat-value { font-family: "SF Mono", "Fira Code", "JetBrains Mono", monospace; font-variant-numeric: tabular-nums; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-fade { animation: fadeIn 0.3s ease; }
+/* iframe embed mode: hide sidebar & topbar */
+</style>
+<style>
+/* ====== IFRAME EMBED MODE ====== */
+body.in-iframe { height: 100vh !important; min-height: 100vh !important; overflow: hidden !important; }
+body.in-iframe .main { overflow-y: auto !important; }
+body.in-iframe .sidebar,
+body.in-iframe .unified-sidebar { display: none !important; }
+body.in-iframe .topbar,
+body.in-iframe .unified-topbar { display: none !important; }
+body.in-iframe .main,
+body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; }
+</style>
+</head>
+<body>
+<script>if(window.self!==window.top)document.body.classList.add("in-iframe");</script>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">5Factor <span>AI</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-title">模块导航</div>
+    <a href="#" class="nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:20px;height:20px;"></i></span>行情与数据</a>
+    <a href="#" class="nav-item"><span class="icon"><i data-lucide="newspaper" style="width:20px;height:20px;"></i></span>内容与信息</a>
+    <a href="#" class="nav-item"><span class="icon"><i data-lucide="target" style="width:20px;height:20px;"></i></span>分析与选股</a>
+    <a href="#" class="nav-item"><span class="icon"><i data-lucide="link" style="width:20px;height:20px;"></i></span>产业链与知识</a>
+    <a href="#" class="nav-item"><span class="icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></span>AI 编排层</a>
+    <a href="strategy-square.html" class="nav-item active"><span class="icon"><i data-lucide="users" style="width:20px;height:20px;"></i></span>社区与协作</a>
+    <a href="strategy-square.html" class="nav-sub">F1 策略广场</a>
+    <a href="notes-share.html" class="nav-sub active">F2 笔记分享</a>
+    <a href="concept-collab.html" class="nav-sub">F3 概念协作</a>
+  </div>
+  <div class="sidebar-section" style="margin-top:auto; border-top:1px solid #E5E5EA; padding-top:12px;">
+    <a href="#" class="nav-item"><span class="icon"><i data-lucide="settings" style="width:20px;height:20px;"></i></span>系统设置</a>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div style="font-size:16px; font-weight:600; color:var(--text-primary);">笔记分享</div>
+    <div class="search-box">
+      <i data-lucide="search" style="width:16px;height:16px; color:var(--text-secondary);"></i>
+      <input type="text" placeholder="搜索笔记、标的、投资逻辑...">
+    </div>
+    <div class="user-area">
+      <span style="font-size:12px; color:var(--text-secondary);">2026-07-09</span>
+      <div class="avatar">投</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <!-- Left Column -->
+    <div class="left-col">
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:16px; font-weight:600; color:var(--navy); margin-bottom:12px;">我的关注</div>
+        <div class="follow-item">
+          <div class="f-avatar">量</div>
+          <div style="flex:1; min-width:0;">
+            <div class="f-name">量化猎人</div>
+            <div class="f-count">策略 12 · 笔记 34</div>
+          </div>
+          <button class="follow-btn following">已关注</button>
+        </div>
+        <div class="follow-item">
+          <div class="f-avatar">价</div>
+          <div style="flex:1; min-width:0;">
+            <div class="f-name">价值坚守者</div>
+            <div class="f-count">策略 8 · 笔记 56</div>
+          </div>
+          <button class="follow-btn following">已关注</button>
+        </div>
+        <div class="follow-item">
+          <div class="f-avatar">晶</div>
+          <div style="flex:1; min-width:0;">
+            <div class="f-name">晶圆厂老周</div>
+            <div class="f-count">策略 5 · 笔记 23</div>
+          </div>
+          <button class="follow-btn following">已关注</button>
+        </div>
+        <div class="follow-item">
+          <div class="f-avatar">港</div>
+          <div style="flex:1; min-width:0;">
+            <div class="f-name">港韭翻身</div>
+            <div class="f-count">策略 6 · 笔记 18</div>
+          </div>
+          <button class="follow-btn following">已关注</button>
+        </div>
+        <div class="follow-item">
+          <div class="f-avatar">链</div>
+          <div style="flex:1; min-width:0;">
+            <div class="f-name">链上观察者</div>
+            <div class="f-count">策略 3 · 笔记 42</div>
+          </div>
+          <button class="follow-btn">关注</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:16px; font-weight:600; color:var(--navy); margin-bottom:12px;">热门标签</div>
+        <div>
+          <span class="hot-tag">#AI算力</span>
+          <span class="hot-tag">#HBM</span>
+          <span class="hot-tag">#NVDA</span>
+          <span class="hot-tag">#五因子</span>
+          <span class="hot-tag">#半导体</span>
+          <span class="hot-tag">#价值投資</span>
+          <span class="hot-tag">#网格交易</span>
+          <span class="hot-tag">#美股</span>
+          <span class="hot-tag">#A股</span>
+          <span class="hot-tag">#港股</span>
+          <span class="hot-tag">#BTC</span>
+          <span class="hot-tag">#黄金</span>
+          <span class="hot-tag">#复盘</span>
+          <span class="hot-tag">#产业链</span>
+          <span class="hot-tag">#CPO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Column -->
+    <div class="center-col">
+      <!-- Write Note -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#5856D6,#AF52DE); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; flex-shrink:0;">投</div>
+          <div style="flex:1;">
+            <textarea placeholder="分享你的投资逻辑、复盘思考或市场观点..." style="width:100%; padding:12px; border-radius:8px; font-size:14px; font-family:inherit; resize:vertical; min-height:80px; margin-bottom:8px;"></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; gap:12px;">
+                <button class="btn-ghost" style="display:flex; align-items:center; gap:4px;">
+                  <i data-lucide="link" style="width:16px;height:16px;"></i>
+                  引用标的
+                </button>
+                <button class="btn-ghost" style="display:flex; align-items:center; gap:4px;">
+                  <i data-lucide="image" style="width:16px;height:16px;"></i>
+                  添加图片
+                </button>
+              </div>
+              <button class="btn-primary">发布笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note 1 -->
+      <div class="card animate-fade" style="margin-bottom:16px;">
+        <div class="note-author">
+          <div class="a-avatar">量</div>
+          <div>
+            <div class="a-name">量化猎人</div>
+            <div class="a-meta">2小时前 · 来自策略广场</div>
+          </div>
+        </div>
+        <div class="note-title">NVDA 五因子雷达图更新：F4/F5 双满分，但 F1 资金面值得警惕</div>
+        <div class="note-summary">
+          今天对 NVDA 做了五因子深度更新。F4 基本面（100分）和 F5 技术面（100分）保持双满分，S4 主升浪全共振信号依然有效。但 F1 资金面只有26分，量比持续萎缩，主力资金近5日净流出 $12.8亿。这是一个重要的警示信号——历史数据显示，当 F1<30 且 F4/F5 双满分时，标的通常进入高位震荡洗盘期，持续时间 2-4 周。建议 Core 仓位持有不变，但不再新增 Tactical 仓位。下周重点观察 F1 是否回升至 40 以上，以及成交量是否回到 20 日均量上方。
+        </div>
+        <div class="note-tags">
+          <span class="tag tag-purple">#NVDA</span>
+          <span class="tag tag-blue">#五因子</span>
+          <span class="tag tag-green">#AI算力</span>
+          <span class="tag tag-yellow">#资金面</span>
+        </div>
+        <div class="note-actions">
+          <span class="note-action" onclick="this.classList.toggle('active')"><i data-lucide="thumbs-up" style="width:16px;height:16px;"></i> 128</span>
+          <span class="note-action" onclick="toggleComments(this)"><i data-lucide="message-square" style="width:16px;height:16px;"></i> 23</span>
+          <span class="note-action"><i data-lucide="bookmark" style="width:16px;height:16px;"></i> 收藏</span>
+          <span class="note-action"><i data-lucide="share-2" style="width:16px;height:16px;"></i> 分享</span>
+        </div>
+        <div class="comment-section">
+          <div class="comment-item">
+            <div class="c-avatar">价</div>
+            <div>
+              <div class="c-text">F1 26分确实偏低，但从价值派角度看，NVDA 的 PEG 只有1.12，EPS增速 58% YoY，基本面支撑足够强。资金流出更像是获利了结，不是趋势反转。</div>
+              <div class="c-meta">价值坚守者 · 1小时前</div>
+            </div>
+          </div>
+          <div class="comment-item">
+            <div class="c-avatar">晶</div>
+            <div>
+              <div class="c-text">同意高位震荡的判断。从产业链角度，HBM 供需仍然紧张，AMAT 和 LRCX 的订单排到2027年Q1，NVDA 的产能瓶颈不在需求端。</div>
+              <div class="c-meta">晶圆厂老周 · 45分钟前</div>
+            </div>
+          </div>
+          <div class="comment-item">
+            <div class="c-avatar">投</div>
+            <div>
+              <div class="c-text">感谢分享！请问这个 F1<30 的历史统计样本量是多少？有没有具体的时间窗口数据？</div>
+              <div class="c-meta">投资小白 · 20分钟前</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input class="comment-input" placeholder="写下你的评论...">
+            <button class="btn-primary btn-sm">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note 2 -->
+      <div class="card animate-fade" style="margin-bottom:16px;">
+        <div class="note-author">
+          <div class="a-avatar">晶</div>
+          <div>
+            <div class="a-name">晶圆厂老周</div>
+            <div class="a-meta">5小时前</div>
+          </div>
+        </div>
+        <div class="note-title">半导体设备赛道：从产业链图谱看 AMAT 和 LRCX 的定价权</div>
+        <div class="note-summary">
+          今天更新了半导体设备产业链的深度分析。从知识图谱的因果传导链来看，先进制程扩产 → 设备需求激增 → 设备厂商定价权提升，这个传导链条在2024-2026年持续验证。AMAT 的 PVD/CVD 设备在 3nm 节点市占率超过70%，LRCX 的刻蚀设备在 GAA 晶体管时代不可替代。关键观察点：台积电 2026 年 CapEx 上调至 $42B（同比+18%），其中 70% 用于设备采购。按照设备交付周期 12-18 个月推算，2026 年 H2 到 2027 年 H1 将是设备订单高峰。建议关注 AMAT / LRCX / KLAC 的三季报指引。
+        </div>
+        <div class="note-tags">
+          <span class="tag tag-purple">#半导体</span>
+          <span class="tag tag-blue">#AMAT</span>
+          <span class="tag tag-green">#产业链</span>
+          <span class="tag tag-yellow">#设备</span>
+        </div>
+        <div class="note-actions">
+          <span class="note-action"><i data-lucide="thumbs-up" style="width:16px;height:16px;"></i> 96</span>
+          <span class="note-action" onclick="toggleComments(this)"><i data-lucide="message-square" style="width:16px;height:16px;"></i> 15</span>
+          <span class="note-action"><i data-lucide="bookmark" style="width:16px;height:16px;"></i> 收藏</span>
+          <span class="note-action"><i data-lucide="share-2" style="width:16px;height:16px;"></i> 分享</span>
+        </div>
+        <div class="comment-section">
+          <div class="comment-item">
+            <div class="c-avatar">量</div>
+            <div>
+              <div class="c-text">AMAT 的五因子评分也是 S4，F4=100 F5=100，和 NVDA 一样。但 F1 资金面 60 分，比 NVDA 好很多。</div>
+              <div class="c-meta">量化猎人 · 3小时前</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input class="comment-input" placeholder="写下你的评论...">
+            <button class="btn-primary btn-sm">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note 3 -->
+      <div class="card animate-fade" style="margin-bottom:16px;">
+        <div class="note-author">
+          <div class="a-avatar">价</div>
+          <div>
+            <div class="a-name">价值坚守者</div>
+            <div class="a-meta">昨天</div>
+          </div>
+        </div>
+        <div class="note-title">A 股高股息策略月度复盘：6月收益 +3.2%，跑赢沪深300 2.8%</div>
+        <div class="note-summary">
+          6 月高股息组合收益 +3.2%，同期沪深 300 +0.4%，超额收益 2.8%。组合核心逻辑：股息率>5% + 连续分红 5 年 + ROE>10% + 负债率<60%。本月贡献最大的是电力板块（长江电力+8.3%、中国核电+6.1%），拖累最大的是银行板块（招商银行-2.1%）。关键反思：银行板块受地产不良率担忧压制，虽然股息率高但资本增值空间有限。7 月计划将银行权重从 25% 降至 15%，增配电力和高速公路。同时加入港股高股息标的（中国移动 H、中海油 H）以分散 A 股单一市场风险。
+        </div>
+        <div class="note-tags">
+          <span class="tag tag-green">#高股息</span>
+          <span class="tag tag-blue">#A股</span>
+          <span class="tag tag-yellow">#月度复盘</span>
+          <span class="tag tag-gray">#价值投资</span>
+        </div>
+        <div class="note-actions">
+          <span class="note-action"><i data-lucide="thumbs-up" style="width:16px;height:16px;"></i> 87</span>
+          <span class="note-action" onclick="toggleComments(this)"><i data-lucide="message-square" style="width:16px;height:16px;"></i> 18</span>
+          <span class="note-action"><i data-lucide="bookmark" style="width:16px;height:16px;"></i> 收藏</span>
+          <span class="note-action"><i data-lucide="share-2" style="width:16px;height:16px;"></i> 分享</span>
+        </div>
+        <div class="comment-section">
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input class="comment-input" placeholder="写下你的评论...">
+            <button class="btn-primary btn-sm">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note 4 -->
+      <div class="card animate-fade" style="margin-bottom:16px;">
+        <div class="note-author">
+          <div class="a-avatar" style="background:linear-gradient(135deg,#FF9500,#FF3B30);">链</div>
+          <div>
+            <div class="a-name">链上观察者</div>
+            <div class="a-meta">2天前</div>
+          </div>
+        </div>
+        <div class="note-title">BTC 减半周期回溯：第四次减半后的第 14 个月，历史会重复吗？</div>
+        <div class="note-summary">
+          2024 年 4 月 BTC 完成第四次减半，当前处于减半后第 14 个月。历史规律：前三次减半后的 12-18 个月是主升浪期。但本次周期有显著不同：① ETF 通过后机构资金成为主导力量，现货 ETF 持仓已超 100 万枚；② 减半后矿工成本线约 $52K，当前价格 $108K，利润率仍高；③ MVRV 比率 2.3，历史顶部通常在 3.5-4.0 区间。关键风险：美联储降息节奏、Mt.Gox 赔付抛压、美国大选后的监管方向。我的判断：短期震荡（$95K-$115K），中期仍看好至 $150K，但需密切关注 ETF 资金流入趋势。如果连续两周 ETF 净流出，需要重新评估。
+        </div>
+        <div class="note-tags">
+          <span class="tag tag-yellow">#BTC</span>
+          <span class="tag tag-purple">#加密货币</span>
+          <span class="tag tag-blue">#周期分析</span>
+        </div>
+        <div class="note-actions">
+          <span class="note-action"><i data-lucide="thumbs-up" style="width:16px;height:16px;"></i> 156</span>
+          <span class="note-action" onclick="toggleComments(this)"><i data-lucide="message-square" style="width:16px;height:16px;"></i> 34</span>
+          <span class="note-action"><i data-lucide="bookmark" style="width:16px;height:16px;"></i> 收藏</span>
+          <span class="note-action"><i data-lucide="share-2" style="width:16px;height:16px;"></i> 分享</span>
+        </div>
+        <div class="comment-section">
+          <div class="comment-item">
+            <div class="c-avatar">量</div>
+            <div>
+              <div class="c-text">MVRV 2.3 确实不算极端。但 ETF 资金流入最近两周明显放缓，周五净流出 $180M，需要警惕。</div>
+              <div class="c-meta">量化猎人 · 1天前</div>
+            </div>
+          </div>
+          <div class="comment-item">
+            <div class="c-avatar">避</div>
+            <div>
+              <div class="c-text">作为避险资产配置，我保持 5% 的 BTC 仓位。超过 $120K 会考虑部分止盈，跌破 $90K 会加仓。</div>
+              <div class="c-meta">避险大师 · 1天前</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input class="comment-input" placeholder="写下你的评论...">
+            <button class="btn-primary btn-sm">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note 5 -->
+      <div class="card animate-fade" style="margin-bottom:16px;">
+        <div class="note-author">
+          <div class="a-avatar" style="background:linear-gradient(135deg,#34C759,#5AC8FA);">港</div>
+          <div>
+            <div class="a-name">港韭翻身</div>
+            <div class="a-meta">3天前</div>
+          </div>
+        </div>
+        <div class="note-title">港股高股息轮动策略：7月调仓清单 + 标的替换逻辑</div>
+        <div class="note-summary">
+          7 月调仓完成，本次替换 3 只标的。调出：碧桂园服务（股息率虚高，现金流恶化）、平安好医生（持续亏损，分红不可持续）、新世界发展（地产风险敞口过大）。调入：中国移动 H（股息率 6.8%，5G 用户增长稳健）、中海油 H（股息率 7.2%，油价中枢上移受益）、港灯（电力公用事业，防御属性）。调仓后组合股息率 6.5%，PE 8.2x，PB 0.85x。历史回测：该策略在 2022-2024 年港熊期间年化收益 +4.2%，最大回撤 -11.3%，显著跑赢恒指。风险提示：港币汇率波动、内地政策不确定性、港股流动性风险。
+        </div>
+        <div class="note-tags">
+          <span class="tag tag-blue">#港股</span>
+          <span class="tag tag-green">#高股息</span>
+          <span class="tag tag-yellow">#调仓</span>
+        </div>
+        <div class="note-actions">
+          <span class="note-action"><i data-lucide="thumbs-up" style="width:16px;height:16px;"></i> 72</span>
+          <span class="note-action" onclick="toggleComments(this)"><i data-lucide="message-square" style="width:16px;height:16px;"></i> 12</span>
+          <span class="note-action"><i data-lucide="bookmark" style="width:16px;height:16px;"></i> 收藏</span>
+          <span class="note-action"><i data-lucide="share-2" style="width:16px;height:16px;"></i> 分享</span>
+        </div>
+        <div class="comment-section">
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input class="comment-input" placeholder="写下你的评论...">
+            <button class="btn-primary btn-sm">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div style="text-align:center; padding:16px;">
+        <button class="btn-outline">加载更多笔记</button>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-col">
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:16px; font-weight:600; color:var(--navy); margin-bottom:4px;">推荐关注</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">基于研究质量和互动数据推荐</div>
+
+        <div class="rec-author">
+          <div class="r-avatar">量</div>
+          <div class="r-info">
+            <div class="r-name">量化猎人</div>
+            <div class="r-desc">五因子策略 · 量化选股</div>
+          </div>
+          <div class="r-score">9.2</div>
+        </div>
+        <div class="rec-author">
+          <div class="r-avatar">价</div>
+          <div class="r-info">
+            <div class="r-name">价值坚守者</div>
+            <div class="r-desc">格雷厄姆体系 · 高股息</div>
+          </div>
+          <div class="r-score">9.0</div>
+        </div>
+        <div class="rec-author">
+          <div class="r-avatar">晶</div>
+          <div class="r-info">
+            <div class="r-name">晶圆厂老周</div>
+            <div class="r-desc">半导体产业链 · 设备</div>
+          </div>
+          <div class="r-score">8.8</div>
+        </div>
+        <div class="rec-author">
+          <div class="r-avatar" style="background:linear-gradient(135deg,#FF9500,#FF3B30);">链</div>
+          <div class="r-info">
+            <div class="r-name">链上观察者</div>
+            <div class="r-desc">BTC周期 · 链上数据</div>
+          </div>
+          <div class="r-score">8.7</div>
+        </div>
+        <div class="rec-author">
+          <div class="r-avatar" style="background:linear-gradient(135deg,#34C759,#5AC8FA);">港</div>
+          <div class="r-info">
+            <div class="r-name">港韭翻身</div>
+            <div class="r-desc">港股高股息 · 轮动</div>
+          </div>
+          <div class="r-score">8.5</div>
+        </div>
+        <div class="rec-author">
+          <div class="r-avatar" style="background:linear-gradient(135deg,#5856D6,#FF2D55);">避</div>
+          <div class="r-info">
+            <div class="r-name">避险大师</div>
+            <div class="r-desc">资产配置 · 风险管理</div>
+          </div>
+          <div class="r-score">8.3</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-size:16px; font-weight:600; color:var(--navy); margin-bottom:12px;">本周笔记排行榜</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:20px; text-align:center; font-size:12px; font-weight:700; color:var(--accent);">1</div>
+            <div style="flex:1; font-size:14px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">BTC 减半周期回溯分析</div>
+            <div style="font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:2px;">156 <i data-lucide="thumbs-up" style="width:14px;height:14px;"></i></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:20px; text-align:center; font-size:12px; font-weight:700; color:var(--text-secondary);">2</div>
+            <div style="flex:1; font-size:14px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">NVDA 五因子雷达图更新</div>
+            <div style="font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:2px;">128 <i data-lucide="thumbs-up" style="width:14px;height:14px;"></i></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:20px; text-align:center; font-size:12px; font-weight:700; color:var(--accent);">3</div>
+            <div style="flex:1; font-size:14px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">半导体设备赛道深度分析</div>
+            <div style="font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:2px;">96 <i data-lucide="thumbs-up" style="width:14px;height:14px;"></i></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:20px; text-align:center; font-size:12px; font-weight:700; color:var(--text-secondary);">4</div>
+            <div style="flex:1; font-size:14px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">A股高股息策略月度复盘</div>
+            <div style="font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:2px;">87 <i data-lucide="thumbs-up" style="width:14px;height:14px;"></i></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:20px; text-align:center; font-size:12px; font-weight:700; color:var(--text-secondary);">5</div>
+            <div style="flex:1; font-size:14px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">港股高股息轮动策略</div>
+            <div style="font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:2px;">72 <i data-lucide="thumbs-up" style="width:14px;height:14px;"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:16px; font-weight:600; color:var(--navy); margin-bottom:12px;">我的笔记数据</div>
+        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px;">
+          <div style="text-align:center; padding:10px; background:#F5F5F7; border-radius:12px;">
+            <div style="font-size:20px; font-weight:700; color:var(--accent);" class="stat-value">12</div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">发布笔记</div>
+          </div>
+          <div style="text-align:center; padding:10px; background:#F5F5F7; border-radius:12px;">
+            <div style="font-size:20px; font-weight:700; color:var(--accent);" class="stat-value">1.2K</div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">获赞总数</div>
+          </div>
+          <div style="text-align:center; padding:10px; background:#F5F5F7; border-radius:12px;">
+            <div style="font-size:20px; font-weight:700; color:var(--accent);" class="stat-value">89</div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">被收藏</div>
+          </div>
+          <div style="text-align:center; padding:10px; background:#F5F5F7; border-radius:12px;">
+            <div style="font-size:20px; font-weight:700; color:var(--accent);" class="stat-value">45</div>
+            <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">粉丝</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function toggleComments(el) {
+  const card = el.closest('.card');
+  const section = card.querySelector('.comment-section');
+  section.classList.toggle('open');
+}
+
+// Follow buttons
+document.querySelectorAll('.follow-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (this.textContent === '关注') {
+      this.textContent = '已关注';
+      this.classList.add('following');
+    } else if (this.textContent === '已关注') {
+      this.textContent = '关注';
+      this.classList.remove('following');
+    }
+  });
+});
+
+// Initialize Lucide icons
+if (typeof lucide !== 'undefined') {
+  lucide.createIcons();
+}
+
+// iframe embed detection
+</script>
+
+</body>
+</html>
