@@ -63,7 +63,7 @@ body {
 .content { padding: 20px 24px; max-width: 1440px; margin: 0 auto; width: 100%; }
 /* Tab Navigation */
 .tab-nav { display: flex; gap: 0; background: #fff; border-bottom: 1px solid var(--border); margin-bottom: 16px; border-radius: 12px 12px 0 0; padding: 0 16px; }
-.tab-btn { padding: 12px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.tab-btn { padding: 12px 24px; font-size: 14px; font-weight: 600; color: var(--text-secondary); background: none; border: none; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
 .tab-btn:hover { color: var(--text-primary); }
 .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 .tab-panel { display: none; animation: fadeIn 0.3s ease; }
@@ -261,6 +261,7 @@ body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !import
   #daily-brief h2 { font-size: 18px !important; }
   #daily-brief h3 { font-size: 16px !important; }
 }
+
 </style>
 </head>
 <body>
@@ -1663,5 +1664,37 @@ lucide.createIcons();
   }
 })();
 </script>
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  }
+})();
+</script>
+
 </body>
 </html>

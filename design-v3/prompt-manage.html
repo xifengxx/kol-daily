@@ -102,6 +102,7 @@ body.in-iframe .topbar,
 body.in-iframe .unified-topbar { display: none !important; }
 body.in-iframe .main,
 body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important; flex: 1 !important; overflow-y: auto !important; }
+
 </style>
 </head>
 <body>
@@ -205,5 +206,37 @@ body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important
 <p>多语言Prompt支持：核心Skill已支持中文、英文双语Prompt，根据用户设置自动切换。中文Prompt针对A股市场优化，英文Prompt针对美股市场优化。未来计划支持日文、韩文Prompt服务亚太市场投资者。</p>
 <p>Prompt安全审查：所有Prompt在发布前经过安全审查，防止Prompt注入攻击、数据泄露风险、偏见输出。审查流程包括自动化扫描（敏感词/个人信息/版权内容）和人工抽检（10%样本）。</p>
 </div>
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  }
+})();
+</script>
+
 </body>
 </html>

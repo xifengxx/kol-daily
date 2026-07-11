@@ -65,6 +65,7 @@ body {
 .stat-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
 .ai-suggestion { background: #F0F7FF; border: 1px solid rgba(0,113,227,0.2); border-radius: 12px; padding: 16px; }
 
+
 </style>
 <style>
 /* ====== IFRAME EMBED MODE ====== */
@@ -430,6 +431,38 @@ setTimeout(() => {
 if (typeof lucide !== 'undefined') {
   lucide.createIcons();
 }
+</script>
+
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  }
+})();
 </script>
 
 </body>

@@ -3,75 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>题材指数 — 金融投资AI助手</title>
+<title>题材指数 — 5Factor AI</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
+<script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; background-color: #F5F5F7; color: #1D1D1F; }
-  .card { background: rgba(255,255,255,0.8); border-radius: 12px; border: 1px solid rgba(120,120,128,0.16); padding: 24px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
-  .card-hover:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-2px); transition: all 0.3s ease; }
-  .tab-btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #86868B; cursor: pointer; transition: all 0.2s; border: none; background: transparent; white-space: nowrap; }
-  .tab-btn.active { background: #0071E3; color: #FFFFFF; }
-  .tab-btn:hover:not(.active) { background: rgba(120,120,128,0.24); color: #1D1D1F; }
-  .score-bar { height: 6px; border-radius: 3px; background: rgba(120,120,128,0.2); overflow: hidden; }
-  .score-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
-  .badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
-  .badge-primary { background: #0071E3; color: #FFFFFF; }
-  .badge-warning { background: #FF9500; color: #FFFFFF; }
-  .badge-success { background: #34C759; color: #FFFFFF; }
-  .badge-danger { background: #FF3B30; color: #FFFFFF; }
-  .badge-neutral { background: rgba(120,120,128,0.2); color: #FFFFFF; }
-  .table-header { background: rgba(120,120,128,0.12); color: #86868B; font-size: 12px; font-weight: 500; padding: 12px 16px; text-align: left; }
-  .table-row { padding: 14px 16px; border-bottom: 1px solid rgba(120,120,128,0.16); font-size: 14px; }
-  .table-row:hover { background: #F5F5F7; }
-  .up { color: #FF3B30; }
-  .down { color: #34C759; }
-  .news-item { padding: 16px 0; border-bottom: 1px solid rgba(120,120,128,0.16); }
-  .news-item:last-child { border-bottom: none; }
-  .hidden { display: none !important; }
-  @media (max-width: 640px) { .card { padding: 16px; } .tab-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+:root {
+  --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA;
+  --text: #1D1D1F; --text2: #86868B; --accent: #0071E3; --navy: #1D1D1F;
+  --up: #FF3B30; --down: #34C759;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+}
+html.iframe-embed body { padding: 0; }
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+/* Header */
+.page-header { margin-bottom: 24px; }
+.page-header h1 { font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; }
+.page-header p { font-size: 14px; color: var(--text2); margin-top: 4px; }
+
+/* Stat row */
+.stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.stat-card .stat-value { font-size: 24px; font-weight: 700; }
+.stat-card .stat-label { font-size: 11px; color: var(--text2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.03em; }
+
+/* Search + filter */
+.filter-bar { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+.filter-bar input { flex: 1; max-width: 320px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; background: var(--card); outline: none; font-family: inherit; }
+.filter-bar input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.12); }
+.filter-bar input::placeholder { color: #C7C7CC; }
+.filter-chip { padding: 6px 14px; border-radius: 16px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--text2); transition: all 0.15s; white-space: nowrap; }
+.filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Theme grid */
+.theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.theme-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.25s ease; }
+.theme-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-2px); border-color: var(--accent); }
+.theme-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.theme-card-name { font-size: 16px; font-weight: 600; color: var(--text); }
+.theme-card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.theme-card-meta { display: flex; gap: 16px; font-size: 11px; color: var(--text2); margin-bottom: 10px; }
+.theme-card-meta span { display: flex; align-items: center; gap: 4px; }
+.theme-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 500; }
+.tag-blue { background: #0071E3; color: #FFFFFF; }
+.tag-green { background: #34C759; color: #FFFFFF; }
+.tag-red { background: #FF3B30; color: #FFFFFF; }
+.tag-orange { background: #FF9500; color: #FFFFFF; }
+.tag-purple { background: #AF52DE; color: #FFFFFF; }
+.tag-gray { background: #F2F2F7; color: #1D1D1F; }
+.heat-bars { display: flex; gap: 2px; align-items: flex-end; height: 16px; }
+.heat-bar { width: 3px; border-radius: 1px; background: var(--border); }
+.heat-bar.on { background: var(--accent); }
+
+/* Detail view */
+.detail-view { display: none; }
+.detail-view.active { display: block; }
+.index-view { display: block; }
+.index-view.hidden { display: none; }
+.back-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: var(--accent); cursor: pointer; margin-bottom: 16px; font-weight: 500; }
+.back-link:hover { text-decoration: underline; }
+
+/* === Original theme detail styles === */
+body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; background-color: #F5F5F7; color: #1D1D1F;}
+.card { background: rgba(255,255,255,0.8); border-radius: 12px; border: 1px solid rgba(120,120,128,0.16); padding: 24px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);}
+.card-hover:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); transform: translateY(-2px); transition: all 0.3s ease;}
+.tab-btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #86868B; cursor: pointer; transition: all 0.2s; border: none; background: transparent; white-space: nowrap;}
+.tab-btn.active { background: #0071E3; color: #FFFFFF;}
+.tab-btn:hover:not(.active) { background: rgba(120,120,128,0.24); color: #1D1D1F;}
+.score-bar { height: 6px; border-radius: 3px; background: rgba(120,120,128,0.2); overflow: hidden;}
+.score-bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease;}
+.badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500;}
+.badge-primary { background: #0071E3; color: #FFFFFF;}
+.badge-warning { background: #FF9500; color: #FFFFFF;}
+.badge-success { background: #34C759; color: #FFFFFF;}
+.badge-danger { background: #FF3B30; color: #FFFFFF;}
+.badge-neutral { background: rgba(120,120,128,0.2); color: #FFFFFF;}
+.table-header { background: rgba(120,120,128,0.12); color: #86868B; font-size: 12px; font-weight: 500; padding: 12px 16px; text-align: left;}
+.table-row { padding: 14px 16px; border-bottom: 1px solid rgba(120,120,128,0.16); font-size: 14px;}
+.table-row:hover { background: #F5F5F7;}
+.up { color: #FF3B30;}
+.down { color: #34C759;}
+.news-item { padding: 16px 0; border-bottom: 1px solid rgba(120,120,128,0.16);}
+.news-item:last-child { border-bottom: none;}
+.hidden { display: none !important;}
+@media (max-width: 640px) { .card { padding: 16px;}
+.tab-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch;}
 </style>
 </head>
-<body class="min-h-screen">
-<!-- Breadcrumb -->
-<div style="background:#F5F5F7; border-bottom:1px solid rgba(120,120,128,0.16);">
-  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
-    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
-    <span style="color:#C7C7CC;">/</span>
-    <span style="color:#1D1D1F; font-weight:500;">题材指数</span>
+<body>
+<div class="container">
+
+<!-- ====== INDEX VIEW ====== -->
+<div class="index-view" id="indexView">
+  <div class="page-header">
+    <h1>题材指数</h1>
+    <p>覆盖 AI、半导体、新能源、机器人、低空经济等领域，实时追踪 20+ 核心题材热度与趋势</p>
   </div>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--accent);">24</div>
+      <div class="stat-label">追踪题材</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--up);">18</div>
+      <div class="stat-label">今日上涨</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" style="color:var(--accent);">+3.24%</div>
+      <div class="stat-label">平均涨幅</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">328</div>
+      <div class="stat-label">关联标的</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" placeholder="搜索题材..." id="themeSearch" oninput="filterThemes()">
+    <span class="filter-chip active" data-cat="all" onclick="filterCategory(this)">全部</span>
+    <span class="filter-chip" data-cat="ai" onclick="filterCategory(this)">AI & 半导体</span>
+    <span class="filter-chip" data-cat="energy" onclick="filterCategory(this)">新能源</span>
+    <span class="filter-chip" data-cat="future" onclick="filterCategory(this)">未来产业</span>
+    <span class="filter-chip" data-cat="macro" onclick="filterCategory(this)">宏观主题</span>
+  </div>
+
+  <div class="theme-grid" id="themeGrid"></div>
 </div>
 
-
-<!-- 顶部导航栏 -->
-<nav class="fixed top-0 left-0 right-0 bg-[rgba(120,120,128,0.08)] border-b border-[rgba(120,120,128,0.16)] z-50" style="height:56px">
-  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 bg-[#0071E3] rounded-lg flex items-center justify-center">
-        <i data-lucide="bar-chart-3" class="w-5 h-5 text-[#1D1D1F]"></i>
-      </div>
-      <span class="font-semibold text-[#1D1D1F]" style="font-size:16px">AI智能投研助手</span>
-    </div>
-    <div class="hidden md:flex flex-1 max-w-md mx-8">
-      <div class="relative w-full">
-        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B]"></i>
-        <input type="text" placeholder="搜索股票、概念..." class="w-full h-10 pl-10 pr-4 rounded-lg bg-[rgba(120,120,128,0.08)] border border-transparent focus:bg-white focus:border-[#0071E3] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,113,227,0.15)] text-sm transition-all">
-      </div>
-    </div>
-    <div class="flex items-center gap-4">
-      <span class="text-sm text-[#86868B] hidden sm:block">2025-07-10</span>
-      <div class="w-8 h-8 rounded-full bg-[rgba(120,120,128,0.12)] flex items-center justify-center cursor-pointer hover:bg-[rgba(120,120,128,0.12)] transition-colors">
-        <svg class="w-4 h-4 text-[#86868B]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-      </div>
-      <div class="w-8 h-8 rounded-full bg-[#0071E3] flex items-center justify-center text-white text-xs font-medium cursor-pointer" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;">A</div>
-    </div>
-  </div>
-</nav>
-
-<!-- 主内容区 -->
-<main class="pt-[56px]">
-  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- ====== DETAIL VIEW ====== -->
+<div class="detail-view" id="detailView">
+  <div class="back-link" onclick="showIndex()"><i data-lucide="arrow-left" style="width:16px;height:16px;"></i> 返回题材指数列表</div>
+  <div id="detailContent"></div>
+<div id="themeDetailAI" style="display:none;"><div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- 题材头部 -->
     <div class="card mb-6">
@@ -507,9 +578,138 @@
       </div>
     </div>
 
-  </div>
-</main>
+  </div></div>
+</div>
 
+</div>
+
+<script>
+var themes = [
+  { id:'ai-computing', name:'AI算力', cat:'ai', desc:'GPU/HBM/光模块/CoWoS/AI服务器等核心赛道，受益于全球AI Capex扩张周期', heat:5, change:+4.58, stocks:42, tags:['高热度','AI','算力'] },
+  { id:'semiconductor', name:'半导体', cat:'ai', desc:'晶圆代工/设备/材料/封测全产业链，国产替代+全球周期复苏双驱动', heat:4, change:+2.12, stocks:56, tags:['国产替代','周期'] },
+  { id:'hbm', name:'HBM高带宽存储', cat:'ai', desc:'AI芯片核心瓶颈，HBM3E→HBM4技术迭代，SK海力士/三星/美光三强争霸', heat:5, change:+5.87, stocks:12, tags:['高热度','存储','AI'] },
+  { id:'cpo', name:'CPO共封装光学', cat:'ai', desc:'光模块下一代技术路线，硅光子+先进封装，解决AI集群带宽瓶颈', heat:4, change:+3.21, stocks:18, tags:['光通信','先进封装'] },
+  { id:'cowos', name:'CoWoS先进封装', cat:'ai', desc:'台积电独家技术，AI芯片封装核心环节，产能持续紧张至2027', heat:5, change:+6.15, stocks:10, tags:['高热度','封测'] },
+  { id:'nev', name:'新能源车', cat:'energy', desc:'动力电池/电机电控/整车/充电桩，渗透率突破40%，智能驾驶加速', heat:3, change:+1.87, stocks:65, tags:['电动化','智能化'] },
+  { id:'pv-storage', name:'光伏储能', cat:'energy', desc:'硅料/电池片/组件/逆变器/储能系统，产能出清后盈利修复预期', heat:2, change:-0.92, stocks:48, tags:['产能出清','周期底'] },
+  { id:'solid-battery', name:'固态电池', cat:'energy', desc:'下一代电池技术，2027年量产元年，能量密度突破500Wh/kg', heat:4, change:+2.45, stocks:14, tags:['新技术','量产'] },
+  { id:'robot', name:'人形机器人', cat:'future', desc:'特斯拉Optimus量产启动，减速器/丝杠/传感器/电机全产业链受益', heat:5, change:+5.12, stocks:22, tags:['高热度','Tesla','量产'] },
+  { id:'evtol', name:'低空经济', cat:'future', desc:'eVTOL商业运营试点获批，空管系统/起降场/飞行器主机三条主线', heat:4, change:+3.89, stocks:16, tags:['政策催化','试点'] },
+  { id:'quantum', name:'量子计算', cat:'future', desc:'超导/离子阱/光量子多路线并进，2026年量子纠错里程碑突破', heat:3, change:+1.56, stocks:8, tags:['前沿科技','早期'] },
+  { id:'autonomous', name:'自动驾驶', cat:'future', desc:'FSD V14国内获批路测，L3责任认定法规完善，Robotaxi加速落地', heat:4, change:+2.78, stocks:20, tags:['政策','落地'] },
+  { id:'brain-computer', name:'脑机接口', cat:'future', desc:'Neuralink人体试验扩展，中国脑计划2026阶段成果发布', heat:2, change:-0.34, stocks:6, tags:['早期','前沿'] },
+  { id:'digital-economy', name:'数据要素', cat:'macro', desc:'数据资产入表/数据交易所/隐私计算，数字经济基础设施加速建设', heat:3, change:+2.34, stocks:19, tags:['政策','基础设施'] },
+  { id:'carbon-neutral', name:'碳中和', cat:'macro', desc:'碳交易市场扩容/CCUS技术/绿色金融，2026碳关税全面实施', heat:2, change:+0.78, stocks:25, tags:['政策','长期'] },
+  { id:'southeast-asia', name:'东南亚出海', cat:'macro', desc:'产业链转移/跨境电商/基建投资，中国制造东南亚布局加速', heat:3, change:+1.45, stocks:15, tags:['出海','地缘'] },
+  { id:'gold', name:'黄金避险', cat:'macro', desc:'地缘冲突/去美元化/央行购金，金价创历史新高驱动黄金股', heat:4, change:+3.62, stocks:12, tags:['避险','大宗'] },
+  { id:'spatial-computing', name:'空间计算', cat:'future', desc:'Vision Pro 2量产启动，Micro-OLED/Pancake光学/空间音频产业链', heat:3, change:+1.89, stocks:10, tags:['Apple','XR'] },
+  { id:'chiplet', name:'Chiplet异构集成', cat:'ai', desc:'UCIe标准推动Chiplet生态成熟，先进封装+EDA+IP三环受益', heat:4, change:+3.78, stocks:9, tags:['先进封装','标准'] },
+  { id:'edge-ai', name:'边缘AI', cat:'ai', desc:'端侧推理芯片/智能终端/工业视觉，AI从云端走向端侧部署', heat:3, change:+2.15, stocks:14, tags:['端侧','推理'] },
+  { id:'industrial-mother', name:'工业母机', cat:'macro', desc:'高端数控机床国产替代，五轴联动/精密主轴/数控系统突破', heat:2, change:+0.56, stocks:11, tags:['国产替代','制造'] },
+  { id:'biotech', name:'创新药', cat:'macro', desc:'ADC/双抗/CAR-T/基因治疗临床进展，License-out交易创历史新高', heat:4, change:+2.92, stocks:22, tags:['出海','临床'] },
+  { id:'satellite', name:'卫星互联网', cat:'future', desc:'低轨星座组网加速，6G标准/手机直连卫星/时空信息基建', heat:3, change:+1.68, stocks:9, tags:['太空','6G'] },
+  { id:'hydrogen', name:'氢能', cat:'energy', desc:'绿氢成本逼近灰氢，燃料电池重卡/氢冶金/管道掺氢示范项目启动', heat:2, change:-1.23, stocks:8, tags:['减碳','早期'] },
+];
+
+function renderThemes(filtered) {
+  var grid = document.getElementById('themeGrid');
+  var list = filtered || themes;
+  grid.innerHTML = list.map(function(t) {
+    var heatBars = '';
+    for (var i=0; i<5; i++) heatBars += '<div class="heat-bar'+(i<t.heat?' on':'')+'"></div>';
+    var changeClass = t.change >= 0 ? 'up' : 'down';
+    return '<div class="theme-card" data-id="'+t.id+'" onclick="showDetail(\''+t.id+'\')">'+
+      '<div class="theme-card-header">'+
+        '<div class="theme-card-name">'+t.name+'</div>'+
+        '<div class="heat-bars">'+heatBars+'</div>'+
+      '</div>'+
+      '<div class="theme-card-desc">'+t.desc+'</div>'+
+      '<div class="theme-card-meta">'+
+        '<span>📈 <b class="'+changeClass+'">'+(t.change>0?'+':'')+t.change+'%</b></span>'+
+        '<span>🏢 '+t.stocks+'只标的</span>'+
+      '</div>'+
+      '<div class="theme-card-tags">'+t.tags.map(function(tg){ var cls=tg.indexOf('高')>=0?'tag-red':tg.indexOf('AI')>=0||tg.indexOf('算力')>=0?'tag-blue':tg.indexOf('政策')>=0||tg.indexOf('国产')>=0?'tag-purple':tg.indexOf('早期')>=0?'tag-gray':tg.indexOf('周期')>=0||tg.indexOf('出清')>=0?'tag-orange':'tag-green'; return '<span class="tag '+cls+'">'+tg+'</span>'; }).join('')+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function filterThemes() {
+  var q = document.getElementById('themeSearch').value.toLowerCase();
+  var active = document.querySelector('.filter-chip.active');
+  var cat = active ? active.dataset.cat : 'all';
+  var filtered = themes.filter(function(t) {
+    var matchCat = cat === 'all' || t.cat === cat;
+    var matchQ = !q || t.name.includes(q) || t.desc.includes(q) || t.tags.some(function(tg){return tg.includes(q);});
+    return matchCat && matchQ;
+  });
+  renderThemes(filtered);
+}
+
+function filterCategory(chip) {
+  document.querySelectorAll('.filter-chip').forEach(function(c){c.classList.remove('active');});
+  chip.classList.add('active');
+  filterThemes();
+}
+
+function showDetail(id) {
+  var theme = themes.find(function(t){return t.id===id;});
+  if (!theme) return;
+  document.getElementById('indexView').classList.add('hidden');
+  document.getElementById('detailView').classList.add('active');
+  var content = document.getElementById('detailContent');
+  
+  content.innerHTML = '<iframe src="theme-detail-' + id + '.html" style="width:100%;height:100vh;border:none;" onload="this.style.height=this.contentWindow.document.body.scrollHeight+\'px\'"></iframe>';
+  window.scrollTo(0,0);
+  return;
+  
+  // Generate mock detail for other themes using same structure
+  var changeClass = theme.change >= 0 ? 'up' : 'down';
+  var changeSign = theme.change >= 0 ? '+' : '';
+  var mockPrice = (1000 + Math.random() * 3000).toFixed(0);
+  var mockVolume = (200 + Math.random() * 600).toFixed(0);
+  var stocksList = ['标的A', '标的B', '标的C', '标的D', '标的E'];
+  
+  content.innerHTML = '<div class="max-w-[1200px] mx-auto">'+
+    '<div class="card mb-6">'+
+      '<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">'+
+        '<div>'+
+          '<div class="flex items-center gap-3 mb-2">'+
+            '<h1 class="font-bold text-[#1D1D1F]" style="font-size:28px;line-height:1.2;letter-spacing:-0.02em">'+theme.name+'</h1>'+
+            '<span class="badge '+(theme.heat>=4?'badge-warning':'badge-primary')+'">'+(theme.heat>=5?'高热度':theme.heat>=4?'活跃':'平稳')+'</span>'+
+          '</div>'+
+          '<p class="text-[#86868B] text-sm">'+theme.desc+'</p>'+
+        '</div>'+
+        '<div class="flex items-center gap-6 text-right">'+
+          '<div><div class="text-[#86868B] text-xs mb-1">题材指数</div><div class="font-semibold text-[#1D1D1F]" style="font-size:32px;line-height:1.1;letter-spacing:-0.02em">'+mockPrice+'.00</div></div>'+
+          '<div><div class="text-[#86868B] text-xs mb-1">涨跌幅</div><div class="font-semibold '+changeClass+'" style="font-size:20px;line-height:1.2">'+changeSign+theme.change.toFixed(2)+'%</div></div>'+
+          '<div><div class="text-[#86868B] text-xs mb-1">成交额</div><div class="font-semibold text-[#1D1D1F]" style="font-size:20px;line-height:1.2">'+mockVolume+'亿</div></div>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="flex gap-2 mb-6 overflow-x-auto pb-2">'+
+      '<button class="tab-btn active" onclick="switchThemeTab(this,\'overview\')">概览</button>'+
+      '<button class="tab-btn" onclick="switchThemeTab(this,\'stocks\')">核心标的</button>'+
+      '<button class="tab-btn" onclick="switchThemeTab(this,\'news\')">最新动态</button>'+
+    '</div>'+
+    '<div class="stat-row" style="grid-template-columns:repeat(4,1fr);">'+
+      '<div class="stat-card"><div class="stat-label">关联标的</div><div class="stat-value" style="color:var(--accent);">'+theme.stocks+'</div></div>'+
+      '<div class="stat-card"><div class="stat-label">今日涨跌</div><div class="stat-value '+changeClass+'">'+changeSign+theme.change.toFixed(2)+'%</div></div>'+
+      '<div class="stat-card"><div class="stat-label">热度等级</div><div class="stat-value" style="color:var(--accent);">'+theme.heat+'/5</div></div>'+
+      '<div class="stat-card"><div class="stat-label">5日涨幅</div><div class="stat-value '+changeClass+'">'+(changeSign+(theme.change+Math.random()*2).toFixed(2))+'%</div></div>'+
+    '</div>'+
+    '<div class="card"><p style="text-align:center;color:var(--text2);padding:40px;">'+theme.name+' 详细分析模块（K线/技术面/资金面）正在开发中<br>当前展示概览数据，完整功能将陆续上线</p></div>'+
+  '</div>';
+  window.scrollTo(0,0);
+}
+
+function showIndex() {
+  document.getElementById('indexView').classList.remove('hidden');
+  document.getElementById('detailView').classList.remove('active');
+}
+
+// Init
+renderThemes();
+</script>
 <script>
 // Tab切换
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -667,68 +867,6 @@ window.addEventListener('resize', () => {
   if (stockInflowChart) stockInflowChart.resize();
 });
 </script>
-<!-- Quick Links -->
-<div style="background:#F5F5F7; padding:32px 0; border-top:1px solid rgba(120,120,128,0.16);">
-  <div class="max-w-[1200px] mx-auto px-6">
-    <h3 style="font-size:16px; font-weight:600; color:#1D1D1F; margin-bottom:16px;">相关模块</h3>
-    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:12px;">
-      <a href="knowledge_graph.html" style="display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.8); border:1px solid rgba(120,120,128,0.16); border-radius:12px; backdrop-filter: blur(20px); padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(120,120,128,0.16)'">
-        <span style="font-size:18px; color:#0071E3;">◫</span>
-        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">知识图谱</span>
-        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
-      </a>
-      <a href="stock_diagnosis.html" style="display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.8); border:1px solid rgba(120,120,128,0.16); border-radius:12px; backdrop-filter: blur(20px); padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(120,120,128,0.16)'">
-        <span style="font-size:18px; color:#0071E3;">◎</span>
-        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">个股诊断</span>
-        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
-      </a>
-      <a href="cross_market.html" style="display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.8); border:1px solid rgba(120,120,128,0.16); border-radius:12px; backdrop-filter: blur(20px); padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(120,120,128,0.16)'">
-        <span style="font-size:18px; color:#0071E3;">⬡</span>
-        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">跨市场助手</span>
-        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
-      </a>
-      <a href="dashboard.html" style="display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.8); border:1px solid rgba(120,120,128,0.16); border-radius:12px; backdrop-filter: blur(20px); padding:14px 18px; text-decoration:none; transition:all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='#0071E3'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='rgba(120,120,128,0.16)'">
-        <span style="font-size:18px; color:#0071E3;">◈</span>
-        <span style="color:#1D1D1F; font-size:14px; font-weight:500;">首页</span>
-        <span style="margin-left:auto; color:#C7C7CC; font-size:18px;">›</span>
-      </a>
-    </div>
-  </div>
-</div>
-
-
-<!-- Iframe Detection: Auto-hide navigation when loaded in app.html -->
-<style>
-  body.in-iframe header,
-  body.in-iframe nav[role="navigation"],
-  body.in-iframe .sidebar,
-  body.in-iframe [class*="sidebar"],
-  body.in-iframe .breadcrumb-nav,
-  body.in-iframe [class*="breadcrumb"] { display: none !important; }
-  body.in-iframe main,
-  body.in-iframe .main-content,
-  body.in-iframe [class*="main-content"],
-  body.in-iframe #main-content { margin-left: 0 !important; margin-top: 0 !important; padding-top: 0 !important; }
-  body.in-iframe { padding: 0 !important; }
-</style>
-<script>
-(function(){
-  if (window.self !== window.top) {
-    document.body.classList.add('in-iframe');
-    // Hide common navigation elements by tag/class
-    var hideSelectors = ['header','nav','aside','[class*="sidebar"]','[class*="breadcrumb"]'];
-    hideSelectors.forEach(function(s){
-      document.querySelectorAll(s).forEach(function(el){
-        if (el && el.tagName !== 'IFRAME') el.style.display = 'none';
-      });
-    });
-    // Remove body margin/padding if any
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-  }
-})();
-</script>
-
 <script>if (typeof lucide !== 'undefined') { lucide.createIcons(); }</script>
 </body>
 </html>

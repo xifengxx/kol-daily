@@ -908,6 +908,53 @@ if (window.self !== window.top) document.body.classList.add('in-iframe');
     themeIds.forEach(t => echarts.getInstanceByDom(document.getElementById(t.id))?.resize());
   });
 </script>
-
+<script>
+function goTo(page, module, label) { window.parent.postMessage({action:'nav',page:page,module:module,label:label}, '*'); }
+function navigateTo(page) {
+  var map = {
+    'scoring-list.html':{m:'分析与选股',l:'评分榜单'},
+    'industry-chain.html':{m:'产业链与知识',l:'产业链全景'},
+    'daily-briefing.html':{m:'内容与信息',l:'每日智能晨报'},
+    'knowledge-base.html':{m:'产业链与知识',l:'知识库'},
+    'workflow.html':{m:'AI编排与智能体',l:'Agent工作流'},
+    'ai-chat.html':{m:'AI编排与智能体',l:'AI投研对话'}
+  };
+  var info = map[page] || {m:'',l:''};
+  goTo(page, info.m, info.l);
+}
+var pageMap = {
+  '查看上证综指详情':{p:'market-overview.html',m:'行情与数据',l:'市场总览'},
+  '查看深证成指详情':{p:'market-overview.html',m:'行情与数据',l:'市场总览'},
+  '查看创业板指详情':{p:'market-overview.html',m:'行情与数据',l:'市场总览'},
+  '查看恒生指数详情':{p:'global-market.html',m:'行情与数据',l:'全球市场'},
+  '进入自选股管理':{p:'watchlist.html',m:'行情与数据',l:'自选股'},
+  '管理自选股':{p:'watchlist.html',m:'行情与数据',l:'自选股'},
+  '查看贵州茅台':{p:'stock-detail.html',m:'行情与数据',l:'个股行情'},
+  '查看平安银行':{p:'stock-detail.html',m:'行情与数据',l:'个股行情'},
+  '查看宁德时代':{p:'stock-detail.html',m:'行情与数据',l:'个股行情'},
+  '查看腾讯控股':{p:'stock-detail.html',m:'行情与数据',l:'个股行情'},
+  '查看英伟达':{p:'stock-detail.html',m:'行情与数据',l:'个股行情'},
+  '查看苹果':{p:'stock-detail.html',m:'行情与数据',l:'个股行情'},
+  '查看更多热点':{p:'daily-briefing.html',m:'内容与信息',l:'每日智能晨报'},
+  '生成每日简报':{p:'daily-briefing.html',m:'内容与信息',l:'每日智能晨报'},
+  '英伟达H200需求超预期':{p:'daily-briefing.html',m:'内容与信息',l:'每日智能晨报'},
+  '固态电池技术突破':{p:'daily-briefing.html',m:'内容与信息',l:'每日智能晨报'},
+  '美联储降息预期升温':{p:'daily-briefing.html',m:'内容与信息',l:'每日智能晨报'},
+  '查看KOL日报全文':{p:'kol-digest.html',m:'内容与信息',l:'KOL观点'},
+  '查看全部题材':{p:'theme-index.html',m:'行情与数据',l:'题材指数'},
+  'AI算力题材':{p:'theme-index.html',m:'行情与数据',l:'题材指数'},
+  '半导体题材':{p:'theme-index.html',m:'行情与数据',l:'题材指数'},
+  '新能源题材':{p:'theme-index.html',m:'行情与数据',l:'题材指数'},
+  '机器人题材':{p:'theme-index.html',m:'行情与数据',l:'题材指数'},
+  '进入知识科普':{p:'concept-card.html',m:'产业链与知识',l:'概念卡片'},
+  '开始深度分析':{p:'stock-deep.html',m:'分析与选股',l:'个股深度'}
+};
+function showToast(msg) {
+  var entry = pageMap[msg];
+  if (entry) { goTo(entry.p, entry.m, entry.l); return; }
+  var t=document.createElement('div'); t.textContent=msg; t.style.cssText='position:fixed;bottom:32px;right:32px;background:#1D1D1F;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;z-index:200;animation:fadeIn 0.3s';
+  document.body.appendChild(t); setTimeout(function(){t.remove();}, 2000);
+}
+</script>
 </body>
 </html>

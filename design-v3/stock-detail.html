@@ -154,6 +154,7 @@ body.in-iframe .sidebar,
 body.in-iframe .topbar { display: none !important; }
 body.in-iframe .main { margin-left: 0 !important; width: 100% !important; }
 body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+
 </style>
 </head>
 <body>
@@ -403,39 +404,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Lightweight Charts K-line
-  var chart = LightweightCharts.createChart(document.getElementById('chart-kline'), {
-    width: document.getElementById('chart-kline').clientWidth,
-    height: 380,
-    layout: { background: { color: '#FFFFFF' }, textColor: '#86868B' },
-    grid: { vertLines: { color: '#F2F2F7' }, horzLines: { color: '#F2F2F7' } },
-    rightPriceScale: { borderColor: '#E5E5EA' },
-    timeScale: { borderColor: '#E5E5EA' },
-  });
+  // ECharts Candlestick K-line
+  var klineChart = echarts.init(document.getElementById('chart-kline'));
+  var dates = data.map(function(d) { return d.time; });
+  var ohlc = data.map(function(d) { return [d.open, d.close, d.low, d.high]; });
+  var volumes = data.map(function(d) { return d.volume; });
 
-  var candleSeries = chart.addCandlestickSeries({
-    upColor: '#FF3B30', downColor: '#34C759', borderUpColor: '#FF3B30', borderDownColor: '#34C759',
-    wickUpColor: '#FF3B30', wickDownColor: '#34C759'
-  });
-  candleSeries.setData(data);
-
-  // MA lines
-  function calcMA(data, period) {
+  function calcMA(arr, period) {
     var result = [];
-    for (var i = 0; i < data.length; i++) {
-      if (i < period - 1) { result.push({ time: data[i].time, value: null }); continue; }
+    for (var i = 0; i < arr.length; i++) {
+      if (i < period - 1) { result.push(null); continue; }
       var sum = 0;
-      for (var j = 0; j < period; j++) sum += data[i - j].close;
-      result.push({ time: data[i].time, value: sum / period });
+      for (var j = 0; j < period; j++) sum += arr[i - j].close;
+      result.push(+(sum / period).toFixed(2));
     }
     return result;
   }
-  var ma5Data = calcMA(data, 5), ma10Data = calcMA(data, 10), ma20Data = calcMA(data, 20), ma60Data = calcMA(data, 60);
-  chart.addLineSeries({ color: '#0071E3', lineWidth: 1 }).setData(ma5Data);
-  chart.addLineSeries({ color: '#FF9500', lineWidth: 1 }).setData(ma10Data);
-  chart.addLineSeries({ color: '#34C759', lineWidth: 1 }).setData(ma20Data);
-  chart.addLineSeries({ color: '#5856D6', lineWidth: 1 }).setData(ma60Data);
-  chart.timeScale().fitContent();
+
+  klineChart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { data: ['K线', 'MA5', 'MA10', 'MA20', 'MA60'], bottom: 0, textStyle: { fontSize: 10 } },
+    grid: [{ left: '8%', right: '8%', top: '8%', height: '60%' }, { left: '8%', right: '8%', top: '76%', height: '16%' }],
+    xAxis: [{ type: 'category', data: dates, gridIndex: 0, axisLabel: { show: false }, axisLine: { lineStyle: { color: '#E5E5EA' } } },
+            { type: 'category', data: dates, gridIndex: 1, axisLabel: { fontSize: 9, color: '#86868B', interval: 30 }, axisLine: { lineStyle: { color: '#E5E5EA' } } }],
+    yAxis: [{ type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: '#F2F2F7' } }, axisLabel: { fontSize: 10, color: '#86868B' } },
+            { type: 'value', gridIndex: 1, axisLabel: { fontSize: 9, color: '#86868B' }, splitLine: { show: false } }],
+    dataZoom: [{ type: 'inside', xAxisIndex: [0,1], start: 50, end: 100 }],
+    series: [
+      { name: 'K线', type: 'candlestick', data: ohlc, xAxisIndex: 0, yAxisIndex: 0,
+        itemStyle: { color: '#FF3B30', color0: '#34C759', borderColor: '#FF3B30', borderColor0: '#34C759' } },
+      { name: 'MA5', type: 'line', data: calcMA(data, 5), xAxisIndex: 0, yAxisIndex: 0, smooth: true, symbol: 'none', lineStyle: { color: '#0071E3', width: 1 } },
+      { name: 'MA10', type: 'line', data: calcMA(data, 10), xAxisIndex: 0, yAxisIndex: 0, smooth: true, symbol: 'none', lineStyle: { color: '#FF9500', width: 1 } },
+      { name: 'MA20', type: 'line', data: calcMA(data, 20), xAxisIndex: 0, yAxisIndex: 0, smooth: true, symbol: 'none', lineStyle: { color: '#34C759', width: 1 } },
+      { name: 'MA60', type: 'line', data: calcMA(data, 60), xAxisIndex: 0, yAxisIndex: 0, smooth: true, symbol: 'none', lineStyle: { color: '#5856D6', width: 1 } },
+      { name: '成交量', type: 'bar', data: volumes, xAxisIndex: 1, yAxisIndex: 1,
+        itemStyle: { color: function(p) { var d = ohlc[p.dataIndex]; return d && d[1] >= d[0] ? '#FF3B30' : '#34C759'; } } }
+    ]
+  });
+  window.addEventListener('resize', function() { klineChart.resize(); });
 
   // Mini indicator charts using ECharts
   var miniOpt = function(values, color, title) {
@@ -474,5 +480,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })();
 </script>
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  }
+})();
+</script>
+
 </body>
 </html>

@@ -120,6 +120,7 @@ html.iframe-embed .main {
   .content { padding: 16px; }
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
 </style>
 <script>(function(){if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');})();</script>
 </head>
@@ -588,8 +589,7 @@ function renderTreemap() {
       formatter: function(p) {
         return p.name + '\n$' + p.value + 'B';
       },
-      fontSize: 11, fontWeight: 'bold', color: '#1D1D1F',
-      textShadowBlur: 3, textShadowColor: 'rgba(0,0,0,0.1)'
+      fontSize: 11, fontWeight: 'bold', color: '#FFFFFF'
     },
     upperLabel: { show: false },
     itemStyle: { borderColor: '#E5E5EA', borderWidth: 2, gapWidth: 2 },
@@ -800,6 +800,38 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('resize', () => {
   if (chartInstance) chartInstance.resize();
 });
+</script>
+
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  }
+})();
 </script>
 
 </body>

@@ -1,20 +1,34 @@
 {
   "version": "1.0",
-  "updated": "2026-07-11T09:50:01.425Z",
+  "updated": "2026-07-11T12:12:38.834Z",
   "patterns": [
     {
       "id": "pattern-001",
       "category": "deploy",
       "language": "unknown",
       "description": "index.html — deploy 패턴 (unknown)",
-      "score": 50,
-      "success_count": 1,
+      "score": 100,
+      "success_count": 42,
       "failure_count": 0,
       "tags": [
         "deploy"
       ],
       "created": "2026-07-11T09:50:01.425Z",
-      "updated": "2026-07-11T09:50:01.425Z"
+      "updated": "2026-07-11T12:12:38.831Z"
+    },
+    {
+      "id": "pattern-002",
+      "category": "ui",
+      "language": "unknown",
+      "description": "index.html — ui 패턴 (unknown)",
+      "score": 59,
+      "success_count": 4,
+      "failure_count": 0,
+      "tags": [
+        "ui"
+      ],
+      "created": "2026-07-11T10:01:17.630Z",
+      "updated": "2026-07-11T12:05:41.756Z"
     }
   ],
   "anti_patterns": []

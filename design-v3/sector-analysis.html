@@ -204,7 +204,7 @@ html.iframe-embed .main {
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
       <div>
         <h1 style="font-size:28px; font-weight:700; color:var(--text); letter-spacing:-0.02em; line-height:1.2;">HBM高带宽存储赛道</h1>
-        <p style="font-size:14px; color:var(--text-secondary); margin-top:6px;">AI算力 ▸ L2 设备与零部件 · 当前热度: <span class="up"><i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px;"></i><i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px;"></i><i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px;"></i> 极高</span></p>
+        <p style="font-size:14px; color:var(--text-secondary); margin-top:6px;">AI算力 ▸ L2 设备与零部件 · 当前热度: <span class="up" style="display:inline-flex;align-items:center;gap:1px;"><i data-lucide="flame" style="width:14px;height:14px;"></i><i data-lucide="flame" style="width:14px;height:14px;"></i><i data-lucide="flame" style="width:14px;height:14px;"></i> 极高</span></p>
       </div>
       <div style="display:flex; gap:8px;">
         <span class="tag tag-success">置信度: 高</span>
@@ -737,9 +737,9 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     this.classList.add('active');
     document.getElementById(this.dataset.tab).classList.add('active');
-    if (this.dataset.tab === 'overview') { initRadar(); initValueChain(); initMarketShare(); }
-    if (this.dataset.tab === 'tech') initKline();
-    if (this.dataset.tab === 'capital') initCapital();
+    if (this.dataset.tab === 'overview') { setTimeout(function() { initRadar(); initValueChain(); initMarketShare(); }, 150); }
+    if (this.dataset.tab === 'tech') setTimeout(function() { initKline(); }, 150);
+    if (this.dataset.tab === 'capital') setTimeout(function() { initCapital(); }, 150);
   });
 });
 
@@ -774,7 +774,11 @@ function initRadar() {
 
 // Value Chain Pie Chart
 function initValueChain() {
-  const chart = echarts.init(document.getElementById('chart-value-chain'));
+  var dom = document.getElementById('chart-value-chain');
+  if (!dom || dom.offsetWidth === 0) return;
+  var existing = echarts.getInstanceByDom(dom);
+  if (existing) existing.dispose();
+  const chart = echarts.init(dom);
   chart.setOption({
     tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
     legend: { bottom: 0, textStyle: { fontSize: 11, color: '#86868B' }, itemWidth: 10, itemHeight: 10 },
@@ -798,7 +802,11 @@ function initValueChain() {
 
 // Market Share Bar Chart
 function initMarketShare() {
-  const chart = echarts.init(document.getElementById('chart-market-share'));
+  var dom = document.getElementById('chart-market-share');
+  if (!dom || dom.offsetWidth === 0) return;
+  var existing = echarts.getInstanceByDom(dom);
+  if (existing) existing.dispose();
+  const chart = echarts.init(dom);
   chart.setOption({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     grid: { left: '3%', right: '4%', bottom: '3%', top: '10%', containLabel: true },
@@ -862,8 +870,20 @@ function initCapital() {
   });
 }
 
-// Init on load
-setTimeout(() => { initRadar(); initKline(); initCapital(); initValueChain(); initMarketShare(); }, 100);
+// Init on load — ensure DOM rendered and echarts loaded
+function safeInit(fn, id) {
+  var el = document.getElementById(id);
+  if (!el || el.offsetWidth === 0) { setTimeout(function() { safeInit(fn, id); }, 100); return; }
+  fn();
+}
+setTimeout(function() {
+  if (typeof echarts === 'undefined') { setTimeout(arguments.callee, 100); return; }
+  safeInit(initRadar, 'radar-sector');
+  safeInit(initKline, 'chart-kline');
+  safeInit(initCapital, 'chart-capital');
+  safeInit(initValueChain, 'chart-value-chain');
+  safeInit(initMarketShare, 'chart-market-share');
+}, 200);
 
 window.addEventListener('resize', () => {
   ['radar-sector', 'chart-kline', 'chart-capital', 'chart-value-chain', 'chart-market-share'].forEach(id => {

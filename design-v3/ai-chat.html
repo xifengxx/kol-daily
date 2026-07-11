@@ -50,6 +50,7 @@ html, body {
   font-size: 14px;
   line-height: 1.5;
   height: 100%;
+  padding: 0 24px;
 }
 body {
   display: flex;
@@ -61,19 +62,22 @@ body {
 /* iframe embed adjustments */
 html.iframe-embed body { min-height: 100vh; padding: 0; flex-direction: column; }
 html.iframe-embed .chat-page-title { display: block !important; padding: 20px 24px 0; }
-html.iframe-embed .chat-wrapper { display: flex; flex: 1; padding: 0 24px 24px; }
-html.iframe-embed .skill-panel { height: 80vh; border-radius: 12px 0 0 12px; }
+html.iframe-embed .chat-wrapper { display: inline-flex; background: #FFFFFF; border-radius: 12px; padding: 20px; gap: 0; align-self: flex-start; }
+.chat-wrapper { display: inline-flex; background: #FFFFFF; border-radius: 12px; padding: 20px; gap: 0; align-self: flex-start; }
+html.iframe-embed .skill-panel { width: 240px; height: 80vh; border-radius: 12px 0 0 12px; }
 html.iframe-embed .chat-area { height: 80vh; border-radius: 0 12px 12px 0; }
 
 /* ===== Left Skill Panel ===== */
 .skill-panel {
   width: 240px;
   min-width: 240px;
-  background: var(--bg-secondary);
+  background: #F9F9FB;
   border: 1px solid var(--border);
   border-radius: 12px 0 0 12px;
   display: flex;
   flex-direction: column;
+  width: 240px;
+  min-width: 240px;
   height: 80vh;
   overflow-y: auto;
 }
@@ -218,7 +222,7 @@ html.iframe-embed .chat-area { height: 80vh; border-radius: 0 12px 12px 0; }
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: var(--bg-secondary);
+  background: #FFFFFF;
   overflow: hidden;
   height: 80vh;
   border-radius: 0 12px 12px 0;
@@ -234,6 +238,7 @@ html.iframe-embed .chat-area { height: 80vh; border-radius: 0 12px 12px 0; }
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background: #F5F5F7;
 }
 .chat-messages::-webkit-scrollbar { width: 6px; }
 .chat-messages::-webkit-scrollbar-track { background: transparent; }
@@ -432,7 +437,7 @@ html.iframe-embed .chat-area { height: 80vh; border-radius: 0 12px 12px 0; }
 
 /* ===== Chat Input Bar ===== */
 .chat-input-bar {
-  background: var(--bg-secondary);
+  background: #FFFFFF;
   border-top: 1px solid var(--border);
   padding: 12px 24px;
   display: flex;
@@ -656,13 +661,14 @@ html.iframe-embed .chat-area { height: 80vh; border-radius: 0 12px 12px 0; }
   .model-selector-bar { padding: 10px 16px; }
   .chat-input-bar { padding: 10px 16px; }
 }
+
 </style>
 </head>
 <body>
 <script>if(window.self!==window.top)document.documentElement.classList.add('iframe-embed');</script>
 
 <!-- Page Title (iframe mode) -->
-<div class="chat-page-title" style="display:none;">
+<div class="chat-page-title">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
     <div>
       <div style="font-size:28px;font-weight:700;color:var(--navy);letter-spacing:-0.02em;line-height:1.2;">AI投研对话</div>
@@ -1186,5 +1192,37 @@ document.addEventListener('DOMContentLoaded', function() {
   messages.scrollTop = messages.scrollHeight;
 });
 </script>
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  }
+})();
+</script>
+
 </body>
 </html>

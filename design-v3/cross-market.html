@@ -32,43 +32,12 @@
   .arrow-chain .arrow { color: #86868B; }
   .mini-chart { height: 40px; width: 100px; }
   @media (max-width: 640px) { .card { padding: 16px; } .tab-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; } }
+
 </style>
 </head>
 <body class="min-h-screen">
-<!-- Breadcrumb -->
-<div style="background:#F5F5F7; border-bottom:1px solid #E5E5EA;">
-  <div class="max-w-[1200px] mx-auto px-6 py-2.5 flex items-center gap-2 text-sm">
-    <a href="index.html" style="color:#0071E3; text-decoration:none;">首页</a>
-    <span style="color:#86868B;">/</span>
-    <span style="color:#1D1D1F; font-weight:500;">跨市场助手</span>
-  </div>
-</div>
-
-
-<!-- 顶部导航栏 -->
-<nav class="fixed top-0 left-0 right-0 bg-[rgba(255,255,255,0.8)] border-b border-[#E5E5EA] z-50" style="height:56px">
-  <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 bg-[#0071E3] rounded-lg flex items-center justify-center">
-        <i data-lucide="bar-chart-3" class="w-5 h-5 text-white"></i>
-      </div>
-      <span class="font-semibold text-[#1D1D1F]" style="font-size:16px">AI智能投研助手</span>
-    </div>
-    <div class="hidden md:flex flex-1 max-w-md mx-8">
-      <div class="relative w-full">
-        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#86868B]"></i>
-        <input type="text" placeholder="搜索股票、概念..." class="w-full h-10 pl-10 pr-4 rounded-lg bg-[rgba(0,0,0,0.06)] border border-transparent focus:bg-[#FFFFFF] focus:border-[#0071E3] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,113,227,0.15)] text-sm transition-all" style="color:#1D1D1F;">
-      </div>
-    </div>
-    <div class="flex items-center gap-4">
-      <span class="text-sm text-[#86868B] hidden sm:block">2025-07-10</span>
-      <div class="w-8 h-8 rounded-full bg-[#0071E3] flex items-center justify-center text-white text-xs font-medium cursor-pointer" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;">A</div>
-    </div>
-  </div>
-</nav>
-
 <!-- 主内容区 -->
-<main class="pt-[56px]">
+<main class="">
   <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- 页面标题 -->
@@ -559,6 +528,38 @@ window.addEventListener('resize', () => {
     // Remove body margin/padding if any
     document.body.style.margin = '0';
     document.body.style.padding = '0';
+  }
+})();
+</script>
+
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
   }
 })();
 </script>

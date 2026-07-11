@@ -353,6 +353,7 @@ body.in-iframe .sidebar,
 body.in-iframe .topbar { display: none !important; }
 body.in-iframe .main { margin-left: 0 !important; width: 100% !important; }
 body.in-iframe .content { max-width: 100% !important; padding: 16px 20px !important; }
+
 </style>
 </head>
 <body>
@@ -777,18 +778,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Chart 2: 行业热力图
   var chart2 = echarts.init(document.getElementById('chart-heatmap'));
-  var sectors = ['半导体', 'AI算力', '新能源', '医药生物', '金融', '消费', '传媒', '军工', '房地产', '化工', '有色', '钢铁'];
+  var sectors = ['半导体', 'AI算力', '新能源车', '光伏储能', '医药生物', '消费电子', '白酒', '金融', '军工', '机器人', '低空经济', '传媒', '房地产', '化工', '有色', '钢铁', '电力', '通信'];
   var heatData = [];
+  var sectorValues = [3.24, 4.58, 1.87, -0.92, 1.23, 2.78, -0.56, 0.21, 3.12, 5.12, 3.89, -0.78, -2.34, 0.45, -0.67, -1.89, 0.92, 2.67];
   for (var i = 0; i < sectors.length; i++) {
-    heatData.push([i, 0, (Math.random() * 6 - 3).toFixed(2)]);
+    heatData.push([0, i, sectorValues[i]]);
   }
   chart2.setOption({
-    tooltip: { position: 'top', formatter: function(p) { return sectors[p.data[0]] + ': ' + (p.data[2] > 0 ? '+' : '') + p.data[2] + '%'; } },
-    grid: { left: '15%', right: '8%', top: '8%', bottom: '12%' },
-    xAxis: { type: 'category', data: ['今日'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { show: false } },
+    tooltip: { position: 'top', formatter: function(p) { return sectors[p.data[1]] + ': ' + (p.data[2] > 0 ? '+' : '') + p.data[2] + '%'; } },
+    grid: { left: '18%', right: '5%', top: '5%', bottom: '15%' },
+    xAxis: { type: 'category', data: ['今日涨跌'], position: 'top', axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#86868B', fontSize: 10 } },
     yAxis: { type: 'category', data: sectors, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#1D1D1F', fontSize: 11 } },
-    visualMap: { min: -3, max: 3, calculable: false, orient: 'horizontal', left: 'center', bottom: '0%', inRange: { color: ['#34C759', '#5AC8FA', '#F2F2F7', '#FF9F9F', '#FF3B30'] }, text: ['涨', '跌'], textStyle: { color: '#86868B', fontSize: 10 } },
-    series: [{ type: 'heatmap', data: heatData, label: { show: true, fontSize: 10, formatter: function(p) { return (p.data[2] > 0 ? '+' : '') + p.data[2] + '%'; } }, itemStyle: { borderRadius: 3, borderColor: '#fff', borderWidth: 2 } }]
+    visualMap: { min: -5, max: 5, calculable: false, orient: 'horizontal', left: 'center', bottom: '0%', inRange: { color: ['#34C759', '#86EFAC', '#F2F2F7', '#FCA5A5', '#FF3B30'] }, text: ['📈 涨', '📉 跌'], textStyle: { color: '#86868B', fontSize: 10 } },
+    series: [{ type: 'heatmap', data: heatData, label: { show: true, fontSize: 10, fontWeight: 600, formatter: function(p) { return (p.data[2] > 0 ? '+' : '') + p.data[2] + '%'; } }, itemStyle: { borderRadius: 4, borderColor: '#fff', borderWidth: 2 } }]
   });
 
   // Chart 3: 资金流向TOP5
@@ -822,5 +824,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })();
 </script>
+
+<script>
+// Fix icon+text alignment for lucide SVG icons
+(function() {
+  function fixIconParents() {
+    document.querySelectorAll('svg.lucide').forEach(function(svg) {
+      var p = svg.parentElement;
+      if (!p || p.dataset.iconFixed) return;
+      var hasText = false;
+      p.childNodes.forEach(function(n) {
+        if (n.nodeType === 3 && n.textContent.trim()) hasText = true;
+        if (n.nodeType === 1 && n !== svg && n.textContent.trim()) hasText = true;
+      });
+      if (hasText) {
+        p.style.display = 'inline-flex';
+        p.style.alignItems = 'center';
+        p.style.gap = '4px';
+        p.dataset.iconFixed = '1';
+      }
+      svg.style.flexShrink = '0';
+    });
+  }
+  // Run after lucide renders, then watch for changes
+  setTimeout(fixIconParents, 300);
+  setTimeout(fixIconParents, 1000);
+  if (window.MutationObserver) {
+    var obs = new MutationObserver(function() { fixIconParents(); });
+    obs.observe(document.body || document.documentElement, { childList: true, subtree: true });
+  }
+})();
+</script>
+
 </body>
 </html>

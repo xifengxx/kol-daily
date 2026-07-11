@@ -62,8 +62,8 @@ body {
 .unified-user { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 14px; color: var(--text-secondary); }
 .unified-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
 .page-title { font-size: 28px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; line-height: 1.2; }
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
-.card-title { font-size: 18px; font-weight: 600; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; line-height: 1.4; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; line-height: 1.4; }
 .btn-primary { background: var(--accent); color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
 .btn-primary:hover { opacity: 0.9; }
 .btn-outline { background: #F5F5F7; border: 1px solid var(--border); color: var(--text-primary); border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
@@ -75,20 +75,20 @@ body {
 .tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
 .tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
 .tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
-.workflow-node { background: #fff; border: 2px solid var(--border); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; cursor: grab; font-size: 14px; font-weight: 500; transition: all 0.15s; min-width: 140px; }
+.workflow-node { background: #fff; border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 10px; display: flex; align-items: center; gap: 6px; cursor: grab; font-size: 12px; font-weight: 500; transition: all 0.15s; min-width: 120px; }
 .workflow-node:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,113,227,0.08); }
-.workflow-node .node-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-.workflow-node .node-icon i { width: 16px; height: 16px; }
+.workflow-node .node-icon { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+.workflow-node .node-icon i { width: 14px; height: 14px; }
 .workflow-node .icon-scan { background: #F0F7FF; color: #0071E3; }
 .workflow-node .icon-score { background: #E8F5E9; color: #34C759; }
 .workflow-node .icon-chain { background: #FFF8E1; color: #FF9500; }
 .workflow-node .icon-nl { background: #F0F7FF; color: #0071E3; }
 .workflow-node .icon-deep { background: #FFEBEE; color: #FF3B30; }
 .workflow-node .icon-news { background: #F3E5F5; color: #AF52DE; }
-.canvas-node { position: absolute; background: #fff; border: 2px solid var(--accent); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
-.canvas-node .badge { position: absolute; top: -6px; right: -6px; background: var(--accent); color: #fff; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-size: 9px; }
+.canvas-node { position: absolute; background: #fff; border: 1.5px solid var(--accent); border-radius: 8px; padding: 7px 10px; display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; }
+.canvas-node .badge { position: absolute; top: -6px; right: -6px; background: var(--accent); color: #fff; border-radius: 50%; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; font-size: 8px; }
 .connector-line { position: absolute; height: 2px; background: var(--accent); border-radius: 1px; }
-.history-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .history-table th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); background: #F2F2F7; }
 .history-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
 .history-table tbody tr:hover { background: #F5F5F7; }
@@ -97,12 +97,12 @@ body {
 .status-dot.success { background: #34C759; }
 .status-dot.failed { background: #FF3B30; }
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-.canvas-area { background: #F5F5F7; border: 1px dashed var(--border); border-radius: 12px; position: relative; min-height: 400px; overflow: hidden; }
-.trigger-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.canvas-area { background: #F5F5F7; border: 1px dashed var(--border); border-radius: 12px; position: relative; flex: 1; min-height: 440px; overflow: auto; cursor: grab; }
+.trigger-row { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid var(--border); }
 .trigger-row:last-child { border-bottom: none; }
-.trigger-label { width: 80px; font-size: 14px; font-weight: 500; color: var(--text-secondary); }
-.trigger-value { flex: 1; font-size: 14px; color: var(--text-primary); }
-.param-input { border: 1px solid transparent; border-radius: 8px; padding: 8px 14px; font-size: 14px; outline: none; width: 100%; max-width: 200px; font-family: inherit; background: #F5F5F7; }
+.trigger-label { width: 60px; font-size: 11px; font-weight: 500; color: var(--text-secondary); flex-shrink: 0; }
+.trigger-value { flex: 1; font-size: 11px; color: var(--text-primary); }
+.param-input { border: 1px solid transparent; border-radius: 6px; padding: 6px 10px; font-size: 11px; outline: none; width: 100%; font-family: inherit; background: #F5F5F7; }
 .param-input:focus { background: #FFFFFF; border-color: #0071E3; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
 /* Workflow cards */
 .workflow-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; transition: all 0.2s; display: flex; flex-direction: column; gap: 12px; }
@@ -150,39 +150,39 @@ body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important
   </div>
   <div class="unified-sidebar-section">
     <div class="unified-sidebar-title">行情与数据</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:16px;height:16px;"></i></span>市场总览</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="trending-up" style="width:16px;height:16px;"></i></span>个股行情</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="globe" style="width:16px;height:16px;"></i></span>全球市场</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="bar-chart-3" style="width:14px;height:14px;"></i></span>市场总览</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="trending-up" style="width:14px;height:14px;"></i></span>个股行情</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="globe" style="width:14px;height:14px;"></i></span>全球市场</div>
   </div>
   <div class="unified-sidebar-section">
     <div class="unified-sidebar-title">内容与信息</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="newspaper" style="width:16px;height:16px;"></i></span>每日晨报</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="mic" style="width:16px;height:16px;"></i></span>KOL观点</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="file-text" style="width:16px;height:16px;"></i></span>内容管理</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="newspaper" style="width:14px;height:14px;"></i></span>每日晨报</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="mic" style="width:14px;height:14px;"></i></span>KOL观点</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="file-text" style="width:14px;height:14px;"></i></span>内容管理</div>
   </div>
   <div class="unified-sidebar-section">
     <div class="unified-sidebar-title">分析与选股</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="star" style="width:16px;height:16px;"></i></span>评分榜单</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="search" style="width:16px;height:16px;"></i></span>个股深度</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="wallet" style="width:16px;height:16px;"></i></span>模拟交易</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="refresh-cw" style="width:16px;height:16px;"></i></span>策略回测</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="star" style="width:14px;height:14px;"></i></span>评分榜单</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="search" style="width:14px;height:14px;"></i></span>个股深度</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="wallet" style="width:14px;height:14px;"></i></span>模拟交易</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="refresh-cw" style="width:14px;height:14px;"></i></span>策略回测</div>
   </div>
   <div class="unified-sidebar-section">
     <div class="unified-sidebar-title">产业链与知识</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="network" style="width:16px;height:16px;"></i></span>产业链图谱</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="flag" style="width:16px;height:16px;"></i></span>赛道分析</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="link" style="width:16px;height:16px;"></i></span>个股关联</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="lightbulb" style="width:16px;height:16px;"></i></span>概念卡片</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="book-open" style="width:16px;height:16px;"></i></span>知识库</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="network" style="width:14px;height:14px;"></i></span>产业链图谱</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="flag" style="width:14px;height:14px;"></i></span>赛道分析</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="link" style="width:14px;height:14px;"></i></span>个股关联</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="lightbulb" style="width:14px;height:14px;"></i></span>概念卡片</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="book-open" style="width:14px;height:14px;"></i></span>知识库</div>
   </div>
   <div class="unified-sidebar-section">
     <div class="unified-sidebar-title">AI编排层</div>
-    <div class="unified-nav-item active"><span class="icon"><i data-lucide="brain" style="width:16px;height:16px;"></i></span>工作流编排</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="mic" style="width:16px;height:16px;"></i></span>会议纪要</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="lock" style="width:16px;height:16px;"></i></span>私域知识</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="settings" style="width:16px;height:16px;"></i></span>Prompt管理</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="image" style="width:16px;height:16px;"></i></span>多模态</div>
-    <div class="unified-nav-item"><span class="icon"><i data-lucide="message-square" style="width:16px;height:16px;"></i></span>AI投研对话</div>
+    <div class="unified-nav-item active"><span class="icon"><i data-lucide="brain" style="width:14px;height:14px;"></i></span>工作流编排</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="mic" style="width:14px;height:14px;"></i></span>会议纪要</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="lock" style="width:14px;height:14px;"></i></span>私域知识</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="settings" style="width:14px;height:14px;"></i></span>Prompt管理</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="image" style="width:14px;height:14px;"></i></span>多模态</div>
+    <div class="unified-nav-item"><span class="icon"><i data-lucide="message-square" style="width:14px;height:14px;"></i></span>AI投研对话</div>
   </div>
 </aside>
 <!-- Main Content -->
@@ -208,23 +208,23 @@ body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important
       </div>
     </div>
     <!-- Three Column Layout -->
-    <div style="display: grid; grid-template-columns: 200px 1fr 240px; gap: 16px; height: 600px;">
+    <div style="display: grid; grid-template-columns: 180px 1fr 220px; gap: 12px;">
       <!-- Left: Tool Library -->
-      <div class="card" style="display: flex; flex-direction: column; gap: 12px; overflow-y: auto;">
+      <div class="card" style="display: flex; flex-direction: column; gap: 10px;">
         <div class="card-title"><i data-lucide="wrench" style="width:18px;height:18px;"></i>工具库</div>
         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px;">拖拽工具到画布</div>
-        <div class="workflow-node"><div class="node-icon icon-scan"><i data-lucide="search" style="width:16px;height:16px;"></i></div>行情扫描</div>
-        <div class="workflow-node"><div class="node-icon icon-score"><i data-lucide="star" style="width:16px;height:16px;"></i></div>五因子评分</div>
-        <div class="workflow-node"><div class="node-icon icon-chain"><i data-lucide="network" style="width:16px;height:16px;"></i></div>产业链查询</div>
-        <div class="workflow-node"><div class="node-icon icon-nl"><i data-lucide="message-square" style="width:16px;height:16px;"></i></div>NL选股</div>
-        <div class="workflow-node"><div class="node-icon icon-deep"><i data-lucide="search" style="width:16px;height:16px;"></i></div>个股分析</div>
-        <div class="workflow-node"><div class="node-icon icon-news"><i data-lucide="newspaper" style="width:16px;height:16px;"></i></div>新闻检索</div>
-        <div class="workflow-node"><div class="node-icon icon-score"><i data-lucide="pie-chart" style="width:16px;height:16px;"></i></div>财报提取</div>
-        <div class="workflow-node"><div class="node-icon icon-chain"><i data-lucide="mic" style="width:16px;height:16px;"></i></div>KOL观点聚合</div>
-        <div class="workflow-node"><div class="node-icon icon-nl"><i data-lucide="file-text" style="width:16px;height:16px;"></i></div>晨报生成</div>
-        <div class="workflow-node"><div class="node-icon icon-deep"><i data-lucide="mail" style="width:16px;height:16px;"></i></div>推送通知</div>
-        <div class="workflow-node"><div class="node-icon icon-news"><i data-lucide="refresh-cw" style="width:16px;height:16px;"></i></div>数据同步</div>
-        <div class="workflow-node"><div class="node-icon icon-scan"><i data-lucide="trending-up" style="width:16px;height:16px;"></i></div>技术指标计算</div>
+        <div class="workflow-node"><div class="node-icon icon-scan"><i data-lucide="search" style="width:14px;height:14px;"></i></div>行情扫描</div>
+        <div class="workflow-node"><div class="node-icon icon-score"><i data-lucide="star" style="width:14px;height:14px;"></i></div>五因子评分</div>
+        <div class="workflow-node"><div class="node-icon icon-chain"><i data-lucide="network" style="width:14px;height:14px;"></i></div>产业链查询</div>
+        <div class="workflow-node"><div class="node-icon icon-nl"><i data-lucide="message-square" style="width:14px;height:14px;"></i></div>NL选股</div>
+        <div class="workflow-node"><div class="node-icon icon-deep"><i data-lucide="search" style="width:14px;height:14px;"></i></div>个股分析</div>
+        <div class="workflow-node"><div class="node-icon icon-news"><i data-lucide="newspaper" style="width:14px;height:14px;"></i></div>新闻检索</div>
+        <div class="workflow-node"><div class="node-icon icon-score"><i data-lucide="pie-chart" style="width:14px;height:14px;"></i></div>财报提取</div>
+        <div class="workflow-node"><div class="node-icon icon-chain"><i data-lucide="mic" style="width:14px;height:14px;"></i></div>KOL观点聚合</div>
+        <div class="workflow-node"><div class="node-icon icon-nl"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div>晨报生成</div>
+        <div class="workflow-node"><div class="node-icon icon-deep"><i data-lucide="mail" style="width:14px;height:14px;"></i></div>推送通知</div>
+        <div class="workflow-node"><div class="node-icon icon-news"><i data-lucide="refresh-cw" style="width:14px;height:14px;"></i></div>数据同步</div>
+        <div class="workflow-node"><div class="node-icon icon-scan"><i data-lucide="trending-up" style="width:14px;height:14px;"></i></div>技术指标计算</div>
         <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-secondary); text-align: center;">
           共 12 个工具节点
         </div>
@@ -241,70 +241,23 @@ body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important
         </div>
         <div class="canvas-area" id="workflowCanvas">
           <!-- Node 1 -->
-          <div class="canvas-node" style="top: 40px; left: 60px;">
-            <div class="node-icon icon-scan" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="search" style="width:16px;height:16px;"></i></div>
-            <span>行情扫描</span>
-            <div class="badge">1</div>
-          </div>
-          <!-- Connector 1→2 -->
-          <div class="connector-line" style="top: 58px; left: 200px; width: 80px;"></div>
-          <!-- Node 2 -->
-          <div class="canvas-node" style="top: 40px; left: 280px;">
-            <div class="node-icon icon-score" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#E8F5E9;color:#34C759;"><i data-lucide="star" style="width:16px;height:16px;"></i></div>
-            <span>五因子评分</span>
-            <div class="badge">2</div>
-          </div>
-          <!-- Connector 2→3 -->
-          <div class="connector-line" style="top: 58px; left: 420px; width: 80px;"></div>
-          <!-- Node 3 -->
-          <div class="canvas-node" style="top: 40px; left: 500px;">
-            <div class="node-icon icon-nl" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="message-square" style="width:16px;height:16px;"></i></div>
-            <span>NL选股</span>
-            <div class="badge">3</div>
-          </div>
-          <!-- Branch down to 4 -->
-          <div class="connector-line" style="top: 58px; left: 640px; width: 40px; transform: rotate(90deg); transform-origin: left; top: 78px; left: 560px; width: 80px; height: 2px; background: var(--accent); position: absolute;"></div>
-          <div style="position: absolute; top: 78px; left: 560px; width: 2px; height: 80px; background: var(--accent);"></div>
-          <div class="connector-line" style="top: 158px; left: 560px; width: 60px;"></div>
-          <!-- Node 4 -->
-          <div class="canvas-node" style="top: 140px; left: 280px;">
-            <div class="node-icon icon-deep" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#FFEBEE;color:#FF3B30;"><i data-lucide="search" style="width:16px;height:16px;"></i></div>
-            <span>个股深度分析</span>
-            <div class="badge">4</div>
-          </div>
-          <!-- Connector 4→5 -->
-          <div class="connector-line" style="top: 158px; left: 420px; width: 80px;"></div>
-          <!-- Node 5 -->
-          <div class="canvas-node" style="top: 140px; left: 500px;">
-            <div class="node-icon icon-news" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#F3E5F5;color:#AF52DE;"><i data-lucide="newspaper" style="width:16px;height:16px;"></i></div>
-            <span>新闻检索</span>
-            <div class="badge">5</div>
-          </div>
-          <!-- Connector 5→6 -->
-          <div class="connector-line" style="top: 158px; left: 640px; width: 80px;"></div>
-          <!-- Node 6 -->
-          <div class="canvas-node" style="top: 140px; left: 720px;">
-            <div class="node-icon icon-chain" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#FFF8E1;color:#FF9500;"><i data-lucide="mic" style="width:16px;height:16px;"></i></div>
-            <span>KOL观点</span>
-            <div class="badge">6</div>
-          </div>
-          <!-- Parallel branch to bottom -->
-          <div style="position: absolute; top: 158px; left: 390px; width: 2px; height: 100px; background: var(--accent);"></div>
-          <div class="connector-line" style="top: 258px; left: 390px; width: 340px;"></div>
-          <div style="position: absolute; top: 258px; left: 390px; width: 2px; height: 60px; background: var(--accent);"></div>
-          <div style="position: absolute; top: 258px; left: 730px; width: 2px; height: 60px; background: var(--accent);"></div>
-          <!-- Node 7 -->
-          <div class="canvas-node" style="top: 280px; left: 340px;">
-            <div class="node-icon icon-nl" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="file-text" style="width:16px;height:16px;"></i></div>
-            <span>晨报生成</span>
-            <div class="badge">7</div>
-          </div>
-          <!-- Node 8 -->
-          <div class="canvas-node" style="top: 280px; left: 680px;">
-            <div class="node-icon icon-scan" style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="mail" style="width:16px;height:16px;"></i></div>
-            <span>推送通知</span>
-            <div class="badge">8</div>
-          </div>
+          <div class="canvas-node" style="top:100px;left:30px;"><div class="node-icon icon-scan" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="search" style="width:14px;height:14px;"></i></div><span>行情扫描</span><div class="badge">1</div></div>
+          <div class="connector-line" style="top:118px;left:152px;width:88px;"></div>
+          <div class="canvas-node" style="top:100px;left:240px;"><div class="node-icon icon-score" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#E8F5E9;color:#34C759;"><i data-lucide="star" style="width:14px;height:14px;"></i></div><span>五因子评分</span><div class="badge">2</div></div>
+          <div class="connector-line" style="top:118px;left:362px;width:88px;"></div>
+          <div class="canvas-node" style="top:100px;left:450px;"><div class="node-icon icon-nl" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="message-square" style="width:14px;height:14px;"></i></div><span>NL选股</span><div class="badge">3</div></div>
+          <div style="position:absolute;top:136px;left:270px;width:2px;height:94px;background:var(--accent);"></div>
+          <div style="position:absolute;top:136px;left:480px;width:2px;height:94px;background:var(--accent);"></div>
+          <div class="canvas-node" style="top:230px;left:30px;"><div class="node-icon icon-deep" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#FFEBEE;color:#FF3B30;"><i data-lucide="search" style="width:14px;height:14px;"></i></div><span>个股深度分析</span><div class="badge">4</div></div>
+          <div class="connector-line" style="top:248px;left:152px;width:88px;"></div>
+          <div class="canvas-node" style="top:230px;left:240px;"><div class="node-icon icon-news" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#F3E5F5;color:#AF52DE;"><i data-lucide="newspaper" style="width:14px;height:14px;"></i></div><span>新闻检索</span><div class="badge">5</div></div>
+          <div class="connector-line" style="top:248px;left:362px;width:88px;"></div>
+          <div class="canvas-node" style="top:230px;left:450px;"><div class="node-icon icon-chain" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#FFF8E1;color:#FF9500;"><i data-lucide="mic" style="width:14px;height:14px;"></i></div><span>KOL观点</span><div class="badge">6</div></div>
+          <div style="position:absolute;top:266px;left:270px;width:2px;height:94px;background:var(--accent);"></div>
+          <div style="position:absolute;top:266px;left:480px;width:2px;height:94px;background:var(--accent);"></div>
+          <div class="canvas-node" style="top:360px;left:130px;"><div class="node-icon icon-nl" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="file-text" style="width:14px;height:14px;"></i></div><span>晨报生成</span><div class="badge">7</div></div>
+          <div class="connector-line" style="top:378px;left:252px;width:198px;"></div>
+          <div class="canvas-node" style="top:360px;left:450px;"><div class="node-icon icon-scan" style="width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#F0F7FF;color:#0071E3;"><i data-lucide="mail" style="width:14px;height:14px;"></i></div><span>推送通知</span><div class="badge">8</div></div>
           <!-- Empty state hint -->
           <div style="position: absolute; bottom: 16px; right: 16px; font-size: 11px; color: var(--text-secondary); background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 8px; border: 1px dashed var(--border); display: flex; align-items: center; gap: 4px;">
             <i data-lucide="lightbulb" style="width:14px;height:14px;"></i>提示：从左侧拖拽工具到画布，连线编排执行顺序
@@ -312,23 +265,23 @@ body.in-iframe .unified-main { margin-left: 0 !important; width: 100% !important
         </div>
       </div>
       <!-- Right: Trigger Config -->
-      <div class="card" style="display: flex; flex-direction: column; gap: 12px; overflow-y: auto;">
+      <div class="card" style="display: flex; flex-direction: column; gap: 8px;">
         <div class="card-title"><i data-lucide="zap" style="width:18px;height:18px;"></i>触发条件</div>
         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">当前工作流：每日收盘扫描 → 评分 → 选股 → 分析</div>
         <div style="border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 8px;">
-          <div style="font-size: 12px; font-weight: 600; margin-bottom: 10px;">执行频率</div>
+          <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px;">执行频率</div>
           <div class="trigger-row"><span class="trigger-label">类型</span><span class="trigger-value"><span class="tag tag-blue">定时触发</span></span></div>
           <div class="trigger-row"><span class="trigger-label">Cron</span><span class="trigger-value"><input class="param-input" value="0 30 16 * * 1-5"></span></div>
           <div class="trigger-row"><span class="trigger-label">时区</span><span class="trigger-value"><select class="param-input"><option>Asia/Shanghai</option><option>America/New_York</option></select></span></div>
         </div>
         <div style="border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 8px;">
-          <div style="font-size: 12px; font-weight: 600; margin-bottom: 10px;">执行条件</div>
+          <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px;">执行条件</div>
           <div class="trigger-row"><span class="trigger-label">大盘状态</span><span class="trigger-value"><select class="param-input"><option>任意状态</option><option>交易中</option></select></span></div>
           <div class="trigger-row"><span class="trigger-label">VIX阈值</span><span class="trigger-value"><input class="param-input" value="< 25"></span></div>
           <div class="trigger-row"><span class="trigger-label">数据源</span><span class="trigger-value"><select class="param-input"><option>yfinance + AKShare</option><option>仅 yfinance</option></select></span></div>
         </div>
         <div style="border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 8px;">
-          <div style="font-size: 12px; font-weight: 600; margin-bottom: 10px;">通知设置</div>
+          <div style="font-size: 11px; font-weight: 600; margin-bottom: 8px;">通知设置</div>
           <div class="trigger-row"><span class="trigger-label">推送</span><span class="trigger-value"><span class="tag tag-green">已启用</span></span></div>
           <div class="trigger-row"><span class="trigger-label">渠道</span><span class="trigger-value">App Push + 邮件</span></div>
           <div class="trigger-row"><span class="trigger-label">阈值</span><span class="trigger-value">FinalScore ≥ 75</span></div>
@@ -489,5 +442,6 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('工作流编排页已加载');
 });
 </script>
+<script>(function(){var c=document.getElementById("workflowCanvas");if(!c)return;var d=!1,x,y,l,t;c.addEventListener("mousedown",function(e){if(e.target.closest(".canvas-node"))return;d=!0;c.style.cursor="grabbing";x=e.clientX;y=e.clientY;l=c.scrollLeft;t=c.scrollTop;e.preventDefault()});window.addEventListener("mousemove",function(e){if(!d)return;c.scrollLeft=l-(e.clientX-x);c.scrollTop=t-(e.clientY-y)});window.addEventListener("mouseup",function(){if(d){d=!1;c.style.cursor="grab"}})})();</script>
 </body>
 </html>
