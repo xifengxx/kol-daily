@@ -1000,7 +1000,7 @@ function renderCompany(c){
     // Part 1: 一句话公司介绍和定位
     if(c.one_liner){
       h+='<div style="margin-bottom:16px;"><div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:6px;">定位与介绍</div>';
-      h+='<div style="border-left:4px solid #0071E3;padding:10px 14px;font-size:14px;color:var(--text);line-height:1.8;background:rgba(0,113,227,0.03);border-radius:0 8px 8px 0;">'+c.one_liner+'</div></div>';
+      h+='<div style="border-left:4px solid #0071E3;padding:10px 14px;font-size:14px;color:var(--text);line-height:1.8;background:rgba(0,113,227,0.03);border-radius:0 8px 8px 0;white-space:pre-line;">'+c.one_liner+'</div></div>';
     }
     // Part 2: 核心业务/产品
     if(coreBiz.length){
@@ -1756,51 +1756,73 @@ function renderGraphView(){
   // Build graph data
   var nodes=[]; var nodeMap={}; var typeColors={segment:'#4ade80',company:'#60a5fa',concept:'#AF52DE',thesis:'#FF9500'};
   var typeIcons={segment:'📋',company:'🏢',concept:'💡',thesis:'📝'};
-  var seenNames={};
+  // 映射：name→[slugs]（跨产业重名赛道）、slug→entity、ticker→slug（论点关联公司用 ticker）
+  var nameToSlugs={}; var slugToEntity={}; var tickerToSlug={};
   DATA.entities.forEach(function(e){
-    if(e.type==='industry'||e.type==='unknown') return;
-    if(seenNames[e.name]) return; seenNames[e.name]=true;
-    nodes.push({id:e.slug,name:e.name,type:e.type,symbolSize:8,itemStyle:{color:typeColors[e.type]||'#94a3b8'},category:e.type});
+    slugToEntity[e.slug]=e;
+    (nameToSlugs[e.name]=nameToSlugs[e.name]||[]).push(e.slug);
+    if(e.type==='company'&&e.ticker) tickerToSlug[e.ticker.toUpperCase()]=e.slug;
+  });
+  DATA.entities.forEach(function(e){
+    if(e.type==='industry'||e.type==='unknown'||e.type==='thesis') return;
+    // 节点 id 用 slug（唯一）；重名赛道 label 加产业后缀区分
+    var label=e.name;
+    if(nameToSlugs[e.name].length>1 && e.industry) label=e.name+' ('+e.industry+')';
+    nodes.push({id:e.slug,name:label,type:e.type,industry:e.industry,symbolSize:8,itemStyle:{color:typeColors[e.type]||'#94a3b8'},category:e.type});
     nodeMap[e.slug]=true;
   });
-  // Build links from wikilinks
+  // Build links（wikilink / 公司 / ticker 统一解析为 slug）
   var links=[]; var edgeMap={};
+  function resolveSlugs(srcSlug,linkName){
+    if(nodeMap[linkName]) return [linkName];                 // 已是 slug
+    var cands=nameToSlugs[linkName];                         // 是 name
+    if(cands){
+      if(cands.length===1) return cands;
+      var srcInd=slugToEntity[srcSlug]&&slugToEntity[srcSlug].industry;
+      if(srcInd){var same=cands.filter(function(s){var t=slugToEntity[s];return t&&t.industry===srcInd;});if(same.length)return same;}
+      return cands;                                          // 无法消歧 → 全部连接
+    }
+    var ts=tickerToSlug[(linkName||'').toUpperCase()];       // 是 ticker
+    if(ts) return [ts];
+    return [];
+  }
   function addLink(src,tgt){
     if(!nodeMap[src]||!nodeMap[tgt]) return;
     var key=src<tgt?src+'|||'+tgt:tgt+'|||'+src;
     if(edgeMap[key]) return; edgeMap[key]=true;
-    links.push({source:src,target:tgt,lineStyle:{color:'#C0C8D0',curveness:0,width:1.2}});
+    links.push({source:src,target:tgt,lineStyle:{color:'#C0C8D0',curveness:0,width:0.8}});
   }
   DATA.entities.forEach(function(e){
     if(!nodeMap[e.slug]) return;
-    (e.wikilinks||[]).forEach(function(target){addLink(e.slug,target);});
+    (e.wikilinks||[]).forEach(function(target){resolveSlugs(e.slug,target).forEach(function(t){addLink(e.slug,t);});});
     // Also link companies from segment.company array
     if(e.type==='segment'&&e.companies){
       e.companies.forEach(function(comp){
         var cn=typeof comp==='string'?comp:(comp.name||comp.ticker||'');
         if(!cn) return;
-        // Find matching company entity by name
         var found=DATA.entities.find(function(x){return x.type==='company'&&(x.name===cn||x.ticker===cn);});
         if(found) addLink(e.slug,found.slug);
       });
     }
-    // Link theses to affected companies
+    // Link theses to affected companies（ticker → slug）
     if(e.type==='thesis'&&e.affected_companies){
-      e.affected_companies.forEach(function(cs){addLink(e.slug,cs);});
+      e.affected_companies.forEach(function(cs){resolveSlugs(e.slug,cs).forEach(function(t){addLink(e.slug,t);});});
     }
   });
   // Update node sizes based on connection count
   var connCount={};
   links.forEach(function(l){connCount[l.source]=(connCount[l.source]||0)+1;connCount[l.target]=(connCount[l.target]||0)+1;});
   nodes.forEach(function(n){var c=connCount[n.id]||0;n.symbolSize=c===0?6:Math.max(8,Math.min(55,Math.sqrt(c)*14+6));});
+  // 所有节点都显示标签（长尾节点在边缘，标签不重叠）；赛道字号略大区分层级
+  nodes.forEach(function(n){n.label={show:true,fontSize:n.type==='segment'?11:9};});
   // Render with ECharts
   if(gh) gh.dispose();
   var dom=document.getElementById('graphChart'); gh=echarts.init(dom);
   var categories=Object.keys(typeColors).map(function(k){return{name:k,itemStyle:{color:typeColors[k]}};});
   gh.setOption({
     tooltip:{formatter:function(p){if(p.dataType==='node'){var d=p.data;var cnt=connCount[d.id]||0;return'<b>'+d.name+'</b><br>'+typeIcons[d.type]+' '+d.type+' · '+cnt+' 关联';}return'';}},backgroundColor:'#fff',
-    legend:{show:true,data:categories.map(function(c){return{name:c.name,icon:'circle'};}),bottom:0,textStyle:{fontSize:11}},
-    series:[{type:'graph',layout:'force',roam:true,draggable:true,force:{repulsion:350,edgeLength:[80,250],gravity:0.1,friction:0.6},data:nodes,links:links.slice(0,5000),categories:categories,label:{show:true,fontSize:10,color:'#1D1D1F',formatter:function(p){return p.name.length>10?p.name.slice(0,10)+'…':p.name;}},emphasis:{focus:'adjacency',lineStyle:{width:4},label:{fontSize:14,fontWeight:'bold'}},lineStyle:{color:'#B0B8C0',curveness:0,opacity:0.5}}]
+    legend:{show:false},
+    series:[{type:'graph',layout:'force',roam:true,draggable:true,force:{repulsion:700,edgeLength:[80,260],gravity:0.05,friction:0.6},data:nodes,links:links.slice(0,5000),categories:categories,label:{show:true,fontSize:10,color:'#1D1D1F',formatter:function(p){return p.data&&p.data.type==='segment'?p.name:(p.name.length>14?p.name.slice(0,14)+'…':p.name);}},emphasis:{focus:'adjacency',lineStyle:{width:4},label:{show:true,fontSize:13,fontWeight:'bold'}},lineStyle:{color:'#B0B8C0',curveness:0,opacity:0.25}}]
   });
   gh.on('click',function(p){if(p.dataType==='node'&&p.data&&p.data.id){openDetail(p.data.id);}});
 }
