@@ -60,33 +60,46 @@ body {
 .content { flex: 1; display: flex; gap: 16px; padding: 16px 24px; }
 .report-wrap { flex: 1; min-width: 0; }
 
-/* 报告卡片 */
+/* ===== 内容区：detail-header + 模块化卡片 ===== */
+.detail-header { margin-bottom: 16px; }
+.detail-header h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+.detail-header .meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--text2); font-size: 13px; }
+.detail-header .meta-item { display: inline-flex; align-items: center; }
+.detail-header .meta-item::before { content: '·'; margin-right: 14px; color: var(--border); }
+.detail-header .meta-item:first-child::before { content: ''; display: none; }
+
 .card {
   background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-  padding: 28px 36px; transition: all 0.3s ease;
+  padding: 24px 28px; margin-bottom: 16px; transition: box-shadow 0.3s ease;
 }
+.card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+.card.summary {
+  border-left: 4px solid var(--accent); background: linear-gradient(180deg, #fff 0%, rgba(0,113,227,0.03) 100%);
+}
+.card.summary .card-title { color: var(--accent); }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 14px; letter-spacing: -0.01em; }
+.card-body { font-size: 14px; line-height: 1.7; }
 .card.loading, .card.empty { color: var(--text2); text-align: center; padding: 80px 24px; }
 
-/* 报告 markdown 样式（仿 quality-table） */
-#report h1 { font-size: 24px; margin: 0 0 14px; padding-bottom: 14px; border-bottom: 2px solid var(--border); }
-#report h2 { font-size: 19px; margin: 28px 0 12px; padding-left: 12px; border-left: 4px solid var(--accent); }
-#report h3 { font-size: 16px; margin: 20px 0 8px; }
-#report h4 { font-size: 14px; margin: 16px 0 6px; }
-#report p { margin: 8px 0; font-size: 14px; line-height: 1.7; }
-#report ul, #report ol { margin: 8px 0 8px 22px; font-size: 14px; }
-#report li { margin: 4px 0; }
-#report blockquote { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--text2); margin: 10px 0; }
-#report table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
-#report th {
+/* ===== 卡内 markdown 样式 ===== */
+.card-body h3 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }
+.card-body h4 { font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
+.card-body p { margin: 8px 0; }
+.card-body ul, .card-body ol { margin: 8px 0 8px 22px; }
+.card-body li { margin: 4px 0; }
+.card-body blockquote { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--text2); margin: 10px 0; }
+.card-body table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
+.card-body th {
   text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600; color: var(--text2);
   text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--border); background: var(--bg);
 }
-#report td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
-#report tr:hover td { background: var(--bg); }
-#report code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
-#report a { color: var(--accent); text-decoration: none; }
-#report a:hover { text-decoration: underline; }
-#report hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.card-body td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.card-body tr:hover td { background: var(--bg); }
+.card-body code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+.card-body a { color: var(--accent); text-decoration: none; }
+.card-body a:hover { text-decoration: underline; }
+.card-body hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.card-body strong { font-weight: 600; }
 
 /* 移动端：侧栏收起为顶部横向选择 */
 @media (max-width: 768px) {
@@ -101,8 +114,9 @@ body {
   .sec-title, .date-list, .sidebar-foot { display: none; }
   .topbar { height: 48px; padding: 0 16px; }
   .content { padding: 12px 12px; }
+  .detail-header h2 { font-size: 22px; }
   .card { padding: 16px 14px; }
-  #report table { font-size: 12px; }
+  .card-body table { font-size: 12px; }
 }
 </style>
 </head>
@@ -131,9 +145,7 @@ body {
     </div>
   </div>
   <div class="content">
-    <div class="report-wrap">
-      <div id="report" class="card loading">加载中…</div>
-    </div>
+    <div class="report-wrap" id="report"></div>
   </div>
 </div>
 
@@ -174,8 +186,7 @@ fetch(MANIFEST_PATH)
   .then(r => r.json())
   .then(m => { manifest = m; renderNav(); loadReport(); })
   .catch(() => {
-    reportEl.className = 'card empty';
-    reportEl.textContent = '❌ 无法加载报告清单 manifest.json';
+    reportEl.innerHTML = '<div class="card empty">❌ 无法加载报告清单 manifest.json</div>';
   });
 
 function renderNav() {
@@ -196,7 +207,6 @@ function renderNav() {
     item.textContent = d + (titles[d] ? ' · ' + titles[d] : '');
     dateNav.appendChild(item);
   });
-  // 默认选中第一项（最新日期）
   dateNav.firstChild.classList.add('active');
   bcDate.textContent = dates[0];
 }
@@ -205,19 +215,56 @@ function loadReport() {
   if (!manifest) return;
   const active = document.querySelector('.date-item.active');
   const d = active ? active.dataset.date : (manifest[currentMarket] || [])[0];
-  if (!d) { reportEl.className = 'card empty'; reportEl.textContent = '暂无报告'; return; }
-  reportEl.className = 'card loading';
-  reportEl.textContent = '加载中…';
+  if (!d) { reportEl.innerHTML = '<div class="card empty">暂无报告</div>'; return; }
+  reportEl.innerHTML = '<div class="card loading">加载中…</div>';
   fetch(`reports/${currentMarket}/${d}.md`)
     .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
-    .then(md => {
-      reportEl.className = 'card';
-      reportEl.innerHTML = marked.parse(md, { gfm: true, breaks: true });
-    })
+    .then(md => { reportEl.innerHTML = renderReport(md); })
     .catch(() => {
-      reportEl.className = 'card empty';
-      reportEl.textContent = '❌ 未找到该日报告：' + `reports/${currentMarket}/${d}.md`;
+      reportEl.innerHTML = '<div class="card empty">❌ 未找到该日报告：' + `reports/${currentMarket}/${d}.md</div>`;
     });
+}
+
+/* ===== 报告解析：按 ## 章节拆成卡片模块 ===== */
+function parseReport(md) {
+  const parts = md.split(/^##\s+/m);
+  const header = parts[0];
+  const sections = parts.slice(1).map(p => {
+    const nl = p.indexOf('\n');
+    return nl === -1
+      ? { title: p.trim(), body: '' }
+      : { title: p.slice(0, nl).trim(), body: p.slice(nl + 1) };
+  });
+  return { header, sections };
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+function renderReport(md) {
+  const { header, sections } = parseReport(md);
+  const h1 = (header.match(/^#\s+(.+)$/m) || [])[1] || '';
+  const metaLines = header
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => /^\*\*.*\*\*：/.test(l))
+    .map(l => l.replace(/^\*\*(.*?)\*\*：/, '$1：'));
+
+  let html = '';
+  html += '<div class="detail-header">';
+  if (h1) html += `<h2>${esc(h1)}</h2>`;
+  if (metaLines.length) html += `<div class="meta">${metaLines.map(m => `<span class="meta-item">${esc(m)}</span>`).join('')}</div>`;
+  html += '</div>';
+
+  sections.forEach((s, i) => {
+    const isSummary = i === 0 || /一句话|总览|摘要/.test(s.title);
+    html += `<div class="card${isSummary ? ' summary' : ''}">`;
+    if (s.title) html += `<div class="card-title">${esc(s.title)}</div>`;
+    html += `<div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div>`;
+    html += '</div>';
+  });
+  return html;
 }
 </script>
 </body>
