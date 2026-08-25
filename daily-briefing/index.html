@@ -7,148 +7,216 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
 :root {
-  --bg: #f5f5f7; --text: #1d1d1f; --text2: #6e6e73;
-  --accent: #533afd; --navy: #061b31; --card: #ffffff; --border: #e5e7eb;
+  --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA;
+  --text: #1D1D1F; --text2: #86868B;
+  --accent: #0071E3; --up: #FF3B30; --down: #34C759;
+  --hover: #F5F5F7; --active: rgba(0,113,227,0.10);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
-  background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5;
+  display: flex; min-height: 100vh;
 }
-.hero {
-  background: var(--navy); color: #fff; padding: 40px 24px 32px; text-align: center;
+
+/* ===== 左栏导航 ===== */
+.sidebar {
+  width: 220px; min-width: 220px; background: var(--card);
+  display: flex; flex-direction: column; position: sticky; top: 0;
+  height: 100vh; overflow-y: auto; z-index: 50; border-right: 1px solid var(--border);
 }
-.hero h1 { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
-.hero h1 span { color: #8b9cf7; }
-.hero p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 640px; margin: 0 auto; }
-.controls {
-  max-width: 900px; margin: 24px auto 8px; padding: 0 24px;
-  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+.sidebar-logo { padding: 20px 16px; font-size: 16px; font-weight: 700; border-bottom: 1px solid var(--border); }
+.sidebar-logo span { color: var(--accent); }
+.nav-section { padding: 8px 0; }
+.nav-title { padding: 14px 16px 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text2); }
+.industry-switcher { display: flex; gap: 6px; padding: 8px 16px 12px; flex-wrap: wrap; }
+.ind-btn {
+  padding: 6px 14px; border-radius: 16px; font-size: 12px; font-weight: 500; cursor: pointer;
+  border: 1px solid var(--border); background: var(--card); color: var(--text2); transition: all .15s; font-family: inherit;
 }
-.tabs { display: flex; gap: 4px; background: #e9e9ec; border-radius: 10px; padding: 4px; }
-.tab {
-  border: none; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600;
-  background: transparent; color: var(--text2); cursor: pointer; transition: all 0.2s;
+.ind-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ind-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.sec-title { padding: 10px 16px 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text2); }
+.date-list { padding: 2px 0 16px; }
+.date-item {
+  padding: 6px 16px 6px 36px; font-size: 12px; cursor: pointer; color: var(--text2);
+  transition: all .15s; border-left: 3px solid transparent; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.tab.active { background: #fff; color: var(--accent); box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
-.date-select {
-  padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px;
-  font-size: 14px; background: #fff; color: var(--text); cursor: pointer;
+.date-item:hover { color: var(--text); background: var(--hover); }
+.date-item.active { color: var(--accent); background: var(--active); border-left-color: var(--accent); font-weight: 500; }
+.sidebar-foot { margin-top: auto; padding: 14px 16px; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); }
+
+/* ===== 右栏主区 ===== */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar {
+  background: var(--card); border-bottom: 1px solid var(--border);
+  padding: 0 24px; display: flex; align-items: center; gap: 16px; height: 56px; flex-shrink: 0;
 }
-.hint { max-width: 900px; margin: 0 auto; padding: 0 24px; font-size: 12px; color: var(--text2); }
-.container { max-width: 900px; margin: 16px auto 48px; padding: 0 24px; }
-#report {
-  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-  padding: 32px 40px; margin-top: 16px;
+.bc { font-size: 14px; color: var(--text2); }
+.bc .sep { margin: 0 8px; color: var(--border); }
+.bc .active { color: var(--text); font-weight: 500; }
+.bc .crumb { cursor: pointer; transition: color .15s; }
+.bc .crumb:hover { color: var(--accent); }
+.content { flex: 1; display: flex; gap: 16px; padding: 16px 24px; }
+.report-wrap { flex: 1; min-width: 0; }
+
+/* 报告卡片 */
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 28px 36px; transition: all 0.3s ease;
 }
-#report.loading, #report.empty { color: var(--text2); text-align: center; padding: 60px 24px; }
-/* 报告 markdown 样式 */
-#report h1 { font-size: 24px; margin: 0 0 12px; border-bottom: 2px solid var(--border); padding-bottom: 12px; }
-#report h2 { font-size: 19px; margin: 28px 0 12px; padding-left: 10px; border-left: 4px solid var(--accent); }
+.card.loading, .card.empty { color: var(--text2); text-align: center; padding: 80px 24px; }
+
+/* 报告 markdown 样式（仿 quality-table） */
+#report h1 { font-size: 24px; margin: 0 0 14px; padding-bottom: 14px; border-bottom: 2px solid var(--border); }
+#report h2 { font-size: 19px; margin: 28px 0 12px; padding-left: 12px; border-left: 4px solid var(--accent); }
 #report h3 { font-size: 16px; margin: 20px 0 8px; }
 #report h4 { font-size: 14px; margin: 16px 0 6px; }
-#report p { margin: 8px 0; font-size: 14px; }
+#report p { margin: 8px 0; font-size: 14px; line-height: 1.7; }
 #report ul, #report ol { margin: 8px 0 8px 22px; font-size: 14px; }
-#report li { margin: 3px 0; }
-#report blockquote { border-left: 3px solid var(--border); padding-left: 12px; color: var(--text2); margin: 8px 0; }
+#report li { margin: 4px 0; }
+#report blockquote { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--text2); margin: 10px 0; }
 #report table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
-#report th, #report td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
-#report th { background: #f4f4f6; font-weight: 600; }
-#report code { background: #f0f0f2; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
-#report a { color: var(--accent); }
+#report th {
+  text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--border); background: var(--bg);
+}
+#report td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+#report tr:hover td { background: var(--bg); }
+#report code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+#report a { color: var(--accent); text-decoration: none; }
+#report a:hover { text-decoration: underline; }
 #report hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-.footer { text-align: center; padding: 32px 24px; font-size: 12px; color: var(--text2); border-top: 1px solid var(--border); }
+
+/* 移动端：侧栏收起为顶部横向选择 */
 @media (max-width: 768px) {
-  .hero h1 { font-size: 24px; }
-  #report { padding: 20px 16px; }
-  .tabs { width: 100%; }
-  .tab { flex: 1; }
-  .date-select { flex: 1; }
+  body { flex-direction: column; }
+  .sidebar {
+    width: 100%; min-width: 0; height: auto; position: static; overflow: visible;
+    border-right: none; border-bottom: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; align-items: center;
+    padding: 10px 12px; gap: 8px;
+  }
+  .sidebar-logo { border: none; padding: 0; font-size: 14px; }
+  .industry-switcher { padding: 0; }
+  .sec-title, .date-list, .sidebar-foot { display: none; }
+  .topbar { height: 48px; padding: 0 16px; }
+  .content { padding: 12px 12px; }
+  .card { padding: 16px 14px; }
+  #report table { font-size: 12px; }
 }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <h1>每日财经<span>简报</span></h1>
-  <p>美股日度复盘（早盘版）· A股+港股收盘复盘（收盘版）· 数据源驱动 + 大模型生成 · 查看历史每日报告</p>
-</header>
-
-<div class="controls">
-  <div class="tabs">
-    <button class="tab active" data-market="us" id="tab-us">📈 美股早盘版</button>
-    <button class="tab" data-market="cn" id="tab-cn">📰 A股收盘版</button>
+<!-- 左栏导航 -->
+<aside class="sidebar">
+  <div class="sidebar-logo">每日财经<span>简报</span></div>
+  <div class="nav-section">
+    <div class="nav-title">报告类型</div>
+    <div class="industry-switcher" id="marketSwitch">
+      <button class="ind-btn active" data-market="us">美股早盘版</button>
+      <button class="ind-btn" data-market="cn">A股收盘版</button>
+    </div>
+    <div class="sec-title">历史报告</div>
+    <div class="date-list" id="dateNav"></div>
   </div>
-  <select id="date-select" class="date-select"><option>加载中…</option></select>
-</div>
-<div class="hint">提示：选择板块（美股/A股）和日期查看对应报告。报告由「每日简报实战」系统自动生成，数据来源见各报告头部标注。</div>
+  <div class="sidebar-foot">数据源：FMP / Infoway / iFinD / AkShare / 新浪 · 大模型生成</div>
+</aside>
 
-<div class="container">
-  <div id="report" class="loading">加载中…</div>
+<!-- 右栏主区 -->
+<div class="main">
+  <div class="topbar">
+    <div class="bc" id="bc">
+      <span class="crumb" id="bcMarket">美股早盘版</span><span class="sep">›</span><span class="active" id="bcDate">—</span>
+    </div>
+  </div>
+  <div class="content">
+    <div class="report-wrap">
+      <div id="report" class="card loading">加载中…</div>
+    </div>
+  </div>
 </div>
-
-<div class="footer">每日简报实战 · 数据源：FMP / Infoway / iFinD / AkShare / 新浪 · 生成于 GitHub Pages</div>
 
 <script>
 const MANIFEST_PATH = 'manifest.json';
+const MARKET_NAMES = { us: '美股早盘版', cn: 'A股收盘版' };
 let currentMarket = 'us';
 let manifest = null;
 
-const tabs = document.querySelectorAll('.tab');
-const dateSelect = document.getElementById('date-select');
+const marketSwitch = document.getElementById('marketSwitch');
+const dateNav = document.getElementById('dateNav');
+const bcMarket = document.getElementById('bcMarket');
+const bcDate = document.getElementById('bcDate');
 const reportEl = document.getElementById('report');
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    currentMarket = tab.dataset.market;
-    populateDates();
-    loadReport();
-  });
+// 市场切换
+marketSwitch.addEventListener('click', e => {
+  const btn = e.target.closest('.ind-btn');
+  if (!btn) return;
+  document.querySelectorAll('.ind-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentMarket = btn.dataset.market;
+  renderNav();
+  loadReport();
 });
 
-dateSelect.addEventListener('change', loadReport);
+// 日期导航（事件委托）
+dateNav.addEventListener('click', e => {
+  const item = e.target.closest('.date-item');
+  if (!item) return;
+  document.querySelectorAll('.date-item').forEach(i => i.classList.remove('active'));
+  item.classList.add('active');
+  bcDate.textContent = item.dataset.date;
+  loadReport();
+});
 
 fetch(MANIFEST_PATH)
   .then(r => r.json())
-  .then(m => { manifest = m; populateDates(); loadReport(); })
+  .then(m => { manifest = m; renderNav(); loadReport(); })
   .catch(() => {
-    reportEl.className = 'empty';
+    reportEl.className = 'card empty';
     reportEl.textContent = '❌ 无法加载报告清单 manifest.json';
   });
 
-function populateDates() {
+function renderNav() {
   if (!manifest) return;
   const dates = (manifest[currentMarket] || []).slice().sort().reverse(); // 最新在前
-  dateSelect.innerHTML = '';
+  const titles = manifest[currentMarket + '_title'] || {};
+  bcMarket.textContent = MARKET_NAMES[currentMarket];
+  dateNav.innerHTML = '';
   if (dates.length === 0) {
-    dateSelect.innerHTML = '<option>暂无报告</option>';
+    dateNav.innerHTML = '<div class="date-item" style="cursor:default;color:var(--text2);">暂无报告</div>';
+    bcDate.textContent = '暂无';
     return;
   }
   dates.forEach(d => {
-    const opt = document.createElement('option');
-    opt.value = d;
-    opt.textContent = d + (manifest[currentMarket + '_title'] && manifest[currentMarket + '_title'][d] ? ' · ' + manifest[currentMarket + '_title'][d] : '');
-    dateSelect.appendChild(opt);
+    const item = document.createElement('div');
+    item.className = 'date-item';
+    item.dataset.date = d;
+    item.textContent = d + (titles[d] ? ' · ' + titles[d] : '');
+    dateNav.appendChild(item);
   });
+  // 默认选中第一项（最新日期）
+  dateNav.firstChild.classList.add('active');
+  bcDate.textContent = dates[0];
 }
 
 function loadReport() {
   if (!manifest) return;
-  const date = dateSelect.value;
-  if (!date) { reportEl.className = 'empty'; reportEl.textContent = '暂无报告'; return; }
-  reportEl.className = 'loading';
+  const active = document.querySelector('.date-item.active');
+  const d = active ? active.dataset.date : (manifest[currentMarket] || [])[0];
+  if (!d) { reportEl.className = 'card empty'; reportEl.textContent = '暂无报告'; return; }
+  reportEl.className = 'card loading';
   reportEl.textContent = '加载中…';
-  fetch(`reports/${currentMarket}/${date}.md`)
+  fetch(`reports/${currentMarket}/${d}.md`)
     .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
     .then(md => {
-      reportEl.className = '';
+      reportEl.className = 'card';
       reportEl.innerHTML = marked.parse(md, { gfm: true, breaks: true });
     })
     .catch(() => {
-      reportEl.className = 'empty';
-      reportEl.textContent = '❌ 未找到该日报告：' + `reports/${currentMarket}/${date}.md`;
+      reportEl.className = 'card empty';
+      reportEl.textContent = '❌ 未找到该日报告：' + `reports/${currentMarket}/${d}.md`;
     });
 }
 </script>
