@@ -12,6 +12,12 @@
   --text: #1D1D1F; --text2: #86868B;
   --accent: #0071E3; --up: #FF3B30; --down: #34C759;
   --hover: #F5F5F7; --active: rgba(0,113,227,0.10);
+  --tag-blue-bg:#dbeafe; --tag-blue-text:#1e40af;
+  --tag-green-bg:#dcfce7; --tag-green-text:#166534;
+  --tag-red-bg:#fee2e2; --tag-red-text:#991b1b;
+  --tag-yellow-bg:#fef3c7; --tag-yellow-text:#92400e;
+  --tag-purple-bg:#ede9fe; --tag-purple-text:#6d28d9;
+  --tag-gray-bg:#f2f2f7; --tag-gray-text:#3a3a3c;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -72,7 +78,7 @@ body {
 .content { flex: 1; display: flex; gap: 16px; padding: 16px 24px; }
 .report-wrap { flex: 1; min-width: 0; }
 
-/* ===== detail-header + 模块化卡片（方案 A 通用） ===== */
+/* ===== detail-header（通用） ===== */
 .detail-header { margin-bottom: 16px; }
 .detail-header h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
 .detail-header .meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--text2); font-size: 13px; }
@@ -83,59 +89,83 @@ body {
   display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 10px;
   font-size: 11px; font-weight: 500; margin-left: 12px; vertical-align: middle;
 }
-.version-badge.morning { background: #dbeafe; color: #1e40af; }
-.version-badge.evening { background: #ede9fe; color: #6d28d9; }
+.version-badge.morning { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.version-badge.evening { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
 
+/* ===== 通用卡片 ===== */
 .card {
   background: var(--card); border: 1px solid var(--border); border-radius: 12px;
   padding: 24px 28px; margin-bottom: 16px; transition: box-shadow 0.3s ease;
 }
 .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
-.card.summary {
-  border-left: 4px solid var(--accent); background: linear-gradient(180deg, #fff 0%, rgba(0,113,227,0.03) 100%);
-}
-.card.summary .card-title { color: var(--accent); }
-.card-title { font-size: 18px; font-weight: 600; margin-bottom: 14px; letter-spacing: -0.01em; }
+.card-title { font-size: 18px; font-weight: 600; margin-bottom: 14px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+.card-title i { color: var(--accent); }
+.card-subtitle { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
 .card-body { font-size: 14px; line-height: 1.7; }
 .card.loading, .card.empty { color: var(--text2); text-align: center; padding: 80px 24px; }
-
-/* ===== 卡内 markdown 样式 ===== */
 .card-body h3 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }
 .card-body h4 { font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
 .card-body p { margin: 8px 0; }
 .card-body ul, .card-body ol { margin: 8px 0 8px 22px; }
 .card-body li { margin: 4px 0; }
 .card-body blockquote { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--text2); margin: 10px 0; }
-.card-body table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
-.card-body th {
-  text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600; color: var(--text2);
-  text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 2px solid var(--border); background: var(--bg);
+.card-body strong { font-weight: 600; }
+.card-body hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+/* ===== 表格（data-table 风格） ===== */
+.card-body table, .data-table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 13px; }
+.card-body th, .data-table th {
+  text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 500; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid var(--border); background: #F2F2F7;
 }
-.card-body td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
-.card-body tr:hover td { background: var(--bg); }
+.card-body td, .data-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); }
+.card-body tr:hover td, .data-table tbody tr:hover { background: var(--bg); }
 .card-body code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
 .card-body a { color: var(--accent); text-decoration: none; }
-.card-body a:hover { text-decoration: underline; }
-.card-body hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-.card-body strong { font-weight: 600; }
 
-/* ===== 方案 B：统计卡片 + 图表（design-v3 风格） ===== */
-#augment { margin-bottom: 4px; }
-.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+/* ===== tag 徽章 ===== */
+.tag { display: inline-flex; align-items: center; padding: 0 9px; border-radius: 10px; font-size: 11px; font-weight: 500; line-height: 20px; height: 20px; gap: 4px; }
+.tag-green { background: var(--tag-green-bg); color: var(--tag-green-text); }
+.tag-blue { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
+.tag-red { background: var(--tag-red-bg); color: var(--tag-red-text); }
+.tag-yellow { background: var(--tag-yellow-bg); color: var(--tag-yellow-text); }
+.tag-purple { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.tag-gray { background: var(--tag-gray-bg); color: var(--tag-gray-text); }
+
+/* ===== 统计卡网格 ===== */
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
 .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: center; }
-.stat-change { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.stat-change.up { color: var(--up); }
-.stat-change.down { color: var(--down); }
-.stat-label { font-size: 11px; font-weight: 500; color: var(--text2); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 16px; }
-.chart-card .card-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
-.chart-box { width: 100%; height: 280px; }
+.stat-label { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat-value { font-size: 20px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; margin-top: 4px; }
+.stat-value.up { color: var(--up); } .stat-value.down { color: var(--down); }
+.stat-change { font-size: 12px; font-weight: 600; margin-top: 2px; color: var(--text2); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+.chart-box { width: 100%; height: 220px; }
 
-/* 方案切换：A 隐藏统计/图表，B 显示 */
-body.scheme-a #augment { display: none; }
-body.scheme-b #augment { display: block; }
+/* ===== hotspot-card（今日热点，design-v3 核心） ===== */
+.hotspot-card {
+  position: relative; border-left: 3px solid var(--accent); background: #FFFFFF;
+  border-radius: 12px; padding: 18px 20px 18px 56px; margin-bottom: 14px;
+  transition: all 0.3s ease; border: 1px solid var(--border);
+}
+.hotspot-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.10); transform: translateY(-2px); }
+.hotspot-num { position: absolute; top: 8px; left: 14px; font-size: 30px; font-weight: 800; color: rgba(0,113,227,0.12); }
+.hotspot-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.hotspot-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.hotspot-section { margin-bottom: 8px; }
+.hotspot-section-label { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+.hotspot-section-text { font-size: 14px; color: var(--text); line-height: 1.6; }
+.hotspot-section-text table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
+.hotspot-section-text th { text-align: left; padding: 8px 10px; font-size: 11px; font-weight: 500; color: var(--text2); background: #F2F2F7; border-bottom: 1px solid var(--border); }
+.hotspot-section-text td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.hotspot-section-text ul, .hotspot-section-text ol { margin: 4px 0 4px 20px; }
 
-/* 移动端：侧栏收起为顶部横向选择 */
+/* ===== 市场概览卡（方案 B） ===== */
+.overview-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+.overview-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.overview-title i { color: var(--accent); }
+
+/* 移动端 */
 @media (max-width: 768px) {
   body { flex-direction: column; }
   .sidebar {
@@ -150,8 +180,9 @@ body.scheme-b #augment { display: block; }
   .content { padding: 12px 12px; }
   .detail-header h2 { font-size: 22px; }
   .card { padding: 16px 14px; }
-  .card-body table { font-size: 12px; }
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-2 { grid-template-columns: 1fr; }
+  .hotspot-card { padding: 16px 14px 16px 46px; }
   .scheme-toggle span.toggle-text { display: none; }
 }
 </style>
@@ -196,6 +227,7 @@ const MARKET_NAMES = { us: '美股早盘版', cn: 'A股收盘版' };
 let currentMarket = 'us';
 let manifest = null;
 let scheme = 'a';
+let cachedMd = '';
 let chartInstance = null;
 let chartData = null;
 
@@ -213,8 +245,7 @@ toggleBtn.addEventListener('click', () => {
   toggleBtn.innerHTML = scheme === 'b'
     ? '<span class="dot a">A</span><span class="toggle-text">纯文字版</span>'
     : '<span class="dot b">B</span><span class="toggle-text">图表版</span>';
-  if (scheme === 'b') initCharts();
-  else disposeChart();
+  render();
 });
 
 // 市场切换
@@ -274,17 +305,18 @@ function loadReport() {
   reportEl.innerHTML = '<div class="card loading">加载中…</div>';
   fetch(`reports/${currentMarket}/${d}.md`)
     .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
-    .then(md => {
-      reportEl.innerHTML = renderReport(md);
-      augmentReport();      // 构建方案 B 的统计卡 + 图表
-      if (scheme === 'b') initCharts();
-    })
-    .catch(() => {
-      reportEl.innerHTML = '<div class="card empty">❌ 未找到该日报告</div>';
-    });
+    .then(md => { cachedMd = md; render(); })
+    .catch(() => { reportEl.innerHTML = '<div class="card empty">❌ 未找到该日报告</div>'; });
 }
 
-/* ===== 报告解析：按 ## 章节拆成卡片模块 ===== */
+function render() {
+  if (!cachedMd) return;
+  disposeChart();
+  reportEl.innerHTML = scheme === 'a' ? buildSchemeA(cachedMd) : buildSchemeB(cachedMd);
+  if (scheme === 'b') initCharts();
+}
+
+/* ===== 通用解析 ===== */
 function parseReport(md) {
   const parts = md.split(/^##\s+/m);
   const header = parts[0];
@@ -294,24 +326,24 @@ function parseReport(md) {
   });
   return { header, sections };
 }
-
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
-function renderReport(md) {
-  const { header, sections } = parseReport(md);
+function renderHeader(md) {
+  const { header } = parseReport(md);
   const h1 = (header.match(/^#\s+(.+)$/m) || [])[1] || '';
   const metaLines = header.split('\n').map(l => l.trim()).filter(l => /^\*\*.*\*\*：/.test(l)).map(l => l.replace(/^\*\*(.*?)\*\*：/, '$1：'));
-  const isMorning = /美股|早盘/.test(h1) || currentMarket === 'us';
+  const isMorning = currentMarket === 'us';
+  let h = '<div class="detail-header">';
+  if (h1) h += `<h2>${esc(h1)}<span class="version-badge ${isMorning ? 'morning' : 'evening'}">${isMorning ? '美股早盘版' : 'A股收盘版'}</span></h2>`;
+  if (metaLines.length) h += `<div class="meta">${metaLines.map(m => `<span class="meta-item">${esc(m)}</span>`).join('')}</div>`;
+  h += '</div>';
+  return h;
+}
 
-  let html = '';
-  html += '<div class="detail-header">';
-  if (h1) html += `<h2>${esc(h1)}<span class="version-badge ${isMorning ? 'morning' : 'evening'}">${isMorning ? '美股早盘版' : 'A股收盘版'}</span></h2>`;
-  if (metaLines.length) html += `<div class="meta">${metaLines.map(m => `<span class="meta-item">${esc(m)}</span>`).join('')}</div>`;
-  html += '</div>';
-
-  // 方案 B 统计/图表容器（A 方案隐藏）
-  html += '<div id="augment"></div>';
-
+/* ===== 方案 A：纯文字（章节卡片） ===== */
+function buildSchemeA(md) {
+  const { sections } = parseReport(md);
+  let html = renderHeader(md);
   sections.forEach((s, i) => {
     const isSummary = i === 0 || /一句话|总览|摘要/.test(s.title);
     html += `<div class="card${isSummary ? ' summary' : ''}">`;
@@ -322,23 +354,58 @@ function renderReport(md) {
   return html;
 }
 
-/* ===== 方案 B：从报告表格提取统计卡 + 图表 ===== */
-function augmentReport() {
-  chartData = null;
-  const aug = document.getElementById('augment');
-  if (!aug) return;
-  aug.innerHTML = '';
-  const tables = reportEl.querySelectorAll('table');
-  let indexTbl = null, sectorTbl = null;
-  tables.forEach(t => {
-    const ths = Array.from(t.querySelectorAll('thead th')).map(x => x.textContent.trim());
-    if (!ths.some(h => h.includes('涨跌幅') || h.includes('涨跌'))) return;
-    const n = t.querySelectorAll('tbody tr').length;
-    if (!indexTbl) indexTbl = t;
-    if (!sectorTbl || n > sectorTbl.querySelectorAll('tbody tr').length) sectorTbl = t;
-  });
+/* ===== 方案 B：design-v3 风格（图表 + 文字设计化） ===== */
+function buildSchemeB(md) {
+  const { sections } = parseReport(md);
+  let html = renderHeader(md);
 
-  // 统计卡：指数表前 5 行
+  // 市场概览卡：统计卡 + 板块图
+  const overview = buildOverviewCard(sections);
+  html += overview.html;
+  chartData = overview.chartData;
+
+  // 各章节
+  sections.forEach((s, i) => {
+    if (!s.body.trim()) return;
+    // 今日一句话 → 高亮摘要
+    if (i === 0 || /一句话|总览|摘要/.test(s.title)) {
+      html += `<div class="card summary"><div class="card-title">${esc(s.title)}</div><div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div></div>`;
+      return;
+    }
+    // 板块热点 / 产业新闻 → hotspot-card（两种报告都支持）
+    if (/板块热点|产业新闻/.test(s.title)) {
+      html += `<div class="card" style="padding:20px 24px;"><div class="card-title">🔥 今日热点</div>${renderHotspots(s.body)}</div>`;
+      return;
+    }
+    // 其他章节 → 设计化卡片
+    html += `<div class="card"><div class="card-title">${esc(s.title)}</div><div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div></div>`;
+  });
+  return html;
+}
+
+function buildOverviewCard(sections) {
+  // 在所有章节的表格里找：指数表（首个带涨跌幅）、板块表（首列=板块/行业 且非港股/个股）
+  let indexTbl = null, sectorTbl = null;
+  sections.forEach(sec => {
+    if (!sec.body.trim()) return;
+    const tmp = document.createElement('div');
+    tmp.innerHTML = marked.parse(sec.body, { gfm: true });
+    tmp.querySelectorAll('table').forEach(t => {
+      const ths = Array.from(t.querySelectorAll('thead th')).map(x => x.textContent.trim());
+      if (!ths.some(h => h.includes('涨跌幅') || h.includes('涨跌'))) return;
+      const n = t.querySelectorAll('tbody tr').length;
+      if (!indexTbl) indexTbl = t;
+      // 板块表：首列表头含"板块/行业"，且章节不是港股/个股/资金
+      const firstCol = ths[0] || '';
+      const isSectorTable = /板块|行业/.test(firstCol) && !/港股|个股|资金|公司/.test(firstCol);
+      const secIsSector = /板块|行业/.test(sec.title) && !/港股|个股|资金/.test(sec.title);
+      if ((isSectorTable || secIsSector) && (!sectorTbl || n > sectorTbl.querySelectorAll('tbody tr').length)) {
+        sectorTbl = t;
+      }
+    });
+  });
+  // 统计卡
+  let statsHtml = '';
   if (indexTbl) {
     const ths = Array.from(indexTbl.querySelectorAll('thead th')).map(x => x.textContent.trim());
     const pctIdx = ths.findIndex(h => h.includes('涨跌幅') || h.includes('涨跌'));
@@ -348,31 +415,76 @@ function augmentReport() {
       return { name: (c[0]?.textContent || '').trim(), pct: (c[pctIdx]?.textContent || '').trim() };
     }).filter(x => x.name && x.pct);
     if (stats.length) {
-      let h = '<div class="stat-grid">';
-      stats.forEach(s => {
+      statsHtml = '<div class="stat-grid">' + stats.map(s => {
         const m = parseFloat(s.pct.replace('%', ''));
         const cls = m > 0 ? 'up' : m < 0 ? 'down' : '';
-        h += `<div class="stat-card"><div class="stat-change ${cls}">${esc(s.pct)}</div><div class="stat-label">${esc(s.name)}</div></div>`;
-      });
-      h += '</div>';
-      aug.innerHTML += h;
+        return `<div class="stat-card"><div class="stat-label">${esc(s.name)}</div><div class="stat-value ${cls}">${esc(s.pct)}</div><div class="stat-change">${s.name.includes('成交') ? s.pct : ''}</div></div>`;
+      }).join('') + '</div>';
     }
   }
-
-  // 板块图：行数最多的涨跌幅表（板块表）→ 横向柱状图
-  if (sectorTbl) {
+  // 板块图数据
+  let chartData = null;
+  if (sectorTbl && sectorTbl !== indexTbl) {
     const ths = Array.from(sectorTbl.querySelectorAll('thead th')).map(x => x.textContent.trim());
     const pctIdx = ths.findIndex(h => h.includes('涨跌幅') || h.includes('涨跌'));
     const rows = Array.from(sectorTbl.querySelectorAll('tbody tr'));
-    const data = rows.map(r => {
+    chartData = rows.map(r => {
       const c = r.querySelectorAll('td');
       return { name: (c[0]?.textContent || '').trim(), pct: parseFloat((c[pctIdx]?.textContent || '0').replace('%', '')) || 0 };
     }).filter(d => d.name && !/指数/.test(d.name));
-    if (data.length >= 3) {
-      chartData = data;
-      aug.innerHTML += '<div class="chart-card"><div class="card-title">📊 板块涨跌全景</div><div class="chart-box" id="sectorChart"></div></div>';
-    }
+    if (chartData.length < 3) chartData = null;
   }
+  let html = '<div class="overview-card"><div class="overview-title">📊 市场概览</div>' + statsHtml;
+  if (chartData) {
+    html += '<div class="grid-2"><div><div class="card-subtitle">板块涨跌全景</div><div class="chart-box" id="sectorChart"></div></div><div></div></div>';
+  }
+  html += '</div>';
+  return { html, chartData };
+}
+
+function renderHotspots(body) {
+  const chunks = body.split(/^###\s+/m).filter(c => c.trim());
+  let html = '', num = 0;
+  chunks.forEach(chunk => {
+    const nl = chunk.indexOf('\n');
+    const title = (nl === -1 ? chunk : chunk.slice(0, nl)).replace(/^🔥\s*/, '').trim();
+    const rest = nl === -1 ? '' : chunk.slice(nl + 1);
+    num++;
+    html += '<div class="hotspot-card">';
+    html += `<div class="hotspot-num">${String(num).padStart(2, '0')}</div>`;
+    html += `<div class="hotspot-title">${esc(title)}</div>`;
+    const tags = extractTags(rest);
+    if (tags.length) html += `<div class="hotspot-meta">${tags.map(t => `<span class="tag ${t.cls}">${t.label}</span>`).join('')}</div>`;
+    splitLabeled(rest).forEach(s => {
+      html += `<div class="hotspot-section"><div class="hotspot-section-label">${esc(s.label)}</div><div class="hotspot-section-text">${marked.parse(s.content, { gfm: true })}</div></div>`;
+    });
+    html += '</div>';
+  });
+  return html;
+}
+
+const LABEL_MAP = { '爆发逻辑':'触发逻辑', '关联产业链':'产业链映射', '典型代表公司':'典型标的', '热度判断':'热度判断', '风险提示':'风险提示', '发生了什么':'事件', '简单点评':'点评', '深度分析':'分析' };
+function splitLabeled(md) {
+  const labelRe = /^\*\*(.+?)\*\*：\s*/;
+  const lines = md.split('\n');
+  const secs = []; let cur = null;
+  lines.forEach(line => {
+    const m = line.match(labelRe);
+    if (m) { cur = { label: LABEL_MAP[m[1]] || m[1], content: line.slice(m[0].length) + '\n' }; secs.push(cur); }
+    else if (cur) cur.content += line + '\n';
+    else if (line.trim()) { cur = { label: '内容', content: line + '\n' }; secs.push(cur); }
+  });
+  return secs.map(s => ({ label: s.label, content: s.content.trim() }));
+}
+
+function extractTags(text) {
+  const tags = [];
+  let m = text.match(/类型[:=]\s*\*{0,2}([^*]+?)\*{0,2}\s*(?:；|;|，|$)/);
+  if (m) tags.push({ cls: 'tag-blue', label: '驱动：' + m[1].trim() });
+  m = text.match(/持续性[:=]\s*\*{0,2}([^*]+?)\*{0,2}\s*(?:；|;|$)/);
+  if (m) tags.push({ cls: 'tag-purple', label: '持续性：' + m[1].trim() });
+  if (/风险/.test(text) && tags.length < 3) tags.push({ cls: 'tag-yellow', label: '⚠ 风险' });
+  return tags.slice(0, 3);
 }
 
 function initCharts() {
@@ -382,22 +494,15 @@ function initCharts() {
   chartInstance = echarts.init(el);
   const sorted = chartData.slice().sort((a, b) => a.pct - b.pct);
   chartInstance.setOption({
-    grid: { left: 90, right: 40, top: 8, bottom: 24 },
+    grid: { left: 120, right: 40, top: 8, bottom: 20 },
     xAxis: { type: 'value', axisLabel: { fontSize: 11 }, splitLine: { lineStyle: { color: '#F0F0F2' } } },
-    yAxis: { type: 'category', data: sorted.map(d => d.name), axisLabel: { fontSize: 11, color: '#1D1D1F' } },
+    yAxis: { type: 'category', data: sorted.map(d => d.name), axisLabel: { fontSize: 11, color: '#1D1D1F', width: 100, overflow: 'truncate' } },
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: p => `${p[0].name}：${p[0].value}%` },
-    series: [{
-      type: 'bar', data: sorted.map(d => d.pct), barWidth: 14,
-      itemStyle: { color: p => p.value >= 0 ? '#FF3B30' : '#34C759', borderRadius: 3 },
-      label: { show: true, position: 'right', formatter: '{c}%', fontSize: 11, color: '#1D1D1F' }
-    }]
+    series: [{ type: 'bar', data: sorted.map(d => d.pct), barWidth: 14, itemStyle: { color: p => p.value >= 0 ? '#FF3B30' : '#34C759', borderRadius: 3 }, label: { show: true, position: 'right', formatter: '{c}%', fontSize: 11, color: '#1D1D1F' } }]
   });
   window.addEventListener('resize', () => chartInstance && chartInstance.resize());
 }
-
-function disposeChart() {
-  if (chartInstance) { chartInstance.dispose(); chartInstance = null; }
-}
+function disposeChart() { if (chartInstance) { chartInstance.dispose(); chartInstance = null; } }
 </script>
 </body>
 </html>
