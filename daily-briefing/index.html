@@ -165,6 +165,75 @@ body {
 .overview-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 .overview-title i { color: var(--accent); }
 
+/* ===== 模块标题（design-v3 section-title） ===== */
+.section-title { font-size: 18px; font-weight: 600; color: var(--text); margin: 20px 0 16px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.01em; }
+.section-title i { color: var(--accent); flex-shrink: 0; }
+.section-title .st-right { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--text2); display: inline-flex; align-items: center; gap: 4px; }
+
+/* ===== 涨跌语义色（正文内 +X% / -X% 红涨绿跌） ===== */
+.up { color: var(--up); }
+.down { color: var(--down); }
+
+/* ===== 公告条目（ann-item） ===== */
+.ann-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.ann-item:last-child { border-bottom: none; }
+.ann-badge { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.ann-content { flex: 1; }
+.ann-title { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.45; }
+.ann-source { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+/* ===== 跟踪清单（track-item） ===== */
+.track-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.track-item:last-child { border-bottom: none; }
+.track-checkbox { width: 16px; height: 16px; border-radius: 3px; border: 1px solid var(--border); flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #1B5E20; background: #E8F5E9; border-color: #1B5E20; }
+.track-checkbox.done { background: #E8F5E9; border-color: #1B5E20; color: #1B5E20; }
+.track-checkbox.todo { background: #F2F2F7; border-color: #E5E5EA; color: #C7C7CC; }
+.track-text { flex: 1; font-size: 14px; color: var(--text); line-height: 1.4; }
+.track-type { font-size: 11px; font-weight: 500; padding: 0 8px; border-radius: 10px; height: 20px; line-height: 20px; flex-shrink: 0; display: inline-flex; align-items: center; }
+
+/* ===== 新闻头条（dark-news-item） ===== */
+.news-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 12px; transition: all 0.3s ease; }
+.news-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+.news-item h3 { color: var(--text); font-size: 15px; font-weight: 600; margin-bottom: 6px; line-height: 1.4; }
+.news-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.news-item .news-ans { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.news-ans p { margin: 2px 0; }
+
+/* ===== 宏观条目（macro-item） ===== */
+.macro-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.macro-item:last-child { border-bottom: none; }
+.macro-flag { font-size: 18px; line-height: 1.2; flex-shrink: 0; }
+.macro-content { flex: 1; }
+.macro-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.macro-desc { font-size: 12px; color: var(--text2); margin-top: 2px; line-height: 1.5; }
+
+/* ===== 美股速览摘要（us-summary-card） ===== */
+.us-summary-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; }
+.us-summary-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.us-summary-item { display: flex; justify-content: space-between; gap: 16px; padding: 4px 0; font-size: 14px; }
+.us-summary-label { color: var(--text2); }
+.us-summary-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ===== 指数统计卡（方案B 市场概览，增强版） ===== */
+.hero-card { background: linear-gradient(135deg, #F0F7FF 0%, #FFFFFF 100%); border: 1px solid #DCE8FA; border-left: 3px solid var(--accent); border-radius: 12px; padding: 22px 24px; margin-bottom: 16px; }
+.hero-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.hero-title i { color: var(--accent); }
+.hero-text { font-size: 14px; color: var(--text); line-height: 1.75; }
+
+/* ===== 方案B专属增强（body.scheme-b） ===== */
+/* 热点标签用实色（贴近 design-v3 收盘版观感），更醒目 */
+body.scheme-b .hotspot-meta .tag.tag-red   { background: #FF3B30; color: #fff; }
+body.scheme-b .hotspot-meta .tag.tag-green { background: #34C759; color: #fff; }
+body.scheme-b .hotspot-meta .tag.tag-blue  { background: #0071E3; color: #fff; }
+body.scheme-b .hotspot-meta .tag.tag-purple{ background: #AF52DE; color: #fff; }
+body.scheme-b .hotspot-meta .tag.tag-yellow{ background: #FF9500; color: #fff; }
+body.scheme-b .hotspot-meta .tag.tag-gray  { background: #F2F2F7; color: var(--text); }
+/* 方案B卡片 hover 上浮（design-v3 dashboard-card 效果） */
+body.scheme-b .card, body.scheme-b .overview-card { transition: all 0.3s ease; }
+body.scheme-b .card:hover, body.scheme-b .overview-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+body.scheme-b .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+body.scheme-b .stat-card { transition: all 0.3s ease; }
+
 /* 移动端 */
 @media (max-width: 768px) {
   body { flex-direction: column; }
@@ -225,8 +294,12 @@ body {
 const MANIFEST_PATH = 'manifest.json';
 const MARKET_NAMES = { us: '美股早盘版', cn: 'A股收盘版' };
 let currentMarket = 'us';
+// 支持 ?market=cn|us 深链指定市场（便于外链/测试）
+(function(){ const m = new URLSearchParams(location.search).get('market'); if (m === 'cn' || m === 'us') { currentMarket = m; const b = document.querySelector('.ind-btn[data-market="' + m + '"]'); if (b) { document.querySelectorAll('.ind-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); } } })();
 let manifest = null;
 let scheme = 'a';
+// 支持 ?view=b 深链直接进入图表版（便于外链/测试）
+(function(){ const v = new URLSearchParams(location.search).get('view'); if (v === 'b') { scheme = 'b'; document.body.className = 'scheme-b'; } })();
 let cachedMd = '';
 let chartInstance = null;
 let chartData = null;
@@ -354,36 +427,125 @@ function buildSchemeA(md) {
   return html;
 }
 
-/* ===== 方案 B：design-v3 风格（图表 + 文字设计化） ===== */
+/* ===== 方案 B：design-v3 模块化排版（内容原样，正文组件化，非整块 raw markdown） ===== */
+/* 章节类型判定（基于标题关键词，兼容美股 + A股两类报告模板） */
+function classifySection(title) {
+  const t = title || '';
+  if (/今日一句话|一句话(总览|核心)/.test(t)) return 'hero';
+  if (/市场指数|市场状态|指数与资金|市场概览/.test(t)) return 'market';
+  if (/板块热点|热点追踪|产业新闻|热点/.test(t)) return 'hotspot';
+  if (/新闻头条|重要新闻/.test(t)) return 'news';
+  if (/明日继续追踪|追踪清单|关注(点|清单)|明日跟/.test(t)) return 'track';
+  if (/个股要闻|龙头股|异动|标签股|涨跌幅/.test(t)) return 'stock';
+  if (/宏观政策|宏观数据|宏观/.test(t)) return 'macro';
+  if (/明日|本周展望|展望/.test(t)) return 'outlook';
+  if (/数据来源|来源说明|数据口径|口径说明/.test(t)) return 'source';
+  return 'generic';
+}
+
 function buildSchemeB(md) {
   const { sections } = parseReport(md);
   let html = renderHeader(md);
-
-  // 市场概览卡：统计卡 + 板块图
-  const overview = buildOverviewCard(sections);
-  html += overview.html;
-  chartData = overview.chartData;
-
-  // 各章节
-  sections.forEach((s, i) => {
-    if (!s.body.trim()) return;
-    // 今日一句话 → 高亮摘要
-    if (i === 0 || /一句话|总览|摘要/.test(s.title)) {
-      html += `<div class="card summary"><div class="card-title">${esc(s.title)}</div><div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div></div>`;
-      return;
+  let sectorSeries = null;
+  sections.forEach(s => {
+    if (!s.body.trim() && !s.title) return;
+    switch (classifySection(s.title)) {
+      case 'hero':    html += heroSection(s); break;
+      case 'market':  { const r = buildOverviewCard(sections, s.title); html += r.html; sectorSeries = sectorSeries || r.chartData; html += subCardSection(s, '📊', false); break; }
+      case 'hotspot': html += hotspotSection(s); break;
+      case 'news':    html += newsSection(s); break;
+      case 'track':   html += subCardSection(s, '📍'); break;
+      case 'stock':   html += subCardSection(s, '🏷️'); break;
+      case 'macro':   html += subCardSection(s, '🏛️'); break;
+      case 'outlook': html += subCardSection(s, '🧭'); break;
+      case 'source':  html += sourceSection(s); break;
+      default:        html += subCardSection(s, '📄');
     }
-    // 板块热点 / 产业新闻 → hotspot-card（两种报告都支持）
-    if (/板块热点|产业新闻/.test(s.title)) {
-      html += `<div class="card" style="padding:20px 24px;"><div class="card-title">🔥 今日热点</div>${renderHotspots(s.body)}</div>`;
-      return;
-    }
-    // 其他章节 → 设计化卡片
-    html += `<div class="card"><div class="card-title">${esc(s.title)}</div><div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div></div>`;
   });
+  document.__sectorSeries = sectorSeries;
   return html;
 }
 
-function buildOverviewCard(sections) {
+/* 今日一句话 → 高亮 hero 卡 */
+function heroSection(s) {
+  const body = s.body.replace(/^---+$/gm, '').trim();
+  return `<div class="hero-card"><div class="hero-title"><i>✨</i> ${esc(s.title)}</div><div class="hero-text">${marked.parse(body, { gfm: true, breaks: true })}</div></div>`;
+}
+
+/* 板块热点 / 产业新闻 → hotspot-card 列表（每个 ### 小节 = 一张热点卡） */
+function hotspotSection(s) {
+  const body = s.body.replace(/^---+$/gm, '').trim();
+  return `<div class="section-title"><i>🔥</i> ${esc(s.title)}<span class="st-right">逐个热点卡片</span></div>` + renderHotspots(body);
+}
+
+/* 新闻头条 → news-item 卡片列表（用 DOM 解析顶层列表项，稳健处理嵌套要点） */
+function newsSection(s) {
+  let html = `<div class="section-title"><i>📰</i> ${esc(s.title)}</div>`;
+  const tmp = document.createElement('div');
+  tmp.innerHTML = marked.parse(s.body, { gfm: true, breaks: true });
+  // 只取「顶层」列表项（其父 ul 不嵌套在 li 内），避免把每条的子要点当成独立新闻
+  const topItems = [];
+  tmp.querySelectorAll('ul').forEach(ul => { if (!ul.closest('li')) topItems.push(...Array.from(ul.querySelectorAll(':scope > li'))); });
+  const topItems2 = topItems.filter(li => /【|头条/.test(li.textContent) || li.querySelector('strong, b') || li.querySelector('ul'));
+  if (topItems2.length) {
+    topItems2.forEach(li => {
+      const strong = li.querySelector('strong, b');
+      let t = strong ? strong.textContent.trim() : li.textContent.trim();
+      // 去掉「【头条 N】」前缀，保留标题本体
+      const m = t.match(/【\s*头条?\s*\d+\s*】\s*/);
+      if (m) t = t.slice(m[0].length);
+      t = t.replace(/^[：:\s]+/, '');
+      if (!t) t = li.textContent.trim();
+      const subUl = li.querySelector('ul');
+      let ans = subUl ? subUl.innerHTML : li.innerHTML;
+      ans = ans.replace(/<\/?ul>/g, '').replace(/<li>/g, '<p>').replace(/<\/li>/g, '</p>').replace(/\n\s*\n/g, '');
+      if (strong) ans = ans.replace(/^<p>/, '<p>'); // 保留标题已前置
+      html += `<div class="news-item"><h3>${esc(t)}</h3><div class="news-ans">${ans}</div></div>`;
+    });
+  } else {
+    html += `<div class="card">${enhancedBody(s.body)}</div>`;
+  }
+  return html;
+}
+
+/* 通用子卡章节：把 ### 小节拆成独立卡片（区别于整块 markdown），正文内表格/列表/涨跌增强 */
+function subCardSection(s, icon, showTitle = true) {
+  let html = showTitle ? `<div class="section-title"><i>${icon}</i> ${esc(s.title)}</div>` : '';
+  const chunks = s.body.split(/^###\s+/m).map(c => c.trim()).filter(Boolean);
+  if (chunks.length || /^#{3}\s/m.test(s.body)) {
+    if (chunks.length) {
+      chunks.forEach(c => {
+        const nl = c.indexOf('\n');
+        const t = (nl === -1 ? c : c.slice(0, nl)).replace(/^[*\s#]+/, '').trim();
+        const rest = nl === -1 ? '' : c.slice(nl + 1);
+        if (!rest.trim()) { html += `<div class="card"><div class="card-title"><i>${icon}</i> ${esc(t)}</div></div>`; return; }
+        html += `<div class="card"><div class="card-title"><i>${icon}</i> ${esc(t)}</div>${enhancedBody(rest)}</div>`;
+      });
+    }
+  } else {
+    html += `<div class="card">${enhancedBody(s.body)}</div>`;
+  }
+  return html;
+}
+
+/* 数据来源说明 → 页脚级次级文字（不占正文卡片） */
+function sourceSection(s) {
+  return `<div class="card" style="background:transparent;border:none;box-shadow:none;padding:8px 4px;margin-top:8px;"><div class="card-subtitle" style="color:var(--text2);font-size:12px;line-height:1.7;">${marked.parse(s.title ? `**${s.title}**` + (s.body ? '：' + s.body : '') : s.body, { gfm: true, breaks: true })}</div></div>`;
+}
+
+/* 正文增强：markdown 渲染后，对涨跌幅上色（红涨绿跌），保留表格/列表样式 */
+function enhancedBody(md) {
+  let h = marked.parse(md || '', { gfm: true, breaks: true });
+  // 给 +/-百分比 上色（A股/美股统一红涨绿跌）
+  h = h.replace(/([+−-])(\d[\d,.]*%?)/g, (m, sign, num) => {
+    if (!/[-+−]/.test(m)) return m;
+    const neg = sign === '-' || sign === '−';
+    return `<span class="${neg ? 'down' : 'up'}">${sign}${num}</span>`;
+  });
+  return `<div class="card-body">${h}</div>`;
+}
+
+function buildOverviewCard(sections, title) {
   // 在所有章节的表格里找：指数表（首个带涨跌幅）、板块表（首列=板块/行业 且非港股/个股）
   let indexTbl = null, sectorTbl = null;
   sections.forEach(sec => {
@@ -434,7 +596,7 @@ function buildOverviewCard(sections) {
     }).filter(d => d.name && !/指数/.test(d.name));
     if (chartData.length < 3) chartData = null;
   }
-  let html = '<div class="overview-card"><div class="overview-title">📊 市场概览</div>' + statsHtml;
+  let html = '<div class="overview-card"><div class="overview-title" style="font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:14px;"><i>📊</i> ' + esc(title || '市场概览') + '</div>' + statsHtml;
   if (chartData) {
     html += '<div class="grid-2"><div><div class="card-subtitle">板块涨跌全景</div><div class="chart-box" id="sectorChart"></div></div><div></div></div>';
   }
@@ -488,6 +650,7 @@ function extractTags(text) {
 }
 
 function initCharts() {
+  const chartData = document.__sectorSeries;
   if (!chartData) return;
   const el = document.getElementById('sectorChart');
   if (!el || chartInstance) return;
