@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>每日财经简报 · 美股早盘版 / A股收盘版</title>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
 <style>
 :root {
   --bg: #F5F5F7; --card: #FFFFFF; --border: #E5E5EA;
@@ -57,16 +58,33 @@ body {
 .bc .active { color: var(--text); font-weight: 500; }
 .bc .crumb { cursor: pointer; transition: color .15s; }
 .bc .crumb:hover { color: var(--accent); }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.scheme-toggle {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+  border: 1px solid var(--border); border-radius: 16px; font-size: 12px; font-weight: 500;
+  cursor: pointer; background: var(--card); color: var(--text2); font-family: inherit; transition: all .15s;
+}
+.scheme-toggle:hover { border-color: var(--accent); color: var(--accent); background: var(--active); }
+.scheme-toggle .dot { width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; }
+.scheme-toggle .dot.a { background: #E5E5EA; color: #1D1D1F; }
+.scheme-toggle .dot.b { background: var(--accent); color: #fff; }
+
 .content { flex: 1; display: flex; gap: 16px; padding: 16px 24px; }
 .report-wrap { flex: 1; min-width: 0; }
 
-/* ===== 内容区：detail-header + 模块化卡片 ===== */
+/* ===== detail-header + 模块化卡片（方案 A 通用） ===== */
 .detail-header { margin-bottom: 16px; }
 .detail-header h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
 .detail-header .meta { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--text2); font-size: 13px; }
 .detail-header .meta-item { display: inline-flex; align-items: center; }
 .detail-header .meta-item::before { content: '·'; margin-right: 14px; color: var(--border); }
 .detail-header .meta-item:first-child::before { content: ''; display: none; }
+.version-badge {
+  display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 10px;
+  font-size: 11px; font-weight: 500; margin-left: 12px; vertical-align: middle;
+}
+.version-badge.morning { background: #dbeafe; color: #1e40af; }
+.version-badge.evening { background: #ede9fe; color: #6d28d9; }
 
 .card {
   background: var(--card); border: 1px solid var(--border); border-radius: 12px;
@@ -101,6 +119,22 @@ body {
 .card-body hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 .card-body strong { font-weight: 600; }
 
+/* ===== 方案 B：统计卡片 + 图表（design-v3 风格） ===== */
+#augment { margin-bottom: 4px; }
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; text-align: center; }
+.stat-change { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat-change.up { color: var(--up); }
+.stat-change.down { color: var(--down); }
+.stat-label { font-size: 11px; font-weight: 500; color: var(--text2); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-bottom: 16px; }
+.chart-card .card-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
+.chart-box { width: 100%; height: 280px; }
+
+/* 方案切换：A 隐藏统计/图表，B 显示 */
+body.scheme-a #augment { display: none; }
+body.scheme-b #augment { display: block; }
+
 /* 移动端：侧栏收起为顶部横向选择 */
 @media (max-width: 768px) {
   body { flex-direction: column; }
@@ -117,10 +151,12 @@ body {
   .detail-header h2 { font-size: 22px; }
   .card { padding: 16px 14px; }
   .card-body table { font-size: 12px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .scheme-toggle span.toggle-text { display: none; }
 }
 </style>
 </head>
-<body>
+<body class="scheme-a">
 
 <!-- 左栏导航 -->
 <aside class="sidebar">
@@ -143,6 +179,11 @@ body {
     <div class="bc" id="bc">
       <span class="crumb" id="bcMarket">美股早盘版</span><span class="sep">›</span><span class="active" id="bcDate">—</span>
     </div>
+    <div class="topbar-right">
+      <button class="scheme-toggle" id="schemeToggle" title="切换视图样式">
+        <span class="dot b">B</span><span class="toggle-text">图表版</span>
+      </button>
+    </div>
   </div>
   <div class="content">
     <div class="report-wrap" id="report"></div>
@@ -154,12 +195,27 @@ const MANIFEST_PATH = 'manifest.json';
 const MARKET_NAMES = { us: '美股早盘版', cn: 'A股收盘版' };
 let currentMarket = 'us';
 let manifest = null;
+let scheme = 'a';
+let chartInstance = null;
+let chartData = null;
 
 const marketSwitch = document.getElementById('marketSwitch');
 const dateNav = document.getElementById('dateNav');
 const bcMarket = document.getElementById('bcMarket');
 const bcDate = document.getElementById('bcDate');
 const reportEl = document.getElementById('report');
+const toggleBtn = document.getElementById('schemeToggle');
+
+// 样式切换（右上角）
+toggleBtn.addEventListener('click', () => {
+  scheme = scheme === 'a' ? 'b' : 'a';
+  document.body.className = 'scheme-' + scheme;
+  toggleBtn.innerHTML = scheme === 'b'
+    ? '<span class="dot a">A</span><span class="toggle-text">纯文字版</span>'
+    : '<span class="dot b">B</span><span class="toggle-text">图表版</span>';
+  if (scheme === 'b') initCharts();
+  else disposeChart();
+});
 
 // 市场切换
 marketSwitch.addEventListener('click', e => {
@@ -172,7 +228,7 @@ marketSwitch.addEventListener('click', e => {
   loadReport();
 });
 
-// 日期导航（事件委托）
+// 日期导航
 dateNav.addEventListener('click', e => {
   const item = e.target.closest('.date-item');
   if (!item) return;
@@ -185,13 +241,11 @@ dateNav.addEventListener('click', e => {
 fetch(MANIFEST_PATH)
   .then(r => r.json())
   .then(m => { manifest = m; renderNav(); loadReport(); })
-  .catch(() => {
-    reportEl.innerHTML = '<div class="card empty">❌ 无法加载报告清单 manifest.json</div>';
-  });
+  .catch(() => { reportEl.innerHTML = '<div class="card empty">❌ 无法加载报告清单 manifest.json</div>'; });
 
 function renderNav() {
   if (!manifest) return;
-  const dates = (manifest[currentMarket] || []).slice().sort().reverse(); // 最新在前
+  const dates = (manifest[currentMarket] || []).slice().sort().reverse();
   const titles = manifest[currentMarket + '_title'] || {};
   bcMarket.textContent = MARKET_NAMES[currentMarket];
   dateNav.innerHTML = '';
@@ -216,12 +270,17 @@ function loadReport() {
   const active = document.querySelector('.date-item.active');
   const d = active ? active.dataset.date : (manifest[currentMarket] || [])[0];
   if (!d) { reportEl.innerHTML = '<div class="card empty">暂无报告</div>'; return; }
+  disposeChart();
   reportEl.innerHTML = '<div class="card loading">加载中…</div>';
   fetch(`reports/${currentMarket}/${d}.md`)
     .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
-    .then(md => { reportEl.innerHTML = renderReport(md); })
+    .then(md => {
+      reportEl.innerHTML = renderReport(md);
+      augmentReport();      // 构建方案 B 的统计卡 + 图表
+      if (scheme === 'b') initCharts();
+    })
     .catch(() => {
-      reportEl.innerHTML = '<div class="card empty">❌ 未找到该日报告：' + `reports/${currentMarket}/${d}.md</div>`;
+      reportEl.innerHTML = '<div class="card empty">❌ 未找到该日报告</div>';
     });
 }
 
@@ -231,31 +290,27 @@ function parseReport(md) {
   const header = parts[0];
   const sections = parts.slice(1).map(p => {
     const nl = p.indexOf('\n');
-    return nl === -1
-      ? { title: p.trim(), body: '' }
-      : { title: p.slice(0, nl).trim(), body: p.slice(nl + 1) };
+    return nl === -1 ? { title: p.trim(), body: '' } : { title: p.slice(0, nl).trim(), body: p.slice(nl + 1) };
   });
   return { header, sections };
 }
 
-function esc(s) {
-  return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 function renderReport(md) {
   const { header, sections } = parseReport(md);
   const h1 = (header.match(/^#\s+(.+)$/m) || [])[1] || '';
-  const metaLines = header
-    .split('\n')
-    .map(l => l.trim())
-    .filter(l => /^\*\*.*\*\*：/.test(l))
-    .map(l => l.replace(/^\*\*(.*?)\*\*：/, '$1：'));
+  const metaLines = header.split('\n').map(l => l.trim()).filter(l => /^\*\*.*\*\*：/.test(l)).map(l => l.replace(/^\*\*(.*?)\*\*：/, '$1：'));
+  const isMorning = /美股|早盘/.test(h1) || currentMarket === 'us';
 
   let html = '';
   html += '<div class="detail-header">';
-  if (h1) html += `<h2>${esc(h1)}</h2>`;
+  if (h1) html += `<h2>${esc(h1)}<span class="version-badge ${isMorning ? 'morning' : 'evening'}">${isMorning ? '美股早盘版' : 'A股收盘版'}</span></h2>`;
   if (metaLines.length) html += `<div class="meta">${metaLines.map(m => `<span class="meta-item">${esc(m)}</span>`).join('')}</div>`;
   html += '</div>';
+
+  // 方案 B 统计/图表容器（A 方案隐藏）
+  html += '<div id="augment"></div>';
 
   sections.forEach((s, i) => {
     const isSummary = i === 0 || /一句话|总览|摘要/.test(s.title);
@@ -265,6 +320,83 @@ function renderReport(md) {
     html += '</div>';
   });
   return html;
+}
+
+/* ===== 方案 B：从报告表格提取统计卡 + 图表 ===== */
+function augmentReport() {
+  chartData = null;
+  const aug = document.getElementById('augment');
+  if (!aug) return;
+  aug.innerHTML = '';
+  const tables = reportEl.querySelectorAll('table');
+  let indexTbl = null, sectorTbl = null;
+  tables.forEach(t => {
+    const ths = Array.from(t.querySelectorAll('thead th')).map(x => x.textContent.trim());
+    if (!ths.some(h => h.includes('涨跌幅') || h.includes('涨跌'))) return;
+    const n = t.querySelectorAll('tbody tr').length;
+    if (!indexTbl) indexTbl = t;
+    if (!sectorTbl || n > sectorTbl.querySelectorAll('tbody tr').length) sectorTbl = t;
+  });
+
+  // 统计卡：指数表前 5 行
+  if (indexTbl) {
+    const ths = Array.from(indexTbl.querySelectorAll('thead th')).map(x => x.textContent.trim());
+    const pctIdx = ths.findIndex(h => h.includes('涨跌幅') || h.includes('涨跌'));
+    const rows = Array.from(indexTbl.querySelectorAll('tbody tr')).slice(0, 5);
+    const stats = rows.map(r => {
+      const c = r.querySelectorAll('td');
+      return { name: (c[0]?.textContent || '').trim(), pct: (c[pctIdx]?.textContent || '').trim() };
+    }).filter(x => x.name && x.pct);
+    if (stats.length) {
+      let h = '<div class="stat-grid">';
+      stats.forEach(s => {
+        const m = parseFloat(s.pct.replace('%', ''));
+        const cls = m > 0 ? 'up' : m < 0 ? 'down' : '';
+        h += `<div class="stat-card"><div class="stat-change ${cls}">${esc(s.pct)}</div><div class="stat-label">${esc(s.name)}</div></div>`;
+      });
+      h += '</div>';
+      aug.innerHTML += h;
+    }
+  }
+
+  // 板块图：行数最多的涨跌幅表（板块表）→ 横向柱状图
+  if (sectorTbl) {
+    const ths = Array.from(sectorTbl.querySelectorAll('thead th')).map(x => x.textContent.trim());
+    const pctIdx = ths.findIndex(h => h.includes('涨跌幅') || h.includes('涨跌'));
+    const rows = Array.from(sectorTbl.querySelectorAll('tbody tr'));
+    const data = rows.map(r => {
+      const c = r.querySelectorAll('td');
+      return { name: (c[0]?.textContent || '').trim(), pct: parseFloat((c[pctIdx]?.textContent || '0').replace('%', '')) || 0 };
+    }).filter(d => d.name && !/指数/.test(d.name));
+    if (data.length >= 3) {
+      chartData = data;
+      aug.innerHTML += '<div class="chart-card"><div class="card-title">📊 板块涨跌全景</div><div class="chart-box" id="sectorChart"></div></div>';
+    }
+  }
+}
+
+function initCharts() {
+  if (!chartData) return;
+  const el = document.getElementById('sectorChart');
+  if (!el || chartInstance) return;
+  chartInstance = echarts.init(el);
+  const sorted = chartData.slice().sort((a, b) => a.pct - b.pct);
+  chartInstance.setOption({
+    grid: { left: 90, right: 40, top: 8, bottom: 24 },
+    xAxis: { type: 'value', axisLabel: { fontSize: 11 }, splitLine: { lineStyle: { color: '#F0F0F2' } } },
+    yAxis: { type: 'category', data: sorted.map(d => d.name), axisLabel: { fontSize: 11, color: '#1D1D1F' } },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: p => `${p[0].name}：${p[0].value}%` },
+    series: [{
+      type: 'bar', data: sorted.map(d => d.pct), barWidth: 14,
+      itemStyle: { color: p => p.value >= 0 ? '#FF3B30' : '#34C759', borderRadius: 3 },
+      label: { show: true, position: 'right', formatter: '{c}%', fontSize: 11, color: '#1D1D1F' }
+    }]
+  });
+  window.addEventListener('resize', () => chartInstance && chartInstance.resize());
+}
+
+function disposeChart() {
+  if (chartInstance) { chartInstance.dispose(); chartInstance = null; }
 }
 </script>
 </body>
