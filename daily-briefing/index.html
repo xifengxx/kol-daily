@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日财经简报 · 美股早盘版 / A股收盘版</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+:root {
+  --bg: #f5f5f7; --text: #1d1d1f; --text2: #6e6e73;
+  --accent: #533afd; --navy: #061b31; --card: #ffffff; --border: #e5e7eb;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+.hero {
+  background: var(--navy); color: #fff; padding: 40px 24px 32px; text-align: center;
+}
+.hero h1 { font-size: 30px; font-weight: 700; margin-bottom: 8px; }
+.hero h1 span { color: #8b9cf7; }
+.hero p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 640px; margin: 0 auto; }
+.controls {
+  max-width: 900px; margin: 24px auto 8px; padding: 0 24px;
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+}
+.tabs { display: flex; gap: 4px; background: #e9e9ec; border-radius: 10px; padding: 4px; }
+.tab {
+  border: none; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  background: transparent; color: var(--text2); cursor: pointer; transition: all 0.2s;
+}
+.tab.active { background: #fff; color: var(--accent); box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
+.date-select {
+  padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 14px; background: #fff; color: var(--text); cursor: pointer;
+}
+.hint { max-width: 900px; margin: 0 auto; padding: 0 24px; font-size: 12px; color: var(--text2); }
+.container { max-width: 900px; margin: 16px auto 48px; padding: 0 24px; }
+#report {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 32px 40px; margin-top: 16px;
+}
+#report.loading, #report.empty { color: var(--text2); text-align: center; padding: 60px 24px; }
+/* 报告 markdown 样式 */
+#report h1 { font-size: 24px; margin: 0 0 12px; border-bottom: 2px solid var(--border); padding-bottom: 12px; }
+#report h2 { font-size: 19px; margin: 28px 0 12px; padding-left: 10px; border-left: 4px solid var(--accent); }
+#report h3 { font-size: 16px; margin: 20px 0 8px; }
+#report h4 { font-size: 14px; margin: 16px 0 6px; }
+#report p { margin: 8px 0; font-size: 14px; }
+#report ul, #report ol { margin: 8px 0 8px 22px; font-size: 14px; }
+#report li { margin: 3px 0; }
+#report blockquote { border-left: 3px solid var(--border); padding-left: 12px; color: var(--text2); margin: 8px 0; }
+#report table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 13px; }
+#report th, #report td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+#report th { background: #f4f4f6; font-weight: 600; }
+#report code { background: #f0f0f2; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+#report a { color: var(--accent); }
+#report hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+.footer { text-align: center; padding: 32px 24px; font-size: 12px; color: var(--text2); border-top: 1px solid var(--border); }
+@media (max-width: 768px) {
+  .hero h1 { font-size: 24px; }
+  #report { padding: 20px 16px; }
+  .tabs { width: 100%; }
+  .tab { flex: 1; }
+  .date-select { flex: 1; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>每日财经<span>简报</span></h1>
+  <p>美股日度复盘（早盘版）· A股+港股收盘复盘（收盘版）· 数据源驱动 + 大模型生成 · 查看历史每日报告</p>
+</header>
+
+<div class="controls">
+  <div class="tabs">
+    <button class="tab active" data-market="us" id="tab-us">📈 美股早盘版</button>
+    <button class="tab" data-market="cn" id="tab-cn">📰 A股收盘版</button>
+  </div>
+  <select id="date-select" class="date-select"><option>加载中…</option></select>
+</div>
+<div class="hint">提示：选择板块（美股/A股）和日期查看对应报告。报告由「每日简报实战」系统自动生成，数据来源见各报告头部标注。</div>
+
+<div class="container">
+  <div id="report" class="loading">加载中…</div>
+</div>
+
+<div class="footer">每日简报实战 · 数据源：FMP / Infoway / iFinD / AkShare / 新浪 · 生成于 GitHub Pages</div>
+
+<script>
+const MANIFEST_PATH = 'manifest.json';
+let currentMarket = 'us';
+let manifest = null;
+
+const tabs = document.querySelectorAll('.tab');
+const dateSelect = document.getElementById('date-select');
+const reportEl = document.getElementById('report');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentMarket = tab.dataset.market;
+    populateDates();
+    loadReport();
+  });
+});
+
+dateSelect.addEventListener('change', loadReport);
+
+fetch(MANIFEST_PATH)
+  .then(r => r.json())
+  .then(m => { manifest = m; populateDates(); loadReport(); })
+  .catch(() => {
+    reportEl.className = 'empty';
+    reportEl.textContent = '❌ 无法加载报告清单 manifest.json';
+  });
+
+function populateDates() {
+  if (!manifest) return;
+  const dates = (manifest[currentMarket] || []).slice().sort().reverse(); // 最新在前
+  dateSelect.innerHTML = '';
+  if (dates.length === 0) {
+    dateSelect.innerHTML = '<option>暂无报告</option>';
+    return;
+  }
+  dates.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d;
+    opt.textContent = d + (manifest[currentMarket + '_title'] && manifest[currentMarket + '_title'][d] ? ' · ' + manifest[currentMarket + '_title'][d] : '');
+    dateSelect.appendChild(opt);
+  });
+}
+
+function loadReport() {
+  if (!manifest) return;
+  const date = dateSelect.value;
+  if (!date) { reportEl.className = 'empty'; reportEl.textContent = '暂无报告'; return; }
+  reportEl.className = 'loading';
+  reportEl.textContent = '加载中…';
+  fetch(`reports/${currentMarket}/${date}.md`)
+    .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
+    .then(md => {
+      reportEl.className = '';
+      reportEl.innerHTML = marked.parse(md, { gfm: true, breaks: true });
+    })
+    .catch(() => {
+      reportEl.className = 'empty';
+      reportEl.textContent = '❌ 未找到该日报告：' + `reports/${currentMarket}/${date}.md`;
+    });
+}
+</script>
+</body>
+</html>
