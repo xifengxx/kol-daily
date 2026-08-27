@@ -1,0 +1,25 @@
+name: sync-modules
+
+# 自动同步 GitHub 源模块（invest-wiki → industry-chain 等）。
+# 配置在仓库根目录 sync-config.json，新增模块只需在那登记。
+# 本地-only 的模块（daily-briefing 等）不走这里，用 sync-local.sh。
+
+on:
+  schedule:
+    # 每 30 分钟一次，错开整点分钟（UTC 时区）
+    - cron: '23,53 * * * *'
+  workflow_dispatch: {}   # 手动触发：Actions 页 → sync-modules → Run workflow
+
+permissions:
+  contents: write
+
+jobs:
+  sync-github-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 1
+      - name: 同步 GitHub 源模块
+        run: python3 sync-github.py

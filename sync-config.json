@@ -1,0 +1,30 @@
+{
+  "_comment": "kol-daily 模块自动同步配置。github_modules 由 GitHub Actions（sync-modules.yml）定时拉取；local_modules 由 sync-local.sh 本地同步。新增模块在此登记即可。",
+  "github_modules": [
+    {
+      "name": "industry-chain-data",
+      "target": "industry-chain/wiki_data.json",
+      "repo": "xifengxx/invest-wiki",
+      "branch": "master",
+      "path": "L3-网页产物/wiki_data.json",
+      "note": "AI产业链知识库数据（invest-wiki 编译产物）"
+    },
+    {
+      "name": "industry-chain-index",
+      "target": "industry-chain/index.html",
+      "repo": "xifengxx/invest-wiki",
+      "branch": "master",
+      "path": "L3-网页产物/index.html",
+      "note": "AI产业链图谱页面（invest-wiki L3 参考实现）"
+    }
+  ],
+  "local_modules": [
+    {
+      "name": "daily-briefing",
+      "source_dir": "/Users/mac/每日简报实战/daily-briefing/",
+      "target_dir": "daily-briefing/",
+      "exclude": [".env", "__pycache__", "scripts", "reports", "README.md", ".DS_Store", ".aura"],
+      "note": "每日复盘（美股/港股/币圈）站点产物"
+    }
+  ]
+}
