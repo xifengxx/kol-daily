@@ -75,6 +75,12 @@ def main():
         print(f"（dry-run）将更新 {len(changed)} 个文件，未提交。")
         return 0
 
+    # GitHub Actions checkout 默认 detached HEAD，先回到 gh-pages 分支再提交
+    try:
+        git("checkout", "-B", "gh-pages", "origin/gh-pages")
+    except subprocess.CalledProcessError:
+        git("checkout", "-B", "gh-pages")
+
     git("config", "user.name", "github-actions[bot]")
     git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com")
     git("add", "--", *changed)
