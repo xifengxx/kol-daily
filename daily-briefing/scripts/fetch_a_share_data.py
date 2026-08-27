@@ -103,6 +103,7 @@ def fmp_get(path, params=None):
 
 def run_with_fallback(name, fetchers):
     """按优先级依次尝试多个取数函数，首个成功即返回；记录实际来源。"""
+    last_err = ""
     for label, fn in fetchers:
         try:
             data = fn()
@@ -269,7 +270,15 @@ def fetch_hk():
     """港股：恒生/恒生国企/恒生科技（新浪直连，FMP 备选）。"""
     def sina():
         q = sina_quote("rt_hkHSI,rt_hkHSCEI,rt_hkHSTECH")
-        return q
+        out = {}
+        for code, arr in q.items():
+            # 新浪 rt_hk 港股指数字段：[0]代码 [1]名称 [2]今开 [3]昨收 [4]最高 [5]最低 [6]现价 [7]涨跌额 [8]涨跌幅
+            if isinstance(arr, list) and len(arr) > 8:
+                try:
+                    out[code] = {"name": arr[1], "price": float(arr[6]), "prev_close": float(arr[3]), "change": float(arr[7]), "change_pct": float(arr[8])}
+                except (ValueError, TypeError):
+                    out[code] = {"raw": arr}
+        return out
     def fmp():
         d = fmp_get("/quote", {"symbol": "^HSI,^HSCE"})
         if isinstance(d, list) and d:
