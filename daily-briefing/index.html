@@ -96,13 +96,17 @@ body {
 .sec-nav-item.active { background: var(--active); color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
 .sec-nav-item .sn-ic { width: 18px; text-align: center; flex-shrink: 0; font-size: 14px; }
 .sec-nav-item .sn-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-/* 回到顶部 / 回到底部 快捷入口 */
-.sec-nav-item.sn-jump { color: var(--accent); font-weight: 500; }
-.sec-nav-item.sn-jump:hover { background: var(--active); }
-.sn-top { margin-bottom: 4px; }
-.sn-top .sn-ic { font-size: 12px; }
-.sn-bottom { margin-top: 6px; border-top: 1px solid var(--border); padding-top: 8px; }
-.sn-bottom .sn-ic { font-size: 12px; }
+/* 回到顶部悬浮按钮（fixed，右下角始终可点） */
+.back-top {
+  position: fixed; right: 28px; bottom: 32px; width: 46px; height: 46px;
+  border-radius: 50%; background: var(--card); border: 1px solid var(--border);
+  color: var(--accent); font-size: 20px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s; z-index: 60; font-family: inherit;
+}
+.back-top.show { opacity: 1; pointer-events: auto; }
+.back-top:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.16); }
 /* 章节锚点容器：滚动定位时避开 sticky topbar */
 .chapter { scroll-margin-top: 72px; }
 /* 窄屏：右侧导航收起，保持单栏、避免挤压 */
@@ -320,6 +324,7 @@ body.scheme-b .stat-card { transition: all 0.3s ease; }
   <div class="content">
     <div class="report-wrap" id="report"></div>
     <aside class="section-nav" id="sectionNav" aria-label="分节导航"></aside>
+    <button class="back-top" id="backTop" title="回到顶部" aria-label="回到顶部">↑</button>
   </div>
 </div>
 
@@ -437,19 +442,11 @@ function renderSectionNav(){
   if (!nav) return;
   if (!chapters.length){ nav.innerHTML = ''; return; }
   nav.innerHTML = '<div class="sn-title">分节导航</div>'
-    + `<a class="sec-nav-item sn-jump sn-top"><span class="sn-ic">⬆</span><span class="sn-txt">回到顶部</span></a>`
-    + chapters.map(c => `<a class="sec-nav-item" data-target="${c.id}" title="${esc(c.label)}"><span class="sn-ic">${c.icon}</span><span class="sn-txt">${esc(c.label)}</span></a>`).join('')
-    + `<a class="sec-nav-item sn-jump sn-bottom"><span class="sn-ic">⬇</span><span class="sn-txt">回到底部</span></a>`;
+    + chapters.map(c => `<a class="sec-nav-item" data-target="${c.id}" title="${esc(c.label)}"><span class="sn-ic">${c.icon}</span><span class="sn-txt">${esc(c.label)}</span></a>`).join('');
   nav.querySelectorAll('.sec-nav-item[data-target]').forEach(el => {
     el.addEventListener('click', () => {
       const t = document.getElementById(el.dataset.target);
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-  nav.querySelectorAll('.sn-jump').forEach(el => {
-    el.addEventListener('click', () => {
-      if (el.classList.contains('sn-top')) window.scrollTo({ top: 0, behavior: 'smooth' });
-      else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
     });
   });
   updateSectionNav();
@@ -465,7 +462,15 @@ function updateSectionNav(){
   const nav = document.getElementById('sectionNav'); if (!nav) return;
   nav.querySelectorAll('.sec-nav-item').forEach(x => x.classList.toggle('active', x.dataset.target === cur.id));
 }
-window.addEventListener('scroll', updateSectionNav, { passive: true });
+/* 回到顶部悬浮按钮：滚过 600px 后显示，点击平滑回顶 */
+const backTopBtn = document.getElementById('backTop');
+function updateBackTop(){
+  if (!backTopBtn) return;
+  if (window.scrollY > 600) backTopBtn.classList.add('show');
+  else backTopBtn.classList.remove('show');
+}
+if (backTopBtn) backTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+window.addEventListener('scroll', () => { updateSectionNav(); updateBackTop(); }, { passive: true });
 
 /* ===== 通用解析 ===== */
 function parseReport(md) {
