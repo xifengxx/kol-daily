@@ -419,9 +419,9 @@ function render() {
 /* ===== 右侧分节导航：点击定位 + scrollspy 高亮 ===== */
 const TYPE_ICON = { hero:'✨', market:'📊', hotspot:'🔥', news:'📰', track:'📍', stock:'🏷️', macro:'🏛️', outlook:'🧭', generic:'📄' };
 function iconOf(title){ return TYPE_ICON[classifySection(title)] || '📄'; }
-/* 分节导航标题：去掉括号（含内容）及括号内文字，只保留括号前正文 */
+/* 分节导航标题：去掉括号（含内容）及括号内文字、去掉冒号后副标题，只保留主标题正文 */
 function navLabel(title){
-  return String(title || '').replace(/（[^）]*）|\([^)]*\)/g, '').replace(/[：:]\s*$/, '').trim();
+  return String(title || '').replace(/（[^）]*）|\([^)]*\)/g, '').replace(/[：:].*$/, '').trim();
 }
 
 function renderSectionNav(){
