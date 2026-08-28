@@ -96,6 +96,13 @@ body {
 .sec-nav-item.active { background: var(--active); color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
 .sec-nav-item .sn-ic { width: 18px; text-align: center; flex-shrink: 0; font-size: 14px; }
 .sec-nav-item .sn-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 回到顶部 / 回到底部 快捷入口 */
+.sec-nav-item.sn-jump { color: var(--accent); font-weight: 500; }
+.sec-nav-item.sn-jump:hover { background: var(--active); }
+.sn-top { margin-bottom: 4px; }
+.sn-top .sn-ic { font-size: 12px; }
+.sn-bottom { margin-top: 6px; border-top: 1px solid var(--border); padding-top: 8px; }
+.sn-bottom .sn-ic { font-size: 12px; }
 /* 章节锚点容器：滚动定位时避开 sticky topbar */
 .chapter { scroll-margin-top: 72px; }
 /* 窄屏：右侧导航收起，保持单栏、避免挤压 */
@@ -429,13 +436,20 @@ function renderSectionNav(){
   const chapters = document.__chapters || [];
   if (!nav) return;
   if (!chapters.length){ nav.innerHTML = ''; return; }
-  nav.innerHTML = '<div class="sn-title">分节导航</div>' + chapters.map(c =>
-    `<a class="sec-nav-item" data-target="${c.id}" title="${esc(c.label)}"><span class="sn-ic">${c.icon}</span><span class="sn-txt">${esc(c.label)}</span></a>`
-  ).join('');
-  nav.querySelectorAll('.sec-nav-item').forEach(el => {
+  nav.innerHTML = '<div class="sn-title">分节导航</div>'
+    + `<a class="sec-nav-item sn-jump sn-top"><span class="sn-ic">⬆</span><span class="sn-txt">回到顶部</span></a>`
+    + chapters.map(c => `<a class="sec-nav-item" data-target="${c.id}" title="${esc(c.label)}"><span class="sn-ic">${c.icon}</span><span class="sn-txt">${esc(c.label)}</span></a>`).join('')
+    + `<a class="sec-nav-item sn-jump sn-bottom"><span class="sn-ic">⬇</span><span class="sn-txt">回到底部</span></a>`;
+  nav.querySelectorAll('.sec-nav-item[data-target]').forEach(el => {
     el.addEventListener('click', () => {
       const t = document.getElementById(el.dataset.target);
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  nav.querySelectorAll('.sn-jump').forEach(el => {
+    el.addEventListener('click', () => {
+      if (el.classList.contains('sn-top')) window.scrollTo({ top: 0, behavior: 'smooth' });
+      else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
     });
   });
   updateSectionNav();
