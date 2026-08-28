@@ -78,6 +78,31 @@ body {
 .content { flex: 1; display: flex; gap: 16px; padding: 16px 24px; }
 .report-wrap { flex: 1; min-width: 0; }
 
+/* ===== 右侧分节导航（section-nav） ===== */
+.section-nav {
+  flex: 0 0 220px; position: sticky; top: 72px; align-self: flex-start;
+  max-height: calc(100vh - 88px); overflow-y: auto;
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+}
+.section-nav::-webkit-scrollbar { width: 4px; }
+.section-nav::-webkit-scrollbar-thumb { background: #D1D1D6; border-radius: 3px; }
+.sn-title { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 10px; padding-left: 4px; }
+.sec-nav-item {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px;
+  cursor: pointer; color: var(--text2); font-size: 13px; line-height: 1.3;
+  transition: all .15s; border-left: 3px solid transparent; margin-bottom: 2px;
+}
+.sec-nav-item:hover { background: var(--hover); color: var(--text); }
+.sec-nav-item.active { background: var(--active); color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+.sec-nav-item .sn-ic { width: 18px; text-align: center; flex-shrink: 0; font-size: 14px; }
+.sec-nav-item .sn-txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 章节锚点容器：滚动定位时避开 sticky topbar */
+.chapter { scroll-margin-top: 72px; }
+/* 窄屏：右侧导航收起，保持单栏、避免挤压 */
+@media (max-width: 1080px) {
+  .section-nav { display: none; }
+}
+
 /* ===== detail-header（通用） ===== */
 .detail-header { margin-bottom: 16px; }
 .detail-header h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
@@ -287,6 +312,7 @@ body.scheme-b .stat-card { transition: all 0.3s ease; }
   </div>
   <div class="content">
     <div class="report-wrap" id="report"></div>
+    <aside class="section-nav" id="sectionNav" aria-label="分节导航"></aside>
   </div>
 </div>
 
@@ -387,7 +413,41 @@ function render() {
   disposeChart();
   reportEl.innerHTML = scheme === 'a' ? buildSchemeA(cachedMd) : buildSchemeB(cachedMd);
   if (scheme === 'b') initCharts();
+  renderSectionNav();
 }
+
+/* ===== 右侧分节导航：点击定位 + scrollspy 高亮 ===== */
+const TYPE_ICON = { hero:'✨', market:'📊', hotspot:'🔥', news:'📰', track:'📍', stock:'🏷️', macro:'🏛️', outlook:'🧭', generic:'📄' };
+function iconOf(title){ return TYPE_ICON[classifySection(title)] || '📄'; }
+
+function renderSectionNav(){
+  const nav = document.getElementById('sectionNav');
+  const chapters = document.__chapters || [];
+  if (!nav) return;
+  if (!chapters.length){ nav.innerHTML = ''; return; }
+  nav.innerHTML = '<div class="sn-title">分节导航</div>' + chapters.map(c =>
+    `<a class="sec-nav-item" data-target="${c.id}" title="${esc(c.label)}"><span class="sn-ic">${c.icon}</span><span class="sn-txt">${esc(c.label)}</span></a>`
+  ).join('');
+  nav.querySelectorAll('.sec-nav-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const t = document.getElementById(el.dataset.target);
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+  updateSectionNav();
+}
+
+/* scrollspy：滚动时高亮当前视口顶部对应的章节导航项 */
+function updateSectionNav(){
+  const chapters = document.__chapters || [];
+  if (!chapters.length) return;
+  const line = 76; // 避开 sticky topbar
+  let cur = chapters[0];
+  chapters.forEach(c => { const el = document.getElementById(c.id); if (el && el.getBoundingClientRect().top <= line) cur = c; });
+  const nav = document.getElementById('sectionNav'); if (!nav) return;
+  nav.querySelectorAll('.sec-nav-item').forEach(x => x.classList.toggle('active', x.dataset.target === cur.id));
+}
+window.addEventListener('scroll', updateSectionNav, { passive: true });
 
 /* ===== 通用解析 ===== */
 function parseReport(md) {
@@ -417,13 +477,19 @@ function renderHeader(md) {
 function buildSchemeA(md) {
   const { sections } = parseReport(md);
   let html = renderHeader(md);
+  const chapters = [];
   sections.forEach((s, i) => {
+    if (!s.body.trim() && !s.title) return;
     const isSummary = i === 0 || /一句话|总览|摘要/.test(s.title);
-    html += `<div class="card${isSummary ? ' summary' : ''}">`;
-    if (s.title) html += `<div class="card-title">${esc(s.title)}</div>`;
-    html += `<div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div>`;
-    html += '</div>';
+    const id = 'sec-' + i;
+    let sec = `<div class="card${isSummary ? ' summary' : ''}">`;
+    if (s.title) sec += `<div class="card-title">${esc(s.title)}</div>`;
+    sec += `<div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div>`;
+    sec += '</div>';
+    html += `<div class="chapter" id="${id}">${sec}</div>`;
+    if (classifySection(s.title) !== 'source') chapters.push({ id, label: s.title, icon: iconOf(s.title) });
   });
+  document.__chapters = chapters;
   return html;
 }
 
@@ -447,22 +513,28 @@ function buildSchemeB(md) {
   const { sections } = parseReport(md);
   let html = renderHeader(md);
   let sectorSeries = null;
-  sections.forEach(s => {
+  const chapters = [];
+  sections.forEach((s, i) => {
     if (!s.body.trim() && !s.title) return;
+    const id = 'sec-' + i;
+    let secHtml = '';
     switch (classifySection(s.title)) {
-      case 'hero':    html += heroSection(s); break;
-      case 'market':  { const r = buildOverviewCard(sections, s.title); html += r.html; sectorSeries = sectorSeries || r.chartData; html += subCardSection(s, '📊', false); break; }
-      case 'hotspot': html += hotspotSection(s); break;
-      case 'news':    html += newsSection(s); break;
-      case 'track':   html += subCardSection(s, '📍'); break;
-      case 'stock':   html += subCardSection(s, '🏷️'); break;
-      case 'macro':   html += subCardSection(s, '🏛️'); break;
-      case 'outlook': html += subCardSection(s, '🧭'); break;
-      case 'source':  html += sourceSection(s); break;
-      default:        html += subCardSection(s, '📄');
+      case 'hero':    secHtml = heroSection(s); break;
+      case 'market':  { const r = buildOverviewCard(sections, s.title); secHtml = r.html; sectorSeries = sectorSeries || r.chartData; secHtml += subCardSection(s, '📊', false); break; }
+      case 'hotspot': secHtml = hotspotSection(s); break;
+      case 'news':    secHtml = newsSection(s); break;
+      case 'track':   secHtml = subCardSection(s, '📍'); break;
+      case 'stock':   secHtml = subCardSection(s, '🏷️'); break;
+      case 'macro':   secHtml = subCardSection(s, '🏛️'); break;
+      case 'outlook': secHtml = subCardSection(s, '🧭'); break;
+      case 'source':  secHtml = sourceSection(s); break;
+      default:        secHtml = subCardSection(s, '📄');
     }
+    html += `<div class="chapter" id="${id}">${secHtml}</div>`;
+    if (classifySection(s.title) !== 'source') chapters.push({ id, label: s.title, icon: iconOf(s.title) });
   });
   document.__sectorSeries = sectorSeries;
+  document.__chapters = chapters;
   return html;
 }
 
