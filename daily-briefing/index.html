@@ -753,9 +753,12 @@ function initCharts() {
   if (!el || chartInstance) return;
   chartInstance = echarts.init(el);
   const sorted = chartData.slice().sort((a, b) => a.pct - b.pct);
+  // 坐标轴对称：取正负最大绝对值，设为 ±symMax，让涨幅/跌幅刻度对应、0 居中
+  const maxAbs = Math.max(...chartData.map(d => Math.abs(d.pct)), 1);
+  const symMax = Math.ceil(maxAbs * 2) / 2;
   chartInstance.setOption({
     grid: { left: 120, right: 40, top: 8, bottom: 20 },
-    xAxis: { type: 'value', axisLabel: { fontSize: 11 }, splitLine: { lineStyle: { color: '#F0F0F2' } } },
+    xAxis: { type: 'value', min: -symMax, max: symMax, axisLabel: { fontSize: 11 }, splitLine: { lineStyle: { color: '#F0F0F2' } } },
     yAxis: { type: 'category', data: sorted.map(d => d.name), axisLabel: { fontSize: 11, color: '#1D1D1F', width: 100, overflow: 'truncate' } },
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: p => `${p[0].name}：${p[0].value}%` },
     series: [{ type: 'bar', data: sorted.map(d => d.pct), barWidth: 14, itemStyle: { color: p => p.value >= 0 ? '#FF3B30' : '#34C759', borderRadius: 3 }, label: { show: true, position: 'right', formatter: '{c}%', fontSize: 11, color: '#1D1D1F' } }]
