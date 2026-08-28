@@ -174,6 +174,7 @@ body {
 .stat-label { font-size: 11px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stat-value { font-size: 20px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; margin-top: 4px; }
 .stat-value.up { color: var(--up); } .stat-value.down { color: var(--down); }
+.stat-point { font-size: 15px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; margin-top: 2px; }
 .stat-change { font-size: 12px; font-weight: 600; margin-top: 2px; color: var(--text2); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
 .chart-box { width: 100%; height: 220px; }
@@ -667,15 +668,16 @@ function buildOverviewCard(sections, title) {
     const ths = Array.from(indexTbl.querySelectorAll('thead th')).map(x => x.textContent.trim());
     const pctIdx = ths.findIndex(h => h.includes('涨跌幅') || h.includes('涨跌'));
     const rows = Array.from(indexTbl.querySelectorAll('tbody tr')).slice(0, 5);
+    const closeIdx = ths.findIndex(h => /收盘|点位/.test(h));
     const stats = rows.map(r => {
       const c = r.querySelectorAll('td');
-      return { name: (c[0]?.textContent || '').trim(), pct: (c[pctIdx]?.textContent || '').trim() };
+      return { name: (c[0]?.textContent || '').trim(), close: closeIdx >= 0 ? (c[closeIdx]?.textContent || '').trim() : '', pct: (c[pctIdx]?.textContent || '').trim() };
     }).filter(x => x.name && x.pct);
     if (stats.length) {
       statsHtml = '<div class="stat-grid">' + stats.map(s => {
         const m = parseFloat(s.pct.replace('%', ''));
         const cls = m > 0 ? 'up' : m < 0 ? 'down' : '';
-        return `<div class="stat-card"><div class="stat-label">${esc(s.name)}</div><div class="stat-value ${cls}">${esc(s.pct)}</div><div class="stat-change">${s.name.includes('成交') ? s.pct : ''}</div></div>`;
+        return `<div class="stat-card"><div class="stat-label">${esc(s.name)}</div><div class="stat-point">${esc(s.close || '—')}</div><div class="stat-value ${cls}">${esc(s.pct)}</div></div>`;
       }).join('') + '</div>';
     }
   }
@@ -693,7 +695,7 @@ function buildOverviewCard(sections, title) {
   }
   let html = '<div class="overview-card"><div class="overview-title" style="font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:14px;"><i>📊</i> ' + esc(title || '市场概览') + '</div>' + statsHtml;
   if (chartData) {
-    html += '<div class="grid-2"><div><div class="card-subtitle">板块涨跌全景</div><div class="chart-box" id="sectorChart"></div></div><div></div></div>';
+    html += '<div class="card-subtitle" style="margin-top:16px;">板块涨跌全景</div><div class="chart-box" id="sectorChart"></div>';
   }
   html += '</div>';
   return { html, chartData };
