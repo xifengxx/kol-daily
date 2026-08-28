@@ -419,6 +419,10 @@ function render() {
 /* ===== 右侧分节导航：点击定位 + scrollspy 高亮 ===== */
 const TYPE_ICON = { hero:'✨', market:'📊', hotspot:'🔥', news:'📰', track:'📍', stock:'🏷️', macro:'🏛️', outlook:'🧭', generic:'📄' };
 function iconOf(title){ return TYPE_ICON[classifySection(title)] || '📄'; }
+/* 分节导航标题：去掉括号（含内容）及括号内文字，只保留括号前正文 */
+function navLabel(title){
+  return String(title || '').replace(/（[^）]*）|\([^)]*\)/g, '').replace(/[：:]\s*$/, '').trim();
+}
 
 function renderSectionNav(){
   const nav = document.getElementById('sectionNav');
@@ -487,7 +491,7 @@ function buildSchemeA(md) {
     sec += `<div class="card-body">${marked.parse(s.body, { gfm: true, breaks: true })}</div>`;
     sec += '</div>';
     html += `<div class="chapter" id="${id}">${sec}</div>`;
-    if (classifySection(s.title) !== 'source') chapters.push({ id, label: s.title, icon: iconOf(s.title) });
+    if (classifySection(s.title) !== 'source') chapters.push({ id, label: navLabel(s.title), icon: iconOf(s.title) });
   });
   document.__chapters = chapters;
   return html;
@@ -531,7 +535,7 @@ function buildSchemeB(md) {
       default:        secHtml = subCardSection(s, '📄');
     }
     html += `<div class="chapter" id="${id}">${secHtml}</div>`;
-    if (classifySection(s.title) !== 'source') chapters.push({ id, label: s.title, icon: iconOf(s.title) });
+    if (classifySection(s.title) !== 'source') chapters.push({ id, label: navLabel(s.title), icon: iconOf(s.title) });
   });
   document.__sectorSeries = sectorSeries;
   document.__chapters = chapters;
