@@ -198,13 +198,11 @@ def fetch_breadth(target):
 
 
 def fetch_sectors():
-    """板块涨跌：Infoway plate/CN（东财在本机被限流）。"""
-    def infoway_plate():
-        d = infoway_get("/common/v2/basic/plate/industry/CN")
-        if isinstance(d, list):
-            return d[:40]  # 返回前 40 个行业
-        return {}
-    return run_with_fallback("sectors", [("Infoway", infoway_plate)])
+    """板块涨跌：新浪行业（中文，Infoway试用key已过期的兜底）。"""
+    def sina():
+        df = ak.stock_sector_spot(indicator="新浪行业")
+        return df.to_dict("records")
+    return run_with_fallback("sectors", [("新浪行业", sina)])
 
 
 def fetch_fund_flow(target):

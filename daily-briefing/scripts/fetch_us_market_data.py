@@ -130,8 +130,12 @@ def pick_bar_by_date(resp_list, target_date):
 
 def fetch_fmp_indices_eod(target):
     """FMP：三大指数 + 费半 + 罗素 收盘与成交量（含量比计算）。
-    注意：^SOX 为付费端点，免费档会失败；指数收盘以本模块为准（Infoway 指数略有偏差）。
-    VIX 免费档取不到（^VIX 为付费端点）。"""
+
+    [数据取值规范 - 务必遵守]
+    - 指数点位：以本模块 FMP `historical-price-eod/full` 为权威收盘，勿用 WebSearch 媒体摘要、勿写"XX 附近"估算。
+    - 费城半导体 ^SOX：免费档取不到（返回 None）→ 用 Yahoo `^SOX` 或新浪 `gb_$sox` 补。
+    - Infoway 指数为"等权口径"，数值与 FMP 加权略异（如标普等权 -0.09% vs 加权 -0.26%），引用须标注口径，勿混用。
+    - VIX 免费档取不到（^VIX 为付费端点）。"""
     out = {"status": "ok", "indices": {}, "note": ""}
     start = (datetime.datetime.strptime(target, "%Y-%m-%d") - datetime.timedelta(days=40)).strftime("%Y-%m-%d")
     for sym in INDICES_FMP:
@@ -259,6 +263,51 @@ def fetch_infoway_afterhours(tickers):
 
 
 # ---------------------------------------------------------------------------
+# 新浪兜底源（Infoway 试用 key 过期后，M7 个股 / 商品改用新浪直连）
+# ---------------------------------------------------------------------------
+
+def _sina_head(codes):
+    """新浪实时快照 → {key:[字段...]}"""
+    import requests as _rq
+    r = _rq.get("https://hq.sinajs.cn/list=" + codes, headers={"Referer": "https://finance.sina.com.cn"}, timeout=10)
+    r.encoding = "gbk"
+    out = {}
+    for line in r.text.strip().splitlines():
+        if "=" in line and '"' in line:
+            k = line.split("=")[0].split("_")[-1]
+            out[k] = line.split('"')[1].split(",")
+    return out
+
+def fetch_m7_sina():
+    """M7 个股（新浪美股，[1]现价 [2]涨跌幅）。Infoway 过期后兜底。"""
+    m = {"nvda": "NVDA.US", "aapl": "AAPL.US", "msft": "MSFT.US", "goog": "GOOGL.US",
+         "amzn": "AMZN.US", "meta": "META.US", "tsla": "TSLA.US"}
+    q = _sina_head("gb_nvda,gb_aapl,gb_msft,gb_goog,gb_amzn,gb_meta,gb_tsla")
+    items = {}
+    for code, us in m.items():
+        a = q.get(code, [])
+        if len(a) > 3:
+            try:
+                items[us] = {"close": float(a[1]), "chg_pct": float(a[2])}
+            except ValueError:
+                items[us] = {"close": a[1], "chg_pct": a[2]}
+    return {"status": "ok" if items else "error", "source": "新浪", "items": items}
+
+def fetch_commodities_sina():
+    """商品（原油/黄金，新浪 hf_）。Infoway 过期后兜底。"""
+    q = _sina_head("hf_CL,hf_OIL,hf_GC")
+    items = {}
+    for code, name in [("CL", "WTI原油"), ("OIL", "布伦特原油"), ("GC", "黄金")]:
+        a = q.get(code, [])
+        if a:
+            try:
+                items[name] = {"close": float(a[0])}
+            except ValueError:
+                items[name] = {"close": a[0]}
+    return {"status": "ok" if items else "error", "source": "新浪", "items": items}
+
+
+# ---------------------------------------------------------------------------
 # 主流程
 # ---------------------------------------------------------------------------
 
@@ -281,14 +330,17 @@ def main():
     if not FMP_KEY:
         print("[错误] 未设置 FMP_API_KEY")
         sys.exit(1)
-    if not INFOWAY_KEY:
-        print("[错误] 未设置 INFOWAY_API_KEY")
-        sys.exit(1)
+    # Infoway 试用 key 可能已过期：不强制要求，M7/商品/等用新浪/FMP 兜底，宽度/温度/盘后若无替代标[待核实]
 
     result = {"target_date": target, "generated_at": datetime.datetime.now().isoformat(), "modules": {}}
 
     def run(name, fn):
-        r = fn()
+        try:
+            r = fn()
+        except Exception as e:
+            result["modules"][name] = {"status": "error", "error": str(e)[:200]}
+            print(f"  ❌ {name}  异常: {str(e)[:120]}")
+            return
         result["modules"][name] = r
         status = r.get("status", "?")
         mark = {"ok": "✅", "partial": "⚠️", "error": "❌"}.get(status, "❓")
@@ -313,10 +365,10 @@ def main():
     time.sleep(1.5)
     run("infoway_temperature", fetch_infoway_temperature)
     time.sleep(1.5)
-    run("infoway_kline_stocks", lambda: fetch_infoway_kline_block("stock", ",".join(M7_INFOWAY), target, "M7"))
-    time.sleep(1.5)
-    run("infoway_kline_common", lambda: fetch_infoway_kline_block("common", INDICES_INFOWAY + "," + COMMODITIES_INFOWAY, target, "indices+commodities"))
-    time.sleep(1.5)
+    run("infoway_kline_stocks", lambda: fetch_m7_sina())
+    time.sleep(0.3)
+    run("infoway_kline_common", lambda: fetch_commodities_sina())
+    time.sleep(0.3)
     run("infoway_afterhours", lambda: fetch_infoway_afterhours(",".join(M7_INFOWAY)))
 
     with open(json_out, "w", encoding="utf-8") as f:
