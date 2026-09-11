@@ -1,4 +1,4 @@
-# 美股 Invest Wiki 产业链热力 + 驱动解读：公共实现与同步方案
+# 美股产业链热力 + 驱动解读：公共实现方案
 
 **状态**：方案已跑通本地试运行，待工程化  
 **适用报告**：美股日度复盘简报第四部分  
@@ -6,36 +6,29 @@
 **产业链数据源仓库**：[xifengxx/invest-wiki](https://github.com/xifengxx/invest-wiki)  
 **简报发布仓库**：[xifengxx/kol-daily](https://github.com/xifengxx/kol-daily)
 
-**当前线上 universe 快照**：[`L3-网页产物/chain_universe.json @ 5a32637`](https://github.com/xifengxx/invest-wiki/blob/5a32637/L3-%E7%BD%91%E9%A1%B5%E4%BA%A7%E7%89%A9/chain_universe.json)；**当前 universe 版本**：`2026-09-11.3` / `logic_version=canonical-segments-v2` / `source_hash8=ba099660`
+**当前线上 universe 快照**：[`chain_universe.json @ 5a32637`](https://github.com/xifengxx/invest-wiki/blob/5a32637/L3-%E7%BD%91%E9%A1%B5%E4%BA%A7%E7%89%A9/chain_universe.json)；**当前 universe 版本**：`2026-09-11.3` / `logic_version=canonical-segments-v2` / `source_hash8=ba099660`
 
 ---
 
 ## 1. 一句话设计
 
-用 FMP 全市场行业接口算“行业热力”，用 Invest Wiki 编译出的产业链宇宙算“产业链段热力”，再用新闻检索给热力表和异常股补“为什么”；所有环节只显示 Top8 / Bottom8，但计算必须覆盖全量产业链段。
+用 FMP 全市场行业接口算“行业热力”，用产业链 universe JSON 算“产业链段热力”，再用新闻检索给热力表和异常股补“为什么”；所有环节只显示 Top8 / Bottom8，但计算必须覆盖全量产业链段。
 
 ---
 
-## 2. 两个仓库的职责
+## 2. 系统边界
 
-| 仓库 | 职责 | 是否是数据源 |
-|---|---|---|
-| [invest-wiki](https://github.com/xifengxx/invest-wiki) | L2 词条、产业链定义、公司/股票映射、L3 编译器、`chain_universe.json` 编译与发布 | 是，产业链宇宙的唯一结构数据源 |
-| [kol-daily](https://github.com/xifengxx/kol-daily) | 报告数据脚本、行情热力 JSON、驱动 JSON、报告模板与渲染 | 消费方，只应消费固定 commit 的 `chain_universe.json` |
-
-**不要抓 GitHub Pages 网页 DOM 当数据源。**  
-应使用 `chain_universe.json` 版本快照。
+- 产业链上游只负责发布带版本号的 `chain_universe.json`。
+- 简报侧是消费方，只负责下载、校验、抓行情、计算、检索驱动和渲染报告。
+- 技术侧不需要维护或理解产业链图谱的内部工程；当上游发布新的 `chain_universe.json` 后，只需要把 pipeline 配置里的固定 commit URL 更新到新版本。
+- 不要抓产业链网页 DOM 当数据源，不要迁入产业链图谱的内部生成逻辑。
 
 ---
 
 ## 3. 总体数据流
 
 ```text
-Invest Wiki L2 markdown
-      ↓ build_wiki_data.py
-Invest Wiki L3 wiki_data.json
-      ↓ build_chain_universe.py
-chain_universe.json（在 invest-wiki 中发布）
+chain_universe.json（invest-wiki 固定 commit）
       ↓ fetch_industry_chain_heat.py
 industry_chain_heat_YYYY-MM-DD.json
       ↓ fetch_us_market_data.py
@@ -52,17 +45,14 @@ YYYY-MM-DD-industry-chain-invest-wiki-drivers.md
 线上报告
 ```
 
-## 4. 当前落地状态
+---
 
-本节区分“规范”和“已经在线上仓库可用的实现”，避免技术误以为所有脚本都已开源。
+## 4. 当前落地状态
 
 | 产物 / 脚本 | 当前状态 | 责任仓库 |
 |---|---|---|
-| `L3-网页产物/wiki_data.json` | 已在 invest-wiki 仓库跟踪，是可拉取的结构化产物。 | invest-wiki |
-| `fetch_us_market_data.py` | 已在 kol-daily 仓库跟踪，但线上版缺少 `industry_heat`、`industry_mapping.json` 和后续新增的免费源兜底；需与本地试运行版合并后再提交。 | kol-daily |
 | `chain_universe.json` | 已发布到 invest-wiki，commit `5a32637`，包含 version / source hash / source commit / 统计信息。 | invest-wiki |
 | `industry_mapping.json` | FMP 全市场行业名到中文名/科技焦点的映射，目前只在本地试运行目录，尚未提交。 | kol-daily |
-| `build_chain_universe.py` | 已提交到 invest-wiki，负责把 `wiki_data.json` 编译成日报 universe。 | invest-wiki |
 | `fetch_industry_chain_heat.py` | 本地试运行脚本，尚未提交到 kol-daily。 | kol-daily |
 | `fetch_daily_drivers.py` | 本地试运行脚本，尚未提交到 kol-daily。 | kol-daily |
 | `render_industry_chain_report.py` / `render_drivers_report.py` | 本地试运行脚本，尚未提交到 kol-daily。 | kol-daily |
@@ -71,32 +61,13 @@ YYYY-MM-DD-industry-chain-invest-wiki-drivers.md
 
 ---
 
-## 5. 产业链宇宙如何形成
+## 5. 产业链计算规则
 
-### 5.1 从原始段到 canonical 段
+### 5.1 数据边界与去重
 
-Invest Wiki 有 AI算力和半导体两个大赛道，其中部分产业段名称完全相同，例如：
+只消费 `chain_universe.json` 中的 canonical segment。不需要重建或改写这些段；跨赛道重复段合并已经在 universe JSON 中完成。
 
-- 光刻机
-- 封装基板材料
-- 电子特气
-- 薄膜沉积设备
-- Chiplet与异构集成
-- CPU(服务器级)
-- 高纯硅料与硅片
-- 检测量测设备
-- RISC-V AI芯片
-- 刻蚀设备
-- 光刻胶与湿化学品
-- 高速连接器与铜缆
-- 晶圆代工(先进制程)
-- EDA与IP核
-- 溅射靶材
-- FPGA
-
-这些跨赛道重复段合并为同一个 canonical 段；合并结果记录在 `segment.source_slugs`。
-
-### 5.2 公司去重规则
+报告侧计算时遵守以下去重规则：
 
 | 层级 | 规则 |
 |---|---|
@@ -107,7 +78,7 @@ Invest Wiki 有 AI算力和半导体两个大赛道，其中部分产业段名�
 | A股 | 只进入 A股映射列，不参与海外热力计算。 |
 | 私有 / 未上市 | 排除行情计算；如需出现在产业链中，仅作上下文。 |
 
-### 5.3 计算口径
+### 5.2 计算口径
 
 对每个段计算：
 
@@ -137,9 +108,9 @@ Invest Wiki 有 AI算力和半导体两个大赛道，其中部分产业段名�
 
 ## 6. 行业热力与产业链热力的区别
 
-| 项目 | 行业热力图 | Invest Wiki 产业链段热力 |
+| 项目 | 行业热力图 | 产业链段热力 |
 |---|---|---|
-| 数据源 | FMP `industry-performance-snapshot` | Invest Wiki 自建宇宙 + Yahoo/yfinance 行情 |
+| 数据源 | FMP `industry-performance-snapshot` | 产业链 universe JSON + Yahoo/yfinance 行情 |
 | 分类口径 | 交易所官方/行业分类，NASDAQ+NYSE 同名合并 | 自建产业链角色，跨国家、跨市场 |
 | 成分股 | FMP 接口只给行业涨跌，免费版不给成分股 | 明确知道每段有哪些公司 |
 | 计算 | 行业内成分股等权 | 段内海外成分股等权，市值加权参考 |
@@ -156,7 +127,7 @@ Invest Wiki 有 AI算力和半导体两个大赛道，其中部分产业段名�
 ### 7.1 检索对象
 
 1. FMP 行业热力 Top8 / Bottom8。
-2. Invest Wiki 产业链 Top8 / Bottom8。
+2. 产业链 Top8 / Bottom8。
 3. 所有 `|chg_pct| >= 5%` 的链内异常股。
 
 ### 7.2 流程
@@ -219,22 +190,25 @@ us_drivers_YYYY-MM-DD.json
 
 ---
 
-## 8. Invest Wiki 更新后的同步策略
+## 8. universe 数据契约与同步
 
-这是当前最容易出错的地方。用户可能昨天或今天改了产业链地图，但 L3 或简报侧 universe 不一定跟着更新。
+### 8.1 版本化快照
 
-### 8.1 先判断改的是哪一层
+`chain_universe.json` 至少包含三类信息：
 
-| 改动内容 | 应该改哪里 | 后续动作 |
-|---|---|---|
-| 新增公司、修改公司描述、更新股票代码、调整产业段成分 | Invest Wiki L2 markdown | commit L2 → 重建 L3 → 重建 universe |
-| 只改了产业链网页 HTML / `wiki_data.json` | 不允许直接作为长期修改 | 必须回写到 L2，否则下次编译会丢 |
-| 改了 16 个跨赛道重名的合并规则 | `build_chain_universe.py` 的 `CANONICAL_SEGMENT_ALIASES` | bump universe 逻辑版本，重建 universe |
-| 改了 ticker 别名、OTC/ADR、日韩台港股后缀 | `build_chain_universe.py` 的 `TICKER_ALIASES` | bump universe 逻辑版本，重建 universe |
-| 改了报告表头、Top8 展示方式、异常股解释列 | 提示词 / 渲染脚本 | 更新提示词和渲染逻辑，不需要重建 universe |
-| 改了新闻检索关键词 | `fetch_daily_drivers.py` 的 query map | 只影响后续驱动解释，不影响行情 |
+```json
+{
+  "version": "universe 版本",
+  "logic_version": "计算规则版本",
+  "source_commit": "GitHub commit SHA",
+  "source_sha256": "内容校验值",
+  "stats": {},
+  "segments": [],
+  "companies": {}
+}
+```
 
-### 8.2 版本化快照
+`segments` 是报告计算的主要输入；每个 segment 至少要有 `segment_id`、`name`、`industry_tags`、`companies`、`n_overseas_candidates`、`n_a_share_mapping` 和 `a_share`。`companies` 用于检查 ticker 是否唯一，以及公司归属哪些段。
 
 `chain_universe.json` 已包含可追溯元数据。kol-daily 不需要长期维护第二份 universe；如果为了回溯需要缓存，可保存为带版本文件名的副本：
 
@@ -250,11 +224,9 @@ chain_universe.json   # 当前生产用 stable 指针/副本
 {
   "version": "YYYY-MM-DD.<n>",
   "built_at": "ISO8601",
-  "source_file": "wiki_data.json 的可追溯路径或 raw URL",
   "source_commit": "GitHub commit SHA",
   "source_sha256": "完整 64 位 SHA-256 十六进制字符串",
   "source_hash8": "source_sha256 的前 8 位，仅用于文件名和报告展示",
-  "source_generated_at": "L3 编译时间",
   "logic_version": "universe 编译规则版本",
   "stats": {}
 }
@@ -270,17 +242,7 @@ target_date
 generated_at
 ```
 
-### 8.3 旧报告是否回算
-
-默认**不回算历史报告**。产业链图谱变了以后：
-
-- 老报告继续使用当时 universe 的口径；
-- 新报告使用最新 universe；
-- 如确需回算，必须生成新文件，例如 `YYYY-MM-DD-industry-chain-invest-wiki-uv2.md`，不能覆盖老报告。
-
-当前历史报告只有 `universe_version` 这类粗粒度信息，部分旧版还使用过 11 环节口径；没有完整的 `source_sha256` 和 `logic_version`，所以不能保证逐字节复算。这个限制要写进交接说明：**从新版本开始必须补齐版本元数据，历史报告只作业务参考，不作为可复算基线。**
-
-### 8.4 技术环境如何获取数据源
+### 8.2 技术环境如何获取数据源
 
 技术环境不要依赖任何 `/Users/...` 本地路径。可选方案：
 
@@ -301,27 +263,25 @@ print(d["version"], d["logic_version"], d["source_sha256"], d["stats"])
 PY
 ```
 
-### 8.5 推荐同步操作（脚本迁移完成后）
+### 8.3 推荐同步操作
+
+上游维护者手动重建并发布新 universe 后，kol-daily 只需要把配置中的 `CHAIN_UNIVERSE_URL` 指到新的 fixed commit：
 
 ```bash
-# 1. Invest Wiki 侧：更新 L2 后重建 L3 和 universe
-git clone git@github.com:xifengxx/invest-wiki.git
-cd invest-wiki
-python3 L3-网页产物/build_wiki_data.py
-python3 L3-网页产物/build_chain_universe.py
-python3 L3-网页产物/validate.py
-
-# 2. 只提交明确产物，禁止 git add -A
-git add L3-网页产物/wiki_data.json L3-网页产物/chain_universe.json
-git commit -m "feat: 重建产业链 L3 快照"
-git push origin master
-
-# 3. kol-daily 侧：把 pipeline 配置里的 CHAIN_UNIVERSE_URL 指到新的 fixed commit
-#    <invest-wiki-commit-sha> 是上一步 push 后得到的完整 SHA。
 CHAIN_UNIVERSE_URL="https://raw.githubusercontent.com/xifengxx/invest-wiki/<invest-wiki-commit-sha>/L3-%E7%BD%91%E9%A1%B5%E4%BA%A7%E7%89%A9/chain_universe.json"
 ```
 
-注意：`build_chain_universe.py` 属于 invest-wiki，不需要迁到 kol-daily。kol-daily 的行情/驱动/渲染脚本仍需完成第 9 节迁移，并且每次运行都必须读取固定 commit 的 `chain_universe.json`。
+除这个 URL 外，简报侧不接触产业链图谱的其他工程文件或页面数据。
+
+### 8.4 旧报告是否回算
+
+默认**不回算历史报告**。产业链 universe 变了以后：
+
+- 老报告继续使用当时 universe 的口径；
+- 新报告使用最新 universe；
+- 如确需回算，必须生成新文件，例如 `YYYY-MM-DD-industry-chain-invest-wiki-uv2.md`，不能覆盖老报告。
+
+当前历史报告只有 `universe_version` 这类粗粒度信息，部分旧版还使用过 11 环节口径；没有完整的 `source_sha256` 和 `logic_version`，所以不能保证逐字节复算。这个限制要写进交接说明：**从新版本开始必须补齐版本元数据，历史报告只作业务参考，不作为可复算基线。**
 
 ---
 
@@ -338,10 +298,10 @@ CHAIN_UNIVERSE_URL="https://raw.githubusercontent.com/xifengxx/invest-wiki/<inve
 
 ### 建议做
 
-7. 给 `chain_universe.json` 加更强的校验器：ticker 非法、A/海外归类异常、私有公司误入行情候选都应报警。
+7. 给 `chain_universe.json` 加消费侧校验器：segment 非空、ticker 重复、A/海外归类异常、私有公司误入行情候选都应报警。
 8. 驱动解释可先用 Google News RSS，后续替换为新闻 API 时保持 schema 不变。
 9. 对缺失行情、市值缺失、数据日期混用生成 warnings 文件，而不是静默忽略。
-10. 做一个 dry-run 报表：81 原始段 → 65 canonical 段，每段成分股数量、缺失率、是否可排名。
+10. 做一个 dry-run 报表：每段成分股数量、缺失率、是否可排名。
 
 ---
 
@@ -349,8 +309,8 @@ CHAIN_UNIVERSE_URL="https://raw.githubusercontent.com/xifengxx/invest-wiki/<inve
 
 | 检查项 | 通过标准 |
 |---|---|
-| Invest Wiki 是否更新 | 如 L2 有更新，必须先重建 L3 和 universe。 |
-| universe 版本 | 报告能说出使用的 universe version / source hash。 |
+| universe 版本 | `CHAIN_UNIVERSE_URL` 指向的固定 commit 是当前应使用的最新发布版本。 |
+| universe 元数据 | 报告能说出使用的 universe version / source hash / logic_version。 |
 | 交易日 | `us_market_data`、`industry_chain_heat`、`us_drivers` 都对应同一美东交易日。 |
 | 段数 | 全量段参与计算；报告只展示 Top8 / Bottom8。 |
 | 去重 | 段内和大赛道汇总均按 ticker 去重。 |
