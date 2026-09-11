@@ -1,10 +1,10 @@
 # 美股产业链热力 + 驱动解读：公共实现方案
 
-**状态**：方案已跑通本地试运行，待工程化  
-**适用报告**：美股日度复盘简报第四部分  
+**状态**：基线脚本、数据产物和 9/11 报告已提交到 kol-daily。适用报告：美股日度复盘简报第四部分
 **对应提示词**：[`美股日度复盘-提示词.md`](https://github.com/xifengxx/kol-daily/blob/gh-pages/daily-briefing/docs/01-提示词/美股日度复盘-提示词.md)  
 **产业链数据源仓库**：[xifengxx/invest-wiki](https://github.com/xifengxx/invest-wiki)  
 **简报发布仓库**：[xifengxx/kol-daily](https://github.com/xifengxx/kol-daily)
+**运行手册**：[`美股产业链热力+驱动解读-数据流与运行手册.md`](./美股产业链热力+驱动解读-数据流与运行手册.md)
 
 **当前线上 universe 快照**：[`chain_universe.json @ 5a32637`](https://github.com/xifengxx/invest-wiki/blob/5a32637/L3-%E7%BD%91%E9%A1%B5%E4%BA%A7%E7%89%A9/chain_universe.json)；**当前 universe 版本**：`2026-09-11.3` / `logic_version=canonical-segments-v2` / `source_hash8=ba099660`
 
@@ -28,11 +28,15 @@
 ## 3. 总体数据流
 
 ```text
-chain_universe.json（invest-wiki 固定 commit）
+industry_mapping.json + FMP
+      ↓ fetch_us_market_data.py
+us_market_data_YYYY-MM-DD.json（含行业热力）
+
+chain_universe.json（invest-wiki 固定 commit）+ Yahoo/yfinance
       ↓ fetch_industry_chain_heat.py
 industry_chain_heat_YYYY-MM-DD.json
-      ↓ fetch_us_market_data.py
-us_market_data_YYYY-MM-DD.json
+
+us_market_data + industry_chain_heat
       ↓ fetch_daily_drivers.py
 us_drivers_raw_YYYY-MM-DD.json
       ↓ 人工筛选 / 模型整理，不编造
@@ -52,12 +56,14 @@ YYYY-MM-DD-industry-chain-invest-wiki-drivers.md
 | 产物 / 脚本 | 当前状态 | 责任仓库 |
 |---|---|---|
 | `chain_universe.json` | 已发布到 invest-wiki，commit `5a32637`，包含 version / source hash / source commit / 统计信息。 | invest-wiki |
-| `industry_mapping.json` | FMP 全市场行业名到中文名/科技焦点的映射，目前只在本地试运行目录，尚未提交。 | kol-daily |
-| `fetch_industry_chain_heat.py` | 本地试运行脚本，尚未提交到 kol-daily。 | kol-daily |
-| `fetch_daily_drivers.py` | 本地试运行脚本，尚未提交到 kol-daily。 | kol-daily |
-| `render_industry_chain_report.py` / `render_drivers_report.py` | 本地试运行脚本，尚未提交到 kol-daily。 | kol-daily |
-
-因此，本文描述的是**目标工程方案**；在下述脚本迁移并参数化之前，不要把它当成已经完整的线上 pipeline。
+| `industry_mapping.json` | 已提交到 kol-daily，用于 FMP 英文行业到中文行业映射。 | kol-daily |
+| `chain_universe.json` 消费侧快照 | 已提交到 `daily-briefing/scripts/chain_universe.json`，内容对齐上游 commit `5a32637`。 | kol-daily |
+| `fetch_us_market_data.py` | 已提交，支持 FMP 全市场行业热力和免费源兜底；不再包含旧 `chain_map.json` 链路。 | kol-daily |
+| `fetch_industry_chain_heat.py` | 已提交，负责 universe 行情抓取和 65 段热力计算。 | kol-daily |
+| `fetch_daily_drivers.py` | 已提交，日期参数已从固定日期改为必填参数。 | kol-daily |
+| `render_industry_chain_report.py` / `render_drivers_report.py` | 已提交，负责热力表和驱动解读列渲染。 | kol-daily |
+| 基线数据产物 | 已提交 2026-09-10 交易日的市场快照、产业链热力、驱动原始结果和整理结果。 | kol-daily |
+| 基线报告 | 已提交 `2026-09-11-industry-chain-invest-wiki.md` 和驱动解读版报告。 | kol-daily |
 
 ---
 
@@ -289,19 +295,16 @@ CHAIN_UNIVERSE_URL="https://raw.githubusercontent.com/xifengxx/invest-wiki/<inve
 
 ### 必做
 
-1. 把 `fetch_industry_chain_heat.py`、`fetch_daily_drivers.py` 和两个 render 脚本迁入 kol-daily。
-2. 把本地试运行版 `fetch_us_market_data.py` 中的 `industry_heat`、`industry_mapping.json` 和免费源兜底逻辑合并到 kol-daily 现有脚本，迁移前先做代码 review，避免覆盖线上已验证逻辑。
-3. 移除脚本里的本地绝对路径和固定日期默认值，把 `TARGET`、`CHAIN_UNIVERSE_URL`、`OUTPUT` 全部参数化。
-4. 每次运行前校验 universe 的 `version`、`logic_version`、`source_sha256`、`source_commit`，并把它们写入热力 JSON 和报告。
-5. 把渲染脚本的标题替换逻辑重构为显式模板渲染。
-6. 报告文件名统一使用美东交易日。
+1. 每次运行前校验 universe 的 `version`、`logic_version`、`source_sha256`、`source_commit`，并把它们写入热力 JSON 和报告。
+2. 把渲染脚本的标题替换逻辑重构为显式模板渲染。
+3. 统一日期语义：数据文件使用美东交易日，报告文件使用北京时间发布日。
 
 ### 建议做
 
-7. 给 `chain_universe.json` 加消费侧校验器：segment 非空、ticker 重复、A/海外归类异常、私有公司误入行情候选都应报警。
-8. 驱动解释可先用 Google News RSS，后续替换为新闻 API 时保持 schema 不变。
-9. 对缺失行情、市值缺失、数据日期混用生成 warnings 文件，而不是静默忽略。
-10. 做一个 dry-run 报表：每段成分股数量、缺失率、是否可排名。
+4. 给 `chain_universe.json` 加消费侧校验器：segment 非空、ticker 重复、A/海外归类异常、私有公司误入行情候选都应报警。
+5. 驱动解释可先用 Google News RSS，后续替换为新闻 API 时保持 schema 不变。
+6. 对缺失行情、市值缺失、数据日期混用生成 warnings 文件，而不是静默忽略。
+7. 做一个 dry-run 报表：每段成分股数量、缺失率、是否可排名。
 
 ---
 

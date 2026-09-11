@@ -1,0 +1,414 @@
+{
+  "date": "2026-09-10",
+  "generated_at": "2026-09-11T10:44:00+08:00",
+  "method": "Google News RSS 检索 + 人工筛选；高置信为当日直接新闻/公告线索，中置信为相关线索，低置信为暂无明确公开原因。",
+  "entries": [
+    {
+      "type": "industry",
+      "key": "广播电视",
+      "display": "广播电视",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；检索仅见“传媒股上涨”类泛化标题，未锁定美股当日行业级驱动。",
+      "sources": [
+        {"title": "Benchmarks snap three-day losses; media shares climb", "source": "Business Standard", "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPaEs1dmRjNzJ6U0ZyUDREdl9BRWxsMVZZLVZ3WjN0YXRnRFRITEF2ZjRKcVdkM283RmJHUU1aM2NQRTBubVpKNHpoazVhM0g0bHRZSGU5WGJSaHg2ZXJuWGpwczVEWnV2T1c4c0lvUGFaNUtmRzVHLWlqeWEwdWE4Rnlha0dCZDRDOFIzSjA5aTRsOWkwazFiWE13cWdyWWxHWDZjUy10LUVXY01SRWNSMmpfV3JvMlB5OEQyb1Y0Rm9IWjkyUTlqMnNzWW9YUdIB0wFBVV95cUxQOVp3bzl5czd6cWNGTUhPRGViZFI0U3FzWFJ2SVZjazU5R1N2RlQ1ZW9LejJzZzFXSHV3QkNmZFlYZVlzcUxmRTRwckhlM1pUX0JxM3JuQ2RhNzJUcm9naUpQbDR1SmFOVm13N1Yyeno2WFlSbkhlTl8ta05zVnRVUG5XSU1YOS0tYU9wamxoZkpfS3Y0YW9nVlAzUmp0SVVGY3FyTy1kMFhweEQ3d1lFTFpLaFhOSEFkMFV0V2FFR3lDdGNZY1dmUmUta01uLWhiam5r?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "烟草",
+      "display": "烟草",
+      "confidence": "中",
+      "driver": "英美烟草内部人买入、回购和股息确定性获关注，防御属性或支撑烟草板块。",
+      "sources": [
+        {"title": "British American Tobacco stock edges higher after insider share purchases", "source": "ad-hoc-news.de", "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPcjNvWkhVSDl3LTFsQ2E4bG96UUlxWUZ5Mjl1UkdGY2Z6cF9YUDNyV1hnWGpaSTdIdzZGZ0Ezclh2dURXeXdDNkEwR0dUV0FKOXV2aWpvbFFNZnFsaGZBeXRhelpLVDh4R0lvQkZaSlZOWTBaWU9RcHBySmdyZE9ocFdRNnV5MjBlSVJIUFhKaWJOUy1DT3BFSS1IRXdabnFIWXZuUFZiaXBDTFdRcmVpdmtBUUo2eExZbjd0aWY0TS1yVENGY2prSXZDdFd5U2F5WFE?oc=5", "published": "2026-09-10"},
+        {"title": "British American Tobacco (BATS) Repurchases 302,000 Shares", "source": "Kalkine Media", "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPRXgyUi0zbk5JNDZUcnZ4MUQ2YXZzbDltcE94UUhLRENuNkxOZDAweWpObTdHRTV5bTF5eG50enh5d3RidlpabzNqQmZwLXphRVR6RHo1Z2ctcXI3Rlg2WGV2YVdHa2VRZWRoRV9Eeml4M2NMWUFqRGxxQXhsWWx2cHlMS1M0a25MTU9DWDVWWUQxaFJaZ0U2bV84Q3c5WENmejJPV2UzTGxMRkVScDhqcjMtWUk3M0Jub29ZYVpSZUJMZklETFZqTV83WndPcjBTbjVGbDM0YkZCdThsemdvNHEzX1JYcEpWMUE?oc=5", "published": "2026-09-06"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "商业设备与耗材",
+      "display": "商业设备与耗材",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；仅见制造和商业设备相关泛化讨论，未锁定当日行业级驱动。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "医疗仪器与耗材",
+      "display": "医疗仪器与耗材",
+      "confidence": "低",
+      "driver": "暂无统一公开原因；仅见器械相关公司获行业观察和分析师关注。",
+      "sources": [
+        {"title": "Zacks Industry Outlook Highlights Veracyte, Globus Medical and UFP Technologies", "source": "TradingView", "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOX2xYdFpoS2d6cHJmQzNVc2M2YzFSYVFGbHk5YTVhb3hCWDdXNGhnVTVhb0EwLWVNVEF0ajVnM1pFeGhTVHFfN1VCVXlnSmtzNHZGZFdrSWpfUnlBSWxxd0tZZXdTQXBsbE1VOVZLQkdvNTlSN1lJbXprNnlYdExtaVBWd1czTFFTSUo4RUpfOWZqdXZmd21JTTdiN0gxUWpZYTdkMkVrWU5JVllaSW9ORjlMMGlxcVpObnozTDNPakV2LTdWX3ZsWnY3VGQ2cGc?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "消费电子",
+      "display": "消费电子",
+      "confidence": "高",
+      "driver": "Apple 发布 iPhone 18 Pro 与折叠屏并强化 AI 升级；Apple 当日领涨 M7，带动消费电子。",
+      "sources": [
+        {"title": "Apple Unveils iPhone Duo Foldable and iPhone 18 Pro with AI Upgrades", "source": "The Motley Fool", "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPeEVBdlNLUW9LTjlNbEVlYW5sdzF6Y2U0eWtBOXJ0QzZGN2lsOUFOanVTNVBoXzFTNEFPNEI4ZzlaOERpWGlmMVd6eDdjX2dJdVJxa2lVb1BuT1FhYWZQZFNsMzlTeVE1TGFYMVQyVS1iTUdaN1lGM2EzM2YtbWI3bDBHVTNiLWk3Z2hwVUhoajJIQWNsemVSNExZVDg4R1RiLUw0bzZsSUJ6THZTY0J3bHR3RXlLZ0NjQlI4Y3lhM0VZNHVNZkpIQmw3cU9lbjVjT1laVjZKVEw4UjA5bEpXbFNrMm1aSzNYbFlj?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "太阳能",
+      "display": "太阳能",
+      "confidence": "中",
+      "driver": "First Solar 获 Freedom Broker 看至约21%上行空间，新能源方向情绪修复。",
+      "sources": [
+        {"title": "Freedom expects First Solar shares to rise 21%", "source": "Freedom Broker", "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQcWc1dzZKYWU2Y1ZxSzBQZ0tVUU90WEc3bzVCckdRVjB3QmJiQkl3TjZpVVZpMHpBQVFPZk5Zcm5UazRpSHNxX3d5Y0dyZS1GdElJLWpIVGR4MkdzZVlKODdBYzk2ZWtsQmY5SGFGcWtIOFpPTnduWTFCRnR3TDRtdmNtNXdJV0Z3am00?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "科技分销",
+      "display": "科技分销",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；仅见泛科技景气与市场选股讨论。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "海运",
+      "display": "海运",
+      "confidence": "中",
+      "driver": "霍尔木兹长期扰动后燃料供给压力缓解，叠加航运股关注名单增多，周期情绪修复。",
+      "sources": [
+        {"title": "Supply squeeze in marine fuel eases as market adapts to prolonged Hormuz disruption", "source": "Reuters", "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOVGo4QmVVZjhzLTdrQkVwTmM4N2Z5NXd5OHJITFp5UE9melIzd3R4SVN3eEQxUDZjYkotUFFBWEFzTGpWMDlPWGdaNGhhaDFSZDBTaEQ2TkJFRlkxbU1uNHV3by1oOW9jM1NTek8zREh1ZjZ4ZXI3YmVFd0E0U2ZVcWdreE95OTR0RG8zbjFtdzh3VUsweXNtdjg1S2Utbk1mbUFQanhKbmdIeU4tQjZBdHpZR2ExZEJTdUE?oc=5", "published": "2026-09-10"},
+        {"title": "Top Shipping Stocks To Add to Your Watchlist", "source": "marketbeat.com", "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOVGo4QmVVZjhzLTdrQkVwTmM4N2Z5NXd5OHJITFp5UE9melIzd3R4SVN3eEQxUDZjYkotUFFBWEFzTGpWMDlPWGdaNGhhaDFSZDBTaEQ2TkJFRlkxbU1uNHV3by1oOW9jM1NTek8zREh1ZjZ4ZXI3YmVFd0E0U2ZVcWdreE95OTR0RG8zbjFtdzh3VUsweXNtdjg1S2Utbk1mbUFQanhKbmdIeU4tQjZBdHpZR2ExZEJTdUE?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "油气设备与服务",
+      "display": "油气设备与服务",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；油价虽高，但设备链资金离场，未检索到统一当日利空。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "工具与配件制造",
+      "display": "工具与配件制造",
+      "confidence": "中",
+      "driver": "CVD Equipment 停止承接新单并裁员约一半，相关制造情绪受压制。",
+      "sources": [
+        {"title": "CVD Equipment will stop pursuing new orders and cut its workforce by about half", "source": "stocktitan.net", "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOaFhNUjlYM1R6RVpFaHgyUXdTblRUaDg3Qm1mektrS2YtcFdoTTVBaG5JRk82a3V1N2VGMzBDRmVLdzBaQzBfZ2lSTmdXWF8zekRVT0dvdWUxTU9SUU80U01adlFNQ1RYYnRxWVVoY0ZodVlqVXBkVlZzU21KZFlURkRPVWRGTmxSV2Rtb3lSbVZ4YmxF?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "纺织制造",
+      "display": "纺织制造",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；检索多为印度纺织展望和IPO，未见当日美股行业利空。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "家居装修",
+      "display": "家居装修",
+      "confidence": "中",
+      "driver": "Home Depot 遭 Bernstein 下调目标价，成屋销售跌破400万套，地产后周期压力显现。",
+      "sources": [
+        {"title": "Home Depot stock reacts to Bernstein price target cut", "source": "ad-hoc-news.de", "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWTJOQ1hRQjRxXzBpeWlIVGVhc21TdS05WTExU2ZPWUY1RkFFbkF5Ti14dldiNFVpYjlWcVRrTHpzVnpzc0V1NkdqR2ZqQkctVUxFZmdCci1jclRXRzA3Z0hoWjlENEM5RXlzMjRPNF9SaFppZGFIVERlVnlrUktJRGZDNjZaenc1dHdOaFFUVXZ2dms?oc=5", "published": "2026-09-10"},
+        {"title": "U.S. Existing-Home Sales Fall Below 4 Million", "source": "TechStock²", "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPWTJOQ1hRQjRxXzBpeWlIVGVhc21TdS05WTExU2ZPWUY1RkFFbkF5Ti14dldiNFVpYjlWcVRrTHpzVnpzc0V1NkdqR2ZqQkctVUxFZmdCci1jclRXRzA3Z0hoWjlENEM5RXlzMjRPNF9SaFppZGFIVERlVnlrUktJRGZDNjZaenc1dHdOaFFUVXZ2dms?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "工业材料",
+      "display": "工业材料",
+      "confidence": "中",
+      "driver": "Vulcan Materials 遭 Wells Fargo 下调评级，周期材料需求担忧叠加。",
+      "sources": [
+        {"title": "Vulcan Materials stock falls after Wells Fargo downgrade", "source": "ad-hoc-news.de", "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5MSWticmVUcmhzVVpBMWg0bFpvRGpXR1FIdzhKMmVOdVVETlV0MzVfemFuMzBwX3Q2Ykh4TFRjakstUDZVX2N6NEpsSWxZZU54bTZnQmNMal9Fdkw3ei04N2htZldJYkhl?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "铀",
+      "display": "铀",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；能源/新能源内部轮动，部分铀股动量转弱。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "抵押REIT",
+      "display": "抵押REIT",
+      "confidence": "高",
+      "driver": "10Y美债收益率升至4.95%，融资和折现率压力直接拖累抵押REIT。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "特殊REIT",
+      "display": "特殊REIT",
+      "confidence": "高",
+      "driver": "10Y美债收益率升至4.95%，房地产风险偏好收缩，特殊REIT同步承压。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "semi-rf-chip",
+      "display": "射频芯片",
+      "confidence": "高",
+      "driver": "Skyworks/Qorvo 合并进展消息推动，Skyworks +9.79%、Qorvo +6.77% 带动。",
+      "sources": [
+        {"title": "Skyworks Solutions Surges 10%, Qorvo Climbs 6% While Chip Stocks Fall: Is the Merger Finally Clearing?", "source": "24/7 Wall St.", "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOMS1acFhVRVU0S25SZi1fY1BzZzBUcFRtUVVEd1pwaWw1Q1FIb3phNmZlclJiOUtQOTVvbFlwcHVVR2o5NDJWQlFQaDFNMjZ1M1YyRDV3aTd1ZjBfUURDdXZvOVloX0VsckJGcC1wVDN3WmZWMjRDZU02aEFFZW1CZHA3R1FULWpEQlNWeV9NT0xfVWhKQ1JINnA0a0xhWmNE?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "semi-analog-ic",
+      "display": "模拟芯片",
+      "confidence": "中",
+      "driver": "ADI 的机器人/边缘AI叙事与 Skyworks/Qorvo 合并外溢效应带动模拟链。",
+      "sources": [
+        {"title": "Analog Devices Wants Robots to Think Without Nvidia", "source": "24/7 Wall St.", "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOcG9hRWJmaW5WZmlVeHZXQXZ6WkRSYk9vY0ZVZzlPMkpwNEZMZzJJaU8xQ2NvT2ZYTnpIY0VwWWV2cVh2N0dRZDJuZEpFR1J1Y2V0R1V3R1MxUVNkNXdGZ1E0Z0JrVVlnZzNMUkNrQnd4THBMc0VJdWZFcUNIUEZXTWY1NlVpU2RTd1E4NjU0RHFzd19qQlNoU2NkYzNoUk5TQmdUXzZ2S1Z4aGhLRTJhUFQzSmpMS01wcFpMNTU5b3BhZ0E?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "pcb-ic-substrate",
+      "display": "PCB与IC载板",
+      "confidence": "中",
+      "driver": "AI 驱动高端 IC 载板增长的话题仍在，但当日个股互有涨跌，暂无统一驱动。",
+      "sources": [
+        {"title": "AI Drives High-End IC Substrate Growth to US$19.51B in 2026", "source": "I-Connect007", "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOZHZPMndIaDhKM2pCTnE5SHlVa25DS3RTS2o1YWE2c2ZhUmRKdDdLS09PV3d4WU1RVFpLb2IzQWVoaEVCTldSRGpjdjFNdVk3N0FjWFRpZUtWYU1WSm4yTUNocXJ6YWtPV2RKTHNQUnhkWUh0LUZjbHFSQkROd1c2UmptVXkyQXBmQWZIRllwMUhWelFTeVlMRVplUi1zZUdMZDhMOXgwaEZuQQ?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "photoresist",
+      "display": "光刻胶与湿化学品",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；仅见半导体材料长期研究，未形成当日行业驱动。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "semi-test-equipment",
+      "display": "测试设备",
+      "confidence": "低",
+      "driver": "Teradyne 的 AI 测试策略获关注，但 Advantest 与 Teradyne 分化，暂无统一驱动。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "edge-ai",
+      "display": "边缘AI",
+      "confidence": "中",
+      "driver": "Apple 新品发布支撑边缘AI，但整体算力硬件回撤抵消涨幅。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "semi-ic-design-service",
+      "display": "IC设计服务(Fabless)",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；半导体个股分化导致等权结果接近零。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "ai-agent",
+      "display": "AI Agent",
+      "confidence": "低",
+      "driver": "Meta 的 Muse AI Agent 讨论仍在，但板块内部涨跌互抵，暂无统一驱动。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "enterprise-storage",
+      "display": "企业级存储",
+      "confidence": "中",
+      "driver": "HPE -6.25% 大幅拖累，存储股在AI硬件回撤中估值承压。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "server-cpu",
+      "display": "CPU(服务器级)",
+      "confidence": "中",
+      "driver": "AI芯片链回撤与利率上行叠加，NVIDIA/Intel 等服务器级CPU相关股承压。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "gpu-architecture",
+      "display": "GPU架构设计",
+      "confidence": "中",
+      "driver": "Nvidia RTX Spark 引发竞争担忧，叠加AI算力链获利了结。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "gpu",
+      "display": "GPU",
+      "confidence": "中",
+      "driver": "GPU股在AI硬件回撤中承压，市场压缩高估值配套的容忍度。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "server-power-ups",
+      "display": "服务器电源与UPS",
+      "confidence": "中",
+      "driver": "AI电力/散热高预期重新定价，Vertiv 和 Delta Electronics 明显回撤。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "ai-server",
+      "display": "AI服务器",
+      "confidence": "高",
+      "driver": "AI服务器两日涨幅回吐，HPE、Dell 回撤，市场对AI配套链做获利了结。",
+      "sources": [
+        {"title": "AI Server Stocks Slide as Two-Day Run Unwinds", "source": "24/7 Wall St.", "url": "https://news.google.com/rss/articles/CBMigwJBVV95cUxOeGlKVDZhai1tWnM2Q3VWTXZ0Z2NtZVBneDFfQ0RQOGF4Z3M1dk9qMENzV2RXTHk5QXp5eEhiQUlINkFuUk52ek5WMTZKN1d0MHJHeUNJeTRPMzFFR1lXZURkdWhrN0hmSWpQTk1rVDliZk53UFR1SE9udGQ2WDJYZl9ibGNUcGNzQkhtZWZXdnhBakNNS3N5ZjRmNlJTTzY1ODhsWEZQMGFpTk5yYkQ2blVVdVJNUW0tdE9SZ1FmRER6YVB1OTRQQlN4NHJaYmVNbGlTbWJWSFAxRVp3b011X2dHTVJoMHpwUnBKUlNDay16LUdmQWllUGhpWlFYY3RQcDVz?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "etch-equipment",
+      "display": "刻蚀设备",
+      "confidence": "中",
+      "driver": "Lam Research -5.65% 带动设备链回撤，AI硬件整体承压。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "dsp-optical-chip",
+      "display": "DSP与光芯片",
+      "confidence": "中",
+      "driver": "光芯片/光模块相关高估值方向同步回撤，Lumentum -5.39% 拖累。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "SWKS",
+      "display": "Skyworks",
+      "confidence": "高",
+      "driver": "Skyworks/Qorvo 合并临近、协同预期和 Goldman Sachs 会议讨论推动股价大涨。",
+      "sources": [
+        {"title": "Skyworks (SWKS) Rockets 9.8% on Looming $22B Qorvo Merger Nod", "source": "Yahoo Finance", "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPcjNvWkhVSDl3LTFsQ2E4bG96UUlxWUZ5Mjl1UkdGY2Z6cF9YUDNyV1hnWGpaSTdIdzZGZ0Ezclh2dURXeXdDNkEwR0dUV0FKOXV2aWpvbFFNZnFsaGZBeXRhelpLVDh4R0lvQkZaSlZOWTBaWU9RcHBySmdyZE9ocFdRNnV5MjBlSVJIUFhKaWJOUy1DT3BFSS1IRXdabnFIWXZuUFZiaXBDTFdRcmVpdmtBUUo2eExZbjd0aWY0TS1yVENGY2prSXZDdFd5U2F5WFE?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "QRVO",
+      "display": "Qorvo",
+      "confidence": "高",
+      "driver": "Skyworks/Qorvo 合并进展与合并套利/叙事交易推动，Qorvo 触及52周新高。",
+      "sources": [
+        {"title": "Qorvo Inc. stock jumps to 52-week high as Skyworks merger momentum builds", "source": "ad-hoc-news.de", "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPcjNvWkhVSDl3LTFsQ2E4bG96UUlxWUZ5Mjl1UkdGY2Z6cF9YUDNyV1hnWGpaSTdIdzZGZ0Ezclh2dURXeXdDNkEwR0dUV0FKOXV2aWpvbFFNZnFsaGZBeXRhelpLVDh4R0lvQkZaSlZOWTBaWU9RcHBySmdyZE9ocFdRNnV5MjBlSVJIUFhKaWJOUy1DT3BFSS1IRXdabnFIWXZuUFZiaXBDTFdRcmVpdmtBUUo2eExZbjd0aWY0TS1yVENGY2prSXZDdFd5U2F5WFE?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "2308.TW",
+      "display": "Delta Electronics",
+      "confidence": "低",
+      "driver": "暂无明确公开原因；AI算力硬件回撤共振。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "HPE",
+      "display": "HPE",
+      "confidence": "中",
+      "driver": "前一日大涨后两日涨幅回吐，AI服务器/企业级存储链条获利了结；当日无明确负面公告线索。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "CRWV",
+      "display": "CoreWeave",
+      "confidence": "中",
+      "driver": "高管按预设计划卖出、杠杆担忧与AI基础设施风险偏好回落共同压制。",
+      "sources": [
+        {"title": "CoreWeave (CRWV) executive sells 22K shares under preset plan", "source": "stocktitan.net", "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQU3Y0VHloYlRMZmVIdU5fN002U1ZjZTVtOVFoMnAxaE1BRWc0N0NfTTU3Y19XbHdQWjU0NW9BN1RKS2ZEeHNJdUFKV2R2N1pPTFN4emJNTnRSMXUzSU1pNDl4RzRzQUMyTjdjRzU2VHFHS0VPNG5fM1B2Z3Ywa3d2WXo1SWtRb0JlTUlKek5pZ1NJWmszNHl0NE1jeUJhMG1vdnhfQUgyalBWelZ0?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "LRCX",
+      "display": "泛林半导体(Lam)",
+      "confidence": "低",
+      "driver": "暂无明确公司新闻；半导体设备/AI硬件链回撤共振。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "VRT",
+      "display": "Vertiv",
+      "confidence": "高",
+      "driver": "收购消化、内部人减持和估值担忧叠加，数据中心电力/散热高预期重新定价。",
+      "sources": [
+        {"title": "Vertiv Holdings Co. (VRT) falls as investors digest acquisition, insider sales, and a recent sharp pullback", "source": "Quiver Quantitative", "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPcjNvWkhVSDl3LTFsQ2E4bG96UUlxWUZ5Mjl1UkdGY2Z6cF9YUDNyV1hnWGpaSTdIdzZGZ0Ezclh2dURXeXdDNkEwR0dUV0FKOXV2aWpvbFFNZnFsaGZBeXRhelpLVDh4R0lvQkZaSlZOWTBaWU9RcHBySmdyZE9ocFdRNnV5MjBlSVJIUFhKaWJOUy1DT3BFSS1IRXdabnFIWXZuUFZiaXBDTFdRcmVpdmtBUUo2eExZbjd0aWY0TS1yVENGY2prSXZDdFd5U2F5WFE?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "INTC",
+      "display": "Intel",
+      "confidence": "中",
+      "driver": "涨价10%与分析师态度分歧、Apple 竞争压力与获利回吐叠加。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "LITE",
+      "display": "Lumentum",
+      "confidence": "中",
+      "driver": "当日无明确业务利空；高估值回撤、内部人卖出和AI硬件风险偏好回落共振。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "ORCL",
+      "display": "Oracle",
+      "confidence": "高",
+      "driver": "财报在收盘后发布，盘中下跌主要是会前风险偏好/预期兑现；盘后财报显示云收入大幅增长，盘后股价上涨。",
+      "sources": [
+        {"title": "Oracle Announces Q1 Results Driven by Triple Digit Growth in Cloud Infrastructure Revenues", "source": "PR Newswire", "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPWHVqa2dod3hUdm9jaWhfQUNyVXE3VHFpNGs3NWE5MXVxYU9maXNEUThEY2pwdGMxN1RkdXIwWlBCVU9LS1VQNGFNckpqUDZ4YWdiUzJObnoxS3ZtUEhURFBzd2prem0wOWhkY0VQV1pQNEx5aWY4V2V4RV9ISzRncFRrS1M4VUsya1NzTDZRMzgtQ00tN25jNXp3c09KbVdxcDZZbnVuRzAxN0hhOTRjMi1ITHY5WHNrbWlmXzA0TDloZlhsUXlkVFU2V01EdDhzZS1feG9mT1pDUjdtN3A0?oc=5", "published": "2026-09-10"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "DELL",
+      "display": "Dell",
+      "confidence": "中",
+      "driver": "50亿美元多档票据发行、AI供应链短缺报道与AI服务器板块回撤共同压制。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "CRUS",
+      "display": "Cirrus Logic",
+      "confidence": "中",
+      "driver": "暂无明确公开原因；Skyworks/Qorvo 合并带动射频/模拟链，Cirrus Logic 随链上涨。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "NBIS",
+      "display": "Nebius",
+      "confidence": "中",
+      "driver": "加息概率提升压制neocloud估值；Palantir 合作与 Truist 买入评级未能抵消。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "APLD",
+      "display": "Applied Digital",
+      "confidence": "中",
+      "driver": "云业务分拆后估值偏贵、获利回吐与neocloud/AI基础设施风险偏好回落共振。",
+      "sources": []
+    }
+  ]
+}

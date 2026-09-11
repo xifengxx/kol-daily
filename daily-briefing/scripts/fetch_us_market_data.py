@@ -23,6 +23,7 @@
 import os
 import sys
 import json
+from pathlib import Path
 import time
 import datetime
 import statistics
@@ -42,6 +43,8 @@ FMP_KEY = os.environ.get("FMP_API_KEY", "")
 INFOWAY_KEY = os.environ.get("INFOWAY_API_KEY", "")
 FMP_BASE = "https://financialmodelingprep.com/stable"
 INFOWAY_BASE = "https://data.infoway.io"
+SCRIPT_DIR = Path(__file__).resolve().parent
+INDUSTRY_MAPPING_PATH = SCRIPT_DIR / "industry_mapping.json"
 
 # 简报模板要用的标的
 M7 = ["NVDA", "AAPL", "MSFT", "GOOGL", "AMZN", "META", "TSLA"]
@@ -49,6 +52,7 @@ M7_INFOWAY = [s + ".US" for s in M7]
 INDICES_FMP = ["^GSPC", "^IXIC", "^DJI", "^SOX", "^RUT"]   # 标普/纳指/道指/费半/罗素
 INDICES_INFOWAY = "US500,US30,US2000,VIX,DXY,ES,NQ"          # 标普/道指/罗素/VIX/美元指数/E-mini期货
 COMMODITIES_INFOWAY = "XAUUSD,CL,BZ,GC"                       # 黄金现货/WTI/布伦特/黄金期货
+CHAIN_TOP_N = 8
 
 # ---------------------------------------------------------------------------
 # 请求封装
@@ -182,6 +186,77 @@ def fetch_fmp_sectors(target):
                for s, v in agg.items()]
     sectors.sort(key=lambda x: -x["avg_change_pct"])
     return {"status": "ok", "sectors": sectors}
+
+
+def _industry_snapshot(target):
+    """取目标日 FMP 行业快照；目标日未生成时向前找最近一个有数交易日。"""
+    d = datetime.datetime.strptime(target, "%Y-%m-%d")
+    for offset in range(8):
+        date = (d - datetime.timedelta(days=offset)).strftime("%Y-%m-%d")
+        exchanges = {}
+        for ex in ("NASDAQ", "NYSE"):
+            rows = fmp_get("/industry-performance-snapshot", {"date": date, "exchange": ex})
+            exchanges[ex] = rows if isinstance(rows, list) else []
+        if any(exchanges.values()):
+            return date, exchanges
+    return target, {"NASDAQ": [], "NYSE": []}
+
+
+def fetch_industry_heat(target):
+    """FMP 全市场行业热力：NASDAQ+NYSE 同名行业等权合并。"""
+    data_date, exchanges = _industry_snapshot(target)
+    if not any(exchanges.values()):
+        return {"status": "error", "error": "no industry snapshot", "data_date": data_date}
+
+    try:
+        mapping = json.loads(INDUSTRY_MAPPING_PATH.read_text(encoding="utf-8"))["industries"]
+    except Exception as e:
+        return {"status": "error", "error": f"industry_mapping.json load failed: {e}"}
+
+    agg = {}
+    for ex, rows in exchanges.items():
+        for row in rows:
+            name = row.get("industry")
+            chg = row.get("averageChange")
+            if not name or chg is None:
+                continue
+            item = agg.setdefault(name, {"changes": [], "by_exchange": {}})
+            item["changes"].append(float(chg))
+            item["by_exchange"][ex] = round(float(chg), 2)
+
+    industries = []
+    for name, item in agg.items():
+        m = mapping.get(name, {})
+        industries.append({
+            "industry": name,
+            "industry_zh": m.get("zh") or name,
+            "sector_group": m.get("sector_group") or "未分组",
+            "is_tech_focus": bool(m.get("is_tech_focus", False)),
+            "avg_change_pct": round(statistics.mean(item["changes"]), 2),
+            "by_exchange": item["by_exchange"],
+            "n_exchanges": len(item["by_exchange"]),
+        })
+    industries.sort(key=lambda x: -x["avg_change_pct"])
+    for i, x in enumerate(industries, 1):
+        x["rank"] = i
+
+    top = industries[:CHAIN_TOP_N]
+    bottom = list(reversed(industries[-CHAIN_TOP_N:]))
+    tech = [x for x in industries if x["is_tech_focus"]]
+    status = "ok" if data_date == target else "partial"
+    return {
+        "status": status,
+        "target_date": target,
+        "data_date": data_date,
+        "source": "FMP /industry-performance-snapshot",
+        "method": "NASDAQ+NYSE 同名行业合并；FMP 等权平均个股涨跌幅，不是市值加权",
+        "mapping_version": "1.0",
+        "n_industries": len(industries),
+        "top": top,
+        "bottom": bottom,
+        "tech_focus": tech,
+        "industries": industries,
+    }
 
 
 def fetch_fmp_treasuries(target):
@@ -349,6 +424,8 @@ def main():
             detail = " ".join(f"{k}:{v.get('close')}({v.get('vol_ratio_20d')}x)" for k, v in r["indices"].items())
         elif name == "fmp_sectors" and r.get("sectors"):
             detail = ", ".join(f"{s['sector']} {s['avg_change_pct']}%" for s in r["sectors"][:6])
+        elif name == "industry_heat" and r.get("top"):
+            detail = ", ".join(f"{x['industry_zh']} {x['avg_change_pct']}%" for x in r["top"][:4])
         elif name == "infoway_kline_stocks":
             detail = ", ".join(f"{k}:{v.get('close')}({v.get('chg_pct')})" for k, v in r.get("items", {}).items())
         elif name == "infoway_kline_common":
@@ -358,6 +435,7 @@ def main():
     print("--- 拉取中 ---")
     run("fmp_indices_eod", lambda: fetch_fmp_indices_eod(target))
     run("fmp_sectors", lambda: fetch_fmp_sectors(target))
+    run("industry_heat", lambda: fetch_industry_heat(target))
     run("fmp_treasuries", lambda: fetch_fmp_treasuries(target))
     run("fmp_crypto", fetch_fmp_crypto)
     # Infoway 免费档限流较紧：每个调用之间留间隔

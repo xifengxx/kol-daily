@@ -224,6 +224,12 @@ WTI 102.87、布伦特 107.96，油价继续维持高位。黄金 4370.17，BTC 
 | 泛林半导体(Lam)（LRCX） | -5.65% | 刻蚀设备、薄膜沉积设备 |
 | Vertiv（VRT） | -5.61% | 散热液冷系统、服务器电源与UPS |
 | Intel（INTC） | -5.57% | AI芯片设计(Fabless)、CPU(服务器级) |
+| Lumentum（LITE） | -5.39% | DSP与光芯片 |
+| Oracle（ORCL） | -5.38% | 云计算IaaS、AI训练集群/超算 |
+| Dell（DELL） | -5.35% | AI服务器、企业级存储 |
+| Cirrus Logic（CRUS） | +5.20% | 模拟芯片 |
+| Nebius（NBIS） | -5.09% | AI模型训练平台 |
+| Applied Digital（APLD） | -5.01% | 数据中心IDC |
 
 链内异动集中在两端：Skyworks/Qorvo 带动射频/模拟链；Delta Electronics/HPE/Vertiv 拖累算力硬件。Vertiv 连续两日走弱，说明市场对数据中心“电力+散热”的高预期也在重新定价。
 
