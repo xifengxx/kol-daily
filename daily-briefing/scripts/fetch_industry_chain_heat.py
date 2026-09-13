@@ -11,7 +11,15 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-import yfinance as yf
+# yfinance 底层是 curl_cffi，只认 http_proxy/https_proxy 环境变量、不读 macOS
+# 系统代理。不先导出代理就会裸连出去撞上 Yahoo 对国内 IP 的封锁
+# （403 / YFRateLimitError）。必须在 import yfinance 之前执行。
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import net_env  # noqa: E402
+
+net_env.ensure_proxy()
+
+import yfinance as yf  # noqa: E402
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -74,7 +82,7 @@ def fetch_fx_rates(target):
     return rates
 
 
-def fetch_market_cap(ticker):
+def fetch_market_cap(ticker, rates=None):
     try:
         info = yf.Ticker(ticker).fast_info
         cap = info.get("marketCap")
@@ -82,16 +90,22 @@ def fetch_market_cap(ticker):
         if cap is None or currency is None:
             return {"market_cap_local": None, "currency": None, "market_cap_usd": None}
         cap = float(cap)
+        # yfinance 的 marketCap 是「本地币种」计价，必须换算成 USD 才能跨市场加权。
+        # 之前直接把本地币种数值当 USD 用，导致韩元市值被放大 ~1380 倍、日元 ~150 倍，
+        # 市值加权口径被亚洲标的完全带偏。
+        rate = 1.0 if currency == "USD" else (rates or {}).get(currency)
+        usd = cap / rate if rate else None
         return {
             "market_cap_local": round(cap / 1e9, 3),
             "currency": currency,
-            "market_cap_usd": cap,
+            # 汇率缺失时不猜：宁可置空（该股不进市值加权），也不要污染口径
+            "market_cap_usd": round(usd, 2) if usd else None,
         }
     except Exception:
         return {"market_cap_local": None, "currency": None, "market_cap_usd": None}
 
 
-def fetch_quotes(candidates, target):
+def fetch_quotes(candidates, target, rates=None):
     symbols = [x["ticker"] for x in candidates]
     start = (datetime.date.fromisoformat(target) - datetime.timedelta(days=14)).isoformat()
     end = (datetime.date.fromisoformat(target) + datetime.timedelta(days=1)).isoformat()
@@ -131,7 +145,7 @@ def fetch_quotes(candidates, target):
                 "chg_pct": None,
                 "used_latest": False,
             }
-        base.update(fetch_market_cap(ticker))
+        base.update(fetch_market_cap(ticker, rates))
         return ticker, base
 
     with ThreadPoolExecutor(max_workers=8) as pool:
@@ -289,7 +303,12 @@ def main():
         if comp["tradable"] and comp["market_guess"] != "CN"
     ]
     print(f"fetching {len(candidates)} overseas tickers for {target}", flush=True)
-    quotes = fetch_quotes(candidates, target)
+    print("fetching FX rates for cross-market market-cap weighting", flush=True)
+    rates = fetch_fx_rates(target)
+    missing = [c for c, r in rates.items() if r is None]
+    if missing:
+        print(f"  ⚠ 汇率缺失（这些币种不参与市值加权）: {missing}", flush=True)
+    quotes = fetch_quotes(candidates, target, rates)
     heat = compute_heat(universe, quotes, target)
     output_path.write_text(json.dumps(heat, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     used = sum(1 for x in quotes.values() if x.get("chg_pct") is not None)
