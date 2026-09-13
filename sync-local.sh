@@ -62,11 +62,27 @@ if dry:
     print(f"（dry-run）以下模块有变化，未提交: {sorted(set(changed))}")
     sys.exit(0)
 
-subprocess.run(["git", "add", "-A"], check=True)
+# 只暂存本次同步的模块目录，禁止 git add -A：
+# 仓库根有其他未跟踪产物（agent 日志等），全量 add 会把它们一起提交。
+targets = sorted(set(changed))
+subprocess.run(["git", "add", "--"] + targets, check=True)
+
+staged = subprocess.run(
+    ["git", "diff", "--cached", "--name-only"],
+    capture_output=True, text=True, check=True,
+).stdout.split()
+if not staged:
+    print("暂存区为空，无需提交。")
+    sys.exit(0)
+outside = [p for p in staged if not any(p.startswith(t.rstrip("/") + "/") for t in targets)]
+if outside:
+    print(f"⚠ 暂存区出现本次同步范围外的文件，已中止提交：\n  " + "\n  ".join(outside))
+    sys.exit(1)
+
 subprocess.run(
-    ["git", "commit", "-m", f"sync: 本地模块同步 {len(changed)} 个 - {datetime.date.today().isoformat()}"],
+    ["git", "commit", "-m", f"sync: 本地模块同步 {len(targets)} 个 - {datetime.date.today().isoformat()}"],
     check=True,
 )
 subprocess.run(["git", "push", "origin", "gh-pages"], check=True)
-print(f"✓ 已提交并推送 {len(changed)} 个模块")
+print(f"✓ 已提交并推送 {len(targets)} 个模块：{targets}")
 PYEOF

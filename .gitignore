@@ -1,2 +1,9 @@
 __pycache__/
 .DS_Store
+
+# 本地 agent 运行产物（会话日志/失败日志），不得进公开仓库
+.aura/
+
+# 密钥（原则：任何层级都不提交）
+.env
+.env.local
