@@ -5,6 +5,7 @@
 import argparse
 import datetime
 import json
+import re
 import urllib.parse
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -16,43 +17,104 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_DIR = SCRIPT_DIR.parent.parent / "data"
 
 
+# 查询词表：只放英文主题词，**不含任何时间词**。
+#
+# 两条实测结论（2026-09-13，Google News RSS）：
+#   1. 查询里带日期会显著压低命中——"Kokusai Electric 6525 2026-09-11" 命中 0 条，
+#      去掉日期后 "Kokusai Electric 6525 stock" 即有正常结果；日期 token 会被当成
+#      字面词去匹配，而不是时间范围。
+#   2. 中文名直接 0 命中——"百货商店 stocks market ..." 命中 0 条，
+#      换成英文名 "Department Stores stocks" 命中正常。
+# 因此：本表只提供「英文主题词」，未覆盖到的条目由 industry_query / segment_query
+# 用英文名或 segment_id 兜底，任何路径都不会把中文名或日期塞进查询。
 INDUSTRY_QUERY_MAP = {
-    "广播电视": "Broadcasting stock market September 2026",
-    "烟草": "Tobacco stocks market September 2026",
-    "商业设备与耗材": "Business equipment supplies stocks market September 2026",
-    "医疗仪器与耗材": "Medical instruments supplies stocks market September 2026",
-    "消费电子": "Consumer electronics stocks market September 2026",
-    "太阳能": "Solar stocks market September 2026",
-    "科技分销": "Technology distributors stocks market September 2026",
-    "海运": "Marine shipping stocks market September 2026",
-    "油气设备与服务": "Oil gas equipment services stocks market September 2026",
-    "工具与配件制造": "Manufacturing tools accessories stocks market September 2026",
-    "纺织制造": "Textile manufacturing stocks market September 2026",
-    "家居装修": "Home improvement stocks market September 2026",
-    "工业材料": "Industrial materials stocks market September 2026",
-    "铀": "Uranium stocks market September 2026",
-    "抵押REIT": "Mortgage REIT stocks market September 2026",
-    "特殊REIT": "Specialty REIT stocks market September 2026",
+    "广播电视": "Broadcasting stocks",
+    "烟草": "Tobacco stocks",
+    "商业设备与耗材": "Business equipment supplies stocks",
+    "医疗仪器与耗材": "Medical instruments supplies stocks",
+    "消费电子": "Consumer electronics stocks",
+    "太阳能": "Solar stocks",
+    "科技分销": "Technology distributors stocks",
+    "海运": "Marine shipping stocks",
+    "油气设备与服务": "Oil gas equipment services stocks",
+    "工具与配件制造": "Manufacturing tools accessories stocks",
+    "纺织制造": "Textile manufacturing stocks",
+    "家居装修": "Home improvement stocks",
+    "工业材料": "Industrial materials stocks",
+    "铀": "Uranium stocks",
+    "抵押REIT": "Mortgage REIT stocks",
+    "特殊REIT": "Specialty REIT stocks",
 }
 
 SEGMENT_QUERY_MAP = {
-    "射频芯片": "RF chip stocks Skyworks Qorvo market September 2026",
-    "模拟芯片": "Analog chip stocks market September 2026",
-    "PCB与IC载板": "PCB IC substrate stocks market September 2026",
-    "光刻胶与湿化学品": "Photoresist wet chemicals semiconductor materials September 2026",
-    "测试设备": "Semiconductor test equipment stocks September 2026",
-    "边缘AI": "Edge AI stocks market September 2026",
-    "IC设计服务(Fabless)": "Fabless semiconductor stocks market September 2026",
-    "AI Agent": "AI agent stocks market September 2026",
-    "企业级存储": "Enterprise storage stocks HPE Dell NetApp September 2026",
-    "CPU(服务器级)": "Server CPU stocks NVIDIA Intel September 2026",
-    "GPU架构设计": "GPU architecture stocks NVIDIA Intel September 2026",
-    "GPU": "GPU stocks NVIDIA Intel September 2026",
-    "服务器电源与UPS": "Server power UPS stocks Vertiv Delta Electronics September 2026",
-    "AI服务器": "AI server stocks HPE Dell Super Micro September 2026",
-    "刻蚀设备": "Semiconductor etch equipment stocks Lam Research September 2026",
-    "DSP与光芯片": "DSP optical chip stocks Lumentum September 2026",
+    "射频芯片": "RF chip stocks Skyworks Qorvo",
+    "模拟芯片": "Analog chip stocks",
+    "PCB与IC载板": "PCB IC substrate stocks",
+    "光刻胶与湿化学品": "Photoresist wet chemicals semiconductor materials",
+    "测试设备": "Semiconductor test equipment stocks",
+    "边缘AI": "Edge AI stocks",
+    "IC设计服务(Fabless)": "Fabless semiconductor stocks",
+    "AI Agent": "AI agent stocks",
+    "企业级存储": "Enterprise storage stocks HPE Dell NetApp",
+    "CPU(服务器级)": "Server CPU stocks NVIDIA Intel",
+    "GPU架构设计": "GPU architecture stocks NVIDIA Intel",
+    "GPU": "GPU stocks NVIDIA Intel",
+    "服务器电源与UPS": "Server power UPS stocks Vertiv Delta Electronics",
+    "AI服务器": "AI server stocks HPE Dell Super Micro",
+    "刻蚀设备": "Semiconductor etch equipment stocks Lam Research",
+    "DSP与光芯片": "DSP optical chip stocks Lumentum",
 }
+
+
+def ascii_terms(text):
+    """从可能中英混排的名称里抽出英文检索词。
+
+    '安森美(onsemi)'   -> 'onsemi'
+    'Himax (奇景光电)' -> 'Himax'
+    'HPE'              -> 'HPE'
+    '纯中文名'          -> ''
+    """
+    if not text:
+        return ""
+    cleaned = re.sub(r"[^\x20-\x7E]", " ", text)          # 去掉 CJK 等非 ASCII 字符
+    cleaned = re.sub(r"[()\[\]{}<>/\\,;:'\"|&+]", " ", cleaned)
+    return " ".join(cleaned.split())
+
+
+def industry_query(row):
+    """行业查询词：优先策展英文主题，否则用 FMP 英文行业名兜底。"""
+    name = row.get("industry_zh") or ""
+    if name in INDUSTRY_QUERY_MAP:
+        return INDUSTRY_QUERY_MAP[name]
+    en = (row.get("industry") or "").strip() or ascii_terms(name)
+    return f"{en} stocks" if en else ""
+
+
+def segment_query(row):
+    """产业链段查询词：优先策展英文主题，否则由英文 segment_id 兜底。"""
+    name = row.get("name") or ""
+    if name in SEGMENT_QUERY_MAP:
+        return SEGMENT_QUERY_MAP[name]
+    slug = " ".join((row.get("segment_id") or "").replace("-", " ").split())
+    if slug:
+        return f"{slug} stocks"
+    en = ascii_terms(name)
+    return f"{en} stocks" if en else ""
+
+
+def anomaly_query(row):
+    """异常股查询词：英文名 + 代码 + stock。
+
+    实测 'onsemi ON stock' 命中且高度相关；而带中文名或日期的写法命中 0 条。
+    """
+    ticker = (row.get("ticker") or "").split(".")[0]
+    en = ascii_terms(row.get("name"))
+    # 用整词匹配判重，避免子串误判：'ON' 是 'onsemi' 的子串，但并非同一个词，
+    # 而实测 'onsemi ON stock' 的命中质量明显优于丢掉代码的 'onsemi stock'。
+    if en and ticker and re.search(rf"\b{re.escape(ticker)}\b", en, re.IGNORECASE):
+        return f"{en} stock"           # 名称里已含代码，避免 'HPE HPE stock'
+    parts = " ".join(p for p in (en, ticker) if p)
+    return f"{parts} stock" if parts else ""
 
 
 def search_google_news(query, limit=10):
@@ -94,7 +156,7 @@ def collect_candidates(market_path, heat_path):
                 "key": name,
                 "display": name,
                 "change_pct": row["avg_change_pct"],
-                "query": INDUSTRY_QUERY_MAP.get(name, f"{name} stocks market {target}"),
+                "query": industry_query(row),
             }
         )
 
@@ -108,7 +170,7 @@ def collect_candidates(market_path, heat_path):
                 "key": row["segment_id"],
                 "display": name,
                 "change_pct": row["change_equal_weight_pct"],
-                "query": SEGMENT_QUERY_MAP.get(name, f"{name} stocks market {target}"),
+                "query": segment_query(row),
             }
         )
 
@@ -121,7 +183,7 @@ def collect_candidates(market_path, heat_path):
                 "key": row["ticker"],
                 "display": f"{row['name']} ({ticker})",
                 "change_pct": row["chg_pct"],
-                "query": f"{row['name']} {ticker} {target}",
+                "query": anomaly_query(row),
             }
         )
 
@@ -149,6 +211,11 @@ def main():
     candidates = collect_candidates(args.market, args.heat)
     results = []
     for i, item in enumerate(candidates, 1):
+        if not item.get("query"):
+            # 名称无法抽出英文检索词时宁可跳过，也不要发一条注定 0 命中的查询
+            results.append({**item, "news": [], "status": "no_query", "error": "无可用英文查询词"})
+            print(f"{i}/{len(candidates)} {item['type']} {item['display']}: 跳过（无英文查询词）", flush=True)
+            continue
         try:
             news = search_google_news(item["query"])
             status = "ok"
