@@ -4,11 +4,16 @@
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 
 TOP_N = 8
 BOTTOM_N = 8
+
+# 报告标题/编号里统一使用的口径描述（改口径时只改这一处）
+# 注意：不要带括号，标题/编号本身已有一层括号，再嵌会变成「（…（…））」
+CHAIN_TITLE_SUFFIX = "Invest Wiki 产业链段热力 65段全量计算"
 
 
 def pct(value):
@@ -96,16 +101,48 @@ def build_chain_section(heat):
 
     top_names = "、".join(x["name"] for x in top[:3])
     bottom_names = "、".join(x["name"] for x in bottom[:3])
+    strongest = top[0] if top else None
+    # bottom 是 reversed(rankable[-8:])，故 bottom[0] 才是跌幅最大的一端
+    weakest = bottom[0] if bottom else None
+
     narrative = [
         "",
         "**结构解读**",
         "",
-        f"- **强势端不等于笼统的“AI涨价”**：Top8 分布在封装测试、CMP材料、大模型、封装基板、Fabless、光/DSP芯片、成熟制程和 AI 服务器。"
-        f"前三段是 {top_names}，更像是资金在 AI 供给瓶颈、材料耗材和平台模型里做结构性选择。",
-        f"- **弱势端集中在 AI 基础设施配套与设备链**：Bottom8 里 {bottom_names} 靠前，说明市场对前期预期较高的算力配套、设备与高估值环节更挑剔；"
-        "这与美债利率上行、油价高位压制成长股估值的宏观背景一致。",
-        "- **A股映射只作观察，不当作因果传导**：美股段热力为隔夜信号，A股次日还受本地资金面、开盘情绪和个股事件影响。表中映射公司来自 Invest Wiki 的产业角色，不代表每只股票都有相同海外业务敞口。",
+        "> 本节全部由当日数据生成；具体涨跌原因见驱动解读列，不做无数据支撑的归因。",
+        "",
     ]
+    if strongest and weakest:
+        narrative.append(
+            f"- **强势端**：Top8 由 {top_names} 领前；等权涨幅居首的是 {strongest['name']}"
+            f"（{pct(strongest['change_equal_weight_pct'])}）。"
+        )
+        narrative.append(
+            f"- **弱势端**：Bottom8 里 {bottom_names} 靠前；等权跌幅最大的是 {weakest['name']}"
+            f"（{pct(weakest['change_equal_weight_pct'])}）。"
+        )
+
+    # 口径提示：只在 Top8 内确实存在明显背离时才写，避免套话
+    divergent = [
+        s for s in top
+        if s.get("change_equal_weight_pct") is not None
+        and s.get("change_mcap_weight_pct") is not None
+        and abs(s["change_equal_weight_pct"] - s["change_mcap_weight_pct"]) >= 1.0
+    ]
+    if divergent:
+        d = max(divergent, key=lambda s: abs(
+            s["change_equal_weight_pct"] - s["change_mcap_weight_pct"]))
+        narrative.append(
+            f"- **口径提示**：Top8 中等权与市值加权背离最大的是 {d['name']}"
+            f"（等权 {pct(d['change_equal_weight_pct'])} vs 市值加权 {pct(d['change_mcap_weight_pct'])}），"
+            "说明该段涨跌主要由小市值成分股贡献、龙头相对走平。两个口径不可互相换算，"
+            "本表以等权为主排序、市值加权仅作参考。"
+        )
+
+    narrative.append(
+        "- **A股映射只作观察，不当作因果传导**：美股段热力为隔夜信号，A股次日还受本地资金面、开盘情绪和个股事件影响。"
+        "表中映射公司来自 Invest Wiki 的产业角色，不代表每只股票都有相同海外业务敞口。"
+    )
 
     if anomalies:
         narrative.extend(
@@ -129,9 +166,11 @@ def build_chain_section(heat):
                 f"| {stock['name']}（{stock['ticker']}） | {stock['chg_pct']:+.2f}% | {roles} |"
             )
         narrative.append("")
+        biggest = max(anomalies, key=lambda s: abs(s["chg_pct"]))
         narrative.append(
-            "Vertiv 的跌幅需要单独看：它是 AI 数据中心“电力+散热”里的标志性美股，短期大跌可能反映获利了结、资金切换或对高预期配套环节的重新定价；"
-            "后续应跟踪公司/行业是否有具体负面消息，而不是机械外推整条散热链。"
+            f"上表按 |涨跌幅| 全量列出，波动最大的是 {biggest['name']}（{biggest['ticker']}）"
+            f"{biggest['chg_pct']:+.2f}%。单只成分股的异动不宜机械外推为整条产业链的方向；"
+            "其具体原因见驱动解读列，无明确公开原因时按低置信标注，不强行归因。"
         )
 
     return "\n".join(header + narrative)
@@ -153,34 +192,46 @@ def replace_chain_subsection(text, chain_section):
     return text[:start] + chain_section + "\n\n" + text[next_marker + 1:]
 
 
+def normalize_meta(text, heat):
+    """把 base 报告的标题/编号/来源/注改成与当日 heat 一致的通用表述。
+
+    全部用正则匹配既有行，不依赖某一期的固定文案；重复渲染是幂等的。
+    """
+    stats = heat["universe_stats"]
+    n_src = stats["source_segments"]
+    n_seg = stats["canonical_segments"]
+
+    # 标题：任意「晨间版 · xxx」都归一，不写死旧标题
+    text = re.sub(
+        r"(# 🌅 美股日度复盘简报（晨间版)[^）]*(）)",
+        rf"\1 · {CHAIN_TITLE_SUFFIX}\2",
+        text, count=1,
+    )
+    # 简报编号：保留期号数字，只规范化括号内的版本描述
+    text = re.sub(
+        r"(\*\*简报编号\*\*：第 \d+ 期（)[^）]*(）)",
+        rf"\1数据源版 · {CHAIN_TITLE_SUFFIX}\2",
+        text, count=1,
+    )
+    # 数据来源：用负向先行断言只看「这一行」，避免被正文里同名表述误判为已处理
+    text = re.sub(
+        r"\*\*数据来源\*\*：(?!Invest Wiki)",
+        f"**数据来源**：Invest Wiki 产业链宇宙（{n_src} 原始段 → {n_seg} canonical 段）；",
+        text, count=1,
+    )
+    # 口径注：追加一句说明。用 [ \t]* 而非 \s*（否则会吃掉行尾空行）；
+    # 用负向先行断言保证重复渲染不会叠加同一句。
+    text = re.sub(
+        r"^(> 注：(?!.*不再使用旧版 11 环节清单).*?)。?[ \t]*$",
+        rf"\1；产业链热力改由 Invest Wiki {n_seg} 段宇宙计算，不再使用旧版 11 环节清单。",
+        text, count=1, flags=re.M,
+    )
+    return text
+
+
 def render(base_report, heat, output_path):
     text = base_report.read_text(encoding="utf-8")
-    text = text.replace(
-        "# 🌅 美股日度复盘简报（晨间版 · 行业热力+AI链试运行）",
-        "# 🌅 美股日度复盘简报（晨间版 · Invest Wiki 65段产业链热力）",
-        1,
-    )
-    text = text.replace(
-        "**数据来源**：",
-        "**数据来源**：Invest Wiki 产业链宇宙（v1.0，81原始段→65 canonical段）；",
-        1,
-    )
-    text = text.replace(
-        "FMP/Yahoo 产业链行情快照；",
-        "Yahoo 产业链行情快照；",
-        1,
-    )
-    text = text.replace(
-        "**简报编号**：第 14 期（数据源版 · 行业热力+AI产业链试运行）",
-        "**简报编号**：第 14 期（数据源版 · Invest Wiki 65段产业链热力）",
-        1,
-    )
-    text = text.replace(
-        "> 注：Infoway 试用 key 已过期（宽度/盘后仍缺并标注）；FMP 指数 ^SOX 未返回（费半改用新浪直连，已校准）。",
-        "> 注：Infoway 试用 key 已过期（宽度/盘后仍缺并标注）；FMP 指数 ^SOX 未返回（费半改用新浪直连，已校准）；"
-        "产业链热力由 Invest Wiki 65 段宇宙重新计算，不再使用旧版 11 环节清单。",
-        1,
-    )
+    text = normalize_meta(text, heat)
     text = replace_chain_subsection(text, build_chain_section(heat))
     output_path.write_text(text, encoding="utf-8")
 

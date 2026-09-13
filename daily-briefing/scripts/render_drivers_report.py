@@ -64,23 +64,41 @@ def expand_tables(text, drivers):
     return "\n".join(out)
 
 
+def normalize_meta(text):
+    """把标题/编号/来源/注标注为「+ 驱动解读」版本。
+
+    全部正则匹配既有行，不依赖某一期的固定文案，重复渲染幂等。
+    """
+    if "驱动解读）" in text.split("\n", 1)[0]:
+        return text
+    text = re.sub(
+        r"(# 🌅 美股日度复盘简报（晨间版)[^）]*(）)",
+        r"\1 · Invest Wiki 产业链段热力 + 驱动解读\2",
+        text, count=1,
+    )
+    text = re.sub(
+        r"(\*\*简报编号\*\*：第 \d+ 期（)[^）]*(）)",
+        r"\1数据源版 · Invest Wiki 产业链段热力 + 驱动解读\2",
+        text, count=1,
+    )
+    if "Google News RSS" not in text:
+        text = re.sub(
+            r"(\*\*数据来源\*\*：[^\n]*)",
+            r"\1；Google News RSS（驱动解释检索）",
+            text, count=1,
+        )
+    if "驱动解释由 Google News RSS" not in text:
+        text = re.sub(
+            r"^(> 注：)",
+            r"\1驱动解释由 Google News RSS 检索后人工筛选，按高/中/低置信标注，"
+            "无明确公开原因的不强行归因；",
+            text, count=1, flags=re.M,
+        )
+    return text
+
+
 def render(text, drivers):
-    text = text.replace(
-        "# 🌅 美股日度复盘简报（晨间版 · Invest Wiki 65段产业链热力）",
-        "# 🌅 羁股日度复盘简报（晨间版 · Invest Wiki 65段产业链热力 + 驱动解读）",
-    ).replace("羁股", "美股")
-    text = text.replace(
-        "**简报编号**：第 15 期（数据源版 · Invest Wiki 65段产业链热力）",
-        "**简报编号**：第 15 期（数据源版 · Invest Wiki 65段产业链热力 + 驱动解读）",
-    )
-    text = text.replace(
-        "大河财立方等当日收评",
-        "大河财立方等当日收评；Google News RSS（驱动解释检索）",
-    )
-    text = text.replace(
-        "> 注：Infoway 试用 key 已过期",
-        "> 注：驱动解释由 Google News RSS 检索后人工筛选，按高/中/低置信标注；暂无明确公开原因的低置信条目不强行归因。原始来源记录在本次抓取数据中。Infoway 试用 key 已过期",
-    )
+    text = normalize_meta(text)
 
     lines = text.splitlines()
     out = []
@@ -98,8 +116,12 @@ def render(text, drivers):
                 for x in lines[start + 2:end]
             ]
             if header[:3] == ["方向", "行业", "当日涨跌"]:
-                out.append(line)
-                out.append(lines[i + 1])
+                # 末列内容会被驱动解释替换，表头同步改名（替换整个末列，不是追加）
+                header[-1] = "驱动解读"
+                out.append("| " + " | ".join(header) + " |")
+                sep = [c.strip() for c in lines[i + 1].strip("|").split("|")]
+                sep[-1] = "---"
+                out.append("| " + " | ".join(sep) + " |")
                 for row in rows:
                     entry = drivers.get("industry:" + row[1])
                     driver = entry["driver"] if entry else "暂无明确公开原因"
