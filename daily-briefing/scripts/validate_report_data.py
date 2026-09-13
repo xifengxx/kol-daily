@@ -45,7 +45,7 @@ def fetch_us_indices():
     for key, name in [("$dji", "道琼斯"), ("ixic", "纳斯达克"), ("inx", "标普"), ("$sox", "费城半导体")]:
         a = q.get(key, [])
         try:
-            res[name] = {"close": float(a[1]), "pct": float(a[3])}
+            res[name] = {"close": float(a[1]), "pct": float(a[2])}
         except (ValueError, IndexError):
             pass
     return res
