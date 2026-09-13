@@ -102,37 +102,40 @@
 
 ---
 
-## 四、数据源三：同花顺 iFinD A股能力
+## 四、数据源三：同花顺 iFinD（FFD / Findesk 平台）—— 实测
+
+> 原「同花顺 iFinD」为 iFinDPy/HTTP API 封装（见文末来源）。本次以 **FFD（Findesk，同花顺金融数据平台）实测** 为准，是 iFinD 数据的现代接入层。
 
 ### 4.1 数据源概述
 
 | 项目 | 内容 |
 |---|---|
-| 调用形态 | SDK（iFinDPy，`THS_iFinDLogin(账号,密码)`）或 HTTP API（`quantapi.51ifind.com/api/v1/`，refresh_token→access_token） |
-| 核心函数 | `THS_RQ`(实时)、`THS_HQ`(历史)、`THS_BD`(基础)、`THS_SS`(快照)、`THS_DR`(专题报表含龙虎榜)、`THS_EDB`(经济库)、`THS_WCQuery`(问财)、`THS_ReportQuery`(公告) |
-| 权限 | **免费版基本不可用**（单命令上限 1W-10W 条）；试用版历史受限（1月/1年/5年）；**正式版**才有涨停/龙虎榜/北向/两融等盘后数据 |
-| 代码 | 上证 `000001.SH`、深成 `399001.SZ`、创业板 `399006.SZ`、科创50 `000688.SH`、北证50 `899050.BJ` |
+| 平台 | **FFD / Findesk**（同花顺 iFinD 金融数据），Base `https://ffd.findesk.cn`，FastAPI + **MCP 服务器**（mcp-0.7.49，85 个 MCP 工具） |
+| 接入三入口 | ① Python SDK：`data.login(api_key=...)` + `data.query(function="history"/"realtime_quote"/"intraday", codes, indicators, start_date, end_date, options)`；② MCP 工具：85 个 `ffd_*`；③ REST：`/api/market-data/*`、`/api/historical/*`、`/api/templates/*`（自然语言 query 模板） |
+| 鉴权 | REST 头 `Authorization: Bearer {key}`；SDK `data.login(api_key=...)`；**Key 只放环境变量/请求头** |
+| 核心能力 | 行情（日线/实时/分钟/秒级/**L2 十档盘口**）、**概念/行业板块（含涨跌幅）**、资金流、两融、龙虎榜（逐席位）、涨停池、公告、宏观、全球市场/指数/宏观/新闻/研报、公司基本面/财务/估值/一致预期 |
+| 权限/计费 | **试用 key 只能看能力目录 `public-capabilities`**；真实数据查询需**正式授权**（实测 `tree`/`indicators`→401、`concepts/catalog`→503）；**扣点制**（搜索/档案 2 点、申报/所有权 5 点、财务/公共采购 10 点、全量导出每 1000 行 1 点、参数错误/权限拦截净扣 0）；新用户送 5 万点 |
 
-### 4.2 12 类数据逐项结论
+### 4.2 12 类数据逐项结论（FFD 实测）
 
-| # | 数据类别 | 支持度 | 具体函数 | 权限 |
-|---|---------|-------|---------|------|
-| 1 | A股指数 | ✅ | `THS_RQ('000001.SH,...','latest,changeRatio,amount')`；历史 `THS_HQ` | 正式版 |
-| 2 | 两市成交额/量比 | ✅ | `amount` 累加；量比 `vol_ratio`/`LB` 指标 | 正式版 |
-| 3 | 涨跌/涨跌停家数 | ⚠️ | `THS_RQ('000001.SH','riseCount;fallCount;upLimitCount;downLimitCount')` | 正式版；**连板无现成字段**（需问财 `THS_WCQuery('昨日涨停今日连板')` 或自算） |
-| 4 | 板块/概念涨跌 | ✅ | 同花顺行业 `881xxx.TI`、概念 `886xxx`、申万 `801xxx.SL`，用 `THS_RQ/THS_HQ` | 正式版 |
-| 5 | 资金流向 | ⚠️ | 主力资金 `THS_RQ(code,'mainNetInflow;...')`；**北向/两融走 `THS_DR` 专题报表**，精确指标代码需 SuperCommand 客户端查询 | 正式版；主力 Level-2 类字段通常收费 |
-| 6 | 个股/龙虎榜 | ⚠️ | 个股 `THS_RQ/THS_HQ`；**龙虎榜走 `THS_DR`**，报表代码需客户端查 | 正式版 |
-| 7 | 公司公告 | ✅ | `THS_ReportQuery('代码','reportType:901;...')` | 正式版；夜间入库 |
-| 8 | 央行 OMO/MLF | ⚠️ | `THS_EDB` 指标 + 新闻解析 | 正式版；无结构化政策日历 |
-| 9 | 宏观数据 | ⚠️ | `THS_EDB`（330万+指标，含 CPI/PPI/PMI/社融/利率） | 正式版；**「预期值」未确认提供**，实际值/前值可 |
-| 10 | 国际市场 | ✅ | `THS_HQ` 美股 `AAPL.O`、商品/汇率代码 | 正式版；美股次日 06:12 入库 |
-| 11 | 港股 | ✅ | `THS_HQ('HSI.HI','00001.HK')`；南向走专题报表 | 正式版 |
-| 12 | 舆情/机构观点 | ⚠️ | MCP news 服务、`THS_ReportQuery` | 正式版 |
+| # | 数据类别 | 支持度 | 具体函数/接口 | 权限 |
+|---|---------|-------|--------------|------|
+| 1 | A股指数行情 | ✅ | `data.query(function="history"/"realtime_quote", codes="000001.SH", indicators=...)` | 正式授权 |
+| 2 | 两市成交额 / 量比 | ✅ | `data.query(history, indicators="amt,vol_ratio")` / `ffd_market_daily` | 正式授权 |
+| 3 | 涨跌家数 / 涨停跌停 / 连板 | ✅ | `ffd_market_breadth`（宽度）；**`ffd_limit_pool`**（每日涨停池/炸板池/跌停池完整导出，含连板/封板率/相关概念） | 正式授权 |
+| 4 | **板块/概念涨跌幅** | ✅ | **`POST /api/templates/sector-concept-fund-flow-rank`**（含"板块净额、**涨跌幅**、流入家数占比"）；`concepts`/`industries` catalog+members；`ffd_industry_history` | 正式授权；**成分覆盖率≥90% 才发布** |
+| 5 | 资金流（北向/主力/两融/ETF） | ✅ | `ffd_money_flow`、`.../moneyflow-continuity`（主力）、`.../margin`（两融）、`etf-money-flow` | 正式授权；北向口径需确认 |
+| 6 | 个股异动 / 龙虎榜 | ✅ | `.../dragon-tiger`、`dragon-tiger-seats`（**逐营业部席位**） | 正式授权 |
+| 7 | 公司公告 | ✅ | 公告原文与详情（`/api/historical/company-events` 等公告模块） | 正式授权 |
+| 8 | 央行 OMO/MLF | ✅ | `ffd_macro_data` | 正式授权；结构化政策日历需确认 |
+| 9 | 宏观数据（实际/预期/前值） | ✅ | `ffd_macro_data` / `ffd_global_macro_series` | 正式授权；预期值按字段核实 |
+| 10 | 国际市场 | ✅/⚠️ | `ffd_global_market_quote`、`ffd_global_index_data`、`ffd_crypto_market_*`；美股 `AAPL.O` | **美股仅日线/分钟，无实时权限** |
+| 11 | 港股（恒指/南向） | ✅ | `history`/`intraday`（`0700.HK`）、`ffd_global_market` | 正式授权 |
+| 12 | 舆情 / 机构观点 | ✅ | 全球新闻库（`sectors`/`news`）、研报库 | 正式授权 |
 
 ### 4.3 一句话结论
 
-**iFinD 是 A股/港股原生主场，正式版能覆盖约 9/12 类；但免费版基本不可用、正式版需付费，且北向/两融/龙虎榜/连板的精确指标代码不在公开文档、需登录 SuperCommand 客户端手工配置（落地成本高）。没有 iFinD 付费账号则不建议作为 A股主源。**
+**FFD 是 A股复盘覆盖最全的数据源（同花顺体系，MCP+SDK+REST 三入口）：能补「板块/概念涨跌幅（含 CPO/算力/半导体）、资金流、两融、龙虎榜逐席位、涨停池、分钟K、全球市场/宏观/新闻/财务」等绝大多数此前缺口。但数据计费（扣点）且需正式授权 key（试用只够看目录，实测数据接口 401/503）；美股无实时权限；板块涨跌幅在资金流模板取、成分覆盖≥90% 才发布。没有正式授权 key 则暂不作为 A股主源（作付费增强/备用）。**
 
 ---
 
@@ -190,7 +193,7 @@
 **三商业源在 A股复盘中的角色**：
 - **Infoway**：免费档补「板块 132 行业 + 涨跌家数」两个一手数据（已实测可用）
 - **FMP**：基本用不上（A股覆盖窄 + 需 Ultimate 付费 + 延迟）
-- **iFinD**：无付费账号则跳过；有账号可作 A股深度补充（但指标代码落地成本高）
+- **iFinD（FFD/Findesk）**：覆盖最全，能补「板块/概念涨跌幅、资金流、两融、龙虎榜、分钟K、全球市场」等缺口，但需**正式授权 key + 计费**；有正式 key 可作 A股**板块与资金流的付费增强/备用**（尤其科技概念板块，正好补 Infoway 英文板块的短板）
 
 ---
 
@@ -207,10 +210,12 @@
 ```
 A股复盘数据层
 ├── AkShare        # 主源：指数/成交额/宽度/资金/龙虎榜/公告/宏观/研报
-├── Infoway        # 补缺：板块 132 行业 + 涨跌家数（一手）
+├── Infoway        # 补缺：板块 132 行业 + 涨跌家数（一手，英文名需映射）
 ├── 新浪直连        # 兜底：美股/原油/黄金/人民币/恒指 实时快照
-└── 财经媒体检索    # 补：央行 OMO/MLF、政策文件、舆情话题
+├── 财经媒体检索    # 补：央行 OMO/MLF、政策文件、舆情话题
+└── [可选增强]FFD(Findesk) # 有正式授权 key 时：板块/概念涨跌幅(含科技概念)+资金流+两融+龙虎榜逐席位+分钟K
 ```
+> **FFD 增强位**：若拿到正式授权 key，`POST /api/templates/sector-concept-fund-flow-rank` 可直出 A股**行业/概念板块涨跌幅与资金流**（含 CPO/算力/半导体等科技概念），是现有免费源（Infoway 英文 / 新浪传统49 / 东财反爬不稳）最可靠的替代/增强；补齐「板块涨跌全景图」的中文科技概念板块。
 
 ---
 
@@ -236,9 +241,12 @@ A股复盘数据层
 - dayu-agent FMP 集成调研（A股符号/Ultimate 档/内幕不含A股）：https://github.com/noho/dayu-agent/blob/main/docs/fmp_integration_research.md
 - Airbyte FMP 连接器（SHH/SHZ 交易所代码）：https://docs.airbyte.com/integrations/sources/financial-modelling
 
-### 同花顺 iFinD
-- 官网/帮助中心：https://quantapi.51ifind.com/gwstatic/static/ds_web/quantapi-web/（含 manual.html / faq.html / deploy.html）
-- HTTP API 手册 PDF（含行情/资金流指标名与配额错误码）：http://quantapi.10jqka.com.cn/thsft/iFindService/DataInterfaceWeb/Index/get-File?Marked=863746e5ecd9608b82b406ddbc4fd11a&id=318
+### 同花顺 iFinD / FFD（Findesk）
+- **FFD 智能体 API 文档（本次实测依据）**：https://ffd.findesk.cn/ffd-api-docs-agent.txt
+- **FFD 能力契约（机器可读，85 工具 + 63 REST 端点）**：https://ffd.findesk.cn/api/v1/catalog/public-capabilities
+- FFD/Findesk 官网：https://www.findesk.cn （金融研究工作台）
+- 原 iFinD 帮助中心：https://quantapi.51ifind.com/gwstatic/static/ds_web/quantapi-web/（含 manual.html / faq.html / deploy.html）
+- HTTP API 手册 PDF：http://quantapi.10jqka.com.cn/thsft/iFindService/DataInterfaceWeb/Index/get-File?Marked=863746e5ecd9608b82b406ddbc4fd11a&id=318
 - 社区封装（ths_close_price_stock、881 板块代码）：https://github.com/10e9928a/ifind-data
 
 ### AkShare / 免费源
