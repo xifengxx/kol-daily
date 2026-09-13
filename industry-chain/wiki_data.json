@@ -1,11 +1,11 @@
 {
-  "total": 480,
+  "total": 468,
   "by_type": {
     "thesis": 18,
     "segment": 65,
     "concept": 10,
     "industry": 2,
-    "company": 385
+    "company": 373
   },
   "entities": [
     {
@@ -1950,31 +1950,31 @@
       "companies": [
         {
           "ticker": "NXPI",
-          "name": "恩智浦(NXP)",
+          "name": "NXP Semiconductors",
           "role": "全球龙头",
           "rev": 45
         },
         {
           "ticker": "STM",
-          "name": "意法半导体(ST)",
+          "name": "意法半导体 (STMicroelectronics)",
           "role": "全球二线",
           "rev": 30
         },
         {
           "ticker": "RNECF",
-          "name": "瑞萨电子(Renesas)",
+          "name": "瑞萨电子 (Renesas Electronics)",
           "role": "全球二线",
           "rev": 35
         },
         {
           "ticker": "IFX.DE",
-          "name": "英飞凌(Infineon)",
+          "name": "Infineon Technologies",
           "role": "全球龙头",
           "rev": 40
         },
         {
           "ticker": "TXN",
-          "name": "德州仪器(TI)",
+          "name": "Texas Instruments",
           "role": "全球二线",
           "rev": 20
         }
@@ -2125,7 +2125,7 @@
         },
         {
           "ticker": "603501",
-          "name": "韦尔股份",
+          "name": "豪威集团（原韦尔股份）",
           "role": "龙头",
           "rev": 55
         },
@@ -2288,12 +2288,6 @@
           "name": "富创精密",
           "role": "国产龙头",
           "rev": 50
-        },
-        {
-          "ticker": "688012",
-          "name": "新莱应材",
-          "role": "国产替代",
-          "rev": 30
         },
         {
           "ticker": "300260",
@@ -2464,7 +2458,9 @@
         "晶圆代工(先进制程)",
         "Chiplet与异构集成",
         "先进封装(CoWoS/3D)",
-        "IC设计服务(Fabless)"
+        "IC设计服务(Fabless)",
+        "封装设备",
+        "测试设备"
       ],
       "content": "# 封装测试(OSAT)\n\n> **半导体** · L3 · TAM **$42.0B** · CAGR **8.0%**\n\n封装测试（OSAT = Outsourced Semiconductor Assembly and Test）将晶圆切割、封装、测试为成品芯片——是芯片从晶圆到产品的**「最后一公里」**。封装从传统引线键合→FC-BGA→2.5D/3D先进封装演进。|**全球OSAT市场$42B+(2025)，日月光(ASE台湾#1，~25%份额)、Amkor(美国#2，~15%)、长电科技(JCAP中国#3，",
       "_heat": 16.8,
@@ -2591,19 +2587,19 @@
       "companies": [
         {
           "ticker": "3711.TW",
-          "name": "日月光投控(ASE)",
+          "name": "日月光 (ASE Group)",
           "role": "全球龙头",
           "rev": 70
         },
         {
           "ticker": "AMKR",
-          "name": "安靠科技(Amkor)",
+          "name": "Amkor Technology",
           "role": "全球二线",
           "rev": 60
         },
         {
           "ticker": "600584",
-          "name": "长电科技(JCET)",
+          "name": "长电科技",
           "role": "国产龙头",
           "rev": 65
         },
@@ -2903,13 +2899,13 @@
       "companies": [
         {
           "ticker": "7735.T",
-          "name": "SCREEN Holdings",
+          "name": "SCREEN Semiconductor",
           "role": "龙头",
           "rev": 45
         },
         {
           "ticker": "ACMR",
-          "name": "盛美半导体",
+          "name": "ACM Research (盛美半导体)",
           "role": "二线弹性",
           "rev": 60
         },
@@ -2921,7 +2917,7 @@
         },
         {
           "ticker": "6146.T",
-          "name": "Disco",
+          "name": "Disco Corporation",
           "role": "龙头",
           "rev": 40
         },
@@ -2950,7 +2946,8 @@
         "GPU",
         "封装基板材料",
         "晶圆代工(先进制程)",
-        "AI芯片设计(Fabless)"
+        "AI芯片设计(Fabless)",
+        "封装设备"
       ],
       "content": "# 先进封装(CoWoS/3D)\n\n> **半导体** · L3 · TAM **$30.0B** · CAGR **40.0%**\n\n先进封装将多颗芯片（GPU+HBM+硅中介层）通过**2.5D/3D技术集成**在单一封装内——是当前AI芯片供应链的**#1瓶颈**。|**TSMC CoWoS（Chip-on-Wafer-on-Substrate）绝对垄断>90%份额**。产能从~55K wpm(2025)→~120K wpm(end 2026,+118%)。NVIDIA独占~60%产能(700K wafers/yr)。CoW",
       "_heat": 15.1,
@@ -3061,7 +3058,8 @@
       ],
       "key_inputs": [
         "封装基板材料",
-        "晶圆代工(先进制程)"
+        "晶圆代工(先进制程)",
+        "封装设备"
       ],
       "key_customers": [
         "AI芯片设计(Fabless)"
@@ -3228,12 +3226,6 @@
           "name": "华海清科",
           "role": "二线弹性",
           "rev": 80
-        },
-        {
-          "ticker": "6361",
-          "name": "Ebara",
-          "role": "龙头",
-          "rev": 20
         }
       ],
       "contradictions": [],
@@ -3249,14 +3241,14 @@
       "tam": 16.0,
       "cagr": 3.7,
       "margin": "35-45%",
-      "backlinks": 0,
+      "backlinks": 3,
       "wikilinks": [
         "模拟芯片",
         "功率半导体",
         "边缘AI"
       ],
       "content": "# MEMS传感器\n\n> **半导体** · L4 · TAM **$16.0B** · CAGR **3.7%**\n\nMEMS（微机电系统）传感器是将机械结构与电子电路集成在硅片上的微型传感器，涵盖惯性传感器（加速度计/陀螺仪）、麦克风、压力传感器、环境传感器等。智能手机、汽车自动驾驶和AI终端是三大核心应用，推动MEMS从单一传感器走向多传感器融合。",
-      "_heat": 2.3,
+      "_heat": 5.5,
       "description": "MEMS（微机电系统）传感器是将机械结构与电子电路集成在硅片上的微型传感器，涵盖惯性传感器（加速度计/陀螺仪）、麦克风、压力传感器、环境传感器等。智能手机、汽车自动驾驶和AI终端是三大核心应用，推动MEMS从单一传感器走向多传感器融合。",
       "cost_share_pct": 5,
       "cost_share_context": "消费电子/汽车BOM",
@@ -3359,7 +3351,7 @@
         },
         {
           "ticker": "STM",
-          "name": "意法半导体",
+          "name": "意法半导体 (STMicroelectronics)",
           "role": "汽车传感龙头",
           "rev": 50
         },
@@ -3389,14 +3381,14 @@
       "tam": 7.65,
       "cagr": 7.35,
       "margin": "45-55%",
-      "backlinks": 0,
+      "backlinks": 3,
       "wikilinks": [
         "检测量测设备",
         "封装测试(OSAT)",
         "存储芯片(DRAM/NAND)"
       ],
       "content": "# 测试设备\n\n> **半导体** · L2 · TAM **$7.65B** · CAGR **7.35%**\n\n半导体测试设备（ATE自动测试设备/探针台/分选机）是芯片出厂前的最后一道质量关口，覆盖晶圆探针测试（CP）和成品测试（FT），确保芯片功能与性能达标。AI芯片复杂度提升和HBM堆叠测试需求，驱动测试设备成为半导体设备中增速最快的细分之一。",
-      "_heat": 1.1,
+      "_heat": 4.3,
       "description": "半导体测试设备（ATE自动测试设备/探针台/分选机）是芯片出厂前的最后一道质量关口，覆盖晶圆探针测试（CP）和成品测试（FT），确保芯片功能与性能达标。AI芯片复杂度提升和HBM堆叠测试需求，驱动测试设备成为半导体设备中增速最快的细分之一。",
       "cost_share_pct": 8,
       "cost_share_context": "半导体后道测试设备投资",
@@ -3530,14 +3522,14 @@
       "tam": 29.5,
       "cagr": 10.0,
       "margin": "40-50%",
-      "backlinks": 0,
+      "backlinks": 3,
       "wikilinks": [
         "模拟芯片",
         "功率半导体",
         "边缘AI"
       ],
       "content": "# 射频芯片\n\n> **半导体** · L4 · TAM **$29.5B** · CAGR **10.0%**\n\n射频芯片（射频前端RF Front-end）是无线通信的核心芯片，负责信号的收发、放大、滤波与开关切换，涵盖功率放大器（PA）、低噪声放大器（LNA）、滤波器、开关等组件。5G/6G升级和AI手机推动射频前端从分立器件走向高集成模块化（FEM），单机价值量持续提升。",
-      "_heat": 4.2,
+      "_heat": 7.5,
       "description": "射频芯片（射频前端RF Front-end）是无线通信的核心芯片，负责信号的收发、放大、滤波与开关切换，涵盖功率放大器（PA）、低噪声放大器（LNA）、滤波器、开关等组件。5G/6G升级和AI手机推动射频前端从分立器件走向高集成模块化（FEM），单机价值量持续提升。",
       "cost_share_pct": 8,
       "cost_share_context": "智能手机BOM",
@@ -3638,7 +3630,7 @@
       "companies": [
         {
           "ticker": "SWKS",
-          "name": "Skyworks",
+          "name": "Skyworks Solutions",
           "role": "全球龙头",
           "rev": 50
         },
@@ -3674,14 +3666,14 @@
       "tam": 6.9,
       "cagr": 5.8,
       "margin": "45-55%",
-      "backlinks": 0,
+      "backlinks": 3,
       "wikilinks": [
         "先进封装(CoWoS/3D)",
         "封装测试(OSAT)",
         "检测量测设备"
       ],
       "content": "# 封装设备\n\n> **半导体** · L2 · TAM **$6.9B** · CAGR **5.8%**\n\n半导体封装设备（键合机/划片机/减薄机/贴片机）是芯片从晶圆到成品的封装环节核心装备，覆盖传统引线键合、倒装、热压键合（TCB）到混合键合（Hybrid Bonding）的演进路线。HBM堆叠和Chiplet异构集成推动先进封装设备成为半导体设备中增速最快的方向。",
-      "_heat": 1.0,
+      "_heat": 4.2,
       "description": "半导体封装设备（键合机/划片机/减薄机/贴片机）是芯片从晶圆到成品的封装环节核心装备，覆盖传统引线键合、倒装、热压键合（TCB）到混合键合（Hybrid Bonding）的演进路线。HBM堆叠和Chiplet异构集成推动先进封装设备成为半导体设备中增速最快的方向。",
       "cost_share_pct": 6,
       "cost_share_context": "半导体后端设备投资",
@@ -3778,7 +3770,7 @@
       "companies": [
         {
           "ticker": "BESI.AS",
-          "name": "Besi",
+          "name": "BE Semiconductor Industries (Besi)",
           "role": "贴片/混合键合龙头",
           "rev": 55
         },
@@ -3790,13 +3782,13 @@
         },
         {
           "ticker": "KLIC",
-          "name": "Kulicke & Soffa",
+          "name": "Kulicke & Soffa (K&S)",
           "role": "引线键合龙头",
           "rev": 45
         },
         {
           "ticker": "6146.T",
-          "name": "Disco",
+          "name": "Disco Corporation",
           "role": "划片机龙头",
           "rev": 60
         }
@@ -3817,7 +3809,9 @@
       "backlinks": 5,
       "wikilinks": [
         "AI服务器",
-        "成熟制程代工"
+        "成熟制程代工",
+        "MEMS传感器",
+        "射频芯片"
       ],
       "content": "# 模拟芯片\n\n> **半导体** · L4 · TAM **$95.0B** · CAGR **8.0%**\n\n模拟芯片处理真实世界的连续信号（声音/光/温度/压力/电压）——是**数字世界与物理世界的「接口」**。电源管理芯片（PMIC）和信号链（放大器/ADC/DAC/接口）为两大品类。|全球$95B+(2025)，**TI(美国#1，~20%，65%+毛利率，12寸厂成本优势，80,000+料号)、ADI(#2，~12%，高性能信号链)、Infineon、ST主导**。PMIC在AI服务器中需求暴增—",
       "_heat": 19.0,
@@ -4187,7 +4181,9 @@
         "半导体设备零部件",
         "MCU与嵌入式处理器",
         "封装测试(OSAT)",
-        "晶圆代工(先进制程)"
+        "晶圆代工(先进制程)",
+        "MEMS传感器",
+        "射频芯片"
       ],
       "content": "# 功率半导体\n\n> **半导体** · L3 · TAM **$42.0B** · CAGR **12.0%**\n\n功率半导体是管理和转换电能的**「电力电子心脏」**——MOSFET/IGBT/SiC/GaN四大品类。新能源车（主驱逆变器+OBC+DC/DC）、光伏逆变器、充电桩、数据中心UPS四大增长引擎。|**全球$42B+(2025)，Infineon(德国#1，~20%份额，SiC/GaN/IGBT全品类)、ON Semi(~12%，汽车+工业)、STMicroelectronics(~10%，SiC",
       "_heat": 13.6,
@@ -4303,19 +4299,19 @@
       "companies": [
         {
           "ticker": "IFX.DE",
-          "name": "英飞凌(Infineon)",
+          "name": "Infineon Technologies",
           "role": "全球龙头",
           "rev": 40
         },
         {
           "ticker": "ON",
-          "name": "安森美(onsemi)",
+          "name": "ON Semiconductor (onsemi)",
           "role": "全球二线",
           "rev": 30
         },
         {
           "ticker": "STM",
-          "name": "意法半导体(ST)",
+          "name": "意法半导体 (STMicroelectronics)",
           "role": "全球二线",
           "rev": 25
         },
@@ -4516,7 +4512,7 @@
         },
         {
           "ticker": "MRVL",
-          "name": "Marvell",
+          "name": "Marvell Technology",
           "role": "龙头",
           "rev": 40
         },
@@ -4663,7 +4659,7 @@
       "companies": [
         {
           "ticker": "MRK.DE",
-          "name": "Merck KGaA (Versum)",
+          "name": "Merck KGaA (EMD Electronics)",
           "role": "龙头",
           "rev": 15
         },
@@ -4721,7 +4717,8 @@
         "CPU(服务器级)",
         "CMP抛光液与抛光垫",
         "晶圆代工(先进制程)",
-        "AI芯片设计(Fabless)"
+        "AI芯片设计(Fabless)",
+        "测试设备"
       ],
       "content": "# 存储芯片(DRAM/NAND)\n\n> **半导体** · L3 · TAM **$200.0B** · CAGR **18.0%**\n\n存储芯片是半导体产业中**最大的单一品类**（占全球半导体市场30%+）。DRAM（动态随机存取存储器）和NAND Flash（闪存）为两大核心产品。|**DRAM市场三巨头垄断>95%：三星(~38%)、SK Hynix(~34%)、Micron(~25%)**。HBM是DRAM中最高端品类——HBM3E 2026合约价涨20%，三巨头全部售罄。DDR5价格涨60%+(Samsung 32GB ",
       "_heat": 43.7,
@@ -4910,15 +4907,9 @@
         },
         {
           "ticker": "2408",
-          "name": "Nanya Technology (南亚科)",
+          "name": "Nanya Technology (南亚科技)",
           "role": "二线弹性",
           "rev": 80
-        },
-        {
-          "ticker": "2344",
-          "name": "Winbond (华邦)",
-          "role": "二线弹性",
-          "rev": 50
         }
       ],
       "contradictions": [],
@@ -5083,25 +5074,25 @@
         },
         {
           "ticker": "1347.HK",
-          "name": "华虹半导体",
+          "name": "华虹半导体 (Hua Hong Semiconductor)",
           "role": "国内二线",
           "rev": 60
         },
         {
           "ticker": "TSM",
-          "name": "台积电",
+          "name": "TSMC(台积电)",
           "role": "全球龙头",
           "rev": 20
         },
         {
           "ticker": "UMC",
-          "name": "联电",
+          "name": "UMC(联电)",
           "role": "全球二线",
           "rev": 50
         },
         {
           "ticker": "GFS",
-          "name": "格芯",
+          "name": "GlobalFoundries",
           "role": "全球二线",
           "rev": 45
         }
@@ -5275,7 +5266,7 @@
         },
         {
           "ticker": "MRVL",
-          "name": "Marvell",
+          "name": "Marvell Technology",
           "role": "二线弹性",
           "rev": 30
         },
@@ -5639,7 +5630,9 @@
         "HBM高带宽内存",
         "AI训练集群/超算",
         "服务器电源与UPS",
-        "DPU/SmartNIC"
+        "DPU/SmartNIC",
+        "企业级存储",
+        "网络设备（交换机）"
       ],
       "content": "# AI服务器\n\n> **AI算力** · L3 · TAM **$220.0B** · CAGR **25.0%**\n\nAI服务器是为深度学习训练和推理**专门优化**的高性能计算系统——集成多颗GPU、配备HBM高带宽内存、液冷散热、高速互联。|**GB200 NVL72是当前旗舰**——72颗B200 GPU通过NVLink全互联集成在液冷机柜中，单机柜ASP超$300万。2025年出货~20K机柜，2026年预计30K+。|**NVIDIA从芯片走向完整系统**：DGX+GB200 NVL机柜级方案定义行业标",
       "_heat": 59.5,
@@ -5946,7 +5939,7 @@
         },
         {
           "ticker": "MRVL",
-          "name": "Marvell",
+          "name": "Marvell Technology",
           "role": "二线弹性",
           "rev": 20
         },
@@ -5988,7 +5981,7 @@
         },
         {
           "ticker": "CBRS",
-          "name": "Cerebras",
+          "name": "Cerebras Systems",
           "role": "二线弹性",
           "rev": 95
         },
@@ -6188,7 +6181,7 @@
       "companies": [
         {
           "ticker": "LIN",
-          "name": "Linde",
+          "name": "Linde plc",
           "role": "龙头",
           "rev": 10
         },
@@ -6206,15 +6199,9 @@
         },
         {
           "ticker": "036490",
-          "name": "SK Materials",
+          "name": "SK Specialty（原 SK Materials）",
           "role": "二线弹性",
           "rev": 70
-        },
-        {
-          "ticker": "AI",
-          "name": "Air Liquide Electronics",
-          "role": "龙头",
-          "rev": 8
         },
         {
           "ticker": "4091",
@@ -6560,7 +6547,7 @@
       "companies": [
         {
           "ticker": "MRVL",
-          "name": "Marvell",
+          "name": "Marvell Technology",
           "role": "龙头",
           "rev": 10
         },
@@ -6624,7 +6611,8 @@
       "wikilinks": [
         "云计算IaaS",
         "AI推理API服务",
-        "ASIC/AI定制芯片"
+        "ASIC/AI定制芯片",
+        "大模型"
       ],
       "content": "# AI Agent\n\n> **AI算力** · L4 · TAM **$11.0B** · CAGR **50.0%**\n\nAI Agent是能**自主感知环境、制定计划、使用工具、执行多步骤任务**的智能体——与聊天机器人不同，Agent可调用API、读写文件、操作软件完成复杂工作流。|**2025是Agent元年**：OpenAI Agents SDK、Anthropic Claude Code($1B ARR/6个月)+Computer Use、Google Mariner、Microsoft Copilot A",
       "_heat": 8.1,
@@ -7232,7 +7220,7 @@
         },
         {
           "ticker": "2408",
-          "name": "Nanya(南亚科)",
+          "name": "Nanya Technology (南亚科技)",
           "role": "概念股",
           "rev": 10
         }
@@ -7481,7 +7469,8 @@
         "AI服务器",
         "数据中心IDC",
         "AI Agent",
-        "AI推理API服务"
+        "AI推理API服务",
+        "企业级存储"
       ],
       "content": "# 云计算IaaS\n\n> **AI算力** · L4 · TAM **$420.0B** · CAGR **28.0%**\n\n云计算IaaS将服务器/存储/网络以**按需付费方式**提供。AI时代竞争核心从通用计算性价比转向**GPU/TPU供给能力**。|**FY2025全球云基础设施$419B(+30% Q4)，AWS 28-29%($128.7B)/Azure 20-21%/GCP 13-15%**。NeoCloud(CoreWeave $5.13B营收2025,从零到全球Top10仅2年)以60-70%折扣抢GP",
       "_heat": 68.6,
@@ -7946,7 +7935,7 @@
         },
         {
           "ticker": "ARM",
-          "name": "ARM Holdings",
+          "name": "Arm Holdings",
           "role": "生态主导",
           "rev": 10
         },
@@ -7989,7 +7978,7 @@
       ],
       "content": "# 高纯硅料与硅片\n\n> **AI算力** · L1 · TAM **$15.0B** · CAGR **8.0%**\n\n半导体级多晶硅(11N纯度)经拉晶/切割/研磨/抛光制成单晶硅片——芯片制造的**「画布」**。300mm(12英寸)是当前主流，占全球出货量70%+。|**全球市场$14.6B(2025)→$20.2B(2030)，CAGR 6.7%**。Top5占>85%份额：**信越化学(24%,$3.8B)、SUMCO(20%,$3.1B)、环球晶圆(16%,$2.5B)、Siltronic(11%,$1",
       "_heat": 14.0,
-      "description": "半导体级多晶硅(11N纯度)经拉晶/切割/研磨/抛光制成单晶硅片——芯片制造的**「画布」**。300mm(12英寸)是当前主流，占全球出货量70%+。|**全球市场$14.6B(2025)→$20.2B(2030)，CAGR 6.7%**。Top5占>85%份额：**信越化学(24%,$3.8B)、SUMCO(20%,$3.1B)、环球晶圆(16%,$2.5B)、Siltronic(11%,$1.8B)、SK Siltron(9%,$1.4B)**。12英寸晶圆市场$12.9B，日本产35%。|**中国国产化率仅4.2%**(8家国产厂商合计)，NSIG(沪硅产业)领衔国产替代但差距巨大。先进制程对硅片缺陷密度要求<0.01 defects/cm²。|**技术门槛与差距**：中国国产化率4.2%为所有半导体材料中最低，差距10年+，先进制程(<5nm)硅片100%依赖进口；11N+超高纯多晶硅提纯全球仅Wacker/Hemlock/三菱等少数掌握，300mm拉晶良率需>95%、晶体缺陷控制极难。",
+      "description": "半导体级多晶硅(11N纯度)经拉晶/切割/研磨/抛光制成单晶硅片——芯片制造的**「画布」**。300mm(12英寸)是当前主流，占全球出货量70%+。|**全球市场$14.6B(2025)→$20.2B(2030)，CAGR 6.7%**。Top5占>85%份额：**信越化学(24%,$3.8B)、SUMCO(20%,$3.1B)、环球晶圆(16%,$2.5B)、Siltronic(11%,$1.8B)、SK Siltron(9%,$1.4B)**。12英寸晶圆市场$12.9B，日本产35%。|**中国12英寸硅片国产化率约15-25%**(2025-2026，口径分歧见 tech_gap)，NSIG(沪硅产业)领衔国产替代但差距巨大。先进制程对硅片缺陷密度要求<0.01 defects/cm²。|**技术门槛与差距**：中国12英寸硅片国产化率约15-25%（口径分歧：10%~50%），为半导体材料中最低之一，差距10年+，先进制程(<5nm)硅片仍依赖进口；11N+超高纯多晶硅提纯全球仅Wacker/Hemlock/三菱等少数掌握，300mm拉晶良率需>95%、晶体缺陷控制极难。",
       "cost_share_pct": 10,
       "cost_share_context": "芯片制造成本（半导体口径：晶圆制造成本，10%）",
       "profit_pool_pct": 4,
@@ -8075,7 +8064,7 @@
             "detail": ""
           },
           {
-            "dimension": "中国国产化率4.2%全球最低，差距10年+。先进制程(<5nm)硅片100%依赖进口",
+            "dimension": "中国12英寸硅片国产化率约15-25%（2025-2026口径分歧：智研咨询15-20%且2026预期25-30%、爱集微约10%、伯恩斯坦称自给率已达50%），为半导体材料中最低之一，差距10年+。先进制程(<5nm)硅片仍依赖进口；8英寸及以下已基本自给",
             "detail": ""
           }
         ]
@@ -8152,13 +8141,13 @@
       "companies": [
         {
           "ticker": "4063.T",
-          "name": "信越化学 (Shin-Etsu)",
+          "name": "信越化学 (Shin-Etsu Chemical)",
           "role": "龙头",
           "rev": 30
         },
         {
           "ticker": "3436.T",
-          "name": "SUMCO",
+          "name": "SUMCO Corporation",
           "role": "龙头",
           "rev": 90
         },
@@ -8181,12 +8170,6 @@
           "rev": 70
         },
         {
-          "ticker": "6488",
-          "name": "环球晶圆 (GlobalWafers)",
-          "role": "龙头",
-          "rev": 70
-        },
-        {
           "ticker": "688126",
           "name": "沪硅产业",
           "role": "国产龙头",
@@ -8200,7 +8183,7 @@
         },
         {
           "ticker": "002129",
-          "name": "TCL中环",
+          "name": "中环股份",
           "role": "国产二线",
           "rev": 20
         },
@@ -8236,7 +8219,8 @@
         "散热液冷系统",
         "云计算IaaS",
         "AI训练集群/超算",
-        "服务器电源与UPS"
+        "服务器电源与UPS",
+        "企业级存储"
       ],
       "content": "# 数据中心IDC\n\n> **AI算力** · L4 · TAM **$83.0B** · CAGR **17.0%**\n\n数据中心IDC为IT设备提供**物理基础设施**——电力、冷却、安防和网络接入。|**AI使功率密度飙升10-20倍**：传统5-10kW/rack→AI 40-120kW/rack，GB200 NVL72单机柜>120kW。液冷从选配变标配——Vertiv/Schneider/CoolIT订单排至2027，Aligned DeltaFlow支持300kW/rack。|**Equinix(#1,2",
       "_heat": 22.7,
@@ -8389,12 +8373,6 @@
           "rev": 15
         },
         {
-          "ticker": "9698",
-          "name": "万国数据",
-          "role": "二线弹性",
-          "rev": 15
-        },
-        {
           "ticker": "CD",
           "name": "秦淮数据",
           "role": "二线弹性",
@@ -8452,9 +8430,9 @@
         "成熟制程代工",
         "刻蚀设备"
       ],
-      "content": "# 溅射靶材\n\n> **AI算力** · L1 · TAM **$2.5B** · CAGR **8.0%**\n\n溅射靶材是PVD工艺**核心耗材**——高能离子轰击靶材表面，溅射原子沉积薄膜。半导体用要求5N+纯度，品类含高纯铜/钽/钛/铝/钨靶。|**全球市场~$2B+，日本JX Metals主导(~30-40%)**，Tosoh、Honeywell、Plansee紧随。中国江丰电子(300666)在铜/钽靶细分快速追赶，已进入TSMC供应链。|AI芯片互连层增加→高纯钽靶/铜靶需求增长。靶材在晶圆成本<",
+      "content": "# 溅射靶材\n\n> **AI算力** · L1 · TAM **$2.5B** · CAGR **8.0%**\n\n溅射靶材是PVD工艺**核心耗材**——高能离子轰击靶材表面，溅射原子沉积薄膜。半导体用要求5N+纯度，品类含高纯铜/钽/钛/铝/钨靶。|**全球市场~$2B+，日本JX Metals主导(~60-65%，JX官方FY2026口径)**，Tosoh、Honeywell、Plansee紧随。中国江丰电子(300666)在铜/钽靶细分快速追赶，已进入TSMC供应链。|AI芯片互连层增加→高纯钽靶/铜靶",
       "_heat": 4.7,
-      "description": "溅射靶材是PVD工艺**核心耗材**——高能离子轰击靶材表面，溅射原子沉积薄膜。半导体用要求5N+纯度，品类含高纯铜/钽/钛/铝/钨靶。|**全球市场~$2B+，日本JX Metals主导(~30-40%)**，Tosoh、Honeywell、Plansee紧随。中国江丰电子(300666)在铜/钽靶细分快速追赶，已进入TSMC供应链。|AI芯片互连层增加→高纯钽靶/铜靶需求增长。靶材在晶圆成本<5%但不可替代，国产化率从10%→25%+提升。**靶材是消耗品——纯度要求5N+(99.999%以上)，一片12寸晶圆需溅射数十层薄膜，每道PVD工序都消耗靶材。Tosoh(~15%)、Honeywell(~12%，航空航天+半导体双线)、Plansee(~10%，钽靶/钨靶强)紧随。NVIDIA B200互连层数比H100多50%+；3nm以下杂质控制要求从ppm级收紧到ppb级；中国铜/钽靶国产化率~25%，先进制程(<5nm)靶材仍依赖进口（江丰电子进入TSMC 3nm是里程碑）。**",
+      "description": "溅射靶材是PVD工艺**核心耗材**——高能离子轰击靶材表面，溅射原子沉积薄膜。半导体用要求5N+纯度，品类含高纯铜/钽/钛/铝/钨靶。|**全球市场~$2B+，日本JX Metals主导(~60-65%，JX官方FY2026口径)**，Tosoh、Honeywell、Plansee紧随。中国江丰电子(300666)在铜/钽靶细分快速追赶，已进入TSMC供应链。|AI芯片互连层增加→高纯钽靶/铜靶需求增长。靶材在晶圆成本<5%但不可替代，国产化率从10%→25%+提升。**靶材是消耗品——纯度要求5N+(99.999%以上)，一片12寸晶圆需溅射数十层薄膜，每道PVD工序都消耗靶材。Tosoh(~15%)、Honeywell(~12%，航空航天+半导体双线)、Plansee(~10%，钽靶/钨靶强)紧随。NVIDIA B200互连层数比H100多50%+；3nm以下杂质控制要求从ppm级收紧到ppb级；中国铜/钽靶国产化率~25%，先进制程(<5nm)靶材仍依赖进口（江丰电子进入TSMC 3nm是里程碑）。**",
       "cost_share_pct": 3,
       "cost_share_context": "晶圆制造成本（半导体口径：PVD工艺3%）",
       "profit_pool_pct": 2,
@@ -8471,8 +8449,8 @@
         "global": [
           {
             "name": "JX Metals",
-            "share": "~18%",
-            "note": "日本，#1全球溅射靶材（另一口径~35%），铜/钽/钛/铝全品类，2025年IPO"
+            "share": "~60-65%",
+            "note": "日本，#1全球半导体溅射靶材（JX官方FY2026披露~65%，Chemical Daily/多家来源~60%），铜/钽/钛/铝全品类，2025年IPO。2026年投¥230亿扩建常陆那珂工厂，产能目标为FY2023的1.6x"
           },
           {
             "name": "Materion",
@@ -8607,12 +8585,6 @@
           "name": "Materion",
           "role": "二线弹性",
           "rev": 25
-        },
-        {
-          "ticker": "5016",
-          "name": "JX Advanced Metals (JX金属)",
-          "role": "龙头",
-          "rev": 35
         },
         {
           "ticker": "4042",
@@ -9330,7 +9302,7 @@
         },
         {
           "ticker": "9660",
-          "name": "地平线",
+          "name": "地平线机器人",
           "role": "龙头",
           "rev": 80
         },
@@ -9612,7 +9584,7 @@
       "companies": [
         {
           "ticker": "4185.T",
-          "name": "JSR",
+          "name": "JSR Corporation",
           "role": "龙头",
           "rev": 70
         },
@@ -9630,7 +9602,7 @@
         },
         {
           "ticker": "4063",
-          "name": "Shin-Etsu Chemical (信越化学)",
+          "name": "信越化学 (Shin-Etsu Chemical)",
           "role": "龙头",
           "rev": 25
         },
@@ -9642,7 +9614,7 @@
         },
         {
           "ticker": "4901",
-          "name": "Fujifilm Electronic Materials",
+          "name": "Fujifilm",
           "role": "二线弹性",
           "rev": 12
         },
@@ -9692,7 +9664,9 @@
         "数据中心IDC",
         "AI模型训练平台",
         "NVMe/存储芯片",
-        "800G/1.6T光模块"
+        "800G/1.6T光模块",
+        "大模型",
+        "网络设备（交换机）"
       ],
       "content": "# AI训练集群/超算\n\n> **AI算力** · L3 · TAM **$80.0B** · CAGR **50.0%**\n\nAI训练集群将**数千到百万颗GPU通过网络互联**，作为整体训练超大模型的超级计算系统。**核心挑战是通信和电力**——十万卡集群需TB/s级互联带宽和100MW+供电。|**xAI Colossus是全球最大集群**：20万H100(122天建成)→2026年55.5万GPU/2GW→目标100万GPU；Anthropic以$1.25B/月租赁Colossus 1产能至2029年。|**Met",
       "_heat": 22.2,
@@ -9864,7 +9838,7 @@
       "tam": 16.2,
       "cagr": 8.3,
       "margin": "60-65%",
-      "backlinks": 0,
+      "backlinks": 4,
       "wikilinks": [
         "网络交换芯片",
         "800G/1.6T光模块",
@@ -9872,7 +9846,7 @@
         "AI训练集群/超算"
       ],
       "content": "# 网络设备（交换机）\n\n> **AI算力** · L3 · TAM **$16.2B** · CAGR **8.3%**\n\n数据中心交换机是AI集群Scale-out互联的核心系统级设备，负责GPU服务器之间的高速数据传输。AI训练推动后端网络从InfiniBand向以太网迁移，800G端口主导当前、1.6T即将量产，NVIDIA Spectrum-X凭借GPU捆绑切入，冲击Cisco/Arista传统格局。",
-      "_heat": 2.3,
+      "_heat": 6.6,
       "description": "数据中心交换机是AI集群Scale-out互联的核心系统级设备，负责GPU服务器之间的高速数据传输。AI训练推动后端网络从InfiniBand向以太网迁移，800G端口主导当前、1.6T即将量产，NVIDIA Spectrum-X凭借GPU捆绑切入，冲击Cisco/Arista传统格局。",
       "cost_share_pct": 15,
       "cost_share_context": "AI集群网络成本",
@@ -10009,7 +9983,8 @@
       "backlinks": 2,
       "wikilinks": [
         "AI Agent",
-        "AI推理API服务"
+        "AI推理API服务",
+        "大模型"
       ],
       "content": "# AI开发者工具\n\n> **AI算力** · L4 · TAM **$8.0B** · CAGR **45.0%**\n\nAI开发者工具是帮助程序员利用AI能力构建软件的**IDE插件、API和平台**。|核心品类：**AI代码补全（GitHub Copilot 180万+付费用户）、AI代码审查、AI自动化测试、AI文档生成、AI API管理**。|AI开发者工具正从「辅助」（提示下一行代码）向**「自主」**（AI Agent独立完成开发任务）演进。Cursor估值$10B+成为VS Code最强竞品。",
       "_heat": 3.3,
@@ -10194,7 +10169,9 @@
       "wikilinks": [
         "晶圆代工(先进制程)",
         "存储芯片(DRAM/NAND)",
-        "光刻机"
+        "光刻机",
+        "封装设备",
+        "测试设备"
       ],
       "content": "# 检测量测设备\n\n> **AI算力** · L2 · TAM **$13.0B** · CAGR **9.0%**\n\n半导体检测量测是芯片制造的**「眼睛」**——在数百道工序后检查晶圆是否合格。分为**缺陷检测**(污染/划痕)和**量测**(膜厚/线宽/套刻精度)。|**全球$12.6B(2025)，KLA绝对垄断(~7x第二名份额)**，KLA+AMAT+Hitachi+ASML+Onto Innovation Top5占>57%。KLA先进封装收入从$635M(2025)→$1B(2026)。Onto I",
       "_heat": 11.6,
@@ -10345,7 +10322,7 @@
         },
         {
           "ticker": "KLAC",
-          "name": "KLA",
+          "name": "KLA Corporation",
           "role": "龙头",
           "rev": 60
         },
@@ -10369,7 +10346,7 @@
         },
         {
           "ticker": "6920.T",
-          "name": "Lasertec",
+          "name": "Lasertec Corporation",
           "role": "龙头",
           "rev": 85
         },
@@ -10420,7 +10397,9 @@
       "backlinks": 7,
       "wikilinks": [
         "自动驾驶",
-        "ASIC/AI定制芯片"
+        "ASIC/AI定制芯片",
+        "MEMS传感器",
+        "射频芯片"
       ],
       "content": "# 边缘AI\n\n> **AI算力** · L4 · TAM **$25.0B** · CAGR **35.0%**\n\n边缘AI将推理从云端**下沉到设备端**(手机/汽车/摄像头/机器人)实时推理。核心优势：毫秒级延迟+本地隐私+离线可用。|**2025年Edge AI芯片市场$23.5-26B，智能手机占~38%(~$9B)**。Qualcomm Snapdragon X2 Elite 80 TOPS NPU(2026H1)、Apple M4 Neural Engine 38 TOPS、AMD Ryzen AI",
       "_heat": 11.1,
@@ -10518,7 +10497,7 @@
         },
         {
           "ticker": "603501",
-          "name": "韦尔股份",
+          "name": "豪威集团（原韦尔股份）",
           "role": "二线弹性",
           "rev": 20
         },
@@ -10940,7 +10919,7 @@
         },
         {
           "ticker": "CDNS",
-          "name": "Cadence",
+          "name": "Cadence Design Systems",
           "role": "龙头",
           "rev": 85
         },
@@ -11150,14 +11129,8 @@
           "rev": 5
         },
         {
-          "ticker": "3711",
-          "name": "日月光 (ASE)",
-          "role": "龙头",
-          "rev": 25
-        },
-        {
-          "ticker": "ASX",
-          "name": "日月光 (ASE)",
+          "ticker": "3711.TW",
+          "name": "日月光 (ASE Group)",
           "role": "龙头",
           "rev": 25
         },
@@ -11169,7 +11142,7 @@
         },
         {
           "ticker": "6239",
-          "name": "力成科技",
+          "name": "力成科技 (Powertech Technology)",
           "role": "二线弹性",
           "rev": 20
         },
@@ -11203,7 +11176,8 @@
       "wikilinks": [
         "GPU",
         "AI服务器",
-        "AI训练集群/超算"
+        "AI训练集群/超算",
+        "企业级存储"
       ],
       "content": "# NVMe/存储芯片\n\n> **AI算力** · L3 · TAM **$6.0B** · CAGR **15.0%**\n\nNVMe/存储芯片是AI系统的**「仓库」**——负责训练数据存取、模型检查点存储和推理缓存管理。|AI训练的数据管道是I/O密集型——预处理后的数据需要以**100GB/s+的速度喂给GPU集群**，慢速存储会导致昂贵的GPU空闲。|**CXL正在打破内存和存储的边界**——允许CPU通过PCIe总线直接访问远端内存池，让AI集群的内存「池化」。",
       "_heat": 4.1,
@@ -11330,7 +11304,7 @@
         },
         {
           "ticker": "005930",
-          "name": "三星电子",
+          "name": "Samsung",
           "role": "龙头",
           "rev": 40
         },
@@ -11378,7 +11352,8 @@
         "AI开发者工具",
         "云计算IaaS",
         "AI Agent",
-        "AI模型训练平台"
+        "AI模型训练平台",
+        "大模型"
       ],
       "content": "# AI推理API服务\n\n> **AI算力** · L4 · TAM **$106.0B** · CAGR **50.0%**\n\nAI推理API将训练好的大模型部署在云端，通过API提供AI能力的**商业模式**——用户按Token付费，无需自购GPU。|**2025年DeepSeek颠覆行业格局**：训练成本$5.6M vs GPT-4 $100M+，推理成本从$60/M token降至$0.15(降幅99.75%)。2026年中国模型价仅为美国7%(中国$0.48 vs 美国$3.38/M token)。|**OpenA",
       "_heat": 24.9,
@@ -11695,7 +11670,7 @@
       "companies": [
         {
           "ticker": "VRT",
-          "name": "Vertiv",
+          "name": "Vertiv Holdings",
           "role": "龙头",
           "rev": 30
         },
@@ -11767,7 +11742,7 @@
       "tam": 82.0,
       "cagr": 100.0,
       "margin": "60-70%",
-      "backlinks": 0,
+      "backlinks": 4,
       "wikilinks": [
         "AI训练集群/超算",
         "AI推理API服务",
@@ -11775,7 +11750,7 @@
         "AI开发者工具"
       ],
       "content": "# 大模型\n\n> **AI算力** · L4 · TAM **$82.0B** · CAGR **100.0%**\n\n大模型（基础模型/LLM）是生成式AI产业链的核心软件层，提供通用智能能力，通过API订阅和消费订阅变现。2026年商业化进入加速兑现阶段，Anthropic以企业API+开发者路线反超OpenAI成为全球营收第一，行业从\"烧钱换规模\"转向\"收入质量与盈利能力\"的分化验证。",
-      "_heat": 11.7,
+      "_heat": 16.0,
       "description": "大模型（基础模型/LLM）是生成式AI产业链的核心软件层，提供通用智能能力，通过API订阅和消费订阅变现。2026年商业化进入加速兑现阶段，Anthropic以企业API+开发者路线反超OpenAI成为全球营收第一，行业从\"烧钱换规模\"转向\"收入质量与盈利能力\"的分化验证。",
       "cost_share_pct": 40,
       "cost_share_context": "大模型训练/推理总成本",
@@ -11917,19 +11892,19 @@
         },
         {
           "ticker": "GOOGL",
-          "name": "Google(Gemini)",
+          "name": "Google(Alphabet)",
           "role": "云+模型协同",
           "rev": 55
         },
         {
           "ticker": "META",
-          "name": "Meta(Llama)",
+          "name": "Meta",
           "role": "开源路线",
           "rev": 45
         },
         {
           "ticker": "02513.HK",
-          "name": "智谱",
+          "name": "智谱AI",
           "role": "国产第一股",
           "rev": 50
         },
@@ -11941,13 +11916,13 @@
         },
         {
           "ticker": "未上市",
-          "name": "月之暗面(Kimi)",
+          "name": "月之暗面",
           "role": "国产高增长",
           "rev": 45
         },
         {
           "ticker": "未上市",
-          "name": "字节跳动(豆包)",
+          "name": "字节跳动",
           "role": "中国第一",
           "rev": 50
         }
@@ -11969,7 +11944,8 @@
       "wikilinks": [
         "GPU",
         "DSP与光芯片",
-        "AI训练集群/超算"
+        "AI训练集群/超算",
+        "网络设备（交换机）"
       ],
       "content": "# 800G/1.6T光模块\n\n> **AI算力** · L2 · TAM **$26.0B** · CAGR **50.0%**\n\n光模块将电信号转光信号在光纤中传输，是AI集群GPU间通信的**「数据高速公路」**——集群规模越大，光模块数量和速率需求指数增长。|**800G→1.6T迭代加速**：800G 2025出货~24M只→2026预计63M只，1.6T从0到5-20M只。AI光模块市场$16.5B(2025)→$26B(2026)。|**中国厂商全球主导**：中际旭创(全球28-30%份额,1.6T 50-70%垄",
       "_heat": 11.3,
@@ -12125,7 +12101,7 @@
       "companies": [
         {
           "ticker": "COHR",
-          "name": "Coherent",
+          "name": "Coherent Corp.",
           "role": "龙头",
           "rev": 35
         },
@@ -12315,7 +12291,7 @@
       "companies": [
         {
           "ticker": "VRT",
-          "name": "Vertiv",
+          "name": "Vertiv Holdings",
           "role": "龙头",
           "rev": 40
         },
@@ -12327,7 +12303,7 @@
         },
         {
           "ticker": "ETN",
-          "name": "Eaton",
+          "name": "Eaton Corporation",
           "role": "二线弹性",
           "rev": 18
         },
@@ -12339,7 +12315,7 @@
         },
         {
           "ticker": "2308",
-          "name": "Delta Electronics",
+          "name": "Delta Electronics (台达电子)",
           "role": "二线弹性",
           "rev": 20
         },
@@ -12618,7 +12594,8 @@
       "backlinks": 4,
       "wikilinks": [
         "GPU",
-        "AI训练集群/超算"
+        "AI训练集群/超算",
+        "网络设备（交换机）"
       ],
       "content": "# 网络交换芯片\n\n> **AI算力** · L3 · TAM **$12.0B** · CAGR **38.0%**\n\n网络交换芯片是数据中心的**「交通调度中心」**——决定数据包路由、优先级和拥塞控制。AI集群要求51.2Tbps→102.4Tbps交换容量+纳秒级延迟。|**Broadcom Tomahawk/Jericho是商用芯片#1**，NVIDIA Spectrum/Quantum+InfiniBand在AI训练是事实标准，垄断GPU集群互联。Ultra Ethernet Consortium(UEC",
       "_heat": 6.0,
@@ -12781,7 +12758,7 @@
         },
         {
           "ticker": "MRVL",
-          "name": "Marvell",
+          "name": "Marvell Technology",
           "role": "二线弹性",
           "rev": 10
         },
@@ -12935,13 +12912,13 @@
         },
         {
           "ticker": "MRVL",
-          "name": "Marvell",
+          "name": "Marvell Technology",
           "role": "龙头",
           "rev": 25
         },
         {
           "ticker": "COHR",
-          "name": "Coherent",
+          "name": "Coherent Corp.",
           "role": "龙头",
           "rev": 15
         },
@@ -12959,7 +12936,7 @@
         },
         {
           "ticker": "MTSI",
-          "name": "Macom",
+          "name": "MACOM Technology Solutions",
           "role": "二线弹性",
           "rev": 20
         },
@@ -13368,7 +13345,7 @@
       "tam": 32.0,
       "cagr": 6.0,
       "margin": "60-70%",
-      "backlinks": 0,
+      "backlinks": 4,
       "wikilinks": [
         "NVMe/存储芯片",
         "AI服务器",
@@ -13376,7 +13353,7 @@
         "数据中心IDC"
       ],
       "content": "# 企业级存储\n\n> **AI算力** · L3 · TAM **$32.0B** · CAGR **6.0%**\n\n企业级存储系统是AI数据中心的数据持久层，为AI训练和推理提供高性能、高可靠的数据存取。全闪存阵列（AFA）取代传统机械盘成为核心增长引擎，AI工作负载推动高IOPS、低延迟存储需求爆发，Pure Storage/NetApp等全闪存厂商受益明显。",
-      "_heat": 4.6,
+      "_heat": 8.9,
       "description": "企业级存储系统是AI数据中心的数据持久层，为AI训练和推理提供高性能、高可靠的数据存取。全闪存阵列（AFA）取代传统机械盘成为核心增长引擎，AI工作负载推动高IOPS、低延迟存储需求爆发，Pure Storage/NetApp等全闪存厂商受益明显。",
       "cost_share_pct": 10,
       "cost_share_context": "数据中心基础设施成本",
@@ -13892,7 +13869,7 @@
         },
         {
           "ticker": "BABA",
-          "name": "阿里巴巴(平头哥)",
+          "name": "阿里巴巴",
           "role": "国产龙头",
           "rev": 10
         },
@@ -13904,7 +13881,7 @@
         },
         {
           "ticker": "603986",
-          "name": "兆易创新",
+          "name": "兆易创新 (GigaDevice)",
           "role": "国产替代",
           "rev": 15
         }
@@ -14091,19 +14068,19 @@
         },
         {
           "ticker": "7751.T",
-          "name": "佳能(Canon)",
+          "name": "Canon",
           "role": "全球二线",
           "rev": 30
         },
         {
           "ticker": "7731.T",
-          "name": "尼康(Nikon)",
+          "name": "Nikon",
           "role": "全球二线",
           "rev": 20
         },
         {
           "ticker": "-",
-          "name": "上海微电子(SMEE)",
+          "name": "SMEE(上海微电子)",
           "role": "国产替代",
           "rev": 60
         }
@@ -17853,40 +17830,6 @@
       "sources": ""
     },
     {
-      "name": "Delta Electronics",
-      "slug": "delta",
-      "type": "company",
-      "country": "TW",
-      "ticker": "",
-      "one_liner": "",
-      "description": "全球电源管理龙头，AI服务器电源和DC-DC",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "服务器电源与UPS"
-      ],
-      "chain_layer": "L2",
-      "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# Delta Electronics\n\n全球电源管理龙头，AI服务器电源和DC-DC\n\n## 基本信息\n- 国家: TW\n- 网站: https://www.deltaww.com",
-      "content_preview": "# Delta Electronics\n\n> 全球电源管理龙头，AI服务器电源和DC-DC",
-      "sources": ""
-    },
-    {
       "name": "Anthropic",
       "slug": "anthropic",
       "type": "company",
@@ -21190,40 +21133,6 @@
       "sources": ""
     },
     {
-      "name": "TOSOH SMD",
-      "slug": "tosoh-smd",
-      "type": "company",
-      "country": "JP",
-      "ticker": "",
-      "one_liner": "",
-      "description": "日本溅射靶材和薄膜材料",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "溅射靶材"
-      ],
-      "chain_layer": "L1",
-      "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# TOSOH SMD\n\n日本溅射靶材和薄膜材料\n\n## 基本信息\n- 国家: JP\n- 网站: https://www.tosoh-smdc.com",
-      "content_preview": "# TOSOH SMD\n\n> 日本溅射靶材和薄膜材料",
-      "sources": ""
-    },
-    {
       "name": "Replit",
       "slug": "replit",
       "type": "company",
@@ -23520,40 +23429,6 @@
       "wikilinks": [],
       "content": "# Cursor\n\n三年把 ARR 从 $1 亿做到 $20 亿，被称为史上最快的 B2B 软件增长——然后被 SpaceX 以 $600 亿买走。但这份履历里有一个不和谐的数字：**AI 编码市场份额从 41% 掉到 26%**。市场在爆发，Cursor 的相对位置却在下降。\n\n## 财务状况\n\nCursor 为**未上市公司**（已被SpaceX收购），采用「融资估值 + ARR」口径。\n\n### 估值路径（三年从 $4亿 到 $600亿）\n\n| 轮次 | 时间 | 估值 | 备注 |\n|------|------|------|------|\n| Series A | 2024-08 | **~$4亿** | — |\n| Series B | 5个月后 | **~$26亿** | — |\n| Series C | 2025年中 | **~$90-99亿** | Thrive 领投 |\n| Series D | 2025-11 | **$293亿** | 募$23亿，Accel与Coatue共同领投，**Google与Nvidia参投** |\n| 新一轮洽谈 | 2026-04 | **~$500亿** | 至少募$20亿，**a16z与Thrive共同领投、Nvidia战略投资**；超额认购 |\n| **SpaceX 收购** | **2026-06** | **~$600亿（全股票）** | 行使4月期权；预计 **Q3 2026 完成**（待监管批准） |\n\n### ARR 增长（史上最快B2B软件）\n\n| 时点 | ARR |\n|------|-----|\n| 2025-01 | ~$1亿 |\n| 2025-06 | ~$5亿 |\n| 2025-11 | **$10亿+** |\n| **2026-02** | **~$20亿** |\n| **2026年底（公司预测）** | **$60亿+ run rate** |\n\n**估值倍数**：$500亿 / $20亿 = **约25x**；按前瞻$60亿则压缩至 **约8x**。\n\n### 盈利能力（结构分化）\n\n| 项 | 内容 |\n|----|------|\n| 历史 | **毛利率为负** |\n| 转折 | 2025-11 推出自研 **Composer 模型**（+使用更低成本外部模型）后，**实现小幅毛利为正** |\n| 结构 | **企业销售毛利为正，个人开发者账户仍亏损** |\n| 整体 | **未披露整体盈利能力** |\n\n#### 财务特征\n\n**Composer 模型是毛利转正的关键**——此前完全依赖Anthropic/OpenAI的外部模型，推理成本直接吃掉毛利。自研模型（配合低成本外部模型混用）让单位经济性首次成立。但**个人开发者账户仍亏损**，说明C端订阅定价无法覆盖推理成本。\n\n## 产品线详解\n\n### Cursor 编辑器（核心产品）\nAI原生IDE，支持代码库索引与上下文理解。200万+总用户、100万+付费客户。\n\n### Composer 自研模型（战略资产）\n2025年11月推出，是毛利率由负转正的根本原因，降低对外部模型供应商的依赖——尤其重要，因为**Anthropic既是其模型供应商，又是最大竞争对手**。\n\n### 企业版\n约 **50,000 企业团队**，**占收入约60%**，毛利率为正。**Fortune 1000 中约70%** 为其客户，企业市场是真正的利润来源。\n\n## 技术路线图\n\n| 方向 | 状态 | 时间 |\n|------|------|------|\n| **Composer 自研模型** | 已使毛利转正 | 2026+ |\n| 企业市场深化 | 占收入60%，毛利为正 | 2026+ |\n| **SpaceX 整合** | 收购预计Q3 2026完成 | 2026 |\n| 模型成本优化 | 自研+低成本外部模型混用 | 2026+ |\n\n## 融资与现金流\n\n- 累计融资约 **$34亿**（a16z、Thrive、Accel、Coatue）\n- 2026年4月新一轮洽谈估值约$500亿（超额认购，Nvidia战略投资）\n- **2026年6月被 SpaceX 以约$600亿全股票收购**，为2026年最大创投支持的创业公司并购\n- 企业业务毛利为正，提供内生现金；个人业务仍亏损\n\n## 研发投入与专利\n\n- 核心壁垒：\n  1. **产品体验与品牌**——AI编码工具中用户规模最大（200万+用户、100万+付费）\n  2. **自研 Composer 模型**——降低对外部模型供应商的成本依赖，且这些供应商同时是竞争对手\n  3. **企业市场渗透**（Fortune 1000 覆盖70%、企业占收入60%）\n  4. **三年ARR从$1亿到$20亿的增长速度**本身构成资本与人才吸引力\n- **主要风险**：\n  1. **市场份额持续下滑**——AI编码份额从 **~41%（2025-06）降至 ~26%（2026-05）**，Anthropic（Claude Code）是主要获益者\n  2. **模型供应商即竞争对手**——Anthropic、OpenAI、Google 既是模型供应方又是直接竞品，存在被\"断供\"或加价的战略风险\n  3. **个人开发者账户亏损**，C端商业模式未验证\n  4. **被收购后的独立性**——成为马斯克生态一部分，可能影响其中立性与其他客户（尤其企业客户）的采用意愿\n  5. 竞争极度密集（GitHub Copilot、Claude Code、Codex、Devin、Windsurf、Replit）\n  6. 未披露整体盈利能力\n\n## 动态更新记录\n\n### 2026-09-13（骨架词条升级）\n> 来源: [[消化笔记/2026-09-13-骨架公司补全批次]]\n> L0归档: `L0-原始资料池/03-新闻/2026-09-13-Cursor-融资与收购调研.md` (input_20260913_039)\n> 置信度: 中（未上市；SpaceX收购待监管批准）\n\n- **词条升级**：从骨架升级为完整词条，补齐 YAML 字段 + 6 个 Body 段\n- **market_cap**：空 → ~$600亿（2026.6 SpaceX 全股票收购价）\n- **latest_revenue**：空 → ARR ~$20亿（2026.2），2026年底预测$60亿+\n- **suppliers/customers/partners/competitors**：空数组 → 分别填充 4/3/5/5 条\n- **segments 扩充**：新增 `AI Agent`\n- **新增核心矛盾**：**ARR三年从$1亿到$20亿，但AI编码份额从41%降至26%**——市场在爆发，Cursor相对位置在下降\n- **新增关键信息**：自研Composer模型使毛利转正、企业占收入60%且毛利为正、个人账户仍亏损、SpaceX $600亿收购",
       "content_preview": "# Cursor\n\n> AI编程工具领军者（Anysphere出品），核心为Cursor代码编辑器与自研Composer模型，通过个人订阅与企业授权实现收入，位于AI算力L4应用层——ARR三年从$1亿增至$20亿（被称为史上最快B2B软件），100万+付费客户，但AI编码市场份额已从41%降至26%。\n【2026.9.13更新】2026年6月SpaceX宣布以约$600亿全股票收购（预计Q3 2026完成），为2026年最大创投支持的创业公司并购；2026年4月曾洽谈以$500亿估值募资；自研Composer模型使毛利率由负转正；但市场份额从41%(2025.6)降至26%(2026.5)，Anthropic获益。\n | 三年把 ARR 从 $1 亿做到 $20 亿，被称为史上最快的 B2B 软件增长——然后被 SpaceX 以 $600 亿买走。但这份履历里有一个不和谐的数字：**AI 编码市场份额从 41% 掉到 26%**。市场在爆发，Cursor 的相对位置却在下降。",
-      "sources": ""
-    },
-    {
-      "name": "VAT Group",
-      "slug": "vat-group",
-      "type": "company",
-      "country": "瑞士",
-      "ticker": "",
-      "one_liner": "",
-      "description": "半导体真空阀全球垄断(>70%),EUV刻蚀必需",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "半导体设备零部件"
-      ],
-      "chain_layer": "L4",
-      "chain_role": "龙头",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# VAT Group\n\n半导体真空阀全球垄断(>70%),EUV刻蚀必需\n\n## 基本信息\n- 国家: 瑞士\n- 网站: N/A",
-      "content_preview": "# VAT Group\n\n> 半导体真空阀全球垄断(>70%),EUV刻蚀必需",
       "sources": ""
     },
     {
@@ -26326,40 +26201,6 @@
       "sources": ""
     },
     {
-      "name": "力成科技",
-      "slug": "ptik",
-      "type": "company",
-      "country": "TW",
-      "ticker": "",
-      "one_liner": "",
-      "description": "台湾存储封装龙头，先进封装SiP",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "先进封装CoWoS"
-      ],
-      "chain_layer": "L2",
-      "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# 力成科技\n\n台湾存储封装龙头，先进封装SiP\n\n## 基本信息\n- 国家: TW\n- 网站: https://www.pti.com.tw",
-      "content_preview": "# 力成科技\n\n> 台湾存储封装龙头，先进封装SiP",
-      "sources": ""
-    },
-    {
       "name": "nVent",
       "slug": "nvent",
       "type": "company",
@@ -28902,40 +28743,6 @@
       "sources": ""
     },
     {
-      "name": "Fujifilm Electronic Materials",
-      "slug": "fujifilm-electronic",
-      "type": "company",
-      "country": "日本",
-      "ticker": "",
-      "one_liner": "",
-      "description": "光刻胶与CMP浆料，ArF浸没式光刻胶",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "光刻胶与湿化学品"
-      ],
-      "chain_layer": "L1",
-      "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# Fujifilm Electronic Materials\n\n光刻胶与CMP浆料，ArF浸没式光刻胶\n\n## 基本信息\n- 国家: 日本\n- 网站: https://www.fujifilm.com",
-      "content_preview": "# Fujifilm Electronic Materials\n\n> 光刻胶与CMP浆料，ArF浸没式光刻胶",
-      "sources": ""
-    },
-    {
       "name": "Toshiba Electronic Devices",
       "slug": "toshiba-electronic",
       "type": "company",
@@ -29033,38 +28840,6 @@
       "wikilinks": [],
       "content": "# Cirrus Logic\n\n音频Codec+触觉驱动IC,Apple iPhone核心供应商\n\n## 基本信息\n- 国家: 美国\n- 网站: N/A",
       "content_preview": "# Cirrus Logic\n\n> 音频Codec+触觉驱动IC,Apple iPhone核心供应商",
-      "sources": ""
-    },
-    {
-      "name": "Cisco(光模块)",
-      "slug": "cisco-optics",
-      "type": "company",
-      "country": "US",
-      "ticker": "",
-      "one_liner": "",
-      "description": "800GbE交换机和光模块，收购Acacia/Luxtera",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [],
-      "chain_layer": "",
-      "chain_role": "直接相关",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# Cisco(光模块)\n\n800GbE交换机和光模块，收购Acacia/Luxtera\n\n## 基本信息\n- 国家: US\n- 网站: https://www.cisco.com",
-      "content_preview": "# Cisco(光模块)\n\n> 800GbE交换机和光模块，收购Acacia/Luxtera",
       "sources": ""
     },
     {
@@ -29258,40 +29033,6 @@
       "wikilinks": [],
       "content": "# Lattice Semiconductor\n\n低功耗FPGA，中端市场主力\n\n## 基本信息\n- 国家: 美国\n- 网站: https://www.latticesemi.com",
       "content_preview": "# Lattice Semiconductor\n\n> 低功耗FPGA，中端市场主力",
-      "sources": ""
-    },
-    {
-      "name": "Intel(EMIB/Foveros)",
-      "slug": "intel-packaging",
-      "type": "company",
-      "country": "US",
-      "ticker": "",
-      "one_liner": "",
-      "description": "EMIB/Foveros 3D封装技术领导者",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "Chiplet与异构集成"
-      ],
-      "chain_layer": "L2",
-      "chain_role": "龙头",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# Intel(EMIB/Foveros)\n\nEMIB/Foveros 3D封装技术领导者\n\n## 基本信息\n- 国家: US\n- 网站: https://www.intel.com",
-      "content_preview": "# Intel(EMIB/Foveros)\n\n> EMIB/Foveros 3D封装技术领导者",
       "sources": ""
     },
     {
@@ -31052,40 +30793,6 @@
       "wikilinks": [],
       "content": "# Microsoft\n\n从自研AI芯片到Copilot应用的全球最强全栈AI帝国——Azure云年收入$750亿且增速高达34%，作为OpenAI独家算力合作伙伴，M365 Copilot正重塑全球数亿企业用户的工作方式。\n\n## 财务状况\n\n| 指标 | FY2023 | FY2024 | FY2025 | Q4 FY2026 |\n|------|--------|--------|--------|-----------|\n| 总营收 | $2119亿 | $2451亿 | $2817亿 | **$900亿**（单季，+17.7% YoY） |\n| 运营利润 | $977亿 | $1094亿 | $1285亿 | **$406亿**（单季，+18% YoY） |\n| Azure增速 | ~27% | ~29% | **34%** | **43%**（Q4，Q1 FY2027指引45%） |\n| 净利润 | $824亿 | $881亿 | $1018亿 | —（单季未披露） |\n\n**Azure AI成增长主引擎**：Azure年收入突破$750亿，Q4单季增速高达39%。AI服务已连续多个季度贡献Azure增长的显著份额（约12-13个百分点），预计AI年化收入run rate即将突破$150亿。微软云（含Azure+M365 Commercial+其他）Q4单季收入$467亿，同比+27%，是公司营收最大增长极。\n\n### Q4 FY2026 详情（截至2026.6）\n\n- **Capex**：$410亿（含资本租赁），现金性Capex约$365亿；下季度指引$500亿。FY2026自然年从$190B→$175B是会计调整（资本租赁分类变动），实际指引未变。短周期资产（服务器等）占比从50%拉至2/3+，意味着摊销折旧反噬尚未到来\n- **现金流**：经营流入单季$550亿，FCF约$196亿（同比-23%），预计FY2027全年FCF勉强守住\n- **新签合同**：单季签$774亿（恢复增长），RPO积压至$6780亿（+$500亿 QoQ），远超当季确认收入$593亿\n- **经营利润率**：小幅上扬（未降），智慧云板块经营利润率40.4%同比维稳；靠经营杠杆+裁员降本（财年减员5千至12.3万）\n- **生产力板块**：商业M365云+14%，E7定价$99/月（单独买$120的打包折扣），通过做高附加值产品渗透率实现ASP名降实升\n- **个人计算**：-5%（好于预期-10%），Windows OEM -7%（预期-15%+），搜索广告+7%（剔汇率+10%）\n\n## 产品线详解\n\n- **Azure AI**：全球第二大公有云，市场份额约24%，提供OpenAI全系列模型（GPT-4o/o3）、自研Phi小模型及AI Foundry一站式开发平台，作为OpenAI**独家算力供应商**构建了不可复制的竞争壁垒\n- **M365 Copilot**：深度嵌入Word、Excel、Teams、Outlook等办公套件，按月付费每用户$30，面向全球超4亿商用Office用户群体，是企业级AI变现的标杆模式\n- **GitHub Copilot**：开发者AI编程助手，已积累180万+付费用户，牢牢占据AI编码工具赛道第一\n- **Dynamics 365 + Copilot**：CRM与ERP系统内置AI代理，季度增速达23%\n- **全球数据中心**：覆盖60+Azure区域、超300座数据中心，FY2025资本开支突破$500亿用于AI算力基础设施扩建\n\n## 技术路线图\n\n**短期（2025-2026）**：\n- Azure AI加速全球扩容，新增区域以GPU集群（NVIDIA H100/B200）为核心\n- **Maia 100**自研AI芯片量产部署，降低对外部GPU依赖\n- Copilot代理（Agent）功能上线，实现跨应用自动化工作流\n- 与OpenAI合作升级，Stargate超级计算机项目持续推进\n- **【2026.8更新】** Azure Q4 FY2026同增43%→Q1 FY2027指引45%，确定性进入加速通道；Github Copilot 6月起从月费转向按用量计费；OAI 7月GPT 5.6发布将继续拉动云用量；商业M365推E7($99/月打包Copilot+Agent+安全)拉升ASP\n\n**中期（2026-2028）**：\n- Maia 200下一代芯片流片，瞄准训练+推理全场景\n- AI基础设施年CapEx维持$600亿+水平\n- Copilot深度融入Windows/Edge/Bing，AI原生OS雏形显现\n\n\n## 融资与现金流\n\n- 详见财务状况章节\n## 研发投入与专利\n\n- **FY2025研发支出**：约**$320亿+**，占总营收11%+，全球科技公司中绝对金额最大\n- **AI专利布局**：全球AI相关专利超10万项，覆盖大模型训练、推理优化、AI安全对齐、小模型压缩\n- **OpenAI生态壁垒**：累计投资OpenAI超**$130亿**（含算力券），获得其盈利分配权（上限约$920亿），是唯一可将OpenAI模型嵌入全线产品的公司\n- **人才密度**：AI研究团队超5000人，囊括多名图灵奖得主及Transformer核心发明人\n- 研发聚焦五大方向：**AI基础设施、AI应用层、量子计算、混合现实、网络安全**\n\n### 2026.8.5 Q4 FY2026 更新\n\n**Azure确定性重启加速**：Q4同比+43%（超乐观预期42%），Q1 FY2027指引45%，管理层明确下半年整体比上半年加速。催化因素：(1) OAI 7月GPT 5.6发布带动云用量加速；(2) Github Copilot 6月从月费转向按用量计费；(3) RPO $6780亿提供收入确认储备。\n\n**后OAI时代客户多元化见效**：微软与OAI貌合神离后，Azure增速曾放缓、办公软件AI化落地难产。但本季Azure加速+签单回血（$774亿），说明客户多元化策略开始取得成效。模型/芯片自研虽弱，但增长有力+估值折价（相对同行）+利润率稳+现金流不崩=具备性价比。\n\n**Capex与摊销的错配窗口**：短周期资产（服务器等）占比从50%拉到2/3+，意味着现有Capex转化为折旧的速度快于长周期资产（数据中心建筑），但当前摊销折旧额同比几乎零增，折旧反噬尚未到来。需持续关注短周期资产占比变化对后续利润率的影响。\n\n## 动态更新记录\n\n- 2026.8.5: Q4 FY2026财报更新（海豚研究）— Azure 43%加速超预期、Capex $410亿克制、FCF $196亿未崩、签单$774亿回血、RPO $6780亿、经营利润率未降。新增Q4 FY2026详情小节 + 财务状况表Q4列 + revenue_model/one_liner/description/employees字段更新。input_id: input_20260805_002",
       "content_preview": "# Microsoft\n\n> 全球最大软件和云计算公司，运营Azure云+自研Maia AI芯片+Copilot AI助手，通过软件订阅+云计算+AI API实现盈利，位于AI算力L4终端应用层——NVIDIA GPU最大采购方\n【2026.8.5更新】Q4 FY2026营收$900亿(+18%), Azure +43%加速超预期(Q1 FY2027指引45%), 经营利润$406亿(+18%)利润率未降, FCF $196亿唯一未崩云巨头, 签单$774亿回血, RPO $6780亿。\n | 从自研AI芯片到Copilot应用的全球最强全栈AI帝国——Azure云年收入$750亿且增速高达34%，作为OpenAI独家算力合作伙伴，M365 Copilot正重塑全球数亿企业用户的工作方式。",
-      "sources": ""
-    },
-    {
-      "name": "Air Liquide Electronics",
-      "slug": "air-liquide-electronics",
-      "type": "company",
-      "country": "法国",
-      "ticker": "",
-      "one_liner": "",
-      "description": "全球电子特气前三，与液化空气/林德/大阳日酸并列",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "电子特气"
-      ],
-      "chain_layer": "L1",
-      "chain_role": "龙头",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# Air Liquide Electronics\n\n全球电子特气前三，与液化空气/林德/大阳日酸并列\n\n## 基本信息\n- 国家: 法国\n- 网站: https://www.airliquide.com",
-      "content_preview": "# Air Liquide Electronics\n\n> 全球电子特气前三，与液化空气/林德/大阳日酸并列",
       "sources": ""
     },
     {
@@ -32852,40 +32559,6 @@
       "sources": ""
     },
     {
-      "name": "SK Specialty",
-      "slug": "sk-specialty",
-      "type": "company",
-      "country": "KR",
-      "ticker": "",
-      "one_liner": "",
-      "description": "韩国NF3/WF6/SiH4电子特气领导者",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "电子特气"
-      ],
-      "chain_layer": "L1",
-      "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# SK Specialty\n\n韩国NF3/WF6/SiH4电子特气领导者\n\n## 基本信息\n- 国家: KR\n- 网站: https://www.skspecialty.com",
-      "content_preview": "# SK Specialty\n\n> 韩国NF3/WF6/SiH4电子特气领导者",
-      "sources": ""
-    },
-    {
       "name": "CyrusOne",
       "slug": "cyrusone",
       "type": "company",
@@ -33233,40 +32906,6 @@
       "wikilinks": [],
       "content": "# Nan Ya PCB (南亚电路板)\n\n台塑集团旗下，ABF/BT载板制造商\n\n## 基本信息\n- 国家: 台湾\n- 网站: https://www.nanyapcb.com.tw",
       "content_preview": "# Nan Ya PCB (南亚电路板)\n\n> 台塑集团旗下，ABF/BT载板制造商",
-      "sources": ""
-    },
-    {
-      "name": "Samsung(AVP)",
-      "slug": "samsung-packaging",
-      "type": "company",
-      "country": "KR",
-      "ticker": "",
-      "one_liner": "",
-      "description": "三星先进封装AVP，X-Cube 3D IC",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "Chiplet与异构集成"
-      ],
-      "chain_layer": "L2",
-      "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# Samsung(AVP)\n\n三星先进封装AVP，X-Cube 3D IC\n\n## 基本信息\n- 国家: KR\n- 网站: https://www.samsung.com",
-      "content_preview": "# Samsung(AVP)\n\n> 三星先进封装AVP，X-Cube 3D IC",
       "sources": ""
     },
     {
@@ -36328,85 +35967,6 @@
       "sources": ""
     },
     {
-      "name": "长电科技 (JCET)",
-      "slug": "jcet",
-      "type": "company",
-      "country": "中国",
-      "ticker": "600584.SS",
-      "one_liner": "中国最大/全球第三大OSAT封测企业（仅次于日月光/Amkor），通过收购SanDisk上海SSDS 80%股权扩大NAND存储封测布局，2026E营收~¥487.9亿（+16%），毛利率13.5%→14.4%（改善中），先进封装（CPO/2.5D/汽车芯片）技术迁移中，市值~¥800亿（~$11B）。\n【2026.8.18更新】Q1 2026营收¥91.71亿/净利¥2.90亿/毛利率14.55%\n",
-      "description": "中国#1/全球#3 OSAT封测龙头，收购SanDisk上海SSDS扩大NAND存储封测，2026E营收¥488亿+16%，先进封装技术追赶ASE/Amkor，国产替代核心受益者。",
-      "core_business": [
-        "传统封测（打线/覆晶/测试，中国#1，全球#3 OSAT）",
-        "先进封装（2.5D/3D/CPO共封装光学/Fan-Out，技术追赶中）",
-        "存储封测（NAND/DRAM封测，收购SSDS扩大产能）",
-        "汽车/工业/物联网芯片封测（多元化终端覆盖）"
-      ],
-      "revenue_model": "2026E营收~¥487.9亿（+16% YoY），净利润~¥30.33亿，EPS ¥1.70。毛利率13.5%（传统封测低毛利）→14.4%（先进封装占比提升改善）。PE ~26x（2026E）。与ASE/Amkor差距主要在先进封装能力和高端客户份额。",
-      "founded": 1972,
-      "headquarters": "中国江苏江阴",
-      "employees": "~23,000",
-      "latest_revenue": "Q1 2026 ¥91.71亿（-1.76% YoY）",
-      "market_cap": "~¥800亿（~$11B USD）（2026.7）",
-      "data_freshness_date": "2026-08-18",
-      "industry": "半导体",
-      "segments": [
-        "先进封装CoWoS",
-        "半导体封测(OSAT)"
-      ],
-      "chain_layer": "L2",
-      "chain_role": "核心参与者",
-      "suppliers": [
-        {
-          "company": "封装基板供应商（欣兴/景硕/揖斐电等）",
-          "supplies": "ABF/BT载板",
-          "note": "先进封装核心材料"
-        },
-        {
-          "company": "设备供应商（Disco/ASMPT/Teradyne等）",
-          "supplies": "切割/键合/测试设备"
-        }
-      ],
-      "customers": [
-        {
-          "company": "中国Fabless（华为海思/紫光展锐/韦尔等）",
-          "revenue_pct": 40,
-          "note": "国产替代核心封测平台"
-        },
-        {
-          "company": "全球IDM/Fabless（TI/Qualcomm/NXP等）",
-          "revenue_pct": 60
-        }
-      ],
-      "partners": [
-        {
-          "company": "SanDisk（收购SSDS 80%股权）",
-          "area": "NAND存储封测",
-          "note": "扩大存储封测布局"
-        }
-      ],
-      "competitors": [
-        {
-          "company": "日月光（ASE）",
-          "ticker": "ASX",
-          "area": "OSAT封测",
-          "note": "全球#1"
-        },
-        {
-          "company": "Amkor",
-          "ticker": "AMKR",
-          "area": "OSAT封测",
-          "note": "全球#2"
-        }
-      ],
-      "tags": [],
-      "website": "https://www.jcetglobal.com",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# 长电科技 (JCET)\n\n中国#1/全球#3 OSAT封测龙头，收购SanDisk上海SSDS扩大NAND存储封测，2026E营收¥488亿+16%，先进封装技术追赶ASE/Amkor，国产替代核心受益者。\n\n\n## 财务状况\n\n| 指标 | 2025E | 2026E | Q1 2026（实际） |\n|------|:------:|:------:|:------:|\n| **营收** | ¥421.5亿 | **¥487.9亿** (+16%) | ¥91.71亿（-1.76%） |\n| **净利润** | ~¥26亿 | **¥30.33亿** | ¥2.90亿（+42.74%） |\n| **毛利率** | 13.5% | 14.4%（改善中） | 14.55%（+1.91pct） |\n| **EPS** | — | ¥1.70 | — |\n\n## 融资与现金流\n- 详见财务状况章节",
-      "content_preview": "# 长电科技 (JCET)\n\n> 中国最大/全球第三大OSAT封测企业（仅次于日月光/Amkor），通过收购SanDisk上海SSDS 80%股权扩大NAND存储封测布局，2026E营收~¥487.9亿（+16%），毛利率13.5%→14.4%（改善中），先进封装（CPO/2.5D/汽车芯片）技术迁移中，市值~¥800亿（~$11B）。\n【2026.8.18更新】Q1 2026营收¥91.71亿/净利¥2.90亿/毛利率14.55%\n | 中国#1/全球#3 OSAT封测龙头，收购SanDisk上海SSDS扩大NAND存储封测，2026E营收¥488亿+16%，先进封装技术追赶ASE/Amkor，国产替代核心受益者。",
-      "sources": ""
-    },
-    {
       "name": "Achronix Semiconductor",
       "slug": "achronix",
       "type": "company",
@@ -36978,40 +36538,6 @@
       "wikilinks": [],
       "content": "# 源杰科技\n\n国产光芯片，EML/DFB激光器芯片，光模块上游核心\n\n## 基本信息\n- 国家: CN\n- 网站: https://www.yj-semitech.com",
       "content_preview": "# 源杰科技\n\n> 国产光芯片，EML/DFB激光器芯片，光模块上游核心",
-      "sources": ""
-    },
-    {
-      "name": "Shin-Etsu Chemical (信越化学)",
-      "slug": "shinetsu-chemical",
-      "type": "company",
-      "country": "日本",
-      "ticker": "",
-      "one_liner": "",
-      "description": "光刻胶/硅片/封装材料，半导体材料全品类平台",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "",
-      "segments": [
-        "光刻胶与湿化学品"
-      ],
-      "chain_layer": "L1",
-      "chain_role": "龙头",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
-      "tags": [],
-      "website": "",
-      "backlinks": 0,
-      "wikilinks": [],
-      "content": "# Shin-Etsu Chemical (信越化学)\n\n光刻胶/硅片/封装材料，半导体材料全品类平台\n\n## 基本信息\n- 国家: 日本\n- 网站: https://www.shinetsu.co.jp",
-      "content_preview": "# Shin-Etsu Chemical (信越化学)\n\n> 光刻胶/硅片/封装材料，半导体材料全品类平台",
       "sources": ""
     },
     {
@@ -39609,13 +39135,6 @@
         }
       },
       {
-        "name": "Delta Electronics",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
         "name": "Anthropic",
         "symbolSize": 12,
         "itemStyle": {
@@ -39952,13 +39471,6 @@
         }
       },
       {
-        "name": "TOSOH SMD",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
         "name": "Replit",
         "symbolSize": 12,
         "itemStyle": {
@@ -40212,13 +39724,6 @@
       },
       {
         "name": "Cursor",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
-        "name": "VAT Group",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -40520,13 +40025,6 @@
       },
       {
         "name": "Cohere",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
-        "name": "力成科技",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -40918,13 +40416,6 @@
         }
       },
       {
-        "name": "Fujifilm Electronic Materials",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
         "name": "Toshiba Electronic Devices",
         "symbolSize": 12,
         "itemStyle": {
@@ -40946,13 +40437,6 @@
         }
       },
       {
-        "name": "Cisco(光模块)",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
         "name": "Qualcomm",
         "symbolSize": 12,
         "itemStyle": {
@@ -40968,13 +40452,6 @@
       },
       {
         "name": "Lattice Semiconductor",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
-        "name": "Intel(EMIB/Foveros)",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -41142,13 +40619,6 @@
         }
       },
       {
-        "name": "Air Liquide Electronics",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
         "name": "Ceva",
         "symbolSize": 12,
         "itemStyle": {
@@ -41310,13 +40780,6 @@
         }
       },
       {
-        "name": "SK Specialty",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
         "name": "CyrusOne",
         "symbolSize": 12,
         "itemStyle": {
@@ -41360,13 +40823,6 @@
       },
       {
         "name": "Nan Ya PCB (南亚电路板)",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
-        "name": "Samsung(AVP)",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -41751,13 +41207,6 @@
         }
       },
       {
-        "name": "长电科技 (JCET)",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
         "name": "Achronix Semiconductor",
         "symbolSize": 12,
         "itemStyle": {
@@ -41815,13 +41264,6 @@
       },
       {
         "name": "源杰科技",
-        "symbolSize": 12,
-        "itemStyle": {
-          "color": "#34C759"
-        }
-      },
-      {
-        "name": "Shin-Etsu Chemical (信越化学)",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -41956,16 +41398,468 @@
     ],
     "edges": [
       {
+        "source": "CoWoS先进封装产能是AI芯片产业链最大瓶颈，2027年前不会缓解",
+        "target": "先进封装CoWoS"
+      },
+      {
+        "source": "CoWoS先进封装产能是AI芯片产业链最大瓶颈，2027年前不会缓解",
+        "target": "GPU"
+      },
+      {
+        "source": "CoWoS先进封装产能是AI芯片产业链最大瓶颈，2027年前不会缓解",
+        "target": "HBM高带宽内存"
+      },
+      {
+        "source": "CoWoS先进封装产能是AI芯片产业链最大瓶颈，2027年前不会缓解",
+        "target": "AI服务器"
+      },
+      {
+        "source": "CoWoS先进封装产能是AI芯片产业链最大瓶颈，2027年前不会缓解",
+        "target": "Chiplet与异构集成"
+      },
+      {
+        "source": "Chiplet+UCIe标准化将重构芯片设计产业格局",
+        "target": "Chiplet与异构集成"
+      },
+      {
+        "source": "Chiplet+UCIe标准化将重构芯片设计产业格局",
+        "target": "GPU"
+      },
+      {
+        "source": "Chiplet+UCIe标准化将重构芯片设计产业格局",
+        "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "Chiplet+UCIe标准化将重构芯片设计产业格局",
+        "target": "CPU(服务器级)"
+      },
+      {
+        "source": "Chiplet+UCIe标准化将重构芯片设计产业格局",
+        "target": "先进封装CoWoS"
+      },
+      {
+        "source": "AI模型效率提升对芯片需求产生通缩效应",
+        "target": "GPU"
+      },
+      {
+        "source": "AI模型效率提升对芯片需求产生通缩效应",
+        "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "AI模型效率提升对芯片需求产生通缩效应",
+        "target": "AI服务器"
+      },
+      {
+        "source": "后摩尔时代Chiplet+3D堆叠+存算一体重构芯片格局",
+        "target": "先进封装CoWoS"
+      },
+      {
+        "source": "后摩尔时代Chiplet+3D堆叠+存算一体重构芯片格局",
+        "target": "Chiplet与异构集成"
+      },
+      {
+        "source": "后摩尔时代Chiplet+3D堆叠+存算一体重构芯片格局",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "后摩尔时代Chiplet+3D堆叠+存算一体重构芯片格局",
+        "target": "先进封装(CoWoS/3D)"
+      },
+      {
+        "source": "AI推理市场增速(60%+)将长期超过训练(30%+)，成为GPU新增长极",
+        "target": "GPU"
+      },
+      {
+        "source": "AI推理市场增速(60%+)将长期超过训练(30%+)，成为GPU新增长极",
+        "target": "AI推理API服务"
+      },
+      {
+        "source": "AI推理市场增速(60%+)将长期超过训练(30%+)，成为GPU新增长极",
+        "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "AI推理市场增速(60%+)将长期超过训练(30%+)，成为GPU新增长极",
+        "target": "边缘AI"
+      },
+      {
+        "source": "AI推理市场增速(60%+)将长期超过训练(30%+)，成为GPU新增长极",
+        "target": "FPGA"
+      },
+      {
+        "source": "HBM高带宽内存供给紧缺将持续至2028年",
+        "target": "HBM高带宽内存"
+      },
+      {
+        "source": "HBM高带宽内存供给紧缺将持续至2028年",
+        "target": "GPU"
+      },
+      {
+        "source": "HBM高带宽内存供给紧缺将持续至2028年",
+        "target": "AI服务器"
+      },
+      {
+        "source": "HBM高带宽内存供给紧缺将持续至2028年",
+        "target": "先进封装CoWoS"
+      },
+      {
+        "source": "定制ASIC对GPU构成结构性威胁，但5年内不会取代",
+        "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "定制ASIC对GPU构成结构性威胁，但5年内不会取代",
+        "target": "GPU"
+      },
+      {
+        "source": "定制ASIC对GPU构成结构性威胁，但5年内不会取代",
+        "target": "AI服务器"
+      },
+      {
+        "source": "定制ASIC对GPU构成结构性威胁，但5年内不会取代",
+        "target": "HBM高带宽内存"
+      },
+      {
+        "source": "中国半导体国产替代处于'从1到10'加速阶段，但先进环节差距仍大",
+        "target": "刻蚀设备"
+      },
+      {
+        "source": "中国半导体国产替代处于'从1到10'加速阶段，但先进环节差距仍大",
+        "target": "MCU与嵌入式处理器"
+      },
+      {
+        "source": "中国半导体国产替代处于'从1到10'加速阶段，但先进环节差距仍大",
+        "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "中国半导体国产替代处于'从1到10'加速阶段，但先进环节差距仍大",
+        "target": "电子特气"
+      },
+      {
+        "source": "中国半导体国产替代处于'从1到10'加速阶段，但先进环节差距仍大",
+        "target": "EDA与IP核"
+      },
+      {
+        "source": "数据中心HVDC+绿电直供成为新建AIDC标配",
+        "target": "服务器电源与UPS"
+      },
+      {
+        "source": "数据中心HVDC+绿电直供成为新建AIDC标配",
+        "target": "散热液冷系统"
+      },
+      {
+        "source": "数据中心HVDC+绿电直供成为新建AIDC标配",
+        "target": "数据中心IDC"
+      },
+      {
+        "source": "数据中心HVDC+绿电直供成为新建AIDC标配",
+        "target": "AI服务器"
+      },
+      {
+        "source": "存储范式从'存数据'到'存知识'转变，AI存储需求500倍增长",
+        "target": "HBM高带宽内存"
+      },
+      {
+        "source": "存储范式从'存数据'到'存知识'转变，AI存储需求500倍增长",
+        "target": "存储芯片(DRAM/NAND)"
+      },
+      {
+        "source": "存储范式从'存数据'到'存知识'转变，AI存储需求500倍增长",
+        "target": "NVMe/存储芯片"
+      },
+      {
+        "source": "NVIDIA GPU垄断地位在未来3年内不可撼动",
+        "target": "GPU"
+      },
+      {
+        "source": "NVIDIA GPU垄断地位在未来3年内不可撼动",
+        "target": "AI服务器"
+      },
+      {
+        "source": "NVIDIA GPU垄断地位在未来3年内不可撼动",
+        "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "NVIDIA GPU垄断地位在未来3年内不可撼动",
+        "target": "HBM高带宽内存"
+      },
+      {
+        "source": "AI主线行情的'五盏红灯'判断框架——任何单一红灯亮起需警惕，两盏同时触发则行情逻辑被证伪",
+        "target": "云计算IaaS"
+      },
+      {
+        "source": "AI主线行情的'五盏红灯'判断框架——任何单一红灯亮起需警惕，两盏同时触发则行情逻辑被证伪",
+        "target": "AI服务器"
+      },
+      {
+        "source": "AI主线行情的'五盏红灯'判断框架——任何单一红灯亮起需警惕，两盏同时触发则行情逻辑被证伪",
+        "target": "GPU架构设计"
+      },
+      {
+        "source": "AI主线行情的'五盏红灯'判断框架——任何单一红灯亮起需警惕，两盏同时触发则行情逻辑被证伪",
+        "target": "800G/1.6T光模块"
+      },
+      {
+        "source": "先进制程(3nm以下)将呈现'TSMC一家独大+Samsung追赶+Intel追赶'三强格局",
+        "target": "AI芯片设计(Fabless)"
+      },
+      {
+        "source": "先进制程(3nm以下)将呈现'TSMC一家独大+Samsung追赶+Intel追赶'三强格局",
+        "target": "先进封装(CoWoS/3D)"
+      },
+      {
+        "source": "先进制程(3nm以下)将呈现'TSMC一家独大+Samsung追赶+Intel追赶'三强格局",
+        "target": "GPU"
+      },
+      {
+        "source": "先进制程(3nm以下)将呈现'TSMC一家独大+Samsung追赶+Intel追赶'三强格局",
+        "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "先进制程(3nm以下)将呈现'TSMC一家独大+Samsung追赶+Intel追赶'三强格局",
+        "target": "CPU(服务器级)"
+      },
+      {
+        "source": "AI基础设施投入的'证据鸿沟'——企业端只有12%能证明AI带来财务回报，2027年底前必须升至25%以上",
+        "target": "云计算IaaS"
+      },
+      {
+        "source": "AI基础设施投入的'证据鸿沟'——企业端只有12%能证明AI带来财务回报，2027年底前必须升至25%以上",
+        "target": "AI推理API服务"
+      },
+      {
+        "source": "AI基础设施投入的'证据鸿沟'——企业端只有12%能证明AI带来财务回报，2027年底前必须升至25%以上",
+        "target": "AI模型训练平台"
+      },
+      {
+        "source": "云厂商自研芯片从'补充'走向'替代'，2028年占AI推理>30%",
+        "target": "云计算IaaS"
+      },
+      {
+        "source": "云厂商自研芯片从'补充'走向'替代'，2028年占AI推理>30%",
+        "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "云厂商自研芯片从'补充'走向'替代'，2028年占AI推理>30%",
+        "target": "GPU"
+      },
+      {
+        "source": "云厂商自研芯片从'补充'走向'替代'，2028年占AI推理>30%",
+        "target": "AI推理API服务"
+      },
+      {
+        "source": "边缘AI将从2027年起爆发，成为仅次于云端的第二大推理市场",
+        "target": "边缘AI"
+      },
+      {
+        "source": "边缘AI将从2027年起爆发，成为仅次于云端的第二大推理市场",
+        "target": "自动驾驶"
+      },
+      {
+        "source": "边缘AI将从2027年起爆发，成为仅次于云端的第二大推理市场",
+        "target": "AI Agent"
+      },
+      {
+        "source": "边缘AI将从2027年起爆发，成为仅次于云端的第二大推理市场",
+        "target": "MCU与嵌入式处理器"
+      },
+      {
+        "source": "边缘AI将从2027年起爆发，成为仅次于云端的第二大推理市场",
+        "target": "FPGA"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "成熟制程代工"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "功率半导体"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "模拟芯片"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "CIS图像传感器"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "封装测试(OSAT)"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "半导体设备零部件"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "自动驾驶"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "成熟制程代工"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "IC设计服务(Fabless)"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "光刻机"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "刻蚀设备"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "薄膜沉积设备"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "检测量测设备"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "CMP设备"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "成熟制程代工"
+      },
+      {
+        "source": "涂胶显影设备(Track)",
+        "target": "光刻机"
+      },
+      {
+        "source": "涂胶显影设备(Track)",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "成熟制程代工"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "封装基板材料"
+      },
+      {
         "source": "封装测试(OSAT)",
         "target": "半导体设备零部件"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "Chiplet与异构集成"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "先进封装(CoWoS/3D)"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "IC设计服务(Fabless)"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "封装设备"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "测试设备"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "CMP设备"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "存储芯片(DRAM/NAND)"
+      },
+      {
+        "source": "清洗设备",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "GPU"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "封装基板材料"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "AI芯片设计(Fabless)"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "封装设备"
       },
       {
         "source": "CMP设备",
         "target": "CMP抛光液与抛光垫"
       },
       {
+        "source": "CMP设备",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "MEMS传感器",
+        "target": "模拟芯片"
+      },
+      {
+        "source": "MEMS传感器",
+        "target": "功率半导体"
+      },
+      {
+        "source": "MEMS传感器",
+        "target": "边缘AI"
+      },
+      {
+        "source": "测试设备",
+        "target": "检测量测设备"
+      },
+      {
         "source": "测试设备",
         "target": "封装测试(OSAT)"
+      },
+      {
+        "source": "测试设备",
+        "target": "存储芯片(DRAM/NAND)"
+      },
+      {
+        "source": "射频芯片",
+        "target": "模拟芯片"
+      },
+      {
+        "source": "射频芯片",
+        "target": "功率半导体"
+      },
+      {
+        "source": "射频芯片",
+        "target": "边缘AI"
       },
       {
         "source": "封装设备",
@@ -41976,8 +41870,52 @@
         "target": "封装测试(OSAT)"
       },
       {
+        "source": "封装设备",
+        "target": "检测量测设备"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "AI服务器"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "成熟制程代工"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "MEMS传感器"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "射频芯片"
+      },
+      {
+        "source": "光掩模版",
+        "target": "光刻机"
+      },
+      {
+        "source": "光掩模版",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "光掩模版",
+        "target": "存储芯片(DRAM/NAND)"
+      },
+      {
+        "source": "功率半导体",
+        "target": "高纯硅料与硅片"
+      },
+      {
         "source": "功率半导体",
         "target": "模拟芯片"
+      },
+      {
+        "source": "功率半导体",
+        "target": "成熟制程代工"
+      },
+      {
+        "source": "功率半导体",
+        "target": "离子注入设备"
       },
       {
         "source": "功率半导体",
@@ -41992,6 +41930,26 @@
         "target": "封装测试(OSAT)"
       },
       {
+        "source": "功率半导体",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "功率半导体",
+        "target": "MEMS传感器"
+      },
+      {
+        "source": "功率半导体",
+        "target": "射频芯片"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "成熟制程代工"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "EDA与IP核"
+      },
+      {
         "source": "IC设计服务(Fabless)",
         "target": "CIS图像传感器"
       },
@@ -42000,12 +41958,72 @@
         "target": "封装测试(OSAT)"
       },
       {
+        "source": "前驱体与ALD/CVD材料",
+        "target": "薄膜沉积设备"
+      },
+      {
+        "source": "前驱体与ALD/CVD材料",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
         "source": "存储芯片(DRAM/NAND)",
         "target": "光掩模版"
       },
       {
         "source": "存储芯片(DRAM/NAND)",
+        "target": "电子特气"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "刻蚀设备"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "检测量测设备"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "CPU(服务器级)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
         "target": "CMP抛光液与抛光垫"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "AI芯片设计(Fabless)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "测试设备"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "光刻机"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "光刻胶与湿化学品"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "溅射靶材"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "刻蚀设备"
       },
       {
         "source": "成熟制程代工",
@@ -42017,11 +42035,23 @@
       },
       {
         "source": "成熟制程代工",
+        "target": "电子特气"
+      },
+      {
+        "source": "成熟制程代工",
         "target": "功率半导体"
       },
       {
         "source": "成熟制程代工",
         "target": "CMP设备"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "检测量测设备"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "薄膜沉积设备"
       },
       {
         "source": "成熟制程代工",
@@ -42037,7 +42067,35 @@
       },
       {
         "source": "成熟制程代工",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "成熟制程代工",
         "target": "IC设计服务(Fabless)"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "GPU"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "FPGA"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "EDA与IP核"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "CPU(服务器级)"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "RISC-V AI芯片"
       },
       {
         "source": "AI芯片设计(Fabless)",
@@ -42052,8 +42110,108 @@
         "target": "功率半导体"
       },
       {
+        "source": "离子注入设备",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "GPU"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "AI服务器"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "GPU制造代工"
+      },
+      {
+        "source": "AI服务器",
+        "target": "GPU"
+      },
+      {
+        "source": "AI服务器",
+        "target": "散热液冷系统"
+      },
+      {
+        "source": "AI服务器",
+        "target": "云计算IaaS"
+      },
+      {
+        "source": "AI服务器",
+        "target": "数据中心IDC"
+      },
+      {
+        "source": "AI服务器",
+        "target": "PCB与IC载板"
+      },
+      {
+        "source": "AI服务器",
+        "target": "HBM高带宽内存"
+      },
+      {
+        "source": "AI服务器",
+        "target": "AI训练集群/超算"
+      },
+      {
+        "source": "AI服务器",
+        "target": "服务器电源与UPS"
+      },
+      {
+        "source": "AI服务器",
+        "target": "DPU/SmartNIC"
+      },
+      {
+        "source": "AI服务器",
+        "target": "企业级存储"
+      },
+      {
+        "source": "AI服务器",
+        "target": "网络设备（交换机）"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "GPU"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "边缘AI"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "AI Agent"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "HBM高带宽内存"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "先进封装CoWoS"
+      },
+      {
+        "source": "电子特气",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
         "source": "电子特气",
         "target": "存储芯片(DRAM/NAND)"
+      },
+      {
+        "source": "电子特气",
+        "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "电子特气",
+        "target": "光刻机"
+      },
+      {
+        "source": "电子特气",
+        "target": "刻蚀设备"
+      },
+      {
+        "source": "电子特气",
+        "target": "薄膜沉积设备"
       },
       {
         "source": "电子特气",
@@ -42064,6 +42222,10 @@
         "target": "成熟制程代工"
       },
       {
+        "source": "电子特气",
+        "target": "光刻胶与湿化学品"
+      },
+      {
         "source": "PCB与IC载板",
         "target": "AI服务器"
       },
@@ -42072,8 +42234,32 @@
         "target": "AI服务器"
       },
       {
+        "source": "DPU/SmartNIC",
+        "target": "GPU"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "FPGA"
+      },
+      {
+        "source": "AI Agent",
+        "target": "云计算IaaS"
+      },
+      {
+        "source": "AI Agent",
+        "target": "AI推理API服务"
+      },
+      {
         "source": "AI Agent",
         "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "AI Agent",
+        "target": "大模型"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "GPU"
       },
       {
         "source": "Chiplet与异构集成",
@@ -42085,11 +42271,39 @@
       },
       {
         "source": "Chiplet与异构集成",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "Chiplet与异构集成",
         "target": "AI芯片设计(Fabless)"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "CPU(服务器级)"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "EDA与IP核"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "FPGA"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "GPU"
       },
       {
         "source": "HBM高带宽内存",
         "target": "AI服务器"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "AI模型训练平台"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "先进封装CoWoS"
       },
       {
         "source": "HBM高带宽内存",
@@ -42097,23 +42311,63 @@
       },
       {
         "source": "AI模型训练平台",
+        "target": "GPU"
+      },
+      {
+        "source": "AI模型训练平台",
         "target": "HBM高带宽内存"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "AI推理API服务"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "AI训练集群/超算"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "GPU"
       },
       {
         "source": "云计算IaaS",
         "target": "AI服务器"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "数据中心IDC"
       },
       {
         "source": "云计算IaaS",
         "target": "AI Agent"
       },
       {
+        "source": "云计算IaaS",
+        "target": "AI推理API服务"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "企业级存储"
+      },
+      {
         "source": "GPU制造代工",
         "target": "GPU架构设计"
       },
       {
+        "source": "GPU制造代工",
+        "target": "GPU"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "GPU"
+      },
+      {
         "source": "CPU(服务器级)",
         "target": "AI服务器"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "晶圆代工(先进制程)"
       },
       {
         "source": "CPU(服务器级)",
@@ -42125,6 +42379,10 @@
       },
       {
         "source": "CPU(服务器级)",
+        "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "CPU(服务器级)",
         "target": "先进封装(CoWoS/3D)"
       },
       {
@@ -42132,8 +42390,20 @@
         "target": "封装测试(OSAT)"
       },
       {
+        "source": "CPU(服务器级)",
+        "target": "FPGA"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "数据中心IDC"
+      },
+      {
         "source": "高纯硅料与硅片",
         "target": "成熟制程代工"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "晶圆代工(先进制程)"
       },
       {
         "source": "高纯硅料与硅片",
@@ -42141,7 +42411,23 @@
       },
       {
         "source": "高纯硅料与硅片",
+        "target": "光刻机"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "刻蚀设备"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "薄膜沉积设备"
+      },
+      {
+        "source": "高纯硅料与硅片",
         "target": "电子特气"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "溅射靶材"
       },
       {
         "source": "数据中心IDC",
@@ -42149,7 +42435,31 @@
       },
       {
         "source": "数据中心IDC",
+        "target": "散热液冷系统"
+      },
+      {
+        "source": "数据中心IDC",
         "target": "云计算IaaS"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "AI训练集群/超算"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "服务器电源与UPS"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "企业级存储"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "薄膜沉积设备"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "晶圆代工(先进制程)"
       },
       {
         "source": "溅射靶材",
@@ -42158,6 +42468,10 @@
       {
         "source": "溅射靶材",
         "target": "成熟制程代工"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "刻蚀设备"
       },
       {
         "source": "薄膜沉积设备",
@@ -42169,11 +42483,27 @@
       },
       {
         "source": "薄膜沉积设备",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
+        "source": "薄膜沉积设备",
         "target": "前驱体与ALD/CVD材料"
       },
       {
         "source": "薄膜沉积设备",
         "target": "电子特气"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "光刻机"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "刻蚀设备"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "检测量测设备"
       },
       {
         "source": "薄膜沉积设备",
@@ -42189,6 +42519,10 @@
       },
       {
         "source": "GPU",
+        "target": "FPGA"
+      },
+      {
+        "source": "GPU",
         "target": "AI服务器"
       },
       {
@@ -42197,11 +42531,19 @@
       },
       {
         "source": "GPU",
+        "target": "先进封装CoWoS"
+      },
+      {
+        "source": "GPU",
         "target": "ASIC/AI定制芯片"
       },
       {
         "source": "自动驾驶",
         "target": "GPU"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "边缘AI"
       },
       {
         "source": "自动驾驶",
@@ -42218,6 +42560,10 @@
       {
         "source": "自动驾驶",
         "target": "ASIC/AI定制芯片"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "散热液冷系统"
       },
       {
         "source": "自动驾驶",
@@ -42232,8 +42578,24 @@
         "target": "功率半导体"
       },
       {
+        "source": "自动驾驶",
+        "target": "FPGA"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "800G/1.6T光模块"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
         "source": "光刻胶与湿化学品",
         "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "光刻机"
       },
       {
         "source": "光刻胶与湿化学品",
@@ -42248,6 +42610,10 @@
         "target": "电子特气"
       },
       {
+        "source": "光刻胶与湿化学品",
+        "target": "刻蚀设备"
+      },
+      {
         "source": "AI训练集群/超算",
         "target": "GPU"
       },
@@ -42257,11 +42623,39 @@
       },
       {
         "source": "AI训练集群/超算",
+        "target": "网络交换芯片"
+      },
+      {
+        "source": "AI训练集群/超算",
         "target": "数据中心IDC"
       },
       {
         "source": "AI训练集群/超算",
         "target": "AI模型训练平台"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "NVMe/存储芯片"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "800G/1.6T光模块"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "大模型"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "网络设备（交换机）"
+      },
+      {
+        "source": "网络设备（交换机）",
+        "target": "网络交换芯片"
+      },
+      {
+        "source": "网络设备（交换机）",
+        "target": "800G/1.6T光模块"
       },
       {
         "source": "网络设备（交换机）",
@@ -42276,8 +42670,32 @@
         "target": "AI Agent"
       },
       {
+        "source": "AI开发者工具",
+        "target": "AI推理API服务"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "大模型"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "晶圆代工(先进制程)"
+      },
+      {
         "source": "检测量测设备",
         "target": "存储芯片(DRAM/NAND)"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "光刻机"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "封装设备"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "测试设备"
       },
       {
         "source": "边缘AI",
@@ -42288,12 +42706,28 @@
         "target": "ASIC/AI定制芯片"
       },
       {
+        "source": "边缘AI",
+        "target": "MEMS传感器"
+      },
+      {
+        "source": "边缘AI",
+        "target": "射频芯片"
+      },
+      {
+        "source": "晶圆代工(先进制程)",
+        "target": "光刻机"
+      },
+      {
         "source": "晶圆代工(先进制程)",
         "target": "溅射靶材"
       },
       {
         "source": "晶圆代工(先进制程)",
         "target": "光掩模版"
+      },
+      {
+        "source": "晶圆代工(先进制程)",
+        "target": "刻蚀设备"
       },
       {
         "source": "晶圆代工(先进制程)",
@@ -42322,6 +42756,10 @@
       {
         "source": "晶圆代工(先进制程)",
         "target": "高纯硅料与硅片"
+      },
+      {
+        "source": "晶圆代工(先进制程)",
+        "target": "高速连接器与铜缆"
       },
       {
         "source": "晶圆代工(先进制程)",
@@ -42404,6 +42842,10 @@
         "target": "AI训练集群/超算"
       },
       {
+        "source": "NVMe/存储芯片",
+        "target": "企业级存储"
+      },
+      {
         "source": "AI推理API服务",
         "target": "GPU"
       },
@@ -42422,6 +42864,10 @@
       {
         "source": "AI推理API服务",
         "target": "AI模型训练平台"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "大模型"
       },
       {
         "source": "散热液冷系统",
@@ -42457,7 +42903,15 @@
       },
       {
         "source": "800G/1.6T光模块",
+        "target": "DSP与光芯片"
+      },
+      {
+        "source": "800G/1.6T光模块",
         "target": "AI训练集群/超算"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "网络设备（交换机）"
       },
       {
         "source": "服务器电源与UPS",
@@ -42502,6 +42956,10 @@
       {
         "source": "网络交换芯片",
         "target": "AI训练集群/超算"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "网络设备（交换机）"
       },
       {
         "source": "DSP与光芯片",
@@ -42550,6 +43008,10 @@
       {
         "source": "刻蚀设备",
         "target": "电子特气"
+      },
+      {
+        "source": "刻蚀设备",
+        "target": "光刻机"
       },
       {
         "source": "刻蚀设备",
@@ -42685,10 +43147,6 @@
       },
       {
         "source": "Chiplet与异构集成",
-        "target": "Chiplet与异构集成"
-      },
-      {
-        "source": "Chiplet与异构集成",
         "target": "先进封装CoWoS"
       },
       {
@@ -42697,27 +43155,7 @@
       },
       {
         "source": "Chiplet与异构集成",
-        "target": "CPU(服务器级)"
-      },
-      {
-        "source": "Chiplet与异构集成",
-        "target": "先进封装(CoWoS/3D)"
-      },
-      {
-        "source": "Chiplet与异构集成",
         "target": "ASIC/AI定制芯片"
-      },
-      {
-        "source": "Chiplet与异构集成",
-        "target": "EDA与IP核"
-      },
-      {
-        "source": "ASIC/AI定制芯片",
-        "target": "ASIC/AI定制芯片"
-      },
-      {
-        "source": "ASIC/AI定制芯片",
-        "target": "GPU"
       },
       {
         "source": "ASIC/AI定制芯片",
@@ -42730,10 +43168,6 @@
       {
         "source": "ASIC/AI定制芯片",
         "target": "Chiplet与异构集成"
-      },
-      {
-        "source": "ASIC/AI定制芯片",
-        "target": "先进封装CoWoS"
       },
       {
         "source": "华为韬定律",
@@ -42781,19 +43215,7 @@
       },
       {
         "source": "HBM高带宽内存",
-        "target": "GPU"
-      },
-      {
-        "source": "HBM高带宽内存",
         "target": "Chiplet与异构集成"
-      },
-      {
-        "source": "HBM高带宽内存",
-        "target": "ASIC/AI定制芯片"
-      },
-      {
-        "source": "HBM高带宽内存",
-        "target": "AI服务器"
       },
       {
         "source": "HBM高带宽内存",
@@ -42818,6 +43240,1818 @@
       {
         "source": "Agentic AI",
         "target": "AI训练集群/超算"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "NXP Semiconductors"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "意法半导体 (STMicroelectronics)"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "瑞萨电子 (Renesas Electronics)"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "Infineon Technologies"
+      },
+      {
+        "source": "MCU与嵌入式处理器",
+        "target": "Texas Instruments"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "Sony Semiconductor"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "豪威集团（原韦尔股份）"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "格科微"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "CIS图像传感器",
+        "target": "Himax (奇景光电)"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "富创精密"
+      },
+      {
+        "source": "涂胶显影设备(Track)",
+        "target": "Tokyo Electron"
+      },
+      {
+        "source": "涂胶显影设备(Track)",
+        "target": "SCREEN Semiconductor"
+      },
+      {
+        "source": "涂胶显影设备(Track)",
+        "target": "SUSS MicroTec"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "日月光 (ASE Group)"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "Amkor Technology"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "长电科技"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "通富微电"
+      },
+      {
+        "source": "封装测试(OSAT)",
+        "target": "甬矽电子"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "Cabot Microelectronics"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "安集科技"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "鼎龙股份"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "Fujimi Incorporated (不二见)"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "AGC Electronics (旭硝子)"
+      },
+      {
+        "source": "清洗设备",
+        "target": "SCREEN Semiconductor"
+      },
+      {
+        "source": "清洗设备",
+        "target": "ACM Research (盛美半导体)"
+      },
+      {
+        "source": "清洗设备",
+        "target": "Tokyo Electron"
+      },
+      {
+        "source": "清洗设备",
+        "target": "Disco Corporation"
+      },
+      {
+        "source": "清洗设备",
+        "target": "芯源微"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "TSMC(台积电)"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "长电科技"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "Intel"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "先进封装(CoWoS/3D)",
+        "target": "SPIL (矽品)"
+      },
+      {
+        "source": "CMP设备",
+        "target": "Ebara"
+      },
+      {
+        "source": "CMP设备",
+        "target": "华海清科"
+      },
+      {
+        "source": "MEMS传感器",
+        "target": "意法半导体 (STMicroelectronics)"
+      },
+      {
+        "source": "MEMS传感器",
+        "target": "Broadcom"
+      },
+      {
+        "source": "测试设备",
+        "target": "Advantest"
+      },
+      {
+        "source": "测试设备",
+        "target": "Teradyne"
+      },
+      {
+        "source": "测试设备",
+        "target": "华峰测控"
+      },
+      {
+        "source": "射频芯片",
+        "target": "Skyworks Solutions"
+      },
+      {
+        "source": "射频芯片",
+        "target": "Qorvo"
+      },
+      {
+        "source": "射频芯片",
+        "target": "Broadcom"
+      },
+      {
+        "source": "封装设备",
+        "target": "BE Semiconductor Industries (Besi)"
+      },
+      {
+        "source": "封装设备",
+        "target": "Kulicke & Soffa (K&S)"
+      },
+      {
+        "source": "封装设备",
+        "target": "Disco Corporation"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "圣邦股份"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "思瑞浦"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Texas Instruments"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Analog Devices (ADI)"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Skyworks Solutions"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Qorvo"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Monolithic Power Systems (MPS)"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Cirrus Logic"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Impinj"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "Semtech"
+      },
+      {
+        "source": "模拟芯片",
+        "target": "SiTime"
+      },
+      {
+        "source": "光掩模版",
+        "target": "Toppan"
+      },
+      {
+        "source": "光掩模版",
+        "target": "Photronics"
+      },
+      {
+        "source": "光掩模版",
+        "target": "清溢光电"
+      },
+      {
+        "source": "光掩模版",
+        "target": "Dai Nippon Printing (DNP)"
+      },
+      {
+        "source": "功率半导体",
+        "target": "Infineon Technologies"
+      },
+      {
+        "source": "功率半导体",
+        "target": "ON Semiconductor (onsemi)"
+      },
+      {
+        "source": "功率半导体",
+        "target": "意法半导体 (STMicroelectronics)"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "Qualcomm"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "Broadcom"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "MediaTek (联发科)"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "Apple"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "Marvell Technology"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "Novatek (联咏)"
+      },
+      {
+        "source": "IC设计服务(Fabless)",
+        "target": "Realtek (瑞昱)"
+      },
+      {
+        "source": "前驱体与ALD/CVD材料",
+        "target": "Merck KGaA (EMD Electronics)"
+      },
+      {
+        "source": "前驱体与ALD/CVD材料",
+        "target": "南大光电"
+      },
+      {
+        "source": "前驱体与ALD/CVD材料",
+        "target": "DNF"
+      },
+      {
+        "source": "前驱体与ALD/CVD材料",
+        "target": "UP Chemical"
+      },
+      {
+        "source": "前驱体与ALD/CVD材料",
+        "target": "Entegris"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Samsung"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "SK Hynix"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "CXMT (长鑫存储)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "YMTC (长江存储)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Micron"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Kioxia"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Western Digital"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Macronix (旺宏)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Winbond (华邦)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Phison (群联)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Nanya Technology (南亚科技)"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "中芯国际"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "华虹半导体 (Hua Hong Semiconductor)"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "TSMC(台积电)"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "UMC(联电)"
+      },
+      {
+        "source": "成熟制程代工",
+        "target": "GlobalFoundries"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "AMD"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "Broadcom"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "Intel"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "Marvell Technology"
+      },
+      {
+        "source": "AI芯片设计(Fabless)",
+        "target": "IBM"
+      },
+      {
+        "source": "离子注入设备",
+        "target": "Axcelis Technologies"
+      },
+      {
+        "source": "离子注入设备",
+        "target": "Sumitomo Heavy Industries (住友重机械)"
+      },
+      {
+        "source": "离子注入设备",
+        "target": "Nissin Ion Equipment"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "AMD"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "景嘉微"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "摩尔线程"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "Intel"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "壁仞科技"
+      },
+      {
+        "source": "GPU架构设计",
+        "target": "天数智芯"
+      },
+      {
+        "source": "AI服务器",
+        "target": "华为"
+      },
+      {
+        "source": "AI服务器",
+        "target": "浪潮信息"
+      },
+      {
+        "source": "AI服务器",
+        "target": "工业富联"
+      },
+      {
+        "source": "AI服务器",
+        "target": "拓维信息"
+      },
+      {
+        "source": "AI服务器",
+        "target": "神州数码"
+      },
+      {
+        "source": "AI服务器",
+        "target": "阿里巴巴"
+      },
+      {
+        "source": "AI服务器",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "AI服务器",
+        "target": "Super Micro"
+      },
+      {
+        "source": "AI服务器",
+        "target": "Dell"
+      },
+      {
+        "source": "AI服务器",
+        "target": "HPE"
+      },
+      {
+        "source": "AI服务器",
+        "target": "联想"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "Broadcom"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "Marvell Technology"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "Amazon(AWS)"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "华为"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "寒武纪"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "阿里巴巴"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "Groq"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "Cerebras Systems"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "昆仑芯"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "Graphcore"
+      },
+      {
+        "source": "ASIC/AI定制芯片",
+        "target": "SambaNova"
+      },
+      {
+        "source": "电子特气",
+        "target": "Linde plc"
+      },
+      {
+        "source": "电子特气",
+        "target": "Air Liquide"
+      },
+      {
+        "source": "电子特气",
+        "target": "Entegris"
+      },
+      {
+        "source": "电子特气",
+        "target": "SK Specialty（原 SK Materials）"
+      },
+      {
+        "source": "电子特气",
+        "target": "Nippon Sanso (大阳日酸)"
+      },
+      {
+        "source": "电子特气",
+        "target": "华特气体"
+      },
+      {
+        "source": "电子特气",
+        "target": "金宏气体"
+      },
+      {
+        "source": "电子特气",
+        "target": "雅克科技"
+      },
+      {
+        "source": "电子特气",
+        "target": "中船特气"
+      },
+      {
+        "source": "电子特气",
+        "target": "南大光电"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "沪电股份"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "深南电路"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "AT&S"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "Nan Ya PCB (南亚电路板)"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "SEMCO"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "Kyocera"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "Simmtech"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "TTM Technologies"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "鹏鼎控股"
+      },
+      {
+        "source": "PCB与IC载板",
+        "target": "东山精密"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "Marvell Technology"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "Broadcom"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "Intel"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "AMD"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "Microsoft"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "Fungible"
+      },
+      {
+        "source": "DPU/SmartNIC",
+        "target": "Kalray"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Microsoft"
+      },
+      {
+        "source": "AI Agent",
+        "target": "字节跳动"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "AI Agent",
+        "target": "腾讯"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Tesla"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Meta"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Apple"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Amazon(AWS)"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Perplexity"
+      },
+      {
+        "source": "AI Agent",
+        "target": "月之暗面"
+      },
+      {
+        "source": "AI Agent",
+        "target": "百川智能"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Figure AI"
+      },
+      {
+        "source": "AI Agent",
+        "target": "1X Technologies"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Palantir"
+      },
+      {
+        "source": "AI Agent",
+        "target": "ServiceNow"
+      },
+      {
+        "source": "AI Agent",
+        "target": "Salesforce"
+      },
+      {
+        "source": "AI Agent",
+        "target": "SAP"
+      },
+      {
+        "source": "AI Agent",
+        "target": "DeepSeek"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "TSMC(台积电)"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "Intel"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "AMD"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "长电科技"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "通富微电"
+      },
+      {
+        "source": "Chiplet与异构集成",
+        "target": "华天科技"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "Micron"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "SK Hynix"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "Samsung"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "CXMT (长鑫存储)"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "Winbond (华邦)"
+      },
+      {
+        "source": "HBM高带宽内存",
+        "target": "Nanya Technology (南亚科技)"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Meta"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Nebius"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Crusoe"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Oracle"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "OVHcloud"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Amazon(AWS)"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Anyscale"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Modal"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "RunPod"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Scale AI"
+      },
+      {
+        "source": "AI模型训练平台",
+        "target": "Databricks"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "Microsoft"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "Amazon(AWS)"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "Oracle"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "阿里巴巴"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "腾讯"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "CoreWeave"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "Lambda Labs"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "IBM"
+      },
+      {
+        "source": "云计算IaaS",
+        "target": "Snowflake"
+      },
+      {
+        "source": "GPU制造代工",
+        "target": "TSMC(台积电)"
+      },
+      {
+        "source": "GPU制造代工",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "GPU制造代工",
+        "target": "AMD"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "Intel"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "AMD"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "Arm Holdings"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "龙芯中科"
+      },
+      {
+        "source": "CPU(服务器级)",
+        "target": "寒武纪"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "信越化学 (Shin-Etsu Chemical)"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "SUMCO Corporation"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "Siltronic"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "环球晶圆 (GlobalWafers)"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "Soitec"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "沪硅产业"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "立昂微"
+      },
+      {
+        "source": "高纯硅料与硅片",
+        "target": "中环股份"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "Equinix"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "Digital Realty"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "润泽科技"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "宝信软件"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "百度"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "DigitalBridge"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "CyrusOne"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "Cyxtera"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "万国数据"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "秦淮数据"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "Vantage Data Centers"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "EdgeConneX"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "Stack Infrastructure"
+      },
+      {
+        "source": "数据中心IDC",
+        "target": "Applied Digital"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "JX Metals"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "Materion"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "TOSOH"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "Honeywell Electronic Materials"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "江丰电子"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "有研新材"
+      },
+      {
+        "source": "溅射靶材",
+        "target": "隆华科技"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "拓荆科技"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "Applied Materials"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "Lam Research"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "Tokyo Electron"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "Kokusai Electric"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "Pfeiffer Vacuum"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "ULVAC"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "微导纳米"
+      },
+      {
+        "source": "薄膜沉积设备",
+        "target": "北方华创"
+      },
+      {
+        "source": "GPU",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "GPU",
+        "target": "AMD"
+      },
+      {
+        "source": "GPU",
+        "target": "Intel"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Tesla"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "百度"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "地平线机器人"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Waymo"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Cruise"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Mobileye"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Qualcomm"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "小马智行"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "文远知行"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Aurora"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Zoox"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Nuro"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "禾赛科技"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "速腾聚创"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "图森未来"
+      },
+      {
+        "source": "自动驾驶",
+        "target": "Apple"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "JSR Corporation"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "Tokyo Ohka Kogyo (TOK)"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "彤程新材"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "信越化学 (Shin-Etsu Chemical)"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "Sumitomo Chemical (住友化学)"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "Fujifilm"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "晶瑞电材"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "南大光电"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "上海新阳"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "安集科技"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "Tesla"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "中科曙光"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "Microsoft"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "Amazon(AWS)"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "Meta"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "Oracle"
+      },
+      {
+        "source": "AI训练集群/超算",
+        "target": "华为"
+      },
+      {
+        "source": "网络设备（交换机）",
+        "target": "Cisco"
+      },
+      {
+        "source": "网络设备（交换机）",
+        "target": "Arista"
+      },
+      {
+        "source": "网络设备（交换机）",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Microsoft"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "阿里巴巴"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Meta"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "JetBrains"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Anthropic"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Hugging Face"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Replit"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Cursor"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Weights & Biases"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "SAP"
+      },
+      {
+        "source": "AI开发者工具",
+        "target": "Databricks"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "中科飞测"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "KLA Corporation"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "Applied Materials"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "Teradyne"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "Advantest"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "Lasertec Corporation"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "Hitachi High-Tech"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "Camtek"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "Nova Measuring Instruments"
+      },
+      {
+        "source": "检测量测设备",
+        "target": "华峰测控"
+      },
+      {
+        "source": "边缘AI",
+        "target": "Apple"
+      },
+      {
+        "source": "边缘AI",
+        "target": "Qualcomm"
+      },
+      {
+        "source": "边缘AI",
+        "target": "豪威集团（原韦尔股份）"
+      },
+      {
+        "source": "边缘AI",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "边缘AI",
+        "target": "Intel"
+      },
+      {
+        "source": "边缘AI",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "边缘AI",
+        "target": "MediaTek (联发科)"
+      },
+      {
+        "source": "晶圆代工(先进制程)",
+        "target": "TSMC(台积电)"
+      },
+      {
+        "source": "晶圆代工(先进制程)",
+        "target": "中芯国际"
+      },
+      {
+        "source": "晶圆代工(先进制程)",
+        "target": "Samsung"
+      },
+      {
+        "source": "晶圆代工(先进制程)",
+        "target": "Intel"
+      },
+      {
+        "source": "EDA与IP核",
+        "target": "华大九天"
+      },
+      {
+        "source": "EDA与IP核",
+        "target": "Cadence Design Systems"
+      },
+      {
+        "source": "EDA与IP核",
+        "target": "Synopsys"
+      },
+      {
+        "source": "EDA与IP核",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "TSMC(台积电)"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "长电科技"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "通富微电"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "华天科技"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "日月光 (ASE Group)"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "Amkor Technology"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "力成科技 (Powertech Technology)"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "京元电子"
+      },
+      {
+        "source": "先进封装CoWoS",
+        "target": "甬矽电子"
+      },
+      {
+        "source": "NVMe/存储芯片",
+        "target": "YMTC (长江存储)"
+      },
+      {
+        "source": "NVMe/存储芯片",
+        "target": "Samsung"
+      },
+      {
+        "source": "NVMe/存储芯片",
+        "target": "Kioxia"
+      },
+      {
+        "source": "NVMe/存储芯片",
+        "target": "Western Digital"
+      },
+      {
+        "source": "NVMe/存储芯片",
+        "target": "Micron"
+      },
+      {
+        "source": "NVMe/存储芯片",
+        "target": "Seagate"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "OpenAI"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Anthropic"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "阿里巴巴"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "百度"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Together AI"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Fireworks AI"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Meta"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Microsoft"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Amazon(AWS)"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "xAI"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Mistral"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Cohere"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Stability AI"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "DeepSeek"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "智谱AI"
+      },
+      {
+        "source": "AI推理API服务",
+        "target": "Perplexity"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "Vertiv Holdings"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "英维克"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "高澜股份"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "工业富联"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "CoolIT Systems"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "nVent"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "Iceotope"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "Submer"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "ZutaCore"
+      },
+      {
+        "source": "散热液冷系统",
+        "target": "Johnson Controls"
+      },
+      {
+        "source": "大模型",
+        "target": "Anthropic"
+      },
+      {
+        "source": "大模型",
+        "target": "OpenAI"
+      },
+      {
+        "source": "大模型",
+        "target": "Google(Alphabet)"
+      },
+      {
+        "source": "大模型",
+        "target": "Meta"
+      },
+      {
+        "source": "大模型",
+        "target": "智谱AI"
+      },
+      {
+        "source": "大模型",
+        "target": "月之暗面"
+      },
+      {
+        "source": "大模型",
+        "target": "字节跳动"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "Coherent Corp."
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "中际旭创"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "新易盛"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "天孚通信"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "光迅科技"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "华工正源"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "Source Photonics"
+      },
+      {
+        "source": "800G/1.6T光模块",
+        "target": "剑桥科技"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "Vertiv Holdings"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "Schneider Electric"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "Eaton Corporation"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "ABB"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "Delta Electronics (台达电子)"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "Huawei Digital Power"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "Mitsubishi Electric"
+      },
+      {
+        "source": "服务器电源与UPS",
+        "target": "Riello UPS"
+      },
+      {
+        "source": "封装基板材料",
+        "target": "味之素 (Ajinomoto)"
+      },
+      {
+        "source": "封装基板材料",
+        "target": "Unimicron (欣兴电子)"
+      },
+      {
+        "source": "封装基板材料",
+        "target": "Ibiden"
+      },
+      {
+        "source": "封装基板材料",
+        "target": "Shinko Electric (新光电气)"
+      },
+      {
+        "source": "封装基板材料",
+        "target": "Nan Ya PCB (南亚电路板)"
+      },
+      {
+        "source": "封装基板材料",
+        "target": "深南电路"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "Broadcom"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "Cisco"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "Arista"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "紫光股份"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "NVIDIA"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "华为"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "Juniper"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "Marvell Technology"
+      },
+      {
+        "source": "网络交换芯片",
+        "target": "Intel"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "Broadcom"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "Marvell Technology"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "Coherent Corp."
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "Lumentum"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "源杰科技"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "MACOM Technology Solutions"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "Semtech"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "仕佳光子"
+      },
+      {
+        "source": "DSP与光芯片",
+        "target": "长光华芯"
+      },
+      {
+        "source": "高速连接器与铜缆",
+        "target": "Broadcom"
+      },
+      {
+        "source": "高速连接器与铜缆",
+        "target": "Amphenol"
+      },
+      {
+        "source": "高速连接器与铜缆",
+        "target": "TE Connectivity"
+      },
+      {
+        "source": "高速连接器与铜缆",
+        "target": "Luxshare Precision (立讯精密)"
+      },
+      {
+        "source": "FPGA",
+        "target": "复旦微电"
+      },
+      {
+        "source": "FPGA",
+        "target": "Intel"
+      },
+      {
+        "source": "FPGA",
+        "target": "AMD"
+      },
+      {
+        "source": "FPGA",
+        "target": "Lattice Semiconductor"
+      },
+      {
+        "source": "FPGA",
+        "target": "安路科技"
+      },
+      {
+        "source": "企业级存储",
+        "target": "Dell"
+      },
+      {
+        "source": "企业级存储",
+        "target": "HPE"
+      },
+      {
+        "source": "刻蚀设备",
+        "target": "Lam Research"
+      },
+      {
+        "source": "刻蚀设备",
+        "target": "Applied Materials"
+      },
+      {
+        "source": "刻蚀设备",
+        "target": "Tokyo Electron"
+      },
+      {
+        "source": "刻蚀设备",
+        "target": "中微公司"
+      },
+      {
+        "source": "刻蚀设备",
+        "target": "北方华创"
+      },
+      {
+        "source": "RISC-V AI芯片",
+        "target": "阿里巴巴"
+      },
+      {
+        "source": "RISC-V AI芯片",
+        "target": "兆易创新 (GigaDevice)"
+      },
+      {
+        "source": "光刻机",
+        "target": "ASML"
+      },
+      {
+        "source": "光刻机",
+        "target": "Zeiss (蔡司)"
+      },
+      {
+        "source": "光刻机",
+        "target": "Canon"
+      },
+      {
+        "source": "光刻机",
+        "target": "Nikon"
+      },
+      {
+        "source": "光刻机",
+        "target": "SMEE(上海微电子)"
       }
     ]
   },
@@ -43118,6 +45352,12 @@
       "backlinks": 11
     },
     {
+      "name": "大模型",
+      "score": 16.0,
+      "tam": 82.0,
+      "backlinks": 4
+    },
+    {
       "name": "刻蚀设备",
       "score": 15.5,
       "tam": 25.0,
@@ -43170,12 +45410,6 @@
       "score": 12.2,
       "tam": 25.0,
       "backlinks": 8
-    },
-    {
-      "name": "大模型",
-      "score": 11.7,
-      "tam": 82.0,
-      "backlinks": 0
     },
     {
       "name": "检测量测设备",
