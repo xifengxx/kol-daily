@@ -509,9 +509,8 @@ function _showKbSegment(slug){
   if(s.margin&&s.margin!=='None') h+='<span class="tag tag-orange">利润率 '+s.margin+'</span>';
   h+='</div>';
   if(s.description){
-    var fullDesc=s.description.replace(/\*\*([^*]+)\*\*/g,'<b class="hl">$1</b>').replace(/\|/g,'</p><p style="margin-top:10px;">');
-    var truncated=fullDesc.length>800;
-    h+='<p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px;">'+fullDesc.substring(0,800)+(truncated?'…':'')+'</p>';
+    var fullDesc=mdInline(excerpt(s.description,800),true).replace(/\|/g,'</p><p style="margin-top:10px;">');
+    h+='<p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px;">'+fullDesc+'</p>';
   }
 
   // Stats row
@@ -659,11 +658,40 @@ function renderMD(text){
   if(inList) h+=(listType==='ul'?'</ul>':'</ol>');
   return h;
 }
-function renderMDInline(text){
-  return text
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+// ── HTML 转义 / 安全截断 / 行内 markdown ─────────────────────────────
+// 数据源是 YAML/LLM 纯文本：全库 25453 个字符串里真实 HTML 标签数 = 0
+// （所有 < > 都是数学比较符，如 >70%、<1%、<0.5μm）。转义后渲染结果不变，
+// 但杜绝了内容被解析成标签的可能（本站是公开的 GitHub Pages）。
+function escHTML(s){
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+
+// 安全截断。截断必须在渲染**之前**——反之会切断 <strong> 标签本身，
+// 产出未闭合标签会污染整个 DOM 子树。若切点落在 **...** 内部则回退。
+function excerpt(text, limit){
+  var t=String(text==null?'':text);
+  if(t.length<=limit) return t;
+  var cut=t.substring(0,limit);
+  if((cut.split('**').length-1)%2===1) cut=cut.substring(0,cut.lastIndexOf('**'));
+  return cut.replace(/\s+$/,'')+'…';
+}
+
+// 行内 markdown → HTML。hl=true 时粗体渲染成 <b class="hl">，
+// 用于保留 512/787 两处原有的强调色（.hl 是 accent 蓝），避免视觉回归。
+// 注意：正则必须保持 `\*\*(.+?)\*\*` 原样，**不要收紧成 `[^*]+?`** ——
+// 数据里有 69 处空粗体 `****`，收紧后奇偶性错位会级联把整段吞进 <strong>。
+function mdInline(text, hl){
+  if(text==null) return '';
+  var b=hl?'<b class="hl">':'<strong>', e=hl?'</b>':'</strong>';
+  return escHTML(text)
+    .replace(/\*{4,}/g,'')
+    .replace(/\*\*(.+?)\*\*/g, b+'$1'+e)
     .replace(/`([^`]+)`/g,'<code style="background:var(--bg);padding:1px 4px;border-radius:3px;font-size:12px;">$1</code>');
 }
+function renderMDInline(text){ return mdInline(text); }
 
 // Tree
 function buildTree(){
@@ -739,7 +767,7 @@ function openDetail(slug){
   document.getElementById('dv').style.display='flex';
   // right-col removed
   var viewLabels={chart:ci,segment:'赛道分析',company:'个股关联',concept:'概念卡片',thesis:'论点',knowledge:'知识库'};
-  document.getElementById('bc').innerHTML='<span style="cursor:pointer;color:var(--accent);" onclick="closeDetail()">'+(viewLabels[currentView]||ci)+'</span><span style="margin:0 6px;color:var(--border);">&#x25B8;</span><span class="active">'+cs.name+'</span>';
+  document.getElementById('bc').innerHTML='<span style="cursor:pointer;color:var(--accent);" onclick="closeDetail()">'+(cs.industries&&cs.industries.length?cs.industries[0]:(cs.industry||viewLabels[currentView]||ci))+'</span><span style="margin:0 6px;color:var(--border);">&#x25B8;</span><span class="active">'+cs.name+'</span>';
   document.querySelectorAll('.tree-item').forEach(function(el){el.classList.toggle('active',el.dataset.slug===slug);});
 
   // Route: company entity → renderCompany
@@ -782,9 +810,9 @@ function openDetail(slug){
     if(comp.indexOf('🔒')>=0){var bp=comp.split('🔒'); if(bp.length>=2){var rest=bp[1]; if(rest.indexOf('📐')>=0){var gp=rest.split('📐'); barriers=gp[0]; gap=gp[1]||'';}else{barriers=rest;}}}
   }
   // split by comma + 2+ spaces: entry separator, not commas inside 备注 text
-  function compRows(txt){return(txt||'').split(/,\s{2,}/).filter(Boolean).map(function(c){var p=c.trim().split('|');if(p.length<2)return'';return'<tr><td class=td-name title="'+((p[0]||'').replace(/"/g,'&quot;'))+'">'+p[0]+'</td><td class=td-share>'+p[1]+'</td><td class=col-desc>'+((p[2]||''))+'</td></tr>';}).join('');}
+  function compRows(txt){return(txt||'').split(/,\s{2,}/).filter(Boolean).map(function(c){var p=c.trim().split('|');if(p.length<2)return'';return'<tr><td class=td-name title="'+((p[0]||'').replace(/"/g,'&quot;'))+'">'+escHTML(p[0])+'</td><td class=td-share>'+escHTML(p[1])+'</td><td class=col-desc>'+mdInline(p[2])+'</td></tr>';}).join('');}
 
-  var desc=(cs.description||cs.content||'暂无描述').substring(0,1500).replace(/\*\*([^*]+)\*\*/g,'<b class="hl">$1</b>').replace(/\|/g,'</p><p style="margin-top:12px;">');
+  var desc=mdInline(excerpt(cs.description||cs.content||'暂无描述',1500),true).replace(/\|/g,'</p><p style="margin-top:12px;">');
 
   var h='';
   h+='<div class="back-btn" onclick="closeDetail()">← 返回'+backLabel()+'</div>';
@@ -792,6 +820,11 @@ function openDetail(slug){
   
   // 1. Size
   h+='<div class="card"><div class="card-title">市场规模</div><div class="detail-stats" style=margin-bottom:0;><div class="ds-card"><div class="val">$'+(cs.tam||'?')+'B</div><div class="lbl">TAM</div></div><div class="ds-card"><div class="val">'+(cs.cagr||'?')+'%</div><div class="lbl">CAGR</div></div><div class="ds-card"><div class="val">'+(cs.margin&&cs.margin!=='None'?cs.margin:'?')+'</div><div class="lbl">利润率</div></div><div class="ds-card"><div class="val">'+cs.backlinks+'</div><div class="lbl">引用量</div></div></div></div>';
+  // 1b. 来源可信度 —— 编译期由 sources 派生（build_wiki_data.py:_source_confidence）。
+  // 全库曾有 17 个赛道"名义有来源、实际无可核验链接"，页面上与深度赛道无从分辨。
+  if(cs.source_confidence==='internal-only'){
+    h+='<div class="card" style="border-left:3px solid #F59E0B;background:rgba(245,158,11,0.04);"><div style="font-size:12px;color:#B45309;line-height:1.7;">⚠️ <b>来源可信度：仅本仓库内证</b> —— 该赛道的 sources 全部没有可核验的外部链接（url 为空串或指向仓内路径）。TAM / CAGR 与厂商份额等数值<strong>未经外部来源交叉验证</strong>，引用前应补做外部核验。</div></div>';
+  }
   
   // 2. Definition
   h+='<div class="card"><div class="card-title">定位与定义</div><div class="detail-body"><p>'+desc+'</p></div></div>';
@@ -799,13 +832,15 @@ function openDetail(slug){
   // 2.5 Contradictions
   if(cs.contradictions&&cs.contradictions.length>0){
     h+='<div class="card" style="border-left:3px solid #F59E0B;background:linear-gradient(135deg,rgba(245,158,11,0.04),rgba(245,158,11,0.01));"><div class="card-title" style="color:#B45309;">'+'⚠️ 已知矛盾 ('+cs.contradictions.length+'项)</div>';
+    // status 枚举的唯一定义见 schemas/field-formats.md §8
+    var stLabels={unresolved:'未解决',resolved_a:'已解决 · 采用来源A',resolved_b:'已解决 · 采用来源B',superseded:'已被新来源取代',wontfix:'口径差异 · 不追'};
     cs.contradictions.forEach(function(ct){
       var st=ct.status||'unresolved';
       var sc='';
       if(st==='unresolved') sc='color:#D97706;background:rgba(245,158,11,0.12);';
       else if(st==='resolved_a'||st==='resolved_b') sc='color:#059669;background:rgba(16,185,129,0.1);';
       else sc='color:#86868B;background:rgba(134,134,139,0.1);';
-      h+='<div style="margin-bottom:8px;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.6;'+sc+'"><b>'+ct.desc+'</b><div style="margin-top:4px;font-size:11px;color:var(--text2);">来源A: '+ct.source_a+' | 来源B: '+ct.source_b+'</div><div style="margin-top:2px;font-size:10px;color:var(--text2);">发现: '+(ct.found_date||'')+' | 状态: '+st+'</div></div>';
+      h+='<div style="margin-bottom:8px;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.6;'+sc+'"><b>'+mdInline(ct.desc)+'</b><div style="margin-top:4px;font-size:11px;color:var(--text2);">来源A: '+escHTML(ct.source_a)+' | 来源B: '+escHTML(ct.source_b)+'</div><div style="margin-top:2px;font-size:10px;color:var(--text2);">发现: '+(ct.found_date||'')+(ct.resolved_date?' | 解决: '+ct.resolved_date:'')+' | 状态: '+(stLabels[st]||st)+'</div></div>';
     });
     h+='</div>';
   }
@@ -865,18 +900,18 @@ function openDetail(slug){
        {key:'china',title:'国内市场',cols:['厂商','份额','备注'],flds:['name','share','note']}].forEach(function(sec){
         var items=compStruct[sec.key]||[]; if(!items.length) return;
         h+='<div style=margin-bottom:16px;><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>'+sec.title+'</div><table class="comp-table"><thead><tr><th>'+sec.cols[0]+'</th><th style=text-align:center;>'+sec.cols[1]+'</th><th>'+sec.cols[2]+'</th></tr></thead><tbody>';
-        items.forEach(function(r){h+='<tr><td class=td-name>'+r[sec.flds[0]]+'</td><td class=td-share>'+r[sec.flds[1]]+'</td><td class=col-desc>'+r[sec.flds[2]]+'</td></tr>';});
+        items.forEach(function(r){h+='<tr><td class=td-name>'+escHTML(r[sec.flds[0]])+'</td><td class=td-share>'+escHTML(r[sec.flds[1]])+'</td><td class=col-desc>'+mdInline(r[sec.flds[2]])+'</td></tr>';});
         h+='</tbody></table></div>';
       });
-      var bi=compStruct.barriers||[]; if(bi.length){h+='<div style=margin-bottom:16px;><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>进入壁垒</div><table class="comp-table"><thead><tr><th>壁垒项</th><th style=text-align:center;>难度</th><th>说明</th></tr></thead><tbody>';bi.forEach(function(b){h+='<tr><td class=td-name>'+(b.item||'').substring(0,30)+'</td><td class=td-badge><span class="tag tag-orange">高</span></td><td class=col-desc>'+(b.detail||'')+'</td></tr>';});h+='</tbody></table></div>';}
-      var gi=compStruct.tech_gap||[]; if(gi.length){h+='<div><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>技术代差</div><table class="comp-table"><thead><tr><th>维度</th><th style=text-align:center;>差距</th><th>说明</th></tr></thead><tbody>';gi.forEach(function(g){h+='<tr><td class=td-name>'+(g.dimension||'').substring(0,30)+'</td><td class=td-badge><span class="tag tag-orange">大</span></td><td class=col-desc>'+(g.detail||'')+'</td></tr>';});h+='</tbody></table></div>';}
+      var bi=compStruct.barriers||[]; if(bi.length){h+='<div style=margin-bottom:16px;><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>进入壁垒</div><table class="comp-table"><thead><tr><th>壁垒项</th><th style=text-align:center;>难度</th><th>说明</th></tr></thead><tbody>';bi.forEach(function(b){h+='<tr><td class=td-name>'+escHTML((b.item||'').substring(0,30))+'</td><td class=td-badge><span class="tag tag-orange">高</span></td><td class=col-desc>'+mdInline(b.detail)+'</td></tr>';});h+='</tbody></table></div>';}
+      var gi=compStruct.tech_gap||[]; if(gi.length){h+='<div><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>技术代差</div><table class="comp-table"><thead><tr><th>维度</th><th style=text-align:center;>差距</th><th>说明</th></tr></thead><tbody>';gi.forEach(function(g){h+='<tr><td class=td-name>'+escHTML((g.dimension||'').substring(0,30))+'</td><td class=td-badge><span class="tag tag-orange">大</span></td><td class=col-desc>'+mdInline(g.detail)+'</td></tr>';});h+='</tbody></table></div>';}
       h+='</div>';
     } else {
       h+='<div class="card"><div class="card-title">竞争格局</div>';
       if(globalComp) h+='<div style=margin-bottom:16px;><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>全球市场</div><table class="comp-table"><thead><tr><th>厂商</th><th style=text-align:center;>份额</th><th>备注</th></tr></thead><tbody>'+compRows(globalComp)+'</tbody></table></div>';
       if(chinaComp) h+='<div style=margin-bottom:16px;><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>国内市场</div><table class="comp-table"><thead><tr><th>厂商</th><th style=text-align:center;>份额</th><th>备注</th></tr></thead><tbody>'+compRows(chinaComp)+'</tbody></table></div>';
-      if(barriers){var bparts=barriers.split('|').filter(Boolean);h+='<div style=margin-bottom:16px;><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>进入壁垒</div><table class="comp-table"><thead><tr><th>壁垒项</th><th style=text-align:center;>难度</th><th>说明</th></tr></thead><tbody>'+bparts.map(function(b){var p=b.trim().split('：');return'<tr><td class=td-name title="'+((p[0]||'').replace(/"/g,'&quot;'))+'">'+((p[0]||'').substring(0,30))+'</td><td class=td-badge><span class="tag tag-orange">高</span></td><td class=col-desc>'+((p[1]||''))+'</td></tr>';}).join('')+'</tbody></table></div>';}
-      if(gap){var gparts=gap.split('|').filter(Boolean);h+='<div><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>技术代差</div><table class="comp-table"><thead><tr><th>维度</th><th style=text-align:center;>差距</th><th>说明</th></tr></thead><tbody>'+gparts.map(function(g){var p=g.trim().split('：');return'<tr><td class=td-name title="'+((p[0]||'').replace(/"/g,'&quot;'))+'">'+((p[0]||'').substring(0,30))+'</td><td class=td-badge><span class="tag tag-orange">大</span></td><td class=col-desc>'+((p[1]||''))+'</td></tr>';}).join('')+'</tbody></table></div>';}
+      if(barriers){var bparts=barriers.split('|').filter(Boolean);h+='<div style=margin-bottom:16px;><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>进入壁垒</div><table class="comp-table"><thead><tr><th>壁垒项</th><th style=text-align:center;>难度</th><th>说明</th></tr></thead><tbody>'+bparts.map(function(b){var p=b.trim().split('：');return'<tr><td class=td-name title="'+((p[0]||'').replace(/"/g,'&quot;'))+'">'+((p[0]||'').substring(0,30))+'</td><td class=td-badge><span class="tag tag-orange">高</span></td><td class=col-desc>'+mdInline(p[1])+'</td></tr>';}).join('')+'</tbody></table></div>';}
+      if(gap){var gparts=gap.split('|').filter(Boolean);h+='<div><div style=font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text);>技术代差</div><table class="comp-table"><thead><tr><th>维度</th><th style=text-align:center;>差距</th><th>说明</th></tr></thead><tbody>'+gparts.map(function(g){var p=g.trim().split('：');return'<tr><td class=td-name title="'+((p[0]||'').replace(/"/g,'&quot;'))+'">'+((p[0]||'').substring(0,30))+'</td><td class=td-badge><span class="tag tag-orange">大</span></td><td class=col-desc>'+mdInline(p[1])+'</td></tr>';}).join('')+'</tbody></table></div>';}
       h+='</div>';
     }
   }
@@ -891,10 +926,7 @@ function openDetail(slug){
       return {title:txt.substring(0,40), detail:txt.substring(40)};
     });
     trendItems.forEach(function(t){
-      var title=(t.title||''), desc=(t.detail||'');
-      if(title.length>40) title=title.substring(0,40)+'…';
-      if(desc.length>140) desc=desc.substring(0,140)+'…';
-      h+='<div class="trend-card"><div class="trend-title">'+title+'</div><div class="trend-desc">'+desc+'</div></div>';
+      h+='<div class="trend-card"><div class="trend-title">'+mdInline(excerpt(t.title,40))+'</div><div class="trend-desc">'+mdInline(excerpt(t.detail,140))+'</div></div>';
     });
     h+='</div>';
   }
@@ -1001,21 +1033,21 @@ function renderCompany(c){
     // Part 1: 一句话公司介绍和定位
     if(c.one_liner){
       h+='<div style="margin-bottom:16px;"><div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:6px;">定位与介绍</div>';
-      h+='<div style="border-left:4px solid #0071E3;padding:10px 14px;font-size:14px;color:var(--text);line-height:1.8;background:rgba(0,113,227,0.03);border-radius:0 8px 8px 0;white-space:pre-line;">'+c.one_liner+'</div></div>';
+      h+='<div style="border-left:4px solid #0071E3;padding:10px 14px;font-size:14px;color:var(--text);line-height:1.8;background:rgba(0,113,227,0.03);border-radius:0 8px 8px 0;white-space:pre-line;">'+mdInline(c.one_liner)+'</div></div>';
     }
     // Part 2: 核心业务/产品
     if(coreBiz.length){
       h+='<div style="margin-bottom:16px;"><div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:8px;">核心业务与产品</div>';
       h+='<div style="display:flex;flex-wrap:wrap;gap:6px;">';
       coreBiz.forEach(function(biz){
-        h+='<span style="padding:6px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);">'+biz+'</span>';
+        h+='<span style="padding:6px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);">'+mdInline(biz)+'</span>';
       });
       h+='</div></div>';
     }
     // Part 3: 盈利模式
     if(revModel){
       h+='<div style="margin-bottom:4px;"><div style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:6px;">盈利模式</div>';
-      h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+revModel+'</div></div>';
+      h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+mdInline(revModel)+'</div></div>';
     }
     h+='</div>';
   }
@@ -1051,14 +1083,14 @@ function renderCompany(c){
     detailItems.forEach(function(d){
       h+='<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">';
       h+='<span style="font-size:12px;color:var(--text2);">'+d.label+'</span>';
-      h+='<span style="font-size:14px;font-weight:500;color:var(--text);text-align:right;">'+d.value+'</span>';
+      h+='<span style="font-size:14px;font-weight:500;color:var(--text);text-align:right;">'+mdInline(d.value)+'</span>';
       h+='</div>';
     });
     h+='</div>';
   }
 
   if(hasBodyContent){
-    h+='<div style="font-size:14px;color:var(--text);line-height:1.8;">'+renderMD(bodyContent.substring(0,3000))+'</div>';
+    h+='<div style="font-size:14px;color:var(--text);line-height:1.8;">'+renderMD(excerpt(bodyContent,3000))+'</div>';
   }
 
   if(!hasDetailFields&&!hasBodyContent){
@@ -1129,8 +1161,8 @@ function renderCompany(c){
     if(c.suppliers && c.suppliers.length>0){
       h+='<div class="supply-group"><div style="font-weight:600;color:var(--text);margin-bottom:6px;">📦 上游供应</div>';
       c.suppliers.forEach(function(s){
-        h+='<div style="padding:3px 0;">• '+s.company+(s.supplies?' · <strong>'+s.supplies+'</strong>':'')+'<span class="relation-badge relation-supplies">supplies</span>';
-        if(s.note) h+=' <span style="color:var(--text2);font-size:11px;">('+s.note+')</span>';
+        h+='<div style="padding:3px 0;">• '+escHTML(s.company)+(s.supplies?' · <strong>'+mdInline(s.supplies)+'</strong>':'')+'<span class="relation-badge relation-supplies">供应</span>';
+        if(s.note) h+=' <span style="color:var(--text2);font-size:11px;">('+mdInline(s.note)+')</span>';
         h+='</div>';
       });
       h+='</div>';
@@ -1138,8 +1170,8 @@ function renderCompany(c){
     if(c.customers && c.customers.length>0){
       h+='<div class="supply-group"><div style="font-weight:600;color:var(--text);margin-bottom:6px;">🏢 下游客户</div>';
       c.customers.forEach(function(cu){
-        h+='<div style="padding:3px 0;">• <strong>'+cu.company+'</strong>'+(cu.revenue_pct?' ~'+cu.revenue_pct+'%':'')+'<span class="relation-badge relation-customer">customer</span>';
-        if(cu.note) h+=' <span style="color:var(--text2);font-size:11px;">('+cu.note+')</span>';
+        h+='<div style="padding:3px 0;">• <strong>'+escHTML(cu.company)+'</strong>'+(cu.revenue_pct?' ~'+cu.revenue_pct+'%':'')+'<span class="relation-badge relation-customer">客户</span>';
+        if(cu.note) h+=' <span style="color:var(--text2);font-size:11px;">('+mdInline(cu.note)+')</span>';
         h+='</div>';
       });
       h+='</div>';
@@ -1147,8 +1179,8 @@ function renderCompany(c){
     if(c.partners && c.partners.length>0){
       h+='<div class="supply-group"><div style="font-weight:600;color:var(--text);margin-bottom:6px;">🤝 合作伙伴</div>';
       c.partners.forEach(function(p){
-        h+='<div style="padding:3px 0;">• <strong>'+p.company+'</strong>'+(p.area?' · '+p.area:'')+'<span class="relation-badge relation-partners">partner</span>';
-        if(p.note) h+=' <span style="color:var(--text2);font-size:11px;">('+p.note+')</span>';
+        h+='<div style="padding:3px 0;">• <strong>'+escHTML(p.company)+'</strong>'+(p.area?' · '+mdInline(p.area):'')+'<span class="relation-badge relation-partners">合作</span>';
+        if(p.note) h+=' <span style="color:var(--text2);font-size:11px;">('+mdInline(p.note)+')</span>';
         h+='</div>';
       });
       h+='</div>';
@@ -1165,8 +1197,8 @@ function renderCompany(c){
     c.competitors.forEach(function(comp){
       h+='<tr><td style="font-weight:600;">'+comp.company+'</td>';
       h+='<td>'+(comp.area||'—')+'</td>';
-      h+='<td><span class="relation-badge relation-competes">competes</span></td>';
-      h+='<td style="font-size:12px;color:var(--text2);">'+(comp.note||'—')+'</td></tr>';
+      h+='<td><span class="relation-badge relation-competes">竞争</span></td>';
+      h+='<td style="font-size:12px;color:var(--text2);">'+mdInline(comp.note||'—')+'</td></tr>';
     });
     h+='</tbody></table></div>';
   }
@@ -1234,7 +1266,7 @@ function renderConcept(c){
   h+='<div class="card" style="margin-bottom:16px;padding:20px 24px;">';
   h+='<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">';
   h+='<div><div style="font-size:22px;font-weight:600;color:var(--text);letter-spacing:-0.01em;line-height:1.3;">'+c.name+'</div>';
-  if(c.one_liner) h+='<div style="font-size:14px;color:var(--text2);margin-top:4px;line-height:1.5;">'+c.one_liner.substring(0,80)+(c.one_liner.length>80?'...':'')+'</div>';
+  if(c.one_liner) h+='<div style="font-size:14px;color:var(--text2);margin-top:4px;line-height:1.5;">'+mdInline(excerpt(c.one_liner,80))+'</div>';
   h+='</div>';
   h+='<div style="display:flex;gap:6px;flex-wrap:wrap;">';
   if(c.category) h+='<span class="tag tag-blue">'+c.category+'</span>';
@@ -1248,7 +1280,7 @@ function renderConcept(c){
   if(c.one_liner){
     h+='<div class="concept-section cs-purple">';
     h+='<div class="concept-heading"><span class="c-icon">🎯</span> 一句话解释</div>';
-    h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+c.one_liner+'</div>';
+    h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+mdInline(c.one_liner)+'</div>';
     h+='</div>';
   }
 
@@ -1271,7 +1303,7 @@ function renderConcept(c){
     if(content && content.length>10){
       h+='<div class="concept-section '+m.cs+'">';
       h+='<div class="concept-heading"><span class="c-icon">'+m.icon+'</span> '+m.title+'</div>';
-      h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+renderMD(content.substring(0,3000))+'</div>';
+      h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+renderMD(excerpt(content,3000))+'</div>';
       h+='</div>';
     }
   });
@@ -1365,7 +1397,7 @@ function renderThesis(c){
       h+='<div class="card"><div class="card-title" style="color:#F59E0B;">待验证假设'+(asItems?' <span style="font-size:12px;font-weight:400;color:var(--text2);">（'+asItems.length+'条）</span>':'')+'</div>';
       h+='<ul style="padding-left:20px;font-size:13px;color:var(--text);line-height:1.8;">';
       var asList=asItems||asStr.split('\n').filter(Boolean).map(function(x){return x.replace(/^[-•]\s*/,'').replace(/^\d+[.)]\s*/,'');});
-      asList.forEach(function(a){h+='<li style="margin-bottom:6px;">'+a+'</li>';});
+      asList.forEach(function(a){h+='<li style="margin-bottom:6px;">'+mdInline(a)+'</li>';});
       h+='</ul></div>';
     }
   }
@@ -1484,7 +1516,7 @@ function _renderSegmentCards(segs){
     h+='<div class="card" style="margin-bottom:8px;padding:16px 20px;cursor:pointer;" onclick="openDetail(\''+s.slug+'\')">';
     h+='<div style="display:flex;justify-content:space-between;align-items:center;">';
     h+='<div style="flex:1;"><div style="font-size:16px;font-weight:600;color:var(--text);">'+s.name+'</div>';
-    if(s.description) h+='<div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5;">'+s.description.substring(0,120).replace(/\|/g,' ').replace(/\*\*/g,'')+(s.description.length>120?'...':'')+'</div>';
+    if(s.description) h+='<div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5;">'+mdInline(excerpt(s.description,120).replace(/\|/g,' '))+'</div>';
     h+='</div>';
     h+='<div style="text-align:right;flex-shrink:0;margin-left:16px;">';
     h+='<div style="font-size:20px;font-weight:700;color:var(--text);">$'+(s.tam||'?')+'B</div>';
