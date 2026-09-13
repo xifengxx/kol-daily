@@ -289,7 +289,8 @@ var DATA = null;
 
 var ci='AI算力', cv='treemap', ch=null, cs=null, gh=null;
 
-function gs(ind){ if(!DATA) return []; return DATA.entities.filter(function(e){return e.type==='segment'&&e.industry===ind;}); }
+function inInd(e,ind){var a=(e&&e.industries&&e.industries.length)?e.industries:((e&&e.industry)?[e.industry]:[]);return a.indexOf(ind)>=0;}
+function gs(ind){ if(!DATA) return []; return DATA.entities.filter(function(e){return e.type==='segment'&&inInd(e,ind);}); }
 function gn(n){ if(!DATA) return null; return DATA.entities.find(function(e){return e.name===n;}); }
 function gl(s){ if(!DATA) return null; return DATA.entities.find(function(e){return e.slug===s;}); }
 // View switching (nav items)
@@ -474,7 +475,7 @@ function _showKbOverview(allE, tc){
   document.getElementById('kbContent').innerHTML=h;
 }
 function _showKbIndustry(ind){
-  var segs=DATA.entities.filter(function(e){return e.type==='segment'&&e.industry===ind;});
+  var segs=DATA.entities.filter(function(e){return e.type==='segment'&&inInd(e,ind);});
   var h='<div class="card-title">📁 '+ind+'</div>';
   h+='<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">'+segs.length+' 条赛道 · 四层产业链结构</p>';
   segs.sort(function(a,b){return (a.layer||0)-(b.layer||0)||(b.tam||0)-(a.tam||0);});
@@ -486,7 +487,7 @@ function _showKbIndustry(ind){
   document.getElementById('kbContent').innerHTML=h;
 }
 function _showKbLayer(ind, layer){
-  var segs=DATA.entities.filter(function(e){return e.type==='segment'&&e.industry===ind&&'L'+(e.layer||'?')===layer;});
+  var segs=DATA.entities.filter(function(e){return e.type==='segment'&&inInd(e,ind)&&'L'+(e.layer||'?')===layer;});
   var layerNames={L1:'原材料与资源',L2:'设备与零部件',L3:'核心产品与集成',L4:'终端应用与服务'};
   var h='<div class="card-title">'+layer+' · '+layerNames[layer]+'</div>';
   h+='<p style="font-size:13px;color:var(--text2);margin-bottom:12px;">'+ind+' · '+segs.length+' 条赛道</p>';
