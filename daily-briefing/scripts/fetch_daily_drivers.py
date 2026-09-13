@@ -14,7 +14,8 @@ import requests
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DATA_DIR = SCRIPT_DIR.parent.parent / "data"
+# 数据统一放 daily-briefing/data/（与运行手册、仓库结构一致）
+DATA_DIR = SCRIPT_DIR.parent / "data"
 
 
 # 查询词表：只放英文主题词，**不含任何时间词**。

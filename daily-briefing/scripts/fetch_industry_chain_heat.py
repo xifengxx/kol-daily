@@ -24,7 +24,8 @@ import yfinance as yf  # noqa: E402
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 UNIVERSE_PATH = SCRIPT_DIR / "chain_universe.json"
-OUTPUT_DIR = SCRIPT_DIR.parent.parent / "data"
+# 数据统一放 daily-briefing/data/（与运行手册、仓库结构一致）
+OUTPUT_DIR = SCRIPT_DIR.parent / "data"
 QUOTE_CURRENCIES = {"KRW", "JPY", "TWD", "HKD", "EUR", "CHF"}
 
 
