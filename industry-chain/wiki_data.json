@@ -3045,7 +3045,7 @@
       "companies": [
         {
           "ticker": "ENTG",
-          "name": "Entegris (CMC Materials)",
+          "name": "Entegris",
           "role": "龙头",
           "rev": 80
         },
@@ -54710,6 +54710,10 @@
       {
         "source": "封装测试(OSAT)",
         "target": "甬矽电子"
+      },
+      {
+        "source": "CMP抛光液与抛光垫",
+        "target": "Entegris"
       },
       {
         "source": "CMP抛光液与抛光垫",
