@@ -1,0 +1,1637 @@
+{
+  "date": "2026-09-14",
+  "generated_at": "2026-09-15T07:20:00+08:00",
+  "method": "Google News RSS 候选 + 人工筛选整理；无明确公开原因按低置信标注，不强行归因",
+  "entries": [
+    {
+      "type": "industry",
+      "key": "电子游戏与多媒体",
+      "display": "电子游戏与多媒体",
+      "confidence": "中",
+      "driver": "检索见 Take-Two 等行业龙头被报道“板块性普涨”，当日无公司级重大公告，属游戏板块整体走强；该行业仅含 NASDAQ 与 NYSE 两个样本，波动被放大。",
+      "sources": [
+        {
+          "title": "TTWO - Take-Two Interactive Software Inc Stock Price and Quote - Finviz",
+          "source": "Finviz",
+          "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE8yYThBbTRaR2JLY2kxTnhIRmJXU0FXWk1kSEFaTmwxcnFrb3JkeGlLUFlpNm1ySms4eGNMMFV4Nk5ucDBQUlE?oc=5",
+          "published": "Tue, 26 May 2026 14:57:55 GMT"
+        },
+        {
+          "title": "5 Best Video Game Stocks for 2026 and How to Invest - The Motley Fool",
+          "source": "The Motley Fool",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQRVZuNFBVQlduRlRjV0ZkaG5NQ3o5RVIyT1ZRb0ozZ21lM0NnNlB1a2s5cnZYZFRaanh5RFRKMERIRFQ0SzlJNXdFT2E5MU4xWEpoZU5UN0EzMVRtYXRLTDN4UTVWSmxSOWEzeUkxenRobmpvMTZ3ajZlc0dUdHBJNmdpaXF6eU51ZFp1aEJaRm5aeTUxcXc?oc=5",
+          "published": "Tue, 25 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "医疗信息服务",
+      "display": "医疗信息服务",
+      "confidence": "中",
+      "driver": "医疗信息化方向当日被行业展望类报道正面提及；在 AI 硬件与高估值科技遭抛售时，资金转向跌幅落后、盈利确定性较高的医疗服务方向。",
+      "sources": [
+        {
+          "title": "Zacks Industry Outlook Medical Systems, American Well and Butterfly Network - TradingView",
+          "source": "TradingView",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNMmx5am9nWVN4RFBtSzNVNThmZ0dlY3pXQVNTc2lNTy1nVmJSUWk2ZWxvWVlHM1VWTnFnb3hHS3lsc01yVnVLQlk4amZJc0s3UG10Rm9saEdVN2JHUWtINzRQeVZkejlXMFZYNnJ5dEFncGRlZFZ1cTVxX21BWjIxNTBTSGtHc1B4Y1VXUzFHeVFkZURUWVlMRExFalRvdzVvMTBJZWV6emlaYXJPaGVWdU96amtoV3ZxWU94TjNWNzRfTk5IZExNS1pB?oc=5",
+          "published": "Mon, 14 Sep 2026 08:17:00 GMT"
+        },
+        {
+          "title": "5 Best-Performing Health Care Stocks for September 2026 - NerdWallet",
+          "source": "NerdWallet",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxORWNJcG9GcmpWdVZYbFA3UkpoVFBTV3A3RHJNTzN1a0NRYWIyZi1VamxKVFdpRVIzZzJKZ1dfV3lReHNOOUNWWU5Wdm9XU3Uxb2t4a1VDVmxDd29kaTliT1VpZVFzVkdYM0d3YU1iN2tjUWt6ZzJXLS11b0RBM081dG5R?oc=5",
+          "published": "Fri, 11 Sep 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "医疗设备与服务",
+      "display": "医疗设备与服务",
+      "confidence": "中",
+      "driver": "9 月医疗保健板块被多家媒体列为月度强势方向；当日属防御性轮动——AI 与半导体重挫，资金回流现金流稳定的医疗设备与服务。",
+      "sources": [
+        {
+          "title": "AdaptHealth's CEO and CFO will attend healthcare events in two cities - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQN0RCUnFqdmhNN2NQa1hhNEIwVm5mWDJ5NXhXVnVxWlpaYXphVllXanlMUzVWaHpvT1JZSXNqVEhQT0V4VFhjVjBFLXRnZm55clZmNkdXazRBelBraldVVGF1V0VmVTIxV0Zxd1c5XzBHWk9IYnUtZUxGbDF2bFlMcnB6cjNuRG1TWF9fa1FsWXNxYWZObWp4T01GNFBCUHhvdy1IOU5n?oc=5",
+          "published": "Fri, 11 Sep 2026 17:00:00 GMT"
+        },
+        {
+          "title": "5 Best-Performing Health Care Stocks for September 2026 - NerdWallet",
+          "source": "NerdWallet",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxORWNJcG9GcmpWdVZYbFA3UkpoVFBTV3A3RHJNTzN1a0NRYWIyZi1VamxKVFdpRVIzZzJKZ1dfV3lReHNOOUNWWU5Wdm9XU3Uxb2t4a1VDVmxDd29kaTliT1VpZVFzVkdYM0d3YU1iN2tjUWt6ZzJXLS11b0RBM081dG5R?oc=5",
+          "published": "Fri, 11 Sep 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "出版",
+      "display": "出版",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果多为泛化榜单与旧闻，未锁定当日行业级驱动。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "基础软件",
+      "display": "基础软件",
+      "confidence": "中",
+      "driver": "当日资金明显从 AI 硬件切向软件：有报道直接指“AI 基础设施股涨、软件股跌”的轮动发生反转；叠加 AI 巨头呼吁放慢前沿模型竞赛，市场解读为利好已有客户基础的软件平台方。",
+      "sources": [
+        {
+          "title": "AI infrastructure stocks surged while software fell. Does the rotation continue Wednesday? - investingLive",
+          "source": "investingLive",
+          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNRXFZNE1LZUZBeEEyVzVRQzdkWnpadjlMcjRnQm5hZXFVUU9XZFJDYU92NF9KTUZCS2FWYU13TGtUWHZPeVZwcjdUbUg5aWdBZ0VwZGVrcmgyakFHQUVIQW1vUzJDejZEUlFIVnVlMlBya1Zsd1RvYWFwMUFRT3N2dlJ2bHFlZ2ppenFqMDRzaGRLN3dCcnN6eTIzWDBTQkdJN0hoRWFkOVNEODVheGhDbXdlZDc1MjhKUE5JZk10Zw?oc=5",
+          "published": "Wed, 09 Sep 2026 08:49:00 GMT"
+        },
+        {
+          "title": "Reflecting On Data Infrastructure Stocks’ Q2 Earnings: Elastic (NYSE:ESTC) - StockStory",
+          "source": "StockStory",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNNG84dWhZazA4OHpnWkFWYWhrb2toMnp1M2V6Qm5zUWlqdWhPaVZiQ1VqX3Q5Z1RDVTlrRHJUR2dlTUxJNkxoaE9UVDJlYXVHUUxlMTNUWUt2T0g4dzMtLWpRb3FlRjJNRUJtakttQ1dIMkJtekxEOWdIdFg3RXh0Wkg4c1hjU2ZlQ29fX2p6WGJrUHh1OWhMU3FQQkltdWdvcXllQ0k5ek85NEx6aXRIQ2JyTHJmcmN5b3YwM0FjU2NtdnJ3?oc=5",
+          "published": "Sun, 13 Sep 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "软件服务",
+      "display": "软件服务",
+      "confidence": "中",
+      "driver": "与基础软件同属“资金从 AI 硬件切向应用软件”的轮动；SAP 当日大涨 5.8% 是软件服务方向的直接拉动。",
+      "sources": [
+        {
+          "title": "Software Service (TSE:3733) Stock Looks Cheap But Profits Keep Slipping - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxONFhpOGhvclhCMnJfSHBoNFdUbk9BdDlKTG9yZWw3YklUajVWWjI2OHZMQWVJdlZScFV0VXBrR3RLYTg4Rk1kWjRZLUk5Ui16MXV1a3RSVFVMTGp2dnFHT1k2U0N1amxQRUEzci0yTmxiYjRFNzVuUzFPNUtyV2ZGb0JRUjVEcU9lcHM3dnZ6WDJoTEdjNFRhN2dLanFWaWZOY295bjFPZUJ5Z1RENWNOVHFadVhoVUFrekIwdmY0VlhCbHVaaGc0dnUyRFJieFpheXVlLThJa9IB3AFBVV95cUxOdlFvZ091YldrenpweEdOMWdxdkNqQXg5ZF93TVpGNmdicE1MLXhXbms1Um5aNjJIXy1zSDVISmhuaEgxRVMtdTlHQUpJY193X0ItZ0wxLXZMZ2QxWG1kWGFDUEE4OUVjWElfUjU1UWhDSFY1QlFwTUV1RV8yZnlWSl8ydlEzeEUxZ0RzX2Rsa1ZOclBDYU9tZ2lWdDJ1UTNIVzhHNl81N3M2eDIwNnJRaDN0QmdTRERGSmgydWpab19yR2xhRTNNRXEzOXZSbHNnVlNrWU5IcG5rWC1N?oc=5",
+          "published": "Sun, 13 Sep 2026 23:05:36 GMT"
+        },
+        {
+          "title": "3 Software-as-a-Service (SaaS) Stocks with Big Upside from AI - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQNllwbHFNdG1WbmlYNzZGNXhoY1FISm1JREZ4VEpzZDZBdXFBS29wSFZkNXBRXzFCdWgxTWVzUjNqUWQxcVg4Sy1QV2RUR0F4NTNURUozYlNNNDJrR0VCYTJpNldId2JYR1FnTzEwSUdhazNoZWY3N1hNOVBSdHRrYmtfY2RXSVYtTi04azdZdFN3SnFZ?oc=5",
+          "published": "Sat, 22 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "家具、固定装置与家电",
+      "display": "家具、固定装置与家电",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果均为旧闻或个股旧公告。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "铜",
+      "display": "铜",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索到的相关报道方向为“关税溢价消退后铜股走弱”，与当日上涨方向相反，不足以解释，按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "污染治理设备",
+      "display": "污染治理设备",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果均为个股旧闻与泛化榜单。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "油气钻探",
+      "display": "油气钻探",
+      "confidence": "低",
+      "driver": "当日油价上涨但油气股整体回落，两者方向背离；检索未见油气钻探的解释性报道，按低置信标注，不强行归因。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "烟草",
+      "display": "烟草",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。该行业 NASDAQ 端跌 7.19%、NYSE 端涨 0.20%，两交易所背离极大，等权均值主要由小样本拖累。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "油气设备与服务",
+      "display": "油气设备与服务",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果多为泛化榜单，未见当日行业级驱动。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "独立发电商",
+      "display": "独立发电商",
+      "confidence": "中",
+      "driver": "两条压制同时作用：一是 AI 数据中心用电需求叙事因“AI 减速”呼声降温，二是 10 年期美债收益率盘中破 5%，利率上行直接压制公用事业这类高股息、重资产板块。",
+      "sources": [
+        {
+          "title": "7 Best-Performing Utility Stocks of September 2026 - NerdWallet",
+          "source": "NerdWallet",
+          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE40UnVrcFl3aFVsZnNDLVpHMmhpTVNCTVdlWmJDZ2p0b1BlUVVWTkpxTTQ0S1BXYlhmWW15TVEtcEFOa3pXSFlLYTVaZ1hvMzVNVGFNVmE1YlZUNmNuSnJqN3UzM1MybEIx?oc=5",
+          "published": "Tue, 01 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Vistra Is the Quietest Big Winner of the AI Power Boom. Here's Why. - The Globe and Mail",
+          "source": "The Globe and Mail",
+          "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxOMm1DdG5OeXNvY1RjM0VRdXdSaGh5YXNLMFg3bk1WWXZKWVpyQ0JGbWtoMTZQWVJRZzVOUGNwcUFPaC11X3ViZTQ1azhkQ2daTThBNy11MTVIa2Yzano0c2xtS184THBzbEh1cktDTE1IQXQ1RUxHcTNQTXlOU00yUFBrYTQxalpRTHU4OVJwLUg4UEhGUlpybUoyREJYSThZVHpjU3J3c0M4Y3JBZ1JlWk1oUFZOUzdTd29nVlE1QnlpdzNmRkVGSVg3MUZIcGVaaDU5VWhMRGVVbmh5Qll5ZGxn?oc=5",
+          "published": "Sun, 23 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "油气一体化",
+      "display": "油气一体化",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。油价上涨而油气一体化股下跌，方向背离，检索未见解释性报道。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "纺织制造",
+      "display": "纺织制造",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果多为 7–8 月旧闻与供应商名单类内容。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "硬件、设备与零件",
+      "display": "硬件、设备与零件",
+      "confidence": "中",
+      "driver": "随 AI 硬件链整体回调：AI 巨头呼吁放慢前沿模型开发，市场担忧数据中心与算力资本开支节奏放缓，硬件设备与零件首当其冲。",
+      "sources": [
+        {
+          "title": "7 Best-Performing Semiconductor Stocks for September 2026 - NerdWallet",
+          "source": "NerdWallet",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE5DcnBsYjFUWnVXMUpGeFdXcnBtd2Q5YjFEcW9OUmZXcjU4Y1Vnbk5zME5CVklCc1JoX182SVlCRFE2WmhRMDB6VjZQeGdwRkRhdW9zUjE4dmlpbnB2dVNGXzJXNFVYVGxwZXJJbm5WWExyZVR6QnBB?oc=5",
+          "published": "Tue, 01 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "title": "3 Best Tech Stocks to Buy in 2026 and How to Invest - The Motley Fool",
+          "source": "The Motley Fool",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQU1BVNDhhd2hFVHg4aDI4dXIxbm1GVURwS2pNRm5LWUp1QnhnVGp1YlQxRzZNWGNkSnY1MmlpQkZhdzZCbXJ6cF9xZHZnWWNEejNFVk41QjNYcnBoV2tjWF9qVUxnTnV3Qm5OVlloNF9sdU9NX3FSYUdHVlVrVU1Yd1A4TE1NZ3ppSFE?oc=5",
+          "published": "Sun, 13 Sep 2026 18:28:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "大模型",
+      "display": "大模型",
+      "confidence": "中",
+      "driver": "Alphabet（+3.22%）、Meta（+2.71%）等自研大模型的平台方逆势走强。市场把“AI 减速”呼声解读为利好已具规模、商业化路径清晰的模型平台方，而利空卖铲子的硬件端。",
+      "sources": [
+        {
+          "title": "Japan AI Foundation Model: .3B SoftBank-Sony-Honda Bet [2026] - tech-insider.org",
+          "source": "tech-insider.org",
+          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPU3VZMktUYnlJN3V0NGxrVjhBb2hFT0hpT3ZtNEJPUTR5YUZIbjFaeGZGUzZDOURxVnVNeWdldjlJRHRieGJLTV9EUTFEaXA2M1NRcjFlaW1QMktEYm9jT09pUXBJaXUxVUNuM1VaZVZhcmoyLVB6VUgzc1VMZFNCMXRDTi16WG8?oc=5",
+          "published": "Wed, 13 May 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Best AI Stocks to Buy in 2026: 10 Top Picks & How to Invest - The Motley Fool",
+          "source": "The Motley Fool",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQcTN4SWRQbVZpY1lwSnJjN3YxWmY5LU5Qck5ia2psWWRwcWplZ0RGTFo3ZmJrZDZ1S1RQZFF2NUcwOTh0NXA3NlM0a25ieHhPWHprdTBmbWxzY2FtdHRIMlpSY1pzcTU5ZkhfN0wtcF9UeDg4WnZVYTZPSkRtcDNZaUJ1djdPQ1RVRkVQeVFUTnJrMFJ5VXdj?oc=5",
+          "published": "Tue, 01 Sep 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "AI开发者工具",
+      "display": "AI开发者工具",
+      "confidence": "中",
+      "driver": "SAP 大涨 5.78%（云业务增长 + 分析师上调目标价）直接拉动该段；资金从 AI 硬件撤离后流向软件与开发工具方向。",
+      "sources": [
+        {
+          "title": "AI Stocks Stumble Amid Growing Safety Fears - morningstar.com",
+          "source": "morningstar.com",
+          "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPUks3dTZzNmJPT1dReVdIOGxfc1VoVUwyTF95V1NVT0tkbERiV2ktdGwyOEgtOHYxaWVwakN5N3RLZDZoUVo2YUFMQTMtR003MUdtSXhHVGRsMXk0ZTE1TDJOUEhBMmZyN0h5cEFNc1l2bHFKdm1Qa2dIbzFMMUgwUk1JUU0yUQ?oc=5",
+          "published": "Mon, 14 Sep 2026 18:13:06 GMT"
+        },
+        {
+          "title": "AI stocks fall amid calls for AI development slowdown - Investing.com",
+          "source": "Investing.com",
+          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOYU9pUHFsYXdTSFhGcnV6eXgtdG5xZkV1OUxkc0EzU1ZGQ2w0NGJjTEFadndfWkZSVUFSZzRMVTI1NmtHMm81V3c3UjNoZERWanhSUWc4LXpTMWhqOHJjWmkyT0htM195endpVDgyaHFYMHhjel9wdE1DN0RjSWZESGc0WkZQZnNZZ2duR3NIalliWHNnZEh4VDV2Q2lybnZpR1BhY3lURkxjR3VySVJpZVVZbW9IQUpxcTdB?oc=5",
+          "published": "Mon, 14 Sep 2026 13:26:09 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "AI Agent",
+      "display": "AI Agent",
+      "confidence": "中",
+      "driver": "ServiceNow 涨 7.41%（分析师上调目标价）、CrowdStrike 等网络安全股大涨；当日资金把“AI 应用/Agent”当作 AI 硬件回调的避风港。",
+      "sources": [
+        {
+          "title": "3 Agentic AI Stocks to Own Before AI Changes the World as We Know It - The Motley Fool",
+          "source": "The Motley Fool",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQeDVIMDVKYlBtR0YtalpPQmpUMlZNSFdQTW15OGM4c2dITmd3cnZQalBnaDJaWDd4bTN6Nkh5Z09TRVpPSTROU0ZNTmQxdlJGeVRWZXg0azZnUUxuSE1sSmFpZFpDWXFuWHhjTmFYU2dlWTFodmVoT2FjUWRJOTNhMFhsYTlZQWdWTEtMYVZLY3NCZw?oc=5",
+          "published": "Sat, 12 Sep 2026 13:30:00 GMT"
+        },
+        {
+          "title": "CrowdStrike Jumps as Cramer Calls Cybersecurity Stock a Must Buy - finance.biggo.com",
+          "source": "finance.biggo.com",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE01cDd5b3c4MEV2OHVzbkJyNUFrT2VLVWRvN1VHR3dSS25OM1RneEp1ZnN3WlZ3VGlYeDhUeF9mRTJoSkxKRWRBRU9DMm1KN05fRmhYZHJ3MVNhYlJSdHhhZHN2WVN4bERXWXRXZHFQZUNaX0ZZelE?oc=5",
+          "published": "Mon, 14 Sep 2026 18:05:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "AI推理API服务",
+      "display": "AI推理API服务",
+      "confidence": "中",
+      "driver": "Alphabet 领涨该段；市场逻辑是“减速”针对的是前沿训练，而推理与 Agent 调用需求不受影响，推理服务端相对抗跌。",
+      "sources": [
+        {
+          "title": "Equinix Stock (EQIX) Opinions on NVIDIA AI Inference Partnership - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQcXRGZndHNVFLc0RuVzBBSHVDcm40WjJPTUFkTlJ0aHJINWJqLXVpZUMtb0RJM2lVSzJoZ3NvRVJzNF94cFpLTmt4Qi1EMmsyWEpCNFVubE56RTRzN3RxODVITW9XUmdzMkQ1SmhJeGVvc3FVNVpEcVVWUmpmSm4yZlBrRUlkQWxCa2pSWmVia3RRRHlMX21mUXc3V1dEVTVITVU0?oc=5",
+          "published": "Thu, 03 Sep 2026 17:34:00 GMT"
+        },
+        {
+          "title": "Cerebras Systems (CBRS) Powers 14x Faster Ultrafast AI Inference - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxORzJMN0lqU0JKNVhrRXJxVmRHMVViM2tYUGFRTFBOSW15cjVKdjQ2NV9hMGszaWFpRGZLanNocDcyaXBkZTk5V2xzWDZhSDRndG1oSzl2SEdfc2dSNHJEcjhucDhlRmtPWWlHbkJNNks4R3UxMmJPc2NBOXhBSTh4ckE1S2phMFpDTHpRVFNpaUdyWkJJRm5nN09tT0k?oc=5",
+          "published": "Mon, 17 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "高纯硅料与硅片",
+      "display": "高纯硅料与硅片",
+      "confidence": "低",
+      "driver": "段内日欧分化：Soitec 涨 3.37%，SUMCO 跌 3.14%，等权口径被互相抵消。检索未见当日段级驱动，按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "CMP抛光液与抛光垫",
+      "display": "CMP抛光液与抛光垫",
+      "confidence": "低",
+      "driver": "段内样本仅 AGC 与 Fujimi 两只，且涨跌幅均在 ±0.6% 以内，属样本少、波动小；检索未见当日段级驱动。",
+      "sources": [
+        {
+          "title": "Why Is Entegris (ENTG) Winning CMP Patent Cases In Taiwan And China? - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPa1A1Z0N5ckthdVdJblJPS3hCOFZ4TGdEVjVGd0o2TGcwZXQ3VXhVVXFmaG12RHRKSzRYQmxtdkhGemFJNVVkcENWbFdLQmVTY08zUXd4QXdBVTRQUXBYc0htcUh0TldwOTVPSG5qVE5mN3VFeDJDQkQzZU9od2pKaS1ETDdZYWVCdnBWQ3QyTlc0VEZrbS1TTHloX21WVEhRUjJxdDNGVlN0M1g2NDFaZjRiTlpTcmxySEk0SDNpcHlzSmtTS1hLZG5TS0jSAdIBQVVfeXFMUGgzMVVJcDZHQTF0VUJiNnBsMTRXNkxSc3QyTzVBZzFkY3JqekJMcTNrd2FWV2xhS2o0ZUxpUDNxU1piUmRHOUJiYXd1UHZZZzdtUkFMNDU5QmtLRWxldU1IVG05ZEo3TGZ6WHg1dWRGTDNxemxLSmFMa2JJV3RpbXY5dE1VYjUxRHE1dmFjSXREdDRWNkswVW1DY0h0VjZWMHVnSmFrU3NxcFN3WlhUcG5DY2VWSElvQ0gxamo2dHlPMkNTQjlYNDl1Q0NZR19mSWZ3?oc=5",
+          "published": "Thu, 20 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "AI训练集群/超算",
+      "display": "AI训练集群/超算",
+      "confidence": "中",
+      "driver": "Alphabet 上涨与 Oracle 下跌（-3.65%）互相抵消。该段正是“放缓前沿训练”论调的直接指向对象：若训练节奏放慢，超算与训练集群的订单预期最先受压。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "自动驾驶",
+      "display": "自动驾驶",
+      "confidence": "低",
+      "driver": "当日跌幅有限（-0.19%），Tesla 小幅回落。检索仅见 Robotaxi 主题的泛化榜单与 Tesla 软件更新消息，未见当日段级驱动。",
+      "sources": [
+        {
+          "title": "SA Asks: As robotaxis gain traction, what's the best rideshare stock play? (UBER:NYSE) - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPZXZ2bWljc0plRmJyWTdTNEgyRU4xNV9lOEZHcEQxV2t5ZGJFYnJYUXRRZlQ5WEY5SkVvX0hYaEpCb1pVWElyZVR6MzBxTXBIcldRWkhwSFNCd1AtZ2Jnei12WFZrUGduemVadkpfOFdscDBIZjdVc3l4ZzFGaHVaMTBacmdvVFBGc3hKaWVVaURuUUlFSVJGX2NLMU9GMElNRXpTZlhHWUhITnM0?oc=5",
+          "published": "Sun, 13 Sep 2026 15:00:12 GMT"
+        },
+        {
+          "title": "Millions of Tesla Owners Are About to Get a Software Update That Lets The Car Intervene and Steer Even If They Never Turned on Full Self-Driving. - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNdERZVElmX0ZPbjRRSk1rM2xLbUlCM09pWDlhenFIS1dfY2Z0S0NaTGZXSllLdWhILVk3Z0xHbV9yaHhKcTRsY29Hd09NVjFaNFhsUFdsOU11ZWpNRW54SFlGODRIYzR4dTQ4aTVBSmJFa3k1ZjdyU2RKeU4zUndlVkg1MGF0XzBMMWNLNTR4dFBha0tITTRxUjBTSUMzNFNHVkE?oc=5",
+          "published": "Mon, 14 Sep 2026 16:09:49 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "DSP与光芯片",
+      "display": "DSP与光芯片",
+      "confidence": "高",
+      "driver": "两重打击叠加：一是康宁（GLW）宣布最高 20 亿美元 ATM 增发、当日暴跌逾 13%，带崩整条光通信链；二是 AI 减速呼声令光模块/光芯片这类高弹性 AI 硬件首当其冲。Macom -12.83%、Coherent -12.73%、Lumentum -9.92%、Semtech -12.07%。",
+      "sources": [
+        {
+          "title": "Credo: Lumentum's Earnings Results Were A Warning Shot (NASDAQ:CRDO) - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNQmZKdjdMVkJSVUxiVldRVENFRGlUMjJfMUF4U3BTdUdlSlhNUVJTU2JXWkcwSW9YT3VSREd0dEtSZmRQbDR3RlpMNWM4a25tTVVQWXNkSEVIaGNDRFNBZW1UOFVKb3pRZVNONFg3TE5DQ0h5ekZNajE2WHBNanZieTI2WXRLbnc0MGdCNkJMdm1zcjV4ZlhJ?oc=5",
+          "published": "Wed, 12 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Top Silicon Photonics Stocks 2026: The Optical Computing Boom - Exoswan Insights",
+          "source": "Exoswan Insights",
+          "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE4zOHZYV2FoRC1OX3JNMHJuT1ZqV3BnZ3I5LUhEbzJ0M0kwMk05MEU1dFpWWEJnSEhQcU5xSmlzcElDdVB5cmc4bjZRdTA?oc=5",
+          "published": "Tue, 01 Sep 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "测试设备",
+      "display": "测试设备",
+      "confidence": "中",
+      "driver": "龙头 Teradyne 暴跌 13.30% 直接拖垮该段；AI 资本开支节奏担忧从算力端传导至半导体设备与测试端。",
+      "sources": [
+        {
+          "title": "Aehr Test Systems Sinks 10%, Teradyne Falls 5%, FormFactor Drops 6%: What's Hitting These Semiconductor Test Equipment Stocks? - 247wallst.com",
+          "source": "247wallst.com",
+          "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPODdCRVRLTEYyeDlYbWI4MnFHM3N1YUlaczU1V1dSN3ZXWnFMV3RONzNWUjNrMHk0eVljTnRlblRPYWo0R3c3dF9fUXZNMkZScS1ReklsUE5VYUxvcVhPcWpZR1RJRHltMDl3ei0xX2ZxVEFWVlJpWk8wVnF1bm4xRzZQdmd1bzBjUnR3REpMTjE3b0I1Q1ppM1ZtM2dJTFp2a2Y0QTNzdjl5T3F6aElrLVpyOHNuSWR2M1MxejNrWTZ6a3JUUkJ2SWNzT0FoQS11bFZfeVpxOHZMZVhQaTBtUlZEd3FNNXFLU1JkSUxxM2p6NWRF?oc=5",
+          "published": "Wed, 19 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "散热液冷系统",
+      "display": "散热液冷系统",
+      "confidence": "中",
+      "driver": "nVent -9.69%、Johnson Controls -5.65%。液冷/散热是 AI 数据中心的高弹性配套，在“训练减速”叙事与美股高估值回撤中跌幅居前；同时利率上行压制重资产的电气与楼宇设备。",
+      "sources": [
+        {
+          "title": "Powering AI: Barclays Names Top Data Center Cooling Stocks to Own - Investing.com",
+          "source": "Investing.com",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPdms0RlQ1bXFETHlFLWg2ZkhaM1lhcFctTWRuS0oxcno5TUxDYWpDOEk1RklpUHZFZFU0MXNxSXAtdkwwdTBPVnNMWmRrc3p6dGlzeDJWcFZ4VWRMdk5KalQwWEMxMUpuVEpPalZnZXFNeC1jd3VpMF9wNjNvTXQ4SWxGRVFJcF9SOFVxemRmSFRFWWRXT0VNdDFxUEJLRzBweGxIdTNZZ1RDbV9sN2IxZjNOd2xGdDlCM3pkZGdrcF9DSVZW?oc=5",
+          "published": "Wed, 08 Apr 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Prediction: Liquid Cooling Will Be the Next Supercycle Within the AI Supercycle. 1 Growth Stock to Own. - The Motley Fool",
+          "source": "The Motley Fool",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQelI4cDVKQzVCQ3dEelRwcllRelRucDFOZ0V2NHUtMjFnd2E3UWFMRnVUajFTSmxVanpLcTQ2d0hyaUxZc19hOUV1N0JFNjl2MTBmVDBVNDBlSW1SWjY4WTJXVlZFM3AzN1BoRmgwN1JMTFdpTFBSeW9CTGtpVFBCenBBaTU1VmhwXzJ6UDk4M0RQajZJ?oc=5",
+          "published": "Wed, 01 Apr 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "射频芯片",
+      "display": "射频芯片",
+      "confidence": "高",
+      "driver": "Skyworks 在此前 5 个交易日因与 Qorvo 的 220 亿美元并购预期累涨约 24%，当日回吐 10.29%，直接拖垮该段；Qorvo 同步下跌 7.43%。属事件驱动后的获利了结，非新增利空。",
+      "sources": [
+        {
+          "title": "Apple suppliers Skyworks and Qorvo to merge, creating $22 billion radio-chip giant - CNBC",
+          "source": "CNBC",
+          "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5XMEpON1JFYjFfVDBIbFZmYTlIUlc5akVFUjlkY3A0d0tSOEVkWG1kM0lBcWZpaXZFcGliY0FhdURfb2MxLXo2azdLVHl2a05HWkVhbTJpcUFFOTdaZmhyOGF2V0xRQjdWTlY1QdIBckFVX3lxTE5Nd2JKRkVFTUxNSE9JSmpZOEN3ckZLTEFCeXhCOFFwRDhlaXFtLThNZVNJVVltQzVuMGJ6c3BPQU1WSVlKNzhlZ01uLWsyWnZuZUtSbk5pMmFEVDdnSDZoek9YYm82dlBkUTVFWDVxY2dUUQ?oc=5",
+          "published": "Tue, 28 Oct 2025 07:00:00 GMT"
+        },
+        {
+          "title": "Skyworks and Qorvo announce landmark merger: a strategic shift in the RF front-end industry - Yole Group",
+          "source": "Yole Group",
+          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOaENqWVFvZ0hvV3djeEY2SHFIc1NpQkNScXRvTGlTaVNYVjlwUlZFR1VKX0FIZXhfeGx1T0U0bVUtVTFhWjZKUjJVZjZHX3JHbmN3STJBNngxc2Q5NXQ5eXgyMDFTVkVXbXUtV0hEaWFZMVRfcVFEUVFaUkRpaUtfeFlHVEFvSkdqam9BQWJJeVlPV0N3cXpMUXU4WHJKYk55OHRtQ3pHYTVWR25QQWx3bWZZM0NzRUU0UGpIQUs4V0xOZWtGSU0xMXZrc0dwVzZi?oc=5",
+          "published": "Thu, 30 Oct 2025 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "企业级存储",
+      "display": "企业级存储",
+      "confidence": "中",
+      "driver": "HPE 跌 10.76%——前一日刚因甲骨文 AI 大单创下标普 500 最强表现，当日被 Evercore 提示估值风险后回吐；NetApp 跌 5.52%。存储整机与 AI 服务器的估值在“减速”叙事下最先被重定价。",
+      "sources": [
+        {
+          "title": "Goldman Sachs Names Dell, HPE, NetApp as Top Hardware Picks on AI Boom - finance.biggo.com",
+          "source": "finance.biggo.com",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTE4zTkhVbVlxMFFuaG5zamRtRFl4THRvdVVzdUpiTVlqVUV6NVV4T1puS3RmWWc5Slhob1k4TTJEdm5xZDlwekE3ODNWdTNXZlB0bFlIVXREeHRDR3VxbGJMRlJGYVBhLW1nb1hRcm56c0R2WE84N2c?oc=5",
+          "published": "Wed, 12 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "NTAP - Netapp Inc Stock Price and Quote - Finviz",
+          "source": "Finviz",
+          "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE5BZlQwOHMtUVhFOV9lS1Z3Nm42dEVqT2RzR2V4MWJRRVNjbnFBNDNhOG9hb2hIVHFpVWQ5NnlBcjZOYXVUZlE?oc=5",
+          "published": "Tue, 26 May 2026 17:00:50 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "FPGA",
+      "display": "FPGA",
+      "confidence": "中",
+      "driver": "Lattice Semi 跌 11.07%（另有内部人拟减持 2,039 股的信息披露），AMD 跌 4.40%；半导体全线回调下的高弹性品种。",
+      "sources": [
+        {
+          "title": "Lattice will showcase low-power FPGA tools at a Sweden conference Sept. 8 - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNMVg1ODdabjI0NkRZQ0IzamJTY3NmZXBDY1NRTjFQOUpUS3BMcEVYWl9HOUQ2QmNFLTRnaXlCMndZNHNOOWJZb3V6eDFDZUpjMm5ORlR4enE0cVFhaUp5cUpYRUZHUTBucFR4NUFuOWJFa0RJN0k4NzdGUVFhazBlNk1PdXBNb1VybXhmcE1tekZzVHJ6dG5GWm41ekhGZzhzZTRnck9BbEt2dEVqLWR5UTI1UjFjdDA?oc=5",
+          "published": "Tue, 25 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Lattice Semiconductor Stock Surges 50% in 2026 and the AMI Deal Can Push It Even Higher - tikr.com",
+          "source": "tikr.com",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNaVVEOUM5ei1ibXc5ZHR0R2NGNFdQWkpmNFRjRFVHbXp0dTdWSjBUT244dEdSTV9sTTR6VGJLd3ZKQ2JtVE1MLUJuQzVKdENNem9SVjQ5N0EzZzBUa2hfV0g2UHNjeFVFNXBJd1NiQW9NUnJvVnpiSjRmRWZKV2pOMFRaM0VuWThRM1R1VU5uQzBWVF9BblMwRk5wblpUQmhkVktJdDVsZ2EyZUdJakREQ1R3?oc=5",
+          "published": "Tue, 19 May 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "检测量测设备",
+      "display": "检测量测设备",
+      "confidence": "中",
+      "driver": "Teradyne -13.30%、Nova -9.99%、Camtek -9.55%、KLA -6.39% 集体重挫；量测检测是半导体资本开支的直接函数，设备端回调最深。",
+      "sources": [
+        {
+          "title": "KLAC vs. AMAT: Which Chip Equipment Stock Is the Better Buy Now? - The Globe and Mail",
+          "source": "The Globe and Mail",
+          "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQMUxDbVhWbzNqRkJHQ09DX2hxaXRFYjVwX3JweUNRa0VZSW9BRE5BSVhUSFNBZ1cyaWtpZWM5Q0VSZjlfbk43Q2JPVFpMQUJaSTA4U183RmV2VlZ6MzJoRXdZQnlUWkVqV09WckNXUXdhZ25jdUJ4OUJ0WVY1MjVxcWJlenF1LWRHNWJNOGN6a1J4MWNnaDY4QlN1YWllRndzYXIzMjBVRXIybEFPV0l1SndVbTN4MmhFOUw3SEV1QmRYWmNWcnBHcjlvR2Q5UEFicFM2UzRCaFdYYXdqczJB?oc=5",
+          "published": "Wed, 24 Jun 2026 07:00:00 GMT"
+        },
+        {
+          "title": "KLAC Stock Hits 52-Week High, Up 46% in 3 Months: Buy, Hold or Sell? - The Globe and Mail",
+          "source": "The Globe and Mail",
+          "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxQLWV3dUZ4M1dHTGhYZEZ4UkVoOWFRdEdJSm9va2xyVGt2OFpzT084NHBGYjdlTEstb2NMV2VReVI3OW5oTnZUZGtsTG94Y1paRVk5cmZTMWNOc3BJMm9MblZ5Qlg1NEhXQkd5cllPMzc5WHlqNjlRMlB6UWUxLVYtcFhrQkZrLS1mX3hMQ09xMGNMUnlmOEpQZ0pEQWdzWkJzZ25ZZGVFUmFEVEg5ekhMYS1EaWJZM0VQZUl5enNVRDhaU0dhWlV3cVE5cm4wLVI2VzNZdVQ5X3hYREg5Wlc2OA?oc=5",
+          "published": "Wed, 10 Jun 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "模拟芯片",
+      "display": "模拟芯片",
+      "confidence": "中",
+      "driver": "SiTime -12.16%（披露内部人非预设交易计划的减持）、Semtech -12.07%、MPS -7.39%、Skyworks -10.29%。模拟芯片与 AI 硬件绑定度高且估值偏贵，在风险偏好回落时跌幅居前；此前已有报道提示利率敏感型芯片股在获利了结中整体回撤。",
+      "sources": [
+        {
+          "title": "BofA flags 3 chip stocks tied to AI power, 800V and analog demand - Investing.com",
+          "source": "Investing.com",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNZzJON3Z2ZWt0ellzdEpHLUR2ZDlzV182QTdKa2w5b2pzV3BDMlh6M0ZjWVkzenBfemVob2FjaWxPZjVmWmM2YnVUNkZZN3ZrOXE0YTQ2Z0gwNlZqMW9HSmpGa2hqbHpmZ3o0OUZ4TjFid3BncXR5X1hqNnp2M25IWWY4bHVkZm02RElGTjBCRFg0VjgyOUFzZVZnVXBUR0ZWR0JwMERZYThhRVYtd0kxWEk3VVpIR1VSZzFhal9B?oc=5",
+          "published": "Tue, 26 May 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Texas Instruments Slides as Analog Chip Weakness and Post-Earnings Caution Weigh on Shares - Moomoo",
+          "source": "Moomoo",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOa3NxTkhGRGRGOU40aEUzRGt3STdqS3c5YjRPMGhZNGtRUDg2TGdmZHk3c3dRcVBTQXBtTmplbmlna0g5ay12aG9YcVFqWUotQWZWMEEwTzJsVk96VXJVdTdIenAwcG9JUkcyRzd5UTVJRjUyWU5PMnN5NTZRU1NSRkNqSEFMM1dneWx2MUhzTG9xS1o2NF9RcFZTX1RpQy1kRHpLcXBGSTJoUmt2?oc=5",
+          "published": "Tue, 18 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "TER",
+      "display": "Teradyne (TER)",
+      "confidence": "中",
+      "driver": "半导体测试设备龙头，当日跌 13.30%。AI 资本开支节奏担忧从算力传导至设备端，该股此前涨幅较大、回撤更深；当日无公司自身公告。",
+      "sources": [
+        {
+          "title": "Teradyne (TER) Stock May Be Overvalued On Strong AI Demand News - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxON2JxdWNYX2l1VDdyNk02LWFQekdMQjl5RXlqam1JQ3BaVC1hRC1tZUFRelZNUy1xaHNjY3YwZmh6dnNBYnBheUw5TkpaNlRHZWtFQ1AwbFRmd0ptUkM5bHR0YnMyWFNTeEdMWTdIOW02QmJ2WGc0Qll1QUxEMU54OGhRZFdaQnRnSDczdTAxUDBjZlIwWHdPY1RiZEh3WFJaUEhrdGZKQWlkY2d6SkRoSzdjRjk5MUpkTVRnU0RTSWF4UWlQV21Ic0NycXjSAdIBQVVfeXFMTXM1eGFTY3A0S3N1ai1ya0pWWHltVEZrTjdCYk90SDlGdzVCMThkMlNSNnpDa18xVmdwT3NIWlpCbW9EY2VkQl92TGhZYm5uOTVtUGx3dFZTcG9XbUg3TEtlcEpyNjdRRU1HUktZYWx3dTgzdVZ3cjRETkJfNVQ5YzNUc0lGS0gyb2FHdWhDS2prMzRtWTBBRGo4Vkw0REJvRkdxcFlRYW1od01GNnZ1aG1LdDlxZEhNaVFFbERvNWd2d0RKTjV0THBJbTRySDFDTE5n?oc=5",
+          "published": "Tue, 25 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Teradyne (TER) Stock Looks Fully Priced As Its 336% Run Continues - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOYXBXcnUwcFRNMjk0X1dtMEFlN2MwX25YaXJOUzdMSTZLcWVDTjZuNnBsUUpOcld6a2pMRzFubzg2aU13N3NFRUkyZDJ3anlHMWJkUjRCZkUtcFNEZkNIMEVabHNYQVc0WWZ5VExPbF9wVlg1VzNUSDJQUHJNcFdOT2lUY2l5R1dZb19GVXI5aUlhUVlwS052UEtDWQ?oc=5",
+          "published": "Tue, 18 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "MTSI",
+      "display": "Macom (MTSI)",
+      "confidence": "中",
+      "driver": "光芯片/模拟芯片双属性，随光通信与半导体同步重挫；当日无公司公告。",
+      "sources": [
+        {
+          "title": "MACOM Technology Solutions Holdings (MTSI) Stock May Be 45% Overvalued Following Q2 Earnings - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxNVzU4QmZ2NjhiZmdlTGJfbDA5TG5YczduZFA0V0ZGaGFYUHIzemlTX2JTVHJVdVZtSlMwclZoQW9MUWtJTF9nSWFuRWx0X09DeUsyczM3ejdiU2FJdUlycjc1ak9CNThIS0N1dGhUS2tuM2k4QUlaSk40SlF1SU1yZVlhOTBXUEN4bmJkdnhOcXFmRkNzVHdOc2diY051c25ENFhzd2tweE85R2FBcDhuRk9FdDNQZl9XZW0yMUg4aDJmZEFzMGR6cUJrSjBvWExRY2JrNnJ2OG02d3NzVzJIbEJyc0hwemQ2ZzgwTFJ4Wko1UdIB9wFBVV95cUxOVUxkV2FyLWlqMGtSVGh0dU42ck9TQlFQM2NzOGJpZmk0S2dLNVJLWmcxVFZTd1pucHR2SlFQazRZaGpjU2psMVg4SFdtekR0eGJqVmNkOWlwTl9kQ0pDVE9HMnVEbmh6THpEMExPbC1OS1lBcDU0eHUzY0hsam5UNV9RNDd3bnBSV1ZuMUViMk1CSGx6OVl6b3l0S3Y5Z21yM3JaV09mbjQtSmg2WUxiejNRSldyNDlGN3dxQ0RWckVnMG9EMElkbEZyZnczNlZ1Y1BLbHlXUzJKa2l1aXUtUTRVRkRUNWNmTWJCTGF3Zm1tbkVNMHhV?oc=5",
+          "published": "Wed, 26 Aug 2026 16:42:33 GMT"
+        },
+        {
+          "title": "MACOM Technology Solutions Holdings Inc (MTSI) Stock Up 4.1% but GF Value Says Overvalued -- GF Score: 82/100 - GuruFocus",
+          "source": "GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOOWJ3SkZobjhqWW9PSnprWDU0YjlZMG12WHRPdUJtQUFPM3lMeU9DVXFmaTFuVnRsNlZzalhZeTQ3TmNSandSUHdfRko3c1R3U0FYekJHN3NZTFZ4cllpX3ZsZFpOM2syc3ZWaHUwdEp5Z2hSVm0zVG5HS2djVWhoS0ZXQjl6Mzg0RXZabV9zUGhTNjl0SEVSNVBPV3NlLUdhNzNOT2pRM1owVExraVExOE9GUlcxTzlWU2ZVNW4zN19Vdk9EMVJHcHhLWm5lc0RDSEQtYlRB?oc=5",
+          "published": "Wed, 09 Sep 2026 22:01:54 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "COHR",
+      "display": "Coherent (COHR)",
+      "confidence": "高",
+      "driver": "光通信重挫的核心标的之一：康宁宣布最高 20 亿美元 ATM 增发引爆板块抛售，叠加 AI 巨头呼吁放慢前沿模型开发的担忧，Coherent 单日跌 12.73%。",
+      "sources": [
+        {
+          "title": "Why Coherent (COHR) Stock Is Up Today - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBmeVo2cmJXRmxRUDk1REtCbi1MQm1GRmZESDhmTkpBWDhtU2otd2ExRE5oQmh3NEFmcWRhUzg1MXlCalduRGI0YXdaTFZBYm92NnpsekVDaW1HWkoxMkJLR3N5SkhCUHpOemdQX0p0dUkxRkZPVUEyUHhLdFQxTDQ?oc=5",
+          "published": "Tue, 08 Sep 2026 15:36:00 GMT"
+        },
+        {
+          "title": "Coherent (COHR) Stock May Be Cheap On Cash Flow But Pricey On Earnings - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOekZUTmNUbXJQcU92bTlqaFN2R0MzUklNYjZkWTlCZWg5dUlxQU1ucEJDS0NPSzBDUHY0eXlWQWRFaklsZURGSU4wRDVIdmh6U3VrNzRBRUlSNWNLbmw1MTZra0FneFhkaGFBalhVc1FxZjYzdE1OcmpKS041aUYwZ1FmNllqT3dnMWJHd015TThUUFJYSGU1b1FtMnhmdkRHX2pfZVRNbW1MT2NvZFJWanFBNEZsZ3J2c01ibtIBwgFBVV95cUxQSnQwTFlEOGhYR29SYm4xUTMtOXpfenRCai15c1JPT1pqUUg1YXRaNjMyVl9fYS1vaFNZb1BkWUNsYXkzdWEza2FLZW5Vb2VpajhxOE5iTWlnVjRBdmJ6ZkVSTU9GQWxOWU4wN0tKRHZxcUREbXZsclF2RVo3WWF0RHFpMnJrLWhaZTAxMDhTV29ZRFdpdTZ2c1M3c3paa0N6YkdlVzREWmIyamJPSTk5dlE1S0Y1eFhvNHRJTzJJVXEydw?oc=5",
+          "published": "Thu, 10 Sep 2026 20:03:09 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "SITM",
+      "display": "SiTime (SITM)",
+      "confidence": "中",
+      "driver": "披露内部人非预设交易计划的减持信息，叠加模拟芯片板块全线回调；此前连续获机构正面评级，估值偏高。",
+      "sources": [
+        {
+          "title": "After $11M June stock sale, SiTime (SITM) officer plans another trade - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOM1lRcnV1Y2h1WXBpdFVIZXoycWdRaF84QlR3ZW01UmVrOEFmNkJ0RUlyOGRjUU5Oc1FERGxCSmxtaUd6dFRTZ1lDakR1cC1qRl92aWV5bHZJTGpWVU5vM2swejR4Qm1KWU91bVZwVHNMTUFwcGRERVcxZ25HT2lDS25sMFA2NFdFVEdOOUhSMk1nUQ?oc=5",
+          "published": "Wed, 09 Sep 2026 19:19:25 GMT"
+        },
+        {
+          "title": "After selling 12,000 shares, SiTime (SITM) CEO still holds 345,544, much in unvested stock units - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPX1VlWkJJQUFXQkNBYkJielRBSlFxMHpQdGJlSkFpZDB5cVBRMmdLTkRkTFRvbE9Wd2I1X1d0YnlsMDNNNTlFMXlmMnZGUlRsU3VZaTVlUUt1b0NLT2t3RC1BZkcxUFBsLTltWEplaWJ4TnZjdFlPTDdXNWFnbGljSnlrWkNnNjdHejZxX2l2Q3loSnpfRHJ2eUFXVV9SN1hpNlpCVXRjaDQ?oc=5",
+          "published": "Thu, 10 Sep 2026 23:04:52 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "SMTC",
+      "display": "Semtech (SMTC)",
+      "confidence": "中",
+      "driver": "模拟芯片 + 光芯片双属性，随两段同步下跌；当日另有 RSU 归属与代扣税的常规披露，不构成实质利空。",
+      "sources": [
+        {
+          "title": "Why Semtech (SMTC) Stock Is Trading Up Today - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOcjZYOHh6RklwSkM2WXd6U0pfbEdScGNnWnk0U2c4UWp4ZGlhR0ZISlVOYjhLaG5UQ0R6VU54ZHUxWmxXWExpRzhUNEpwWlBnZTBtVW1xSnFQc005Mkl4N1lRX2lvVk5KT1E3ZVhhUUt1NGV2Q2dTdndka2YyN2lwRUh1R3FMazB1cjlfWGVZcjItVlVNdld0MUhhTQ?oc=5",
+          "published": "Wed, 26 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "A 5-Day Winning Streak Has Semtech Stock Up 24% - Trefis",
+          "source": "Trefis",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNbmM1TnU2QVpfenpTLTlXZlRkd1RFa0o5NlNxNllJQnVQbmVHNWdBeXVwNDQ4cUwxbDlLT0VUbWllU0lxN2lxN3FRMHgycklOcU42Q3NQT0dMSEFLdDNoUUxmUGdKMlJNaHlRUFBWeVExMTZLejJmcnJmUTdwSk5ldExKbkRYNTFuQVRiT3ZtallxVC1DTWNMQ3NZbDhmR2pzYTBpbndjcUNETkU?oc=5",
+          "published": "Thu, 10 Sep 2026 07:14:52 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "LSCC",
+      "display": "Lattice Semi (LSCC)",
+      "confidence": "中",
+      "driver": "FPGA 板块回调，另有内部人拟于 9 月减持 2,039 股的披露；该股 2026 年累计涨幅巨大，回撤幅度深。",
+      "sources": [
+        {
+          "title": "Why Lattice Semiconductor (LSCC) Stock Is Up Today - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQMDhBQTFYdzF1bF96M1pwdjRLNTNnU3BDNno1SUVfLU5jUmw0NGNKWDFXS3E5LWpobUY1dWhfOTBDbWVHODVIRVFsUFRROThGZFdYcVU3Qmt5TXdRcUJSWHFhNzV0T1VDR2thS1BZeVBsR0JMWnNQMlhzcHZTeVpqVW9xcS1sdFFSQXQtckNMYUhST2V6NTd3a2Q0YkJRV0l5eWNv?oc=5",
+          "published": "Wed, 26 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Why Lattice Semiconductor (LSCC) Stock Is Down Today | LSCC Stock News - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxONWtlWmY3T0E0NldrbGY3ZWZUeUtmT0JqdnkzblgwWURncHBtRUN0NnJDSzljeXhmcHlPRlQ0ak5FV09nYWpxTm1FcGtCak1kN1RGeEQxYjk3d0dVREtnOWhycjlPcGVOekVneDMzRjN0MHNxbWljV2ZQNWY1T0Nib1dMMTkwRDB1NDlBT2lyVHQ4bmM?oc=5",
+          "published": "Wed, 05 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "HPE",
+      "display": "HPE (HPE)",
+      "confidence": "高",
+      "driver": "前一日刚因甲骨文 AI 大单成为标普 500 最强个股，当日被 Evercore 提示估值风险后回吐 10.76%；同时市场开始把 HPE 当作“内存价格的押注”，存储成本上行引发毛利担忧。",
+      "sources": [
+        {
+          "title": "Hewlett Packard Enterprise slides 11% after Evercore ISI downgrade (HPE:NYSE) - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPMEVhQmphekswTEl2NE01T3dleXhvRC10Qmd2eUZaVm1uSzJQZnVTVDVrLThsVUNyNEJpLXc4bGF1bTA1ZEdoRzdVR0RINWNpUUxKLVM0QUlLTE1tVUVhYWdaZGYxejVwRUNtWWx5MW5SMjN5VllOeWhlc3NxRDJNbjlkbENaSVFYbmMtR2JQVXNOM09zZk9RckdwTFJ6ZklRbGlSZXBKbmVUTThYSW5VYw?oc=5",
+          "published": "Mon, 14 Sep 2026 21:08:56 GMT"
+        },
+        {
+          "title": "HPE Stock Is Downgraded After Rising 159% This Year. Why? - Barron's",
+          "source": "Barron's",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOeFZIUHBTZjJ1SnF5TEIza3YxUmtVRTRCY0VwbVB3X0RJU2hicS1OaDE3MEtFVURYT3JxdTNrdFZobTFzbElZd0VaYzh1MmVvdFlYNkV5dTJQaEgwSWktNTd0QVd1ekg5ZmVGT0kyN2MyWXEzQkNuaF80Y2NIdjlKS2hoZnNwb1VBeU1XbWhuVzI1Zw?oc=5",
+          "published": "Mon, 14 Sep 2026 18:23:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "TTMI",
+      "display": "TTM Technologies (TTMI)",
+      "confidence": "中",
+      "driver": "PCB 与 IC 载板随 AI 硬件链回调；此前被报道估值已在溢价交易，另有股东拟减持披露。",
+      "sources": [
+        {
+          "title": "Why Is TTM Technologies (TTMI) Stock Rocketing Higher Today - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOSDViR2todDMyV2JOaTg4U3hfTXdSRGpTcnp5RURDM050d0M5QURjXzQzU1lKSXN0azU2bTVVSFFPYUhtMTM2M1BWNWNoNUMtY3NGY1M0dGNWcEVTdEluLTJFWUdSRXdOX2hBOEQwZVNhNUdGZDA2UzZicUlFNzF0d2NrbDdWSWF4TGM5SjVJaklRd1YyTXNlVXdMQWM?oc=5",
+          "published": "Wed, 26 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "TTM Technologies: Priced Like A Board Shop, Booked Like A Defense Prime (NASDAQ:TTMI) - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNdVowY0x5ZEZ5b3d0bWU1ZE12SkRTWktKb2xzcUxYakcyTS1nU0owNngyY1ZfU3VWaU5FaFdmZmhmejM4Um1uUDlVV0lpaGVhVnRPUkZBdkVGbkM4ZXhUM3JGektrOVYyR0hyUUlPd3hVcXZiWXgxR1dCdnA0cFRsNkpWbUdKTWRDeXhtRnc4eFpIZUFNX1FNenB4NENQeU9JZjBQTFdrekNaTmdwREhZa0Zn?oc=5",
+          "published": "Tue, 25 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "SWKS",
+      "display": "Skyworks (SWKS)",
+      "confidence": "高",
+      "driver": "此前 5 个交易日因与 Qorvo 的 220 亿美元并购预期累涨约 24%，并创 52 周新高，当日回吐 10.29%；属获利了结，当日无新增利空。",
+      "sources": [
+        {
+          "title": "Skyworks Solutions Surges 10%, Qorvo Climbs 6% While Chip Stocks Fall: Is the Merger Finally Clearing? - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOMS1acFhVRVU0S25SZi1fY1BzZzBUcFRtUVVEd1pwaWw1Q1FIb3phNmZlclJiOUtQOTVvbFlwcHVVR2o5NDJWQlFQaDFNMjZ1M1YyRDV3aTd1ZjBfVTRDdXZvOVloX0VsckJGcC1wVDN3WmZWMjRDZU02aEFFZW1CZHA3R1FULWpEQlNWeV9NT0xfVWhKQ1JINnA0a0xhWmNE?oc=5",
+          "published": "Thu, 10 Sep 2026 16:47:26 GMT"
+        },
+        {
+          "title": "Why Skyworks Solutions (SWKS) Stock Is Up Today - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOYWMwaDZmY2cwXzVkZjllemIzbzNyTGZPTGRqS05jejdiZGE4S3ktdm9xanJYUzY0emxsdnBUQ28tMHVNUUphYmFPQzJ4b0daZlgzMFRvSm9vNkl0ZGpySEZLWnZBOHVva01WSGlEVjlEc0pNNGN3cGpDM1lYd3BYcXdVLVNFSWFpUWUyVQ?oc=5",
+          "published": "Thu, 10 Sep 2026 15:34:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "NVMI",
+      "display": "Nova Measuring Instruments (NVMI)",
+      "confidence": "中",
+      "driver": "检测量测设备板块集体重挫（同板块 KLA -6.39%、Camtek -9.55%），该股跟随下跌；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Nova (NASDAQ:NVMI) Gains Attention Among Best Nasdaq Stocks - Kalkine Media",
+          "source": "Kalkine Media",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPdF9LalV2Ulk5VEtqNk5Hdl9kWDZSODhtNXdYRWRISUlRZkZjR3o5c0hCSkdiVk9OMm95a2NXV2Zsd2JHMnZhRGhDU2J4SkxiV2ppX3RUTFBXVWxVNVR4Y0NpSTBxU1JyR1gxUmZoQjFUY1QwNlRnR1lWMGVIeXpDZ2gzVkxYNTlPVHIzTmY0ZUhTRU5VVTQ5NTZCc18wa2dBaXpXOA?oc=5",
+          "published": "Tue, 20 Jan 2026 08:00:00 GMT"
+        },
+        {
+          "title": "Cantor reiterates Nova Measuring stock rating on long-term growth - Investing.com",
+          "source": "Investing.com",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNNHhRZWhDWENWRUNyekg1NmRTWC1UWXhZQmVoY3FwZTRkNWY3c083ZFBRVUQ0ODhqbVhNNG5qOUI3YXpRcjJ6Q0tIbE9fR2FGTFRBTWR5NHFlTVNNZU9mTmp1a0YyaDlBN1A2UmFObUdKYXBpaGlucUUzMnM2V3AwZDNxc3hablk5S19xYU41ZDdkd2JnVVRITDhwLTVoOXpybTFWTW9DUm43eHBKZWVSVmsxTHd1OG92ZUFBVlpkakdSUQ?oc=5",
+          "published": "Tue, 14 Jul 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "LITE",
+      "display": "Lumentum (LITE)",
+      "confidence": "高",
+      "driver": "光通信重挫：康宁 20 亿美元 ATM 增发引爆板块抛售，叠加 AI 减速叙事，Lumentum 跌 9.92%。",
+      "sources": [
+        {
+          "title": "LITE Stock Jumps Over 9% As Lumentum Extends Its Stellar 2026 Run — Why Barclays Thinks There’s Still Room To Run - Stocktwits",
+          "source": "Stocktwits",
+          "url": "https://news.google.com/rss/articles/CBMijAJBVV95cUxOMzI1bV9LNXdxemV2RVBTMDZxZHZhQWVJVFdSZjdQdWl5SGR3d0cyaS1JalhnUS02dzF2Ukh3ZHdmbnZlUE8xblcza2YxNVlzbVZIbERHdGJUbnA3R3pnYTZCRHB5SWc0dl9IeXhLNmFVZ3l4SWZYYkNET1pNc202Rkdyd3lvZ09oQTRTZUZ0YU5SNF9UTkNna2FodHVkSFYwSUtuWmdiRi1tdFJ5bnduU0FsdHpMbEczYWlORENnYnNIQWRTdzJDeEQ2YklKMTZlcVdVMUJzbTRzb212ekpMT3FoempIdUN6dVB2U2hWZ1Zrd1pKb2ZKaXBEZlRMRXNwUjF2SzYtU2VzTFFy?oc=5",
+          "published": "Wed, 09 Sep 2026 19:55:55 GMT"
+        },
+        {
+          "title": "Lumentum (LITE) Stock May Trade At A Discount After AI Optics Investment - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxQeXpZbUlBcW9hQ2Nkdk81cjJhZEhGRmkwQmlRaFpIX0RBRE4xaVRxTkJLV3pybEdoY2JYZ3dRZzJLRWNMd1YwcS1OV3RWc0J3NGF4UlBrMDBDWFUyQXYxM1RYaUt6RzNiZFZKekhUTkRGM1lzMmktU1c5YVN0RWhmclNrMmR2WXY0RGE0WjBGeXI1WjVaTnZSeFRxNVZJa3M2a01VMC1ndklOOXRwRUdJV0ZyZmVESFYzU2JsQWFhUTFxZnlidDFBSkRkVdIB0AFBVV95cUxNQnBRU2kxVjNHenJXSWNWaGxLUDFuNFVjOU1MU1g2bXdPeDFreVQ2eUVtbTlVVmVkV1BWUGF2VTlCdGdhSFdzVTJFTS04eEtJeFQ2WkwtYVpScG15aU1uVHF3S2FrQm05ZHlwM2hJOWVZYmY4R29ub2hjMmlHUW5NTk5jTUtySm5kYlpnWUI3azF6amFoNmRRWUJvOHNCN0N6ek1fSWVoTE8tVUVEMlAzMnhFU0JvaDdJakRUM2dfU1Y5MHhNRXM5anRTQ1hTdHBN?oc=5",
+          "published": "Wed, 09 Sep 2026 18:32:21 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ARM",
+      "display": "ARM Holdings (ARM)",
+      "confidence": "中",
+      "driver": "半导体全线回调中的高估值 IP 标的；市场担忧 AI 训练放缓会影响服务器 CPU 与自研芯片的授权需求。",
+      "sources": [
+        {
+          "title": "Why Arm Holdings Stock Popped Today - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQR0N0M1VXRlZDenA1MDcwTTNEQ09NTktFX1BJbG9EclBXNGZDRDE2UDNieUlPa2hjTkZvNFB1T2J3M3ZXa1UzXzhtRnBmWldCVnJ6RkpQaENjRkFzSk0ya1ZwQ0VCRDNLNmJWeDZIZDhkdUN0QlNSNkV3dXVZYzVqbV8yZkZka3VmMW9oOUVVcHBTNHY3YVo2ZVdB?oc=5",
+          "published": "Thu, 13 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Arm Stock Jumps With AI CPU Demand Rising - Can ARM Break Above $266.53? - TradingKey",
+          "source": "TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOVlgxUVoydFU2THZuVzFWNUh4Qy00Y1pWUlpXTFppdG0ySG8yMDFsWWsxdEZIdm1fblJGbGJSMmh5eDVTMm5laFFsZ2Y2MmpoQ2ZjVzVfT3pKbTNVaEtETi0tRVpLTHRVSzE1ci11N1ViWWxqX2tGWXFhbTZZSkl2QjdEa1J4WUs1VDdRZjlGeWZTUG5BTnR3NGtacUluUzZaM2dRMXZwdW9lVHdDX3dNMg?oc=5",
+          "published": "Sat, 12 Sep 2026 23:02:03 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "NVT",
+      "display": "nVent (NVT)",
+      "confidence": "中",
+      "driver": "液冷散热与电气设备方向回调；虽被 Zacks 列为当日 Bull of the Day，仍随 AI 数据中心配套链下跌。",
+      "sources": [
+        {
+          "title": "nVent (NVT) Stock Seems 36% Pricey On Its $2.6B Backlog - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNam5QWklBU0JXWVdmSm9MY09laEtibUNTRGhCWkJfUWs4NDdLcGFQNDI0MURnaTFmNXMyZV9SY2xJcWN6cm5fUnpyeHhBWnJqX1I1OV9YcnRhN21tYk1qdHowTWhmSGhuS3o1NzdTcnBEbTFrYjl0M01HakJGaHk0OEI2VkFjR1dkeUI1UmhtNHdOMU0?oc=5",
+          "published": "Tue, 28 Jul 2026 07:00:00 GMT"
+        },
+        {
+          "title": "nVent Electric (NVT) Pulled Back After A Strong Run, Is It Still 20% Undervalued? - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQNVZEajZHWnkxMmV6ckQwdUlORW5VOXJQd01rQlBaOEVPR1ZiSWVMMkFtNTVzT1dVbWFxTjgzcVdsYXhTS1U4Z2ZQcVlWNXhkcEhOTE81U1RuQTBteWRSUGtGUlNMM1A3TlRnQXZIUHBublNMODBYS243d0tILUlNZy1kMmlNWU05TGktcHRPeUdmNDg4OUwwTXQySQ?oc=5",
+          "published": "Tue, 28 Jul 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "CAMT",
+      "display": "Camtek (CAMT)",
+      "confidence": "中",
+      "driver": "检测量测设备板块集体下跌，该股跟随；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Camtek (CAMT) Stock May Be Overvalued As AI Demand Expectations Build - Sahm",
+          "source": "Sahm",
+          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOazdNQUVONm9mREZmOG1BaTM2cy15T3o3TEN3c29lYTVjNkxyUGtCR3VRcWNjRXBOOXZlTUVTOWFzRy1wVGxZMWpSVml1RWx2TjJXU1VFWm4xT1FyNDRrcHZibmt1ckwwbkNIRU5iQ3k1T0h2X3VmcjN6Qm5TMXo3RnRoNnFXTDhSWlYtZ0Q4QlM0bF9MMk9jeDRwWHFFc1BNelMyUDY3Z3RvR2RIdVJoVmhWMmNBZ1ZjdnFN?oc=5",
+          "published": "Tue, 25 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Camtek (CAMT) Q1 Earnings and Revenues Surpass Estimates - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOMHd3YklPcWpqbHlLSVVsN1N2WVdFeTlBWnBxcHVzRTA1bnVGc0N1QXV6UE05WjVELWp6SG84UkVqSnFyVEp6UlplV1JwZEJhWTBobXdIQU1XRUthUm1wWTg4NFNhZnBsSzRQTUZQZzJoNE9XM1Y0UjlWV3FOZFI5R1JJWTNqWW9NMTM1RFhGVFNMaWtGTy1aVWZ3SUxWUQ?oc=5",
+          "published": "Tue, 12 May 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "AMKR",
+      "display": "Amkor Technology (AMKR)",
+      "confidence": "中",
+      "driver": "封测（OSAT）随半导体链回调，当日低开；先进封装是 AI 芯片产能瓶颈，对资本开支节奏敏感。",
+      "sources": [
+        {
+          "title": "Why Amkor Technology (AMKR) Stock Is Up Today - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOX0xSOFNWZlBjZWpMNDdENng1THFMMEJaNm5EOEdTZEwyMDFKcHo4aF9SVk5MRFRPVGU3QTVoMHM5NmNNR1NJVldYelVuNTI4dFJmTUR4azFDbE1WQWlMcTZ5VzJ4dFNuWURnYnBTWVZ5YnJqNnIyTHZvZUQ2Slg2ZG9Mckw0VlY4ZUE?oc=5",
+          "published": "Tue, 08 Sep 2026 18:37:00 GMT"
+        },
+        {
+          "title": "Here is What to Know Beyond Why Amkor Technology, Inc. (AMKR) is a Trending Stock - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNWHNEakh1ZFUwZzF2WkR2Y1FzUUlJLTB4SG5kR3BNTkhZbG1URTgxQXdFNnBIV2FGbXk4MnBDcWpuQktycF9WdS1BeV9kMVRmNkZrNlNYNG5VVFkweG1leDN1d1BweTNWajJFZUFldUJjOUpGUWJ4NmxGa3ZlSmItVmZCRDhxbElVbVJQVFZYbGN0TU9ST2tpa3N1a3Vidw?oc=5",
+          "published": "Tue, 08 Sep 2026 13:00:04 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ENTG",
+      "display": "Entegris (ENTG)",
+      "confidence": "中",
+      "driver": "半导体材料（前驱体/特气）随设备与制造链回调；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Entegris (ENTG) Stock May Be Fully Priced After Its 82% Run - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQM1plMUtlc3QwVDFlZEpGV3owY3Nac045blVVVmMwanViOVJzQjJzZFVDajhnVUpjZlk2VXpNdGhZdU1CQXU3UjVGTTlXb1BVTWxxbGt2QXNfNmlQbk5zcTd6WWRJNERreUhhWlc1VkxfMm1QUlNJYmdvdF9lSDk5eVpiVy1TdW5ZbkNmNXRGRk9reXVBSElISWh3?oc=5",
+          "published": "Wed, 19 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Semiconductor Manufacturing Stocks Q2 In Review: Entegris (NASDAQ:ENTG) Vs Peers - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQNnExclRiMExFWk1UWUJobW1sU3Y2a25BOWs1R2JDU3IwYUc3ZzZaX1hpaWpZNENBU2JDV2x5dVFNOFlhOU9Ua01uNkpkUGs5eVJ2S19OeDFrTDBCZjZZeWQxWHJKMDlQRE1RYVJmeVBIcHJLLUh0VmpJb3FyLVZMWmViNTVOYkVVZWxJTmdVSnlOWk9Zd3VqYzNqN1YxQ1NaUHE5aUgyUkU5WlMyRVE?oc=5",
+          "published": "Wed, 09 Sep 2026 20:26:38 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "SMCI",
+      "display": "Super Micro (SMCI)",
+      "confidence": "高",
+      "driver": "AI 服务器整机，在 AI 硬件回调与风险警示报道下下跌 8.38%；市场担忧训练放缓直接压缩服务器订单。",
+      "sources": [
+        {
+          "title": "Super Micro Computer Stock (SMCI) Opinions on Surging AI Demand - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOd0pONE1YUGtHa3l2aEIxVDhrUWRtVnlTNndLeE8ta19jMFlFOG45LTFhNzNZNW9McllncXV3M0V1bjM2R280QkxHemhPeFNIdGQ1blgyem9SdEE4NnNyX1NjUjlWRDNUYUhud012cDlCV2pWX3NtTjZwQjZoeUNCU3JMZllPYW1pOGpVRnFqSDVXdURCQWRmeEwxMmxyR0l5WXc?oc=5",
+          "published": "Wed, 09 Sep 2026 17:34:00 GMT"
+        },
+        {
+          "title": "Dear Super Micro Stock Fans, Here's What August's Rally Means for SMCI - Barchart.com",
+          "source": "Barchart.com",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOYmpNOWNBQ1FrUkxlRTVDUnhuc2UwV2tiUmQ1Z19jcUdtYm5iVlRlajZrWnJZYWZ6TE4yaU9pMHJLVnMzNFVOaTlUWjF5OTdhOVR2cENOVl9FY3dOZkRScEFQMUR5aHBrNF82bmxZNkF3V1pMd2M5WldJanhCcWYyanhKd2xYUkRhN0VYMnJnTldUWENpTjlhSXpiT0J0TEJWdFpqcDFrVVZud1NubEM3S0p0Yw?oc=5",
+          "published": "Thu, 10 Sep 2026 15:40:42 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "LRCX",
+      "display": "泛林半导体(Lam) (LRCX)",
+      "confidence": "高",
+      "driver": "薄膜沉积/刻蚀设备龙头，有报道直接指“AI 节奏论传导至晶圆厂资本开支”，Lam 与 Applied Materials 当日同跌约 6–8%。",
+      "sources": [
+        {
+          "title": "Why Lam Research (LRCX) Stock Is Down Today - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOa3M3OWV4OXhxV2Q0dTc4eFZROHhUQl9yN3RGM1lsUkl6NGVoUF9SOGR3NUZTVzF2S3FWM0FaS3B6dmdxQmx2aDVJbUFqMGt1Y01NemtiWHRIc0hGR1B4Q2Rsb180dFZwdVNsc0MzdVZxeTZlTEc4TlRFLWpyNjNIMFZFZk1UQ3M?oc=5",
+          "published": "Wed, 19 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Lam Research (LRCX) Stock Looks Pricey On Earnings While AI Demand Stays Strong - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOck5KYjZ1RHdVaTFYOU9nclh5WmdTRXR6U0FkTnNCWkZDbzFDb1dodDAyeGpYOTd1d2pGcUY0a3F1VXhaRTJRdndEaU96M0x2ZGV5MGtMazIxeHE1Z0VQZTFxN0s4bHVmVmI1UUdzWk02STVTVWg0VHR3NDEwd3d4OHYyMGI3OEhzcndUTDNVYW85RnlZcW9VRTVuMDFVVTZmMVJtdmpDa1ExeWFkWnl1VzZTUnJrVzBabktpcVM2elc0ZC1scHJfR3VCZEp0ZU5EdC1V0gHYAUFVX3lxTE5aQ1Y1VzRybGpoMTZ0V2s0REVHZkZlZlA1VUtxdjVnN3MtcDdfc2YwTWQ2Umk4VU1DbjVZY3VpRFdNN0FZUWdLcEZDbUFHdFRkdmZhamdpdV9NbW52SzJQaEgzak0wZlByYnFkbnRhRDkxMFgzbVlnOUI3V2RMQ2VtWF9NbGp4c096NGJvdk95Umt1ZF9famF5TnkyXzduNGFBOUV6cVVZWl9UY2tzckFtYUVSVU9xdDcyY19QbV84NVBlSU5PY3VfakFyVm0zNXpNX25ad2hfNA?oc=5",
+          "published": "Wed, 09 Sep 2026 21:42:22 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "KLIC",
+      "display": "Kulicke & Soffa (KLIC)",
+      "confidence": "中",
+      "driver": "封装设备随半导体设备链回调；当日另有机构增减持的常规披露。",
+      "sources": [
+        {
+          "title": "Kulicke and Soffa Industries (KLIC) Institutional Ownership 2026 $KLIC - MarketBeat",
+          "source": "MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1TMGVmZWV4ZDBNNzlKRWhlWi1Pdlo5MGxGQjcwSlJaTU0xZkNZUU1YMjlPVVVLSEVvU2t6cjVUTmJYaXpBempsUkFvVUJlZTZQX0w5cTdpWjNvc1ZIbGpKZk5WUlVIQnlQOFYwOGk4OS1YdTFnZ2czMHpR?oc=5",
+          "published": "Wed, 09 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Kulicke And Soffa Industries (KLIC) Stock Looks Fairly Valued Following Its 117% Run - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOUjN2dFpmT2JQQzYyemo2MUZRUUFsNThvU1A5T0t6TG5zSlBpaUJKMndlNENYbjJLd0ZrSjd3VEIxSTZiY3NKUXp1VEU1dlBUbXk2b194eFUwc3VDOVlnTW5BZ0tFd1Mzd2g4MmdPZVo0Yko2aU1RcDJoVlgxc25YU1dtSFZpNGlaaVZVdkw2REhqUW9XY0NSakU2ZHAtWjNhS3c?oc=5",
+          "published": "Wed, 02 Sep 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "HIMX",
+      "display": "Himax (奇景光电) (HIMX)",
+      "confidence": "中",
+      "driver": "CIS 图像传感器，前一日刚大涨，当日回吐；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Why Himax (HIMX) Shares Are Plunging Today - StockStory",
+          "source": "StockStory",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPQ3RUenl4NXN0Z05DQ0hxVkhzQlhpeW5VcXBXOUI1b2psUTVYTENMZjA1MVNSMzV1T3dZMWt4Nm4wR1JYeVRIX2gxUkoybnlOMUh5aktwaFdKVFlkckVYVkpyR1UzczlFOE5TUUtmWldhazgtc2hJLVBBT2lnMmFNWUVscmpEeW12TUFhblJyMllfTmQwakhwTXZqb2JkcGZPVUU5NTlKRQ?oc=5",
+          "published": "Wed, 01 Jul 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Himax will bring glasses-free 3D and hand tracking to Detroit - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQaFFyUHk1LVdtMW05d2lpVTNhRGJuVmkxWWRyTWdrSlV6bWtkaTI2UjdteXVTakRSZ2c1RHNPdlRDME00VDRXa21QZ0RhVnFpMzRLdGxJdFpHSEt0bWNPbmhXUFA2N28wZWxVcXVYWXpKUVZGdjdJYzRNTktnMldRelhfelE2QlJFYVVHMk4zV0NFWEtNck1taC1sa1dtV3RXT19lM0ZRMUFuVUFsLXluZzJjOG5xdVdMdGNIcw?oc=5",
+          "published": "Thu, 10 Sep 2026 06:11:05 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "VRT",
+      "display": "Vertiv (VRT)",
+      "confidence": "中",
+      "driver": "AI 数据中心液冷与电源龙头，随 AI 硬件链回调；非常规的大额虚值看涨期权成交显示多空分歧加剧。",
+      "sources": [
+        {
+          "title": "Vertiv Holdings Co Stock (VRT) Moved Down by 8.17% on Sep 9: What Investors Need To Know - TradingKey",
+          "source": "TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQT1pBaWlaT1JaNVRKUW02SmZWWGcyTi1rYm1MZFNRTVFnSFUxQzkxbGVUQ0JYMU1KS05PT3gyN3FZOWpKc0RmVEw4RTI2QTRlOE5jNzhaMTNCeHFLRFBmM05nRm51Zko1X0pOMmo0S0d4cHg1bkVRWUpDTzhvNHplYTVxOTZJNGFYckE?oc=5",
+          "published": "Wed, 09 Sep 2026 16:15:24 GMT"
+        },
+        {
+          "title": "Is Vertiv (VRT) a Buy as Wall Street Analysts Look Optimistic? - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNLVdTQ1p3X2lNNDlPdmRieFBiVXlaQkQxZ1VQc0pfOU5FT2Y4UzhFdDFBRFlWTmNlMWNZcWVDQkF0RTE4akpuX1VwcjY1OUFhT05oRzNfMW1DczByNXd5UjdRY0Q5dkZEX2lmUFN6bS1NaTZ5S0g2X0FwX0ZGLXJLMjlSWjB6cmYyWWlWUER2VTFGWFczc2c?oc=5",
+          "published": "Wed, 09 Sep 2026 13:30:05 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ETN",
+      "display": "Eaton (ETN)",
+      "confidence": "中",
+      "driver": "电气设备；同日 GE Vernova 被 GLJ Research 首次覆盖给予卖出评级、目标价 470 美元，带动电气设备板块整体走弱。",
+      "sources": [
+        {
+          "title": "Eaton (ETN) Suffers a Larger Drop Than the General Market: Key Insights - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOUHdiN3ZDZk9IdVdBNzRXSWFWTzFvOU1VOXRFWjJvQWJhTmtpT2xrOHBYTEhIMVpEbjhjVFZYTE8ySnIyRjFRQzhhXy1XYm5iRGFmdFg0RVhVcTZJcEgyNHZ2UDNxc19JQURvT1hhV0pTX2NxUkxnMk9hY2VjUGFRa01QWXF6c0sxLVRJNTRRRl80OVdCMUZxeTRn?oc=5",
+          "published": "Wed, 09 Sep 2026 21:50:04 GMT"
+        },
+        {
+          "title": "Why Eaton (ETN) Dipped More Than Broader Market Today - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNZ081aU9kN3JPLUhxa0tWSkgtUU1Dd1pFaFVFN2ZaTFpvRTV2TmJHVEZXREk5RHpadjgtbUxLNFZDc0wzcE1MUnlCZW5aYmRsRDFTcm4wYTZQMVZTSGFfd1lPZ1NWUWI5bmE5dUlYX2NRMHRMaEdpQzA1dHp5VC1sRjd1anZIekg3emR4M1pjV2VUVjFp?oc=5",
+          "published": "Thu, 10 Sep 2026 21:45:03 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "QRVO",
+      "display": "Qorvo (QRVO)",
+      "confidence": "中",
+      "driver": "与 Skyworks 的并购预期此前推动其连涨，当日随板块回吐 7.43%；另有内部人拟减持 2,500 股的披露。",
+      "sources": [
+        {
+          "title": "Qorvo Inc Stock (QRVO) Moved Up by 8.17% on Sep 10: Key Drivers Unveiled - TradingKey",
+          "source": "TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQbVlFNUFGOGg4bzJyT3Roc3pTaHNDQzViOXJvdm55cUsxRElLdmNMME0ta2otaVVTdERtLWZMc0UyQmRseC1pNXRkYzJrOVcyVUtOWUhiX29PLWhXUmFrM21ISFZtUUVmRFZSUjRLRkVfUm9vRk0xYVVuYjRVcDNSMjhJdTBDTUVwRUdV?oc=5",
+          "published": "Thu, 10 Sep 2026 19:15:27 GMT"
+        },
+        {
+          "title": "Why Qorvo (QRVO) Stock Is Up Today - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBCeUdjSkJISHlBLUZ4TktWU1gyZUR3RElndFRpcS04RDRlNFNya3NmUHlxVnFhT1czdURoQlNTNlFQY0kzRlZNT3c2NUZmTnBBUHVMcGJRVFE5U3JqOTRLMUJ2WHJhYTFVSUlQZUlnQ0x2VmxfdzVuYW10aw?oc=5",
+          "published": "Thu, 10 Sep 2026 18:35:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "MPWR",
+      "display": "Monolithic Power Systems (MPS) (MPWR)",
+      "confidence": "中",
+      "driver": "模拟芯片板块回调；当日公司公告的是第三季度分红，不构成利空。",
+      "sources": [
+        {
+          "title": "Reflecting On Analog Semiconductors Stocks’ Q1 Earnings: Monolithic Power Systems (NASDAQ:MPWR) - StockStory",
+          "source": "StockStory",
+          "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNbUJLZEpsX05pTGh2Z1V1RVFHZkJOQl92VU5EN1F1TE5EWlhyUW5nNngzVHhmaUctbFBYX05LRUdaaWowa1BKeXQwdTRyWnpGX19OamFEbzV1emZpd0QxdzRid3FZeHA0WU9UcTFrUGxDRUhVeWlJMTBfVDVPN3pVYjZ2enlXUkFQU295YzFUa3cycW03U0s0eGZuUVIxcHc4ZUdQQlZlaGhyQ29EaTlIa1FiZzFiY3EzWHZhanQxLTdZVTZVYnVXVGtjMGJ3MlBTUzlvRzYxYWNQQmRCVlNfQ1hrMA?oc=5",
+          "published": "Wed, 01 Jul 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Monolithic Power Systems: Why I'm Selling The Best Quarter (NASDAQ:MPWR) - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNajdYQXpTbVp5TWliZ0xSRUdXTW91V2xWdElZWktoQ0JzMm45TlpmNklHdVZDb3JPYWJWRjFua3ctd0dXYk9TRkdxT1ltQjZpeWFyZmM0d01ZNk40X3lhdkhCenkxdlZRWXVSUzd4dkNoNS1CY2RIcmJGN2lUUF9GMXNSSXNXbW5xYTViQnpLYmxDbXh2dlItWDlabkVzdw?oc=5",
+          "published": "Tue, 04 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "MRVL",
+      "display": "Marvell (MRVL)",
+      "confidence": "高",
+      "driver": "定制 AI 芯片（ASIC）与光 DSP 双主线，是“AI 减速”担忧最直接的承压标的之一，单日跌 7.32%；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Marvell stock soars 32% as Nvidia's Huang says it could be the next trillion-dollar company - CNBC",
+          "source": "CNBC",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQYTMtR2pPU3JFdFNmZlA5NEw0YWM2aFFBZVdPNGYxX202dmdFTjVVdGZ4b3poZ2htaWh6eHhWMTFqRHBZdDR4VGE0ZTBPWDYzd05vOEQ4akVXbmZ5LTR2RF9DM1hTS1h5ZlNXUldiUXpod0IzU3BTMGlaVjIybUc0YmVCSzRFOVBBWU5jclVLS2l2bEZMSVl6b1NB0gGfAUFVX3lxTE5MUG1BMGkxV2dSR2ZPQ2ZHV0t1aTZqTlJqcmVJcHNfOEdxbzZCMzJIaEh2aVFZcHVGZzYyQUtaNTZISktWUVRGa0FGOTdneXphdHRFaWhacjhYQmdXZUo0TkxMSWNpZi1ZRzUtRkpKNGNnckczX3RaZS1oZU4yYVFIS3JSUFZxb1JDaExVcGUtZHc0dUtSOWtNaEdUXzI0cw?oc=5",
+          "published": "Tue, 02 Jun 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Marvell Technology, Inc. Reports Second Quarter of Fiscal Year 2027 Financial Results - Marvell Technology",
+          "source": "Marvell Technology",
+          "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQMDhNVWVTS042VzhPTnZYZWgwd2kzVW1aVm9NR29YUHZncmt6QWFsbFJIQVFrLTRsQUtjc00yZHo3VXlvcFZQY3R0dGJiVzVSNDl6bllJQldUM185U0o5LWV6UFRmSWhHMWR0STBfazA5eVNBbU4xbUtyY0xzSnphR2piOVozN1lpd0JWRmFjUDV3UzdCY2RoN3V0M0Y0Q18xYUY2SGw0X2t0ME1JOVNwZ0RzcjlMYXBwVmxhSlFvdUR3bnVNMDQwbDlqVEdQMWMtRjFDQ2cyb3dkdDFyczZJbUJEc20xUQ?oc=5",
+          "published": "Thu, 27 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "GFS",
+      "display": "格芯 (GFS)",
+      "confidence": "中",
+      "driver": "成熟制程代工，随半导体制造链回调；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Is GLOBALFOUNDRIES (GFS) Stock Expensive, Or Roughly Fairly Priced? - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxObDI2SUliZktXQ0NSbXRQSm52VHF6SjhlODRqTmtVR0h0eFQxTDhUWDVNemptc0pxQXh2dVFuRGt0Y2o2ZWktNWJvdzRUeWFkekJ5Zl9SOEcySlVOZmNra2ZhZXZneHdGV0F5dEVSeDBFbExqOWlhWUlUX3RHYWtRUUgwcmU1SnFDTnFhX0luSXdzT21PZ0hwLVg3NHdTS005a21KX213MWtOZDc4?oc=5",
+          "published": "Wed, 02 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "title": "GLOBALFOUNDRIES (GFS) Stock Looks Discounted Even As Caution Persists - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNOWpuSlZyRGtqWlgyWjhyZ3RuWENFbUJaZDdleW5SdTJ4bXpEa2Y3cUZhc183bFE2UkFyYWxrdDZmMU1IS3FzOVI5UnFTUHpLQXhCQVhEZTNVYzVyOEp3RGs4d2dNYjNBUlZKd05wVml0dEJvUU5WWVBCdVNHX3drVEsyQlBKTk9PX0UzbVpRYm5zVWM1ZF9fSUdvTkVrTHNFdXNDSHo4akZJbWs?oc=5",
+          "published": "Thu, 30 Jul 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ASML",
+      "display": "ASML (ASML)",
+      "confidence": "高",
+      "driver": "全球半导体设备风向标，欧洲半导体同步重挫（ASM International 跌约 10%、Besi 跌约 8%），ASML 收跌 7.25%；直接触发因素是 AI 巨头呼吁放慢前沿模型开发、市场担忧晶圆厂资本开支节奏。",
+      "sources": [
+        {
+          "title": "ASML Stock Gains Over 5% — Why Bernstein Thinks ASML Holding Can Keep Climbing After Nearly 140% Run In The Past Year - Stocktwits",
+          "source": "Stocktwits",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNc0hLaWhQRmdBeFhhTUFhdi1SWDRqMlFYUU5zcDBhb2t2VHQtd1ZJT2RiNnJOX00wZ3kzeU9FTXBrNTIxdFZKUjBfazFDbGowRUVlSVhOY3Z3S3VCUEFQSnhIeVdaeEFMWENYa0pVNFN4UmtfaUVQNmFWRFFrZ2FCRHZZNVhrZDRWNktJQ252OVVwN3lEWWMxS2xwajg0ak12by0zdVFMY1RvMDY0ZUhLdXpZdnBqZW16ZlduUDZWc1ZRZEs5SGR4eg?oc=5",
+          "published": "Sat, 12 Sep 2026 08:40:26 GMT"
+        },
+        {
+          "title": "ASML Holding NV (ASML) Shares Fall 7.2% -- What GF Score of 94 Tells Investors - GuruFocus",
+          "source": "GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQbkt3YlFrc1dENXF5cWtmZDJtS2h3aHRscFpEWTdDdkZ3YWdZVHpyS01EZDdXUC0yQzVPVk05aGtOcUhRTTBFbG1nVEdOUU1mdjV5YWJUTnVrU3RkQjBxd0JWUmZCS0VYWkhsaWJDN2dvb2ltQ3FIaHV0ejZ2UkFJa0QtZzAtQk1fUjJ5SVhyc0x1Tml6QnhqVDFEQmpnQU9WbC1HSXVlZzk3QUNsN2pn?oc=5",
+          "published": "Mon, 14 Sep 2026 21:57:06 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "STM",
+      "display": "意法半导体(ST) (STM)",
+      "confidence": "中",
+      "driver": "欧洲半导体全线重挫（英飞凌、Soitec、Aixtron 等同步大跌），ST 跟随下跌 7.24%。",
+      "sources": [
+        {
+          "title": "STM - Finviz",
+          "source": "Finviz",
+          "url": "https://news.google.com/rss/articles/CBMiREFVX3lxTFA2R2ZwQ0dpczZPWEFWRFhsVlRrU3NUZ0ZXeVZCX2s5aGlBMXo3akVZR3I4OTM3eFJPWHR1WjNZblhoWUxw?oc=5",
+          "published": "Tue, 26 May 2026 11:19:20 GMT"
+        },
+        {
+          "title": "Can STMicroelectronics Become a Bigger AI Datacenter Winner? - TradingView",
+          "source": "TradingView",
+          "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOTGM0TkUyNzROODd4c1JLQ2JGd2hGVnRRMXoyNE5UMWN5eGhiQlM2T0lKZXQ5d2xPbzlUZmp6UWJLTGNUVVdZbjBYN2NsY281N1JxSEx3ZWNGV3pWNHpSZlNjR0c2cjhRZDdkQjJ1OXA3aFRQdTVLZERaQkNobmkxYjRHN3FNVGU1YWVzS1NKdDNjdmVIRGNHNGJvQlBDaU52T2RXMGYtWkE5Rmw0c2tqeEN1RUJFUQ?oc=5",
+          "published": "Tue, 18 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ACLS",
+      "display": "Axcelis Technologies (ACLS)",
+      "confidence": "中",
+      "driver": "离子注入设备随半导体设备板块回调；当日公司仅为行业会议赞助消息。",
+      "sources": [
+        {
+          "title": "Axcelis Technologies (ACLS) Declines More Than Market: Some Information for Investors - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQRTRsd2o3OEV6R19VMm5SNzdBVHVfYVBJWmlzUzdNR1pGalRnVExfZmtsUHhUSE9nRlFSSmFZUW1BM1VfYzl0MXk2WHhDZ29NdTBKMVMyYW5vOWN5NFRCSFNZeHJLdS1WcHd4Zk5rMm9Tc21yNFpXbk5HZ2NpOWdCRmhQcHFYdEtUWWdCbmJySnNxQThJbHRTa1BPNlB0MnBTZ2FUa3Jhcw?oc=5",
+          "published": "Wed, 09 Sep 2026 22:15:01 GMT"
+        },
+        {
+          "title": "Korea Factory Plan Might Change The Case For Investing In Axcelis Technologies (ACLS) - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOSHFkXzREbWlxdVBqVVE3QnVOYThsX3ZmWThWS0tZSHBRWWljWElXXzBfX1ZjQzZXd0gxWUVKT1NxekxwT3lnOHlqYzRjelhGbDNTZDkwUUdtMkEzT3RYTWdBbW9xUENqSkVOalcyY2hJSUxxVUZ3a2xKX01UYVQwWld0eTdtQkp6ejRJQXh4T2FxdkhnQW1nWE5fSFpOcVBBbERHdEZBN3hsQlRQSVN1Z2lZbnV3bmtwaEdPb090OVdNNXBEcHJUOFNTZU1rSXhPN1BhVmdqaDFyMHVnZ2fSAeMBQVVfeXFMUDRwV3BjdW1JbjlwNXhpRDI2dVJ0ekN3NzVnNnd4a3BNSmtkemkyMV9FdUN2bjZicXhCMEt2SVpfRmFfTXM4bF9PWnZNdFcxcUoyYmZ3bmNYX3kxSkxRUlZDcm5QUDBwbVhSM2JoT3prdWlLVWx2cmppNmlWb0s2blZlcHd3SVJjYUlya09sMTR1MFpOQV91d0k4eU1YLVF0cGgtOTM2dEotdjRoR2NGbU9RMUJIbWFDR3hkSDExcEZBUm1MN29uZ3hNeHVUTGk3bnlQR0J1UmszZUQwdVlCUDlJM2c?oc=5",
+          "published": "Thu, 10 Sep 2026 13:36:22 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ACMR",
+      "display": "盛美半导体 (ACMR)",
+      "confidence": "中",
+      "driver": "清洗设备随设备链回调；此前有内部人减持披露。",
+      "sources": [
+        {
+          "title": "ACM Research, Inc. (ACMR) Stock Falls Amid Market Uptick: What Investors Need to Know - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOaWxuenhyd1FRY0dBTE1SNGw4Y0syb0diYkU5em93eXg3MHRaWllMcjdxcWNMS3FLUHBSN00tMFBfVlJmOTEtWWpsNGlaNk8yLW1fNXhCTi0wZ1owZTEyMWtUM2xqYXN2Uy1YX2dkRmZjWkVUU1JxbWZ6MTdkUzc3YU5IbUlKZlo0UmpwMnVOZ21IbjJPbnpz?oc=5",
+          "published": "Wed, 15 Jul 2026 07:00:00 GMT"
+        },
+        {
+          "title": "ACM Research (ACMR) Stock Trades Cheap On Earnings But Pricey After A 5x Run - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQbG5oRkRWYzZGRWlXMFJLZHB5N3pFUEFpWGZfcnJ3Q3B0azQ2djBBOWY4dFZNQXBNTUZ0T2E1dlZWQmN6WkhhbmJSZkhXYWNhdGVOeEdrSWE3a2YzVUlVS3NwWnZlcTZVMmpzN0pKbGpneElRc1BlRVY5T1pYVnh1blg5VVVQcmRQVUZSTG9ha01EOG1QUW9WQTdNUQ?oc=5",
+          "published": "Wed, 12 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "AMAT",
+      "display": "应用材料(AMAT) (AMAT)",
+      "confidence": "高",
+      "driver": "薄膜沉积/刻蚀设备龙头，有报道直接以“AI 节奏论传导至晶圆厂资本开支”解释其与 Lam 的同步下跌；单日跌 7.07%。",
+      "sources": [
+        {
+          "title": "AMAT Stock Slips After-Hours Even As Q4 Revenue, Earnings Outlook Top Expectations - Stocktwits",
+          "source": "Stocktwits",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNYUM2dF9RVnFBSHJwTlRoNHptcWI0OEUxZ0laYVFaUEZpUzNZcjNkUzJtUmVHRmZ6VjR6eFZySU1zdTExMldmUG5mbEhGdVdVakhMdUlWNW9qTFJkSC00ckZfS2h5enBOS2RUdUFYYS1OQ1FZdmhTNUxWUjc5aTRaRzRGaEdya2FsOER3NVJoTEprc2dydjJ1SUI4OWtydWkyVmhxS1B0bUR4Z0lWSFVMWnNEaw?oc=5",
+          "published": "Wed, 09 Sep 2026 15:58:50 GMT"
+        },
+        {
+          "title": "Applied Materials (AMAT) Stock May Be A Bargain On Earnings But Full On Broader Checks - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOaFd5emhhS1FtTFpDaEJwYVJmX2lTQjJXeGl4UjRYN1d1WFVNeThlODRkLVFYeV9VWHhDS2xBM2FBMXlCYXh5dWtMalE1UGxSZkNuaHRUNUpzVVM2SkFOLXdTeXlFNU95eUM5cWVmQVhSWGFCR1lHX2tUNzFyeFV4cXpwcmtlNk1pWnIxZVI3XzY5eXFscTU5Um0zSmlXRnNCOGlfSTZMQW1fUzRVVmpYblJCOUk2ZWlWQzdjSElkdGpiYkdvaE95Ung2d1RsaTRxTjNCekdlbUVCQdIB3wFBVV95cUxPQTZEVUxiRDZXaVEtV1BzdG5BQ0Zwb19UbGYxQzNCOHV4MHlFc1lZaE5SVFY0TGxMNXNXOUlYcjRGb21xNEh3Q0liTFVyd0ZEc2xwVHhud0YzNzNkUF9pemEyeEkxZnZjVVVNam9ucXJMUXVRR2tBX01TTHYtZE1HOUo2bFlHSzA3TUJUT2FjVUpQbC05S2J1MXFYLVFtTl9ZVjlkaGJYQlRwRUZwYVFJYUx0ckFfSFdSbUp4dzZQbHktMmlTWXpHMzBZUDBMUDNHSFFjbVJzUENBRXM0ZVB3?oc=5",
+          "published": "Sat, 12 Sep 2026 09:30:47 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "APLD",
+      "display": "Applied Digital (APLD)",
+      "confidence": "高",
+      "driver": "AI 数据中心（neocloud）运营商，在 AI 训练需求放缓担忧下跌 6.96%；另有高管 RSU 代扣税披露。",
+      "sources": [
+        {
+          "title": "Applied Digital Sets Fiscal Fourth Quarter and Full Year 2026 Conference Call for Monday, July 27, 2026, at 5:00 p.m. Eastern Time - Applied Digital Corporation (APLD)",
+          "source": "Applied Digital Corporation (APLD)",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOS3Bhc004R0RvM3BIaGNsemJmYlpsdTRKc2d3aVdmM0hoVFdNRzgza0duTDdBWnBVN1I0b29sUjZ2Y0VXQ0gyNlNudGY1MFhlNkpVWk52dXJuenNhMVBWR3p1cVl6OGFOd1JLZUdGNEtmWGJOeE96cHA3V0hFQW9qbHhTVmRBWTRtZC12dzFQTDZWc0kwTEtMZU5ja2pnVmNyTTVUUXN5ZU1kSS1KbjNwQmo1OUEtcXBfZWRiNlBqakJlUQ?oc=5",
+          "published": "Wed, 15 Jul 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Applied Digital Stock (APLD) Opinions on AI Infrastructure Buildout - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOb3U1X1VXbERQTUtRY2h4OS1NLXNjalJFRlJOTTdENUE0TmpPRExZRXJkNnQtOUFqOWRzR3VZajNUR21Ucm9hNzloczQzck9mbUNiZXRBaU5ZbHIzU19VdE41NkxDelJLZ1JWeUFWN2IwWnZoSXR4YW1WU0VBTWYtVTVndVc5Y2hMcWRfQkd5NTlHX01uRjFORnNPV2JlN29sM0xSU05UUQ?oc=5",
+          "published": "Tue, 08 Sep 2026 17:33:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "CRWV",
+      "display": "CoreWeave (CRWV)",
+      "confidence": "高",
+      "driver": "Bernstein 分析师明确指出 CoreWeave 是“若 AI 训练需求放缓则最暴露”的标的，当日跌 6.75%；neocloud 板块整体重挫。",
+      "sources": [
+        {
+          "title": "Why CoreWeave Stock Soared 12% Today - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNTEkwRWxVNG5Ba0FqNVdaT18zWGtZakE3WTRXd0xUVGt0bDc0UW1fUUVGZmdRU2JRRjRMeGdfTFZFMGoxdEF1bHd1dmVUYjZmTGwzaHZPRkJoQUNwbnlTeks5ZTBlb3p6eGhkYVcwaTQzdkVNX1l4QmV0SkQzNTJwY05vWlc5YUJ3Snd1aC1YSEJvdnN6am5HTzlB?oc=5",
+          "published": "Tue, 08 Sep 2026 20:51:53 GMT"
+        },
+        {
+          "title": "CoreWeave (NASDAQ:CRWV) Shares Down 6.8% - Should You Sell? - MarketBeat",
+          "source": "MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNYTFVd21hNzhyQ18tejlXcTBIQlFISk5RZElsQWVaRkF0TXhwazZHXzFHbFpOMXFLM2NPWGNwdHNiaHdEcHhUM2M0M280eExhRUNQcmRxVDJmWnRIWDFKNFdia1VnV3ZRRU9jSFJETE9KdThyRFFYazFMS1N3NE9xdmQ2N0NmaXZzSTBzS0UxTHczdUotMEVJM2lMZFloalE1M3hWSkpKSDF6OXZwYnZocWx3?oc=5",
+          "published": "Mon, 14 Sep 2026 21:23:31 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "2344.TW",
+      "display": "Winbond (华邦) (2344)",
+      "confidence": "中",
+      "driver": "华邦电子，存储芯片（DRAM/NAND）与 HBM 段同步回调；存储厂利润高度依赖 HBM 供给紧张与定价，对 AI 资本开支回落最敏感。",
+      "sources": [
+        {
+          "title": "ETFs Investing in Winbond Electronics Corp. Stocks - TradingView",
+          "source": "TradingView",
+          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBmMTJSWG5EMThMVmRsay1DN2thYzgzcnBaN0drU255QWpBV0tQck1YUms2RUozVmpCekdZYTIwWlFXQUdKeldKQmFjTjFMMllacGpwVC13SThISFBabWIxVA?oc=5",
+          "published": "Wed, 09 Jul 2025 08:30:20 GMT"
+        },
+        {
+          "title": "Winbond Plunges 26% in 3 Days, Then Foreign Investors Flip to Net Buy 36,000 Lots — Retail Investors Split: Dumping or Bottom-Fishing? - finance.biggo.com",
+          "source": "finance.biggo.com",
+          "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBFa3JhS2RVSlJ6elYwSkJURW9qOG9idGJXWjJzZ3dWVy1VdjJkU3Nwa3dMWnNwSlRNU3VtN1lHVDgxWEQxMUpIaUtXWXpZTlNBVWlYZ245THRYQjZlal82OUlkM1NaQnpqZXFYUy0yWkFwa2Vramc?oc=5",
+          "published": "Thu, 30 Jul 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "MTRN",
+      "display": "Materion (MTRN)",
+      "confidence": "中",
+      "driver": "溅射靶材，随半导体材料链回调；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Small stock-unit grant adds to Materion Corp (MTRN) counsel's holdings - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPckdXZnByWU51Y1NYd3NZZkJHX0V6NEZNbWQtVFVTdERxN2VLVjdmdkoyZ2p6ZmwyeEI1QV9tYUhycGpiajI5Q0JXZVVHTjdObF9sZVZEeTVKQTN0cjk1RUdpbXFPYkY5RHlJRHlQTnc3a3htNEItNENQRmt2TUlqSzYwMDQ0eWhFQlpNUE53MjYyWkU3U1N6bGZNcXRCTWZ5dk5BeGNGeWJndnc?oc=5",
+          "published": "Wed, 09 Sep 2026 21:00:35 GMT"
+        },
+        {
+          "title": "Materion Corp (NYSE: MTRN) director lifts deferred holdings to 54,950.937 shares - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPTHJpVU5IdnQ1VzFBMGY5T2x3TDh6WTktWGp2UV8zTGdBUVJjbnpjNjlvVFBoREpYMEdpdlpUSUxucy1ENWlPU0paNjNxSmRSdHJyMlFab2NFSElIeWhWZ3V3UXNlV3BIYnNDS05UTmdsSExJV1Zsa3ZoWUhiTFAwajExRE8wbUJmbnVzOG53UGFsSE43NVNMNGIyd3VTVDUzRXpYWkNZc1FOSEk?oc=5",
+          "published": "Wed, 09 Sep 2026 21:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "APH",
+      "display": "安费诺(Amphenol) (APH)",
+      "confidence": "中",
+      "driver": "高速连接器与铜缆，AI 服务器供应链的高弹性品种，随 AI 硬件链回调 6.40%；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Amphenol Tests Key Level, Nears Pivot Amid Strong AI Datacom Sales - Investor's Business Daily",
+          "source": "Investor's Business Daily",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE1EQXJWemkwQzEzWHpfaWM5WGYyMDEwanp6OERhNmdISEV4UUdya2o5WFZBMHljWUtFTzM3Vi1RdksxeGlQQlJqQ2FuSEJrYm01QzhNT3FkWFFUN1J5QkI3dGdGV0YtZ19xZTk0dlE5YVc0TDdSZXVmbA?oc=5",
+          "published": "Wed, 09 Sep 2026 18:03:00 GMT"
+        },
+        {
+          "title": "Amphenol: Priced At A Premium For A Reason - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxONGhqMmFjTVhHOFZMNDFUMThuZmltcm5WRUVPOVZCQXJmUVVoMDFINkc1UlJjNzN1VTR0bFJCaFVuZ3JPUlFXbTB4cXFSYm9WaU1teTd1UU52aWJGV1M2Tm5jdnhIUVVUWnU3ZGZGOS02Z0s2UFU3cGZvSEpmeTk5TTlkVldURUdGTWc?oc=5",
+          "published": "Wed, 09 Sep 2026 14:02:40 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "KLAC",
+      "display": "科磊(KLA) (KLAC)",
+      "confidence": "中",
+      "driver": "检测量测设备龙头，被报道为“更广泛风险偏好回落中随芯片股走弱”；当日无公司公告。",
+      "sources": [
+        {
+          "title": "KLA (KLAC) Stock Looks Rich With Little Room For Error - webull.com",
+          "source": "webull.com",
+          "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE83TWZaU0dXTXlTNThqVzV2R281QlhHc3BCY3ZYYTZ1Z3BpQWpGSk5xUmFvclc0czdlR19UdmNQNVdVaHNtbkFjWURSaFpJMUZ3RmtrX2ZOVno?oc=5",
+          "published": "Wed, 09 Sep 2026 11:42:34 GMT"
+        },
+        {
+          "title": "KLA Corporation Is A Buy The Dip Opportunity (Technical Analysis) (NASDAQ:KLAC) - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQVktYNV9neDZqS3IwamZwZjdMV0tvQ2pLOXY0MjBkWmxzSkQ3WTk4TGFwM09zSVpCOXFoNXJHdkdhZkpXZl9vdTU5Rk5CVXNRNTc5TGVpVFJMNUpHOHFmS2lUTFZteThCNlpCLTJwR0VBOUtCeVFZUkJMb2t6ZmxBMnRDNHVYZmRKSldKX3E5NW5rVnZHeTl1RDkzd0lFRFVvZEJkYnVGdw?oc=5",
+          "published": "Wed, 09 Sep 2026 11:19:24 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "285A.T",
+      "display": "Kioxia (285A)",
+      "confidence": "高",
+      "driver": "铠侠（Kioxia），存储与 HBM 段当日跌幅居前；有报道直接指“存储股领跌本轮 AI 抛售，因 Anthropic 与 OpenAI 掌门人呼吁放慢开发”。",
+      "sources": [
+        {
+          "title": "Has Kioxia Holdings (TSE:285A) Run Too Far Ahead Of Its Fundamentals As Chip Stocks Sell Off? - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdXdwN2tiQW5KQUdWU1VpUEFzMnpITXpWS0pDX0QzYVk0dkViR2NVS3dUdG9xV01FVmx4WUE4dW1KRURzbTVsVEhMYVpNWDFGQVN6cnMzbWhRMUFGWF9rX19XQmllemljTTdwV25haWtiY0xqc2J6TUVOaThVRzQxb3IyRFhOZjZ1ZE9rbUVQRlZkMWxaX0NsMQ?oc=5",
+          "published": "Wed, 19 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Kioxia shares hit record high on report of potential dividend - Investing.com",
+          "source": "Investing.com",
+          "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPN0FUWVRsRUs0bE5fUFY2clBCRnlQTGlMMTNKTHZkblJ6MFRpWmhtVEVKQ3JXVnhOTW1kQXZSZU9taEwwemg1c2I3VV9LWXRWZW01T0ZaWW9Idng3YXhRd1ZNbTdkT1Z2bzM1MzlNNkZIZnhHV3UyZkR0OERTVmVpV0s4a1R0MmlEU0JhTE01T0QyaXhUVi1tWjNFX0dzRnRTWkp2VFBsYjlSSVN6T2xBS3BOeEtUSFB1QlE?oc=5",
+          "published": "Wed, 08 Apr 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "000660.KS",
+      "display": "SK Hynix (000660)",
+      "confidence": "高",
+      "driver": "SK 海力士，HBM 龙头，当日随韩国市场重挫（KOSPI 跌约 3.3%）；存储厂利润扩张主要依赖 HBM 供给紧张与有利定价，对 AI 资本开支回落最为敏感。",
+      "sources": [
+        {
+          "title": "SK Hynix plans $28.6 billion buyback after share price declines - reuters.com",
+          "source": "reuters.com",
+          "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNUlJGSW1ENWNua28tWENjMFMtWjJmTGl6eUFuNFZkbHlvdU9SbWJONF9SeFNLdjRXXy0tVzVPN2VMLV9yUjg0UUZlNm5QNDRYT1FlZ25JVmlJNXRrRE5XVU95ZXB2VTlWMFNCLS1PLXZ4bS0zZ3YtN29OM0sxcHlPb3pwN083b0NfN1I0T1M1V3c0dDFYOW54TGV3WjFqbWJySTRMQUxiZ0hheVVNV21LaURVaw?oc=5",
+          "published": "Wed, 19 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "SK hynix Inc. (000660) Gets a Buy from Bernstein - The Globe and Mail",
+          "source": "The Globe and Mail",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPUmJBSDh5R0xGYXhfOUhQYlRCQWFBV1UwS0V3Q193WmdkQm5QaVFOMEJJRHBTeGhadkNiWjd5RkVuSjRiVFgxMkVZNDE2MUI5bnV0bnBXZWFQYXVXYktGNUNJRE03QTBKVHpYYVJ4cGtBZ1EySC1fd18yenphRUk3cVJDLWx3eS15OEZBaHRjZ3ZzVkhVWnRSMURqX0lJWUZLbjM0bmR6Uk9kVzdhZ0hZdXZTcUhtclNleFljSzZLaE5WMDBMejVOR013?oc=5",
+          "published": "Wed, 09 Sep 2026 10:46:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "PLAB",
+      "display": "Photronics (PLAB)",
+      "confidence": "中",
+      "driver": "光掩模版，随半导体制造链回调；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Photronics (PLAB) Stock Is Up, What You Need To Know - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQb21jWVhsRnZfd1hNd0RGOHpTSC1yQWtwQWhoWTlyQ3pPTmpRZXhZVmsyeTBNVXVoYUJHeG9CeXpiYWF0LVJxV3ZydnJJeWxSeUNJVmZ2eVZ1ejBfV0NsQnlFQTZMeWt3ZmhFREhRYUQtUE9iQ0VoZTFlQXV0UU1qeHhRaUU1TEY4SWFCTmM1QmdnUjVrdkE?oc=5",
+          "published": "Wed, 26 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Photronics' high-end chip business reaches a record 44% of IC revenue - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPb2RQdjg1U1c2aERFMmtiVmVFWWlfS3UxTVk1RXFEb05lWTF6LVg2bjdyNEJrdkdBV1JNeXZtR0dnVkphZlFxb1Nab0ZwMHhUOFpPcnRFbmZXOFVSQ1prV2RCX0VBTUtWeDAxdWpHQWhFZk91YUo5M2VkbldlWVJsUy1qeFZFVHc1SVVYTDZXS1pGSUNzcDRV?oc=5",
+          "published": "Wed, 26 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ASX",
+      "display": "日月光 (ASE) (ASX)",
+      "confidence": "中",
+      "driver": "日月光（ASE）封测，随半导体链回调；公司 8 月营收此前公布为强劲，当日属板块性下跌。",
+      "sources": [
+        {
+          "title": "ASE Technology Surges 16% in 3 Months: Time to Hold or Fold the Stock? - TradingView",
+          "source": "TradingView",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQck5EaWJNUkl6NEhpMjlUeGdyUHF5UnhKbG9La19hMmRkQlVPdUIxQ1lwYmI5d0JUMWR3RmtVd1E3NHZKOC1IemhJR2hXdzA2dXpReHZ5V2FkRVJqNXVoV29YTU5oZ3JqSXlwWGdXUHdlck01SGVwaDhtemRTTHIwdzEzSzh0bGFBMDhwVk9ZblBHeGtFSDlWaC1tU19IX2JwRG5oNkdJRHNFeHRZVFNsbDdzQ2pLYXE4eGtqQ0pGTjE?oc=5",
+          "published": "Wed, 09 Sep 2026 13:23:00 GMT"
+        },
+        {
+          "title": "Insider at ASE Technology (NYSE: ASX) now holds 985,500 shares - Stock Titan",
+          "source": "Stock Titan",
+          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQZm9scjgxbmpDQzRUQndQdUVGa05kbjQ2N2YtdkpyRXN5NmhScjktM0tQTW1kbVcxdXhHZzZFWExJWFotb1RVMDM3ZUJZRDJRcmlIWDdGZ2lkaDRZYTB2OU5CSXNmWjM5NG5kcl9UMXBCYjJIOG1LckxHa0ZKM05LX2NyMjlHTlU4Q1VMcDUweko2OFBEVEpLMHY4eGF4N1d4VXl4Z1I2b0RkVzZVRzlPQ3FkTU1fVlpmc2lpNm9Kaw?oc=5",
+          "published": "Wed, 09 Sep 2026 10:21:04 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ANET",
+      "display": "Arista (ANET)",
+      "confidence": "中",
+      "driver": "网络设备/交换芯片，AI 数据中心配套，随 AI 硬件链回调 5.90%；当日无公司公告。",
+      "sources": [
+        {
+          "title": "A Look at Arista Networks Inc (ANET) After 5.9% Decline -- GF Value $164.22 vs Price $187.81 - GuruFocus",
+          "source": "GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOM0dxVHkxQno3aDNSLWNVR2J2ZVl0R1F5VE9hX1hjZXRUY2xtQzN6MF9HY2s0bEpuOFlILUY0a1VIVXA3a3RYU1U5d0VMMUdmaGVzUHJUX2ppZDRoUE5xNlpQZTJqR2xjLUdwNXZKYnltazRub1BFeFZTODVDVHAwUllSS2FZeGhycG5mbW9QVnRsM2xlNFFoRl82QXFGN3cydWpGNENGRDE0czR0QlN4d21iT1hhS0ZpRzFFcw?oc=5",
+          "published": "Mon, 14 Sep 2026 21:32:29 GMT"
+        },
+        {
+          "title": "Arista Networks Inc Stock (ANET) Moved Down by 5.12% on Sep 14: What Signal Does It Send? - TradingKey",
+          "source": "TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOSFRvRmlZZ01SZ1lMYzR0WjV3ZGEweVE0Yk5hcFJ1cU8zXzJ4QWx4bmc1cElGclFFVjBOQ3F5ZUw4M1NTX2pJbmNqNUxyWnJXeFNzUVlxLUo0VThpSTNLRm9XVC1TUlpTV1lYUUhvX053N1l1VmJ0SUxTZjdyRXI3RHZnTmtyN0pVSXk4?oc=5",
+          "published": "Mon, 14 Sep 2026 17:15:44 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "ON",
+      "display": "安森美(onsemi) (ON)",
+      "confidence": "中",
+      "driver": "功率半导体（含 AI 数据中心电源），随半导体链回调；当日无公司公告。",
+      "sources": [
+        {
+          "title": "onsemi (ON) Stock Trades Up, Here Is Why - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPR3VGQ1N6T1NKbm00M1VnbV9yZkZjYXQ4YmdoaFdkUHFqWUVRbS1VYlpzalJaWHJBWXlCSFQ2RmNMVHU1ckV3dmo1WkJpaVd0Zm04UXhhVE52TXp2bzhtLVZrUXJZNlpjU1JZbVk3S0xQS0tpQUt4ZzZ5UW9JWHZtbnplZWVXaHFhdjNuN2N0VFNodw?oc=5",
+          "published": "Tue, 26 May 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Why onsemi (ON) Stock Is Down Today - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1DQ3JKaFd6bmxfdlJja2dNTnJ3UE1TOXcyQ1JSazhLS3JtYVF4OUhBWjhjc1E1ZkV3S2VVR1VRQmw1Znp5cU1QZHpjUWplSEZwR1U3eld6WENOUERqN0R3R3ZuV0FUWjhLNFJ0LTRUOTIwQnFaV0NRcGVZdng?oc=5",
+          "published": "Thu, 23 Jul 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "DELL",
+      "display": "Dell (DELL)",
+      "confidence": "中",
+      "driver": "AI 服务器与存储整机，前一日刚创历史新高，当日随 AI 硬件链回吐 5.82%；甲骨文 6,640 亿美元订单积压的消息此前推动其上涨。",
+      "sources": [
+        {
+          "title": "Dell: Powerhouse AI Stock (NYSE:DELL) - Seeking Alpha",
+          "source": "Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1PVnBpSzJTNUkxdDVNeTFIVnRlMFJsbG1DcWZQYWZjRHB4eUhYMDUwdzZwaTVzMGJfOFJ5QnpkQzhDUTB4WHB5LUdra2NwR19zTXlHUEw3VGZUWlA5ZTFzVHpTQThRYmg0cVJ1bnpLako2a1U?oc=5",
+          "published": "Sun, 13 Sep 2026 09:24:56 GMT"
+        },
+        {
+          "title": "Oracle’s $664 billion backlog sends a signal to Dell, HPE - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNYTR4bHlZTjVBX0FaTE5TM1g2NE1ucFlBYzdKSGVfMFdVRXhsSm1mT3RieUpIemJqclQ1TlJDSEhiTGxQenRGdlpKb2Z0b0xrRkF5ZTFab29yRmE1RWhnb1FCTzQxTXI0UWZCNHlXRVhjazR0eVRKRTYxUEEyWUNyQmxFdWVVZGJLUTRERGZVQ2U3TmFxN0g5QS1LV04?oc=5",
+          "published": "Mon, 14 Sep 2026 13:33:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "JCI",
+      "display": "Johnson Controls (JCI)",
+      "confidence": "中",
+      "driver": "楼宇与液冷配套设备，随 AI 数据中心配套链回调；此前已被报道估值偏高。",
+      "sources": [
+        {
+          "title": "Is Market Not Aligned With Johnson Controls’ Management? - Trefis",
+          "source": "Trefis",
+          "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQczZNWnZxdEE5X192YXluaVlfUnlMVXZhTmdFVDJiNnAzc2ZDOGRFaG9CSExiek96RTVrQjZNR1dERDFYQnBtX1pOeWNHMjdINmtaOENWYW1vcnFtLUJUcnEyejJlZ3pjTXdJYk00Y3d4bkFrclh5LXd2VFUzR3FoZC13V3R6b21obURRNkQzYkU4cDFTMy16VVdadl9JZGNpc3R4ODA2cS16LUhfUkxEQmNpOUY?oc=5",
+          "published": "Tue, 28 Jul 2026 07:00:00 GMT"
+        },
+        {
+          "title": "Johnson Controls Falls as Valuation Concerns Likely Spur Pullback | JCI Stock News - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPelJlUVlWSmJkWGNqcTRIZXRjMVY2V1VPNWJGVl8wWmQ1RXBHUTZ2N3R1SkpSYW9vVDhobFJXY0xtVEZpdjJiMWZ0NlFGN3BTbEI0TnY4dU5kVzJ3ODdTRnR5bEJ1TGNBT3hBZm9ZRVAtX1UwQVY3YzU1UXZSRHpRRE5lUThlWWE0aVJucEJORm8tdHhxUXhtcUxyaTVHYWc?oc=5",
+          "published": "Tue, 18 Aug 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "INTC",
+      "display": "Intel (INTC)",
+      "confidence": "中",
+      "driver": "半导体全线回调，另有报道指 Apple 进一步边缘化 Intel Mac 产品线；单日跌 5.59%。",
+      "sources": [
+        {
+          "title": "Why Is Intel (INTC) Stock Volatile After Earnings? Revenue Beat Overshadowed by $11 Billion Loss - TradingKey",
+          "source": "TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPdGVhdUdOWHYwd0I2OHRLRjlFVE9KTkNud09aOHhCOTZGY2NDZVM4VjFnTTZKdkpKdlBORHo1OG5RWENLVFg4VUZoYVdVWVRpaWFCSWtxY2dHX280ZFFsaDlvSldKQm9NdTdWTjlueks4V3V3RUVJQ2pqYVFtNi0xVU9zY2V3MGdONjRFaHJqU1RRaVZZMm9GZndlNVRSaWpveDlMWG41WG5qUk52T0tRcGl1bklGZ2twMmQyQnJxdkM0YzU1d1J2Wg?oc=5",
+          "published": "Sun, 13 Sep 2026 00:40:26 GMT"
+        },
+        {
+          "title": "Intel Corp (INTC) Stock Down 5.6% but Still Overvalued -- GF Score: 66/100 - GuruFocus",
+          "source": "GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPczBJeWltZGtpNUg0VHllQm1YWFlmR3Y4dUIwakZvYlpuNXJnVXFxeXZsRDN0WHVhMEVuZFlUamEzQUdkN3dmSmFsTGdKYUVxVmRPRnU2eW5rT3FSeE1sRHNCUHlQQll0TzZfLUwwS2VQNFRDUUM0S0dLVWYwdVd5Z01TdF9QRmZFOXpDZlJoQnkwVEdVemtXZnhqYTNsTXMtZVpLdGg4NA?oc=5",
+          "published": "Mon, 14 Sep 2026 21:57:06 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "NTAP",
+      "display": "NetApp (NTAP)",
+      "confidence": "中",
+      "driver": "企业级存储随 AI 硬件链回调，另有高管按计划减持 1,000 股的披露；当日无实质新增利空。",
+      "sources": [
+        {
+          "title": "What Comes Next for NetApp (NTAP) After Enhanced Product Strategy and Record Earnings - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPMXliYVR1eFRVMmg2QWVRbWx4b1loMDFoNWd5b0VGbHpJcVgxNl9JaHExRXhBaEpVQ1V2Z2Y2ejZ5Rzh6WXpvemZQMm9lOUlBcVVXMzRwS3NyZDNob1BOQjhsU1BScDRjXzlCQlI5WGt6MHNNamRnSzhhVzU5d1UtY0dIRGkwNmUyX1UyellQWWJHeU9ySFNWdFVrSDc?oc=5",
+          "published": "Wed, 09 Sep 2026 19:48:55 GMT"
+        },
+        {
+          "title": "NetApp (NTAP) Stock May Trade At A Cash Flow Discount But An Earnings Premium - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPRDVKcm1SN0VJdEtPUlNaSmRqUjg4Xzl2NjRRaWJuZGEzaEotSk8wQXl3czZfT0FYMnNobmhzU3pFd3FHcy1JczMySWJPQ3pFR21IcGVTU25SYjFDcVFPYU80a2ZXYktheDBIVC0zVnNkMl9WMmk2WFU4c1pYdzJnZ1dGV3FidWtBTEpDa0J2QzBGMlY0OGZZQ2RkejhLSlU0OUJ3MEZkNjBuY3hmTWtYQXhOaXhyTE9INTFPMUhB0gHDAUFVX3lxTE9BVllVOEpHRWxNMmRPdVBuTWpjX1lWNlliZG0wa1NxalNnV1hUYjZucTI5ckxIOG5hR2I5NkRwNHBzZTcwSTJCM0hzZzNWNEc1cnMyMnNtblZ1U0ZUd2lFRXhpSHoyWTl0d1hfV0NIbWpVNjR1aExpOTRqZFFrUHpTdXV5WmM2TV90U3M4VWR4cEtVb3E5NjVMSkh1LVNFTmQ5dHBDUzRPYWZhNkRQMTZJY0RhUGNuczlFVXlRT0VSZEJMYw?oc=5",
+          "published": "Wed, 09 Sep 2026 12:24:09 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "NBIS",
+      "display": "Nebius (NBIS)",
+      "confidence": "中",
+      "driver": "AI 云（neocloud）标的，随 AI 训练需求放缓担忧回调 5.50%；当日无公司公告。",
+      "sources": [
+        {
+          "title": "Nebius Group (NasdaqGS:NBIS) Stock Could Be Overvalued After Sovereign AI Deal - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPWC1NOVgyWUdvS01mWWVwUTRSTmtXMk44Nnh2X1NYY1VHX05qTzV6Qm12WWlwWGxWRDF6OE5VaG0weTZJeEFMT2J6ZTB6ZGQ0Q0xQc0ttblJmYWtHVUI3YTl1c0VaT0JuY1h6ZGVZbnQzMFdiLXpJYkY5dUs1VnY4U2NzM0RiSnhxUVk1VkptM1hDZWZYUEY3cU5jMmxGUTcwdjNBR2VKY3oxYjUzdUVpdS1nOFNFRzZwYlg1dm5zWHk5MlowbzJqcDE4a9IB0AFBVV95cUxQRlUxa0pHR04yZkhZaGdZOTlYYVhqSXIwQ293U05EYW9kOGhwZmxycThhWTRJYi0wUWd4MUY5TU9yamFrQ0trR3hiOUxYaWZuSG54emluOGlraHVJQktIRmZYWFc4RVI1elNENkhsaV9MeTJ6MlR2Zmg1Zkh1SlpUWEE2TkR3ZnFLTFU0LTdmc2ZKSXRJMThwcHBldGthV3NMSW9tMFZ0eFplVlJWUG96ZmVlMlcxdF84dVYwR1ZhUGJCWXRUR0k5c1Z1akZmSnlH?oc=5",
+          "published": "Wed, 09 Sep 2026 08:52:35 GMT"
+        },
+        {
+          "title": "Nebius Group NBIS Stock Surges On Explosive AI Cloud Growth - StocksToTrade",
+          "source": "StocksToTrade",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBtZk1qNWtQd3NRMHJYd3dkcXVHNEs2dW11dXFfVWo0Nm5oRE9LOUNuRDh3S2FEM2RabDN4M1ZtempvRlFnQVlSOS1sZTZYQTlUVmlsRG0yVnhfbnE0cUVsNFJwRXlDeGR2TlRsaV9fcWk4c3VWRlBV?oc=5",
+          "published": "Tue, 08 Sep 2026 13:18:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "MU",
+      "display": "Micron (MU)",
+      "confidence": "高",
+      "driver": "存储龙头，当日跌 5.25%。Barron's 专文将 AI 安全担忧与存储芯片直接挂钩：存储厂利润高度依赖 HBM 供给紧张与有利定价，是“减速”叙事下最脆弱的环节之一，与闪迪、SK 海力士同步下挫。",
+      "sources": [
+        {
+          "title": "Will Micron Technology Stock Soar to $1,500 After Sept. 30? - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOWUtTdFhTMEd3azI4U0RxbU5vR2llZ1BtNGc5clhKanFNTDQ5bUdiUDJuZklhMnI5NmRyM1FFSUJnSTJZcnRPRWpnN1RDZlprZkhCWWdZYU5VUHJ0SlRzRUZhZVdHRWxOS3p3WmtzRjl2UWdoQVlfaXRseXZHZU9la2hPX0RkazBCcnowaTBHdXhIOUd2bWhsXzEtRQ?oc=5",
+          "published": "Sun, 13 Sep 2026 16:35:00 GMT"
+        },
+        {
+          "title": "Broadcom vs. Micron Technology: Which Technology Stock Is a Better Buy in 2026? - The Motley Fool",
+          "source": "The Motley Fool",
+          "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOYUN3aHVKUG1DVll2TkhILTRsQUlqYmlrME8wN01HdTNDWVZRUEk5MzBuS3RjcjNDYTA4ai0yWElWdmZEc1pOc2JXOTJFUkFsZjRQMEozSDBjX0NLYzJoMEdIclYtVjFYSVNjbGlyUC1RclZfWEJTT3NWRzJEWnRUeW56RXF0ejQzZmFLYWRjZUE0OUFXRXpYU2lpQTJQeElzM3JLdDJSVk42dnBhYVVZMXZIN2tCMU9vazVCS1RXbHhCY25VcVBtOA?oc=5",
+          "published": "Sat, 12 Sep 2026 18:48:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "NXPI",
+      "display": "恩智浦(NXP) (NXPI)",
+      "confidence": "中",
+      "driver": "MCU 与嵌入式处理器，荷兰芯片商展望未达预期已被报道，叠加半导体全线回调；单日跌 5.24%。",
+      "sources": [
+        {
+          "title": "NXP Semiconductors (NXPI) Laps the Stock Market: Here's Why - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOQWwwQm1TNWJUSHNWekp1enRkdVZubS1BcTAxWTFSRVp1M3QtRDZldkVibjc2bXdQdlVCQVpsZVY2MWlQZVFETUNmQWxNb0FSajgxU19UV2IyWmFxMUNmU1hYNHFTd24waXA4TEQ2QWVuQjVWMkNzR01wa1JTRHk0NHJHdUk4NUVMcEo1R3FxWUtoS0dzbzdXNzByWlg4c3BN?oc=5",
+          "published": "Wed, 02 Sep 2026 07:00:00 GMT"
+        },
+        {
+          "title": "NXP Semiconductors (NASDAQ:NXPI) Q2: Beats On Revenue But Stock Drops - StockStory",
+          "source": "StockStory",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQZURONTVyNEFIYnFQWVJhcnJSaFZOVEZTTTdFNUF2WFlwTExfa2hZaXUyLV85RjUtdmdqVlVkX1M2a2hkRWtZSnNrWGJRY2F0eTdMU3RHSTg5bDlzazBKbnM1SEcxaUJRay1OUGs3QXhUYWNmV0ZnRjJLT2Z5cW5mdk9hdmlSTTF4MlZOTjBOa2hxcWJDRnZXN29sdEFTTG11LWp3RVFKUWY2Nld3RlVxWURaV0VadXBBdloxQzZyb0tnT05k?oc=5",
+          "published": "Tue, 28 Jul 2026 07:00:00 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "DLR",
+      "display": "Digital Realty (DLR)",
+      "confidence": "高",
+      "driver": "数据中心 REIT，两重压力：一是 AI 叙事降温令数据中心估值承压，二是 10 年期美债收益率盘中破 5%，利率上行直接抬高 REIT 的融资成本与折现率。",
+      "sources": [
+        {
+          "title": "How Is Digital Realty Trust's Stock Performance Compared to Other Real Estate Stocks - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNLUhMdDFwOGRnR1djZkpydVF3aEZiVUJlM2dfVGZ4SGVCcHh3Z1VWZzlscUpQQlhUMlpNVnBXQ1R4eFpIUjV0aXVOM1Rwd3lfbzNoTGIzSk02SGZCdk5BSU5xaHVEQ3pGcDRxY0JwSV84cWlyREpHbzFJdF9nUWE3cHNOZFJwYkJ0MFVta3A5ZlJMUXRkQW9hY3FMSnZPZFR5NzRr?oc=5",
+          "published": "Wed, 09 Sep 2026 12:35:15 GMT"
+        },
+        {
+          "title": "NewEdge Advisors LLC Raises Stock Position in Digital Realty Trust, Inc. $DLR - MarketBeat",
+          "source": "MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNVk5UYUxOLUVVZ1F2NGlHNGpSTnFnN3NFR2FQNUw0LWdydERqc0s4ZHN0b0JhSWF3RjUxcUJRVGRkVUpDOUFQSUx0ZjdXUC01cHJ0WlVjOVZxSkNmQVJDelNWN1kyOFdELWtpb0p5LUd2UjZRNFNRa2JyQk1fODhER0NhYVpCUGVkaTJTYURVOUdtWHd5U1BkbTliZ0psckY4dGVTcVlyaDNKS09ycVFlNDNUakFXYjBlWGthLXBzRnIwZExDYU5fal9WX2M4dk43?oc=5",
+          "published": "Sun, 13 Sep 2026 08:04:03 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "SAP",
+      "display": "SAP (SAP)",
+      "confidence": "高",
+      "driver": "逆势大涨 5.78%：市场关注其云业务强劲增长与分析师上调目标价；在 AI 硬件重挫当日，资金明确切向有客户基础的企业软件。",
+      "sources": [
+        {
+          "title": "SAP Shares Have Tumbled From Their Highs. Is the Software Stock a Buy Now? - Morningstar",
+          "source": "Morningstar",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNZkFBT2FnOWNqT3dQcDJfYnJ6UUlvMnF4T3NwQ01oTDAyalNQa291TlhTa0stMWthOEc3STROZHNXMEZaaTZrRHVTcnFQQjRMdVd0ck4zR0tKdkVzaXl6ZkxpNk9lOFFuamZDb0o5T0JtU0lWTENFNmQxRVVqZkJPdUdERTVZVFJYWEZIOHpTUE9qV0xXYUxtSFBPc3F2OWUycUZFTTFTWGE?oc=5",
+          "published": "Wed, 24 Jun 2026 07:00:00 GMT"
+        },
+        {
+          "title": "SAP CEO: Our AI breakthrough moment is coming - Yahoo Finance",
+          "source": "Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQeFQ1azN5SWtTMEhLT2p3U00taXFSa3UwdlkyRVFXX0EyTDRGcFJ6VkVWeF9RRU9qRDMyVzZ3YUJCOG0wUGJ0T0dTNVVjRVJPV21xdEpEUnFvdGtTSDhMclJaUmpXY0x2RTQ0LUpRdVdKdGRiWmFYa01WUUgtZG92TDVBZHYyZUFNelhkNDVCSkJFRTJNN1VFS3hVZDI0UTVoM1lmVjFteWZyYWQ5?oc=5",
+          "published": "Tue, 08 Sep 2026 22:16:42 GMT"
+        }
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "NOW",
+      "display": "ServiceNow (NOW)",
+      "confidence": "高",
+      "driver": "ServiceNow 当日涨 7.41%，为链内最强个股：分析师上调目标价，且资金把 AI Agent/AI 应用当作 AI 硬件回调的避风港。",
+      "sources": [
+        {
+          "title": "Why ServiceNow (NOW) Stock Is Up Today - Quiver Quantitative",
+          "source": "Quiver Quantitative",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9MZW83NTFkci12cC1NTDRRdGJZTDJfLWNPWHd4WDVpZFgtZXExVWNmUkw1Ul85NEVpRVdTTFoxNmQ5bEo3djd0ODVaSXVFX21EMGVXTXJydmRvcFNlNmFfeE5qSnJqdzlSRFdNbkJmb0Zfdk9BS1N0MVhuTQ?oc=5",
+          "published": "Wed, 19 Aug 2026 07:00:00 GMT"
+        },
+        {
+          "title": "ServiceNow (NOW) Stock Still Looks Expensive After Fresh AI Ecosystem News - simplywall.st",
+          "source": "simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOSlZGSXFrU0tYN1ZoSFNOQXVWME5kRkNpOEFmNl9GeWRoMXB2YzdwX0dpQzNKY1FhNi1zM0hBMGRSc3doN0Z6Z1lxNl9pZnVxVE9fWThrY21LdUN4LTNaZmNXVTUwV2YzQXRLejdLMlAyZWVZN2FrcmxGTzRmVnFKU3lDcmJxSE1LQ2R3d2tJaFpmMkNndm5Odi1WWnlZMHBBZGdFeE5YV1VTVEs1M0RaOEVMbUJUUDdmYnBIMUxWTVpmTjdW0gHKAUFVX3lxTE5MYjBsQ1JtOXZ3Y09kcGJSUWdCejVFVlotbHpOTzlpck5DSVQ4N2JsNGVZR3JlbzA4UjdJSzVGdWhLOWRvUlVxUkNEdDlVelFoYWhYaWhFVlMwcGdtUXY5SUdacTVHVTI0YUl5UzBYRWZTM2xzbHBHdU1CRUwxTHgwVUdRYXZYSERiRTFla041V29Qd0hxZWxxb2tWT3hlWG9GdmtBdG45N1RKSnNoa3dZZEJCRE5DZGdDQ0JlMlU0bU9LV0NJbzRpUmc?oc=5",
+          "published": "Thu, 10 Sep 2026 18:31:17 GMT"
+        }
+      ]
+    }
+  ]
+}
