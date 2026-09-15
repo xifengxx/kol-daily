@@ -19360,42 +19360,131 @@
       "sources": ""
     },
     {
-      "name": "Kioxia",
+      "name": "Kioxia Holdings",
       "slug": "kioxia",
       "type": "company",
-      "country": "JP",
-      "ticker": "",
-      "one_liner": "全球第二大NAND闪存制造商，企业级SSD，位于产业链L3核心产品与集成（核心参与者）",
-      "description": "全球第二大NAND闪存制造商，企业级SSD",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
+      "country": "日本",
+      "ticker": "285A.T",
+      "one_liner": "日本NAND闪存龙头企业，核心业务覆盖BiCS NAND、企业级SSD和移动存储，通过闪存晶圆、SSD和长期客户协议实现收入，位于半导体L3核心产品与集成层——FY2026Q1营收¥1.77万亿，企业级NAND需求带动盈利大幅回升。\n",
+      "description": "Kioxia是NAND周期反转和企业级SSD需求爆发中的核心受益者，其优势来自BiCS NAND技术、日本制造体系和Sandisk产能协同。",
+      "core_business": [
+        "BiCS NAND闪存晶圆制造",
+        "企业级PCIe/NVMe SSD",
+        "移动端eMMC与UFS存储",
+        "消费级SSD、存储卡与USB存储",
+        "与Sandisk协同的日本NAND制造体系"
+      ],
+      "revenue_model": "NAND晶圆自用与外售、企业级SSD、移动存储和消费存储产品销售构成主要收入；企业级SSD通过AI数据中心客户放量，NAND价格周期决定利润弹性。",
+      "founded": 2019,
+      "headquarters": "日本东京",
+      "employees": "未在本次公开口径中核验",
+      "latest_revenue": "FY2026Q1营收¥1.77T，净利¥842B",
+      "market_cap": "~$182B（2026.9，按¥51,750/股估算）",
+      "data_freshness_date": "2026-09-15",
       "industry": "AI算力",
       "industries": [
         "AI算力",
         "半导体"
       ],
       "segments": [
-        "NVMe/存储芯片",
-        "存储芯片(DRAM/NAND)"
+        "存储芯片(DRAM/NAND)",
+        "NVMe/存储芯片"
       ],
       "chain_layer": "L3",
-      "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
+      "chain_role": "龙头",
+      "suppliers": [
+        {
+          "company": "半导体设备供应商",
+          "supplies": "NAND刻蚀、薄膜沉积、离子注入、量测检测设备",
+          "note": "BiCS层数提升对高深宽比刻蚀和良率管理依赖度高"
+        },
+        {
+          "company": "硅晶圆与半导体材料供应商",
+          "supplies": "300mm硅晶圆、光刻胶、电子特气、超高纯化学品、抛光材料",
+          "note": "四日市和北崎产能扩张依赖材料供给稳定性"
+        },
+        {
+          "company": "先进封装与测试伙伴",
+          "supplies": "NAND封装、SSD控制器集成、测试与固件验证",
+          "note": "企业级SSD需要控制器、固件和长期可靠性认证"
+        },
+        {
+          "company": "Sandisk制造合资体系",
+          "supplies": "日本NAND产能协同",
+          "note": "双方在四日市及北崎附近共同运营或协调产能"
+        }
+      ],
+      "customers": [
+        {
+          "company": "云厂商与AI数据中心客户",
+          "note": "采购企业级PCIe/NVMe SSD用于AI训练数据池、推理缓存和热数据存储"
+        },
+        {
+          "company": "智能手机与移动终端OEM",
+          "note": "采购eMMC/UFS和嵌入式NAND"
+        },
+        {
+          "company": "PC、工作站与企业服务器OEM",
+          "note": "采购企业级和客户端SSD"
+        },
+        {
+          "company": "消费渠道与分销商",
+          "note": "销售KIOXIA品牌SSD、存储卡和USB产品"
+        }
+      ],
+      "partners": [
+        {
+          "company": "Sandisk",
+          "area": "日本NAND产能与投资",
+          "note": "2026-08-27宣布投资超$31B扩建日本NAND产能，时间窗覆盖2026-2032"
+        },
+        {
+          "company": "控制器与IP供应商",
+          "area": "SSD控制器、纠错算法和企业级固件",
+          "note": "企业级NAND价值化依赖控制器与软件优化"
+        },
+        {
+          "company": "日本政府和产业机构",
+          "area": "半导体产能与基础设施支持",
+          "note": "NAND扩产涉及用地、电力、供应链和出口合规"
+        }
+      ],
+      "competitors": [
+        {
+          "company": "三星电子",
+          "ticker": "005930.KS",
+          "area": "NAND/企业级SSD",
+          "note": "NAND技术和企业级SSD综合份额领先"
+        },
+        {
+          "company": "SK海力士",
+          "ticker": "000660.KS",
+          "area": "NAND/企业级SSD",
+          "note": "通过Solidigm强化企业级高容量SSD"
+        },
+        {
+          "company": "美光",
+          "ticker": "MU",
+          "area": "NAND/企业级SSD",
+          "note": "G9 NAND与PCIe企业级SSD竞争"
+        },
+        {
+          "company": "长江存储",
+          "area": "NAND",
+          "note": "2026Q2出货量媒体报道已达全球第三，价格与产能压力增强"
+        },
+        {
+          "company": "西部数据/Sandisk体系",
+          "area": "NAND品牌与渠道",
+          "note": "既是制造伙伴，也在客户端SSD和分销渠道竞争"
+        }
+      ],
       "tags": [],
-      "website": "https://www.kioxia.com",
+      "website": "https://www.kioxia-holdings.com",
       "backlinks": 0,
       "wikilinks": [],
-      "content": "# Kioxia\n\n全球第二大NAND闪存制造商，企业级SSD",
-      "content_preview": "# Kioxia\n\n> 全球第二大NAND闪存制造商，企业级SSD，位于产业链L3核心产品与集成（核心参与者） | 全球第二大NAND闪存制造商，企业级SSD",
+      "content": "# Kioxia Holdings\n\nKioxia是NAND周期反转和企业级SSD需求爆发中的核心受益者，其优势来自BiCS NAND技术、日本制造体系和Sandisk产能协同。\n\n## 财务状况\n\nFY2025（截至2026-03-31）营收`¥2.34T`，同比增长约37%；Non-GAAP营业利润`¥876B`，同比增长约93%；净利`¥554.5B`，EPS为`¥1,024.07`。\n\n| 口径 | 营收 | Non-GAAP营业利润 | 净利 |\n|------|------:|----------------:|-----:|\n| FY2025 | ¥2.34T | ¥876B | ¥554.5B |\n| FY2026Q1（4-6月） | ¥1.77T | ¥1.33T | ¥842B |\n| FY2026H1指引 | ¥4.16T | ¥3.23T | ¥2.17T |\n\nFY2026Q1的净利已接近FY2025全年，说明企业级SSD、AI数据中心采购和NAND涨价对利润的抬升非常显著。2026-09-15收盘价为`¥51,750`，52周区间`¥4,310-¥112,700`；按546M股估算总市值约`$182B`。10月1日3比1拆股后，股价和股本口径需要同步调整。\n\n## 产品线详解\n\n| 产品线 | 用途 | 商业价值 |\n|--------|------|----------|\n| **BiCS NAND晶圆** | 自用、外售和合资产能协同 | 技术源头收入，层堆叠与存储密度决定单位成本 |\n| **企业级PCIe/NVMe SSD** | AI训练数据池、数据库、视频、云对象存储 | 高单价、高毛利，是当前收入弹性最大的一块 |\n| **eMMC/UFS** | 智能手机、平板、汽车座舱和IoT | 受移动终端回暖影响，量大但价格敏感 |\n| **消费级SSD与存储卡** | PC、游戏、创作者和零售渠道 | 维持品牌曝光，帮助消耗标准品NAND产能 |\n\nKioxia的价值化路径不只是提高NAND层数，而是把晶圆装进企业级SSD、控制器固件和数据管理能力中。AI集群对大容量SSD的采购正在让NAND从“周期性标准品”转向“定制化基础设施部件”。\n\n## 技术路线图\n\n- **BiCS层数与单元密度**：继续提高NAND堆叠层数，降低每TB成本，同时控制良率损失。\n- **企业级SSD**：扩展PCIe接口带宽、随机写性能、功耗效率和固件安全能力，适配GPU集群和云存储。\n- **控制器与固件**：通过纠错、缓存、压缩、安全擦除和QLC管理提高NAND附加价值。\n- **产能扩张**：与Sandisk共同宣布2026至2032年超`$31B`投资，重点在日本扩建NAND产能。\n- **美国ADR上市**：Bloomberg 2026-09-14报道公司考虑约`$10B`美国ADR上市，最早2027年，但该事项尚未成为确认交易。\n\n## 供应链与资本结构\n\nKioxia上游依赖日本NAND制造生态，包括硅晶圆、化学品、气体、光刻材料和高深宽比刻蚀设备。企业级SSD还依赖控制器IP、固件工程和测试设备。\n\n截至2026-03-31，主要股东包括BCPE Pangea约21.9%、Toshiba约17.59%、Goldman Sachs约3.74%；后续报道显示Toshiba减持至约12.84%。资本结构已经比早期重组阶段更市场化。2026-07-31公司公告约`¥800B`回购计划，2026-03-05加入日经225指数，S&P与Fitch评级上调至`BBB-`，这些都降低了融资和股东退出压力。\n\n## 竞争与风险\n\nKioxia处于三星、SK海力士、美光、长江存储和Sandisk品牌体系的夹击中。长江存储2026Q2出货量被媒体报道提升至全球第三，而Kioxia与Sandisk虽在制造端协同，但在终端SSD和客户份额上仍要应对中国厂商的价格竞争。\n\n主要风险包括：NAND价格周期反转；3D NAND刻蚀良率下降；AI数据中心SSD订单后移；与美国贸易监管相关的出口限制；以及ADR上市可能带来的股东结构变化。日元汇率也会影响其美元采购和美元收入的转换。\n\n## 动态更新记录\n\n### 2026-09-15（F3批次：存储组4家薄档补全）\n- **来源**：`L0-原始资料池/03-新闻/2026-09-15-F3批次-存储组4家-数据溯源.md`（input_20260915_132）\n- **核心更新**：由11字段骨架补全至25字段加5个以上正文段；更新FY2025/FY2026Q1财务、市值、回购、拆股、Sandisk扩产、日经225纳入、信用评级和美国ADR传闻。",
+      "content_preview": "# Kioxia Holdings\n\n> 日本NAND闪存龙头企业，核心业务覆盖BiCS NAND、企业级SSD和移动存储，通过闪存晶圆、SSD和长期客户协议实现收入，位于半导体L3核心产品与集成层——FY2026Q1营收¥1.77万亿，企业级NAND需求带动盈利大幅回升。\n | Kioxia是NAND周期反转和企业级SSD需求爆发中的核心受益者，其优势来自BiCS NAND技术、日本制造体系和Sandisk产能协同。",
       "sources": ""
     },
     {
@@ -29856,41 +29945,128 @@
       "sources": ""
     },
     {
-      "name": "CXMT (长鑫存储)",
+      "name": "长鑫科技",
       "slug": "cxmt",
       "type": "company",
       "country": "中国",
-      "ticker": "",
-      "one_liner": "中国DRAM龙头,17nm DDR4/DDR5量产（直接相关）",
-      "description": "中国DRAM龙头,17nm DDR4/DDR5量产",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "半导体",
+      "ticker": "688825.SH",
+      "one_liner": "中国DRAM龙头和全球第四大DRAM制造商，聚焦LPDDR5X、LPDDR6、DDR5与HBM类存储产品，通过晶圆制造、模组销售和长期采购协议实现收入，位于半导体L3核心产品与集成层——2026Q2 DRAM市占率约10%并进入HBM试产阶段。\n",
+      "description": "长鑫科技是国产DRAM体系从追赶走向规模竞争的关键载体，投资价值同时来自国产替代、AI推理内存需求和全球DRAM涨价周期。",
+      "core_business": [
+        "DRAM晶圆制造与IDM运营",
+        "LPDDR5X/LPDDR6移动与AI终端内存",
+        "DDR5服务器与PC内存",
+        "HBM3试产与HBM3E研发验证",
+        "存储模组、国产供应链协同和长期客户协议"
+      ],
+      "revenue_model": "以DRAM晶圆与存储模组销售为主，通过移动客户、云厂商、OEM厂商和战略合作协议扩大收入；AI推理、国产化替代和HBM产品放量决定单季收入弹性与毛利率。",
+      "founded": 2016,
+      "headquarters": "中国合肥",
+      "employees": "未在本次公开口径中核验",
+      "latest_revenue": "2026H1营收¥1,503亿（含Q1 ¥508亿、Q1归母净利¥247.6亿）",
+      "market_cap": "~¥3.68万亿/~$518B（2026.9）",
+      "data_freshness_date": "2026-09-15",
+      "industry": "AI算力",
       "industries": [
+        "AI算力",
         "半导体"
       ],
       "segments": [
         "存储芯片(DRAM/NAND)",
         "HBM高带宽内存"
       ],
-      "chain_layer": "",
-      "chain_role": "直接相关",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
+      "chain_layer": "L3",
+      "chain_role": "龙头",
+      "suppliers": [
+        {
+          "company": "国产半导体设备供应商",
+          "supplies": "刻蚀、沉积、清洗、离子注入、量测检测等设备",
+          "note": "DRAM扩产对设备国产化率高度敏感，本仓库NAURA、华海清科、拓荆科技等词条存在反向供应线索"
+        },
+        {
+          "company": "半导体材料与化学品供应商",
+          "supplies": "硅晶圆、光刻胶、电子特气、超高纯化学品、CMP抛光材料",
+          "note": "先进DRAM工艺对金属污染、均匀性和批次稳定性要求极高"
+        },
+        {
+          "company": "光刻设备供应商",
+          "supplies": "DUV浸没式光刻系统",
+          "note": "海外管制与零部件维护是DRAM产能扩张的关键约束"
+        },
+        {
+          "company": "先进封装与测试伙伴",
+          "supplies": "HBM堆叠封装、存储封装测试",
+          "note": "HBM3/HBM3E量产能力依赖TSV、键合、测试良率"
+        }
+      ],
+      "customers": [
+        {
+          "company": "腾讯",
+          "ticker": "0700.HK",
+          "note": "媒体报道约¥200亿采购订单"
+        },
+        {
+          "company": "字节跳动",
+          "note": "媒体报道五年超过$70亿采购协议"
+        },
+        {
+          "company": "小米",
+          "ticker": "1810.HK",
+          "note": "媒体报道玄戒O3采用其LPDDR6"
+        },
+        {
+          "company": "国产手机、PC与消费电子OEM",
+          "note": "LPDDR5X、DDR4/DDR5和移动内存主力客户群"
+        },
+        {
+          "company": "国内云厂商与AI推理服务器厂商",
+          "note": "国产AI算力体系下增加DRAM采购"
+        }
+      ],
+      "partners": [
+        {
+          "company": "国产AI算力与整机生态",
+          "area": "AI推理服务器和终端内存适配",
+          "note": "围绕国产GPU、NPU和整机厂做兼容性认证"
+        },
+        {
+          "company": "地方政府与产业基金",
+          "area": "DRAM产线和研发中心建设",
+          "note": "合肥及北京扩产依托产业资本与政策支持"
+        }
+      ],
+      "competitors": [
+        {
+          "company": "三星电子",
+          "ticker": "005930.KS",
+          "area": "DRAM/HBM",
+          "note": "DRAM全球份额第一，HBM与先进制程综合能力最强"
+        },
+        {
+          "company": "SK海力士",
+          "ticker": "000660.KS",
+          "area": "DRAM/HBM",
+          "note": "AI加速器HBM主要供应商，技术认证与客户绑定领先"
+        },
+        {
+          "company": "美光",
+          "ticker": "MU",
+          "area": "DRAM/HBM",
+          "note": "全球DRAM第三，HBM4已进入AI平台量产节奏"
+        },
+        {
+          "company": "南亚科",
+          "ticker": "2408.TW",
+          "area": "利基型DRAM",
+          "note": "在利基型内存和区域供应链上竞争"
+        }
+      ],
       "tags": [],
-      "website": "N/A",
+      "website": "https://www.cxmt.com",
       "backlinks": 0,
       "wikilinks": [],
-      "content": "# CXMT (长鑫存储)\n\n中国DRAM龙头,17nm DDR4/DDR5量产",
-      "content_preview": "# CXMT (长鑫存储)\n\n> 中国DRAM龙头,17nm DDR4/DDR5量产（直接相关） | 中国DRAM龙头,17nm DDR4/DDR5量产",
+      "content": "# 长鑫科技\n\n长鑫科技是国产DRAM体系从追赶走向规模竞争的关键载体，投资价值同时来自国产替代、AI推理内存需求和全球DRAM涨价周期。\n\n## 财务状况\n\n长鑫科技于2026-07-27在上交所科创板上市，发行价`¥8.66/股`，发行融资约`¥579亿`，上市首日涨幅被媒体统计在465%至471%之间，亚洲2026年IPO融资规模居于前列。\n\n| 口径 | 指标 | 说明 |\n|------|------|------|\n| 2026Q1 | 营收`¥508亿` | 媒体披露口径，同比增长约719% |\n| 2026Q1 | 归母净利`¥247.6亿` | DRAM价格上涨叠加国产替代放量 |\n| 2026H1 | 营收`¥1,503亿` | 同比增长约874% |\n| 2026H1 | 归母净利`¥776亿` | H1隐含Q2净利约`¥528亿` |\n| 2026-09-15 | 总市值约`¥3.68万亿` | 收盘`¥54.22`，约`~$518B` |\n\n需要强调，Q2分季值由H1减去Q1推算，后续应以半年报和审计口径复核。公司利润率受益于DRAM供需反转，但新厂折旧、HBM研发和地缘政策仍是长期变量。\n\n## 产品线详解\n\n| 产品线 | 客户与场景 | 竞争位置 |\n|--------|------------|----------|\n| **LPDDR5X/LPDDR6** | 国产旗舰手机、AI终端和汽车座舱 | LPDDR6完成研发验证，媒体报道速率达12.8Gbps |\n| **DDR4/DDR5模组** | PC、服务器和国产算力平台 | DDR5放量是服务器收入主力 |\n| **利基型DRAM** | 工业、网络、消费电子 | 与南亚科等利基厂商竞争 |\n| **HBM3/HBM3E** | 国产AI加速器和推理集群 | HBM3试产，HBM3E良率仍处爬坡阶段 |\n\nDRAM收入弹性来自三重因素：AI推理带动DRAM容量需求、传统服务器和手机补库存、以及海外供应链不确定下国产客户增加长单。HBM短期还不是收入主力，但对估值和技术卡位有决定性影响。\n\n## 技术路线图\n\n1. **LPDDR6规模化**：完成研发验证后推进手机与AI终端认证，玄戒O3等国产SoC是关键落地窗口。\n2. **HBM3到HBM3E**：HBM3试产之后重点解决TSV、堆叠键合、测试良率和客户平台适配；公开报道显示HBM3E良率约25%，量产时点需谨慎。\n3. **先进DRAM制程**：继续推进10nm级DRAM节点，平衡光刻设备获取、良率、成本和专利风险。\n4. **产能扩张**：北京第二座DRAM基地计划推进，公司2030年目标建成第六座mega-fab。\n5. **全球份额**：Counterpoint数据显示2026Q2市占率约10%、全球第四；媒体提及2030年30%目标，属于公司路线图而非已实现结果。\n\n## 供应链与生态\n\nDRAM IDM的上游约束比芯片设计更强。设备侧涉及刻蚀、沉积、清洗、量测和光刻；材料侧涉及硅晶圆、光刻胶、电子特气、CMP材料和高纯化学品。HBM叠加上游TSV、键合设备和先进封装测试环节。\n\n本仓库NAURA、华海清科、拓荆科技等供应链词条中已出现指向长鑫体系的反向关系，可作为国产设备与材料合作的线索。但具体收入占比、采购单价和长协条款应以招股书、公司公告和客户披露为准。\n\n## 风险与监管\n\n- **地缘政治**：美国国防部曾将其列入相关清单，公司选择诉讼争取移除；设备维护、零部件和技术出口仍是核心风险。\n- **HBM良率**：HBM3E若不能快速提升良率，会影响国产AI内存替代节奏，也会摊薄研发投入。\n- **DRAM周期**：当前价格上行放大利润，但一旦供给集中释放或需求后移，收入和毛利率可能快速回落。\n- **资本开支**：第六座mega-fab与多节点研发需要持续高投入，现金流和折旧压力要跟踪。\n- **上市主体治理**：品牌名“长鑫存储”与上市主体“长鑫科技”需区分，避免关联业务口径误用。\n\n## 动态更新记录\n\n### 2026-09-15（F3批次：存储组4家薄档补全）\n- **来源**：`L0-原始资料池/03-新闻/2026-09-15-F3批次-存储组4家-数据溯源.md`（input_20260915_132）\n- **核心更新**：由10字段骨架补全至25字段加5个以上正文段；更新上市主体、`688825.SH`、IPO、2026Q1/H1财务、市值、DRAM份额、LPDDR6、HBM试产、客户协议和监管诉讼。",
+      "content_preview": "# 长鑫科技\n\n> 中国DRAM龙头和全球第四大DRAM制造商，聚焦LPDDR5X、LPDDR6、DDR5与HBM类存储产品，通过晶圆制造、模组销售和长期采购协议实现收入，位于半导体L3核心产品与集成层——2026Q2 DRAM市占率约10%并进入HBM试产阶段。\n | 长鑫科技是国产DRAM体系从追赶走向规模竞争的关键载体，投资价值同时来自国产替代、AI推理内存需求和全球DRAM涨价周期。",
       "sources": ""
     },
     {
@@ -32814,40 +32990,119 @@
       "sources": ""
     },
     {
-      "name": "Macronix (旺宏)",
+      "name": "旺宏电子",
       "slug": "macronix",
       "type": "company",
-      "country": "台湾",
-      "ticker": "",
-      "one_liner": "NOR Flash全球#1,3D NAND,SLC NAND，位于产业链L3核心产品与集成（核心参与者）",
-      "description": "NOR Flash全球#1,3D NAND,SLC NAND",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "半导体",
+      "country": "中国台湾",
+      "ticker": "2337.TW",
+      "one_liner": "台湾NOR Flash与利基型存储龙头企业，核心业务覆盖NOR Flash、ROM、SLC NAND和高可靠性存储，通过车规、工业、医疗、通信和航天客户订单实现收入，位于半导体L3核心产品与集成层——2025年NOR收入占比61%。\n",
+      "description": "旺宏的看点不是AI数据中心爆发，而是车规、工业、医疗和航天等长周期高可靠存储需求的涨价与毛利率修复。",
+      "core_business": [
+        "高可靠性NOR Flash",
+        "掩膜ROM",
+        "SLC NAND与小容量NAND",
+        "车规、工业、医疗和航天存储",
+        "高价值应用定制化存储解决方案"
+      ],
+      "revenue_model": "以NOR Flash、ROM和SLC NAND销售为主，通过车规、工业、医疗和航天等长生命周期客户订单获得稳定定价；2026年利基存储涨价和高价值应用占比提升推动毛利率修复。",
+      "founded": 1989,
+      "headquarters": "中国台湾新竹",
+      "employees": "未在本次公开口径中核验",
+      "latest_revenue": "2026年8月单月营收NT$8.145B，创单月新高",
+      "market_cap": "~$7.0B（2026.9，按收盘NT$114.5估算）",
+      "data_freshness_date": "2026-09-15",
+      "industry": "AI算力",
       "industries": [
+        "AI算力",
         "半导体"
       ],
       "segments": [
-        "存储芯片(DRAM/NAND)"
+        "存储芯片(DRAM/NAND)",
+        "NVMe/存储芯片"
       ],
       "chain_layer": "L3",
       "chain_role": "核心参与者",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
+      "suppliers": [
+        {
+          "company": "半导体设备供应商",
+          "supplies": "光刻、刻蚀、沉积、离子注入、量测检测设备",
+          "note": "自有晶圆制造与产能升级依赖设备供给和良率维护"
+        },
+        {
+          "company": "硅晶圆与材料供应商",
+          "supplies": "硅晶圆、光刻胶、电子特气、超高纯化学品、封装材料",
+          "note": "车规和医疗客户对材料批次一致性与可追溯性要求高"
+        },
+        {
+          "company": "封装测试伙伴",
+          "supplies": "存储封装、可靠性测试、车规级认证",
+          "note": "高可靠性NOR订单依赖温度循环、寿命和数据保持测试"
+        },
+        {
+          "company": "设计与IP合作方",
+          "supplies": "嵌入式存储IP、控制器与系统适配",
+          "note": "MCU、网络芯片和车用控制器客户需要IP级适配"
+        }
+      ],
+      "customers": [
+        {
+          "company": "汽车电子Tier 1与车用MCU厂商",
+          "note": "NOR Flash用于安全启动、仪表、ADAS和车身控制代码存储"
+        },
+        {
+          "company": "网络通信与工业控制设备商",
+          "note": "交换机、路由器、PLC、工控模块和服务器BMC需要高可靠性代码存储"
+        },
+        {
+          "company": "医疗与航天电子客户",
+          "note": "长生命周期、宽温、抗辐射和高数据保持要求提升ASP"
+        },
+        {
+          "company": "消费电子与PC/手机周边芯片客户",
+          "note": "TWS、电视、机顶盒、面板驱动和BIOS等场景"
+        }
+      ],
+      "partners": [
+        {
+          "company": "车用MCU与SiP生态",
+          "area": "NOR IP集成与系统认证",
+          "note": "为安全启动和功能安全场景提供代码存储"
+        },
+        {
+          "company": "晶圆制造与封测体系",
+          "area": "自有产能加外部封测协同",
+          "note": "旺季扩产时需要外部封装测试产能配合"
+        }
+      ],
+      "competitors": [
+        {
+          "company": "华邦电子",
+          "ticker": "2344.TW",
+          "area": "NOR Flash/利基型存储",
+          "note": "台湾利基存储与NOR市场直接竞争"
+        },
+        {
+          "company": "Infineon/Cypress体系",
+          "area": "车规NOR",
+          "note": "车规安全和网络客户渠道强"
+        },
+        {
+          "company": "Winbond",
+          "area": "NOR/利基DRAM",
+          "note": "在工业和消费NOR客户重叠度高"
+        },
+        {
+          "company": "GigaDevice",
+          "area": "NOR Flash",
+          "note": "中国大陆NOR供应商，价格竞争和本土终端渠道增强"
+        }
+      ],
       "tags": [],
-      "website": "N/A",
+      "website": "https://www.macronix.com",
       "backlinks": 0,
       "wikilinks": [],
-      "content": "# Macronix (旺宏)\n\nNOR Flash全球#1,3D NAND,SLC NAND",
-      "content_preview": "# Macronix (旺宏)\n\n> NOR Flash全球#1,3D NAND,SLC NAND，位于产业链L3核心产品与集成（核心参与者） | NOR Flash全球#1,3D NAND,SLC NAND",
+      "content": "# 旺宏电子\n\n旺宏的看点不是AI数据中心爆发，而是车规、工业、医疗和航天等长周期高可靠存储需求的涨价与毛利率修复。\n\n## 财务状况\n\n2025年报显示营收`NT$28.88B`，同比增长11.58%；毛利率约17.8%；净亏损约`NT$3.3B`，每股亏损约`NT$1.77`。亏损主要反映利基存储底部、产能利用率和产品结构压力。\n\n2026年出现明显反转：2026Q2毛利率约64%，创下历史新高；2026年8月单月营收`NT$8.145B`，首次突破NT$80亿，并连续5个月创单月新高。2026Q2资本支出约`NT$15.8B`，说明公司在为高价值NOR和利基型存储需求扩产。\n\n| 指标 | 2025年报 | 2026年近期变化 |\n|------|----------|----------------|\n| 营收 | NT$28.88B | 8月单月营收NT$8.145B |\n| 毛利率 | 约17.8% | Q2约64%，创历史新高 |\n| 净利 | 净亏损约NT$3.3B | 利基存储涨价带动盈利修复 |\n| 产品结构 | NOR 61%、ROM 16%、NAND 16% | 高价值NOR需求提升 |\n\n按2026-09-15收盘`NT$114.5`和1,931,082,818股估算，总市值约`NT$221.1B`，约合`~$7.0B`。52周区间`NT$22.6-NT$192.0`，波动幅度很大。\n\n## 产品线详解\n\n| 产品线 | 2025年占比 | 主要场景 | 优势 |\n|--------|-----------:|----------|------|\n| **NOR Flash** | 约61% | BIOS、安全启动、车载仪表、网络设备、工业PLC | 快速读取、可靠代码存储、长生命周期 |\n| **掩膜ROM** | 约16% | 消费电子、游戏卡带、家电和显示驱动 | 大批量定制成本低 |\n| **NAND/SLC NAND** | 约16% | 工业、网络、车用和专用数据存储 | 相比MLC/TLC更可靠，NAND收入2025年同比+62% |\n\n公司强调车规、工业、医疗、航天等高价值应用约占NOR收入38%。这些客户虽然放量慢，但认证周期长、价格相对稳定，有助于降低纯消费存储周期波动。\n\n## 技术路线图\n\n- **高可靠NOR Flash**：提升写入速度、工作温度范围、安全启动和数据保持能力，适配AI边缘设备的固件和模型代码存储。\n- **车规与功能安全**：覆盖AEC-Q100、ISO 26262相关认证场景，把NOR嵌入BMS、ADAS、座舱和车身控制器。\n- **嵌入式存储IP**：向MCU、SiP和系统级客户推广NOR/NAND IP，绑定早期设计。\n- **SLC NAND扩展**：SLC NAND收入2025年同比增长约62%，可用于工业日志、网络配置和车用数据记录。\n- **产能与良率**：2026Q2资本支出约NT$15.8B，重点在提升高价值产品产能与良率。\n\n## 供应链与客户集中度\n\n2025年报显示最大客户占营收约16%，客户集中度需要跟踪。公司上游依赖晶圆制造设备、硅晶圆、化学品和封装测试；车规与医疗订单还要求可追溯性、长期供货承诺和失效分析能力。\n\n与纯设计公司不同，旺宏拥有自有晶圆制造能力，因此在产能紧张时可以优先服务高毛利订单，但也必须承担折旧、工艺升级和周期底部利用率不足的成本。\n\n## 竞争与风险\n\n主要竞争对手包括华邦电子、Winbond、Infineon/Cypress体系和兆易创新。华邦和Winbond在利基型存储上重叠度高，兆易创新在中国大陆终端渠道和价格上压力增强，Infineon/Cypress在车规NOR渠道上具有优势。\n\n主要风险包括：NOR和SLC NAND涨价周期回落；车规客户项目延期；资本开支造成折旧上升；地缘和汇率波动；以及高毛利率64%能否在需求正常化后维持。若单月营收连续回落，市场会快速重新定价其周期弹性。\n\n## 动态更新记录\n\n### 2026-09-15（F3批次：存储组4家薄档补全）\n- **来源**：`L0-原始资料池/03-新闻/2026-09-15-F3批次-存储组4家-数据溯源.md`（input_20260915_132）\n- **核心更新**：由11字段骨架补全至25字段加5个以上正文段；更新2025年报、2026Q2毛利率、8月营收、产品结构、市值、车规与工业客户、竞争风险。",
+      "content_preview": "# 旺宏电子\n\n> 台湾NOR Flash与利基型存储龙头企业，核心业务覆盖NOR Flash、ROM、SLC NAND和高可靠性存储，通过车规、工业、医疗、通信和航天客户订单实现收入，位于半导体L3核心产品与集成层——2025年NOR收入占比61%。\n | 旺宏的看点不是AI数据中心爆发，而是车规、工业、医疗和航天等长周期高可靠存储需求的涨价与毛利率修复。",
       "sources": ""
     },
     {
@@ -41615,41 +41870,132 @@
       "sources": ""
     },
     {
-      "name": "YMTC (长江存储)",
+      "name": "长江存储",
       "slug": "ymtc",
       "type": "company",
       "country": "中国",
       "ticker": "",
-      "one_liner": "中国NAND Flash龙头,232层3D NAND量产（直接相关）",
-      "description": "中国NAND Flash龙头,232层3D NAND量产",
-      "core_business": [],
-      "revenue_model": "",
-      "founded": null,
-      "headquarters": "",
-      "employees": "",
-      "latest_revenue": "",
-      "market_cap": "",
-      "data_freshness_date": "",
-      "industry": "半导体",
+      "one_liner": "中国NAND Flash龙头企业，核心业务为Xtacking 3D NAND晶圆、企业级SSD和移动嵌入式存储，通过NAND晶圆、SSD和客户长单实现收入，位于半导体L3核心产品与集成层——2026Q2出货量媒体口径全球第三。\n",
+      "description": "长江存储的核心变量是NAND国产替代从消费市场进入企业级市场，IPO与产能升级会共同决定它能否从规模第三走向技术与盈利质量第三。",
+      "core_business": [
+        "Xtacking架构3D NAND晶圆制造",
+        "移动端嵌入式NAND与eMMC/UFS",
+        "消费级SSD与国产PC/终端存储",
+        "企业级SSD和数据中心存储方案",
+        "300层以上NAND研发与产能升级"
+      ],
+      "revenue_model": "NAND晶圆、移动存储芯片、消费级SSD和企业级SSD销售构成主要收入；国产终端、云厂商和国产AI存储集群需求带动收入，NAND价格与企业级认证决定盈利质量。",
+      "founded": 2016,
+      "headquarters": "中国武汉",
+      "employees": "未在本次公开口径中核验",
+      "latest_revenue": "2026Q1营收¥470.42亿，归母净利¥333.79亿",
+      "market_cap": "未上市；媒体估值口径约¥3万亿，不作为确证",
+      "data_freshness_date": "2026-09-15",
+      "industry": "AI算力",
       "industries": [
+        "AI算力",
         "半导体"
       ],
       "segments": [
         "存储芯片(DRAM/NAND)",
         "NVMe/存储芯片"
       ],
-      "chain_layer": "",
-      "chain_role": "直接相关",
-      "suppliers": [],
-      "customers": [],
-      "partners": [],
-      "competitors": [],
+      "chain_layer": "L3",
+      "chain_role": "龙头",
+      "suppliers": [
+        {
+          "company": "国产半导体设备供应商",
+          "supplies": "刻蚀、薄膜沉积、清洗、离子注入、量测检测设备",
+          "note": "3D NAND扩产对高深宽比刻蚀和沉积设备依赖强，本仓库NAURA、中微公司、拓荆科技等词条存在反向供应线索"
+        },
+        {
+          "company": "半导体材料与化学品供应商",
+          "supplies": "硅晶圆、光刻胶、电子特气、超高纯化学品、CMP抛光材料",
+          "note": "Xtacking工艺对材料纯度、界面和批次稳定性要求高"
+        },
+        {
+          "company": "海外设备与软件供应商",
+          "supplies": "先进光刻、量测、EDA和设备维护服务",
+          "note": "美国出口管制可能影响扩产速度、备件和服务"
+        },
+        {
+          "company": "封装测试与控制器伙伴",
+          "supplies": "NAND封装、控制器、固件和企业级SSD测试",
+          "note": "企业级SSD价值化依赖控制器算法与可靠性验证"
+        }
+      ],
+      "customers": [
+        {
+          "company": "国产智能手机与IoT OEM",
+          "note": "采购嵌入式NAND、eMMC和UFS"
+        },
+        {
+          "company": "国产PC和消费电子OEM",
+          "note": "采购消费级SSD和NAND组件"
+        },
+        {
+          "company": "国内云厂商与AI数据中心",
+          "note": "采购企业级SSD用于热数据、数据湖和推理缓存"
+        },
+        {
+          "company": "国产服务器与存储系统厂商",
+          "note": "集成NAND颗粒和SSD进入存储阵列与一体机"
+        }
+      ],
+      "partners": [
+        {
+          "company": "中信证券与中信建投",
+          "area": "科创板IPO辅导与承销",
+          "note": "2025-05-19启动IPO辅导，媒体报道双方参与"
+        },
+        {
+          "company": "国产存储控制器与整机生态",
+          "area": "SSD控制器适配和企业级认证",
+          "note": "形成NAND、控制器、文件系统和服务器平台的联合验证"
+        },
+        {
+          "company": "武汉地方政府与产业基金",
+          "area": "NAND产线和研发基础设施",
+          "note": "武汉基地是公司制造和扩产核心"
+        }
+      ],
+      "competitors": [
+        {
+          "company": "三星电子",
+          "ticker": "005930.KS",
+          "area": "NAND/企业级SSD",
+          "note": "NAND产能、技术和企业级客户覆盖最广"
+        },
+        {
+          "company": "SK海力士",
+          "ticker": "000660.KS",
+          "area": "NAND/企业级SSD",
+          "note": "拥有Hynix NAND与Solidigm企业级SSD资产"
+        },
+        {
+          "company": "Kioxia",
+          "ticker": "285A.T",
+          "area": "NAND",
+          "note": "BiCS NAND技术领先，与Sandisk制造协同"
+        },
+        {
+          "company": "美光",
+          "ticker": "MU",
+          "area": "NAND/企业级SSD",
+          "note": "G9 NAND和PCIe企业级SSD与长江存储直接竞争"
+        },
+        {
+          "company": "Sandisk",
+          "area": "NAND/消费与渠道SSD",
+          "note": "品牌、分销渠道和Kioxia产能协同优势明显"
+        }
+      ],
       "tags": [],
-      "website": "N/A",
+      "website": "https://www.ymtc.com",
       "backlinks": 0,
       "wikilinks": [],
-      "content": "# YMTC (长江存储)\n\n中国NAND Flash龙头,232层3D NAND量产",
-      "content_preview": "# YMTC (长江存储)\n\n> 中国NAND Flash龙头,232层3D NAND量产（直接相关） | 中国NAND Flash龙头,232层3D NAND量产",
+      "content": "# 长江存储\n\n长江存储的核心变量是NAND国产替代从消费市场进入企业级市场，IPO与产能升级会共同决定它能否从规模第三走向技术与盈利质量第三。\n\n## 财务与IPO进展\n\n公司2026年8月21日科创板IPO获受理，8月24日公告受理，9月4日进入已问询状态；拟募集资金约`¥330亿`，媒体报道超过此前长鑫科技申报口径的`¥295亿`。IPO辅导于2025年5月19日启动，媒体披露中信证券与中信建投参与。\n\n| 口径 | 指标 | 说明 |\n|------|------|------|\n| 2026Q1营收 | `¥470.42亿` | 公开报道，同比大幅增长 |\n| 2026Q1归母净利 | `¥333.79亿` | NAND涨价和国产需求共同推动 |\n| 2026Q1毛利率 | `78.73%` | 体现NAND涨价周期下的盈利弹性 |\n| IPO募资目标 | `¥330亿` | 拟用于产能、研发和运营资金 |\n| 估值口径 | 媒体称约`¥3万亿` | 未上市，不写入市值字段 |\n\n由于公司尚未上市，完整可比财年、审计口径和分部收入还需等待招股说明书、问询回复和上市后财报。\n\n## 产品线详解\n\n| 产品线 | 主要客户 | 竞争价值 |\n|--------|----------|----------|\n| **3D NAND晶圆** | 内部SSD、移动客户和存储系统 | Xtacking架构提高逻辑电路与存储阵列分工效率 |\n| **eMMC/UFS** | 国产手机、平板、汽车座舱和IoT | 消费终端国产化主入口，量大且迭代快 |\n| **消费级SSD** | 国产PC、游戏本、DIY和渠道 | 消耗NAND产能，建立品牌和渠道心智 |\n| **企业级SSD** | 云厂商、AI数据中心、国产服务器 | 高价值转型关键，需要固件、控制器和企业级认证 |\n\n长江存储的收入结构正从消费NAND向企业级SSD迁移。企业级订单单笔金额更高，但客户会同时测试写耐久、功耗、QoS、安全擦除、故障恢复和长期供货能力，订单兑现比消费端更慢。\n\n## 技术路线图\n\n- **Xtacking架构深化**：通过阵列与外围电路分层制造提升密度和I/O速度，是公司对三星、SK海力士和Kioxia的差异化路线。\n- **300层以上NAND**：公开报道显示研发推进，量产时的良率、成本和可靠性决定其能否真正缩小与海外龙头差距。\n- **企业级SSD**：从容量扩展转向QoS、低时延、持久内存缓存、安全固件和数据可靠性。\n- **国产化设备与材料**：在管制环境下提高国产刻蚀、沉积、量测和材料验证比例。\n- **IPO扩产**：募资若落地，会支撑新产能、研发和供应链保障，但也带来折旧和资本开支压力。\n\n## 市场地位与竞争格局\n\n行业研究报道显示，2026Q2长江存储NAND市占率约14%，按出货量进入全球第三，超过Kioxia和美光；多家媒体预测其2027年可能进一步挑战三星、SK海力士的领先位置。该预测只代表媒体推断，不作为事实结论。\n\n其竞争压力来自两端：海外龙头拥有更强企业级SSD生态和客户绑定；Kioxia与Sandisk通过制造协同扩大产能。长江存储的优势是本土云厂商、国产终端和国产AI存储集群的采购窗口，但要在企业级市场持续胜出，控制器、固件、服务能力和长期供货承诺必须跟上产能。\n\n## 供应链与风险\n\n3D NAND的供应链风险集中在高深宽比刻蚀、薄膜沉积、量测检测、EDA软件和设备维护。美国出口管制可能影响设备新增、备件获取和技术升级。本仓库NAURA、中微公司、拓荆科技等词条存在指向长江存储的反向关系，可作为国产设备验证线索，但实际采购占比仍需IPO披露确认。\n\n主要风险包括：NAND价格周期反转；企业级SSD客户认证失败或订单延迟；300层以上产品良率爬坡；美国管制扩大到材料、零部件或服务；以及上市后新增的产能消化和治理披露压力。\n\n## 动态更新记录\n\n### 2026-09-15（F3批次：存储组4家薄档补全）\n- **来源**：`L0-原始资料池/03-新闻/2026-09-15-F3批次-存储组4家-数据溯源.md`（input_20260915_132）\n- **核心更新**：由10字段骨架补全至25字段加5个以上正文段；更新科创板IPO受理与问询、2026Q1财务、NAND份额、Xtacking路线、企业级SSD、供应链与风险。",
+      "content_preview": "# 长江存储\n\n> 中国NAND Flash龙头企业，核心业务为Xtacking 3D NAND晶圆、企业级SSD和移动嵌入式存储，通过NAND晶圆、SSD和客户长单实现收入，位于半导体L3核心产品与集成层——2026Q2出货量媒体口径全球第三。\n | 长江存储的核心变量是NAND国产替代从消费市场进入企业级市场，IPO与产能升级会共同决定它能否从规模第三走向技术与盈利质量第三。",
       "sources": ""
     },
     {
@@ -50152,7 +50498,7 @@
         }
       },
       {
-        "name": "Kioxia",
+        "name": "Kioxia Holdings",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -51055,7 +51401,7 @@
         }
       },
       {
-        "name": "CXMT (长鑫存储)",
+        "name": "长鑫科技",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -51300,7 +51646,7 @@
         }
       },
       {
-        "name": "Macronix (旺宏)",
+        "name": "旺宏电子",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -52063,7 +52409,7 @@
         }
       },
       {
-        "name": "YMTC (长江存储)",
+        "name": "长江存储",
         "symbolSize": 12,
         "itemStyle": {
           "color": "#34C759"
@@ -54985,27 +55331,11 @@
       },
       {
         "source": "存储芯片(DRAM/NAND)",
-        "target": "CXMT (长鑫存储)"
-      },
-      {
-        "source": "存储芯片(DRAM/NAND)",
-        "target": "YMTC (长江存储)"
-      },
-      {
-        "source": "存储芯片(DRAM/NAND)",
         "target": "Micron"
       },
       {
         "source": "存储芯片(DRAM/NAND)",
-        "target": "Kioxia"
-      },
-      {
-        "source": "存储芯片(DRAM/NAND)",
         "target": "Western Digital"
-      },
-      {
-        "source": "存储芯片(DRAM/NAND)",
-        "target": "Macronix (旺宏)"
       },
       {
         "source": "存储芯片(DRAM/NAND)",
@@ -55422,10 +55752,6 @@
       {
         "source": "HBM高带宽内存",
         "target": "Samsung"
-      },
-      {
-        "source": "HBM高带宽内存",
-        "target": "CXMT (长鑫存储)"
       },
       {
         "source": "HBM高带宽内存",
@@ -56125,15 +56451,7 @@
       },
       {
         "source": "NVMe/存储芯片",
-        "target": "YMTC (长江存储)"
-      },
-      {
-        "source": "NVMe/存储芯片",
         "target": "Samsung"
-      },
-      {
-        "source": "NVMe/存储芯片",
-        "target": "Kioxia"
       },
       {
         "source": "NVMe/存储芯片",
