@@ -1,0 +1,479 @@
+{
+  "date": "2026-09-15",
+  "generated_at": "2026-09-16T07:45:00+08:00",
+  "method": "Google News RSS 候选 + 人工筛选整理；无明确公开原因按低置信标注，不强行归因",
+  "entries": [
+    {
+      "type": "industry",
+      "key": "油气钻探",
+      "display": "油气钻探",
+      "confidence": "高",
+      "driver": "布伦特原油站上 108 美元、WTI 在 100 美元上方，直接拉动上游钻探与服务端。当日报道显示 Valaris 涨约 5.8%，属板块性普涨。驱动来自供给端事件：沙特东西管道遭袭停运、霍尔木兹海峡通行量骤降，市场对近端供给缺口定价。",
+      "sources": [
+        {"title": "Valaris Jumps 5.8% Amid Sector-Wide Rally", "source": "news.alphastreet.com", "url": "https://news.alphastreet.com/"},
+        {"title": "Oil Prices Rise on Saudi Pipeline Outage and Rising Red Sea Risks", "source": "Investing.com", "url": "https://za.investing.com/analysis/oil-prices-rise-on-saudi-pipeline-outage-and-rising-red-sea-risks-200623057"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "炼油与营销",
+      "display": "炼油与营销",
+      "confidence": "中",
+      "driver": "同属油价上行的直接受益方向：原油成本上行阶段炼厂的产品端提价往往滞后但价差走阔，且成品油（尤其柴油）供应偏紧。检索另有 BTIG 提示炼油股在创纪录上涨后面临回调风险，属反向风险提示。",
+      "sources": [
+        {"title": "BTIG warns oil refining stocks face potential correction after record gains", "source": "Investing.com", "url": "https://www.investing.com/news/stock-market-news/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "油气勘探与生产",
+      "display": "油气勘探与生产",
+      "confidence": "中",
+      "driver": "油价上行的上游受益方向。当日标普 500 涨幅榜中 APA 涨 5.29%、Devon Energy 涨 3.89%，均为页岩油气勘探生产企业，直接对应布伦特站上 108 美元的价格环境。",
+      "sources": [
+        {"title": "US Market Movers Today - 15 September 2026", "source": "Smartkarma", "url": "https://www.smartkarma.com/home/market-movers/us-market-movers-today-15-september-2026/"},
+        {"title": "3 Oil And Gas Stocks Retail Investors May Be Missing Right Now", "source": "simplywall.st", "url": "https://simplywall.st/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "化工",
+      "display": "化工",
+      "confidence": "中",
+      "driver": "油价上行的成本传导方向：化工品价格与原油高度联动，市场在供给冲击下预期提价。当日标普 500 涨幅榜中 LyondellBasell 涨 4.27%，属石化链条。该行业两个交易所样本量较大，等权口径相对可靠。",
+      "sources": [
+        {"title": "US Market Movers Today - 15 September 2026", "source": "Smartkarma", "url": "https://www.smartkarma.com/home/market-movers/us-market-movers-today-15-september-2026/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "海运",
+      "display": "海运",
+      "confidence": "低",
+      "driver": "检索见航运股在霍尔木兹风险与运价、保险费率相关报道中被提及，绕行预期对运价构成支撑；但当日未见针对该行业的公司级公告或运价指数变动数据，归因为油价与地缘的外溢，置信度低。",
+      "sources": [
+        {"title": "Shipping Stocks To Watch As Strait Of Hormuz Risks Lift Marine Insurance Rates", "source": "simplywall.st", "url": "https://simplywall.st/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "医疗专科",
+      "display": "医疗专科",
+      "confidence": "中",
+      "driver": "医疗方向的强势与当日资金从消费与利率敏感板块撤出有关。涨幅榜中 Tempus AI 涨 10.67%、Caris Life Sciences 涨 9.40%，均属医疗专科与诊断方向；检索同时见外科耗材与专科设备的季度业绩回顾被正面评价。",
+      "sources": [
+        {"title": "Top Stock Movers - September 15, 2026", "source": "COT-Trading", "url": "https://www.cot-trading.com/post?slug=top-stock-movers-september-15-2026"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "医疗诊断与研究",
+      "display": "医疗诊断与研究",
+      "confidence": "中",
+      "driver": "当日标普 500 涨幅榜中 Thermo Fisher 涨 4.61%、Quest Diagnostics 涨 3.86%，另有 Revvity 涨 9.07%，均为生命科学与诊断检测公司。在长端利率上行、成长股承压的环境里，盈利确定性高的诊断服务反而获得资金。",
+      "sources": [
+        {"title": "US Market Movers Today - 15 September 2026", "source": "Smartkarma", "url": "https://www.smartkarma.com/home/market-movers/us-market-movers-today-15-september-2026/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "商业设备与耗材",
+      "display": "商业设备与耗材",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果多为泛化的行业榜单与旧闻（最近一条为 RB Global 的季度业绩对标），未锁定当日行业级驱动；该行业仅含 NASDAQ 一个交易所样本，等权值易被单只个股放大，请谨慎解读。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "家居装修",
+      "display": "家居装修",
+      "confidence": "高",
+      "driver": "RH 收跌约 6.96%：第三季度营收指引疲软盖过二季度超预期业绩，美国银行提示四季度风险、多家机构下调目标价，理由是高端门店客流恶化与奢侈品住房市场放缓。叠加 10 年期美债收益率站上 5% 直接压制房屋交易与装修需求。注意 NASDAQ 口径 -9.85% 与 NYSE 口径 -1.67% 差异极大，样本分散，不宜当作全行业真实跌幅。",
+      "sources": [
+        {"title": "RH Stock Slides As Revenue Outlook Rattles Investors", "source": "TipRanks", "url": "https://blog.tipranks.com/rh-stock-slides-as-revenue-outlook-rattles-investors/"},
+        {"title": "Rising Cost Headwinds And Retail Sell-Off Could Be A Game Changer For RH", "source": "simplywall.st", "url": "https://simplywall.st/stocks/us/retail/nyse-rh/rh/news/rising-cost-headwinds-and-retail-sell-off-could-be-a-game-ch"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "食品分销",
+      "display": "食品分销",
+      "confidence": "高",
+      "driver": "Sysco 收跌 4.72%，是标普 500 当日跌幅前列个股。食品分销商的订单直接跟随餐饮客流，Placer.ai 公布的 8 月线下餐饮客流同比下降 2.4%，等于提前反映了批发端的量价压力。",
+      "sources": [
+        {"title": "US Market Movers Today - 15 September 2026", "source": "Smartkarma", "url": "https://www.smartkarma.com/home/market-movers/us-market-movers-today-15-september-2026/"},
+        {"title": "Restaurant Stocks Fall on Slower August Traffic", "source": "MarketWatch", "url": "https://www.marketwatch.com/story/restaurant-stocks-fall-on-slower-august-traffic-c3f7525d"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "餐饮",
+      "display": "餐饮",
+      "confidence": "高",
+      "driver": "Placer.ai 的 8 月零售与餐饮指数显示线下连锁餐饮客流同比下降 2.4%，逆转 6、7 月的改善趋势。Wingstop 跌 12.09%、Chipotle 跌 5.94%、Casey's 跌 5.55%，Texas Roadhouse、CAVA、Shake Shack、Brinker 同步下跌。原因链条与油价相连：汽油价格高企与外食价格涨幅跑赢食品杂货，推动消费者回流家庭餐桌。",
+      "sources": [
+        {"title": "Wingstop, Chipotle Stocks Slide in Broader Restaurant Selloff", "source": "Barron's", "url": "https://www.barrons.com/articles/wingstop-chipotle-restaurant-stocks-consumer-e30d8075"},
+        {"title": "Soft August dining traffic weighs on restaurant sector", "source": "Seeking Alpha", "url": "https://seekingalpha.com/news/4643135-soft-august-dining-traffic-weighs-on-restaurant-sector"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "医疗保险计划",
+      "display": "医疗保险计划",
+      "confidence": "高",
+      "driver": "两重利空叠加。一是两党议员提出《Protecting Approved Care Act》，改革 Medicare Advantage 的预授权与支付规则（要求计划遵守初始预授权、禁止追溯性追回款项），市场担心推高医疗赔付率；二是 Alignment Healthcare 在 Baird 医疗会议上提示三季度住院与专业护理成本高于预期、并拒绝对 Star Ratings 置评，个股暴跌约 19.7% 创 52 周新低，Clover Health 同步跌约 9%。",
+      "sources": [
+        {"title": "Alignment Healthcare shares drop after providing commentary at Baird conference", "source": "TipRanks", "url": "https://www.tipranks.com/news/the-fly/alignment-healthcare-shares-drop-after-providing-commentary-at-baird-conference-thefly-news"},
+        {"title": "ALHC Stock Tumbles After 'Don't Poke the Bear' Silence On Star Ratings - CLOV Falls With It", "source": "asianetnews", "url": "https://newsable.asianetnews.com/markets/alhc-stock-tumbles-after-don-t-poke-the-bear-silence-on-star-ratings-clov-falls-with-it-articleshow-nwsubov"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "太阳能",
+      "display": "太阳能",
+      "confidence": "中",
+      "driver": "长端利率上行直接抬高太阳能项目的融资成本与折现率，该板块对利率的敏感度在全市场居前。检索见 9 月 15 日再生能源股普遍下滑的报道；另有关税重塑本土供应链的行业性讨论，属中期变量。",
+      "sources": [
+        {"title": "Green Stocks Sep 15: ACME Solar Lone Gainer as Renewable Energy Stocks Slide", "source": "Saur Energy", "url": "https://www.saurenergy.com/"},
+        {"title": "3 U.S. Solar Stocks Worth Watching As Tariffs Reshape Domestic Supply Chains", "source": "simplywall.st", "url": "https://simplywall.st/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "酒庄与蒸馏酒",
+      "display": "酒庄与蒸馏酒",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果均为个股行情页与泛化榜单，未锁定当日行业级驱动；该行业仅含 NASDAQ 单交易所样本、成分股数量少，等权值波动被放大，请谨慎解读。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "工程与建设",
+      "display": "工程与建设",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。可观察到的背景是长端利率上行压制基建与地产相关资本开支，且该板块在周一相对抗跌后有补跌压力；但检索未见当日行业级事件或订单变动，故按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "污染治理设备",
+      "display": "污染治理设备",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。检索结果均为小市值个股（Fuel Tech、Rainmaker 等）的零散公告与旧闻，未锁定当日行业级驱动；该行业仅含 NASDAQ 单交易所样本、成分股极少，-5.80% 的等权值很可能由单只个股贡献，不代表行业整体。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "互联网内容与信息",
+      "display": "互联网内容与信息",
+      "confidence": "中",
+      "driver": "科技关注组当日唯一涨幅超过 1% 的行业。谷歌等平台型公司虽当日小幅回吐，但该行业在 NYSE 口径上涨 1.60%，且属连续第二日跑赢硬件端；在利率上行、成长股承压的环境里，现金流稳定的平台方相对抗跌。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "信息技术服务",
+      "display": "信息技术服务",
+      "confidence": "低",
+      "driver": "涨跌幅仅 +0.11%，基本走平。检索未见当日行业级驱动；该行业在 NASDAQ 口径为 -0.62%、NYSE 口径为 +0.85%，两所背离说明结果主要由样本结构差异驱动，而非真实的方向性变化。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "应用软件",
+      "display": "应用软件",
+      "confidence": "低",
+      "driver": "涨跌幅仅 +0.08%，基本走平。前一日作为“AI 应用避风港”大涨的软件方向当日未延续，属获利了结与轮动；检索未见当日行业级事件，按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "基础软件",
+      "display": "基础软件",
+      "confidence": "低",
+      "driver": "微跌 0.20%，两交易所口径均为 -0.20%。前一日资金“从 AI 硬件切向软件”的轮动当日明显退潮，但跌幅有限；检索未见当日行业级驱动。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "通信设备",
+      "display": "通信设备",
+      "confidence": "低",
+      "driver": "微跌 0.37%，跌幅有限。检索见前一日诺基亚因 AI 数据中心投资担忧跌超 9% 的报道，但那是 9/14 的事件；当日未见新的行业级驱动，按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "电信服务",
+      "display": "电信服务",
+      "confidence": "低",
+      "driver": "微跌 0.45%。该行业属高股息、利率敏感型资产，在长端收益率站上 5% 的环境下小幅承压；检索未见当日公司级事件，按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "电子游戏与多媒体",
+      "display": "电子游戏与多媒体",
+      "confidence": "中",
+      "driver": "Take-Two 收跌 4.93%，是标普 500 当日跌幅前列个股，直接拖累该行业。该行业在 NASDAQ 口径 -1.16%、NYSE 口径 -0.26%，等权平均后为 -0.71%；检索未见行业级事件，主要由权重个股的下挫带动。",
+      "sources": [
+        {"title": "US Market Movers Today - 15 September 2026", "source": "Smartkarma", "url": "https://www.smartkarma.com/home/market-movers/us-market-movers-today-15-september-2026/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "科技分销",
+      "display": "科技分销",
+      "confidence": "低",
+      "driver": "暂无明确公开原因。该行业仅含 NASDAQ 单交易所样本、成分股极少，-0.80% 的值易被单只个股放大；检索未见当日行业级驱动。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "计算机硬件",
+      "display": "计算机硬件",
+      "confidence": "中",
+      "driver": "该行业 NASDAQ 口径 -2.89%、NYSE 口径 +0.36%，等权后 -1.26%。硬件端的弱势与 AI 资本开支叙事的降温一脉相承，但当日跌幅已较周一大为收敛；服务器与网络的个别标的（戴尔 +1.73%、Arista +2.68%）反而上涨，说明内部分化剧烈。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "半导体",
+      "display": "半导体",
+      "confidence": "高",
+      "driver": "等权口径 -1.49%（NASDAQ -1.03% / NYSE -1.94%），但费城半导体指数收涨 0.40%，两个口径方向相反。原因是等权口径里缺乏权重股的支撑：当日真正的上涨来自并购驱动的 Skyworks、Qorvo、高通等个股，而多数中小半导体个股仍在消化前一日跌幅。这说明“芯片止跌”目前是权重股现象，尚未扩散到全行业。",
+      "sources": [
+        {"title": "Smartphone Chip Stocks Rally While Large-Cap Technology Slips: Skyworks Jumps 11%, Qorvo Rises 7%, Qualcomm Climbs 4%", "source": "247wallst.com", "url": "https://247wallst.com/"}
+      ]
+    },
+    {
+      "type": "industry",
+      "key": "软件服务",
+      "display": "软件服务",
+      "confidence": "中",
+      "driver": "科技关注组当日跌幅最大的行业（仅 NASDAQ 一个样本，-2.05%）。前一日作为“AI 应用避风港”大涨的方向当日回吐，属单日轮动的反转；检索未见当日行业级事件，按中置信标注。",
+      "sources": []
+    },
+    {
+      "type": "industry",
+      "key": "消费电子",
+      "display": "消费电子",
+      "confidence": "中",
+      "driver": "微跌 0.11%，其中 NASDAQ +0.33%、NYSE -0.54%。苹果跌 0.52%，基本不受当日宏观波动影响；射频芯片链的大涨（Skyworks、Qorvo、Cirrus Logic）对该行业构成支撑，两股力量基本抵消。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "射频芯片",
+      "display": "射频芯片",
+      "confidence": "高",
+      "driver": "Skyworks 与 Qorvo 的并购交易获美国反垄断批准、进入最终审查阶段，管理层称有信心年底前交割。该交易规模约 220 亿美元、预计协同效应约 5 亿美元。Skyworks 收涨 13.55%、Qorvo 收涨 9.34%，而段内 Broadcom 跌 1.58%，故等权 +7.10%、市值加权 -1.39% 背离明显——涨幅完全由这笔并购事件驱动，而非行业景气度改善。",
+      "sources": [
+        {"title": "Skyworks Solutions and Qorvo surge as merger enters final stages", "source": "Seeking Alpha", "url": "https://seekingalpha.com/news/4643087-skyworks-solutions-and-qorvo-surge-as-merger-enters-final-stages"},
+        {"title": "Skyworks Solutions Stock Is the Best S&P 500 Performer Today", "source": "Barron's", "url": "https://www.barrons.com/articles/skyworks-solutions-stock-tops-s-p-500-apple-supplier-cb28cad2"}
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "模拟芯片",
+      "display": "模拟芯片",
+      "confidence": "中",
+      "driver": "段内 9 只样本，涨幅主要由 Skyworks（+13.55%，并购驱动）与 Qorvo（+9.34%）贡献——两者同时属于射频与模拟分类，存在重叠。剔除这两只后，ADI +0.09%、TI 基本持平、MPS -0.07%、SiTime -1.43%，段内其余标的基本走平甚至微跌，说明该段的热度同样是并购外溢而非模拟芯片基本面变化。",
+      "sources": [
+        {"title": "Skyworks Solutions and Qorvo surge as merger enters final stages", "source": "Seeking Alpha", "url": "https://seekingalpha.com/news/4643087-skyworks-solutions-and-qorvo-surge-as-merger-enters-final-stages"}
+      ]
+    },
+    {
+      "type": "segment",
+      "key": "企业级存储",
+      "display": "企业级存储",
+      "confidence": "中",
+      "driver": "戴尔 +1.73%、HPE +0.85%、NetApp +0.88%，三只样本全部上涨且幅度接近，属板块性温和修复。存储整机方向在前一日因 AI 资本开支担忧重挫，当日随芯片链止跌而回稳；检索未见当日公司级事件。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "网络设备（交换机）",
+      "display": "网络设备（交换机）",
+      "confidence": "中",
+      "driver": "Arista +2.68% 领涨，Cisco +0.01%、NVIDIA +0.57%。高速网络设备是 AI 数据中心内部互联的直接受益环节，在芯片链止跌的当天率先修复；检索未见当日公司级事件，属板块性回稳。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "CPU(服务器级)",
+      "display": "CPU(服务器级)",
+      "confidence": "中",
+      "driver": "AMD +2.19% 领涨，ARM Holdings +1.18%、NVIDIA +0.57%、Intel -0.05%。服务器 CPU 方向随算力芯片情绪修复而回稳，AMD 的涨幅明显强于英伟达，与近期市场对 AMD 服务器份额提升的预期一致；检索未见当日公司级事件。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "GPU",
+      "display": "GPU",
+      "confidence": "中",
+      "driver": "段内 3 只样本 AMD +2.19%、NVIDIA +0.57%、Intel -0.05%，等权 +0.90%。GPU 是 AI 算力的核心环节，前一日领跌后当日率先止跌回稳，与费半指数收涨 0.40% 同向；检索未见当日公司级事件，属超跌修复。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "GPU架构设计",
+      "display": "GPU架构设计",
+      "confidence": "中",
+      "driver": "与 GPU 段样本完全相同（AMD、NVIDIA、Intel），等权 +0.90%。两段在产业链宇宙中属不同环节但成分股重合，因此走势一致，属 AI 算力核心资产的同步修复。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "DSP与光芯片",
+      "display": "DSP与光芯片",
+      "confidence": "中",
+      "driver": "段内 6 只样本多数上涨：Semtech +2.62%、Coherent +1.75%、Marvell +1.32%、Lumentum +0.47%、Macom +0.17%，仅 Broadcom -1.58%。光通信链在前一日暴跌逾一成后当日温和反弹，但幅度远小于前日的跌幅，属超跌修复而非趋势反转；检索未见当日公司级订单或指引变化。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "高纯硅料与硅片",
+      "display": "高纯硅料与硅片",
+      "confidence": "低",
+      "driver": "数据口径说明：该段 4 只样本中，Soitec（-12.58%）与 Siltronic（-8.85%）的行情日期为美东 9/14，非 9/15——欧洲市场 EOD 数据在报告生成时点尚未更新，属已知的每日数据源滞后。若只看 9/15 口径的样本，SUMCO +1.20%、信越化学 -0.99%，等权约为 +0.1%。因此本段 -5.30% 的读数不代表昨夜的真实强弱。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "封装测试(OSAT)",
+      "display": "封装测试(OSAT)",
+      "confidence": "中",
+      "driver": "段内仅 2 只样本：日月光（ASE）-3.27%、Amkor -1.57%，两只均为 9/15 口径、方向一致。封测是半导体后段环节，弹性通常大于设计端，在前一日全链重挫后当日未能跟上涨幅；样本量少，读数波动较大，检索未见当日公司级事件。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "PCB与IC载板",
+      "display": "PCB与IC载板",
+      "confidence": "低",
+      "driver": "数据口径说明：段内 5 只样本中 AT&S（-9.01%）为美东 9/14 行情（欧洲源滞后）。9/15 口径的样本为 SEMCO -1.50%、Kyocera +0.31%、Nan Ya PCB -0.31%、TTM -0.67%，四只均在 ±1.5% 以内且方向分散。因此本段 -2.24% 的跌幅主要由滞后数据贡献，不宜解读为昨夜的板块弱势。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "封装设备",
+      "display": "封装设备",
+      "confidence": "低",
+      "driver": "数据口径说明：段内 4 只样本中 Besi（-7.03%）为美东 9/14 行情（欧洲源滞后）。9/15 口径的 ASMPT -0.13%、Disco -0.06%、Kulicke & Soffa -0.83%，三只跌幅都在 1% 以内。本段 -2.01% 的读数由滞后数据主导，不代表昨夜真实强弱。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "功率半导体",
+      "display": "功率半导体",
+      "confidence": "低",
+      "driver": "数据口径说明：段内 3 只样本中英飞凌（-7.72%）为美东 9/14 行情（欧洲源滞后）。9/15 口径的安森美 +2.16%、意法半导体 +0.29%，两只均为上涨。若剔除滞后样本，本段方向实际为正，-1.76% 的读数不成立。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "EDA与IP核",
+      "display": "EDA与IP核",
+      "confidence": "中",
+      "driver": "段内 3 只样本：Synopsys -3.60%、Cadence -1.83%、NVIDIA +0.57%，两只 EDA 龙头双双下跌（均为 9/15 口径）。EDA 是半导体设计端的高估值、高客户集中度资产，在长端利率上行压制高久期资产的环境下承压；检索未见当日公司级事件。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "服务器电源与UPS",
+      "display": "服务器电源与UPS",
+      "confidence": "低",
+      "driver": "数据口径说明：段内 6 只样本中 Schneider Electric（-6.54%）与 ABB（-4.09%）为美东 9/14 行情（欧洲源滞后）。9/15 口径的 Delta Electronics +3.09%、Mitsubishi Electric -0.43%、Eaton -0.19%、Vertiv -1.17%，方向分散且幅度均小。本段 -1.55% 的读数受滞后样本影响明显，需谨慎解读。",
+      "sources": []
+    },
+    {
+      "type": "segment",
+      "key": "CIS图像传感器",
+      "display": "CIS图像传感器",
+      "confidence": "中",
+      "driver": "段内 3 只样本：Himax（奇景光电）-2.79%、Sony Semiconductor -2.25%、NVIDIA +0.57%，两只图像传感器标的均为 9/15 口径且同步下跌。CIS 的主要终端是手机与汽车，当日手机上链的射频芯片大涨而 CIS 下跌，说明资金在手机链内部做了区分；检索未见当日公司级事件。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "SWKS",
+      "display": "Skyworks (SWKS)",
+      "confidence": "高",
+      "driver": "与 Qorvo 的约 220 亿美元并购交易获美国反垄断批准、进入最终审查阶段，管理层称有信心年底前交割，预计协同效应约 5 亿美元。收涨 13.55%，为标普 500 当日最强个股。注意该股在上涨前已因并购预期累涨，属事件驱动的估值重估，非行业景气反转。",
+      "sources": [
+        {"title": "Skyworks Solutions and Qorvo surge as merger enters final stages", "source": "Seeking Alpha", "url": "https://seekingalpha.com/news/4643087-skyworks-solutions-and-qorvo-surge-as-merger-enters-final-stages"},
+        {"title": "Skyworks Solutions Stock Is the Best S&P 500 Performer Today", "source": "Barron's", "url": "https://www.barrons.com/articles/skyworks-solutions-stock-tops-s-p-500-apple-supplier-cb28cad2"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "QRVO",
+      "display": "Qorvo (QRVO)",
+      "confidence": "高",
+      "driver": "与 Skyworks 的并购交易获美国反垄断批准、进入最终审查阶段的同一事件驱动，收涨 9.34%。当日另有运营高管按计划出售 2,500 股的信息披露，规模有限，不构成主要驱动。",
+      "sources": [
+        {"title": "Qorvo Inc Stock (QRVO) Moved Up by 7.41% on Sep 15: A Full Analysis", "source": "TradingKey", "url": "https://www.tradingkey.com/"},
+        {"title": "Insider Selling: Qorvo (NASDAQ:QRVO) SVP Sells 2,500 Shares of Stock", "source": "MarketBeat", "url": "https://www.marketbeat.com/"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "CRUS",
+      "display": "Cirrus Logic (CRUS)",
+      "confidence": "中",
+      "driver": "收涨 5.05%，与射频芯片链的并购事件同向。Cirrus Logic 是苹果音频与混合信号芯片的主要供应商，与 Skyworks/Qorvo 同属手机半导体链，市场把并购获批解读为该链条集中度提升、议价能力改善；检索未见该公司当日自身公告。",
+      "sources": [
+        {"title": "Cirrus Logic Inc (CRUS) Shares Surge 5.1% -- What GF Score of 88 Tells Investors", "source": "GuruFocus", "url": "https://www.gurufocus.com/"}
+      ]
+    },
+    {
+      "type": "anomaly",
+      "key": "SOI.PA",
+      "display": "Soitec (SOI.PA)",
+      "confidence": "低",
+      "driver": "该行取到的是美东 9/14 收盘行情（欧洲行情源滞后一日），-12.58% 并非昨夜（9/15）的变动，而是周一欧洲芯片股暴跌的延续记录。检索结果亦均为 9 月 3–9 日关于其上调营收指引的旧闻，与 9/15 无关，故按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "WAF.DE",
+      "display": "Siltronic (WAF.DE)",
+      "confidence": "低",
+      "driver": "该行取到的是美东 9/14 收盘行情（欧洲行情源滞后一日），-8.85% 不是昨夜（9/15）的变动。检索仅见 9/15 当日一则高盛持股变动披露，属例行公告，不足以解释股价波动，故按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "IFX.DE",
+      "display": "英飞凌(Infineon) (IFX.DE)",
+      "confidence": "低",
+      "driver": "该行取到的是美东 9/14 收盘行情（欧洲行情源滞后一日），-7.72% 不是昨夜（9/15）的变动。检索未见当日（9/15）的公司级事件；其实际 9/15 走势未能在本报告生成时点取得结构化数据。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "BESI.AS",
+      "display": "Besi (BESI.AS)",
+      "confidence": "低",
+      "driver": "该行取到的是美东 9/14 收盘行情（欧洲行情源滞后一日），-7.03% 不是昨夜（9/15）的变动；检索到的相关报道（混合键合技术采用延迟的担忧）亦发表于 9/14，属周一的事件。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "ATS.VI",
+      "display": "AT&S (ATS.VI)",
+      "confidence": "低",
+      "driver": "该行取到的是美东 9/14 收盘行情（欧洲行情源滞后一日），-9.01% 不是昨夜（9/15）的变动。检索结果多为不相关的同名代码新闻，未见当日公司级事件，按低置信标注。",
+      "sources": []
+    },
+    {
+      "type": "anomaly",
+      "key": "SU.PA",
+      "display": "Schneider Electric (SU.PA)",
+      "confidence": "低",
+      "driver": "该行取到的是美东 9/14 收盘行情（欧洲行情源滞后一日），-6.54% 不是昨夜（9/15）的变动；检索到的“开盘前 6.4% 下跌”报道亦发布于 9/15 凌晨、对应的是周一收盘结果。",
+      "sources": []
+    }
+  ]
+}
