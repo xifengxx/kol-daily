@@ -1980,6 +1980,12 @@
           "name": "Texas Instruments",
           "role": "全球二线",
           "rev": 20
+        },
+        {
+          "ticker": "MCHP",
+          "name": "Microchip Technology",
+          "role": "龙头",
+          "rev": 90
         }
       ],
       "contradictions": [],
@@ -2584,6 +2590,18 @@
           "name": "建龙微纳",
           "role": "概念相关",
           "rev": 15
+        },
+        {
+          "ticker": "MKSI",
+          "name": "MKS Instruments",
+          "role": "龙头",
+          "rev": 85
+        },
+        {
+          "ticker": "VACN.SW",
+          "name": "VAT Group AG",
+          "role": "龙头",
+          "rev": 90
         }
       ],
       "contradictions": [],
@@ -3823,6 +3841,18 @@
           "name": "长川科技",
           "role": "国产二线",
           "rev": 35
+        },
+        {
+          "ticker": "FORM",
+          "name": "FormFactor",
+          "role": "龙头",
+          "rev": 85
+        },
+        {
+          "ticker": "TPRO.MI",
+          "name": "Technoprobe S.p.A.",
+          "role": "龙头",
+          "rev": 80
         }
       ],
       "contradictions": [],
@@ -4100,7 +4130,7 @@
         },
         {
           "ticker": "0522.HK",
-          "name": "ASMPT",
+          "name": "ASM Pacific Technology",
           "role": "TCB龙头",
           "rev": 50
         },
@@ -4669,6 +4699,24 @@
           "name": "闻泰科技(安世)",
           "role": "国产替代",
           "rev": 25
+        },
+        {
+          "ticker": "6504.T",
+          "name": "Fuji Electric",
+          "role": "龙头",
+          "rev": 70
+        },
+        {
+          "ticker": "6963.T",
+          "name": "ROHM Semiconductor",
+          "role": "龙头",
+          "rev": 75
+        },
+        {
+          "ticker": "WOLF",
+          "name": "Wolfspeed",
+          "role": "龙头",
+          "rev": 95
         }
       ],
       "contradictions": [],
@@ -5209,13 +5257,13 @@
         },
         {
           "ticker": "CXMT",
-          "name": "CXMT (长鑫存储)",
+          "name": "长鑫科技",
           "role": "概念股",
           "rev": 95
         },
         {
           "ticker": "YMTC",
-          "name": "YMTC (长江存储)",
+          "name": "长江存储",
           "role": "概念股",
           "rev": 95
         },
@@ -5227,7 +5275,7 @@
         },
         {
           "ticker": "KIOXIA",
-          "name": "Kioxia",
+          "name": "Kioxia Holdings",
           "role": "二线弹性",
           "rev": 95
         },
@@ -5260,6 +5308,12 @@
           "name": "Nanya Technology (南亚科技)",
           "role": "二线弹性",
           "rev": 80
+        },
+        {
+          "ticker": "688008.SH",
+          "name": "澜起科技",
+          "role": "龙头",
+          "rev": 85
         }
       ],
       "contradictions": [],
@@ -6201,6 +6255,12 @@
           "name": "联想",
           "role": "二线弹性",
           "rev": 10
+        },
+        {
+          "ticker": "2317.TW",
+          "name": "鸿海精密 (富士康/Foxconn)",
+          "role": "龙头",
+          "rev": 60
         }
       ],
       "contradictions": [],
@@ -6621,7 +6681,7 @@
         },
         {
           "ticker": "4091",
-          "name": "Nippon Sanso (大阳日酸)",
+          "name": "Taiyo Nippon Sanso",
           "role": "二线弹性",
           "rev": 12
         },
@@ -7682,7 +7742,7 @@
         },
         {
           "ticker": "CXMT",
-          "name": "CXMT (长鑫存储)",
+          "name": "长鑫科技",
           "role": "概念股",
           "rev": 10
         },
@@ -8731,6 +8791,12 @@
           "name": "上海合晶",
           "role": "国产替代",
           "rev": 45
+        },
+        {
+          "ticker": "IQE.L",
+          "name": "IQE plc",
+          "role": "龙头",
+          "rev": 90
         }
       ],
       "contradictions": [],
@@ -9427,6 +9493,12 @@
           "name": "北方华创",
           "role": "国产龙头",
           "rev": 40
+        },
+        {
+          "ticker": "ASM.AS",
+          "name": "ASM International",
+          "role": "龙头",
+          "rev": 30
         }
       ],
       "contradictions": [],
@@ -10220,6 +10292,12 @@
           "name": "安集科技",
           "role": "国产替代",
           "rev": 30
+        },
+        {
+          "ticker": "DD",
+          "name": "DuPont",
+          "role": "龙头",
+          "rev": 85
         }
       ],
       "contradictions": [],
@@ -10993,6 +11071,12 @@
           "name": "华峰测控",
           "role": "国产替代",
           "rev": 50
+        },
+        {
+          "ticker": "",
+          "name": "Horiba",
+          "role": "龙头",
+          "rev": 80
         }
       ],
       "contradictions": [],
@@ -12253,7 +12337,7 @@
       "companies": [
         {
           "ticker": "YMTC",
-          "name": "YMTC (长江存储)",
+          "name": "长江存储",
           "role": "二线弹性",
           "rev": 60
         },
@@ -12265,7 +12349,7 @@
         },
         {
           "ticker": "285A",
-          "name": "Kioxia",
+          "name": "Kioxia Holdings",
           "role": "二线弹性",
           "rev": 80
         },
@@ -13801,6 +13885,12 @@
           "name": "Intel",
           "role": "二线弹性",
           "rev": 10
+        },
+        {
+          "ticker": "ALAB",
+          "name": "Astera Labs",
+          "role": "龙头",
+          "rev": 90
         }
       ],
       "contradictions": [],
@@ -14380,6 +14470,12 @@
           "name": "安路科技",
           "role": "国产替代",
           "rev": 55
+        },
+        {
+          "ticker": "XLNX",
+          "name": "Xilinx(AMD)",
+          "role": "龙头",
+          "rev": 85
         }
       ],
       "contradictions": [],
@@ -55982,6 +56078,10 @@
         "target": "Texas Instruments"
       },
       {
+        "source": "MCU与嵌入式处理器",
+        "target": "Microchip Technology"
+      },
+      {
         "source": "CIS图像传感器",
         "target": "Sony Semiconductor"
       },
@@ -56044,6 +56144,14 @@
       {
         "source": "半导体设备零部件",
         "target": "建龙微纳"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "MKS Instruments"
+      },
+      {
+        "source": "半导体设备零部件",
+        "target": "VAT Group AG"
       },
       {
         "source": "涂胶显影设备(Track)",
@@ -56178,6 +56286,14 @@
         "target": "长川科技"
       },
       {
+        "source": "测试设备",
+        "target": "FormFactor"
+      },
+      {
+        "source": "测试设备",
+        "target": "Technoprobe S.p.A."
+      },
+      {
         "source": "射频芯片",
         "target": "Skyworks Solutions"
       },
@@ -56199,7 +56315,7 @@
       },
       {
         "source": "封装设备",
-        "target": "ASMPT"
+        "target": "ASM Pacific Technology"
       },
       {
         "source": "封装设备",
@@ -56294,6 +56410,18 @@
         "target": "闻泰科技(安世)"
       },
       {
+        "source": "功率半导体",
+        "target": "Fuji Electric"
+      },
+      {
+        "source": "功率半导体",
+        "target": "ROHM Semiconductor"
+      },
+      {
+        "source": "功率半导体",
+        "target": "Wolfspeed"
+      },
+      {
         "source": "IC设计服务(Fabless)",
         "target": "Qualcomm"
       },
@@ -56351,7 +56479,19 @@
       },
       {
         "source": "存储芯片(DRAM/NAND)",
+        "target": "长鑫科技"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "长江存储"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
         "target": "Micron"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "Kioxia Holdings"
       },
       {
         "source": "存储芯片(DRAM/NAND)",
@@ -56368,6 +56508,10 @@
       {
         "source": "存储芯片(DRAM/NAND)",
         "target": "Nanya Technology (南亚科技)"
+      },
+      {
+        "source": "存储芯片(DRAM/NAND)",
+        "target": "澜起科技"
       },
       {
         "source": "成熟制程代工",
@@ -56498,6 +56642,10 @@
         "target": "联想"
       },
       {
+        "source": "AI服务器",
+        "target": "鸿海精密 (富士康/Foxconn)"
+      },
+      {
         "source": "ASIC/AI定制芯片",
         "target": "Broadcom"
       },
@@ -56563,7 +56711,7 @@
       },
       {
         "source": "电子特气",
-        "target": "Nippon Sanso (大阳日酸)"
+        "target": "Taiyo Nippon Sanso"
       },
       {
         "source": "电子特气",
@@ -56775,6 +56923,10 @@
       },
       {
         "source": "HBM高带宽内存",
+        "target": "长鑫科技"
+      },
+      {
+        "source": "HBM高带宽内存",
         "target": "Winbond (华邦)"
       },
       {
@@ -56950,6 +57102,10 @@
         "target": "上海合晶"
       },
       {
+        "source": "高纯硅料与硅片",
+        "target": "IQE plc"
+      },
+      {
         "source": "数据中心IDC",
         "target": "Equinix"
       },
@@ -57078,6 +57234,10 @@
         "target": "北方华创"
       },
       {
+        "source": "薄膜沉积设备",
+        "target": "ASM International"
+      },
+      {
         "source": "GPU",
         "target": "NVIDIA"
       },
@@ -57196,6 +57356,10 @@
       {
         "source": "光刻胶与湿化学品",
         "target": "安集科技"
+      },
+      {
+        "source": "光刻胶与湿化学品",
+        "target": "DuPont"
       },
       {
         "source": "AI训练集群/超算",
@@ -57338,6 +57502,10 @@
         "target": "华峰测控"
       },
       {
+        "source": "检测量测设备",
+        "target": "Horiba"
+      },
+      {
         "source": "边缘AI",
         "target": "Apple"
       },
@@ -57471,7 +57639,15 @@
       },
       {
         "source": "NVMe/存储芯片",
+        "target": "长江存储"
+      },
+      {
+        "source": "NVMe/存储芯片",
         "target": "Samsung"
+      },
+      {
+        "source": "NVMe/存储芯片",
+        "target": "Kioxia Holdings"
       },
       {
         "source": "NVMe/存储芯片",
@@ -57754,6 +57930,10 @@
         "target": "Intel"
       },
       {
+        "source": "网络交换芯片",
+        "target": "Astera Labs"
+      },
+      {
         "source": "DSP与光芯片",
         "target": "Broadcom"
       },
@@ -57832,6 +58012,10 @@
       {
         "source": "FPGA",
         "target": "安路科技"
+      },
+      {
+        "source": "FPGA",
+        "target": "Xilinx(AMD)"
       },
       {
         "source": "企业级存储",
