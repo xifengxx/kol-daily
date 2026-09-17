@@ -192,6 +192,13 @@ body {
 .hotspot-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
 .hotspot-section { margin-bottom: 8px; }
 .hotspot-section-label { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+/* AI 日报：把「我的点评」与「源站摘要」在视觉上分开。
+   仅在 AI 品类启用（renderHotspots 的 commentLabel 选项），美股/A股的热点卡不受影响。 */
+.hotspot-section.is-comment {
+  margin-top: 14px; padding: 2px 0 2px 12px;
+  border-left: 3px solid var(--accent); background: rgba(0,113,227,0.03); border-radius: 0 6px 6px 0;
+}
+.hotspot-section.is-comment .hotspot-section-label { color: var(--accent); }
 .hotspot-section-text { font-size: 14px; color: var(--text); line-height: 1.6; }
 .hotspot-section-text table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 13px; }
 .hotspot-section-text th { text-align: left; padding: 8px 10px; font-size: 11px; font-weight: 500; color: var(--text2); background: #F2F2F7; border-bottom: 1px solid var(--border); }
@@ -568,7 +575,7 @@ function buildSchemeB(md) {
       case 'source':  secHtml = sourceSection(s); break;
       // AI 日报：每个 ### 条目渲染成一张卡（复用热点卡组件）。
       // 关掉 tags —— 否则点评里出现「风险」二字就会凭空冒出一个「⚠ 风险」徽章，纯噪音。
-      case 'ai':      secHtml = hotspotSection(s, { tags: false, right: '源站摘要 + 我的点评' }); break;
+      case 'ai':      secHtml = hotspotSection(s, { tags: false, commentLabel: true, right: '源站摘要 + 我的点评' }); break;
       default:        secHtml = subCardSection(s, '📄');
     }
     html += `<div class="chapter" id="${id}">${secHtml}</div>`;
@@ -736,7 +743,8 @@ function renderHotspots(body, opts) {
       if (tags.length) html += `<div class="hotspot-meta">${tags.map(t => `<span class="tag ${t.cls}">${t.label}</span>`).join('')}</div>`;
     }
     splitLabeled(rest).forEach(s => {
-      html += `<div class="hotspot-section"><div class="hotspot-section-label">${esc(s.label)}</div><div class="hotspot-section-text">${marked.parse(s.content, { gfm: true })}</div></div>`;
+      const isComment = !!(opts && opts.commentLabel) && /点评/.test(s.label);
+      html += `<div class="hotspot-section${isComment ? ' is-comment' : ''}"><div class="hotspot-section-label">${esc(s.label)}</div><div class="hotspot-section-text">${marked.parse(s.content, { gfm: true })}</div></div>`;
     });
     html += '</div>';
   });
