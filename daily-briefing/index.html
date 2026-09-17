@@ -127,6 +127,7 @@ body {
 }
 .version-badge.morning { background: var(--tag-blue-bg); color: var(--tag-blue-text); }
 .version-badge.evening { background: var(--tag-purple-bg); color: var(--tag-purple-text); }
+.version-badge.ai { background: var(--tag-green-bg); color: var(--tag-green-text); }
 
 /* ===== 通用卡片 ===== */
 .card {
@@ -303,6 +304,7 @@ body.scheme-b .stat-card { transition: all 0.3s ease; }
     <div class="industry-switcher" id="marketSwitch">
       <button class="ind-btn active" data-market="us">美股早盘版</button>
       <button class="ind-btn" data-market="cn">A股收盘版</button>
+      <button class="ind-btn" data-market="ai">AI 日报</button>
     </div>
     <div class="sec-title">历史报告</div>
     <div class="date-list" id="dateNav"></div>
@@ -331,10 +333,11 @@ body.scheme-b .stat-card { transition: all 0.3s ease; }
 
 <script>
 const MANIFEST_PATH = 'manifest.json';
-const MARKET_NAMES = { us: '美股早盘版', cn: 'A股收盘版' };
+const MARKET_NAMES = { us: '美股早盘版', cn: 'A股收盘版', ai: 'AI 日报' };
 let currentMarket = 'us';
-// 支持 ?market=cn|us 深链指定市场（便于外链/测试）
-(function(){ const m = new URLSearchParams(location.search).get('market'); if (m === 'cn' || m === 'us') { currentMarket = m; const b = document.querySelector('.ind-btn[data-market="' + m + '"]'); if (b) { document.querySelectorAll('.ind-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); } } })();
+// 支持 ?market=us|cn|ai 深链指定市场（便于外链/测试）
+// 白名单直接取 MARKET_NAMES 的键，新增品类时只需改上面一处，不会再漏
+(function(){ const m = new URLSearchParams(location.search).get('market'); if (m && Object.prototype.hasOwnProperty.call(MARKET_NAMES, m)) { currentMarket = m; const b = document.querySelector('.ind-btn[data-market="' + m + '"]'); if (b) { document.querySelectorAll('.ind-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); } } })();
 let manifest = null;
 let scheme = 'a';
 // 支持 ?view=b 深链直接进入图表版（便于外链/测试）
@@ -430,7 +433,7 @@ function render() {
 }
 
 /* ===== 右侧分节导航：点击定位 + scrollspy 高亮 ===== */
-const TYPE_ICON = { hero:'✨', market:'📊', hotspot:'🔥', news:'📰', track:'📍', stock:'🏷️', macro:'🏛️', outlook:'🧭', generic:'📄' };
+const TYPE_ICON = { hero:'✨', market:'📊', hotspot:'🔥', news:'📰', track:'📍', stock:'🏷️', macro:'🏛️', outlook:'🧭', ai:'🤖', generic:'📄' };
 function iconOf(title){ return TYPE_ICON[classifySection(title)] || '📄'; }
 /* 分节导航标题：去掉括号（含内容）及括号内文字、去掉冒号后副标题，只保留主标题正文 */
 function navLabel(title){
@@ -489,9 +492,15 @@ function renderHeader(md) {
   const { header } = parseReport(md);
   const h1 = (header.match(/^#\s+(.+)$/m) || [])[1] || '';
   const metaLines = header.split('\n').map(l => l.trim()).filter(l => /^\*\*.*\*\*：/.test(l)).map(l => l.replace(/^\*\*(.*?)\*\*：/, '$1：'));
-  const isMorning = currentMarket === 'us';
+  // 徽章按品类映射，不再是二元判断——否则新增品类会一律落到 else 分支显示「A股收盘版」
+  const MARKET_BADGE = {
+    us: { cls: 'morning', label: '美股早盘版' },
+    cn: { cls: 'evening', label: 'A股收盘版' },
+    ai: { cls: 'ai',      label: 'AI 日报' },
+  };
+  const badge = MARKET_BADGE[currentMarket] || MARKET_BADGE.us;
   let h = '<div class="detail-header">';
-  if (h1) h += `<h2>${esc(h1)}<span class="version-badge ${isMorning ? 'morning' : 'evening'}">${isMorning ? '美股早盘版' : 'A股收盘版'}</span></h2>`;
+  if (h1) h += `<h2>${esc(h1)}<span class="version-badge ${badge.cls}">${badge.label}</span></h2>`;
   if (metaLines.length) h += `<div class="meta">${metaLines.map(m => `<span class="meta-item">${esc(m)}</span>`).join('')}</div>`;
   h += '</div>';
   return h;
@@ -518,9 +527,15 @@ function buildSchemeA(md) {
 }
 
 /* ===== 方案 B：design-v3 模块化排版（内容原样，正文组件化，非整块 raw markdown） ===== */
-/* 章节类型判定（基于标题关键词，兼容美股 + A股两类报告模板） */
+/* 章节类型判定（基于标题关键词，兼容美股 / A股 / AI 日报三类报告模板） */
 function classifySection(title) {
   const t = title || '';
+  // ① source 必须最先判：AI 日报末尾的「数据来源与口径说明（AIHOT）」同时含「数据来源」
+  //    与 AIHOT 标记，若让 AI 分支先命中，它会被渲染成正文卡片、并挤进右侧分节目录。
+  if (/数据来源|来源说明|数据口径|口径说明/.test(t)) return 'source';
+  // ② AI 日报专属标记：用模板自带的（AIHOT）后缀识别，而不是「模型发布」这类
+  //    可能与行情报告撞车的中文词。源站将来新增章节，只要带上后缀仍能正确归类。
+  if (/（AIHOT）/.test(t)) return 'ai';
   if (/今日一句话|一句话(总览|核心)/.test(t)) return 'hero';
   if (/市场指数|市场状态|指数与资金|市场概览/.test(t)) return 'market';
   if (/板块热点|热点追踪|产业新闻|热点/.test(t)) return 'hotspot';
@@ -529,7 +544,6 @@ function classifySection(title) {
   if (/个股要闻|龙头股|异动|标签股|涨跌幅/.test(t)) return 'stock';
   if (/宏观政策|宏观数据|宏观/.test(t)) return 'macro';
   if (/明日|本周展望|展望/.test(t)) return 'outlook';
-  if (/数据来源|来源说明|数据口径|口径说明/.test(t)) return 'source';
   return 'generic';
 }
 
@@ -552,6 +566,9 @@ function buildSchemeB(md) {
       case 'macro':   secHtml = subCardSection(s, '🏛️'); break;
       case 'outlook': secHtml = subCardSection(s, '🧭'); break;
       case 'source':  secHtml = sourceSection(s); break;
+      // AI 日报：每个 ### 条目渲染成一张卡（复用热点卡组件）。
+      // 关掉 tags —— 否则点评里出现「风险」二字就会凭空冒出一个「⚠ 风险」徽章，纯噪音。
+      case 'ai':      secHtml = hotspotSection(s, { tags: false, right: '源站摘要 + 我的点评' }); break;
       default:        secHtml = subCardSection(s, '📄');
     }
     html += `<div class="chapter" id="${id}">${secHtml}</div>`;
@@ -569,9 +586,10 @@ function heroSection(s) {
 }
 
 /* 板块热点 / 产业新闻 → hotspot-card 列表（每个 ### 小节 = 一张热点卡） */
-function hotspotSection(s) {
+function hotspotSection(s, opts) {
   const body = s.body.replace(/^---+$/gm, '').trim();
-  return `<div class="section-title"><i>🔥</i> ${esc(s.title)}<span class="st-right">逐个热点卡片</span></div>` + renderHotspots(body);
+  const right = (opts && opts.right) || '逐个热点卡片';
+  return `<div class="section-title"><i>🔥</i> ${esc(s.title)}<span class="st-right">${esc(right)}</span></div>` + renderHotspots(body, opts);
 }
 
 /* 新闻头条 → news-item 卡片列表（用 DOM 解析顶层列表项，稳健处理嵌套要点） */
@@ -701,7 +719,8 @@ function buildOverviewCard(sections, title) {
   return { html, chartData };
 }
 
-function renderHotspots(body) {
+function renderHotspots(body, opts) {
+  const showTags = !opts || opts.tags !== false;
   const chunks = body.split(/^###\s+/m).filter(c => c.trim());
   let html = '', num = 0;
   chunks.forEach(chunk => {
@@ -712,8 +731,10 @@ function renderHotspots(body) {
     html += '<div class="hotspot-card">';
     html += `<div class="hotspot-num">${String(num).padStart(2, '0')}</div>`;
     html += `<div class="hotspot-title">${esc(title)}</div>`;
-    const tags = extractTags(rest);
-    if (tags.length) html += `<div class="hotspot-meta">${tags.map(t => `<span class="tag ${t.cls}">${t.label}</span>`).join('')}</div>`;
+    if (showTags) {
+      const tags = extractTags(rest);
+      if (tags.length) html += `<div class="hotspot-meta">${tags.map(t => `<span class="tag ${t.cls}">${t.label}</span>`).join('')}</div>`;
+    }
     splitLabeled(rest).forEach(s => {
       html += `<div class="hotspot-section"><div class="hotspot-section-label">${esc(s.label)}</div><div class="hotspot-section-text">${marked.parse(s.content, { gfm: true })}</div></div>`;
     });
