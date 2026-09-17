@@ -23,8 +23,17 @@
       "name": "daily-briefing",
       "source_dir": "/Users/mac/每日简报实战/daily-briefing/",
       "target_dir": "daily-briefing/",
-      "exclude": [".env", "__pycache__", "scripts", "reports", "README.md", ".DS_Store", ".aura"],
-      "note": "每日复盘（美股/港股/币圈）站点产物"
+      "exclude": [
+        ".env",
+        "__pycache__",
+        "scripts",
+        "reports",
+        "README.md",
+        ".DS_Store",
+        ".aura",
+        "_*"
+      ],
+      "note": "每日复盘（美股/港股/币圈）站点产物（_* 排除 data/_base_*、_stage_*、_aihot_comments_* 等中间产物，防被推到公开仓库）"
     }
   ]
 }
