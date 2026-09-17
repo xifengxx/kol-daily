@@ -124,10 +124,20 @@ def to_num(s):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--market", choices=["us", "cn"], default="us")
+    ap.add_argument("--market", choices=["us", "cn", "ai"], default="us")
     ap.add_argument("--report", help="报告 .md 路径")
     ap.add_argument("--date", help="日期(用于拼默认路径)")
     args = ap.parse_args()
+
+    # AI 日报没有可对标的实时指数（它校验的是「源站摘要逐字一致 + 点评覆盖率与字数」），
+    # 所以不在这里做，直接指向专用校验器，而不是给出一个看起来校验过了的假象。
+    if args.market == "ai":
+        print("AI 日报请使用专用校验器：\n"
+              "  python3 scripts/validate_aihot_report.py \\\n"
+              "      --report reports/ai/<日期>.md --snapshot data/aihot_daily_<日期>.json",
+              file=sys.stderr)
+        sys.exit(2)
+
     base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # daily-briefing
     if not args.report and args.date:
         args.report = os.path.join(base, "reports", args.market, args.date + ".md")
