@@ -1,0 +1,574 @@
+{
+ "date": "2026-09-18",
+ "generated_at": "2026-09-19T07:40:00+08:00",
+ "method": "Google News RSS 候选 + 人工筛选整理；无明确公开原因按低置信标注，不强行归因",
+ "entries": [
+  {
+   "type": "industry",
+   "key": "油气一体化",
+   "display": "油气一体化",
+   "confidence": "低",
+   "driver": "该行数值与当日油价方向相反，必须谨慎解读：9/18 国际油价大跌（WTI 收 95.47 美元、-6.32%；布伦特 98.77 美元、-5.77%），而埃克森美孚（+0.17%）、雪佛龙（-0.97%）、康菲（-1.02%）、西方石油（-0.76%）等权重股多为小幅下跌。该行业等权值被 NASDAQ 一侧的小样本（+6.82%）拉高，NYSE 一侧仅 +0.06%，属样本结构失真，不代表板块普涨。",
+   "sources": [
+    {"title": "Wall Street: apre poco mossa (Dj -0,1%) dopo rimbalzo di ieri", "source": "Borsa Italiana", "url": "https://www.borsaitaliana.it/borsa/notizie/radiocor/commenti/dettaglio/wall-street-apre-poco-mossa-dj-01-dopo-rimbalzo-di-ieri-rco-2-nRC_18092026_1603_441116227.html"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "计算机硬件",
+   "display": "计算机硬件",
+   "confidence": "低",
+   "driver": "同一天该行业 NASDAQ 样本 +8.29%、NYSE 样本 -3.51%，内部撕裂极大。当日权重股实际是走弱的——戴尔 -3.46%、超微电脑 -3.12%、慧与 -0.46%，属前一日 AI 服务器整机大涨之后的回吐。该行的高读数来自 NASDAQ 侧的小市值样本，不宜读作硬件链普涨。",
+   "sources": [
+    {"title": "AI Server Stocks Rally as the Hardware Bid Broadens", "source": "Yahoo Finance", "url": "https://finance.yahoo.com/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "金融数据与交易所",
+   "display": "金融数据与交易所",
+   "confidence": "低",
+   "driver": "检索未见当日行业级或公司级事件，候选多为二季度财报复盘与「中国投资者涌入美股」等宏观话题。当日 10 年期美债收益率回升至 5.01%，理论上利于交易所的净息差与成交收入，两个交易所样本方向也一致（NASDAQ +3.01%、NYSE +1.35%），但缺乏可归因的公开催化。",
+   "sources": [
+    {"title": "Q2 Earnings Highlights: Tradeweb Markets Vs The Rest Of The Financial Exchanges & Data Stocks", "source": "StockStory", "url": "https://stockstory.org/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "科技分销",
+   "display": "科技分销",
+   "confidence": "低",
+   "driver": "检索未见当日行业级事件。该行业本期只有 NASDAQ 单交易所样本，等权值对个别个股高度敏感。当日资金主线明确集中在半导体设备与存储，分销环节不在这条线上，读数更可能是样本效应。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "工程与建设",
+   "display": "工程与建设",
+   "confidence": "低",
+   "driver": "与同链条的建筑施工（-5.88%）方向相反，说明当日并非「建筑链整体走强」。检索候选多为数据中心机电总包的长期叙事与韩国建筑股消息。需注意市场差异：当日韩国建筑股因对美投资协议临近而上涨，那是韩国本土驱动，不构成美国同业的利好。",
+   "sources": [
+    {"title": "Korean construction stocks rise on nearing US investment deal", "source": "The Korea Times", "url": "https://www.koreatimes.co.kr/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "半导体",
+   "display": "半导体",
+   "confidence": "高",
+   "driver": "本期最需要对照读的一行：等权口径 +1.85%，同日费城半导体指数（市值加权）涨 2.78%——等权反而更低，与上一期「等权 +0.96% vs 费半 +3.14%」的方向刚好相反。这说明当日上涨不是少数超大权重的独舞，而是设备与存储环节的中小市值标的全面参与：拉姆研究 +6.98%、应用材料 +6.51%、科天 +4.74%、阿斯麦 +3.08%，日本与台湾的设备、测试、存储股同步大涨（Lasertec +8.70%、Kokusai +7.24%、爱德万 +5.99%、京元电子 +10.00%、南亚科 +7.58%）。",
+   "sources": [
+    {"title": "Lam Research Climbs 5% as Chip Equipment Names Outrun the Sector", "source": "Yahoo Finance", "url": "https://finance.yahoo.com/markets/stocks/articles/lam-research-climbs-5-chip-165944019.html"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "纺织制造",
+   "display": "纺织制造",
+   "confidence": "低",
+   "driver": "检索候选均为行业长期叙事（贸易协议、供应链转移）与零售股榜单，无当日催化事件。该行业本期只有 NASDAQ 单交易所样本，等权口径下个别个股即可推动整行。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "家居装修",
+   "display": "家居装修",
+   "confidence": "低",
+   "driver": "检索未见当日公司级事件，候选多为「值得关注的家居装修股」等榜单与二季度复盘。当日 NYSE 侧样本（-0.26%）与 NASDAQ 侧（+3.62%）方向相反，且住房链整体仍在下跌（建筑施工 -5.88%），不具备基本面支撑。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "建筑施工",
+   "display": "建筑施工",
+   "confidence": "中",
+   "driver": "当日 140 个行业中跌幅最大，样本全部来自 NYSE（-5.88%）。美国 8 月营建许可走弱、住房链继续降温，同时 10 年期美债收益率回升至 5.01%（2007 年以来最高区间），直接抬高按揭与开发融资成本。这是「利率高位咬住实体经济」在住房端最直接的一份读数。",
+   "sources": [
+    {"title": "U.S. Building Permits Drop, Housing Stocks In Focus", "source": "The Globe and Mail", "url": "https://www.theglobeandmail.com/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "商业设备与耗材",
+   "display": "商业设备与耗材",
+   "confidence": "低",
+   "driver": "跌幅榜第二，但检索未锁定任何当日行业级或公司级事件，候选内容多为二季度复盘与「最佳工业股」榜单。该行业本期只有 NASDAQ 单交易所样本，等权口径波动本就偏大。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "多元房地产",
+   "display": "多元房地产",
+   "confidence": "中",
+   "driver": "与前一日（9/17）方向刚好相反——9/17 该行业随 10 年期美债收益率回落 7 个基点而上涨，9/18 收益率回升 7 个基点至 5.01%，REITs 作为高分红、长久期资产立刻回吐。这是一次干净的「利率敏感资产随收益率反向波动」的验证，检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "钢铁",
+   "display": "钢铁",
+   "confidence": "高",
+   "driver": "原因明确且可验证：纽柯（NUE）与钢动力（STLD）同日发布三季度指引，双双低于市场预期——纽柯 Q3 调整后 EPS 指引 5.55–5.65 美元，低于市场共识的 5.87–5.99 美元，并提示原材料分部盈利将因价格与出货量走弱而下滑；钢动力指引 5.34–5.38 美元，低于约 5.55 美元的共识。纽柯当日跌 6.32%，是标普 500 当日表现最差的个股，钢动力跌约 4.6%。",
+   "sources": [
+    {"title": "These Steelmakers Sink To Bottom Of S&P 500 After Issuing Weak Guidance", "source": "Investor's Business Daily", "url": "https://www.investors.com/news/sp-500-stocks-steelmakers-outlook-nue-stld-stock/"},
+    {"title": "Nucor Stock Drops 5.8% as Disappointing Third Quarter Profit Forecast Hits Steelmakers", "source": "TipRanks", "url": "https://www.tipranks.com/news/nucor-stock-drops-5-8-as-disappointing-third-quarter-profit-forecast-hits-steelmakers"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "太阳能",
+   "display": "太阳能",
+   "confidence": "高",
+   "driver": "驱动是利率而非行业消息：10 年期美债收益率回升至 5.01%（2007 年以来最高区间），太阳能运营商靠项目融资运转，是全场对利率最敏感的板块之一。当日 Enphase 跌 3.83%、First Solar 跌 2.59%，媒体口径直接写作「利率上行打压太阳能股」。与前一日的上涨（9/17 太阳能曾在涨幅榜前列）形成镜像。",
+   "sources": [
+    {"title": "Enphase Energy Falls as Higher Rates Pressure Solar Shares", "source": "Quiver Quantitative", "url": "https://www.quiverquant.com/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "互联网内容与信息",
+   "display": "互联网内容与信息",
+   "confidence": "中",
+   "driver": "主要来自 Meta 的拖累（-2.43%），其公开下跌逻辑是「AI 资本开支的回报不确定」——季度自由现金流同比骤降逾九成、全年资本开支指引抬升至 1300–1450 亿美元，且管理层未给出自由现金流转正的时间表。市场正在用「资本开支回收速度」重新给 AI 重投入的平台定价。检索未见当日公司级新事件。",
+   "sources": [
+    {"title": "Meta Vs. Oracle: The Laggards of AI Capex Payback Velocity", "source": "24/7 Wall St.", "url": "https://247wallst.com/investing/2026/09/18/meta-vs-oracle-the-laggards-of-ai-capex-payback-velocity/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医药",
+   "display": "医药",
+   "confidence": "低",
+   "driver": "检索未锁定当日行业级或公司级事件，候选均为「最佳生物科技股」「医疗基金」等长期榜单。该行业本期只有 NASDAQ 单交易所样本。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "农业投入品",
+   "display": "农业投入品",
+   "confidence": "低",
+   "driver": "检索未见当日催化事件，候选多为数月前的行业展望。两个交易所样本方向一致（NASDAQ -3.25%、NYSE -1.69%），但缺乏可归因的公开原因。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "电信服务",
+   "display": "电信服务",
+   "confidence": "低",
+   "driver": "与前一日的下跌（9/17 -3.22%）形成对照，属超跌后的技术性回摆。检索未见当日公司级事件。这一上涨与防御性资金回流无关——同日的必需消费仅微涨（+0.13%）、公用事业继续下跌（-1.51%），说明防御方向并没有整体回归。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "消费电子",
+   "display": "消费电子",
+   "confidence": "中",
+   "driver": "基本收平（-0.07%）。手机链两端当日走向分化：芯片设计端的射频芯片段为 -0.59%（Skyworks -2.80%、高通 -5.82%），而整机端的消费电子相对抗跌。这说明高通当日的下杀是估值与持仓问题，而不是手机需求出现了新变化。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "软件服务",
+   "display": "软件服务",
+   "confidence": "低",
+   "driver": "当日资金明确偏好「设备与存储」这类订单可见的硬件环节，软件层缺乏叙事支撑，但跌幅温和（-0.21%），远好于前一日的 -3.14%。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "电子游戏与多媒体",
+   "display": "电子游戏与多媒体",
+   "confidence": "低",
+   "driver": "检索未见当日行业级事件，属高估值成长方向在资金集中转向硬件时的轻微失血。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "通信设备",
+   "display": "通信设备",
+   "confidence": "低",
+   "driver": "与半导体设备端的火热形成反差——当日增量资金集中在晶圆制造设备与存储，网络设备环节被冷落。检索候选多为设备商的长期订单讨论，无当日催化事件。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "应用软件",
+   "display": "应用软件",
+   "confidence": "低",
+   "driver": "软件层整体走弱的一部分（基础软件 -1.52%、信息技术服务 -2.08%），方向与硬件的强势完全相反。当日的资金主线是「买设备、买存储、卖软件」——应用软件收入靠订阅与人力，对 AI 资本开支的弹性最低。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "基础软件",
+   "display": "基础软件",
+   "confidence": "低",
+   "driver": "与通信设备、应用软件同属「被资金抽走」的一侧。同日 IBM 跌 3.45%、戴尔跌 3.46%，反映「企业 IT 预算向 AI 硬件倾斜、软件与服务被挤出」的长期叙事仍在压制软件与服务的估值。检索未见当日催化事件。",
+   "sources": [
+    {"title": "IBM warns AI infrastructure spending is displacing enterprise software budgets", "source": "VARIndia", "url": "https://www.varindia.com/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "信息技术服务",
+   "display": "信息技术服务",
+   "confidence": "低",
+   "driver": "跌幅在科技组内居前，检索未见当日行业级或公司级事件。属科技内部的资金再分配——增量资金流向设备与存储，服务与外包类缺乏叙事支撑。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "刻蚀设备",
+   "display": "刻蚀设备",
+   "confidence": "高",
+   "driver": "当日 65 段中最强，样本内三只全数大涨（拉姆研究 +6.98%、东京电子 +4.20%），等权与市值加权（+6.30%）方向一致。驱动是设备端景气的集体上修：摩根大通研报判断晶圆厂设备（WFE）进入深化上行周期，预计 2026 年同比增长 31%、2027 年 38%，并把科天列为首选；台积电 2026 年设备采购预估从此前 1 倍基线先后上调至 1.5 倍、1.9 倍，资本开支展望逼近 640 亿美元；SEMI 预计全球半导体设备销售额从 2025 年 1347 亿美元增至 2026 年 1659 亿美元、2027 年 2012 亿美元。",
+   "sources": [
+    {"title": "Lam Research Climbs 5% as Chip Equipment Names Outrun the Sector", "source": "Yahoo Finance", "url": "https://finance.yahoo.com/markets/stocks/articles/lam-research-climbs-5-chip-165944019.html"},
+    {"title": "全链条涨价！半导体设备供不应求", "source": "东方财富", "url": "https://fund.eastmoney.com/a/202609183878708113.html"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "高纯硅料与硅片",
+   "display": "高纯硅料与硅片",
+   "confidence": "中",
+   "driver": "领涨的 Soitec +13.41% 是美东 9/16 的旧值（见「数据口径预警」），剔除后该段涨幅仍为正但明显收窄：信越化学 +1.42%、SUMCO +5.60%，后者受益于 AI 驱动的硅片供给紧张预期（公司此前曾因该预期创 18 年半新高）。当日另有报道指出半导体大硅片论坛临近、行业维持稳步增长。",
+   "sources": [
+    {"title": "As the Semiconductor Large Silicon Wafer Forum approaches, the industry continues to see steady growth", "source": "Moomoo", "url": "https://www.moomoo.com/"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "测试设备",
+   "display": "测试设备",
+   "confidence": "中",
+   "driver": "样本内两只均涨——爱德万 +5.99%、泰瑞达 +5.19%。测试环节是存储与 AI 芯片出货的直接受益方：存储超级周期推高 DRAM/HBM 的测试时长与设备需求。同日台湾测试厂京元电子涨停 10.00%，可作交叉印证；检索亦见「FormFactor 涨 6.7%、半导体设备板块普涨」等报道。",
+   "sources": [
+    {"title": "FormFactor Jumps 6.7% Amid Sector-Wide Rally", "source": "AlphaStreet", "url": "https://alphastreet.com/"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "NVMe/存储芯片",
+   "display": "NVMe/存储芯片",
+   "confidence": "高",
+   "driver": "存储链当日全面爆发：铠侠 +9.40%、SK 海力士 +6.42%、南亚科 +7.58%、华邦 +5.59%、三星 +3.37%。公开逻辑是「存储超级周期尚未见顶」——多家机构认为 AI 数据中心对 DRAM/HBM 的需求仍在上行，涨价与供给紧张延续；当日闪迪（SNDK）+10.99%、西部数据 +4.13% 可作交叉印证。",
+   "sources": [
+    {"title": "SK hynix Stock: Memory Supercycle Isn't Peaking Yet", "source": "Seeking Alpha", "url": "https://seekingalpha.com/"},
+    {"title": "Micron Stock: Why the AI Memory Cycle Is Different This Time", "source": "I/O Fund", "url": "https://io-fund.com/"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "存储芯片(DRAM/NAND)",
+   "display": "存储芯片(DRAM/NAND)",
+   "confidence": "高",
+   "driver": "与上一段同源，样本 8 只全数上涨，领涨铠侠 +9.40%、垫底的三星也有 +3.37%，是当日「全段普涨」最典型的一段。驱动是存储涨价与 AI 需求延续的共识：多家卖方强调本轮内存周期与以往不同（需求由 AI 数据中心而非消费电子驱动），当日相关报道密集。",
+   "sources": [
+    {"title": "Intel vs. SK Hynix: Which Chip Stock Is Worth Chasing After This Week's Surge?", "source": "Yahoo Finance", "url": "https://finance.yahoo.com/"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "HBM高带宽内存",
+   "display": "HBM高带宽内存",
+   "confidence": "中",
+   "driver": "南亚科 +7.58%、SK 海力士 +6.42% 领涨，三星 +3.37% 垫底。SK 海力士是 HBM 的核心供应商，其上涨与「内存超级周期尚未见顶」的卖方观点一致；本周存储消息面持续密集（前一日市场还在消化其洽谈英特尔俄亥俄厂的传闻）。",
+   "sources": [
+    {"title": "3 U.S. Stocks Riding The HBM Memory Buildout After Intel And SK Hynix News", "source": "simplywall.st", "url": "https://simplywall.st/"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "检测量测设备",
+   "display": "检测量测设备",
+   "confidence": "中",
+   "driver": "样本 7 只全涨，Lasertec +8.70% 领涨、Nova +2.31% 垫底。量测与检测是先进制程与 HBM 堆叠良率控制的必需环节，直接受益于同一轮设备景气上修（摩根大通 WFE 上行周期判断）。检索未见当日公司级公告。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "薄膜沉积设备",
+   "display": "薄膜沉积设备",
+   "confidence": "中",
+   "driver": "Kokusai Electric +7.24% 领涨，市值加权（+6.29%）高于等权（+4.81%），说明大权重个股贡献更大。同属 WFE 上行周期与台积电资本开支上修的受益环节。需注意段内 Pfeiffer Vacuum 的数值为美东 9/16 旧值（见「数据口径预警」）。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "光刻胶与湿化学品",
+   "display": "光刻胶与湿化学品",
+   "confidence": "低",
+   "driver": "弱势端里最抗跌的一段，基本收平（-0.09%）。东京应化 +1.65%、住友化学 -2.91%，方向分化。检索候选多为半导体材料市场的长期规模报告，无当日催化事件。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "云计算IaaS",
+   "display": "云计算IaaS",
+   "confidence": "中",
+   "driver": "表面收平（-0.20%），内部方向相反——阿里巴巴 +4.33%（中概股整体走强）与 IBM -3.45% 相互抵消。IBM 的下跌延续了「企业 IT 预算向 AI 硬件倾斜、软件与服务被挤出」的叙事。检索未见当日行业级事件。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "射频芯片",
+   "display": "射频芯片",
+   "confidence": "中",
+   "driver": "段内撕裂明显——博通 +2.97% 上涨，Skyworks -2.80%、高通 -5.82% 下跌。当日高通的下杀是本期最值得单独解释的个股异动（详见链内异常股表），而博通的上涨属于半导体主线的一部分，二者叠加后段内微跌。这条信息很关键：「半导体上涨」不能简单外推到手机射频链。",
+   "sources": [
+    {"title": "Qualcomm Drops 6% as Past Month's Rally Unwinds; Skyworks and Qorvo Slip", "source": "24/7 Wall St.", "url": "https://247wallst.com/investing/2026/09/18/qualcomm-drops-6-as-past-months-rally-unwinds-skyworks-and-qorvo-slip/"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "AI训练集群/超算",
+   "display": "AI训练集群/超算",
+   "confidence": "中",
+   "driver": "弱势端。段内领涨的是亚马逊（AWS）+1.00%，领跌的是 Meta -2.43%。当日算力集群叙事被两股力量拉扯：一边是设备与存储的景气上修，另一边是市场对超大规模资本开支回报的重新审视（Meta 的自由现金流问题最具代表性）。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "AI Agent",
+   "display": "AI Agent",
+   "confidence": "低",
+   "driver": "与上一段同源，Meta -2.43% 是主要拖累，亚马逊 +1.00% 提供支撑。检索见「AI Agent 推升网络安全需求」「Meta 发布个人 AI Agent」等报道，但当日资金并未因此买入软件层。",
+   "sources": [
+    {"title": "AI Agents Fuel Cybersecurity Demand: 3 Stocks to Watch", "source": "Benzinga", "url": "https://www.benzinga.com/"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "大模型",
+   "display": "大模型",
+   "confidence": "中",
+   "driver": "样本仅两只——谷歌（Alphabet）+0.64%、Meta -2.43%，是 65 段里样本最少的一段（有效样本 2 只）。段内负值完全由 Meta 贡献，不代表大模型方向整体走弱，不宜据此判断赛道冷热。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "企业级存储",
+   "display": "企业级存储",
+   "confidence": "中",
+   "driver": "弱势端里跌幅居前（-1.16%）。NetApp +0.44% 微涨，戴尔 -3.46% 明显下跌——这里出现了「存储芯片大涨、企业级存储系统下跌」的反差：当日买的是存储芯片与设备，而不是存储系统集成商。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "自动驾驶",
+   "display": "自动驾驶",
+   "confidence": "中",
+   "driver": "当日最弱的一段（13 只样本全部有效）。英伟达 +1.34% 领涨，高通 -5.82% 领跌，通用汽车（Cruise 口径）-5.10% 同向拖累。当日汽车股整体走弱（福特 -4.9%、Stellantis 同跌），叠加高通的下杀，把这一段压到榜尾。检索未见自动驾驶方向的当日行业催化。",
+   "sources": [
+    {"title": "General Motors Stock Tumbles In Worst Session Since July 2025", "source": "Benzinga", "url": "https://www.benzinga.com/markets/commodities/26/09/61874498/general-motors-stock-tumbles-5-percent-worst-session-since-july-2025"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "SOI.PA",
+   "display": "Soitec",
+   "confidence": "低",
+   "driver": "数值为美东 9/16 的旧值，不代表 9/18 的涨幅（Yahoo 欧洲 EOD 滞后，脚本按既定预案回退到最近可用交易日）。其公开驱动是公司上调营收指引，理由是 AI 数据中心对 SOI 晶圆需求强劲。读者在解读本榜单时必须先剔除这一只。",
+   "sources": [
+    {"title": "Soitec Shares Jump After Guidance Upgrade on Strong AI Demand", "source": "WSJ", "url": "https://www.wsj.com/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "2449.TW",
+   "display": "京元电子",
+   "confidence": "中",
+   "driver": "台湾封测厂，当日涨停 10.00%。检索未锁定公司级公告，最合理的解释是存储与 AI 芯片测试需求的外溢——同日爱德万 +5.99%、泰瑞达 +5.19%，测试环节整体走强。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "0992.HK",
+   "display": "联想",
+   "confidence": "高",
+   "driver": "收报 37.58 港元创历史新高，市值一度超越美团。公开驱动明确：摩根士丹利 9/17 报告维持增持评级、目标价 46 港元，指出联想在通用服务器与 AI 服务器两端需求均强，ISG 收入增速有望继续加快，云客户（含 neocloud）约占其服务器收入七成；行业层面 TrendForce 将 2026 年 AI 服务器出货增速从 28% 上调至接近 31%，并预计九大云厂商 2026 年资本开支超 8867 亿美元。",
+   "sources": [
+    {"title": "联想股价创新高 大摩：新云客户驱动服务器增长", "source": "大河财立方", "url": "https://app.dahecube.com/nweb/news/20260918/287424n7dc3618fd90.htm"},
+    {"title": "联想市值超越美团", "source": "东方财富", "url": "https://finance.eastmoney.com/a/202609183878449392.html"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "285A.T",
+   "display": "Kioxia",
+   "confidence": "中",
+   "driver": "日本存储厂，随存储链整体爆发。检索见「Kioxia 等日本优质股」等报道，未锁定公司级公告；同日南亚科 +7.58%、华邦 +5.59%、SK 海力士 +6.42%，方向一致。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "6920.T",
+   "display": "Lasertec",
+   "confidence": "中",
+   "driver": "日本量测检测设备商，受益于设备景气上修与先进制程、存储良率检测需求。检索候选多为长期成长股叙事，无当日公司公告。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "OVH.PA",
+   "display": "OVHcloud",
+   "confidence": "低",
+   "driver": "数值为美东 9/16 的旧值，不代表 9/18 的涨幅（同 Soitec，属 Yahoo 欧洲 EOD 滞后样本）。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "2408.TW",
+   "display": "Nanya(南亚科)",
+   "confidence": "中",
+   "driver": "台湾 DRAM 厂，随存储涨价与供给紧张预期大涨。当日「存储超级周期尚未见顶」的卖方观点密集，南亚科与华邦、京元电子同属台湾存储与测试链的核心受益标的。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "6525.T",
+   "display": "Kokusai Electric",
+   "confidence": "中",
+   "driver": "日本薄膜沉积设备商，直接受益于晶圆厂设备（WFE）上行周期与台积电资本开支上修。摩根大通预计 2026 年 WFE 同比增长 31%，设备交期已拉长至 18–24 个月。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "COHR",
+   "display": "Coherent",
+   "confidence": "中",
+   "driver": "AI 光器件与材料商。检索见当日多篇「Coherent 上涨，原因是……」报道，卖方同期讨论其利润率扩张为更高估值打开空间。当日光通信并非市场主线，该股的上涨更接近个股层面的重估。",
+   "sources": [
+    {"title": "Coherent Corp Stock (COHR) Moved Up by 6.08% on Sep 18: Drivers Behind the Movement", "source": "TradingKey", "url": "https://www.tradingkey.com/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "LRCX",
+   "display": "泛林半导体(Lam)",
+   "confidence": "高",
+   "driver": "收报 288.11 美元。驱动是设备板块的集体上修而非公司新公告：摩根大通预计 WFE 深化上行（2026 年 +31%、2027 年 +38%）并把科天列为首选；台积电 2026 年设备采购预估先后上调至 1.9 倍基线、资本开支展望逼近 640 亿美元；公司自身还公布了约 12 亿美元的印度首座半导体零部件工厂计划。基本面亦有支撑：上一财季 EPS 1.82 美元超预期，季度股息上调 27% 至 0.33 美元（除息日 9 月 23 日）。",
+   "sources": [
+    {"title": "Lam Research advances 7%, reversing some recent losses", "source": "Seeking Alpha", "url": "https://seekingalpha.com/"},
+    {"title": "Lam Research Soars on Bold India Chip Bet", "source": "TipRanks", "url": "https://blog.tipranks.com/lam-research-soars-on-bold-india-chip-bet/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "STX",
+   "display": "Seagate",
+   "confidence": "中",
+   "driver": "硬盘厂商，随存储链与「AI 存储需求」逻辑上涨。检索见「希捷上涨、同业存储股走高」等当日报道；此前该股曾连跌五日累跌约 15%，当日属超跌反弹叠加板块共振。",
+   "sources": [
+    {"title": "Seagate Technology Holdings rises 7% amid storage peer gains", "source": "Seeking Alpha", "url": "https://seekingalpha.com/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "APLD",
+   "display": "Applied Digital",
+   "confidence": "中",
+   "driver": "AI 数据中心运营商。公开催化是富国银行将其列为首选并给出 50 美元目标价；此外其已签约的数据中心长期租约持续被市场做价值重估。",
+   "sources": [
+    {"title": "Applied Digital Surges After Wells Fargo Names Stock a Top Pick With $50 Price Target", "source": "Benzinga", "url": "https://www.benzinga.com/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "AMAT",
+   "display": "应用材料(AMAT)",
+   "confidence": "高",
+   "driver": "收报 444.57 美元，与拉姆研究同步走强。公开催化包括公司在 SEMICON India 2026 宣布未来十年约 50 亿美元的印度半导体研究园区与供应链投资计划，以及此前一笔 2.52 亿美元出口调查的和解扫清了不确定性；卖方报道亦直言「板块性上涨盖过了缺少公司专属消息这一点」。",
+   "sources": [
+    {"title": "Applied Materials gains as chip-sector rally appears to outweigh lack of fresh company-specific news", "source": "Quiver Quantitative", "url": "https://www.quiverquant.com/"},
+    {"title": "Applied Materials Soars on Bold India Chip Bet", "source": "TipRanks", "url": "https://blog.tipranks.com/applied-materials-soars-on-bold-india-chip-bet/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "000660.KS",
+   "display": "SK Hynix",
+   "confidence": "中",
+   "driver": "存储龙头，随 HBM 与内存超级周期叙事走强。本周消息面密集：市场持续消化其洽谈英特尔俄亥俄厂的传闻，卖方亦维持「内存超级周期尚未见顶」的判断。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "6857.T",
+   "display": "Advantest",
+   "confidence": "中",
+   "driver": "日本半导体测试设备龙头，受益于存储与 AI 芯片测试需求。检索见「Kioxia 与爱德万在 AI 半导体上持续增长」等报道。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "4062.T",
+   "display": "Ibiden(揖斐电)",
+   "confidence": "中",
+   "driver": "日本 IC 载板厂，AI 芯片封装基板需求驱动。公司此前已将 FY2027 净利润预测上调至 840 亿日元，理由是 AI 基板业务强劲；当日随半导体链整体走强。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "QCOM",
+   "display": "Qualcomm",
+   "confidence": "高",
+   "driver": "收报 177.72 美元，是当日唯一显著下跌的半导体权重股。公开解释有三条：一是获利了结——此前一个月累计涨约 12%，当日属强势股回吐；二是 Zacks Research 下调评级，理由是估值已充分反映、AI 数据中心推进摊薄利润率、苹果基带订单下滑快于预期；三是有分析认为「AI 数据中心交易后估值已合理」。注意口径：当日费半上涨 2.78%，高通的下跌属个股与持仓问题，不是半导体板块转向；同链条的 Skyworks（-2.80%）跌幅明显更小。",
+   "sources": [
+    {"title": "Qualcomm Drops 6% as Past Month's Rally Unwinds; Skyworks and Qorvo Slip", "source": "24/7 Wall St.", "url": "https://247wallst.com/investing/2026/09/18/qualcomm-drops-6-as-past-months-rally-unwinds-skyworks-and-qorvo-slip/"},
+    {"title": "Qualcomm Tumbles as Downgrade Hits AI Hopes", "source": "TipRanks", "url": "https://blog.tipranks.com/qualcomm-tumbles-as-downgrade-hits-ai-hopes/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ENTG",
+   "display": "Entegris",
+   "confidence": "中",
+   "driver": "半导体材料与耗材商，随设备与材料链的景气上修走强。检索未见当日公司级公告；同日东京应化 +1.65%、住友化学 -2.91%，材料端方向并不统一，该股上涨更接近设备景气的溢出。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "3436.T",
+   "display": "SUMCO",
+   "confidence": "中",
+   "driver": "日本硅片厂，AI 驱动的硅片供给紧张预期是主要逻辑——公司此前曾因该预期创下 18 年半新高。当日高纯硅料与硅片段整体走强（剔除滞后样本后）。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "2344.TW",
+   "display": "Winbond (华邦)",
+   "confidence": "中",
+   "driver": "台湾利基存储厂，随存储涨价与供给紧张大涨。检索见「存储芯片短缺与涨价推动南亚科、华邦涨停」等报道，方向与当日存储链一致。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "TER",
+   "display": "Teradyne",
+   "confidence": "中",
+   "driver": "测试设备商，与爱德万同步走强。检索见「泰瑞达扩张机器人与印度业务」等报道，未见当日公司级公告，属测试环节的板块共振。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "GM",
+   "display": "Cruise",
+   "confidence": "高",
+   "driver": "通用汽车当日跌 5.10%（收报 82.20 美元），为逾一年来最大单日跌幅，市值蒸发约 35 亿美元。公开驱动有三条：一是柴油价格在沙特东西管道泵站遇袭后创下每加仑 6.30 美元以上的纪录高位，直接威胁其利润贡献最大的皮卡与 SUV 业务；二是 10 年期美债收益率回升至 5.01%（2007 年以来最高），抬高购车融资成本；三是前一日因防务订单上涨 3.6% 后，板块轮动反转。德意志银行同日将其目标价下调至 82 美元（维持持有）。",
+   "sources": [
+    {"title": "General Motors Stock Tumbles In Worst Session Since July 2025", "source": "Benzinga", "url": "https://www.benzinga.com/markets/commodities/26/09/61874498/general-motors-stock-tumbles-5-percent-worst-session-since-july-2025"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "0522.HK",
+   "display": "ASMPT",
+   "confidence": "中",
+   "driver": "先进封装设备商。检索见公司此前宣布获得逾 50 台芯片对基板热压键合设备订单，以及新任集团 CEO 于 9 月就任；当日随设备与封装链走强。",
+   "sources": []
+  }
+ ]
+}

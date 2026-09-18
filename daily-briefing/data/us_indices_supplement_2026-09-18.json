@@ -1,0 +1,65 @@
+{
+ "target_date": "2026-09-18",
+ "modules": {
+  "yahoo": {
+   "source": "Yahoo chart v8",
+   "items": {
+    "费城半导体": {
+     "symbol": "^SOX",
+     "date": "2026-09-18",
+     "close": 11921.69,
+     "prev_date": "2026-09-17",
+     "prev_close": 11599.49,
+     "chg_pct": 2.78
+    },
+    "纳斯达克100": {
+     "symbol": "^NDX",
+     "date": "2026-09-18",
+     "close": 29644.17,
+     "prev_date": "2026-09-17",
+     "prev_close": 29446.98,
+     "chg_pct": 0.67
+    },
+    "VIX": {
+     "symbol": "^VIX",
+     "date": "2026-09-18",
+     "close": 14.81,
+     "prev_date": "2026-09-17",
+     "prev_close": 15.44,
+     "chg_pct": -4.08
+    },
+    "罗素2000": {
+     "symbol": "^RUT",
+     "date": "2026-09-18",
+     "close": 2860.4,
+     "prev_date": "2026-09-17",
+     "prev_close": 2874.63,
+     "chg_pct": -0.5
+    }
+   }
+  },
+  "sina": {
+   "source": "新浪 hq.sinajs.cn gb_ 快照",
+   "items": {
+    "道琼斯": {
+     "name": "道琼斯",
+     "close": 51682.6406,
+     "chg_pct": -0.18,
+     "quote_time": "2026-09-19 04:20:27"
+    },
+    "纳斯达克": {
+     "name": "纳斯达克",
+     "close": 26522.5453,
+     "chg_pct": 0.39,
+     "quote_time": "2026-09-19 05:30:00"
+    },
+    "费城半导体": {
+     "name": "费交所半导体股指数",
+     "close": 11921.6855,
+     "chg_pct": 2.78,
+     "quote_time": "2026-09-19 05:16:21"
+    }
+   }
+  }
+ }
+}
