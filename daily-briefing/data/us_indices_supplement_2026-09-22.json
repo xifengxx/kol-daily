@@ -1,0 +1,151 @@
+{
+ "target_date": "2026-09-22",
+ "modules": {
+  "yahoo": {
+   "source": "Yahoo chart v8",
+   "items": {
+    "费城半导体": {
+     "symbol": "^SOX",
+     "date": "2026-09-22",
+     "close": 12689.82,
+     "prev_date": "2026-09-21",
+     "prev_close": 12433.17,
+     "chg_pct": 2.06
+    },
+    "纳斯达克100": {
+     "symbol": "^NDX",
+     "date": "2026-09-22",
+     "close": 30732.4,
+     "prev_date": "2026-09-21",
+     "prev_close": 30482.35,
+     "chg_pct": 0.82
+    },
+    "VIX": {
+     "symbol": "^VIX",
+     "date": "2026-09-22",
+     "close": 14.21,
+     "prev_date": "2026-09-21",
+     "prev_close": 14.87,
+     "chg_pct": -4.44
+    },
+    "标普500": {
+     "symbol": "^GSPC",
+     "date": "2026-09-22",
+     "close": 7764.64,
+     "prev_date": "2026-09-21",
+     "prev_close": 7764.7,
+     "chg_pct": -0.0
+    },
+    "纳斯达克综合": {
+     "symbol": "^IXIC",
+     "date": "2026-09-22",
+     "close": 27244.28,
+     "prev_date": "2026-09-21",
+     "prev_close": 27122.09,
+     "chg_pct": 0.45
+    },
+    "道琼斯": {
+     "symbol": "^DJI",
+     "date": "2026-09-22",
+     "close": 51863.69,
+     "prev_date": "2026-09-21",
+     "prev_close": 52048.83,
+     "chg_pct": -0.36
+    },
+    "罗素2000": {
+     "symbol": "^RUT",
+     "date": "2026-09-22",
+     "close": 2889.92,
+     "prev_date": "2026-09-21",
+     "prev_close": 2875.36,
+     "chg_pct": 0.51
+    }
+   }
+  },
+  "sina": {
+   "source": "新浪 hq.sinajs.cn gb_ 快照",
+   "items": {
+    "道琼斯": {
+     "name": "道琼斯",
+     "close": 51863.6914,
+     "chg_pct": -0.36,
+     "quote_time": "2026-09-23 04:37:04"
+    },
+    "纳斯达克": {
+     "name": "纳斯达克",
+     "close": 27244.2777,
+     "chg_pct": 0.45,
+     "quote_time": "2026-09-23 05:30:30"
+    },
+    "费交所半导体股指数": {
+     "name": "费交所半导体股指数",
+     "close": 12689.8203,
+     "chg_pct": 2.06,
+     "quote_time": "2026-09-23 05:16:02"
+    },
+    "纳斯达克100": {
+     "name": "纳斯达克100",
+     "close": 30732.3956,
+     "chg_pct": 0.82,
+     "quote_time": "2026-09-23 05:30:30"
+    }
+   }
+  },
+  "commodities_yahoo": {
+   "source": "Yahoo chart v8 连续合约结算价（CL=F / BZ=F / GC=F）",
+   "items": {
+    "WTI原油": {
+     "symbol": "CL=F",
+     "date": "2026-09-22",
+     "close": 89.68,
+     "prev_date": "2026-09-21",
+     "prev_close": 95.78,
+     "chg_pct": -6.37
+    },
+    "布伦特原油": {
+     "symbol": "BZ=F",
+     "date": "2026-09-22",
+     "close": 98.44,
+     "prev_date": "2026-09-21",
+     "prev_close": 100.34,
+     "chg_pct": -1.89
+    },
+    "黄金": {
+     "symbol": "GC=F",
+     "date": "2026-09-22",
+     "close": 4401.7,
+     "prev_date": "2026-09-21",
+     "prev_close": 4383.9,
+     "chg_pct": 0.41
+    }
+   }
+  },
+  "commodities_contract_months": {
+   "source": "Yahoo chart v8 具体月份合约（CLV26.NYM / CLX26.NYM / BZX26.NYM）",
+   "note": "CL=F/BZ=F 连续合约在美东 9/22 发生合约展期（WTI 由 10 月合约切到 11 月合约），因此连续序列的 9/22 单日涨跌幅含展期跳空，不能直接引用。本模块用具体月份合约给出同合约口径的涨跌幅。",
+   "items": {
+    "WTI 10月合约": {
+     "symbol": "CLV26.NYM",
+     "date": "2026-09-22",
+     "close": 95.21,
+     "prev_close": 95.78,
+     "chg_pct": -0.6
+    },
+    "WTI 11月合约": {
+     "symbol": "CLX26.NYM",
+     "date": "2026-09-22",
+     "close": 89.71,
+     "prev_close": 92.37,
+     "chg_pct": -2.88
+    },
+    "布伦特 11月合约": {
+     "symbol": "BZX26.NYM",
+     "date": "2026-09-22",
+     "close": 98.58,
+     "prev_close": 100.34,
+     "chg_pct": -1.75
+    }
+   }
+  }
+ }
+}

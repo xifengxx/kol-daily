@@ -1,0 +1,2364 @@
+{
+  "target_date": "2026-09-22",
+  "generated_at": "2026-09-23T07:05:54.098544",
+  "modules": {
+    "fmp_indices_eod": {
+      "status": "partial",
+      "indices": {
+        "^GSPC": {
+          "date": "2026-09-22",
+          "close": 7764.64,
+          "volume": 3164537854,
+          "vol_ratio_20d": 0.64
+        },
+        "^IXIC": {
+          "date": "2026-09-22",
+          "close": 27244.28,
+          "volume": 8149663438,
+          "vol_ratio_20d": 1.02
+        },
+        "^DJI": {
+          "date": "2026-09-22",
+          "close": 51863.69,
+          "volume": 444772813,
+          "vol_ratio_20d": 0.99
+        },
+        "^SOX": {
+          "error": {
+            "error": "HTTP 402: Premium Query Parameter: 'Special Endpoint : This value set for 'symbol' is not available under your current subscription please visit our subscriptio"
+          }
+        },
+        "^RUT": {
+          "date": "2026-09-22",
+          "close": 2889.92,
+          "volume": 0,
+          "vol_ratio_20d": 0.0
+        }
+      },
+      "note": "失败(多为付费端点): ['^SOX']"
+    },
+    "fmp_sectors": {
+      "status": "ok",
+      "sectors": [
+        {
+          "sector": "Technology",
+          "avg_change_pct": 1.8,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Basic Materials",
+          "avg_change_pct": 1.57,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Industrials",
+          "avg_change_pct": 0.84,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Healthcare",
+          "avg_change_pct": 0.69,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Real Estate",
+          "avg_change_pct": 0.6,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Consumer Defensive",
+          "avg_change_pct": 0.14,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Utilities",
+          "avg_change_pct": -0.19,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Consumer Cyclical",
+          "avg_change_pct": -0.22,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Energy",
+          "avg_change_pct": -0.47,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Communication Services",
+          "avg_change_pct": -0.61,
+          "n_exchanges": 1
+        },
+        {
+          "sector": "Financial Services",
+          "avg_change_pct": -1.67,
+          "n_exchanges": 1
+        }
+      ]
+    },
+    "industry_heat": {
+      "status": "ok",
+      "target_date": "2026-09-22",
+      "data_date": "2026-09-22",
+      "source": "FMP /industry-performance-snapshot",
+      "method": "NASDAQ+NYSE 同名行业合并；FMP 等权平均个股涨跌幅，不是市值加权",
+      "mapping_version": "1.0",
+      "n_industries": 140,
+      "top": [
+        {
+          "industry": "Construction",
+          "industry_zh": "建筑施工",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 6.36,
+          "by_exchange": {
+            "NYSE": 6.36
+          },
+          "n_exchanges": 1,
+          "rank": 1
+        },
+        {
+          "industry": "Uranium",
+          "industry_zh": "铀",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": 6.07,
+          "by_exchange": {
+            "NASDAQ": 6.07
+          },
+          "n_exchanges": 1,
+          "rank": 2
+        },
+        {
+          "industry": "Business Equipment & Supplies",
+          "industry_zh": "商业设备与耗材",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 3.56,
+          "by_exchange": {
+            "NASDAQ": 3.56
+          },
+          "n_exchanges": 1,
+          "rank": 3
+        },
+        {
+          "industry": "Industrial - Pollution & Treatment Controls",
+          "industry_zh": "污染治理设备",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 3.3,
+          "by_exchange": {
+            "NASDAQ": 3.3
+          },
+          "n_exchanges": 1,
+          "rank": 4
+        },
+        {
+          "industry": "Gold",
+          "industry_zh": "黄金",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 3.23,
+          "by_exchange": {
+            "NASDAQ": 3.46,
+            "NYSE": 3.01
+          },
+          "n_exchanges": 2,
+          "rank": 5
+        },
+        {
+          "industry": "Copper",
+          "industry_zh": "铜",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.88,
+          "by_exchange": {
+            "NYSE": 2.88
+          },
+          "n_exchanges": 1,
+          "rank": 6
+        },
+        {
+          "industry": "Coal",
+          "industry_zh": "煤炭",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.83,
+          "by_exchange": {
+            "NASDAQ": 0.51,
+            "NYSE": 5.15
+          },
+          "n_exchanges": 2,
+          "rank": 7
+        },
+        {
+          "industry": "Semiconductors",
+          "industry_zh": "半导体",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": 2.79,
+          "by_exchange": {
+            "NASDAQ": 3.13,
+            "NYSE": 2.45
+          },
+          "n_exchanges": 2,
+          "rank": 8
+        }
+      ],
+      "bottom": [
+        {
+          "industry": "Travel Services",
+          "industry_zh": "旅行服务",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -6.28,
+          "by_exchange": {
+            "NASDAQ": -3.91,
+            "NYSE": -8.65
+          },
+          "n_exchanges": 2,
+          "rank": 140
+        },
+        {
+          "industry": "Publishing",
+          "industry_zh": "出版",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -3.68,
+          "by_exchange": {
+            "NASDAQ": -2.41,
+            "NYSE": -4.94
+          },
+          "n_exchanges": 2,
+          "rank": 139
+        },
+        {
+          "industry": "Real Estate - Development",
+          "industry_zh": "房地产开发",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": -3.23,
+          "by_exchange": {
+            "NASDAQ": -6.13,
+            "NYSE": -0.34
+          },
+          "n_exchanges": 2,
+          "rank": 138
+        },
+        {
+          "industry": "Personal Products & Services",
+          "industry_zh": "个人产品与服务",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -3.06,
+          "by_exchange": {
+            "NASDAQ": -4.5,
+            "NYSE": -1.62
+          },
+          "n_exchanges": 2,
+          "rank": 137
+        },
+        {
+          "industry": "Education & Training Services",
+          "industry_zh": "教育培训",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.66,
+          "by_exchange": {
+            "NASDAQ": -3.6,
+            "NYSE": -1.72
+          },
+          "n_exchanges": 2,
+          "rank": 136
+        },
+        {
+          "industry": "Leisure",
+          "industry_zh": "休闲",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.63,
+          "by_exchange": {
+            "NASDAQ": -2.2,
+            "NYSE": -3.06
+          },
+          "n_exchanges": 2,
+          "rank": 135
+        },
+        {
+          "industry": "Banks - Diversified",
+          "industry_zh": "多元银行",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.52,
+          "by_exchange": {
+            "NYSE": -2.52
+          },
+          "n_exchanges": 1,
+          "rank": 134
+        },
+        {
+          "industry": "Electronic Gaming & Multimedia",
+          "industry_zh": "电子游戏与多媒体",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -2.52,
+          "by_exchange": {
+            "NASDAQ": -1.38,
+            "NYSE": -3.66
+          },
+          "n_exchanges": 2,
+          "rank": 133
+        }
+      ],
+      "tech_focus": [
+        {
+          "industry": "Semiconductors",
+          "industry_zh": "半导体",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": 2.79,
+          "by_exchange": {
+            "NASDAQ": 3.13,
+            "NYSE": 2.45
+          },
+          "n_exchanges": 2,
+          "rank": 8
+        },
+        {
+          "industry": "Technology Distributors",
+          "industry_zh": "科技分销",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": 2.37,
+          "by_exchange": {
+            "NASDAQ": 2.37
+          },
+          "n_exchanges": 1,
+          "rank": 10
+        },
+        {
+          "industry": "Computer Hardware",
+          "industry_zh": "计算机硬件",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": 2.17,
+          "by_exchange": {
+            "NASDAQ": 7.05,
+            "NYSE": -2.71
+          },
+          "n_exchanges": 2,
+          "rank": 11
+        },
+        {
+          "industry": "Communication Equipment",
+          "industry_zh": "通信设备",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -0.59,
+          "by_exchange": {
+            "NASDAQ": -0.74,
+            "NYSE": -0.44
+          },
+          "n_exchanges": 2,
+          "rank": 81
+        },
+        {
+          "industry": "Consumer Electronics",
+          "industry_zh": "消费电子",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -0.65,
+          "by_exchange": {
+            "NASDAQ": -0.17,
+            "NYSE": -1.14
+          },
+          "n_exchanges": 2,
+          "rank": 85
+        },
+        {
+          "industry": "Software - Services",
+          "industry_zh": "软件服务",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -0.82,
+          "by_exchange": {
+            "NASDAQ": -0.82
+          },
+          "n_exchanges": 1,
+          "rank": 90
+        },
+        {
+          "industry": "Software - Infrastructure",
+          "industry_zh": "基础软件",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.03,
+          "by_exchange": {
+            "NASDAQ": -1.52,
+            "NYSE": -0.53
+          },
+          "n_exchanges": 2,
+          "rank": 98
+        },
+        {
+          "industry": "Information Technology Services",
+          "industry_zh": "信息技术服务",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.46,
+          "by_exchange": {
+            "NASDAQ": -0.97,
+            "NYSE": -1.96
+          },
+          "n_exchanges": 2,
+          "rank": 111
+        },
+        {
+          "industry": "Telecommunications Services",
+          "industry_zh": "电信服务",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.78,
+          "by_exchange": {
+            "NASDAQ": -2.0,
+            "NYSE": -1.56
+          },
+          "n_exchanges": 2,
+          "rank": 118
+        },
+        {
+          "industry": "Software - Application",
+          "industry_zh": "应用软件",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.96,
+          "by_exchange": {
+            "NASDAQ": -1.47,
+            "NYSE": -2.45
+          },
+          "n_exchanges": 2,
+          "rank": 127
+        },
+        {
+          "industry": "Internet Content & Information",
+          "industry_zh": "互联网内容与信息",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -2.0,
+          "by_exchange": {
+            "NASDAQ": -0.57,
+            "NYSE": -3.43
+          },
+          "n_exchanges": 2,
+          "rank": 128
+        },
+        {
+          "industry": "Electronic Gaming & Multimedia",
+          "industry_zh": "电子游戏与多媒体",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -2.52,
+          "by_exchange": {
+            "NASDAQ": -1.38,
+            "NYSE": -3.66
+          },
+          "n_exchanges": 2,
+          "rank": 133
+        }
+      ],
+      "industries": [
+        {
+          "industry": "Construction",
+          "industry_zh": "建筑施工",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 6.36,
+          "by_exchange": {
+            "NYSE": 6.36
+          },
+          "n_exchanges": 1,
+          "rank": 1
+        },
+        {
+          "industry": "Uranium",
+          "industry_zh": "铀",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": 6.07,
+          "by_exchange": {
+            "NASDAQ": 6.07
+          },
+          "n_exchanges": 1,
+          "rank": 2
+        },
+        {
+          "industry": "Business Equipment & Supplies",
+          "industry_zh": "商业设备与耗材",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 3.56,
+          "by_exchange": {
+            "NASDAQ": 3.56
+          },
+          "n_exchanges": 1,
+          "rank": 3
+        },
+        {
+          "industry": "Industrial - Pollution & Treatment Controls",
+          "industry_zh": "污染治理设备",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 3.3,
+          "by_exchange": {
+            "NASDAQ": 3.3
+          },
+          "n_exchanges": 1,
+          "rank": 4
+        },
+        {
+          "industry": "Gold",
+          "industry_zh": "黄金",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 3.23,
+          "by_exchange": {
+            "NASDAQ": 3.46,
+            "NYSE": 3.01
+          },
+          "n_exchanges": 2,
+          "rank": 5
+        },
+        {
+          "industry": "Copper",
+          "industry_zh": "铜",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.88,
+          "by_exchange": {
+            "NYSE": 2.88
+          },
+          "n_exchanges": 1,
+          "rank": 6
+        },
+        {
+          "industry": "Coal",
+          "industry_zh": "煤炭",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.83,
+          "by_exchange": {
+            "NASDAQ": 0.51,
+            "NYSE": 5.15
+          },
+          "n_exchanges": 2,
+          "rank": 7
+        },
+        {
+          "industry": "Semiconductors",
+          "industry_zh": "半导体",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": 2.79,
+          "by_exchange": {
+            "NASDAQ": 3.13,
+            "NYSE": 2.45
+          },
+          "n_exchanges": 2,
+          "rank": 8
+        },
+        {
+          "industry": "Hardware, Equipment & Parts",
+          "industry_zh": "硬件、设备与零件",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.55,
+          "by_exchange": {
+            "NASDAQ": 3.5,
+            "NYSE": 1.61
+          },
+          "n_exchanges": 2,
+          "rank": 9
+        },
+        {
+          "industry": "Technology Distributors",
+          "industry_zh": "科技分销",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": 2.37,
+          "by_exchange": {
+            "NASDAQ": 2.37
+          },
+          "n_exchanges": 1,
+          "rank": 10
+        },
+        {
+          "industry": "Computer Hardware",
+          "industry_zh": "计算机硬件",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": 2.17,
+          "by_exchange": {
+            "NASDAQ": 7.05,
+            "NYSE": -2.71
+          },
+          "n_exchanges": 2,
+          "rank": 11
+        },
+        {
+          "industry": "Financial - Mortgages",
+          "industry_zh": "抵押贷款",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.12,
+          "by_exchange": {
+            "NASDAQ": 4.55,
+            "NYSE": -0.31
+          },
+          "n_exchanges": 2,
+          "rank": 12
+        },
+        {
+          "industry": "Medical - Specialties",
+          "industry_zh": "医疗专科",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.12,
+          "by_exchange": {
+            "NASDAQ": 2.12
+          },
+          "n_exchanges": 1,
+          "rank": 13
+        },
+        {
+          "industry": "Medical - Diagnostics & Research",
+          "industry_zh": "医疗诊断与研究",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 2.11,
+          "by_exchange": {
+            "NASDAQ": 2.84,
+            "NYSE": 1.38
+          },
+          "n_exchanges": 2,
+          "rank": 14
+        },
+        {
+          "industry": "Residential Construction",
+          "industry_zh": "住宅建设",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.98,
+          "by_exchange": {
+            "NASDAQ": 2.0,
+            "NYSE": 1.97
+          },
+          "n_exchanges": 2,
+          "rank": 15
+        },
+        {
+          "industry": "Other Precious Metals",
+          "industry_zh": "其他贵金属",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.96,
+          "by_exchange": {
+            "NASDAQ": 0.86,
+            "NYSE": 3.07
+          },
+          "n_exchanges": 2,
+          "rank": 16
+        },
+        {
+          "industry": "Oil & Gas Drilling",
+          "industry_zh": "油气钻探",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.82,
+          "by_exchange": {
+            "NYSE": 1.82
+          },
+          "n_exchanges": 1,
+          "rank": 17
+        },
+        {
+          "industry": "Drug Manufacturers - General",
+          "industry_zh": "综合制药",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.71,
+          "by_exchange": {
+            "NASDAQ": 1.71,
+            "NYSE": 1.72
+          },
+          "n_exchanges": 2,
+          "rank": 18
+        },
+        {
+          "industry": "Electrical Equipment & Parts",
+          "industry_zh": "电气设备与零件",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.66,
+          "by_exchange": {
+            "NASDAQ": 1.91,
+            "NYSE": 1.41
+          },
+          "n_exchanges": 2,
+          "rank": 19
+        },
+        {
+          "industry": "Biotechnology",
+          "industry_zh": "生物科技",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.61,
+          "by_exchange": {
+            "NASDAQ": -0.06,
+            "NYSE": 3.27
+          },
+          "n_exchanges": 2,
+          "rank": 20
+        },
+        {
+          "industry": "Agricultural Inputs",
+          "industry_zh": "农业投入品",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.5,
+          "by_exchange": {
+            "NASDAQ": 1.95,
+            "NYSE": 1.05
+          },
+          "n_exchanges": 2,
+          "rank": 21
+        },
+        {
+          "industry": "Medical - Pharmaceuticals",
+          "industry_zh": "医药",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.41,
+          "by_exchange": {
+            "NASDAQ": 1.41
+          },
+          "n_exchanges": 1,
+          "rank": 22
+        },
+        {
+          "industry": "Paper, Lumber & Forest Products",
+          "industry_zh": "纸业、木材与林产品",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.41,
+          "by_exchange": {
+            "NASDAQ": 1.78,
+            "NYSE": 1.05
+          },
+          "n_exchanges": 2,
+          "rank": 23
+        },
+        {
+          "industry": "Chemicals - Specialty",
+          "industry_zh": "特种化工",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.24,
+          "by_exchange": {
+            "NASDAQ": 1.46,
+            "NYSE": 1.01
+          },
+          "n_exchanges": 2,
+          "rank": 24
+        },
+        {
+          "industry": "Medical - Care Facilities",
+          "industry_zh": "医疗照护机构",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.24,
+          "by_exchange": {
+            "NASDAQ": 1.09,
+            "NYSE": 1.39
+          },
+          "n_exchanges": 2,
+          "rank": 25
+        },
+        {
+          "industry": "Conglomerates",
+          "industry_zh": "综合集团",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.23,
+          "by_exchange": {
+            "NASDAQ": 1.89,
+            "NYSE": 0.56
+          },
+          "n_exchanges": 2,
+          "rank": 26
+        },
+        {
+          "industry": "Beverages - Wineries & Distilleries",
+          "industry_zh": "酒庄与蒸馏酒",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.14,
+          "by_exchange": {
+            "NASDAQ": 1.14
+          },
+          "n_exchanges": 1,
+          "rank": 27
+        },
+        {
+          "industry": "Steel",
+          "industry_zh": "钢铁",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.11,
+          "by_exchange": {
+            "NASDAQ": 1.73,
+            "NYSE": 0.48
+          },
+          "n_exchanges": 2,
+          "rank": 28
+        },
+        {
+          "industry": "Department Stores",
+          "industry_zh": "百货商店",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.04,
+          "by_exchange": {
+            "NYSE": 1.04
+          },
+          "n_exchanges": 1,
+          "rank": 29
+        },
+        {
+          "industry": "Railroads",
+          "industry_zh": "铁路",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 1.0,
+          "by_exchange": {
+            "NASDAQ": 0.71,
+            "NYSE": 1.28
+          },
+          "n_exchanges": 2,
+          "rank": 30
+        },
+        {
+          "industry": "Food Confectioners",
+          "industry_zh": "糖果食品",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.98,
+          "by_exchange": {
+            "NASDAQ": 0.98
+          },
+          "n_exchanges": 1,
+          "rank": 31
+        },
+        {
+          "industry": "Insurance - Life",
+          "industry_zh": "人寿保险",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.86,
+          "by_exchange": {
+            "NASDAQ": 3.01,
+            "NYSE": -1.29
+          },
+          "n_exchanges": 2,
+          "rank": 32
+        },
+        {
+          "industry": "Beverages - Non-Alcoholic",
+          "industry_zh": "非酒精饮料",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.81,
+          "by_exchange": {
+            "NASDAQ": 0.55,
+            "NYSE": 1.07
+          },
+          "n_exchanges": 2,
+          "rank": 33
+        },
+        {
+          "industry": "Packaging & Containers",
+          "industry_zh": "包装与容器",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.79,
+          "by_exchange": {
+            "NASDAQ": 1.89,
+            "NYSE": -0.31
+          },
+          "n_exchanges": 2,
+          "rank": 34
+        },
+        {
+          "industry": "REIT - Residential",
+          "industry_zh": "住宅REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.75,
+          "by_exchange": {
+            "NYSE": 0.75
+          },
+          "n_exchanges": 1,
+          "rank": 35
+        },
+        {
+          "industry": "Oil & Gas Equipment & Services",
+          "industry_zh": "油气设备与服务",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.73,
+          "by_exchange": {
+            "NASDAQ": 0.72,
+            "NYSE": 0.75
+          },
+          "n_exchanges": 2,
+          "rank": 36
+        },
+        {
+          "industry": "Manufacturing - Tools & Accessories",
+          "industry_zh": "工具与配件制造",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.65,
+          "by_exchange": {
+            "NASDAQ": 0.88,
+            "NYSE": 0.42
+          },
+          "n_exchanges": 2,
+          "rank": 37
+        },
+        {
+          "industry": "Medical - Distribution",
+          "industry_zh": "医疗分销",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.6,
+          "by_exchange": {
+            "NASDAQ": 1.74,
+            "NYSE": -0.54
+          },
+          "n_exchanges": 2,
+          "rank": 38
+        },
+        {
+          "industry": "Engineering & Construction",
+          "industry_zh": "工程与建设",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.58,
+          "by_exchange": {
+            "NASDAQ": 0.59,
+            "NYSE": 0.57
+          },
+          "n_exchanges": 2,
+          "rank": 39
+        },
+        {
+          "industry": "REIT - Specialty",
+          "industry_zh": "特殊REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.48,
+          "by_exchange": {
+            "NASDAQ": 0.64,
+            "NYSE": 0.33
+          },
+          "n_exchanges": 2,
+          "rank": 40
+        },
+        {
+          "industry": "Chemicals",
+          "industry_zh": "化工",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.43,
+          "by_exchange": {
+            "NASDAQ": -0.41,
+            "NYSE": 1.27
+          },
+          "n_exchanges": 2,
+          "rank": 41
+        },
+        {
+          "industry": "REIT - Diversified",
+          "industry_zh": "多元REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.43,
+          "by_exchange": {
+            "NASDAQ": 0.89,
+            "NYSE": -0.04
+          },
+          "n_exchanges": 2,
+          "rank": 42
+        },
+        {
+          "industry": "Industrial - Machinery",
+          "industry_zh": "工业机械",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.39,
+          "by_exchange": {
+            "NASDAQ": -0.1,
+            "NYSE": 0.87
+          },
+          "n_exchanges": 2,
+          "rank": 43
+        },
+        {
+          "industry": "Manufacturing - Metal Fabrication",
+          "industry_zh": "金属加工制造",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.39,
+          "by_exchange": {
+            "NASDAQ": 1.89,
+            "NYSE": -1.1
+          },
+          "n_exchanges": 2,
+          "rank": 44
+        },
+        {
+          "industry": "Apparel - Manufacturers",
+          "industry_zh": "服装制造",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.36,
+          "by_exchange": {
+            "NASDAQ": 0.81,
+            "NYSE": -0.09
+          },
+          "n_exchanges": 2,
+          "rank": 45
+        },
+        {
+          "industry": "Industrial Materials",
+          "industry_zh": "工业材料",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.34,
+          "by_exchange": {
+            "NASDAQ": -0.35,
+            "NYSE": 1.03
+          },
+          "n_exchanges": 2,
+          "rank": 46
+        },
+        {
+          "industry": "Furnishings, Fixtures & Appliances",
+          "industry_zh": "家具、固定装置与家电",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.28,
+          "by_exchange": {
+            "NASDAQ": 0.84,
+            "NYSE": -0.27
+          },
+          "n_exchanges": 2,
+          "rank": 47
+        },
+        {
+          "industry": "Drug Manufacturers - Specialty & Generic",
+          "industry_zh": "专科与仿制药",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.25,
+          "by_exchange": {
+            "NASDAQ": -0.09,
+            "NYSE": 0.59
+          },
+          "n_exchanges": 2,
+          "rank": 48
+        },
+        {
+          "industry": "Medical - Equipment & Services",
+          "industry_zh": "医疗设备与服务",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.24,
+          "by_exchange": {
+            "NASDAQ": 0.24
+          },
+          "n_exchanges": 1,
+          "rank": 49
+        },
+        {
+          "industry": "Household & Personal Products",
+          "industry_zh": "家庭与个人护理",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.18,
+          "by_exchange": {
+            "NASDAQ": -0.12,
+            "NYSE": 0.49
+          },
+          "n_exchanges": 2,
+          "rank": 50
+        },
+        {
+          "industry": "REIT - Retail",
+          "industry_zh": "零售REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.18,
+          "by_exchange": {
+            "NASDAQ": 0.41,
+            "NYSE": -0.05
+          },
+          "n_exchanges": 2,
+          "rank": 51
+        },
+        {
+          "industry": "Discount Stores",
+          "industry_zh": "折扣零售",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.16,
+          "by_exchange": {
+            "NASDAQ": 0.12,
+            "NYSE": 0.19
+          },
+          "n_exchanges": 2,
+          "rank": 52
+        },
+        {
+          "industry": "REIT - Mortgage",
+          "industry_zh": "抵押REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.14,
+          "by_exchange": {
+            "NASDAQ": 0.55,
+            "NYSE": -0.27
+          },
+          "n_exchanges": 2,
+          "rank": 53
+        },
+        {
+          "industry": "Regulated Electric",
+          "industry_zh": "受监管电力",
+          "sector_group": "公用事业",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.1,
+          "by_exchange": {
+            "NASDAQ": 0.27,
+            "NYSE": -0.07
+          },
+          "n_exchanges": 2,
+          "rank": 54
+        },
+        {
+          "industry": "Beverages - Alcoholic",
+          "industry_zh": "酒精饮料",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.06,
+          "by_exchange": {
+            "NYSE": 0.06
+          },
+          "n_exchanges": 1,
+          "rank": 55
+        },
+        {
+          "industry": "Medical - Instruments & Supplies",
+          "industry_zh": "医疗仪器与耗材",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.04,
+          "by_exchange": {
+            "NASDAQ": 0.04,
+            "NYSE": 0.05
+          },
+          "n_exchanges": 2,
+          "rank": 56
+        },
+        {
+          "industry": "Diversified Utilities",
+          "industry_zh": "多元公用事业",
+          "sector_group": "公用事业",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.02,
+          "by_exchange": {
+            "NYSE": 0.02
+          },
+          "n_exchanges": 1,
+          "rank": 57
+        },
+        {
+          "industry": "REIT - Healthcare Facilities",
+          "industry_zh": "医疗设施REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": 0.01,
+          "by_exchange": {
+            "NASDAQ": -0.38,
+            "NYSE": 0.39
+          },
+          "n_exchanges": 2,
+          "rank": 58
+        },
+        {
+          "industry": "Industrial - Distribution",
+          "industry_zh": "工业分销",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.07,
+          "by_exchange": {
+            "NASDAQ": 0.41,
+            "NYSE": -0.54
+          },
+          "n_exchanges": 2,
+          "rank": 59
+        },
+        {
+          "industry": "Broadcasting",
+          "industry_zh": "广播电视",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.11,
+          "by_exchange": {
+            "NASDAQ": -0.62,
+            "NYSE": 0.4
+          },
+          "n_exchanges": 2,
+          "rank": 60
+        },
+        {
+          "industry": "Shell Companies",
+          "industry_zh": "壳公司",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.11,
+          "by_exchange": {
+            "NASDAQ": -0.22,
+            "NYSE": 0.0
+          },
+          "n_exchanges": 2,
+          "rank": 61
+        },
+        {
+          "industry": "Specialty Business Services",
+          "industry_zh": "专业商业服务",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.15,
+          "by_exchange": {
+            "NASDAQ": 0.54,
+            "NYSE": -0.84
+          },
+          "n_exchanges": 2,
+          "rank": 62
+        },
+        {
+          "industry": "Medical - Devices",
+          "industry_zh": "医疗器械",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.19,
+          "by_exchange": {
+            "NASDAQ": 0.24,
+            "NYSE": -0.63
+          },
+          "n_exchanges": 2,
+          "rank": 63
+        },
+        {
+          "industry": "Renewable Utilities",
+          "industry_zh": "可再生能源公用事业",
+          "sector_group": "公用事业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.19,
+          "by_exchange": {
+            "NASDAQ": -0.84,
+            "NYSE": 0.45
+          },
+          "n_exchanges": 2,
+          "rank": 64
+        },
+        {
+          "industry": "Regulated Water",
+          "industry_zh": "受监管水务",
+          "sector_group": "公用事业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.22,
+          "by_exchange": {
+            "NASDAQ": -0.3,
+            "NYSE": -0.14
+          },
+          "n_exchanges": 2,
+          "rank": 65
+        },
+        {
+          "industry": "Trucking",
+          "industry_zh": "卡车运输",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.23,
+          "by_exchange": {
+            "NASDAQ": -0.49,
+            "NYSE": 0.03
+          },
+          "n_exchanges": 2,
+          "rank": 66
+        },
+        {
+          "industry": "Apparel - Retail",
+          "industry_zh": "服装零售",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.25,
+          "by_exchange": {
+            "NASDAQ": -0.12,
+            "NYSE": -0.39
+          },
+          "n_exchanges": 2,
+          "rank": 67
+        },
+        {
+          "industry": "Insurance - Diversified",
+          "industry_zh": "多元保险",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.27,
+          "by_exchange": {
+            "NASDAQ": -0.85,
+            "NYSE": 0.32
+          },
+          "n_exchanges": 2,
+          "rank": 68
+        },
+        {
+          "industry": "Travel Lodging",
+          "industry_zh": "旅行住宿",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.28,
+          "by_exchange": {
+            "NASDAQ": 0.37,
+            "NYSE": -0.94
+          },
+          "n_exchanges": 2,
+          "rank": 69
+        },
+        {
+          "industry": "Specialty Retail",
+          "industry_zh": "专业零售",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.29,
+          "by_exchange": {
+            "NASDAQ": -0.13,
+            "NYSE": -0.44
+          },
+          "n_exchanges": 2,
+          "rank": 70
+        },
+        {
+          "industry": "Aerospace & Defense",
+          "industry_zh": "航天与国防",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.3,
+          "by_exchange": {
+            "NASDAQ": 1.12,
+            "NYSE": -1.71
+          },
+          "n_exchanges": 2,
+          "rank": 71
+        },
+        {
+          "industry": "Insurance - Reinsurance",
+          "industry_zh": "再保险",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.36,
+          "by_exchange": {
+            "NASDAQ": -0.62,
+            "NYSE": -0.1
+          },
+          "n_exchanges": 2,
+          "rank": 72
+        },
+        {
+          "industry": "Auto - Manufacturers",
+          "industry_zh": "汽车制造",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.44,
+          "by_exchange": {
+            "NASDAQ": -0.05,
+            "NYSE": -0.83
+          },
+          "n_exchanges": 2,
+          "rank": 73
+        },
+        {
+          "industry": "Oil & Gas Energy",
+          "industry_zh": "油气能源",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.44,
+          "by_exchange": {
+            "NYSE": -0.44
+          },
+          "n_exchanges": 1,
+          "rank": 74
+        },
+        {
+          "industry": "Oil & Gas Midstream",
+          "industry_zh": "油气中游",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.53,
+          "by_exchange": {
+            "NASDAQ": -0.69,
+            "NYSE": -0.36
+          },
+          "n_exchanges": 2,
+          "rank": 75
+        },
+        {
+          "industry": "Regulated Gas",
+          "industry_zh": "受监管燃气",
+          "sector_group": "公用事业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.55,
+          "by_exchange": {
+            "NYSE": -0.55
+          },
+          "n_exchanges": 1,
+          "rank": 76
+        },
+        {
+          "industry": "REIT - Office",
+          "industry_zh": "办公REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.55,
+          "by_exchange": {
+            "NYSE": -0.55
+          },
+          "n_exchanges": 1,
+          "rank": 77
+        },
+        {
+          "industry": "Security & Protection Services",
+          "industry_zh": "安全与防护服务",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.57,
+          "by_exchange": {
+            "NASDAQ": -0.92,
+            "NYSE": -0.21
+          },
+          "n_exchanges": 2,
+          "rank": 78
+        },
+        {
+          "industry": "Restaurants",
+          "industry_zh": "餐饮",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.58,
+          "by_exchange": {
+            "NASDAQ": -0.88,
+            "NYSE": -0.28
+          },
+          "n_exchanges": 2,
+          "rank": 79
+        },
+        {
+          "industry": "Real Estate - Diversified",
+          "industry_zh": "多元房地产",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.58,
+          "by_exchange": {
+            "NYSE": -0.58
+          },
+          "n_exchanges": 1,
+          "rank": 80
+        },
+        {
+          "industry": "Communication Equipment",
+          "industry_zh": "通信设备",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -0.59,
+          "by_exchange": {
+            "NASDAQ": -0.74,
+            "NYSE": -0.44
+          },
+          "n_exchanges": 2,
+          "rank": 81
+        },
+        {
+          "industry": "Insurance - Specialty",
+          "industry_zh": "专项保险",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.6,
+          "by_exchange": {
+            "NASDAQ": -0.45,
+            "NYSE": -0.76
+          },
+          "n_exchanges": 2,
+          "rank": 82
+        },
+        {
+          "industry": "Banks",
+          "industry_zh": "Banks",
+          "sector_group": "未分组",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.62,
+          "by_exchange": {
+            "NASDAQ": -1.26,
+            "NYSE": 0.01
+          },
+          "n_exchanges": 2,
+          "rank": 83
+        },
+        {
+          "industry": "Independent Power Producers",
+          "industry_zh": "独立发电商",
+          "sector_group": "公用事业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.62,
+          "by_exchange": {
+            "NASDAQ": -0.43,
+            "NYSE": -0.81
+          },
+          "n_exchanges": 2,
+          "rank": 84
+        },
+        {
+          "industry": "Consumer Electronics",
+          "industry_zh": "消费电子",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -0.65,
+          "by_exchange": {
+            "NASDAQ": -0.17,
+            "NYSE": -1.14
+          },
+          "n_exchanges": 2,
+          "rank": 85
+        },
+        {
+          "industry": "Oil & Gas Exploration & Production",
+          "industry_zh": "油气勘探与生产",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.69,
+          "by_exchange": {
+            "NASDAQ": -0.81,
+            "NYSE": -0.57
+          },
+          "n_exchanges": 2,
+          "rank": 86
+        },
+        {
+          "industry": "Integrated Freight & Logistics",
+          "industry_zh": "综合货运与物流",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.7,
+          "by_exchange": {
+            "NASDAQ": -0.67,
+            "NYSE": -0.73
+          },
+          "n_exchanges": 2,
+          "rank": 87
+        },
+        {
+          "industry": "Agricultural - Machinery",
+          "industry_zh": "农业机械",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.71,
+          "by_exchange": {
+            "NASDAQ": -2.17,
+            "NYSE": 0.75
+          },
+          "n_exchanges": 2,
+          "rank": 88
+        },
+        {
+          "industry": "Auto - Recreational Vehicles",
+          "industry_zh": "休闲车与房车",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.77,
+          "by_exchange": {
+            "NASDAQ": -1.41,
+            "NYSE": -0.13
+          },
+          "n_exchanges": 2,
+          "rank": 89
+        },
+        {
+          "industry": "Software - Services",
+          "industry_zh": "软件服务",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -0.82,
+          "by_exchange": {
+            "NASDAQ": -0.82
+          },
+          "n_exchanges": 1,
+          "rank": 90
+        },
+        {
+          "industry": "Construction Materials",
+          "industry_zh": "建筑材料",
+          "sector_group": "原材料",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.84,
+          "by_exchange": {
+            "NASDAQ": -1.38,
+            "NYSE": -0.3
+          },
+          "n_exchanges": 2,
+          "rank": 91
+        },
+        {
+          "industry": "REIT - Industrial",
+          "industry_zh": "工业REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.86,
+          "by_exchange": {
+            "NASDAQ": -0.67,
+            "NYSE": -1.05
+          },
+          "n_exchanges": 2,
+          "rank": 92
+        },
+        {
+          "industry": "REIT - Hotel & Motel",
+          "industry_zh": "酒店REIT",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.88,
+          "by_exchange": {
+            "NASDAQ": -0.59,
+            "NYSE": -1.17
+          },
+          "n_exchanges": 2,
+          "rank": 93
+        },
+        {
+          "industry": "Solar",
+          "industry_zh": "太阳能",
+          "sector_group": "公用事业",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.91,
+          "by_exchange": {
+            "NASDAQ": -0.37,
+            "NYSE": -1.46
+          },
+          "n_exchanges": 2,
+          "rank": 94
+        },
+        {
+          "industry": "Agricultural Farm Products",
+          "industry_zh": "农产品",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.94,
+          "by_exchange": {
+            "NASDAQ": -0.7,
+            "NYSE": -1.19
+          },
+          "n_exchanges": 2,
+          "rank": 95
+        },
+        {
+          "industry": "Auto - Parts",
+          "industry_zh": "汽车零部件",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -0.95,
+          "by_exchange": {
+            "NASDAQ": -1.39,
+            "NYSE": -0.5
+          },
+          "n_exchanges": 2,
+          "rank": 96
+        },
+        {
+          "industry": "Airlines, Airports & Air Services",
+          "industry_zh": "航空与机场服务",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.0,
+          "by_exchange": {
+            "NASDAQ": -1.06,
+            "NYSE": -0.94
+          },
+          "n_exchanges": 2,
+          "rank": 97
+        },
+        {
+          "industry": "Software - Infrastructure",
+          "industry_zh": "基础软件",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.03,
+          "by_exchange": {
+            "NASDAQ": -1.52,
+            "NYSE": -0.53
+          },
+          "n_exchanges": 2,
+          "rank": 98
+        },
+        {
+          "industry": "Waste Management",
+          "industry_zh": "废物管理",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.04,
+          "by_exchange": {
+            "NASDAQ": -2.06,
+            "NYSE": -0.01
+          },
+          "n_exchanges": 2,
+          "rank": 99
+        },
+        {
+          "industry": "Oil & Gas Integrated",
+          "industry_zh": "油气一体化",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.05,
+          "by_exchange": {
+            "NASDAQ": -2.79,
+            "NYSE": 0.68
+          },
+          "n_exchanges": 2,
+          "rank": 100
+        },
+        {
+          "industry": "Insurance - Property & Casualty",
+          "industry_zh": "财产与意外险",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.07,
+          "by_exchange": {
+            "NASDAQ": -0.75,
+            "NYSE": -1.4
+          },
+          "n_exchanges": 2,
+          "rank": 101
+        },
+        {
+          "industry": "Staffing & Employment Services",
+          "industry_zh": "人力与就业服务",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.08,
+          "by_exchange": {
+            "NASDAQ": -1.0,
+            "NYSE": -1.17
+          },
+          "n_exchanges": 2,
+          "rank": 102
+        },
+        {
+          "industry": "Consulting Services",
+          "industry_zh": "咨询服务",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.13,
+          "by_exchange": {
+            "NASDAQ": -1.18,
+            "NYSE": -1.09
+          },
+          "n_exchanges": 2,
+          "rank": 103
+        },
+        {
+          "industry": "Manufacturing - Textiles",
+          "industry_zh": "纺织制造",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.13,
+          "by_exchange": {
+            "NASDAQ": -1.13
+          },
+          "n_exchanges": 1,
+          "rank": 104
+        },
+        {
+          "industry": "Medical - Healthcare Information Services",
+          "industry_zh": "医疗信息服务",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.17,
+          "by_exchange": {
+            "NASDAQ": -1.36,
+            "NYSE": -0.97
+          },
+          "n_exchanges": 2,
+          "rank": 105
+        },
+        {
+          "industry": "Packaged Foods",
+          "industry_zh": "包装食品",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.21,
+          "by_exchange": {
+            "NASDAQ": -1.19,
+            "NYSE": -1.23
+          },
+          "n_exchanges": 2,
+          "rank": 106
+        },
+        {
+          "industry": "Financial - Conglomerates",
+          "industry_zh": "综合金融",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.24,
+          "by_exchange": {
+            "NASDAQ": -1.31,
+            "NYSE": -1.16
+          },
+          "n_exchanges": 2,
+          "rank": 107
+        },
+        {
+          "industry": "Financial - Data & Stock Exchanges",
+          "industry_zh": "金融数据与交易所",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.31,
+          "by_exchange": {
+            "NASDAQ": -1.42,
+            "NYSE": -1.19
+          },
+          "n_exchanges": 2,
+          "rank": 108
+        },
+        {
+          "industry": "Home Improvement",
+          "industry_zh": "家居装修",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.32,
+          "by_exchange": {
+            "NASDAQ": -3.6,
+            "NYSE": 0.97
+          },
+          "n_exchanges": 2,
+          "rank": 109
+        },
+        {
+          "industry": "Real Estate - Services",
+          "industry_zh": "房地产服务",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.39,
+          "by_exchange": {
+            "NASDAQ": -1.24,
+            "NYSE": -1.55
+          },
+          "n_exchanges": 2,
+          "rank": 110
+        },
+        {
+          "industry": "Information Technology Services",
+          "industry_zh": "信息技术服务",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.46,
+          "by_exchange": {
+            "NASDAQ": -0.97,
+            "NYSE": -1.96
+          },
+          "n_exchanges": 2,
+          "rank": 111
+        },
+        {
+          "industry": "Entertainment",
+          "industry_zh": "娱乐",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.47,
+          "by_exchange": {
+            "NASDAQ": -1.69,
+            "NYSE": -1.24
+          },
+          "n_exchanges": 2,
+          "rank": 112
+        },
+        {
+          "industry": "Luxury Goods",
+          "industry_zh": "奢侈品",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.52,
+          "by_exchange": {
+            "NYSE": -1.52
+          },
+          "n_exchanges": 1,
+          "rank": 113
+        },
+        {
+          "industry": "Marine Shipping",
+          "industry_zh": "海运",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.6,
+          "by_exchange": {
+            "NASDAQ": -1.91,
+            "NYSE": -1.29
+          },
+          "n_exchanges": 2,
+          "rank": 114
+        },
+        {
+          "industry": "Investment - Banking & Investment Services",
+          "industry_zh": "银行与投资服务",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.62,
+          "by_exchange": {
+            "NASDAQ": -1.29,
+            "NYSE": -1.95
+          },
+          "n_exchanges": 2,
+          "rank": 115
+        },
+        {
+          "industry": "Auto - Dealerships",
+          "industry_zh": "汽车经销商",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.67,
+          "by_exchange": {
+            "NASDAQ": -0.76,
+            "NYSE": -2.59
+          },
+          "n_exchanges": 2,
+          "rank": 116
+        },
+        {
+          "industry": "Oil & Gas Refining & Marketing",
+          "industry_zh": "炼油与营销",
+          "sector_group": "能源",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.75,
+          "by_exchange": {
+            "NASDAQ": -2.55,
+            "NYSE": -0.94
+          },
+          "n_exchanges": 2,
+          "rank": 117
+        },
+        {
+          "industry": "Telecommunications Services",
+          "industry_zh": "电信服务",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.78,
+          "by_exchange": {
+            "NASDAQ": -2.0,
+            "NYSE": -1.56
+          },
+          "n_exchanges": 2,
+          "rank": 118
+        },
+        {
+          "industry": "Tobacco",
+          "industry_zh": "烟草",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.81,
+          "by_exchange": {
+            "NASDAQ": -4.52,
+            "NYSE": 0.9
+          },
+          "n_exchanges": 2,
+          "rank": 119
+        },
+        {
+          "industry": "Food Distribution",
+          "industry_zh": "食品分销",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.85,
+          "by_exchange": {
+            "NASDAQ": -3.11,
+            "NYSE": -0.6
+          },
+          "n_exchanges": 2,
+          "rank": 120
+        },
+        {
+          "industry": "Insurance - Brokers",
+          "industry_zh": "保险经纪",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.86,
+          "by_exchange": {
+            "NASDAQ": -1.76,
+            "NYSE": -1.97
+          },
+          "n_exchanges": 2,
+          "rank": 121
+        },
+        {
+          "industry": "Banks - Regional",
+          "industry_zh": "区域银行",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.88,
+          "by_exchange": {
+            "NASDAQ": -2.12,
+            "NYSE": -1.65
+          },
+          "n_exchanges": 2,
+          "rank": 122
+        },
+        {
+          "industry": "Apparel - Footwear & Accessories",
+          "industry_zh": "鞋服与配饰",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.89,
+          "by_exchange": {
+            "NASDAQ": -1.08,
+            "NYSE": -2.7
+          },
+          "n_exchanges": 2,
+          "rank": 123
+        },
+        {
+          "industry": "Financial - Capital Markets",
+          "industry_zh": "资本市场",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.9,
+          "by_exchange": {
+            "NASDAQ": -1.6,
+            "NYSE": -2.2
+          },
+          "n_exchanges": 2,
+          "rank": 124
+        },
+        {
+          "industry": "Grocery Stores",
+          "industry_zh": "食品杂货零售",
+          "sector_group": "消费必需",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.9,
+          "by_exchange": {
+            "NASDAQ": -1.41,
+            "NYSE": -2.4
+          },
+          "n_exchanges": 2,
+          "rank": 125
+        },
+        {
+          "industry": "Financial - Credit Services",
+          "industry_zh": "信贷服务",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -1.91,
+          "by_exchange": {
+            "NASDAQ": -1.14,
+            "NYSE": -2.68
+          },
+          "n_exchanges": 2,
+          "rank": 126
+        },
+        {
+          "industry": "Software - Application",
+          "industry_zh": "应用软件",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -1.96,
+          "by_exchange": {
+            "NASDAQ": -1.47,
+            "NYSE": -2.45
+          },
+          "n_exchanges": 2,
+          "rank": 127
+        },
+        {
+          "industry": "Internet Content & Information",
+          "industry_zh": "互联网内容与信息",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -2.0,
+          "by_exchange": {
+            "NASDAQ": -0.57,
+            "NYSE": -3.43
+          },
+          "n_exchanges": 2,
+          "rank": 128
+        },
+        {
+          "industry": "Rental & Leasing Services",
+          "industry_zh": "租赁服务",
+          "sector_group": "工业",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.01,
+          "by_exchange": {
+            "NASDAQ": -4.44,
+            "NYSE": 0.43
+          },
+          "n_exchanges": 2,
+          "rank": 129
+        },
+        {
+          "industry": "Advertising Agencies",
+          "industry_zh": "广告代理",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.1,
+          "by_exchange": {
+            "NASDAQ": -2.78,
+            "NYSE": -1.43
+          },
+          "n_exchanges": 2,
+          "rank": 130
+        },
+        {
+          "industry": "Gambling, Resorts & Casinos",
+          "industry_zh": "博彩与度假村",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.3,
+          "by_exchange": {
+            "NASDAQ": -2.78,
+            "NYSE": -1.82
+          },
+          "n_exchanges": 2,
+          "rank": 131
+        },
+        {
+          "industry": "Medical - Healthcare Plans",
+          "industry_zh": "医疗保险计划",
+          "sector_group": "医疗健康",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.46,
+          "by_exchange": {
+            "NASDAQ": -2.94,
+            "NYSE": -1.97
+          },
+          "n_exchanges": 2,
+          "rank": 132
+        },
+        {
+          "industry": "Electronic Gaming & Multimedia",
+          "industry_zh": "电子游戏与多媒体",
+          "sector_group": "科技",
+          "is_tech_focus": true,
+          "avg_change_pct": -2.52,
+          "by_exchange": {
+            "NASDAQ": -1.38,
+            "NYSE": -3.66
+          },
+          "n_exchanges": 2,
+          "rank": 133
+        },
+        {
+          "industry": "Banks - Diversified",
+          "industry_zh": "多元银行",
+          "sector_group": "金融",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.52,
+          "by_exchange": {
+            "NYSE": -2.52
+          },
+          "n_exchanges": 1,
+          "rank": 134
+        },
+        {
+          "industry": "Leisure",
+          "industry_zh": "休闲",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.63,
+          "by_exchange": {
+            "NASDAQ": -2.2,
+            "NYSE": -3.06
+          },
+          "n_exchanges": 2,
+          "rank": 135
+        },
+        {
+          "industry": "Education & Training Services",
+          "industry_zh": "教育培训",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -2.66,
+          "by_exchange": {
+            "NASDAQ": -3.6,
+            "NYSE": -1.72
+          },
+          "n_exchanges": 2,
+          "rank": 136
+        },
+        {
+          "industry": "Personal Products & Services",
+          "industry_zh": "个人产品与服务",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -3.06,
+          "by_exchange": {
+            "NASDAQ": -4.5,
+            "NYSE": -1.62
+          },
+          "n_exchanges": 2,
+          "rank": 137
+        },
+        {
+          "industry": "Real Estate - Development",
+          "industry_zh": "房地产开发",
+          "sector_group": "房地产",
+          "is_tech_focus": false,
+          "avg_change_pct": -3.23,
+          "by_exchange": {
+            "NASDAQ": -6.13,
+            "NYSE": -0.34
+          },
+          "n_exchanges": 2,
+          "rank": 138
+        },
+        {
+          "industry": "Publishing",
+          "industry_zh": "出版",
+          "sector_group": "传媒与商业服务",
+          "is_tech_focus": false,
+          "avg_change_pct": -3.68,
+          "by_exchange": {
+            "NASDAQ": -2.41,
+            "NYSE": -4.94
+          },
+          "n_exchanges": 2,
+          "rank": 139
+        },
+        {
+          "industry": "Travel Services",
+          "industry_zh": "旅行服务",
+          "sector_group": "可选消费",
+          "is_tech_focus": false,
+          "avg_change_pct": -6.28,
+          "by_exchange": {
+            "NASDAQ": -3.91,
+            "NYSE": -8.65
+          },
+          "n_exchanges": 2,
+          "rank": 140
+        }
+      ]
+    },
+    "fmp_treasuries": {
+      "status": "ok",
+      "rates": {
+        "date": "2026-09-22",
+        "month1": 3.97,
+        "month2": 4.09,
+        "month3": 4.16,
+        "month6": 4.26,
+        "year1": 4.43,
+        "year2": 4.71,
+        "year3": 4.81,
+        "year5": 4.83,
+        "year7": 4.89,
+        "year10": 4.96,
+        "year20": 5.33,
+        "year30": 5.29
+      }
+    },
+    "fmp_crypto": {
+      "status": "ok",
+      "btc_usd": {
+        "price": 86349.86,
+        "change_pct": -0.28634,
+        "volume": 41222176768
+      }
+    },
+    "infoway_breadth": {
+      "status": "error",
+      "error": {
+        "error": "HTTP 401: {\"code\":401,\"message\":\"Token invalid\",\"timestamp\":1790118422593}"
+      }
+    },
+    "infoway_temperature": {
+      "status": "error",
+      "error": {
+        "error": "HTTP 401: {\"code\":401,\"message\":\"Token invalid\",\"timestamp\":1790118429870}"
+      }
+    },
+    "infoway_kline_stocks": {
+      "status": "ok",
+      "source": "新浪",
+      "items": {
+        "NVDA.US": {
+          "close": 228.87,
+          "chg_pct": 0.66
+        },
+        "AAPL.US": {
+          "close": 339.75,
+          "chg_pct": 0.23
+        },
+        "MSFT.US": {
+          "close": 498.0,
+          "chg_pct": -0.72
+        },
+        "GOOGL.US": {
+          "close": 347.41,
+          "chg_pct": -0.99
+        },
+        "AMZN.US": {
+          "close": 254.98,
+          "chg_pct": -1.34
+        },
+        "META.US": {
+          "close": 736.595,
+          "chg_pct": -0.63
+        },
+        "TSLA.US": {
+          "close": 378.9,
+          "chg_pct": 0.96
+        }
+      }
+    },
+    "infoway_kline_common": {
+      "status": "ok",
+      "source": "新浪",
+      "items": {
+        "WTI原油": {
+          "close": 89.7
+        },
+        "布伦特原油": {
+          "close": 94.617
+        },
+        "黄金": {
+          "close": 4401.525
+        }
+      }
+    },
+    "infoway_afterhours": {
+      "status": "error",
+      "error": {
+        "error": "HTTP 401: {\"code\":401,\"message\":\"Token invalid\",\"timestamp\":1790118438232}"
+      },
+      "trades": {}
+    }
+  }
+}
