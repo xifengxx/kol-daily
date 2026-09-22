@@ -1,0 +1,539 @@
+{
+ "date": "2026-09-21",
+ "generated_at": "2026-09-22T11:40:00+08:00",
+ "method": "Google News RSS 候选 + 财经媒体检索 + 人工筛选整理；无明确公开原因按低置信标注，不强行归因",
+ "entries": [
+  {
+   "type": "industry",
+   "key": "烟草",
+   "display": "烟草",
+   "confidence": "低",
+   "driver": "检索未见当日行业级或公司级催化事件。该行业本期有 NASDAQ 与 NYSE 两个样本，等权均值对单一权重股敏感；当日资金主线清楚集中在 AI 算力与半导体，烟草属低相关防御方向，读数更可能是资金分散配置的副产品，不代表行业基本面发生变化。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "互联网内容与信息",
+   "display": "互联网内容与信息",
+   "confidence": "高",
+   "driver": "当日全市场最强的可归因行业，几乎完全来自 Meta 大涨 11.34%（收 741.25 美元，为 2025 年 4 月以来最大单日涨幅）。触发因素是 Meta 的 AI 智能体应用 Muse 登上美国苹果 App Store 免费榜首（上线六天下载逾 90 万次），叠加富国银行把目标价从 640 美元上调至 796 美元——市场开始为「消费级 AI 变现」重新定价。与前一日的 -2.73% 形成镜像反转。",
+   "sources": [
+    {"title": "Meta Surges 11% on Wells Fargo Target Hike, Muse App Success", "source": "Yonhap Infomax", "url": "https://en.infomaxai.com/news/articleView.html?idxno=140297"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗专科",
+   "display": "医疗专科",
+   "confidence": "低",
+   "driver": "检索未见当日行业级或公司级事件，候选多为医疗板块的长期研报与榜单。该行业本期仅 NASDAQ 单交易所样本，等权值对个别个股高度敏感。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "航空与机场服务",
+   "display": "航空与机场服务",
+   "confidence": "高",
+   "driver": "当日逻辑最干净的一条行业线：国际油价单日大跌（WTI 收 95.78 美元、-4.51%；布伦特 100.34 美元、-3.40%）。航空燃油是航空公司最大的可变成本项，油价急跌直接改善利润预期。这与炼油与营销（-3.63%）、油气一体化（-2.63%）恰好是同一枚硬币的两面——油价下跌在能源链内部制造了输家，在交运链制造了赢家。",
+   "sources": [
+    {"title": "Oil prices slide on hopes diplomacy at UN will help end Iran conflict", "source": "The National", "url": "https://www.thenationalnews.com/business/energy/2026/09/21/oil-prices-slide-on-hopes-diplomacy-at-un-will-help-end-iran-conflict/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "服装零售",
+   "display": "服装零售",
+   "confidence": "低",
+   "driver": "检索未见当日公司级事件。该行业两个交易所样本方向一致，属普涨日里的中游跟随；当日资金叙事中心是 AI 算力与半导体，消费零售不在其中。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "生物科技",
+   "display": "生物科技",
+   "confidence": "中",
+   "driver": "与 10 年期美债收益率回落至 4.96%（较前一日下行 5 个基点）方向一致。生物科技是典型的「长久期、靠融资」资产——多数公司当期无盈利、现金流靠后，对贴现率最敏感；前一日收益率站上 5.01% 时该方向承压，本期回落即修复。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "基础软件",
+   "display": "基础软件",
+   "confidence": "中",
+   "driver": "当日科技组内表现最好的方向（+2.00%），一改前一日软件层全线走弱的格局（9/18 应用软件 -1.49%、信息技术服务 -2.08%）。推动力来自风险偏好整体回升与长端收益率回落，而非行业新增订单；检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "房地产开发",
+   "display": "房地产开发",
+   "confidence": "中",
+   "driver": "与 10 年期美债收益率回落至 4.96% 直接相关。房地产开发是全场对利率最敏感的行业之一，融资成本直接决定项目回报；本期收益率下行 5 个基点，配合住宅建设（+1.08%）、住宅 REIT（+0.31%）同步转正，构成一次清晰的「利率敏感资产修复」。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "医疗设备与服务",
+   "display": "医疗设备与服务",
+   "confidence": "低",
+   "driver": "当日 140 个行业中跌幅最大（-4.61%），但检索未锁定任何当日行业级或公司级事件，且该行业本期仅 NASDAQ 单交易所样本。当日跌幅榜上医疗与能源并存，两条线缺乏共同的宏观解释。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "炼油与营销",
+   "display": "炼油与营销",
+   "confidence": "高",
+   "driver": "原因明确且可验证：国际油价单日大跌 4.5% 以上（WTI 收 95.78 美元、-4.51%；布伦特 100.34 美元、-3.40%）。炼油与营销赚的是原油到成品油的价差，油价急跌会同步拉低成品油价格与在手库存价值，是当日跌幅榜上最直接、最干净的「油价受害者」。",
+   "sources": [
+    {"title": "川普愿与伊朗总统会面 美伊本周谈判？油价下挫", "source": "中时新闻网", "url": "https://www.chinatimes.com/cn/newspapers/20260922000162-260202"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "油气一体化",
+   "display": "油气一体化",
+   "confidence": "高",
+   "driver": "与炼油与营销同源：WTI 单日 -4.51%、布伦特 -3.40%。触发因素是美伊可能在联合国大会期间举行首脑级会晤的预期（特朗普称对会见伊朗总统佩泽什基安「可能持开放态度」），叠加沙特经霍尔木兹海峡出口从 8 月的日均 240 万桶回升至 400 万桶以上，地缘风险溢价被抽走。埃克森美孚、雪佛龙为当日道指主要拖累（雪佛龙 -2.79%）。",
+   "sources": [
+    {"title": "Oil prices slide on hopes diplomacy at UN will help end Iran conflict", "source": "The National", "url": "https://www.thenationalnews.com/business/energy/2026/09/21/oil-prices-slide-on-hopes-diplomacy-at-un-will-help-end-iran-conflict/"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "铁路",
+   "display": "铁路",
+   "confidence": "低",
+   "driver": "检索未见当日行业级或公司级事件。油价下跌理论上降低铁路柴油成本，但铁路的核心变量是货运量与运价，燃油不是主导项；该行业两个交易所样本方向一致。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "商业设备与耗材",
+   "display": "商业设备与耗材",
+   "confidence": "低",
+   "driver": "跌幅榜第五，但检索未锁定任何当日行业级或公司级事件，候选多为二季度复盘与榜单类内容。该行业本期仅 NASDAQ 单交易所样本，等权口径波动本就偏大。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "农业投入品",
+   "display": "农业投入品",
+   "confidence": "低",
+   "driver": "检索未见当日催化事件，候选多为农产品价格与化肥供需的长期讨论。当日农产品（-1.20%）、包装食品（-0.76%）同属走弱阵营，但缺乏可归因的当日公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "计算机硬件",
+   "display": "计算机硬件",
+   "confidence": "中",
+   "driver": "与前一日的强势（9/18 该行业 +2.39%）方向相反，连续两期都是样本结构最需要警惕的一行。当日 AI 服务器侧实际是分化的——超微电脑（SMCI）涨 5.40%，但 FMP 等权口径的计算机硬件行业收跌 2.00%。这说明跌幅来自该行业里的中小市值样本，而不是 AI 服务器整机这条主线本身转向。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "海运",
+   "display": "海运",
+   "confidence": "中",
+   "driver": "与油价下跌同向但结果相反。海运最大的成本项是船用燃料，油价单日大跌 4.5% 理论上直接降低运营成本；但当日海运收跌 1.98%，说明市场定价的是运价与全球贸易量预期，而不是燃料成本。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "半导体",
+   "display": "半导体",
+   "confidence": "高",
+   "driver": "本期最需要对照读的一行。FMP 等权口径仅 +1.39%，而同日费城半导体指数（市值加权）大涨 4.29%——等权远低于市值加权，与前一日的方向刚好相反（9/18 等权 +1.85% vs 费半 +2.78%）。这说明 9/21 的半导体行情是「大市值龙头独舞」：ARM +17.16%、英特尔 +12.14%、AMD +9.95%、高通 +9.29% 四只巨头贡献了绝大部分涨幅，中小市值芯片股并未同步跟上。",
+   "sources": [
+    {"title": "美股半导体暴涨！ARM狂拉17% 英特尔涨超12%", "source": "九方智投", "url": "https://www.9fzt.com/9fztgw_1_top/8173da5cfe99c0f4a62d10bea26b0d4f.html"}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "消费电子",
+   "display": "消费电子",
+   "confidence": "中",
+   "driver": "基本收平（+0.92%）。与前一日相比，手机链两端继续分化——芯片设计端的射频芯片段仅 +0.47%、模拟芯片段 +0.86%，而 AI 算力方向（CPU 段 +10.39%、GPU 段 +8.13%）大涨。这说明当日资金买的是「数据中心算力」，而不是「终端出货」。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "应用软件",
+   "display": "应用软件",
+   "confidence": "低",
+   "driver": "从前一日的领跌（9/18 -1.49%）转为小幅上涨（+0.91%），属风险偏好整体回升下的修复，而非行业新增订单驱动。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "电子游戏与多媒体",
+   "display": "电子游戏与多媒体",
+   "confidence": "低",
+   "driver": "检索未见当日行业级事件，属成长方向在资金转向算力硬件时的中游跟随。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "通信设备",
+   "display": "通信设备",
+   "confidence": "低",
+   "driver": "涨幅仅 +0.21%。当日增量资金集中在 CPU/GPU/FPGA 这类算力芯片，网络设备环节被冷落；检索候选多为设备商的长期订单讨论，无当日催化事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "软件服务",
+   "display": "软件服务",
+   "confidence": "低",
+   "driver": "基本收平（+0.13%），是本轮「买算力、卖其余」格局下受挤压最轻的软件方向。该行业本期仅 NASDAQ 单交易所样本。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "信息技术服务",
+   "display": "信息技术服务",
+   "confidence": "低",
+   "driver": "基本收平（-0.04%），延续了前一日被资金抽走的格局（9/18 -2.08%），但跌幅已明显收窄。检索未见当日行业级或公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "电信服务",
+   "display": "电信服务",
+   "confidence": "低",
+   "driver": "下跌 0.48%，与前一日的上涨（9/18 +0.91%）方向相反，属防御方向在风险偏好回升时的失血。检索未见当日公司级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "科技分销",
+   "display": "科技分销",
+   "confidence": "低",
+   "driver": "下跌 0.56%，本期仅 NASDAQ 单交易所样本。当日资金主线是芯片设计与制造，分销环节不在这条线上，读数更可能是样本效应。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "CPU(服务器级)",
+   "display": "CPU(服务器级)",
+   "confidence": "高",
+   "driver": "当日最强产业链段，4 只成分股全部上涨且全部是大市值龙头：ARM +17.16%、英特尔 +12.14%、AMD +9.95%、英伟达 +2.30%。驱动是「AI 智能体拉动服务器 CPU 需求」——Meta 的 Muse 等代理式 AI 应用快速普及，杰富瑞分析师指出 agent 的推理、编排与基础设施负载会同步抬升服务器 CPU 需求；同时英特尔与 AMD 都在推进约 10% 的提价，被市场读作定价权而非成本转嫁。",
+   "sources": [
+    {"title": "Intel shares rise more than 13% in US amid CPU rally", "source": "CNBC via UA News", "url": "https://ua.news/en/money/aktsiyi-intel-u-ssha-zrosli-bilsh-iak-na-13-na-tli-rali-cpu-cnbc"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "FPGA",
+   "display": "FPGA",
+   "confidence": "高",
+   "driver": "只有 3 只成分股（AMD、英特尔、Lattice），等权值被 AMD +9.95% 与英特尔 +12.14% 直接拉高。这不是 FPGA 行业出现了独立的订单事件，而是两只权重股同时属于该段；Lattice（+5.66%）作为纯 FPGA 标的也跟涨，说明当日资金对「可编程逻辑」这个细分方向有正向偏好。市值加权（+10.75%）高于等权，进一步印证是大市值主导。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "GPU",
+   "display": "GPU",
+   "confidence": "中",
+   "driver": "3 只成分股（AMD +9.95%、英特尔 +12.14%、英伟达 +2.30%）。需要特别指出：本段涨幅并非来自 GPU 龙头英伟达——英伟达当日仅涨 2.30%，是段内最弱的一只；拉升来自 AMD 与英特尔的「CPU+GPU 双线共振」。这与其他由算力主线驱动的段落质地不同。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "GPU架构设计",
+   "display": "GPU架构设计",
+   "confidence": "中",
+   "driver": "成分股与 GPU 段完全相同（AMD、英特尔、英伟达），因此读数与解读一致。主导当日行情的不是 GPU 架构设计环节，而是 CPU 与 AI 加速器的需求预期；英伟达作为该环节最核心的标的，当日反而只涨 2.30%。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "Chiplet与异构集成",
+   "display": "Chiplet与异构集成",
+   "confidence": "中",
+   "driver": "4 只成分股全部上涨——AMD +9.95%、英特尔 +12.14%、英伟达 +2.30%、台积电 +2.41%。台积电是段内涨幅最小的一只，说明当日资金没有为「先进制程代工」额外定价，Chiplet 段的高读数同样来自 AMD 与英特尔的权重。当日无该环节的独立公开事件。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "大模型",
+   "display": "大模型",
+   "confidence": "高",
+   "driver": "只有 2 只成分股（Meta +11.34%、Alphabet +1.55%），等权值几乎完全由 Meta 决定。驱动是 Meta 的 AI 智能体应用 Muse 登上美国苹果 App Store 免费榜首，叠加富国银行把目标价从 640 美元上调至 796 美元。Alphabet 仅微涨 1.55%，市值加权口径更是只有 +1.55%——与等权 +6.45% 的巨大差距说明，市场把这一事件读作 Meta 的个体胜利，而不是「大模型整体重估」。",
+   "sources": [
+    {"title": "Meta stock soars 11% on price target increase, Muse AI downloads", "source": "Yahoo Finance", "url": "https://finance.yahoo.com/technology/article/meta-stock-soars-11-on-price-target-increase-muse-ai-downloads-180423756.html"}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "先进封装(CoWoS/3D)",
+   "display": "先进封装(CoWoS/3D)",
+   "confidence": "中",
+   "driver": "3 只成分股（英特尔 +12.14%、英伟达 +2.30%、台积电 +2.41%）。与 Chiplet 段同源，读数主要由英特尔贡献；CoWoS 环节最重要的两家（台积电与英伟达）当日都只是小幅上涨，说明先进封装本身没有出现新的产能或订单催化，读数来自段内权重股而非环节景气。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "DPU/SmartNIC",
+   "display": "DPU/SmartNIC",
+   "confidence": "中",
+   "driver": "6 只成分股中英特尔 +12.14% 与 Marvell +5.38% 领涨，微软 +1.59%、英伟达 +2.30%、博通 +1.41% 跟随。当日无该环节的独立公开事件；读数更多是「数据中心网络芯片」作为算力主线的一部分被同步买入，而不是 DPU 本身出现了独立需求信号。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "电子特气",
+   "display": "电子特气",
+   "confidence": "低",
+   "driver": "当日最弱的一段，但读数不可信——3 只成分股里，大阳日酸（-0.31%）与法国液化空气（-1.26%）取到的都是美东 9/18 的旧值（9/21 日本敬老日休市、欧洲日线未更新），只有 Entegris（+0.63%）是当日新值。本段没有当日可归因的行业事件，检索也未见电子特气相关的价格或订单变化。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "光掩模版",
+   "display": "光掩模版",
+   "confidence": "低",
+   "driver": "3 只成分股中，Toppan 与 DNP 都是美东 9/18 的旧值（日本市场 9/21 休市），只有 Photronics（+0.79%）为当日新值。本段 -0.13% 的读数实际是「两个交易日的混合均值」，不具备当日的解释力。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "光刻胶与湿化学品",
+   "display": "光刻胶与湿化学品",
+   "confidence": "低",
+   "driver": "4 只成分股全部是日本标的（住友化学、信越化学、TOK、富士胶片），且全部取到美东 9/18 的旧值——9/21 日本因敬老日休市，Yahoo 无当日日线。因此本段读数完全是 9/18 的日本行情，不能读作 9/21 的表现，建议直接跳过这一行。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "溅射靶材",
+   "display": "溅射靶材",
+   "confidence": "低",
+   "driver": "3 只成分股中，TOSOH（-1.68%）与 JX Metals（+2.11%）为美东 9/18 旧值（日本休市），只有霍尼韦尔（+0.01%）为当日新值。样本跨两个交易日混用，读数不具备当日解释力。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "HBM高带宽内存",
+   "display": "HBM高带宽内存",
+   "confidence": "中",
+   "driver": "本段 4 只成分股全部是当日新值，是底部段落里最干净的一行。存储方向当日明显没有跟上算力芯片：SK 海力士 +0.59%、南亚科 -1.71%、华邦 -3.06%，只有三星 +4.98% 逆势走强。这与前一日「存储霸榜」的格局形成鲜明反差——资金在 9/21 从存储与设备切向了逻辑芯片。市值加权 +4.60% 与等权 +0.20% 的巨大差距，说明是三星这一只大权重撑起了市值口径。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "前驱体与ALD/CVD材料",
+   "display": "前驱体与ALD/CVD材料",
+   "confidence": "低",
+   "driver": "3 只成分股中，Merck KGaA 的德国上市实体（MRK.DE，-1.22%）为美东 9/18 旧值，美国实体（MRK，+1.79%）与 Entegris（+0.63%）为当日新值。样本跨交易日混用，且同一集团的两地上市实体方向相反，读数不宜解读。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "射频芯片",
+   "display": "射频芯片",
+   "confidence": "中",
+   "driver": "3 只成分股全部为当日新值。博通 +1.41%、Qorvo +0.03%、Skyworks -0.02%——射频方向当日几乎完全走平。这是「资金只买数据中心算力、不买终端射频」的又一证据：同日模拟芯片段也只涨 0.86%，而 CPU 段涨 10.39%。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "模拟芯片",
+   "display": "模拟芯片",
+   "confidence": "中",
+   "driver": "8 只成分股全部为当日新值，但内部严重分化：MPS（MPWR）+4.92%、ADI +1.94%、德州仪器 +1.59% 上涨，而 Semtech -4.12%、Skyworks -0.02%、Qorvo +0.03% 走平或下跌。当日无该行业的独立公开事件；与算力芯片的暴涨相比，模拟芯片整体被资金忽略，说明这轮行情是「AI 数据中心专用」而非「半导体全面景气」。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "ARM",
+   "display": "ARM Holdings（ARM）",
+   "confidence": "高",
+   "driver": "收 322.90 美元、涨 17.16%，为 2025 年 4 月以来最大单日涨幅，市值单日增加约 505 亿美元。驱动是 AI 智能体带动的服务器 CPU 需求预期——杰富瑞分析师指出，随着代理式 AI 应用（如 Meta 的 Muse）扩大消费者使用，推理、编排与基础设施负载会同步抬升服务器 CPU 需求；ARM 作为 CPU 架构授权方是这一逻辑最纯粹的标的。",
+   "sources": [
+    {"title": "美股半导体暴涨！ARM狂拉17% 英特尔涨超12%", "source": "九方智投", "url": "https://www.9fzt.com/9fztgw_1_top/8173da5cfe99c0f4a62d10bea26b0d4f.html"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "INTC",
+   "display": "Intel（INTC）",
+   "confidence": "高",
+   "driver": "收 121.78 美元、涨 12.14%，市值单日增加约 692 亿美元。两条公开线索：一是 AI 智能体拉动服务器 CPU 需求（杰富瑞观点）；二是英特尔据报计划自 10 月 5 日起对 PC CPU 提价约 10%（为 2025 年底以来第三轮），市场把它读作定价权与供需紧张的证据，而不是成本转嫁。提价一事未见英特尔官方公告，属渠道报道，标 [传闻，未证实]。",
+   "sources": [
+    {"title": "Intel shares rise more than 13% in US amid CPU rally", "source": "CNBC via UA News", "url": "https://ua.news/en/money/aktsiyi-intel-u-ssha-zrosli-bilsh-iak-na-13-na-tli-rali-cpu-cnbc"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "META",
+   "display": "Meta（META）",
+   "confidence": "高",
+   "driver": "收 741.25 美元、涨 11.34%，为 2025 年 4 月以来最大单日涨幅，成交量约为三个月均值的 157%。驱动明确：其 AI 智能体应用 Muse（9 月 8 日上线）登上美国苹果 App Store 免费应用榜首，六天下载逾 90 万次；同日富国银行把目标价从 640 美元上调至 796 美元。注：媒体口径多写作 +11.43%，本报告按前一交易日收盘 665.75 美元与当日收盘 741.25 美元计算得 +11.34%，差异源于对前收盘价的不同取法，收盘价本身一致。",
+   "sources": [
+    {"title": "Why Meta Stock Jumped Over 11% Today – September 21, 2026", "source": "TipRanks", "url": "https://www.tipranks.com/news/why-meta-stock-jumped-over-11-today-september-21-2026"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "WAF.DE",
+   "display": "Siltronic（WAF.DE）",
+   "confidence": "低",
+   "driver": "读数 +10.48% 取到的是美东 9/18 的旧值，不是 9/21 的涨幅——德国市场日线在本报告生成时点（北京时间 07:05 前后）尚未更新。该标的为硅片厂 Siltronic，属已知的欧洲标的日线滞后问题，请直接跳过这一行。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "AMD",
+   "display": "AMD（AMD）",
+   "confidence": "高",
+   "driver": "收 615.52 美元、涨 9.95%，市值首次突破 1 万亿美元，成为继英伟达、博通、美光之后第四家跨过该门槛的美国芯片商。两条线索叠加：一是据供应链报道，AMD 已通知合作伙伴自 2026 年四季度起对 AI 加速器、消费级 GPU 与主板芯片组提价约 10%，用于转嫁台积电代工报价上涨；二是 AI 智能体带动的服务器 CPU 需求预期。提价消息未获 AMD 官方确认，标 [传闻，未证实]。",
+   "sources": [
+    {"title": "AMD Reportedly Plans 10% Price Hike for GPUs, AI Chips, Chipsets in 4Q26 as TSMC Costs Rise", "source": "TrendForce", "url": "https://www.trendforce.com/news/2026/09/18/news-amd-reportedly-plans-10-price-hike-for-gpus-ai-chips-chipsets-in-4q26-as-tsmc-costs-rise/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "285A.T",
+   "display": "Kioxia（285A.T）",
+   "confidence": "低",
+   "driver": "读数 +9.40% 为美东 9/18 旧值——铠侠是日本标的，9/21 日本因敬老日休市，Yahoo 无当日日线。请直接跳过这一行，不要读作 9/21 的涨幅。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "QCOM",
+   "display": "Qualcomm（QCOM）",
+   "confidence": "高",
+   "driver": "收 194.23 美元、涨 9.29%。驱动与 CPU／边缘算力叙事同源：代理式 AI 应用在终端普及提升了高性能计算需求预期；同日高通骁龙峰会在夏威夷举行、聚焦 AI 基础设施供应链，构成情绪催化。当日无公司财报发布。",
+   "sources": [
+    {"title": "环自动态 | 中美首脑与AI巨头会晤，本周市场关注五大看点", "source": "etnet 经济通", "url": "https://www.etnet.com.hk/www/tc/us-stocks/news-article/409958/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "6920.T",
+   "display": "Lasertec（6920.T）",
+   "confidence": "低",
+   "driver": "读数 +8.70% 为美东 9/18 旧值——Lasertec 是日本半导体检测设备商，9/21 日本休市，无当日行情。请直接跳过。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "2308.TW",
+   "display": "Delta Electronics（2308.TW）",
+   "confidence": "高",
+   "driver": "涨 8.07%，为当日新值。台达电子是 AI 数据中心电源与散热的台系主力供应商——算力芯片功耗抬升直接带动电源供应器与散热方案的需求，因此它在算力芯片大涨的日子里同步走强。当日无公司财报或公告，属产业链联动。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "6525.T",
+   "display": "Kokusai Electric（6525.T）",
+   "confidence": "低",
+   "driver": "读数 +7.24% 为美东 9/18 旧值——Kokusai Electric 是日本半导体设备商，9/21 日本休市，无当日行情。请直接跳过。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "2454.TW",
+   "display": "MediaTek (联发科)（2454.TW）",
+   "confidence": "高",
+   "driver": "涨 6.37%，为当日新值。台股芯片设计龙头跟随美股算力芯片同步走强；当日无公司财报或重大公告，属板块联动，不宜单独归因。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "ACMR",
+   "display": "盛美半导体（ACMR）",
+   "confidence": "中",
+   "driver": "涨 6.22%。盛美是半导体清洗设备商，驱动来自半导体设备景气的延续与中国大陆晶圆厂扩产预期——当日多条产业新闻指向成熟制程需求爆发、中国大陆承接全球新增供给。公司层面无当日公告。",
+   "sources": [
+    {"title": "成熟制程需求爆发 联电、力积电等晶圆代工厂酝酿涨价", "source": "东方财富", "url": "https://www.eastmoney.com/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "6857.T",
+   "display": "Advantest（6857.T）",
+   "confidence": "低",
+   "driver": "读数 +5.99% 为美东 9/18 旧值——爱德万测试是日本半导体测试设备商，9/21 日本休市。该值反映的是 9/18 日本设备股的上涨，不是 9/21 的行情，请跳过。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "4062.T",
+   "display": "Ibiden(揖斐电)（4062.T）",
+   "confidence": "低",
+   "driver": "读数 +5.85% 为美东 9/18 旧值——揖斐电是日本封装基板厂，9/21 日本休市，无当日行情。请跳过。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "LSCC",
+   "display": "Lattice Semi（LSCC）",
+   "confidence": "中",
+   "driver": "涨 5.66%。Lattice 是纯 FPGA 标的，当日 FPGA 段整体走强（该段有 AMD 与英特尔两只权重股带动），它作为纯标的跟涨；公司层面无当日公告，属板块联动。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "3436.T",
+   "display": "SUMCO（3436.T）",
+   "confidence": "低",
+   "driver": "读数 +5.60% 为美东 9/18 旧值——SUMCO 是日本硅片厂，9/21 日本休市，无当日行情。请跳过。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "SMCI",
+   "display": "Super Micro（SMCI）",
+   "confidence": "中",
+   "driver": "涨 5.40%。驱动是 AI 服务器需求预期回暖——当日算力芯片全面走强，整机作为下游受益方向获得资金回补；公司层面无当日公告。需注意同日 FMP 等权口径的「计算机硬件」行业反而收跌 2.00%，说明该方向内部分化严重，不宜机械外推。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "MRVL",
+   "display": "Marvell（MRVL）",
+   "confidence": "中",
+   "driver": "涨 5.38%。Marvell 主营数据中心网络与定制芯片，驱动是数据中心算力链的整体走强，与当日 DPU/SmartNIC 段 +5.46% 的方向一致；公司层面无当日公告。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "HSAI",
+   "display": "禾赛科技（HSAI）",
+   "confidence": "中",
+   "driver": "涨 5.15%。禾赛是激光雷达中概股，当日中概股走势分化，激光雷达方向受自动驾驶与机器人产业的长期叙事支撑；公司层面无当日公告。属题材驱动，波动较大，风险较高。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "ATS.VI",
+   "display": "AT&S（ATS.VI）",
+   "confidence": "低",
+   "driver": "读数 +5.14% 取到的是美东 9/18 旧值——AT&S 是奥地利封装基板厂，欧洲市场日线在本报告生成时点尚未更新。请跳过。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "TTMI",
+   "display": "TTM Technologies（TTMI）",
+   "confidence": "中",
+   "driver": "涨 5.13%。TTM 主营 PCB 与覆铜板，与当日 PCB 产业链涨价潮方向一致——多条中文产业媒体报道 AI 驱动 PCB 设备与材料需求增长、覆铜板提价；公司层面无当日公告。",
+   "sources": [
+    {"title": "大族数控盘中涨超5%，PCB产业链涨价潮起，AI驱动设备需求增长", "source": "caiwennews", "url": "https://caiwennews.com/"}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "CRWV",
+   "display": "CoreWeave（CRWV）",
+   "confidence": "中",
+   "driver": "恰好涨 5.00%。CoreWeave 是 AI 云算力租赁商，驱动是 AI 算力需求的整体乐观情绪——Meta 的 Muse 等代理式 AI 应用普及强化了算力租赁的需求预期；公司层面无当日公告。该股波动极大，单日 5% 不宜作为趋势判断依据。",
+   "sources": []
+  }
+ ]
+}

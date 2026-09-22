@@ -1,0 +1,122 @@
+{
+ "target_date": "2026-09-21",
+ "modules": {
+  "yahoo": {
+   "source": "Yahoo chart v8",
+   "items": {
+    "费城半导体": {
+     "symbol": "^SOX",
+     "date": "2026-09-21",
+     "close": 12433.17,
+     "prev_date": "2026-09-18",
+     "prev_close": 11921.69,
+     "chg_pct": 4.29
+    },
+    "纳斯达克100": {
+     "symbol": "^NDX",
+     "date": "2026-09-21",
+     "close": 30482.35,
+     "prev_date": "2026-09-18",
+     "prev_close": 29644.17,
+     "chg_pct": 2.83
+    },
+    "VIX": {
+     "symbol": "^VIX",
+     "date": "2026-09-21",
+     "close": 14.87,
+     "prev_date": "2026-09-18",
+     "prev_close": 14.81,
+     "chg_pct": 0.41
+    },
+    "罗素2000": {
+     "symbol": "^RUT",
+     "date": "2026-09-21",
+     "close": 2875.36,
+     "prev_date": "2026-09-18",
+     "prev_close": 2860.4,
+     "chg_pct": 0.52
+    },
+    "标普500": {
+     "symbol": "^GSPC",
+     "date": "2026-09-21",
+     "close": 7764.7,
+     "prev_date": "2026-09-18",
+     "prev_close": 7650.5,
+     "chg_pct": 1.49
+    },
+    "纳斯达克综合": {
+     "symbol": "^IXIC",
+     "date": "2026-09-21",
+     "close": 27122.09,
+     "prev_date": "2026-09-18",
+     "prev_close": 26522.54,
+     "chg_pct": 2.26
+    },
+    "道琼斯": {
+     "symbol": "^DJI",
+     "date": "2026-09-21",
+     "close": 52048.8,
+     "prev_date": "2026-09-18",
+     "prev_close": 51682.64,
+     "chg_pct": 0.71
+    }
+   }
+  },
+  "sina": {
+   "source": "新浪 hq.sinajs.cn gb_ 快照",
+   "items": {
+    "道琼斯": {
+     "name": "道琼斯",
+     "close": 52048.8281,
+     "chg_pct": 0.71,
+     "quote_time": "2026-09-22 04:51:02"
+    },
+    "纳斯达克": {
+     "name": "纳斯达克",
+     "close": 27122.0942,
+     "chg_pct": 2.26,
+     "quote_time": "2026-09-22 05:30:00"
+    },
+    "费城半导体": {
+     "name": "费交所半导体股指数",
+     "close": 12433.1707,
+     "chg_pct": 4.29,
+     "quote_time": "2026-09-22 05:16:01"
+    },
+    "纳斯达克100": {
+     "name": "纳斯达克100",
+     "close": 30482.3525,
+     "chg_pct": 2.83,
+     "quote_time": "2026-09-22 05:30:00"
+    }
+   }
+  },
+  "commodities_yahoo": {
+   "source": "Yahoo chart v8 连续合约结算价（CL=F / BZ=F / GC=F）",
+   "note": "本机 us_market_data 快照中的 Infoway 商品字段返回的是抓取时点的实时报价（WTI 93.169、布伦特 97.232、黄金 4376.478），与美东 9/21 结算价不符，报告一律采用下列 Yahoo 结算价。",
+   "items": {
+    "WTI原油": {
+     "symbol": "CL=F",
+     "date": "2026-09-21",
+     "close": 95.78,
+     "prev_close": 100.3,
+     "chg_pct": -4.51
+    },
+    "布伦特原油": {
+     "symbol": "BZ=F",
+     "date": "2026-09-21",
+     "close": 100.34,
+     "prev_close": 103.87,
+     "chg_pct": -3.4
+    },
+    "黄金": {
+     "symbol": "GC=F",
+     "date": "2026-09-21",
+     "close": 4383.9,
+     "prev_close": 4424.9,
+     "chg_pct": -0.93
+    }
+   }
+  }
+ }
+}
