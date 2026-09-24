@@ -157,6 +157,51 @@ def fetch_quotes(candidates, target, rates=None):
             if i % 25 == 0:
                 print(f"quotes/caps: {i}/{len(candidates)}", flush=True)
             time.sleep(0.02)
+
+    # 批量下载的已知缺陷：一次请求多只标的时，部分欧洲交易所（.DE/.PA/.AS/.SW/.VI）
+    # 的最新一根日线会整批漏掉，结果停在前一交易日；同一只标的单独下载往往拿得到当日。
+    # 实测（2026-09-24 快照）：8 只欧股批量下载止于 09-23，逐个单独下载为 09-24。
+    # 这类"用前一日涨跌幅冒充当日"的污染会直接扭曲产业链段热力排序，故对没取到
+    # 目标日的标的做逐只补抓。
+    #
+    # 补抓要重试：Yahoo 对欧洲日线的缓存是分节点不一致的，同一只标的几分钟内会
+    # 在 09-24 / 09-23 之间反复横跳（同一时刻 ^STOXX50E 停在 09-23，而 ^GDAXI、
+    # ^FCHI、^AEX、^SSMI、^FTSE 都已是 09-24）。单次补抓命中旧节点的概率不低，
+    # 必须重试到命中当日为止。
+    #
+    # 注意韩股（KRX）遇中秋休市时确实没有当日 bar，重试后仍是前值——那是真实
+    # 情况，不是缺陷，报告里按"最近交易日"标注即可。
+    stale = [t for t, q in quotes.items() if q.get("date") != target]
+    if stale:
+        print(f"批量下载未取到 {target} 的标的 {len(stale)} 只，逐只补抓…", flush=True)
+        RETRIES = 5
+        fixed = {}
+        for ticker in stale:
+            for attempt in range(1, RETRIES + 1):
+                try:
+                    single = yf.download(
+                        ticker, start=start, end=end, auto_adjust=False, progress=False
+                    )
+                    # 单标的下载返回 MultiIndex 列（Price, Ticker），直接取
+                    # single["Close"] 得到 DataFrame 而非 Series，会让
+                    # _target_change 里的 float(...) 抛错、补抓静默失效。
+                    close = single["Close"]
+                    if hasattr(close, "columns"):
+                        close = close.iloc[:, 0]
+                    change = _target_change(close, target)
+                except Exception:
+                    change = None
+                if change and change.get("date") == target:
+                    quotes[ticker].update(change)
+                    fixed[ticker] = attempt
+                    break
+                if attempt < RETRIES:
+                    time.sleep(1.5)
+        print(
+            f"逐只补抓后修正 {len(fixed)}/{len(stale)} 只"
+            f"（仍未取到当日的多为休市市场，如 KRX 中秋休市）",
+            flush=True,
+        )
     return quotes
 
 
