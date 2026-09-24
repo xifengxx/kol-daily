@@ -1,0 +1,896 @@
+{
+ "target_date": "2026-09-23",
+ "generated_at": "2026-09-24T22:53:24.610383+08:00",
+ "source": "Yahoo Finance via yfinance (auto_adjust=False, daily bars)",
+ "modules": {
+  "indices": {
+   "source": "Yahoo Finance / yfinance",
+   "items": {
+    "标普500": {
+     "symbol": "^GSPC",
+     "date": "2026-09-23",
+     "close": 7706.03,
+     "prev_date": "2026-09-22",
+     "prev_close": 7764.64,
+     "chg_pct": -0.75,
+     "volume": 5110910000,
+     "avg_vol_20d": 4944282500,
+     "vol_ratio_20d": 1.03,
+     "prev_source": "FMP",
+     "note": "yfinance 日线缺 09-22 bar，prev 由 FMP 补齐"
+    },
+    "纳斯达克综合": {
+     "symbol": "^IXIC",
+     "date": "2026-09-23",
+     "close": 26936.04,
+     "prev_date": "2026-09-22",
+     "prev_close": 27244.28,
+     "chg_pct": -1.13,
+     "volume": 8491740000,
+     "avg_vol_20d": 7984999500,
+     "vol_ratio_20d": 1.06,
+     "prev_source": "FMP",
+     "note": "yfinance 日线缺 09-22 bar，prev 由 FMP 补齐"
+    },
+    "道琼斯": {
+     "symbol": "^DJI",
+     "date": "2026-09-23",
+     "close": 51511.59,
+     "prev_date": "2026-09-22",
+     "prev_close": 51863.69,
+     "chg_pct": -0.68,
+     "volume": 428070000,
+     "avg_vol_20d": 448281000,
+     "vol_ratio_20d": 0.95,
+     "prev_source": "FMP",
+     "note": "yfinance 日线缺 09-22 bar，prev 由 FMP 补齐"
+    },
+    "费城半导体": {
+     "symbol": "^SOX",
+     "date": "2026-09-23",
+     "close": 12534.28,
+     "prev_date": "2026-09-22",
+     "prev_close": 12689.82,
+     "chg_pct": -1.23,
+     "volume": 0,
+     "prev_source": "Yahoo(chart v8, 09-23 run)",
+     "note": "yfinance 日线缺 09-22 bar，prev 由 Yahoo(chart v8, 09-23 run) 补齐"
+    },
+    "纳斯达克100": {
+     "symbol": "^NDX",
+     "date": "2026-09-23",
+     "close": 30470.29,
+     "prev_date": "2026-09-22",
+     "prev_close": 30732.4,
+     "chg_pct": -0.85,
+     "volume": 8491740000,
+     "avg_vol_20d": 7984999500,
+     "vol_ratio_20d": 1.06,
+     "prev_source": "Yahoo(chart v8, 09-23 run)",
+     "note": "yfinance 日线缺 09-22 bar，prev 由 Yahoo(chart v8, 09-23 run) 补齐"
+    },
+    "罗素2000": {
+     "symbol": "^RUT",
+     "date": "2026-09-23",
+     "close": 2838.66,
+     "prev_date": "2026-09-22",
+     "prev_close": 2889.92,
+     "chg_pct": -1.77,
+     "volume": 5110910000,
+     "avg_vol_20d": 4944282500,
+     "vol_ratio_20d": 1.03,
+     "prev_source": "FMP",
+     "note": "yfinance 日线缺 09-22 bar，prev 由 FMP 补齐"
+    },
+    "VIX": {
+     "symbol": "^VIX",
+     "date": "2026-09-23",
+     "close": 15.18,
+     "prev_date": "2026-09-22",
+     "prev_close": 14.21,
+     "chg_pct": 6.83,
+     "volume": 0,
+     "prev_source": "Yahoo(chart v8, 09-23 run)",
+     "note": "yfinance 日线缺 09-22 bar，prev 由 Yahoo(chart v8, 09-23 run) 补齐"
+    }
+   }
+  },
+  "m7": {
+   "source": "Yahoo Finance / yfinance",
+   "items": {
+    "英伟达": {
+     "symbol": "NVDA",
+     "date": "2026-09-23",
+     "close": 225.51,
+     "prev_date": "2026-09-22",
+     "prev_close": 228.87,
+     "chg_pct": -1.47,
+     "volume": 89306700,
+     "avg_vol_20d": 133275200,
+     "vol_ratio_20d": 0.67
+    },
+    "苹果": {
+     "symbol": "AAPL",
+     "date": "2026-09-23",
+     "close": 337.02,
+     "prev_date": "2026-09-22",
+     "prev_close": 339.75,
+     "chg_pct": -0.8,
+     "volume": 31587800,
+     "avg_vol_20d": 43191285,
+     "vol_ratio_20d": 0.73
+    },
+    "微软": {
+     "symbol": "MSFT",
+     "date": "2026-09-23",
+     "close": 500.59,
+     "prev_date": "2026-09-22",
+     "prev_close": 498.0,
+     "chg_pct": 0.52,
+     "volume": 19415500,
+     "avg_vol_20d": 21547410,
+     "vol_ratio_20d": 0.9
+    },
+    "谷歌": {
+     "symbol": "GOOGL",
+     "date": "2026-09-23",
+     "close": 337.83,
+     "prev_date": "2026-09-22",
+     "prev_close": 351.16,
+     "chg_pct": -3.8,
+     "volume": 35463700,
+     "avg_vol_20d": 26067690,
+     "vol_ratio_20d": 1.36
+    },
+    "亚马逊": {
+     "symbol": "AMZN",
+     "date": "2026-09-23",
+     "close": 249.27,
+     "prev_date": "2026-09-22",
+     "prev_close": 254.98,
+     "chg_pct": -2.24,
+     "volume": 43999500,
+     "avg_vol_20d": 33922630,
+     "vol_ratio_20d": 1.3
+    },
+    "Meta": {
+     "symbol": "META",
+     "date": "2026-09-23",
+     "close": 744.1,
+     "prev_date": "2026-09-22",
+     "prev_close": 736.6,
+     "chg_pct": 1.02,
+     "volume": 30346000,
+     "avg_vol_20d": 21178655,
+     "vol_ratio_20d": 1.43
+    },
+    "特斯拉": {
+     "symbol": "TSLA",
+     "date": "2026-09-23",
+     "close": 380.12,
+     "prev_date": "2026-09-22",
+     "prev_close": 378.9,
+     "chg_pct": 0.32,
+     "volume": 33427400,
+     "avg_vol_20d": 38805345,
+     "vol_ratio_20d": 0.86
+    }
+   }
+  },
+  "leaders": {
+   "source": "Yahoo Finance / yfinance",
+   "items": {
+    "博通": {
+     "symbol": "AVGO",
+     "date": "2026-09-23",
+     "close": 354.99,
+     "prev_date": "2026-09-22",
+     "prev_close": 364.54,
+     "chg_pct": -2.62,
+     "volume": 23333600,
+     "avg_vol_20d": 27299500,
+     "vol_ratio_20d": 0.85
+    },
+    "AMD": {
+     "symbol": "AMD",
+     "date": "2026-09-23",
+     "close": 614.61,
+     "prev_date": "2026-09-22",
+     "prev_close": 623.77,
+     "chg_pct": -1.47,
+     "volume": 16299200,
+     "avg_vol_20d": 21152405,
+     "vol_ratio_20d": 0.77
+    },
+    "美光": {
+     "symbol": "MU",
+     "date": "2026-09-23",
+     "close": 1071.88,
+     "prev_date": "2026-09-22",
+     "prev_close": 1096.16,
+     "chg_pct": -2.22,
+     "volume": 21470000,
+     "avg_vol_20d": 25112375,
+     "vol_ratio_20d": 0.85
+    },
+    "台积电": {
+     "symbol": "TSM",
+     "date": "2026-09-23",
+     "close": 446.57,
+     "prev_date": "2026-09-22",
+     "prev_close": 452.0,
+     "chg_pct": -1.2,
+     "volume": 10167700,
+     "avg_vol_20d": 9879875,
+     "vol_ratio_20d": 1.03
+    },
+    "摩根大通": {
+     "symbol": "JPM",
+     "date": "2026-09-23",
+     "close": 337.53,
+     "prev_date": "2026-09-22",
+     "prev_close": 340.0,
+     "chg_pct": -0.73,
+     "volume": 7068500,
+     "avg_vol_20d": 7200545,
+     "vol_ratio_20d": 0.98
+    },
+    "高盛": {
+     "symbol": "GS",
+     "date": "2026-09-23",
+     "close": 936.29,
+     "prev_date": "2026-09-22",
+     "prev_close": 950.1,
+     "chg_pct": -1.45,
+     "volume": 2131500,
+     "avg_vol_20d": 2023200,
+     "vol_ratio_20d": 1.05,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "伯克希尔": {
+     "symbol": "BRK-B",
+     "date": "2026-09-23",
+     "close": 507.36,
+     "prev_date": "2026-09-22",
+     "prev_close": 503.61,
+     "chg_pct": 0.74,
+     "volume": 5400400,
+     "avg_vol_20d": 4610070,
+     "vol_ratio_20d": 1.17,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "礼来": {
+     "symbol": "LLY",
+     "date": "2026-09-23",
+     "close": 1152.7,
+     "prev_date": "2026-09-22",
+     "prev_close": 1170.48,
+     "chg_pct": -1.52,
+     "volume": 2154100,
+     "avg_vol_20d": 2373105,
+     "vol_ratio_20d": 0.91,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "埃克森美孚": {
+     "symbol": "XOM",
+     "date": "2026-09-23",
+     "close": 161.28,
+     "prev_date": "2026-09-22",
+     "prev_close": 158.69,
+     "chg_pct": 1.63,
+     "volume": 12569300,
+     "avg_vol_20d": 14881455,
+     "vol_ratio_20d": 0.84,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "雪佛龙": {
+     "symbol": "CVX",
+     "date": "2026-09-23",
+     "close": 205.53,
+     "prev_date": "2026-09-22",
+     "prev_close": 202.37,
+     "chg_pct": 1.56,
+     "volume": 8257800,
+     "avg_vol_20d": 9852535,
+     "vol_ratio_20d": 0.84,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "Coinbase": {
+     "symbol": "COIN",
+     "date": "2026-09-23",
+     "close": 198.13,
+     "prev_date": "2026-09-22",
+     "prev_close": 201.07,
+     "chg_pct": -1.46,
+     "volume": 7151900,
+     "avg_vol_20d": 10331860,
+     "vol_ratio_20d": 0.69
+    },
+    "Strategy": {
+     "symbol": "MSTR",
+     "date": "2026-09-23",
+     "close": 162.2,
+     "prev_date": "2026-09-22",
+     "prev_close": 167.33,
+     "chg_pct": -3.07,
+     "volume": 21110500,
+     "avg_vol_20d": 26627835,
+     "vol_ratio_20d": 0.79
+    },
+    "Palantir": {
+     "symbol": "PLTR",
+     "date": "2026-09-23",
+     "close": 191.79,
+     "prev_date": "2026-09-22",
+     "prev_close": 184.99,
+     "chg_pct": 3.68,
+     "volume": 35029400,
+     "avg_vol_20d": 27243235,
+     "vol_ratio_20d": 1.29
+    },
+    "Salesforce": {
+     "symbol": "CRM",
+     "date": "2026-09-23",
+     "close": 237.58,
+     "prev_date": "2026-09-21",
+     "prev_close": 236.42,
+     "chg_pct": 0.49,
+     "volume": 12353500,
+     "avg_vol_20d": 16828295,
+     "vol_ratio_20d": 0.73
+    },
+    "甲骨文": {
+     "symbol": "ORCL",
+     "date": "2026-09-23",
+     "close": 144.56,
+     "prev_date": "2026-09-22",
+     "prev_close": 149.2,
+     "chg_pct": -3.11,
+     "volume": 22607300,
+     "avg_vol_20d": 31305195,
+     "vol_ratio_20d": 0.72
+    },
+    "英特尔": {
+     "symbol": "INTC",
+     "date": "2026-09-23",
+     "close": 122.6,
+     "prev_date": "2026-09-22",
+     "prev_close": 123.86,
+     "chg_pct": -1.02,
+     "volume": 85148900,
+     "avg_vol_20d": 103489210,
+     "vol_ratio_20d": 0.82
+    },
+    "高通": {
+     "symbol": "QCOM",
+     "date": "2026-09-23",
+     "close": 197.24,
+     "prev_date": "2026-09-22",
+     "prev_close": 198.27,
+     "chg_pct": -0.52,
+     "volume": 9713400,
+     "avg_vol_20d": 14580525,
+     "vol_ratio_20d": 0.67
+    },
+    "应用材料": {
+     "symbol": "AMAT",
+     "date": "2026-09-23",
+     "close": 474.38,
+     "prev_date": "2026-09-22",
+     "prev_close": 472.46,
+     "chg_pct": 0.41,
+     "volume": 4585600,
+     "avg_vol_20d": 6507650,
+     "vol_ratio_20d": 0.7
+    },
+    "阿斯麦": {
+     "symbol": "ASML",
+     "date": "2026-09-23",
+     "close": 1744.61,
+     "prev_date": "2026-09-21",
+     "prev_close": 1711.32,
+     "chg_pct": 1.95,
+     "volume": 1254400,
+     "avg_vol_20d": 1273600,
+     "vol_ratio_20d": 0.98
+    },
+    "泛林": {
+     "symbol": "LRCX",
+     "date": "2026-09-23",
+     "close": 307.28,
+     "prev_date": "2026-09-22",
+     "prev_close": 310.96,
+     "chg_pct": -1.18,
+     "volume": 9644600,
+     "avg_vol_20d": 8779160,
+     "vol_ratio_20d": 1.1
+    },
+    "科天": {
+     "symbol": "KLAC",
+     "date": "2026-09-23",
+     "close": 187.86,
+     "prev_date": "2026-09-21",
+     "prev_close": 183.97,
+     "chg_pct": 2.11,
+     "volume": 8852100,
+     "avg_vol_20d": 9564760,
+     "vol_ratio_20d": 0.93
+    },
+    "Arm": {
+     "symbol": "ARM",
+     "date": "2026-09-23",
+     "close": 332.56,
+     "prev_date": "2026-09-22",
+     "prev_close": 333.2,
+     "chg_pct": -0.19,
+     "volume": 6963200,
+     "avg_vol_20d": 4745150,
+     "vol_ratio_20d": 1.47
+    },
+    "戴尔": {
+     "symbol": "DELL",
+     "date": "2026-09-23",
+     "close": 549.83,
+     "prev_date": "2026-09-22",
+     "prev_close": 548.92,
+     "chg_pct": 0.17,
+     "volume": 8238900,
+     "avg_vol_20d": 10690505,
+     "vol_ratio_20d": 0.77
+    },
+    "西部数据": {
+     "symbol": "WDC",
+     "date": "2026-09-23",
+     "close": 473.69,
+     "prev_date": "2026-09-22",
+     "prev_close": 464.6,
+     "chg_pct": 1.96,
+     "volume": 5027600,
+     "avg_vol_20d": 6406470,
+     "vol_ratio_20d": 0.78
+    },
+    "希捷": {
+     "symbol": "STX",
+     "date": "2026-09-23",
+     "close": 923.86,
+     "prev_date": "2026-09-21",
+     "prev_close": 877.33,
+     "chg_pct": 5.3,
+     "volume": 3242800,
+     "avg_vol_20d": 3674400,
+     "vol_ratio_20d": 0.88
+    },
+    "泰瑞达": {
+     "symbol": "TER",
+     "date": "2026-09-23",
+     "close": 389.14,
+     "prev_date": "2026-09-21",
+     "prev_close": 381.54,
+     "chg_pct": 1.99,
+     "volume": 2008700,
+     "avg_vol_20d": 2591355,
+     "vol_ratio_20d": 0.78
+    },
+    "Entegris": {
+     "symbol": "ENTG",
+     "date": "2026-09-23",
+     "close": 150.93,
+     "prev_date": "2026-09-21",
+     "prev_close": 143.14,
+     "chg_pct": 5.44,
+     "volume": 1897700,
+     "avg_vol_20d": 2145385,
+     "vol_ratio_20d": 0.88
+    },
+    "迈威尔": {
+     "symbol": "MRVL",
+     "date": "2026-09-23",
+     "close": 260.9,
+     "prev_date": "2026-09-22",
+     "prev_close": 262.36,
+     "chg_pct": -0.56,
+     "volume": 13633300,
+     "avg_vol_20d": 22089235,
+     "vol_ratio_20d": 0.62
+    },
+    "恩智浦": {
+     "symbol": "NXPI",
+     "date": "2026-09-23",
+     "close": 235.44,
+     "prev_date": "2026-09-21",
+     "prev_close": 232.41,
+     "chg_pct": 1.3,
+     "volume": 4018700,
+     "avg_vol_20d": 3396670,
+     "vol_ratio_20d": 1.18
+    },
+    "安森美": {
+     "symbol": "ON",
+     "date": "2026-09-23",
+     "close": 74.1,
+     "prev_date": "2026-09-21",
+     "prev_close": 71.72,
+     "chg_pct": 3.32,
+     "volume": 9148300,
+     "avg_vol_20d": 10248980,
+     "vol_ratio_20d": 0.89
+    },
+    "ADI": {
+     "symbol": "ADI",
+     "date": "2026-09-23",
+     "close": 385.23,
+     "prev_date": "2026-09-21",
+     "prev_close": 383.0,
+     "chg_pct": 0.58,
+     "volume": 3204200,
+     "avg_vol_20d": 3553540,
+     "vol_ratio_20d": 0.9
+    },
+    "ServiceNow": {
+     "symbol": "NOW",
+     "date": "2026-09-23",
+     "close": 140.78,
+     "prev_date": "2026-09-22",
+     "prev_close": 137.0,
+     "chg_pct": 2.76,
+     "volume": 11348400,
+     "avg_vol_20d": 15765130,
+     "vol_ratio_20d": 0.72
+    },
+    "Snowflake": {
+     "symbol": "SNOW",
+     "date": "2026-09-23",
+     "close": 334.81,
+     "prev_date": "2026-09-21",
+     "prev_close": 339.39,
+     "chg_pct": -1.35,
+     "volume": 4037300,
+     "avg_vol_20d": 5552590,
+     "vol_ratio_20d": 0.73
+    },
+    "CoreWeave": {
+     "symbol": "CRWV",
+     "date": "2026-09-23",
+     "close": 86.9,
+     "prev_date": "2026-09-22",
+     "prev_close": 86.76,
+     "chg_pct": 0.16,
+     "volume": 31637800,
+     "avg_vol_20d": 27092700,
+     "vol_ratio_20d": 1.17
+    },
+    "Expedia": {
+     "symbol": "EXPE",
+     "date": "2026-09-23",
+     "close": 259.04,
+     "prev_date": "2026-09-22",
+     "prev_close": 280.71,
+     "chg_pct": -7.72,
+     "volume": 5101600,
+     "avg_vol_20d": 1840295,
+     "vol_ratio_20d": 2.77,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "Booking": {
+     "symbol": "BKNG",
+     "date": "2026-09-23",
+     "close": 155.9,
+     "prev_date": "2026-09-22",
+     "prev_close": 164.22,
+     "chg_pct": -5.07,
+     "volume": 13865300,
+     "avg_vol_20d": 7659725,
+     "vol_ratio_20d": 1.81
+    },
+    "爱彼迎": {
+     "symbol": "ABNB",
+     "date": "2026-09-23",
+     "close": 149.67,
+     "prev_date": "2026-09-22",
+     "prev_close": 161.81,
+     "chg_pct": -7.5,
+     "volume": 13664800,
+     "avg_vol_20d": 4495605,
+     "vol_ratio_20d": 3.04,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "嘉信理财": {
+     "symbol": "SCHW",
+     "date": "2026-09-23",
+     "close": 99.5,
+     "prev_date": "2026-09-22",
+     "prev_close": 100.35,
+     "chg_pct": -0.85,
+     "volume": 10895900,
+     "avg_vol_20d": 8731490,
+     "vol_ratio_20d": 1.25
+    },
+    "财捷": {
+     "symbol": "INTU",
+     "date": "2026-09-23",
+     "close": 286.8,
+     "prev_date": "2026-09-22",
+     "prev_close": 292.31,
+     "chg_pct": -1.89,
+     "volume": 3418600,
+     "avg_vol_20d": 4123945,
+     "vol_ratio_20d": 0.83,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "奥多比": {
+     "symbol": "ADBE",
+     "date": "2026-09-23",
+     "close": 240.69,
+     "prev_date": "2026-09-22",
+     "prev_close": 238.25,
+     "chg_pct": 1.02,
+     "volume": 3855100,
+     "avg_vol_20d": 5719255,
+     "vol_ratio_20d": 0.67
+    },
+    "Planet Fitness": {
+     "symbol": "PLNT",
+     "date": "2026-09-23",
+     "close": 41.01,
+     "prev_date": "2026-09-22",
+     "prev_close": 42.6,
+     "chg_pct": -3.74,
+     "volume": 5440000,
+     "avg_vol_20d": 1798565,
+     "vol_ratio_20d": 3.02,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "思科": {
+     "symbol": "CSCO",
+     "date": "2026-09-23",
+     "close": 106.43,
+     "prev_date": "2026-09-22",
+     "prev_close": 106.44,
+     "chg_pct": -0.01,
+     "volume": 17630900,
+     "avg_vol_20d": 16425550,
+     "vol_ratio_20d": 1.07
+    },
+    "IBM": {
+     "symbol": "IBM",
+     "date": "2026-09-23",
+     "close": 232.76,
+     "prev_date": "2026-09-21",
+     "prev_close": 231.93,
+     "chg_pct": 0.36,
+     "volume": 4536600,
+     "avg_vol_20d": 5517280,
+     "vol_ratio_20d": 0.82
+    },
+    "联合健康": {
+     "symbol": "UNH",
+     "date": "2026-09-23",
+     "close": 371.3,
+     "prev_date": "2026-09-22",
+     "prev_close": 372.95,
+     "chg_pct": -0.44,
+     "volume": 3859300,
+     "avg_vol_20d": 4991945,
+     "vol_ratio_20d": 0.77,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "Visa": {
+     "symbol": "V",
+     "date": "2026-09-23",
+     "close": 361.56,
+     "prev_date": "2026-09-22",
+     "prev_close": 362.14,
+     "chg_pct": -0.16,
+     "volume": 5125600,
+     "avg_vol_20d": 6292450,
+     "vol_ratio_20d": 0.81,
+     "method": "Yahoo 60m bars rebuilt (daily series lacked the 09-22 bar)"
+    },
+    "Moderna": {
+     "symbol": "MRNA",
+     "date": "2026-09-23",
+     "close": 182.11,
+     "prev_date": "2026-09-22",
+     "prev_close": 182.56,
+     "chg_pct": -0.25,
+     "volume": 17703700,
+     "avg_vol_20d": 18309000,
+     "vol_ratio_20d": 0.97
+    },
+    "Palo Alto Networks": {
+     "symbol": "PANW",
+     "date": "2026-09-23",
+     "close": 393.3,
+     "chg_pct": 5.03,
+     "prev_date": "2026-09-22",
+     "prev_close": 374.48,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "CrowdStrike": {
+     "symbol": "CRWD",
+     "date": "2026-09-23",
+     "close": 262.5,
+     "chg_pct": 4.97,
+     "prev_date": "2026-09-22",
+     "prev_close": 250.07,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "塔吉特": {
+     "symbol": "TGT",
+     "date": "2026-09-23",
+     "close": 156.32,
+     "chg_pct": -1.7,
+     "prev_date": "2026-09-22",
+     "prev_close": 159.03,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "洛克希德": {
+     "symbol": "LMT",
+     "date": "2026-09-23",
+     "close": 524.1,
+     "chg_pct": 0.34,
+     "prev_date": "2026-09-22",
+     "prev_close": 522.32,
+     "method": "Yahoo 60m bars rebuilt"
+    }
+   }
+  },
+  "commodities": {
+   "source": "Yahoo Finance / yfinance",
+   "items": {
+    "WTI原油": {
+     "symbol": "CL=F",
+     "date": "2026-09-23",
+     "close": 92.16,
+     "prev_date": "2026-09-22",
+     "prev_close": 94.59,
+     "chg_pct": -2.57,
+     "volume": 422683,
+     "avg_vol_20d": 296726,
+     "vol_ratio_20d": 1.42
+    },
+    "布伦特原油": {
+     "symbol": "BZ=F",
+     "date": "2026-09-23",
+     "close": 103.08,
+     "prev_date": "2026-09-22",
+     "prev_close": 99.25,
+     "chg_pct": 3.86,
+     "volume": 47365,
+     "avg_vol_20d": 42970,
+     "vol_ratio_20d": 1.1
+    },
+    "黄金": {
+     "symbol": "GC=F",
+     "date": "2026-09-23",
+     "close": 4318.4,
+     "prev_date": "2026-09-22",
+     "prev_close": 4376.4,
+     "chg_pct": -1.33,
+     "volume": 178132,
+     "avg_vol_20d": 181959,
+     "vol_ratio_20d": 0.98
+    },
+    "白银": {
+     "symbol": "SI=F",
+     "date": "2026-09-23",
+     "close": 64.38,
+     "prev_date": "2026-09-22",
+     "prev_close": 65.93,
+     "chg_pct": -2.35,
+     "volume": 99,
+     "avg_vol_20d": 1574,
+     "vol_ratio_20d": 0.06
+    }
+   }
+  },
+  "sector_etfs": {
+   "source": "Yahoo Finance / yfinance 60m bars (SPDR Select Sector ETFs)",
+   "note": "标普 500 GICS 11 大行业的 ETF 单日涨跌幅，用于核对 FMP sector-performance-snapshot。",
+   "items": {
+    "能源": {
+     "symbol": "XLE",
+     "date": "2026-09-23",
+     "close": 62.38,
+     "prev_date": "2026-09-22",
+     "prev_close": 61.76,
+     "chg_pct": 1.0,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "金融": {
+     "symbol": "XLF",
+     "date": "2026-09-23",
+     "close": 54.54,
+     "prev_date": "2026-09-22",
+     "prev_close": 54.78,
+     "chg_pct": -0.44,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "科技": {
+     "symbol": "XLK",
+     "date": "2026-09-23",
+     "close": 195.31,
+     "prev_date": "2026-09-22",
+     "prev_close": 196.26,
+     "chg_pct": -0.48,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "公用事业": {
+     "symbol": "XLU",
+     "date": "2026-09-23",
+     "close": 39.76,
+     "prev_date": "2026-09-22",
+     "prev_close": 40.525,
+     "chg_pct": -1.89,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "工业": {
+     "symbol": "XLI",
+     "date": "2026-09-23",
+     "close": 170.1,
+     "prev_date": "2026-09-22",
+     "prev_close": 170.29,
+     "chg_pct": -0.11,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "必需消费": {
+     "symbol": "XLP",
+     "date": "2026-09-23",
+     "close": 82.45,
+     "prev_date": "2026-09-22",
+     "prev_close": 82.71,
+     "chg_pct": -0.31,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "可选消费": {
+     "symbol": "XLY",
+     "date": "2026-09-23",
+     "close": 110.64,
+     "prev_date": "2026-09-22",
+     "prev_close": 112.33,
+     "chg_pct": -1.5,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "医疗保健": {
+     "symbol": "XLV",
+     "date": "2026-09-23",
+     "close": 168.8,
+     "prev_date": "2026-09-22",
+     "prev_close": 169.9,
+     "chg_pct": -0.65,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "房地产": {
+     "symbol": "XLRE",
+     "date": "2026-09-23",
+     "close": 41.86,
+     "prev_date": "2026-09-22",
+     "prev_close": 42.5,
+     "chg_pct": -1.51,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "通信服务": {
+     "symbol": "XLC",
+     "date": "2026-09-23",
+     "close": 112.56,
+     "prev_date": "2026-09-22",
+     "prev_close": 113.52,
+     "chg_pct": -0.85,
+     "method": "Yahoo 60m bars rebuilt"
+    },
+    "原材料": {
+     "symbol": "XLB",
+     "date": "2026-09-23",
+     "close": 50.27,
+     "prev_date": "2026-09-22",
+     "prev_close": 50.53,
+     "chg_pct": -0.51,
+     "method": "Yahoo 60m bars rebuilt"
+    }
+   }
+  }
+ },
+ "missing": [],
+ "indices_prev_note": "yfinance 的指数日线序列缺 2026-09-22 这一根 bar（个股正常），因此指数 prev_close 不从同一序列取，改用 FMP historical-price-eod/full 与上一期 Yahoo chart v8 补充文件补齐；两来源的 09-21 bar 与本序列完全一致。",
+ "repair_note": "多只标的的 Yahoo 日线缺 2026-09-22 这一根 bar，直接用日线会算出跨两日的涨跌幅。本文件对这些标的改用 Yahoo 60m 分时序列按交易所本地日期重建 prev_close；重建值已与产业链热力快照（同样做过该修复）逐只比对，NVDA/MU/STX/ENTG/AAPL/MSFT 误差均在 0.06 个百分点内。"
+}
