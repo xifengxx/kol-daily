@@ -1,0 +1,578 @@
+{
+ "date": "2026-09-25",
+ "generated_at": "2026-09-27T22:50:00+08:00",
+ "method": "Google News RSS 检索（行业/产业链段/异常股三组，共 35 个查询）→ 人工筛选，按高/中/低置信标注；无明确公开原因时写「暂无明确公开原因」，禁止编造因果。产业链价格类线索来自 data/price_news_2026-09-25.json 快照。",
+ "entries": [
+  {
+   "type": "industry",
+   "key": "建筑施工",
+   "display": "建筑施工",
+   "confidence": "低",
+   "driver": "全市场涨幅第一，也是本期最剧烈的反转——前一日它还是跌幅榜前八（-2.82%）。检索未发现当日该行业的专有催化事件，候选多为工程承包类公司的历史订单与榜单文章。当日宏观变量的方向与该行业高度契合：2 年期美债回落 6 个基点至 4.81%、油价跌逾 2%，直接改善项目融资成本与施工成本，而这两块正是前一日它被系统性卖出的原因，因此这更像一次宏观驱动的回补。但该行业本期只有 NYSE 单交易所样本、成分股数量少，等权读数对个别个股高度敏感，不做进一步归因。",
+   "sources": [
+    {
+     "title": "Is Quanta Services (PWR) Outperforming Other Construction Stocks This Year?",
+     "source": "Yahoo Finance",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "租赁服务",
+   "display": "租赁服务",
+   "confidence": "低",
+   "driver": "等权 +2.77%，为全市场第二。检索到的候选多为租车与设备租赁公司的行情页与季度回顾，无当日行业级事件。方向上与「油价回落 → 出行与设备使用成本下降」一致，但这属于事后拟合，证据不足以确认因果。",
+   "sources": [
+    {
+     "title": "Avis Budget Group (CAR) Stock Price, News, Quote & History",
+     "source": "Yahoo Finance Canada",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗照护机构",
+   "display": "医疗照护机构",
+   "confidence": "低",
+   "driver": "接棒前一日的医疗强势（前一日领涨的是医疗专科、医药、医疗诊断与研究，本期这三者全部转跌，改由照护机构与医疗信息服务领涨）。检索到的候选均为「最佳医疗股」类榜单与长期展望，没有当日公司或政策事件。这种「同一板块内子行业快速轮换」的形态说明是资金在医疗内部换位置，而非行业景气变化。暂无明确公开原因。",
+   "sources": [
+    {
+     "title": "The Best Healthcare Stocks to Buy",
+     "source": "Morningstar",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "折扣零售",
+   "display": "折扣零售",
+   "confidence": "低",
+   "driver": "等权 +2.46%。检索到的候选多为折扣零售板块的推荐类文章，无当日事件。可解释的方向是当日油价下跌逾 2%，边际改善中低收入家庭的可支配收入，对折扣零售是顺风；但缺少当日公司层面的直接证据，不做进一步归因。",
+   "sources": [
+    {
+     "title": "Buy 3 Big Discount Retailers to Gain From Solid Near-Term Price Upside",
+     "source": "Yahoo Finance",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "休闲车与房车",
+   "display": "休闲车与房车",
+   "confidence": "低",
+   "driver": "等权 +2.31%。该行业的成本结构与油价直接挂钩（房车使用成本几乎完全由燃油决定），当日油价跌逾 2% 在方向上是明确利好。但检索到的候选均为 THOR、Camping World 等公司的季度回顾与估值讨论，没有当日事件，因此只能给出方向性判断。",
+   "sources": [
+    {
+     "title": "Unpacking Q2 Earnings: THOR Industries (THO) In The Context Of Other Automobile Manufacturing Stocks",
+     "source": "StockStory",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗信息服务",
+   "display": "医疗信息服务",
+   "confidence": "低",
+   "driver": "等权 +2.15%。检索到的候选以「医疗 IT 受益于生成式 AI」的中长期叙事为主，无当日催化。本期未取得该行业的交易所拆分样本，等权读数对个别个股敏感，可靠性有限。暂无明确公开原因。",
+   "sources": [
+    {
+     "title": "3 Medical Info Systems Stocks to Gain From GenAI Boom Amid Cyber Risk",
+     "source": "Yahoo Finance",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "奢侈品",
+   "display": "奢侈品",
+   "confidence": "低",
+   "driver": "等权 +1.94%。检索到的候选为奢侈品板块的估值讨论与欧洲奢侈品下半年前景的分析，均非当日事件。当日美元指数回落 0.32%，对以欧元计价的欧洲奢侈品公司构成轻微的汇率顺风，但证据强度不足以确认。",
+   "sources": [
+    {
+     "title": "Top Luxury Goods Stocks To Research - September 25th",
+     "source": "MarketBeat",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "服装制造",
+   "display": "服装制造",
+   "confidence": "低",
+   "driver": "等权 +1.92%。检索到的候选全部是服装类公司的季度业绩回顾与荐股文章，无当日行业事件。本期未取得该行业的当日专有信息，不做归因。",
+   "sources": [
+    {
+     "title": "Consumer Discretionary - Apparel and Accessories Stocks Q2 In Review",
+     "source": "TradingView",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗设备与服务",
+   "display": "医疗设备与服务",
+   "confidence": "低",
+   "driver": "全市场跌幅第一。检索到的候选为医疗科技估值回调的中长期讨论与榜单，没有当日公司或政策事件。方向上是前一日医疗（专科 +3.78%、医药 +3.11%）大涨后的回吐，与「医疗照护机构 +2.48%」形成同板块内的反向切换——净效果是医疗板块整体只涨 0.49%。暂无明确公开原因。",
+   "sources": [
+    {
+     "title": "Medical Technology Stocks: Innovation Endures as Valuations Reset",
+     "source": "AllianceBernstein",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "教育培训",
+   "display": "教育培训",
+   "confidence": "低",
+   "driver": "等权 -2.31%，两个交易所均为负（NASDAQ -2.85%、NYSE -1.77%），说明是普遍下跌而非个别个股。检索未发现当日行业级事件，候选为教育类公司的行情页与长期荐股。本期未取得进一步线索，不做归因。",
+   "sources": [
+    {
+     "title": "Lincoln Educational Services Corporation (LINC) Stock Price, News, Quote & History",
+     "source": "Yahoo Finance Canada",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "电子游戏与多媒体",
+   "display": "电子游戏与多媒体",
+   "confidence": "低",
+   "driver": "等权 -2.16%，是科技相关行业中跌幅最大的一行（NYSE -3.96%、NASDAQ -0.36%，交易所之间差异极大，说明跌幅主要由 NYSE 一侧的少数个股贡献）。检索到的候选为游戏与媒体公司的行情页和季报回顾，无当日事件。需与本报告「通信服务 ETF -0.90%」一并读：两者同属传媒娱乐方向，当日都是弱势端。暂无明确公开原因。",
+   "sources": [
+    {
+     "title": "GameSquare Holdings (GAME) stock price, news, quote and history",
+     "source": "Yahoo Finance Singapore",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "综合金融",
+   "display": "综合金融",
+   "confidence": "低",
+   "driver": "等权 -1.81%。检索到的候选是「最受信任金融公司」「最佳蓝筹股」类榜单与银行板块整体分析，没有当日事件。当日金融板块 ETF 是收涨的（+0.57%），本行却下跌 1.81%，两个口径方向相反，说明下跌集中在综合金融这一细分而非金融整体。本期未取得该行业的交易所样本细节，不做归因。",
+   "sources": [
+    {
+     "title": "IBD's 30 Most Trusted Financial Companies — See The 2026 List",
+     "source": "Investor's Business Daily",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "特殊REIT",
+   "display": "特殊REIT",
+   "confidence": "中",
+   "driver": "等权 -1.78%（NASDAQ -2.69%、NYSE -0.88%）。方向上有一条可验证的宏观解释：REITs 的定价锚是长端而非短端利率，当日短端（2 年期）回落 6 个基点，但长端完全没有改善——20 年期微升 1 个基点至 5.54%、30 年期微升 2 个基点至 5.49%，且 20 年期仍高于 30 年期。这解释了为什么当日房地产板块 ETF（-0.22%）与特殊 REIT 同时收跌，而同属利率敏感方向的公用事业（+0.38%）只是微涨。检索未发现当日该行业的专有事件。",
+   "sources": [
+    {
+     "title": "Why Welltower Stock Topped the Market on Thursday",
+     "source": "The Motley Fool",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗专科",
+   "display": "医疗专科",
+   "confidence": "中",
+   "driver": "前一日全市场涨幅第一（+3.78%），当日转为跌幅榜前八（-1.77%），一天之内完成反向。这不是基本面变化，而是前一日那笔「防御性停靠」资金的撤出：前一日长端利率创 19 年新高、油价跳涨 3.27%，资金需要一个与利率、油价都不相关的停靠点；当日油价跌逾 2%、短端利率回落 6 个基点、VIX 跌 5.11%，这个停靠需求随之下降。同一板块内照护机构（+2.48%）与信息服务（+2.15%）接棒，说明是资金在医疗内部换位置。检索未发现当日公司或政策事件。",
+   "sources": [
+    {
+     "title": "Q2 Earnings Roundup: Intuitive Surgical (ISRG) And The Rest Of The Surgical Equipment & Consumables",
+     "source": "TradingView",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "农业投入品",
+   "display": "农业投入品",
+   "confidence": "低",
+   "driver": "等权 -1.70%（两个交易所均为负）。检索到的最相关线索是美国计划购买白俄罗斯钾肥导致 Mosaic 与 Nutrien 下跌，但该报道的发布时间为 9/21，早于本报告覆盖的交易日，不能作为当日下跌的原因。本期未取得当日行业级事件，不做归因。",
+   "sources": [
+    {
+     "title": "Mosaic and Nutrien: Shares Fall on US Plan to Buy Belarusian Potash",
+     "source": "Morningstar",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医药",
+   "display": "医药",
+   "confidence": "中",
+   "driver": "前一日涨幅第二（+3.11%），当日转为 -1.38%，与医疗专科（-1.77%）同源——都是前一日防御性配置资金的撤出。检索未发现当日医药行业的专有事件（候选为「最佳制药股」「生物科技」类中长期榜单）。请与「医疗照护机构 +2.48%」连读：前一日领涨的三个医疗子行业本期全部转跌，而前一日没有表现的照护机构与信息服务本期领涨——这是一次典型的板块内轮换，不是行业转向。",
+   "sources": [
+    {
+     "title": "Best Pharmaceutical Stocks to Buy for September 2026",
+     "source": "Zacks Investment Research",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "消费电子",
+   "display": "消费电子",
+   "confidence": "低",
+   "driver": "等权 +0.94%，是科技相关行业中涨幅最大的一行。当日苹果 +1.53%，对整个消费电子方向有拉动。检索未发现当日行业级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "计算机硬件",
+   "display": "计算机硬件",
+   "confidence": "中",
+   "driver": "等权 +0.73%。该行当日有一条明确的个股驱动：戴尔（DELL）+5.01%，触发是摩根士丹利上调其牛市情形目标价至 756 美元（9/25）。戴尔属于计算机硬件，其市值权重足以带动整行等权读数为正。这一行的上涨与前一日「建筑施工 +6.36%」类似，都是单一公司事件主导的等权读数。",
+   "sources": [
+    {
+     "title": "Dell Stock Jumps as Morgan Stanley Raises Odds of $756 Bull Case",
+     "source": "Yahoo Finance",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "科技分销",
+   "display": "科技分销",
+   "confidence": "低",
+   "driver": "等权 +0.71%。该行成分股数量少，等权读数对个别个股敏感。当日科技板块整体由微软（+3.66%）主导，科技分销属于被动跟随。检索未发现当日行业级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "基础软件",
+   "display": "基础软件",
+   "confidence": "中",
+   "driver": "等权 +0.16%，几乎持平。这是本期一处需要注意的「不响应」：微软当日 +3.66%，触发是 Copilot 企业版重构（新增编程工具、常驻 AI 智能体、Office 三件套并入 Copilot），但整个基础软件行业等权只涨 0.16%。说明市场把这次上涨理解为「微软一家公司的产品事件」，而不是「企业软件板块的景气上行」——这与半导体等权 -0.22% 而费半 +1.41% 是同一类现象：钱只买了少数几个名字。",
+   "sources": [
+    {
+     "title": "Microsoft Stock Is on Pace for Its Highest Close in Nearly 11 Months",
+     "source": "Barron's",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "软件服务",
+   "display": "软件服务",
+   "confidence": "低",
+   "driver": "等权 +0.01%，完全持平。当日既无行业级利好也无利空，检索到的候选为 AI 治理与加拿大 AI 股的中长期讨论。本期不做归因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "电信服务",
+   "display": "电信服务",
+   "confidence": "低",
+   "driver": "等权 -0.12%，基本持平。当日无行业级事件。需注意本行与前一日方向一致（前一日 -0.12%），说明电信服务连续两日处于无人交易的状态。暂无明确公开原因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "通信设备",
+   "display": "通信设备",
+   "confidence": "低",
+   "driver": "等权 -0.18%，基本持平。检索未发现当日行业级事件。方向上，当日光模块与网络设备方向既没有跟随半导体设备走强，也没有跟随 AI 平台端走弱，处于中间态。本期不做归因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "半导体",
+   "display": "半导体",
+   "confidence": "中",
+   "driver": "等权 -0.22%，是本期最需要标注的一处口径背离：同一天市值加权的费城半导体指数是 +1.41%，两个口径方向相反。含义是「大市值半导体在涨、中小市值半导体在跌」——上涨集中在设备与代工龙头（泛林 +2.62%、应用材料 +2.27%、东京电子 +4.82%），而权重最大的几只（英伟达 +0.22%、台积电 ADR -0.12%）几乎没动。因此不能把费半的 +1.41% 读作「芯片股全面走强」。本报告第一节已就这一点单独说明。",
+   "sources": [
+    {
+     "title": "US semiconductor equipment stocks surge, memory stocks follow suit",
+     "source": "Moomoo",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "应用软件",
+   "display": "应用软件",
+   "confidence": "低",
+   "driver": "等权 -0.28%，小幅下跌。微软的 Copilot 事件属于基础软件与企业生产力方向，未外溢到应用软件。检索未发现当日行业级事件。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "互联网内容与信息",
+   "display": "互联网内容与信息",
+   "confidence": "高",
+   "driver": "等权 -0.53%。该行的方向由 Meta（-3.33%）单独决定——Meta 是这一行权重最高的成分股，而它当日下跌 3.33%，是对本周前几个交易日累计约 13% 涨幅的获利了结（触发上涨的是其 Muse AI 智能体的产品预期）。需要标注：本行同时包含 Alphabet（GOOGL +0.46%），两者方向相反，等权读数因此被压到小幅下跌。这是「个股事件主导行业读数」的又一例。",
+   "sources": [
+    {
+     "title": "Wall Street ends higher as investors buy AI stocks; Microsoft rallies",
+     "source": "Reuters / MarketScreener",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "信息技术服务",
+   "display": "信息技术服务",
+   "confidence": "低",
+   "driver": "等权 -0.78%，是科技相关行业中跌幅第二。检索未发现当日行业级事件，候选为 IT 服务与 AI 基础设施公司的中长期讨论。本期不做归因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "涂胶显影设备(Track)",
+   "display": "涂胶显影设备(Track)",
+   "confidence": "中",
+   "driver": "全市场 65 段中涨幅第一（等权 +4.07%、市值加权 +4.68%）。该段只有两只成分股，东京电子（8035.T）+4.82%、SCREEN（7735.T）+3.31%，两只同向大涨，说明是真实的板块级买盘而非单只拉动。可溯源的催化是存储与代工的资本开支上修：美银将东京电子目标价上调至 49,000 日元，理由正是存储与代工资本开支走高，并指出东京电子股价与存储价格高度相关；同期多家外资机构对日本半导体设备给出偏正面观点。这条链与当日「存储涨价预期上修 → 存储扩产 → 前道设备采购」的产业报道方向一致。风险提示：该段仅两只成分股、样本极窄，等权读数的稳定性天然弱于成分股多的段。",
+   "sources": [
+    {
+     "title": "JAPAN TECHNOLOGY: SEMICONDUCTOR CAPITAL EQUIPMENT",
+     "source": "Jefferies / Reportify",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "刻蚀设备",
+   "display": "刻蚀设备",
+   "confidence": "中",
+   "driver": "等权 +3.24%。三只成分股全线上涨：东京电子 +4.82%、泛林半导体 +2.62%、应用材料 +2.27%。泛林此前将 2026 年晶圆厂设备（WFE）市场规模展望上修至约 1,500 亿美元区间下沿，并预计封装相关收入增长超过 70%，是本轮设备端走强的核心叙事来源。与「存储扩产拉动设备采购」的产业逻辑同源。风险提示：设备股当前估值处于历史高位区间，对存储资本开支的边际变化高度敏感。",
+   "sources": [
+    {
+     "title": "Lam Research (LRCX) Could Be 34% Undervalued On Raised 2026 Outlook",
+     "source": "Simply Wall St.",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "清洗设备",
+   "display": "清洗设备",
+   "confidence": "低",
+   "driver": "等权 +2.82%，四只成分股全线上涨（东京电子 +4.82%、SCREEN +3.31%、Disco +1.69%、盛美半导体 +1.47%）。本段没有独立的催化事件，上涨来自与刻蚀、涂胶显影同一批日本设备股的共振。检索未找到本段专有的当日信息，因此只能归入「半导体设备整体走强」这条线，不做单独归因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "测试设备",
+   "display": "测试设备",
+   "confidence": "低",
+   "driver": "等权 +2.79%，两只成分股同向上涨（Advantest +2.84%、Teradyne +2.75%）。检索到的候选多为 Teradyne 的季度回顾与设备股估值讨论，无当日事件。本段上涨同样是设备端共振的一部分。风险提示：测试设备需求与存储/逻辑厂的产能利用率强相关，若资本开支预期回落，本段弹性同样向下。",
+   "sources": [
+    {
+     "title": "Reflecting On Semiconductor Manufacturing Stocks' Q2 Earnings: Teradyne (TER)",
+     "source": "Yahoo Finance",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "薄膜沉积设备",
+   "display": "薄膜沉积设备",
+   "confidence": "低",
+   "driver": "等权 +2.57%，六只成分股全部上涨（东京电子 +4.82%、泛林 +2.62%、ULVAC +2.41%、Kokusai Electric +2.32%、应用材料 +2.27%、普发真空 +0.97%）。本段成分股数量较多且全线上涨，是 Top8 中读数最稳健的一段。但检索未发现当日专有事件，归入设备端共振。需标注：普发真空（PFV.DE）本期取到的是美东 9/25 当日行情，上期出现的欧股日期滞后本期未再发生。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "散热液冷系统",
+   "display": "散热液冷系统",
+   "confidence": "中",
+   "driver": "等权 +2.51%，三只成分股全线上涨：Johnson Controls +3.33%、Vertiv +3.25%、nVent +0.94%。Vertiv 当日扩展数据中心冷却业务线，属于「AI 机柜功率密度上升 → 液冷成为必需项」这条产业叙事的直接受益方向。检索到的相关线索包括数据中心水冷需求与 Ecolab-CoolIT 交易等，均指向同一方向。风险提示：本段三只成分股中 Johnson Controls 与 nVent 的主业并非数据中心，等权读数会高估该段对 AI 的纯粹暴露。",
+   "sources": [
+    {
+     "title": "As AI Racks Get Hotter, Vertiv Expands The Business Around Data Center Cooling",
+     "source": "Stocktwits",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "功率半导体",
+   "display": "功率半导体",
+   "confidence": "高",
+   "driver": "等权 +2.34%，且有明确的价格类催化：当日多条中文产业报道确认功率半导体进入第二轮调价——安森美（onsemi）计划 10 月调价，台系厂商最快第四季度跟进，报道用「涨价接力赛开跑」描述本轮传导。个股层面完全对应：安森美 +5.54%（当日链内异常股之一）、英飞凌 +0.80%、意法半导体 +0.68%。需要标注两点：① 涨幅主要由安森美一只贡献，等权读数被单只放大；② 英飞凌本期取到的是美东 9/25 当日行情（上期该股为 9/23 旧值），因此本段读数本期是干净的。",
+   "sources": [
+    {
+     "title": "功率半导体涨价接力赛开跑！安森美10月调价，台厂最快Q4跟上",
+     "source": "集微网",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "模拟芯片",
+   "display": "模拟芯片",
+   "confidence": "低",
+   "driver": "等权 +2.28%，九只成分股全部上涨：Semtech +4.47%、SiTime +2.96%、ADI +2.87%、TI +2.74%、MPS +2.39%、Skyworks +1.74%、Qorvo +1.40%、Impinj +0.97%、Cirrus Logic +0.94%。九只全涨但没有任何一只有当日专有事件，属于典型的板块级买盘。检索到的最接近的叙事是「模拟芯片周期见底、选择性受益」的中长期观点（美银），但发布时间远早于本交易日，不能作为当日原因。风险提示：本段无明确催化，持续性存疑，需观察后续是否出现公司层面的订单或价格证据。",
+   "sources": [
+    {
+     "title": "5 Analog Chip Stocks Set to Rebound as the Cycle Changes",
+     "source": "24/7 Wall St.",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "大模型",
+   "display": "大模型",
+   "confidence": "高",
+   "driver": "全市场 65 段中跌幅最大（等权 -1.44%）。该段只有两只成分股，方向完全由 Meta（-3.33%）决定，Alphabet 是上涨的（+0.46%）——两只成分股方向相反而段读数为负，说明 Meta 的跌幅足以盖过 Alphabet 的涨幅。Meta 当日下跌的原因是本周累计约 13% 涨幅后的获利了结，触发前期上涨的是其 Muse AI 智能体的产品预期，与本期基本面无关。风险提示：本段仅两只成分股，等权读数不具备「行业景气」的含义，不应据此判断大模型方向。",
+   "sources": [
+    {
+     "title": "Closing Bell: Akamai-Anthropic Contract, Microsoft Jumps, Meta's New AI Agent",
+     "source": "Podcast / Closing Bell",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "AI模型训练平台",
+   "display": "AI模型训练平台",
+   "confidence": "中",
+   "driver": "等权 -1.20%。七只成分股里四只下跌：Meta -3.33%、Nebius -2.53%、甲骨文 -1.75%、OVHcloud -1.58%；上涨的是 Alphabet +0.46%、英伟达 +0.22%、亚马逊 +0.12%。这是本期一条值得注意的线索：同为「AI 平台」，微软（+3.66%）与 Alphabet 上涨，而新云（Nebius）与老牌企业软件（甲骨文）下跌，说明资金在 AI 平台内部做了区分，并没有整体买入「AI 平台」。检索未发现本段当日专有事件。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "先进封装(CoWoS/3D)",
+   "display": "先进封装(CoWoS/3D)",
+   "confidence": "中",
+   "driver": "等权 -1.12%。三只成分股中英特尔 -3.45% 是唯一拖累，英伟达 +0.22%、台积电 -0.12%。英特尔的下跌是本周大幅上涨后的获利了结——此前一周它累计涨约 11.8%，驱动因素包括 SK 海力士洽谈其俄亥俄州晶圆厂、分析师上调评级以及 PC 处理器涨价计划。需注意：本段与「先进封装CoWoS」是两个不同的段，后者的三只台系成分股（京元电子、日月光、力成科技）因台股当日休市取到的是 9/24 旧值，两者的读数不可互相印证。",
+   "sources": [
+    {
+     "title": "Intel Corporation (INTC) Stock Historical Prices & Data",
+     "source": "Yahoo Finance",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "数据中心IDC",
+   "display": "数据中心IDC",
+   "confidence": "低",
+   "driver": "等权 -1.12%，但市值加权是 +0.14%，两个口径方向相反，说明是小市值成分股在跌、大市值相对抗跌。八只成分股中 Applied Digital -2.99%、Equinix -2.58%、万国数据（美股）-1.65%、百度 -1.16%、Digital Realty -1.32% 下跌，英伟达 +0.22%、DigitalBridge 持平、万国数据（港股）+0.49% 上涨。检索未发现当日行业级事件。本期不做归因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "GPU架构设计",
+   "display": "GPU架构设计",
+   "confidence": "中",
+   "driver": "等权 -1.00%。三只成分股中英特尔 -3.45% 单独拖累全段，AMD +0.22%、英伟达 +0.22% 均为微涨。与「先进封装(CoWoS/3D)」同源——都是英特尔一只股票造成的段级负读数。本段与「GPU」段成分股完全相同，两者读数一致（-1.00%），属同一批股票的两次呈现。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "GPU",
+   "display": "GPU",
+   "confidence": "中",
+   "driver": "等权 -1.00%，与「GPU架构设计」段为同一批成分股（英特尔 -3.45%、AMD +0.22%、英伟达 +0.22%）。请勿把本段的负读数读作「GPU 需求转弱」：英伟达与 AMD 当日均为微涨，全段为负完全来自英特尔。当日与 GPU 需求直接相关的事件是 Akamai 与 Anthropic 签署 116 亿美元算力协议（Akamai 提供 CPU 算力），属于需求侧的边际增量而非减量。",
+   "sources": [
+    {
+     "title": "Akamai与Anthropic达成多年合作后涨8.27%，AI基础设施股领涨",
+     "source": "5toy",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "高纯硅料与硅片",
+   "display": "高纯硅料与硅片",
+   "confidence": "中",
+   "driver": "等权 -0.95%，四只成分股为 Siltronic -2.85%、Soitec -0.76%、信越化学 -0.24%、SUMCO +0.06%。**本段的负读数与产业报道方向相反，必须前置提示**：本期价格快照中仍有多条报道确认 12 英寸硅片 2027 年长约正在涨价（含「涨幅 15%–40%+」「部分二线客户超 50%」等表述），与股价的负读数方向不一致，说明股价层面尚未跟随涨价预期，或前期已经反映。需标注一处与上期的差异：上期本段有 2 只（Siltronic、Soitec）因 Yahoo 欧股缓存滞后取到旧值，本期四只成分股全部为美东 9/25 当日行情，因此这是真实读数而非数据缺口。风险提示：硅片厂商的涨价传导到利润表通常滞后 2–3 个季度，短期股价与涨价消息脱节属正常现象。",
+   "sources": [
+    {
+     "title": "[News] 12-inch Wafer Price Hikes Loom for 2027 as AI Demand Tightens Supply, with LTAs Reportedly Up 15–40%+",
+     "source": "Google News RSS 价格快照",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "Chiplet与异构集成",
+   "display": "Chiplet与异构集成",
+   "confidence": "中",
+   "driver": "等权 -0.78%，四只成分股中英特尔 -3.45% 是唯一显著下跌者，AMD +0.22%、英伟达 +0.22%、台积电 -0.12%。与前两段同源，属英特尔个股拖累。检索到的当日相关线索是 Arteris 发布 FlexGen Multi Die（多裸片互连 IP），方向上对 Chiplet 是正面信息，但 Arteris 不在本段成分股内，不能用于解释本段读数。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "ACLS",
+   "display": "Axcelis Technologies (ACLS)",
+   "confidence": "中",
+   "driver": "涨 6.00%，是当日链内异常股中涨幅最大的一只（收 123.11 美元，前收 116.14 美元）。Axcelis 是离子注入设备商，属当日「半导体设备全面领涨」这条线：同日泛林 +2.62%、应用材料 +2.27%、东京电子 +4.82%，本段所在的设备链整体走强。检索到的最接近的公司层面线索是「碳化硅器件市场预计 2031 年达 110 亿美元，Axcelis 将在日本进行展示」（9/21），但早于本交易日，不能作为当日原因。因此判定为板块共振而非公司事件。风险提示：该股当日成交未见异常放大，且设备股整体已处于高位，单日 6% 的涨幅回吐风险不低。暂无明确公开原因。",
+   "sources": [
+    {
+     "title": "The silicon carbide device market is estimated to reach $11B by 2031. Axcelis will present in Japan.",
+     "source": "Stock Titan",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ON",
+   "display": "安森美(onsemi) (ON)",
+   "confidence": "高",
+   "driver": "涨 5.54%，是当日链内异常股之一，且有明确可溯源的价格类催化。当日多条中文产业报道确认功率半导体进入第二轮调价：安森美计划 10 月调价，台系厂商最快第四季度跟进，报道以「功率半导体涨价接力赛开跑」描述本轮传导（来源：集微网，9/25）。同段的意法半导体 +0.68%、英飞凌 +0.80% 涨幅远小于安森美，说明市场把涨价受益最直接地定价在了调价方身上。需要标注一处风险：安森美在 9 月中的一次新产品发布曾被市场解读为不及预期、股价单日大跌，说明市场对该公司的定价波动极大，本次涨价驱动的持续性需要后续订单或毛利率数据验证。",
+   "sources": [
+    {
+     "title": "功率半导体涨价接力赛开跑！安森美10月调价，台厂最快Q4跟上",
+     "source": "集微网",
+     "url": ""
+    }
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "DELL",
+   "display": "Dell (DELL)",
+   "confidence": "高",
+   "driver": "涨 5.01%，同样是当日链内异常股之一。直接触发是卖方定价：摩根士丹利上调戴尔牛市情形目标价至 756 美元（Yahoo Finance，9/25）。同一天还有一条来自公司管理层的表态提供了产业层面的支撑——戴尔高管称本次 AI 涨价周期与过去不同、可能持续五年以上，并明确表示最担忧的环节是内存与硬盘（HDD）的供给。这两条合起来解释了戴尔为什么在 AI 服务器方向上被重新定价。风险提示：戴尔同时出现在当日涨幅榜与「高管减持」的报道中（此前有高管合计减持约 3,200 万美元），且该股 2026 年内涨幅已接近 350%，估值对 AI 服务器订单的边际变化高度敏感。",
+   "sources": [
+    {
+     "title": "Dell Stock Jumps as Morgan Stanley Raises Odds of $756 Bull Case",
+     "source": "Yahoo Finance",
+     "url": ""
+    },
+    {
+     "title": "Dell放话本次AI涨价周期与过去不同：持续5年以上、内存和HDD最担忧",
+     "source": "17173",
+     "url": ""
+    }
+   ]
+  }
+ ]
+}
