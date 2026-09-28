@@ -1,0 +1,70 @@
+{
+  "target_date": "2026-09-28",
+  "generated_at": "2026-09-28T22:00:28+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-09-28",
+      "detail": null,
+      "data": {
+        "report_date": "2026-09-28",
+        "generated_at_source": "2026-09-28T00:00:10.939Z",
+        "window_start": "2026-09-27T00:00:00.000Z",
+        "window_end": "2026-09-28T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-09-28",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-09-28"
+        },
+        "section_count": 1,
+        "item_count": 2,
+        "lead_present": false,
+        "flashes_count": 0,
+        "sections": [
+          {
+            "label": "行业动态",
+            "items": [
+              {
+                "item_id": "cmujmfafc0lsrro9hqdnqg5or",
+                "title": "Authors Guild v. OpenAI 新文件披露高管早已知道大规模盗版书籍训练违法",
+                "summary": "Authors Guild v. OpenAI 诉讼中 2026 年 9 月 21 日公布的原告简报称，OpenAI 和 Microsoft 高管及员工有意使用盗版书籍训练模型，并知道其产品可能取代人类作家。",
+                "summary_len": 104,
+                "source_name": "Hacker News 热门（buzzing.cc 中文翻译）",
+                "link_aihot": "https://aihot.news/items/cmujmfafc0lsrro9hqdnqg5or",
+                "link_original": "https://authorsguild.org/news/ag-v-openai-top-execs-knew-mass-book-piracy-was-illegal",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/cmujmfafc0lsrro9hqdnqg5or"
+                }
+              },
+              {
+                "item_id": "cmujftxjg0exdro9hi64xx2i9",
+                "title": "OpenAI 与 Anthropic CEO 被传唤出席澳大利亚参议院 AI 调查听证会",
+                "summary": "澳大利亚参议院 AI 专项调查已传唤 OpenAI 的 Sam Altman 和 Anthropic 的 Dario Amodei，要求出席堪培拉的公开质询。",
+                "summary_len": 79,
+                "source_name": "IT之家（RSS）",
+                "link_aihot": "https://aihot.news/items/cmujftxjg0exdro9hi64xx2i9",
+                "link_original": "https://www.ithome.com/1/007/508.htm",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/cmujftxjg0exdro9hi64xx2i9"
+                }
+              }
+            ]
+          }
+        ],
+        "item_index": {
+          "cmujmfafc0lsrro9hqdnqg5or": {
+            "section_label": "行业动态",
+            "title": "Authors Guild v. OpenAI 新文件披露高管早已知道大规模盗版书籍训练违法"
+          },
+          "cmujftxjg0exdro9hi64xx2i9": {
+            "section_label": "行业动态",
+            "title": "OpenAI 与 Anthropic CEO 被传唤出席澳大利亚参议院 AI 调查听证会"
+          }
+        }
+      }
+    }
+  }
+}
