@@ -1,0 +1,236 @@
+{
+  "target_date": "2026-09-29",
+  "generated_at": "2026-09-30T07:06:40+08:00",
+  "modules": {
+    "price_news": {
+      "status": "ok",
+      "source": "Google News RSS",
+      "method": "固定查询组（AI 产业链价格敏感环节，中英各一条）→ 标题必须命中涨价词且不得命中干扰词 → 按标题去重 → 时间窗截断",
+      "data": {
+        "days_window": 3,
+        "cutoff_date": "2026-09-26",
+        "queries_total": 22,
+        "queries_failed": 0,
+        "errors": [],
+        "items_total": 15,
+        "items_by_category": {
+          "半导体设备": 3,
+          "存储/HBM": 1,
+          "晶圆代工": 6,
+          "硅片/材料": 3,
+          "服务器/整机": 1,
+          "AI芯片": 1
+        },
+        "filter_stats": {
+          "excluded": 40,
+          "no_keyword": 956,
+          "too_old": 887,
+          "undated": 0
+        },
+        "items": [
+          {
+            "category": "半导体设备",
+            "lang": "zh",
+            "query": "半导体设备 涨价",
+            "matched": "涨价",
+            "title": "涨价信号落地！PCB产业链打通价格传导，依顿电子涨停 - 搜狐网",
+            "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPY01QUlBab2dLOU4wMkJDNEJsTmJKcGtrdWsxdGs5R182cXJCUEZTRHl2bTQ4bjU5ZXRQRzZWSUt0WVdGVVNFVlB5UmFNdEdCWENMRTFNdGhSd0VsYkY5X29VcGVzdWF3bDgyWTdYdW04QUp4RzFMRWQwR0xDYlFkNGpzQTdtVTNvS2lSRg?oc=5",
+            "source": "搜狐网",
+            "published": "Tue, 29 Sep 2026 01:42:00 GMT",
+            "pub_date": "2026-09-29",
+            "age_days": 0,
+            "also_matched": []
+          },
+          {
+            "category": "半导体设备",
+            "lang": "zh",
+            "query": "半导体设备 涨价",
+            "matched": "涨价",
+            "title": "缺料、涨价、扩产三连击！PCB面临缺货潮 - eet-china.com",
+            "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5QMGIzUnB4M0dLc1ptaVE3S0RpQ3c1RUtOQVFNdmNaNE05d2tFQzI0Y3hodXF0T0VWVVpVZkFVQnQybi10aHJyUGR1Y1BYZVBxMC1V?oc=5",
+            "source": "eet-china.com",
+            "published": "Tue, 29 Sep 2026 07:00:00 GMT",
+            "pub_date": "2026-09-29",
+            "age_days": 0,
+            "also_matched": []
+          },
+          {
+            "category": "存储/HBM",
+            "lang": "zh",
+            "query": "HBM 存储 涨价",
+            "matched": "涨价",
+            "title": "供需缺口持续扩大 HBM涨价预期大幅上调 - 证券之星",
+            "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5RaUNBNDJtYnZSaHZDNFpUMUlPU3h2TWRIU1VZcFpISkNIdmUzbExtQk5fdXN6S25XWGpGLVJ5ZHBPNHhHZU5Ba2RfZk16RG9uVl9hbFlIQmlZb2xibXM4c2t3?oc=5",
+            "source": "证券之星",
+            "published": "Tue, 29 Sep 2026 18:07:44 GMT",
+            "pub_date": "2026-09-29",
+            "age_days": 0,
+            "also_matched": [
+              "半导体设备"
+            ]
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "zh",
+            "query": "晶圆代工 涨价",
+            "matched": "涨价",
+            "title": "代工涨价，DRAM大厂追加21.43亿元采购额度 - 搜狐网",
+            "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxORVFxOEhRempsYVdnQUJwU1dIVzB4TkFhMEZzaVhJdUJnUmh2ZGlURHZtR09sYzJnek1HMl9lUmh6Ym44cDRXa0lkR0V6Q1RzZm9LNi11WDc0YlFHN2JwMWxiSDQ4UHJjVlVaSmZ0aEJwM1NJUmZPVmNjc2MzSFJLbGg1TklPelQxcFB2Qg?oc=5",
+            "source": "搜狐网",
+            "published": "Tue, 29 Sep 2026 03:03:56 GMT",
+            "pub_date": "2026-09-29",
+            "age_days": 0,
+            "also_matched": []
+          },
+          {
+            "category": "硅片/材料",
+            "lang": "zh",
+            "query": "硅片 涨价",
+            "matched": "涨价",
+            "title": "半导体硅片长约或迎涨价潮 融资客已提前布局多股(名单) - finance.sina.com.cn",
+            "link": "https://news.google.com/rss/articles/CBMiyARBVV95cUxPd3JKeUdaRjZyME9rWU5uSFJ5VGZxQTN2OVhfWnlmaXVJZTZzR29DSWxqdHgyVERkSEpwbGE4ZXZITWE5eFNfWWZGNHRIU1pYRmlDLVpnNERyUTlmYlZkX1RDOTBLRjhxRnlnUUlZMkZpWm9faW1DcE1FT0owWklRT2lyM2N6ZUVlc0VOdDVXU0xRVkZYVXJTdE0xR25ydE84Nmh1OGh3LXFnY1VxNXlMV1owT0tvakxCdnZXR094c1ZIUkY2SDVWUUFGcUxMWDJVdVlBa2phVGVvVnFsd250a242SFU5VFBzQlNVc281ZVZ2VkN0YXJmRVhBZnBFWVoxd0pObVROTUIxS1Q4VDByc1YyeXR5M1FRN2RGYVU3ZzdSX29yLTBhRjRUc2d0YnhBRFNnZkJ6N05PUl90a1dlMVppNGxEX0RaTGFOaFVxbTZKYk42bGFNNmwwRk52OEhrY010S0F0Qk1JemxBYlNYQUxtelZNZ2pTOFVMRFBlSWJ0eFlPTkhUNDEzVGRkeWlVSDBTenFCZ2d6WlR4QURXUkRSNFByeWVyNkhETS1DNE1mczF3YjZuYW43U05LRzlmdW9MM0RxbVRnak1CbFJSNUppcWVfQ1labzh6SFhHeHI4QWhyay16ZHVzYU1vaUM2VGRpc2ROUm5DZ294c3FET05vT25pUVQwTU92bUg1aU9VdjJCMGc0WXdhMDBJa0UwTnR0dHdQYUJfQXpHMU00VDFvbThBSjduTEozRWRGN0VPWWlmejlfNw?oc=5",
+            "source": "finance.sina.com.cn",
+            "published": "Tue, 29 Sep 2026 09:58:09 GMT",
+            "pub_date": "2026-09-29",
+            "age_days": 0,
+            "also_matched": []
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "zh",
+            "query": "晶圆代工 涨价",
+            "matched": "涨价",
+            "title": "晶圆代工涨价原因?先进产能吃紧，产业链面临哪些风险? - ebc.com",
+            "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1vOW1SYmVLQlgzbnYxQUJiQ2NFbHdsM25BN2h0eDZOVzdxN2JjRUdUNjVrOUNJM3lRekJaSDN6RHRhMV9nVGFpbG5yLVhHUU1RdmpKdmdkRDA?oc=5",
+            "source": "ebc.com",
+            "published": "Mon, 28 Sep 2026 10:49:00 GMT",
+            "pub_date": "2026-09-28",
+            "age_days": 1,
+            "also_matched": []
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "en",
+            "query": "wafer foundry TSMC price increase",
+            "matched": "price hike",
+            "title": "TSMC Reportedly Plans 3–6% Wafer Price Hike in 2027 as AI Demand Pushes Orders to 2030 - KuCoin",
+            "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPU3NJWkx0a21LOVBtYmVvQmdPUzZkcTBFVVE1TkNmSGJMSXd3VUliaU9MSnRabnBMZ184MjZaQWNQRm1TeUxLRFN5WTFEYlF3Tkg4QVkxVE5aZWM2YjMycWFyTl9DeERzQnU1RHBnZ0dZbWRhNXU4ZUtXZTM2SUtOdUdLUDRoUHBtMEt3NXhlTmFiVjB4NHM2Z05pLVd6LXVyQ2xIYUhrUnJ3cEdiR2d2dlptZw?oc=5",
+            "source": "KuCoin",
+            "published": "Mon, 28 Sep 2026 09:05:00 GMT",
+            "pub_date": "2026-09-28",
+            "age_days": 1,
+            "also_matched": []
+          },
+          {
+            "category": "服务器/整机",
+            "lang": "zh",
+            "query": "服务器 涨价",
+            "matched": "涨价",
+            "title": "电子行业周报：AI拉动MLCC涨价持续，看好MLCC产业链_行业研究_研报 - 证券之星",
+            "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5zUU42MHdCUXM3c3JVQ0EzTGFjNkNzRU54VFZMdWVvalBaWlBrcnAyWUZ4U1Q1U3ZIaDBLMnRiUGkwMWJwWlpWdFg4TTN0ckt0bWs3elphOXI2V1FOT0pJQTBn?oc=5",
+            "source": "证券之星",
+            "published": "Mon, 28 Sep 2026 07:53:00 GMT",
+            "pub_date": "2026-09-28",
+            "age_days": 1,
+            "also_matched": []
+          },
+          {
+            "category": "硅片/材料",
+            "lang": "zh",
+            "query": "硅片 涨价",
+            "matched": "涨价",
+            "title": "【今日主题前瞻】部分涨价50%！分析师称半导体12英寸硅片已成为全球晶圆制造的绝对主流基材 - 中金在线",
+            "link": "https://news.google.com/rss/articles/CBMickFVX3lxTFB4WlJ3VkxheXBycnMyQjVoSTRMRnllblUwOTFfU2FjSktLeWRNMExOd1YyUEJmS000T0hleEZORTUwMERPbWhZWXlJdlJiRXQ3NDhiYnNRQnQ2dFNQeWZXYkg0YUhVUzM0QVZ2ZnE3WURtdw?oc=5",
+            "source": "中金在线",
+            "published": "Mon, 28 Sep 2026 00:10:32 GMT",
+            "pub_date": "2026-09-28",
+            "age_days": 1,
+            "also_matched": []
+          },
+          {
+            "category": "半导体设备",
+            "lang": "zh",
+            "query": "半导体设备 涨价",
+            "matched": "涨价",
+            "title": "9月28日精选热点：半导体硅片涨价50% 这三大龙头要暴涨 - 新浪财经",
+            "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPeGdHNDBXNE1kbUZVWWhIT2hUOVF1NGh3ZUhDRE4tRC1tQ3N1cmRFNHdYWEY5cFhjVGNuV2FBcVlSSmZ2RFdpZVBNQWFNOUtSRjhJRnhXcVVJQWlJLUFWMGRxdnk3akZvUFFLNXJFRG5UNnFyLXNBV3NSYnJmUUxpU3kzMHJGUlV3?oc=5",
+            "source": "新浪财经",
+            "published": "Sun, 27 Sep 2026 11:29:40 GMT",
+            "pub_date": "2026-09-27",
+            "age_days": 2,
+            "also_matched": [
+              "硅片/材料"
+            ]
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "zh",
+            "query": "晶圆代工 涨价",
+            "matched": "涨价",
+            "title": "市场传闻：台积电明年1月晶圆代工再涨价 按制程及产品调整晶圆代工出片价格 涨幅约为3%-6% - 每日经济新闻",
+            "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1XR1BaS2FGaUJGU0R1d0lKOHRTOUU3U21aLU13cVc3eTJ4ZnlMQmJjMUcwYWNKczJBc3BCemFYdTJGZXl5WHBuT0VNTTZXRlhVXzNycmh2X2VzQ3pvcy1oZ0ZpelUwQQ?oc=5",
+            "source": "每日经济新闻",
+            "published": "Sun, 27 Sep 2026 04:56:00 GMT",
+            "pub_date": "2026-09-27",
+            "age_days": 2,
+            "also_matched": []
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "zh",
+            "query": "晶圆代工 涨价",
+            "matched": "涨价",
+            "title": "电子行业研究：台积电2027年晶圆代工有望继续涨价，关注美光财报 - 证券之星",
+            "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1nLTlaREpTY1pxWnRIWkNfeTFvcmg1UWctYzBCcW5GbFlYeVhyUl9MdnRHZDN2aXBVNDB0OG5EN0dtNzJSalFZRnd3b3ZYNk9MbWgxck5GMEJZRkdmMXh5VEpn?oc=5",
+            "source": "证券之星",
+            "published": "Sun, 27 Sep 2026 10:17:00 GMT",
+            "pub_date": "2026-09-27",
+            "age_days": 2,
+            "also_matched": [
+              "半导体设备"
+            ]
+          },
+          {
+            "category": "AI芯片",
+            "lang": "en",
+            "query": "AI chip price increase",
+            "matched": "price hike",
+            "title": "Intel Price Hike and High-NA EUV: Why the Chip Giant's 10% CPU Increase Could Signal a Semiconductor Breakout - equiti.com",
+            "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxQNnpZUFZFTWJfdTFlLUlORmpwbUFUcVhfYlpkY2ZDZW05ZWU4TTlla3NLNDdGMmFqY0cyN0xlcWpFRHJCcHBPaHdDMlFKVWRGWlRsNm9EcnljelRqaHprTHFhQi1pblNZbHZieXR5UU5qcjA3VG1seW9wSnpBaTUwYmZkV2dmcTB5WmhjTzk0XzVJSUxTWHRBMDZfMmxQbHJy?oc=5",
+            "source": "equiti.com",
+            "published": "Sat, 26 Sep 2026 20:13:17 GMT",
+            "pub_date": "2026-09-26",
+            "age_days": 3,
+            "also_matched": []
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "zh",
+            "query": "晶圆代工 涨价",
+            "matched": "涨价",
+            "title": "「寻芯记」成本涨、需求旺，半导体“涨价风”吹向全链 - 东方财富",
+            "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBPa2tqdkJzX1Y3NW5kWG1nLXhpVzdUYUdlaWJ4Znh1a2lnaW1xdGd5UGJnOU96dHFjUHJ4ZkVGWWpjRmJvT2pXQTNFRGU3MzF1OVRZeWRLRThTYW9WcllocjRGWTBDUQ?oc=5",
+            "source": "东方财富",
+            "published": "Sat, 26 Sep 2026 09:32:41 GMT",
+            "pub_date": "2026-09-26",
+            "age_days": 3,
+            "also_matched": []
+          },
+          {
+            "category": "硅片/材料",
+            "lang": "zh",
+            "query": "硅片 涨价",
+            "matched": "涨幅",
+            "title": "部分涨幅或超50%！半导体12英寸硅片长约“涨声”起 - 财联社",
+            "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9YcENTWXNNVGsxeWpkaG1IdW1vYU9KVnRoTzBQNDZScVc1MEZCSGdrSzR3VlFvMHJ3aUsyaVRfOE9aV1p1TXN2Wg?oc=5",
+            "source": "财联社",
+            "published": "Sat, 26 Sep 2026 07:00:00 GMT",
+            "pub_date": "2026-09-26",
+            "age_days": 3,
+            "also_matched": []
+          }
+        ]
+      }
+    }
+  }
+}
