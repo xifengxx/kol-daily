@@ -1,0 +1,347 @@
+{
+ "date": "2026-09-30",
+ "generated_at": "2026-10-01T07:45:00+08:00",
+ "method": "Google News RSS 检索（行业/产业链段/异常股三组）+ 财经媒体与公司公告检索 → 人工筛选，按高/中/低置信标注；无明确公开原因时写「暂无明确公开原因」，禁止编造因果。产业链价格类线索来自 data/price_news_2026-09-30.json 快照。段读数若受欧股旧值污染（date_mixed=true），已在驱动列内显式标注并要求打折引用。",
+ "entries": [
+  {
+   "type": "industry",
+   "key": "Industrial - Specialties",
+   "display": "Industrial - Specialties",
+   "confidence": "低",
+   "driver": "涨幅榜第一（+4.25%），但只有 NASDAQ 单交易所样本，且该分类较宽（工业专业服务），成分股数量少，等权读数稳定性天然弱。当日检索命中的报道均为行业综述与个股对比类文章（Ingevity 一年期表现、3M 与霍尼韦尔对比），未发现当日行业级催化事件。本报告不做归因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "教育培训",
+   "display": "教育培训",
+   "confidence": "低",
+   "driver": "涨幅榜第二（+1.78%），双交易所样本（NASDAQ +1.65% / NYSE +1.91%），方向一致。但当日检索命中的相关报道全部是选股清单与季度业绩综述（Lincoln Educational 二季度表现、教育股推荐），无当日行业级催化。单交易所与少样本叠加，不宜作为板块信号引用。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "电子游戏与多媒体",
+   "display": "电子游戏与多媒体",
+   "confidence": "低",
+   "driver": "涨幅榜第三（+1.55%），是本期科技类细分中唯一进入涨幅榜前列的一行，但双交易所分歧明显（NASDAQ +0.42% / NYSE +2.68%），涨幅主要来自 NYSE 样本。当日检索命中的相关报道均为个股行情页与媒体股清单，无当日行业级催化事件。本报告不做归因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "抵押贷款",
+   "display": "抵押贷款",
+   "confidence": "低",
+   "driver": "涨幅榜第四（+1.54%），但双交易所分歧极大（NASDAQ +5.89% / NYSE -2.81%），涨幅几乎全部来自 NASDAQ 样本，读数不宜直接引用。更需注意的是方向存疑：当日 30 年期房贷利率接近 7.3%、MBA 周度房贷申请「大幅下滑」，且检索命中多篇报道显示 Radian、Fidelity National Financial、First American Financial、Kemper 等住房金融标的是**下跌**的。等权正读数与基本面方向相反，本报告不做基本面归因。",
+   "sources": [
+    {"title": "Homebuilding stocks are feeling the bite of higher mortgage rates", "source": "Yahoo Finance", "url": ""},
+    {"title": "Radian Group, Fidelity National Financial, First American Financial, and Kemper Stocks Trade Down", "source": "StockStory", "url": ""}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "农产品",
+   "display": "农产品",
+   "confidence": "低",
+   "driver": "涨幅榜第五（+1.39%），双交易所分歧（NASDAQ +3.27% / NYSE -0.50%）。当日有一条方向相反的一手信息：美国农业部 9 月谷物库存报告显示库存高于市场预期，玉米期货当日大跌约 20 美分。库存高企对农产品价格是利空，与该行业等权上涨的读数方向相反，因此本报告不把这组读数归因于基本面，不做进一步解释。",
+   "sources": [
+    {"title": "Corn plunges 20 cents as high USDA stocks stun market", "source": "Farm Progress", "url": ""}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗信息服务",
+   "display": "医疗信息服务",
+   "confidence": "低",
+   "driver": "涨幅榜第六（+1.39%），双交易所同向（NASDAQ +0.31% / NYSE +2.46%）。检索命中的相关报道以医疗股清单与个别公司业绩为主（Privia Health 二季度增长），无当日行业级催化事件。该行业成分股数量有限，等权读数易被个别个股拉动，本报告不做归因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "生物科技",
+   "display": "生物科技",
+   "confidence": "低",
+   "driver": "涨幅榜第七（+1.15%），双交易所同向（NASDAQ +0.18% / NYSE +2.12%）。它在本期最有价值的地方是结构对照：同一天医药大市值股大跌（医药行业 -3.11%、医疗设备与服务 -2.99%，礼来 -2.33%、Moderna -5.35%），而生物科技等权上涨——这是「大药企跌、小生物科技涨」的典型形态。当日检索命中的报道多为卖方推荐类文章（Jefferies 点出三只潜力生物科技股），无行业级催化，本报告只作结构标注、不做方向归因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "旅行服务",
+   "display": "旅行服务",
+   "confidence": "低",
+   "driver": "涨幅榜第八（+1.01%），双交易所分歧（NASDAQ +0.50% / NYSE +1.51%）。当日宏观背景与读数方向相反：9 月消费者信心指数降至 81.9、为 2014 年以来最低，且储蓄率降至 4.1%，对可选消费类的旅行需求构成压力。检索命中的相关报道多为旅行股清单，另有一组关于「Meta AI 代理对在线旅行社威胁有限」的卖方观点（原始报道在 9 月下旬）。无当日行业级催化，本报告不做归因。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "建筑施工",
+   "display": "建筑施工",
+   "confidence": "低",
+   "driver": "全市场跌幅第一（-6.60%），但只有 NYSE 单交易所样本。本报告未检索到 9 月 30 日该行业的可信对应事件——可查到的建筑业利空（富国银行 9 月 9 日下调建材板块、9 月初 30 年期房贷利率破 7%）都早于 9/30。该行业成分股数量少，单只小盘股暴跌即可把等权收益拉爆，因此 -6.60% 这个读数本身不宜作为行业信号引用。**请勿用这个数字描述建筑行业当日表现。**",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "专项保险",
+   "display": "专项保险",
+   "confidence": "中",
+   "driver": "跌幅榜第二（-5.74%）。**本期这一条已找到具体标的与原因**：拖累来自住房金融链条中的房贷保险与产权保险组，而非普通财险——Stewart Information Services（STC）-11.4%（2020 年 3 月以来最大单日跌幅、创 52 周新低）、NMI Holdings -8.3%、MGIC -7%、Essent -7%、Enact -6.2%。驱动是 30 年期房贷利率接近 7.3%、MBA 周度房贷申请大幅下滑、住房需求走软，叠加 FHFA 局长此前公开批评房贷保险成本「没有必要」带来的政策风险；券商把这组统一定义为「利率敏感的住房中介整体去风险」。这是一次真实的基本面事件，但由于该行业为等权口径，-5.74% 的幅度大于权重股跌幅，**请勿用它描述整个保险业**。",
+   "sources": [
+    {"title": "NMI Holdings, MGIC, Essent, Enact and Stewart Information Services stocks trade down", "source": "StockStory", "url": ""},
+    {"title": "Homebuilding stocks are feeling the bite of higher mortgage rates", "source": "Yahoo Finance", "url": ""}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "农业投入品",
+   "display": "农业投入品",
+   "confidence": "中",
+   "driver": "跌幅榜第三（-4.69%），双交易所分歧大（NASDAQ -8.70% / NYSE -0.67%）。当日有一条可对应的一手信息：美国农业部 9 月谷物库存报告显示玉米库存高于市场预期，玉米期货当日大跌约 20 美分——谷物价格下跌直接压制化肥、种子等投入品的需求与定价预期。另有一条更早的背景：Mosaic 与 Nutrien 此前因美国计划采购白俄罗斯钾肥的消息下跌（9 月 21 日报道）。方向与该读数一致，但主因判断为中等置信度，且等权读数包含小市值个股的放大效应。",
+   "sources": [
+    {"title": "Corn plunges 20 cents as high USDA stocks stun market", "source": "Farm Progress", "url": ""},
+    {"title": "USDA Grain Stocks Report September 2026", "source": "IndexBox", "url": ""}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "资本市场",
+   "display": "资本市场",
+   "confidence": "低",
+   "driver": "跌幅榜第四（-4.31%），双交易所分歧大（NASDAQ -6.97% / NYSE -1.65%）。**本报告未检索到单一直接事件**，但当日有三条可解释该方向的线索（属推断，非来源结论）：① Fair Isaac（FICO）连续第二日下跌 -4.11% 至 592.47 美元（前一日已跌 26.5%），新增利空是 TransUnion 把 VantageScore 4.0 的 99 美分促销价延长到 2028 年 12 月，且 VantageScore 已接入 1,100 家以上房贷机构，BMO 下调其目标价、美银下调评级至中性；② 私人信贷压力升级——澳大利亚最大的私人信贷机构之一 Metrics Credit Partners 冻结逾 90 亿澳元批发基金赎回，三家 ASX 上市信托因审计师拒绝签字而停牌；③ 英国央行当日警告 AI 相关债券发行过快。等权口径的 -6.97%（NASDAQ）说明小市值资管与券商跌幅远大于大行，**请勿用它描述整个资本市场板块**。",
+   "sources": [
+    {"title": "FICO slides Wednesday: will regulatory pressures and TransUnion price war break its monopoly?", "source": "Benzinga", "url": ""},
+    {"title": "Australia's Metrics freezes some fund redemptions in sign of private credit market stress", "source": "MarketScreener", "url": ""}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "抵押REIT",
+   "display": "抵押REIT",
+   "confidence": "中",
+   "driver": "跌幅榜第五（-3.39%），双交易所同向（NASDAQ -3.57% / NYSE -3.22%），方向可信。驱动与「专项保险」「抵押贷款」两条同源：30 年期房贷利率接近 7.3%、MBA 周度房贷申请大幅下滑、住房需求走软。抵押 REIT 持有的是对利率最敏感的资产，在 10 年期美债收益率 +3.7bp、30 年期 +4.4bp 的当日下跌，方向与逻辑一致。检索命中的相关报道（「利率维持 7% 以上时值得关注的三只抵押 REIT」）也印证了利率是该板块的主导变量。",
+   "sources": [
+    {"title": "3 U.S. Mortgage REIT Stocks Worth Watching While Rates Stay Above 7%", "source": "Simply Wall St", "url": ""}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医药",
+   "display": "医药",
+   "confidence": "中",
+   "driver": "跌幅榜第六（-3.11%），NASDAQ 单交易所样本。当日有三条叠加线索：① 有报道称美国最高法院就零售商与消费者药价之间的巨大差距提出质疑，直接指向药品定价监管风险；② 礼来 -2.33%（1,157.08 美元），因在米兰 EASD 公布的 EloraTZP（eloralintide + 替尔泊肽）二期数据虽实现最高剂量组 48 周减重 23.3%（优于单药 14.8%），但不良事件停药率高达 10.8%–27%（单药仅 2.9%）；③ Moderna -5.35%，因花旗将其评级从「中性」下调至「卖出」。此外医药属长久期资产，当日长端利率上行 4.4bp 亦构成压制。",
+   "sources": [
+    {"title": "Healthcare stocks slide after Supreme Court questions wide gap between retailer and consumer medicine prices", "source": "TradingView", "url": ""},
+    {"title": "Citi downgrades Moderna after 222% rally, calls oncology expectations unrealistic", "source": "TipRanks", "url": ""}
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗设备与服务",
+   "display": "医疗设备与服务",
+   "confidence": "低",
+   "driver": "跌幅榜第七（-2.99%），NASDAQ 单交易所样本。检索命中的相关报道均为二季度业绩回顾与医疗股推荐清单（GE HealthCare、QuidelOrtho 等），未发现当日行业级催化事件。本报告把它与「医药」并列理解为「长久期现金流资产在长端利率上行当日的估值压缩」，但不做进一步因果认定。",
+   "sources": []
+  },
+  {
+   "type": "industry",
+   "key": "商业设备与耗材",
+   "display": "商业设备与耗材",
+   "confidence": "低",
+   "driver": "跌幅榜第八（-2.61%），NASDAQ 单交易所样本。检索命中的相关报道以医疗设备与耗材类公司的二季度业绩对比为主，没有当日行业级事件。样本少、且该分类成分股集中，等权读数对个别个股高度敏感，本报告不做归因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "silicon-wafer",
+   "display": "高纯硅料与硅片",
+   "confidence": "中",
+   "driver": "全市场最强的一段（等权 +7.19% / 市值加权 +4.45%）。当日有效驱动来自两只日本龙头：SUMCO（3436.T）+9.08%、信越化学（4063.T）+3.41%；同段的 Soitec +9.08% 与 Siltronic +7.17% 取到的是美东 9/29 旧值，**不计入当日判断**。催化是硅片涨价被多家媒体确认：电子工程专辑 9 月 30 日报道 12 英寸硅晶圆出现三年来首次调价、部分产品涨幅超过 50%；另有 9 月 25 日的行业简报称 2027 年 12 英寸外延片新长协价可能涨 15%–25%、抛光片涨幅可能超过 40%。结构性背景是该行业集中度极高（信越约 24%、SUMCO 约 20%、环球晶圆约 16%、Siltronic 约 11%、SK Siltron 约 9%，Top5 超 85%），涨价一旦启动议价权在供给方。**口径提示：该段仅 4 只有效成分股、其中 2 只为旧值，等权读数的统计意义弱，请勿把 +7.19% 当作硅片行业整体涨幅。**",
+   "sources": [
+    {"title": "部分涨幅超50%！半导体硅晶圆三年首次调价", "source": "电子工程专辑", "url": ""},
+    {"title": "部分涨价50%！分析师称半导体12英寸硅片已成为全球晶圆制造的绝对主流基材", "source": "中金在线", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "semi-clean-equipment",
+   "display": "清洗设备",
+   "confidence": "中",
+   "driver": "涨幅榜第二（等权 +2.78% / 市值加权 +2.37%）。当日同产业链的盛美半导体（ACMR）+7.02% 进入异常股榜单，是本段上涨的主要贡献者。背景逻辑与硅片、材料涨价同源：半导体上游资本开支扩张带动设备需求，且清洗设备是国产替代进度较快的环节。**该段有效样本仅 4 只，读数对单只个股敏感。**",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "photoresist",
+   "display": "光刻胶与湿化学品",
+   "confidence": "中",
+   "driver": "涨幅榜第三（等权 +2.57% / 市值加权 +2.76%），两个口径同向且幅度接近，说明不是单只小票拉动。驱动与本期半导体材料涨价潮一致：价格快照命中多条材料与耗材涨价报道，包括「模拟、功率涨价潮延续，MLCC 龙头停产部分料号并释放扩产信号」。该段成分股以日本厂商（TOK、住友化学等）为主，本报告未检索到当日公司级事件，按行业级涨价逻辑归因。",
+   "sources": [
+    {"title": "半导体9月报：模拟、功率涨价潮延续，MLCC龙头停产部分料号并释放扩产信号", "source": "电子工程专辑", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "eda-ip",
+   "display": "EDA与IP核",
+   "confidence": "高",
+   "driver": "涨幅榜第四（等权 +2.38%）。本段当日有**明确的公司级催化**：新思科技（Synopsys）与 AWS 签署超过 10 亿美元的硅 IP 协议，AWS 成为其新建「应用优化硅 IP」业务的锚定客户，覆盖 Nitro、Graviton、Trainium 三条自研芯片线；同时新思与 OpenAI 宣布合建面向芯片设计工作流的 AI 模型，并把 FY2027 营收增速指引上调至 15%（市场预期约 11.19%），股价当日涨约 3%–5% 至约 435.70 美元。这是本期少数「消息—指引—股价」三者同向且可溯源的环节。",
+   "sources": [
+    {"title": "Amazon, Synopsys $1 billion AWS custom chips deal", "source": "Benzinga", "url": ""},
+    {"title": "Synopsys, OpenAI strike deal to develop AI model for chip design work", "source": "MarketScreener", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "semi-power-semiconductor",
+   "display": "功率半导体",
+  "confidence": "中",
+   "driver": "涨幅榜第五（等权 +2.09% / 市值加权 +2.85%），市值加权高于等权，说明大市值成分股贡献更大。驱动来自价格端：当日价格快照命中多条功率半导体涨价报道，包括「大厂涨价，AI 驱动功率半导体高景气」与「模拟、功率涨价潮延续」。需注意这些报道的措辞是「涨价潮延续」而非新发涨价，属于既有趋势的延续，不是当日新增事件。",
+   "sources": [
+    {"title": "半导体9月报：模拟、功率涨价潮延续，MLCC龙头停产部分料号并释放扩产信号", "source": "电子工程专辑", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "semi-cmp-materials",
+   "display": "CMP抛光液与抛光垫",
+   "confidence": "低",
+   "driver": "涨幅榜第六（等权 +1.88% / 市值加权 +2.15%）。**该段有效样本仅 2 只，等权与市值加权几乎等价，读数不具备统计意义**，不宜作为行业信号引用。方向上与本期半导体材料涨价潮一致，但本报告未检索到该细分当日的事件级催化，不做归因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "thin-film-deposition",
+   "display": "薄膜沉积设备",
+   "confidence": "中",
+   "driver": "涨幅榜第七（等权 +1.82% / 市值加权 +1.04%），等权高于市值加权，说明中小市值成分股贡献更大。当日有一条对应消息：应用材料宣布铠侠（Kioxia）加入其 50 亿美元 EPIC 中心，共同开发 AI 时代高密度存储的先进存储单元结构、多芯片堆叠与先进封装——这与本期存储涨价、HBM 售罄的链条方向一致。该段有效样本 6 只，样本相对充足，读数可信度高于同榜的其他材料类段。",
+   "sources": [
+    {"title": "Applied Materials and Kioxia partner at the EPIC Center to advance next-generation memory technology", "source": "GlobeNewswire", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "gpu",
+   "display": "GPU",
+   "confidence": "中",
+   "driver": "涨幅榜第八（等权 +1.64% / 市值加权 +0.82%），等权明显高于市值加权，说明涨幅由中小市值成分股主导，权重最大的英伟达（+0.51%）只是小幅跟涨。当日有两条公司级消息：① CoreWeave 宣布将英伟达 Vera Rubin NVL72 投入生产，首个生产客户为 Cognition，实测推理总 token 吞吐为 GB200 NVL72 基线的 4.8 倍；② HPE 拿下 AMD Helios AI 机架首单（Vultr，12 亿美元，每机架 72 颗 MI455X），AMD +0.69%。**注意：GPU 段上涨而费城半导体指数收平（-0.00%），说明算力芯片在当日并非资金主攻方向。**",
+   "sources": [
+    {"title": "CoreWeave delivers NVIDIA Vera Rubin NVL72 performance at production scale", "source": "MarketScreener", "url": ""},
+    {"title": "Hewlett Packard Enterprise jumps on AMD order", "source": "247wallst", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "semi-rf-chip",
+   "display": "射频芯片",
+   "confidence": "低",
+   "driver": "跌幅榜第一（等权 -1.98% / 市值加权 -1.12%），是本期最弱的一段。本报告未检索到当日该细分的事件级催化。方向上可归入「成熟制程与消费电子需求偏弱」的一组读数——同日 FMP 等权口径下的消费电子 -0.59%、计算机硬件 -0.38%、科技分销 -1.63% 同为负值，但这是行业级联动解释，不是因果认定。该段有效样本仅 3 只，请谨慎引用。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "liquid-cooling",
+   "display": "散热液冷系统",
+   "confidence": "低",
+   "driver": "跌幅榜第二（等权 -1.39% / 市值加权 -1.58%）。方向上与当日 AI 基建的正面消息相反：HPE 拿下 12 亿美元 AMD Helios 机架首单、AIB 与 Nebius 签 50MW 数据中心协议，理论上对液冷与散热环节是利好，而该段收跌。本报告未检索到该细分当日的事件级催化，不做归因。**该段有效样本仅 3 只。**",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "semi-precursor",
+   "display": "前驱体与ALD/CVD材料",
+   "confidence": "低",
+   "driver": "跌幅榜第三（等权 -1.29% / 市值加权 -2.26%）。该段与同期的材料涨价潮方向相反——本期硅片、光刻胶与湿化学品段都是上涨的，前驱体段却下跌。矛盾可能来自个别成分股的事件（该段有效样本仅 3 只），本报告未检索到当日对应的公司级消息，不做归因。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "semi-analog-ic",
+   "display": "模拟芯片",
+   "confidence": "低",
+   "driver": "跌幅榜第四（等权 -0.71% / 市值加权 -0.56%），有效样本 9 只、样本相对充足。它构成本期一处明显的「叙事与股价背离」：价格快照中明确提到「模拟、功率涨价潮延续」，同属涨价受益环节的功率半导体段 +2.09%，而模拟芯片段为 -0.71%。本报告未检索到当日该细分的公司级事件，不做因果认定。一个可能的解释是市场把成熟制程涨价读作成本项而非利润项，但无直接证据支持，仅为推测。",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "high-speed-connector",
+   "display": "高速连接器与铜缆",
+   "confidence": "低",
+   "driver": "跌幅榜第五（等权 -0.62% / 市值加权 -0.98%）。与本期光互联环节走弱同向（DSP 与光芯片段 -0.54%、康宁 -3.12%）。本报告未检索到该细分当日的事件级催化。**该段有效样本仅 3 只。**",
+   "sources": []
+  },
+  {
+   "type": "segment",
+   "key": "semi-foundry-mature",
+   "display": "成熟制程代工",
+   "confidence": "中",
+   "driver": "跌幅榜第六（等权 -0.55% / 市值加权 -0.19%）。本段是本期「涨价叙事与股价背离」最典型的一段：价格快照中晶圆代工类报道多达 9 条、为全品类最多，内容包括台积电 2027 年 1 月起代工报价再涨 3%–6%（原始报道为 9 月 24 日 DIGITIMES）、三星代工是否跟进涨价、晶圆代工厂对华涨价 30%，但该段当日收跌。本报告的理解是：市场把代工涨价读作下游的成本项、而非代工厂的利润项——尤其在成熟制程需求并不强劲的背景下。此判断为分析性结论，非来源结论（置信度：中）。",
+   "sources": [
+    {"title": "市场传闻：台积电明年1月晶圆代工再涨价 涨幅约为3%-6%", "source": "每日经济新闻", "url": ""},
+    {"title": "三星晶圆厂，涨价？", "source": "华尔街见闻", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "dsp-optical-chip",
+   "display": "DSP与光芯片",
+   "confidence": "中",
+   "driver": "跌幅榜第七（等权 -0.54% / 市值加权 -0.90%），有效样本 6 只。当日光通信链条整体承压，最明确的个股事件是康宁（GLW）跌 3.12%——伯恩斯坦首次覆盖给 Market Perform（中性）、目标价 140 美元，远低于市场一致预期（约 189–199 美元），且该机构同日对 Lumentum、Coherent、Ciena 均给出 Outperform，属差异化评级。**重要澄清：本段并非全线下挫**——Lumentum 仅 -0.23%、迈威尔 +0.36%，尾盘明显收敛，说明这是一次由康宁主导、而非板块性的下跌。",
+   "sources": [
+    {"title": "Why Corning Stock Is Falling Today", "source": "Nasdaq", "url": ""},
+    {"title": "Bernstein initiates Corning at Market Perform with $140 price target", "source": "MarketScreener", "url": ""}
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "semi-osat",
+   "display": "封装测试(OSAT)",
+   "confidence": "低",
+   "driver": "跌幅榜第八（等权 -0.46% / 市值加权 +1.76%），**两个口径方向相反**：等权微跌、市值加权上涨，说明大市值成分股在涨、中小市值在跌，本表以等权为主排序、市值加权仅作参考。当日有一条相关消息：有报道称谷歌在下一代 TPU 上采用了英特尔的 EMIB-T 先进封装，被视为台积电 CoWoS 的替代方案之一——这对 OSAT 环节是边际竞争压力，但方向与该段市值加权上涨矛盾，本报告不做因果认定。**该段有效样本仅 2 只，读数统计意义弱。**",
+   "sources": [
+    {"title": "Intel rises on chip contender status", "source": "Yahoo Finance", "url": ""}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ATS.VI",
+   "display": "AT&S (ATS)",
+   "confidence": "低",
+   "driver": "**口径警示：该标的取到的是美东 9/29 的旧值，不是 9/30 的行情**（Yahoo 对欧洲日线缓存滞后）。它出现在异常涨幅榜首位属于数据时点问题，**不应被读作 9/30 的异动**。本报告不对其做驱动归因。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "3436.T",
+   "display": "SUMCO (3436)",
+   "confidence": "中",
+   "driver": "**9/30 当日有效值 +9.08%（收 3,316 日元），是本期异常股榜单中唯一同时具备「当日有效」与「明确产业催化」的标的。** SUMCO 是全球第二大 12 英寸硅片厂商（份额约 20%）。催化是硅片涨价被确认：电子工程专辑 9 月 30 日报道 12 英寸硅晶圆出现三年来首次调价、部分产品涨幅超过 50%；另有 9 月 25 日的行业简报称 2027 年 12 英寸外延片新长协价可能上涨 15%–25%、抛光片涨幅可能超过 40%。同日同段信越化学 +3.41%，方向一致。**风险提示：涨价报道未经厂商官方确认，且「部分产品」是关键限定词。**",
+   "sources": [
+    {"title": "部分涨幅超50%！半导体硅晶圆三年首次调价", "source": "电子工程专辑", "url": ""}
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "SOI.PA",
+   "display": "Soitec (SOI)",
+   "confidence": "低",
+   "driver": "**口径警示：该标的取到的是美东 9/29 的旧值，不是 9/30 的行情**（Yahoo 对欧洲日线缓存滞后）。它出现在异常涨幅榜前列属于数据时点问题，**不应被读作 9/30 的异动**。本报告不对其做驱动归因。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "WAF.DE",
+   "display": "Siltronic (WAF)",
+   "confidence": "低",
+   "driver": "**口径警示：该标的取到的是美东 9/29 的旧值，不是 9/30 的行情**（Yahoo 对欧洲日线缓存滞后）。它出现在异常涨幅榜前列属于数据时点问题，**不应被读作 9/30 的异动**。本报告不对其做驱动归因。",
+   "sources": []
+  },
+  {
+   "type": "anomaly",
+   "key": "ACMR",
+   "display": "盛美半导体 (ACMR)",
+   "confidence": "低",
+   "driver": "9/30 当日有效值 +7.02%，属清洗设备环节，与本期「清洗设备」段 +2.78% 同向，是拉动该段的主要个股。方向上可归入半导体上游资本开支扩张与国产设备替代的持续叙事，但**本报告未检索到该公司当日的事件级催化**（无财报、无订单公告），因此只标注段内角色，不做个股因果归因。",
+   "sources": []
+  }
+ ]
+}
