@@ -1,0 +1,369 @@
+{
+ "target_date": "2026-10-06",
+ "source": "Yahoo Finance via yfinance (auto_adjust=False, daily bars)",
+ "note": "FMP 免费档不返回 ^SOX 与 ^VIX，费半/纳指100/VIX/罗素2000 以本文件为准；标普500/纳斯达克综合/道琼斯/罗素2000 的收盘价与 FMP 完全一致，可互相验证。CL=F/BZ=F/GC=F 为连续合约（前月），换月日会出现读数跳变，解读时需注意。",
+ "modules": {
+  "indices": {
+   "source": "Yahoo Finance / yfinance（指数）",
+   "items": {
+    "标普500": {
+     "symbol": "^GSPC",
+     "date": "2026-10-06",
+     "close": 7818.9302,
+     "volume": 2717394000,
+     "prev_date": "2026-10-05",
+     "prev_close": 7773.9502,
+     "chg_pct": 0.5786
+    },
+    "纳斯达克综合": {
+     "symbol": "^IXIC",
+     "date": "2026-10-06",
+     "close": 27599.8867,
+     "volume": 7658736000,
+     "prev_date": "2026-10-05",
+     "prev_close": 27477.3105,
+     "chg_pct": 0.4461
+    },
+    "道琼斯": {
+     "symbol": "^DJI",
+     "date": "2026-10-06",
+     "close": 51521.2812,
+     "volume": 404919021,
+     "prev_date": "2026-10-05",
+     "prev_close": 51267.8984,
+     "chg_pct": 0.4942
+    },
+    "费城半导体": {
+     "symbol": "^SOX",
+     "date": "2026-10-06",
+     "close": 13217.8232,
+     "volume": 0,
+     "prev_date": "2026-10-05",
+     "prev_close": 13172.7402,
+     "chg_pct": 0.3422
+    },
+    "纳斯达克100": {
+     "symbol": "^NDX",
+     "date": "2026-10-06",
+     "close": 31224.6855,
+     "volume": 1136353000,
+     "prev_date": "2026-10-05",
+     "prev_close": 31076.4395,
+     "chg_pct": 0.477
+    },
+    "罗素2000": {
+     "symbol": "^RUT",
+     "date": "2026-10-06",
+     "close": 2830.2974,
+     "volume": 0,
+     "prev_date": "2026-10-05",
+     "prev_close": 2847.1399,
+     "chg_pct": -0.5916
+    },
+    "VIX恐慌指数": {
+     "symbol": "^VIX",
+     "date": "2026-10-06",
+     "close": 15.01,
+     "volume": 0,
+     "prev_date": "2026-10-05",
+     "prev_close": 15.52,
+     "chg_pct": -3.2861
+    }
+   }
+  },
+  "sector_etf": {
+   "source": "Yahoo Finance / yfinance（行业ETF）",
+   "items": {
+    "科技XLK": {
+     "symbol": "XLK",
+     "date": "2026-10-06",
+     "close": 202.0,
+     "volume": 6124005,
+     "prev_date": "2026-10-05",
+     "prev_close": 200.93,
+     "chg_pct": 0.5325
+    },
+    "金融XLF": {
+     "symbol": "XLF",
+     "date": "2026-10-06",
+     "close": 54.01,
+     "volume": 21721482,
+     "prev_date": "2026-10-05",
+     "prev_close": 53.88,
+     "chg_pct": 0.2413
+    },
+    "能源XLE": {
+     "symbol": "XLE",
+     "date": "2026-10-06",
+     "close": 63.75,
+     "volume": 27825597,
+     "prev_date": "2026-10-05",
+     "prev_close": 63.45,
+     "chg_pct": 0.4728
+    },
+    "医疗XLV": {
+     "symbol": "XLV",
+     "date": "2026-10-06",
+     "close": 167.09,
+     "volume": 7339458,
+     "prev_date": "2026-10-05",
+     "prev_close": 167.37,
+     "chg_pct": -0.1673
+    },
+    "公用事业XLU": {
+     "symbol": "XLU",
+     "date": "2026-10-06",
+     "close": 41.16,
+     "volume": 52063230,
+     "prev_date": "2026-10-05",
+     "prev_close": 39.97,
+     "chg_pct": 2.9772
+    },
+    "必需消费XLP": {
+     "symbol": "XLP",
+     "date": "2026-10-06",
+     "close": 81.8,
+     "volume": 12023395,
+     "prev_date": "2026-10-05",
+     "prev_close": 81.04,
+     "chg_pct": 0.9378
+    },
+    "可选消费XLY": {
+     "symbol": "XLY",
+     "date": "2026-10-06",
+     "close": 111.72,
+     "volume": 5896683,
+     "prev_date": "2026-10-05",
+     "prev_close": 110.42,
+     "chg_pct": 1.1773
+    },
+    "工业XLI": {
+     "symbol": "XLI",
+     "date": "2026-10-06",
+     "close": 171.58,
+     "volume": 5846368,
+     "prev_date": "2026-10-05",
+     "prev_close": 170.1,
+     "chg_pct": 0.8701
+    },
+    "基础材料XLB": {
+     "symbol": "XLB",
+     "date": "2026-10-06",
+     "close": 49.73,
+     "volume": 12921980,
+     "prev_date": "2026-10-05",
+     "prev_close": 49.5,
+     "chg_pct": 0.4646
+    },
+    "房地产XLRE": {
+     "symbol": "XLRE",
+     "date": "2026-10-06",
+     "close": 41.1,
+     "volume": 7384955,
+     "prev_date": "2026-10-05",
+     "prev_close": 40.67,
+     "chg_pct": 1.0573
+    },
+    "通信服务XLC": {
+     "symbol": "XLC",
+     "date": "2026-10-06",
+     "close": 111.65,
+     "volume": 5814099,
+     "prev_date": "2026-10-05",
+     "prev_close": 111.61,
+     "chg_pct": 0.0358
+    }
+   }
+  },
+  "futures_commodities": {
+   "source": "Yahoo Finance / yfinance（商品与美元指数，连续合约）",
+   "items": {
+    "WTI原油": {
+     "symbol": "CL=F",
+     "date": "2026-10-06",
+     "close": 89.88,
+     "volume": 1105,
+     "prev_date": "2026-10-05",
+     "prev_close": 89.43,
+     "chg_pct": 0.5032
+    },
+    "布伦特原油": {
+     "symbol": "BZ=F",
+     "date": "2026-10-06",
+     "close": 101.14,
+     "volume": 70,
+     "prev_date": "2026-10-05",
+     "prev_close": 100.32,
+     "chg_pct": 0.8174
+    },
+    "黄金": {
+     "symbol": "GC=F",
+     "date": "2026-10-06",
+     "close": 4192.7002,
+     "volume": 2176,
+     "prev_date": "2026-10-05",
+     "prev_close": 4156.7998,
+     "chg_pct": 0.8637
+    },
+    "美元指数": {
+     "symbol": "DX-Y.NYB",
+     "date": "2026-10-06",
+     "close": 101.845,
+     "volume": 0,
+     "prev_date": "2026-10-05",
+     "prev_close": 102.17,
+     "chg_pct": -0.3181
+    },
+    "标普期货ES": {
+     "symbol": "ES=F",
+     "date": "2026-10-06",
+     "close": 7881.0,
+     "volume": 5105,
+     "prev_date": "2026-10-05",
+     "prev_close": 7826.25,
+     "chg_pct": 0.6996
+    },
+    "纳指期货NQ": {
+     "symbol": "NQ=F",
+     "date": "2026-10-06",
+     "close": 31499.75,
+     "volume": 5916,
+     "prev_date": "2026-10-05",
+     "prev_close": 31317.75,
+     "chg_pct": 0.5811
+    }
+   }
+  },
+  "m7_and_weights": {
+   "source": "Yahoo Finance / yfinance（权重股）",
+   "items": {
+    "英伟达NVDA": {
+     "symbol": "NVDA",
+     "date": "2026-10-06",
+     "close": 239.24,
+     "volume": 101482897,
+     "prev_date": "2026-10-05",
+     "prev_close": 238.9,
+     "chg_pct": 0.1423
+    },
+    "苹果AAPL": {
+     "symbol": "AAPL",
+     "date": "2026-10-06",
+     "close": 333.63,
+     "volume": 30438844,
+     "prev_date": "2026-10-05",
+     "prev_close": 332.89,
+     "chg_pct": 0.2223
+    },
+    "微软MSFT": {
+     "symbol": "MSFT",
+     "date": "2026-10-06",
+     "close": 529.3,
+     "volume": 21098949,
+     "prev_date": "2026-10-05",
+     "prev_close": 525.18,
+     "chg_pct": 0.7845
+    },
+    "谷歌GOOGL": {
+     "symbol": "GOOGL",
+     "date": "2026-10-06",
+     "close": 347.68,
+     "volume": 18702460,
+     "prev_date": "2026-10-05",
+     "prev_close": 346.47,
+     "chg_pct": 0.3492
+    },
+    "亚马逊AMZN": {
+     "symbol": "AMZN",
+     "date": "2026-10-06",
+     "close": 256.29,
+     "volume": 34067715,
+     "prev_date": "2026-10-05",
+     "prev_close": 251.4,
+     "chg_pct": 1.9451
+    },
+    "Meta": {
+     "symbol": "META",
+     "date": "2026-10-06",
+     "close": 738.88,
+     "volume": 12557926,
+     "prev_date": "2026-10-05",
+     "prev_close": 741.9,
+     "chg_pct": -0.4071
+    },
+    "特斯拉TSLA": {
+     "symbol": "TSLA",
+     "date": "2026-10-06",
+     "close": 380.68,
+     "volume": 27702813,
+     "prev_date": "2026-10-05",
+     "prev_close": 378.73,
+     "chg_pct": 0.5149
+    },
+    "博通AVGO": {
+     "symbol": "AVGO",
+     "date": "2026-10-06",
+     "close": 375.81,
+     "volume": 30811427,
+     "prev_date": "2026-10-05",
+     "prev_close": 362.51,
+     "chg_pct": 3.6689
+    },
+    "台积电ADR": {
+     "symbol": "TSM",
+     "date": "2026-10-06",
+     "close": 482.3,
+     "volume": 8328553,
+     "prev_date": "2026-10-05",
+     "prev_close": 485.8,
+     "chg_pct": -0.7205
+    },
+    "摩根大通JPM": {
+     "symbol": "JPM",
+     "date": "2026-10-06",
+     "close": 331.28,
+     "volume": 6287462,
+     "prev_date": "2026-10-05",
+     "prev_close": 332.38,
+     "chg_pct": -0.3309
+    },
+    "高盛GS": {
+     "symbol": "GS",
+     "date": "2026-10-06",
+     "close": 897.18,
+     "volume": 2048725,
+     "prev_date": "2026-10-05",
+     "prev_close": 893.46,
+     "chg_pct": 0.4164
+    },
+    "礼来LLY": {
+     "symbol": "LLY",
+     "date": "2026-10-06",
+     "close": 1157.49,
+     "volume": 2131200,
+     "prev_date": "2026-10-05",
+     "prev_close": 1143.12,
+     "chg_pct": 1.2571
+    },
+    "埃克森美孚XOM": {
+     "symbol": "XOM",
+     "date": "2026-10-06",
+     "close": 164.48,
+     "volume": 9285521,
+     "prev_date": "2026-10-05",
+     "prev_close": 164.0,
+     "chg_pct": 0.2927
+    },
+    "雪佛龙CVX": {
+     "symbol": "CVX",
+     "date": "2026-10-06",
+     "close": 207.58,
+     "volume": 5470678,
+     "prev_date": "2026-10-05",
+     "prev_close": 206.47,
+     "chg_pct": 0.5376
+    }
+   }
+  }
+ }
+}
