@@ -1053,13 +1053,17 @@ function renderCompany(c){
   }
 
   // 详细信息：公司深度资料（结构化字段优先，否则显示待填充占位）
+  // 两列网格只放**标量**（成立年份/总部/员工规模/最新营收/市值）——它是 flex +
+  // space-between + text-align:right + align-items:center 的排版，为短值设计。
+  // 把散文塞进这格会把整行撑高，并让左侧标签垂直居中悬空（实测 2026-10-10:
+  // pure-storage 269px vs vis 59px）。公司简介因此单独占一整行、左对齐，见下方。
+  var summary=(c.description&&c.description.length>10)?c.description:'';
   var detailItems=[];
   if(c.founded) detailItems.push({label:'成立年份',value:c.founded});
   if(c.headquarters) detailItems.push({label:'总部',value:c.headquarters});
   if(c.employees) detailItems.push({label:'员工规模',value:c.employees});
   if(c.latest_revenue) detailItems.push({label:'最新营收',value:c.latest_revenue});
   if(c.market_cap) detailItems.push({label:'市值',value:c.market_cap});
-  if(c.description&&c.description.length>10) detailItems.push({label:'公司简介',value:c.description});
 
   // Also render body content for any additional markdown
   var bodyContent = c.content || '';
@@ -1067,33 +1071,55 @@ function renderCompany(c){
   var firstBreak=bodyContent.indexOf('\n\n');
   if(firstBreak>0){
     var firstPara=bodyContent.substring(0,firstBreak).trim();
-    if(firstPara.length<200&&firstPara.indexOf('##')<0&&firstPara.indexOf('- ')<0){
+    // 首段若就是上面渲染的「公司简介」，从正文里去掉，避免同页出现两次。
+    // 旧代码此处判 `firstPara.length<200`，阈值方向是反的：短首段被去掉（对），
+    // 长首段被留下，于是长首段在「公司简介」与正文里各显示一遍（2026-10-10 实测 21 家）。
+    // 改为与 summary 直接比对同源：同源则去掉，不同源则保留（宁可多显示、不可漏内容）。
+    var sameAsSummary=summary.length>10&&firstPara.substring(0,40)===summary.substring(0,40);
+    if(sameAsSummary){
       bodyContent=bodyContent.substring(firstBreak).trim();
     }
   }
   bodyContent = bodyContent.replace(/## 基本信息[\s\S]*?(?=\n## |\Z)/g,'').trim().replace(/\n{3,}/g,'\n\n').trim();
 
   var hasBodyContent = bodyContent.length > 50;
+  var hasSummary = summary.length > 10;
   var hasDetailFields = detailItems.length > 0;
 
   h+='<div class="card" style="margin-bottom:16px;"><div class="card-title" style="font-size:18px;">详细信息</div>';
 
+  if(hasSummary){
+    h+='<div style="padding:0 0 12px;border-bottom:1px solid var(--border);margin-bottom:'+((hasDetailFields||hasBodyContent)?'12px':'2px')+';">';
+    h+='<div style="font-size:12px;color:var(--text2);margin-bottom:6px;">公司简介</div>';
+    h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+mdInline(summary)+'</div>';
+    h+='</div>';
+  }
+
   if(hasDetailFields){
     h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-bottom:'+(hasBodyContent?'14px':'4px')+';">';
     detailItems.forEach(function(d){
-      h+='<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">';
-      h+='<span style="font-size:12px;color:var(--text2);">'+d.label+'</span>';
-      h+='<span style="font-size:14px;font-weight:500;color:var(--text);text-align:right;">'+mdInline(d.value)+'</span>';
+      // 顶对齐而非居中：值换行成 2-3 行时，居中会让 label 浮在行中间，
+      // 与相邻行的 label 不成一条线（沿用旧对齐会「忽上忽下」）。单行时两者渲染相同。
+      h+='<div style="padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;">';
+      // 标签不可压缩：flex 下 label 默认可收缩，值一长（如「员工规模」值 105 字）
+      // 就会把 label 挤成两行「市\n值」（2026-10-10 实测 rogers-corp / pure-storage）。
+      h+='<span style="font-size:12px;color:var(--text2);flex:0 0 auto;white-space:nowrap;margin-right:10px;">'+d.label+'</span>';
+      h+='<span style="font-size:14px;font-weight:500;color:var(--text);text-align:right;min-width:0;">'+mdInline(d.value)+'</span>';
       h+='</div>';
     });
     h+='</div>';
   }
 
   if(hasBodyContent){
-    h+='<div style="font-size:14px;color:var(--text);line-height:1.8;">'+renderMD(excerpt(bodyContent,3000))+'</div>';
+    // 正文完整渲染，不做长度截断：`c.content` 已在编译期剥离 `## 动态更新记录`
+    // 及其后内容（build_wiki_data.py 的 strip_changelog），故不存在把审计日志
+    // 倒进页面的风险。曾经这里的 excerpt(...,3000) 会静默砍掉后面所有 `##` 段，
+    // 2026-10-10 实测 414 家公司有 57 家正文 >3000 字（最长 rogers-corp 11602 字），
+    // 页面直接看不到末尾章节。截断只应作用于列表卡片，不应作用于详情页正文。
+    h+='<div style="font-size:14px;color:var(--text);line-height:1.8;">'+renderMD(bodyContent)+'</div>';
   }
 
-  if(!hasDetailFields&&!hasBodyContent){
+  if(!hasSummary&&!hasDetailFields&&!hasBodyContent){
     h+='<div style="padding:20px 0;text-align:center;color:var(--text2);font-size:13px;line-height:2.2;">';
     h+='<div style="font-size:48px;margin-bottom:8px;opacity:0.3;">📋</div>';
     h+='<div style="font-weight:600;color:var(--text);margin-bottom:8px;">待填充内容</div>';
