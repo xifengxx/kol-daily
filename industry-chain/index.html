@@ -175,13 +175,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 .chain-step.current{box-shadow:0 4px 12px rgba(0,113,227,0.15);}
 .chain-arrow{color:var(--accent);font-size:18px;font-weight:700;display:flex;align-items:center;}
 .supply-group{padding:12px;background:var(--bg);border-radius:12px;margin-bottom:10px;}
-.data-table{width:100%;border-collapse:collapse;font-size:14px;}
+.data-table{width:100%;border-collapse:collapse;font-size:14px;margin:0 0 14px;}
 .data-table th{text-transform:uppercase;font-size:12px;color:var(--text2);font-weight:500;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg);letter-spacing:0.02em;}
 .data-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;}
 .data-table tbody tr:hover{background:var(--bg);}
 .company-header-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:16px;}
 /* Styled lists for concept content */
-.styled-list{list-style:none;padding:0;margin:6px 0;}
+.styled-list{list-style:none;padding:0;margin:0 0 14px;}
 .styled-list li{padding:7px 10px 7px 28px;position:relative;font-size:14px;line-height:1.6;border-bottom:1px solid var(--bg);}
 .styled-list li:last-child{border-bottom:none;}
 .styled-list.ordered li::before{content:counter(step)'.';counter-increment:step;position:absolute;left:6px;top:7px;font-weight:700;color:var(--accent);font-size:13px;}
@@ -612,21 +612,68 @@ function _renderThesisTable(){
 // Markdown → HTML 渲染器（处理表格、粗体、列表、引用）
 function renderMD(text){
   if(!text) return '';
-  var h='', lines=text.split('\n'), i=0, inTable=false, inList=false, listType='';
+  var h='', lines=text.split('\n'), i=0, inTable=false, inList=false, listType='', rows=[];
+  // 整张表读完再渲染：判断某列是否数值列需要看完整列，逐格判断会让
+  // 「板块|占比|说明」这种数值列与散文列混排的表参差不齐。
+  //
+  // 判据只看**表头**，不看单元格内容。单元格分类试过两轮都不稳：
+  //   `5870、5880、6002、6006`（代表型号）数字占优，会被误判成数值列；
+  //   `NT$142.45 亿（+13.7% QoQ / +21.8% YoY）` 又因拉丁字母多被判成散文，
+  //   导致 VIS 财务表整列左对齐（2026-10-10 实测全库 994 张表后放弃）。
+  // 表头是人写的、直接表达列意图，且判据一眼能读懂。
+  //
+  // 三条判据，各自挡住一类误判（按 2026-10-10 全库左对齐表头普查 294 个词定稿）：
+  //   ① 期间列：含 4 位年份，或 FY/Q/H + 数字（`2026 Q1` `FY2025` `2026H1` `Q2 FY2026`）
+  //      起始锚定的 `^\d?[A-Z]\d` 专收 `1H26`/`2H25` 这类「半年」写法——字母前是数字，
+  //      会被 `[^A-Za-z0-9]` 排除掉，但 `3D 打印`/`5G 应用` 因字母后不是数字而不会误收。
+  //   ② 计量词列：精确等于，或以计量词结尾（`值` `同比` `同比变化` `毛利率同比` `营收占比` `总市值` `新指引`）
+  //   ③ 拉丁缩写列：`YoY` `QoQ` `TTM` `EPS` `PE` `CAGR`（可带「增长/同比」后缀）
+  // 刻意不做的两件事——
+  //   子串匹配：`商业价值` 含「值」、`增长驱动` 含「增长」，一律会被误判成数值列；
+  //   词尾用「率」：`产能利用率` 是散文列，故只收「比率」不收单字「率」。
+  // 首列恒左对齐——全库 994 张表的首列都是标签（指标/项目/方向/产品线/板块/业务/维度/季度…）。
+  var PERIOD_COL=/\d{4}|^\d?[A-Z]\d|(^|[^A-Za-z0-9])(FY|Q|H)\d/;
+  var VALUE_HEAD=/^(值|数值|数字|金额|占比|比重|同比|环比|变化|变动|增减|涨幅|跌幅|目标价|份额|数量|价格|均价|收盘价|营收|收入|净利|净利润|归母净利|归母净利润|利润|营业利润|毛利|毛利率|利润率|市值|总市值|股价|增速|比率|指引|新指引|原指引|数据|估值|对比|排名|增长|占营收比)$/;
+  var VALUE_SUFFIX=/(同比|环比|占比|变化|变动|净利|利润|毛利|市值|股价|营收|收入|指引|排名|金额|价格|数量|份额|比率|增速)$/;
+  var VALUE_LATIN=/^(EPS|PE|PB|ROE|CAGR|TTM|YoY|QoQ)(增长|同比)?$/i;
+  function isValueCol(h){
+    h=String(h).replace(/\*\*/g,'').trim();
+    return PERIOD_COL.test(h) || VALUE_HEAD.test(h) || VALUE_SUFFIX.test(h) || VALUE_LATIN.test(h);
+  }
+  // 顺带修掉旧逻辑的 `<tr>` 计数缺陷：它拿整篇累积的 h 去比，导致只有正文里
+  // 第一张表的表头是 <th>，其余表的表头全渲染成 <td>。
+  function flushTable(){
+    if(!inTable) return;
+    var n=rows.length?rows[0].length:0, right=[];
+    for(var c=0;c<n;c++) right[c]= c>0 && isValueCol(rows[0][c]);
+    h+='<table class="data-table"><tbody>';
+    rows.forEach(function(cells,ri){
+      h+='<tr>';
+      cells.forEach(function(c,ci){
+        var tag=(ri===0)?'th':'td';
+        h+='<'+tag+(right[ci]?' style="text-align:right;"':'')+'>'+renderMDInline(c)+'</'+tag+'>';
+      });
+      h+='</tr>';
+    });
+    h+='</tbody></table>';
+    rows=[]; inTable=false;
+  }
   while(i<lines.length){
     var l=lines[i].trim();
-    // Empty line
-    if(!l){ if(inTable){h+='</tbody></table>'; inTable=false;} if(inList){h+=(listType==='ul'?'</ul>':'</ol>'); inList=false;} i++; h+='<br>'; continue; }
+    // 空行 = Markdown 的块分隔符，不是换行符：它自身的视觉重量为零，
+    // 块间距一律交给各块的 CSS margin（p 14 / 标题 20-12 / 表 14 / 列表 14）。
+    // 旧代码在这里吐一个裸 `<br>`，于是每个 `##` 标题后都多出一整行空白——
+    // 2026-10-10 实测 rogers-corp 正文 13463px 里塞了 53 个这种游离 <br>。
+    if(!l){ flushTable(); if(inList){h+=(listType==='ul'?'</ul>':'</ol>'); inList=false;} i++; continue; }
     // Table row
     if(l.indexOf('|')===0 && l.lastIndexOf('|')===l.length-1){
-      if(!inTable){h+='<table class="data-table"><tbody>'; inTable=true;}
+      if(!inTable){ inTable=true; rows=[]; }
       var cells=l.split('|').slice(1,-1);
       if(cells.length>0 && cells[0].replace(/[-:\s]+/g,'')===''){ i++; continue; } // skip separator row
-      h+='<tr>';
-      cells.forEach(function(c){ var tag=inTable&&h.indexOf('<tr>')===h.lastIndexOf('<tr>')?'th':'td'; h+='<'+tag+'>'+renderMDInline(c.trim())+'</'+tag+'>'; });
-      h+='</tr>'; i++; continue;
+      rows.push(cells.map(function(c){ return c.trim(); }));
+      i++; continue;
     }
-    if(inTable){h+='</tbody></table>'; inTable=false;}
+    flushTable();
     // Unordered list
     if(/^[-*]\s/.test(l)){
       if(!inList||listType!=='ul'){ if(inList){h+=(listType==='ul'?'</ul>':'</ol>');} h+='<ul class="styled-list unordered">'; inList=true; listType='ul'; }
@@ -639,22 +686,22 @@ function renderMD(text){
     }
     if(inList){h+=(listType==='ul'?'</ul>':'</ol>'); inList=false;}
     // Blockquote
-    if(l.indexOf('> ')==0){ h+='<div style="padding:6px 12px;background:#FFF3E0;border-left:3px solid #FF9500;border-radius:4px;margin:4px 0;font-size:13px;">'+renderMDInline(l.replace(/^>\s*/,''))+'</div>'; i++; continue; }
+    if(l.indexOf('> ')==0){ h+='<div style="padding:6px 12px;background:#FFF3E0;border-left:3px solid #FF9500;border-radius:4px;margin:0 0 12px;font-size:13px;">'+renderMDInline(l.replace(/^>\s*/,''))+'</div>'; i++; continue; }
     // ## heading
-    if(l.indexOf('## ')==0){ h+='<div style="font-weight:700;font-size:16px;margin:16px 0 8px;color:var(--text);padding-bottom:4px;border-bottom:1px solid var(--border);">'+renderMDInline(l.replace(/^##\s*/,''))+'</div>'; i++; continue; }
+    if(l.indexOf('## ')==0){ h+='<div style="font-weight:700;font-size:16px;margin:20px 0 12px;color:var(--text);padding-bottom:4px;border-bottom:1px solid var(--border);">'+renderMDInline(l.replace(/^##\s*/,''))+'</div>'; i++; continue; }
     // # heading
-    if(l.indexOf('# ')==0){ h+='<div style="font-weight:700;font-size:18px;margin:18px 0 10px;color:var(--text);">'+renderMDInline(l.replace(/^#\s*/,''))+'</div>'; i++; continue; }
+    if(l.indexOf('# ')==0){ h+='<div style="font-weight:700;font-size:18px;margin:22px 0 12px;color:var(--text);">'+renderMDInline(l.replace(/^#\s*/,''))+'</div>'; i++; continue; }
     // ### subheading
-    if(l.indexOf('### ')==0){ h+='<div style="font-weight:600;font-size:14px;margin:12px 0 6px;color:var(--text);">'+renderMDInline(l.replace(/^###\s*/,''))+'</div>'; i++; continue; }
+    if(l.indexOf('### ')==0){ h+='<div style="font-weight:600;font-size:14px;margin:16px 0 8px;color:var(--text);">'+renderMDInline(l.replace(/^###\s*/,''))+'</div>'; i++; continue; }
     // **bold title** : value — definition row
     if(/^\*\*[^*]+\*\*[：:]/.test(l)){
-      h+='<div style="margin:4px 0;">'+renderMDInline(l)+'</div>'; i++; continue;
+      h+='<div style="margin:0 0 10px;">'+renderMDInline(l)+'</div>'; i++; continue;
     }
     // Normal paragraph
-    h+='<p style="margin:4px 0;">'+renderMDInline(l)+'</p>';
+    h+='<p style="margin:0 0 14px;">'+renderMDInline(l)+'</p>';
     i++;
   }
-  if(inTable) h+='</tbody></table>';
+  flushTable();
   if(inList) h+=(listType==='ul'?'</ul>':'</ol>');
   return h;
 }
@@ -1090,7 +1137,11 @@ function renderCompany(c){
 
   if(hasSummary){
     h+='<div style="padding:0 0 12px;border-bottom:1px solid var(--border);margin-bottom:'+((hasDetailFields||hasBodyContent)?'12px':'2px')+';">';
-    h+='<div style="font-size:12px;color:var(--text2);margin-bottom:6px;">公司简介</div>';
+    // 「公司简介」是段落小标题，用全站统一的小标题规格（13px/600/主色），
+    // 与「上游输入」「下游客户」「竞争格局」等一致。旧值 12px/常规/次级灰与
+    // 下方网格的 label 完全同款，视觉模型判定「会被当成又一个数据标签」
+    // （2026-10-10 iw_pure-storage 截图）。
+    h+='<div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px;">公司简介</div>';
     h+='<div style="font-size:14px;color:var(--text);line-height:1.7;">'+mdInline(summary)+'</div>';
     h+='</div>';
   }
