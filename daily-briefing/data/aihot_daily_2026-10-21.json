@@ -1,0 +1,255 @@
+{
+  "target_date": "2026-10-21",
+  "generated_at": "2026-10-21T08:30:31+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-10-21",
+      "detail": null,
+      "data": {
+        "report_date": "2026-10-21",
+        "generated_at_source": "2026-10-21T00:00:33.717Z",
+        "window_start": "2026-10-20T00:00:00.000Z",
+        "window_end": "2026-10-21T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-10-21",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-10-21"
+        },
+        "section_count": 4,
+        "item_count": 12,
+        "lead_present": true,
+        "flashes_count": 10,
+        "sections": [
+          {
+            "label": "模型发布/更新",
+            "items": [
+              {
+                "item_id": "osk3jj5jltogwr6zpo09w80j8",
+                "title": "Inception Labs 发布扩散大语言模型 Mercury 3，速度达 1068 tokens/秒",
+                "summary": "Inception Labs 发布扩散式大语言模型 Mercury 3，称其在多项基准上超过 GPT-6 Luna 和 Claude Haiku 5.5，速度达 1068 tokens/秒，参数量较 Mercury 1 扩大 40 倍以上。",
+                "summary_len": 120,
+                "source_name": "Inception Labs：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/osk3jj5jltogwr6zpo09w80j8",
+                "link_original": "https://www.inceptionlabs.ai/blog/introducing-mercury-3",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/osk3jj5jltogwr6zpo09w80j8"
+                }
+              }
+            ]
+          },
+          {
+            "label": "产品发布/更新",
+            "items": [
+              {
+                "item_id": "ckykonvith99q6hvd0utjdwfn",
+                "title": "DeepSeek 全面开源内部推理框架 DeepInfer",
+                "summary": "DeepSeek 宣布将内部推理框架 DeepInfer 全面开源，并同步开源生产级 Token 编解码组件 deepseek-recipe。",
+                "summary_len": 71,
+                "source_name": "公众号：DeepSeek（深度求索）",
+                "link_aihot": "https://aihot.news/items/ckykonvith99q6hvd0utjdwfn",
+                "link_original": "https://mp.weixin.qq.com/s?__biz=Mzk0OTYwNzc3NQ%3D%3D&mid=2247485884&idx=1&sn=d457981abe7db1f1b5d600fc109dc836",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/ckykonvith99q6hvd0utjdwfn"
+                }
+              },
+              {
+                "item_id": "lh8vm7yp332xoffhqoscusss4",
+                "title": "Google 与 Meta 发布 TorchTPU：PyTorch 原生 TPU 后端",
+                "summary": "Google 与 Meta 发布开源项目 TorchTPU，为 Google TPU 提供原生 PyTorch 后端，模型迁移只需把 .to(\"cuda\") 改为 .to(\"tpu\")。",
+                "summary_len": 93,
+                "source_name": "PyTorch：Blog（RSS）",
+                "link_aihot": "https://aihot.news/items/lh8vm7yp332xoffhqoscusss4",
+                "link_original": "https://pytorch.org/blog/introducing-torchtpu/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/lh8vm7yp332xoffhqoscusss4"
+                }
+              },
+              {
+                "item_id": "asyalmeuxw45l5wj2tar3tda5",
+                "title": "ChatGPT 推出 Locked Chats，可用 PIN 或生物识别锁定敏感对话",
+                "summary": "ChatGPT 推出 Locked Chats 功能，把敏感对话从常规历史记录和搜索中移入受保护空间。用户在网页端和桌面端可用 PIN 解锁，支持的移动设备上可用 PIN、Face ID、Touch ID 或设备解锁；锁定会话中的新消息不会更新常规对话使用的记忆。该功能即日起向 Free、Go、Plus、Pro、Business、Enterprise 和 Edu 套餐推出。",
+                "summary_len": 188,
+                "source_name": "X：ChatGPT (@ChatGPT)",
+                "link_aihot": "https://aihot.news/items/asyalmeuxw45l5wj2tar3tda5",
+                "link_original": "https://x.com/ChatGPT/status/2112597766333673624",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/asyalmeuxw45l5wj2tar3tda5"
+                }
+              },
+              {
+                "item_id": "mlusnw9gi199uld4ixj58m2cz",
+                "title": "Google 发布 vLLM 与 SGLang 的 TorchTPU 原生推理引擎",
+                "summary": "Google 在 PyTorch 相关公告中推出基于 TorchTPU 的 vLLM 和 SGLang 原生 PyTorch 推理引擎，分别与 Inferact、RadixArk 合作开发，让开发者用熟悉的 PyTorch 工具在 TPU 上部署模型。",
+                "summary_len": 126,
+                "source_name": "Google Developers Blog（RSS）",
+                "link_aihot": "https://aihot.news/items/mlusnw9gi199uld4ixj58m2cz",
+                "link_original": "https://developers.googleblog.com/announcing-new-vllm-and-sglang-inference-engines-on-tpu/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/mlusnw9gi199uld4ixj58m2cz"
+                }
+              }
+            ]
+          },
+          {
+            "label": "行业动态",
+            "items": [
+              {
+                "item_id": "srgsfi8edabzrwgg6vjtgw3ya",
+                "title": "路透：OpenAI 拟在 Anthropic 上市前加速融资约 300 亿美元，估值超 1.4 万亿美元",
+                "summary": "据 Reuters 报道，OpenAI 正赶在 Anthropic 上市前洽谈融资约 300 亿美元，估值超 1.4 万亿美元，比 3 月的 8520 亿美元至少高 64%。",
+                "summary_len": 87,
+                "source_name": "X：Rohan Paul (@rohanpaul_ai)",
+                "link_aihot": "https://aihot.news/items/srgsfi8edabzrwgg6vjtgw3ya",
+                "link_original": "https://x.com/rohanpaul_ai/status/2112455383356989598",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/srgsfi8edabzrwgg6vjtgw3ya"
+                }
+              },
+              {
+                "item_id": "ov4nfafvbhe7d8mj1uirkgsxb",
+                "title": "SpaceX 财报显示 AI 业务超预期，占收入 52%",
+                "summary": "SpaceX 发布第三季度监管文件，披露营收 146 亿美元、净利润 44 亿美元，扭转去年同期 10 亿美元亏损。其更名的“Super Intelligence”业务线（含 Cursor、Grok 和 neocloud 算力业务）表现好于投资者预期，AI 目前占公司收入 52%，算力规模达 1.7 GW。",
+                "summary_len": 154,
+                "source_name": "TechCrunch：AI（RSS）",
+                "link_aihot": "https://aihot.news/items/ov4nfafvbhe7d8mj1uirkgsxb",
+                "link_original": "https://techcrunch.com/2026/10/20/spacexs-ai-business-is-beating-expectations/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/ov4nfafvbhe7d8mj1uirkgsxb"
+                }
+              },
+              {
+                "item_id": "u6kqfrgiqrhbpxn012nlisd66",
+                "title": "美国陆军网络司令部 ECHOTRIBBLE 项目拟将 AI 智能体变成自主扩散的网络武器",
+                "summary": "据 The Intercept 获取的文件，美国陆军网络司令部（ARCYBER）正在开发代号 ECHOTRIBBLE 的平台，让 AI 智能体自主在网络间移动、识别并清除威胁目标，之后自毁，且须在极少人工监督下运行。",
+                "summary_len": 108,
+                "source_name": "The Decoder：AI News（RSS）",
+                "link_aihot": "https://aihot.news/items/u6kqfrgiqrhbpxn012nlisd66",
+                "link_original": "https://the-decoder.com/army-cyber-commands-echotribble-would-turn-ai-agents-into-self-spreading-cyberweapons/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/u6kqfrgiqrhbpxn012nlisd66"
+                }
+              },
+              {
+                "item_id": "apaky0ybxpb9uwt12jrwj954p",
+                "title": "Redact 调查：WhatsApp 帮助页面隐藏 LLM 指令，让 AI 不推荐监管机构、不提 GDPR",
+                "summary": "Redact 发现 WhatsApp 帮助中心页面向 LLM 发送用户看不到的隐藏指令，指示其支持聊天机器人不推荐数据保护监管机构，并在用户提到律师或法律行动后不引用 GDPR、LGPD 或 CCPA。",
+                "summary_len": 101,
+                "source_name": "Hacker News：AI 热帖",
+                "link_aihot": "https://aihot.news/items/apaky0ybxpb9uwt12jrwj954p",
+                "link_original": "https://redact.dev/blog/whatsapp-help-pages-hidden-ai-instructions",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/apaky0ybxpb9uwt12jrwj954p"
+                }
+              },
+              {
+                "item_id": "u9skklgkszb3pcf3cvvc1nefk",
+                "title": "OpenAI 收购药物研发平台 Orchestra Bio 并入 Rosalind 生命科学体系",
+                "summary": "OpenAI 宣布收购 Orchestra Bio，一个帮助生物制药团队协调药物研发复杂流程的平台，其团队和技术将与 Rosalind 整合。Orchestra 的智能体可帮助团队追踪研究和项目进展，分析如生产批次失败对临床试验时间线的影响并提出应对方案。文中还提到与 Novo Nordisk 和 Moderna 的合作，以及新药研发平均需要 10 到 15 年的背景。",
+                "summary_len": 186,
+                "source_name": "OpenAI：官网动态（RSS · 排除企业/客户案例）",
+                "link_aihot": "https://aihot.news/items/u9skklgkszb3pcf3cvvc1nefk",
+                "link_original": "https://openai.com/index/openai-to-acquire-orchestra-bio",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/u9skklgkszb3pcf3cvvc1nefk"
+                }
+              },
+              {
+                "item_id": "cbzvuf1atk51l7i5c2dpgboao",
+                "title": "Anthropic 云合作生变：AWS、Google、微软视其为竞争者",
+                "summary": "据泄露给华尔街日报的 S-1 文件，Anthropic 难以从 AWS、Google 和 Microsoft 获得足够云算力，这些厂商日益将其视为竞争者而非客户。",
+                "summary_len": 81,
+                "source_name": "TechCrunch：AI（RSS）",
+                "link_aihot": "https://aihot.news/items/cbzvuf1atk51l7i5c2dpgboao",
+                "link_original": "https://techcrunch.com/2026/10/20/anthropics-cloud-partnerships-are-getting-messy/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/cbzvuf1atk51l7i5c2dpgboao"
+                }
+              }
+            ]
+          },
+          {
+            "label": "论文研究",
+            "items": [
+              {
+                "item_id": "oxl50pfymja6rgxkem3y0de9j",
+                "title": "Anthropic 用 Claude 设计出针对蝎子神经毒素的蛋白质迷你结合剂",
+                "summary": "Anthropic 让内部研究模型在 Claude Science 中主要自主运行 64 小时，设计针对五种蝎子神经毒素的蛋白质迷你结合剂，共生成 318,484 个设计、筛选出 180 个。",
+                "summary_len": 96,
+                "source_name": "Anthropic：Research（发表成果 · 网页）",
+                "link_aihot": "https://aihot.news/items/oxl50pfymja6rgxkem3y0de9j",
+                "link_original": "https://www.anthropic.com/research/claude-scorpion-toxin-binder-design",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/oxl50pfymja6rgxkem3y0de9j"
+                }
+              }
+            ]
+          }
+        ],
+        "item_index": {
+          "osk3jj5jltogwr6zpo09w80j8": {
+            "section_label": "模型发布/更新",
+            "title": "Inception Labs 发布扩散大语言模型 Mercury 3，速度达 1068 tokens/秒"
+          },
+          "ckykonvith99q6hvd0utjdwfn": {
+            "section_label": "产品发布/更新",
+            "title": "DeepSeek 全面开源内部推理框架 DeepInfer"
+          },
+          "lh8vm7yp332xoffhqoscusss4": {
+            "section_label": "产品发布/更新",
+            "title": "Google 与 Meta 发布 TorchTPU：PyTorch 原生 TPU 后端"
+          },
+          "asyalmeuxw45l5wj2tar3tda5": {
+            "section_label": "产品发布/更新",
+            "title": "ChatGPT 推出 Locked Chats，可用 PIN 或生物识别锁定敏感对话"
+          },
+          "mlusnw9gi199uld4ixj58m2cz": {
+            "section_label": "产品发布/更新",
+            "title": "Google 发布 vLLM 与 SGLang 的 TorchTPU 原生推理引擎"
+          },
+          "srgsfi8edabzrwgg6vjtgw3ya": {
+            "section_label": "行业动态",
+            "title": "路透：OpenAI 拟在 Anthropic 上市前加速融资约 300 亿美元，估值超 1.4 万亿美元"
+          },
+          "ov4nfafvbhe7d8mj1uirkgsxb": {
+            "section_label": "行业动态",
+            "title": "SpaceX 财报显示 AI 业务超预期，占收入 52%"
+          },
+          "u6kqfrgiqrhbpxn012nlisd66": {
+            "section_label": "行业动态",
+            "title": "美国陆军网络司令部 ECHOTRIBBLE 项目拟将 AI 智能体变成自主扩散的网络武器"
+          },
+          "apaky0ybxpb9uwt12jrwj954p": {
+            "section_label": "行业动态",
+            "title": "Redact 调查：WhatsApp 帮助页面隐藏 LLM 指令，让 AI 不推荐监管机构、不提 GDPR"
+          },
+          "u9skklgkszb3pcf3cvvc1nefk": {
+            "section_label": "行业动态",
+            "title": "OpenAI 收购药物研发平台 Orchestra Bio 并入 Rosalind 生命科学体系"
+          },
+          "cbzvuf1atk51l7i5c2dpgboao": {
+            "section_label": "行业动态",
+            "title": "Anthropic 云合作生变：AWS、Google、微软视其为竞争者"
+          },
+          "oxl50pfymja6rgxkem3y0de9j": {
+            "section_label": "论文研究",
+            "title": "Anthropic 用 Claude 设计出针对蝎子神经毒素的蛋白质迷你结合剂"
+          }
+        }
+      }
+    }
+  }
+}
