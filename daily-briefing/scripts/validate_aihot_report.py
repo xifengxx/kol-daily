@@ -116,7 +116,11 @@ def main():
 
     lens = [len(it["comment"]) for it in items]
     print(f"  ✅ 逐字一致 {len(items)}/{len(items)}")
-    print(f"  ✅ 点评完整，字数 {min(lens)}–{max(lens)} 字（区间 {MIN_LEN}-{MAX_LEN}）")
+    # 源站会发 0 条日报（实测 2026-10-26「今日安静，无大事发生」），此时没有点评字数可统计
+    if lens:
+        print(f"  ✅ 点评完整，字数 {min(lens)}–{max(lens)} 字（区间 {MIN_LEN}-{MAX_LEN}）")
+    else:
+        print("  ✅ 源站本期 0 条，无点评字数可统计")
     print(f"  ✅ 章节 {sections} 个、来源章节齐备")
     print("校验通过")
 

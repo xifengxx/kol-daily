@@ -1,0 +1,29 @@
+{
+  "target_date": "2026-10-26",
+  "generated_at": "2026-10-26T08:30:29+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-10-26",
+      "detail": null,
+      "data": {
+        "report_date": "2026-10-26",
+        "generated_at_source": "2026-10-26T00:00:16.964Z",
+        "window_start": "2026-10-25T00:00:00.000Z",
+        "window_end": "2026-10-26T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-10-26",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-10-26"
+        },
+        "section_count": 0,
+        "item_count": 0,
+        "lead_present": true,
+        "flashes_count": 0,
+        "sections": [],
+        "item_index": {}
+      }
+    }
+  }
+}
