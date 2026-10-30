@@ -272,7 +272,13 @@ def compute_heat(universe, quotes, target):
         key=lambda x: (
             not x["rankable"],
             x["rank_change_pct"] is None,
-            -(x["rank_change_pct"] or -999),
+            # 注意：不能用 `x["rank_change_pct"] or -999`——恰好 0.00% 的段
+            # 会被当成空值排到最后一位（2026-10-30 电子特气 -0.00% 踩过）。
+            -(
+                x["rank_change_pct"]
+                if x["rank_change_pct"] is not None
+                else -999
+            ),
         )
     )
     for i, seg in enumerate(rendered_segments, 1):
