@@ -1,0 +1,255 @@
+{
+  "target_date": "2026-10-31",
+  "generated_at": "2026-10-31T08:30:41+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-10-31",
+      "detail": null,
+      "data": {
+        "report_date": "2026-10-31",
+        "generated_at_source": "2026-10-31T00:00:43.744Z",
+        "window_start": "2026-10-30T00:00:00.000Z",
+        "window_end": "2026-10-31T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-10-31",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-10-31"
+        },
+        "section_count": 4,
+        "item_count": 12,
+        "lead_present": true,
+        "flashes_count": 4,
+        "sections": [
+          {
+            "label": "产品发布/更新",
+            "items": [
+              {
+                "item_id": "pd3dehdyyhzkyrjsw4b6bmcyj",
+                "title": "Anthropic 将 Claude Max 套餐更名为 Max 与 Ultra，Ultra 认证账号取消 5 小时限制",
+                "summary": "Anthropic 将 Claude 订阅套餐更名：Max 5x 改为 Max，Max 20x 改为 Ultra，价格不变（Max 100 美元/月、Ultra 200 美元/月）。即日起多数老订阅者的认证 Ultra 账号取消 5 小时限制，新账号保留临时限制以防欺诈滥用，周限额不变。",
+                "summary_len": 144,
+                "source_name": "X：Ado Kukic（Anthropic 开发者关系，Claude Code） (@adocomplete)",
+                "link_aihot": "https://aihot.news/items/pd3dehdyyhzkyrjsw4b6bmcyj",
+                "link_original": "https://x.com/adocomplete/status/2116224220539883992",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/pd3dehdyyhzkyrjsw4b6bmcyj"
+                }
+              },
+              {
+                "item_id": "qit1hgequ8pknedqqvuei5wfh",
+                "title": "Gemini API 的 Computer Use 工具正式开放（GA）",
+                "summary": "Google 于 10 月 30 日宣布 Gemini API 的 Computer Use 工具正式可用（GA），覆盖 Interactions 和 GenerateContent 两套 API。",
+                "summary_len": 99,
+                "source_name": "Gemini API：更新日志（网页）",
+                "link_aihot": "https://aihot.news/items/qit1hgequ8pknedqqvuei5wfh",
+                "link_original": "https://ai.google.dev/gemini-api/docs/changelog#10-30-2026",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/qit1hgequ8pknedqqvuei5wfh"
+                }
+              }
+            ]
+          },
+          {
+            "label": "行业动态",
+            "items": [
+              {
+                "item_id": "iu7xvjx1c2c5wqrpn0rwfxcb5",
+                "title": "Cursor 披露 Claude Code VS Code 扩展被植入恶意软件事件，最多影响 5000 用户",
+                "summary": "Cursor 发现通过其 IDE 扩展市场分发的 Claude Code VS Code 扩展被修改并植入恶意软件，最多影响 5000 用户，恶意版本并非 Anthropic 开发。Cursor 已于当日下午下线扩展市场，与相关提供方合作清除恶意软件并确认无进一步风险后重新上线，建议受影响用户参考博客说明排查，并升级到 Claude Code for VS Code 2.1.314。",
+                "summary_len": 193,
+                "source_name": "X：Cursor (@cursor_ai)",
+                "link_aihot": "https://aihot.news/items/iu7xvjx1c2c5wqrpn0rwfxcb5",
+                "link_original": "https://x.com/cursor_ai/status/2116074289053175808",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/iu7xvjx1c2c5wqrpn0rwfxcb5"
+                }
+              },
+              {
+                "item_id": "yrdu4gxaoljhhbkvw1xlvzc3p",
+                "title": "阿里巴巴：Apple 智能国行用户可自主选择是否开通千问集成功能",
+                "summary": "阿里巴巴发布公告，说明千问集成 Apple 智能后用户可自主选择是否开通，功能将于 11 月 4 日随 iOS 开发者 Beta 版开放测试，12 月 iOS 27.3 正式发布时面向中国用户推出。",
+                "summary_len": 99,
+                "source_name": "IT之家·人工智能",
+                "link_aihot": "https://aihot.news/items/yrdu4gxaoljhhbkvw1xlvzc3p",
+                "link_original": "https://www.ithome.com/1/020/395.htm",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/yrdu4gxaoljhhbkvw1xlvzc3p"
+                }
+              },
+              {
+                "item_id": "cms82puwtmpssdpbjmajoopr9",
+                "title": "Project Suncatcher 在轨道卫星上运行 TPU，Gemma 模型首次在太空完成推理并回传回应",
+                "summary": "Philipp Schmid 转引 Sundar Pichai 的消息：Google Project Suncatcher 在数周前发射原型卫星后，成功向轨道发送指令、启动 TPU、运行提示词，并在地面收到了首个完整回应（一首 haiku），作者称 Gemma 4 成为首个在太空运行的大语言模型。",
+                "summary_len": 149,
+                "source_name": "X：Philipp Schmid（Google DeepMind 开发者体验） (@_philschmid)",
+                "link_aihot": "https://aihot.news/items/cms82puwtmpssdpbjmajoopr9",
+                "link_original": "https://x.com/_philschmid/status/2116235686445502608",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/cms82puwtmpssdpbjmajoopr9"
+                }
+              },
+              {
+                "item_id": "fxmexzrmo7pw52vc5j6ej17kl",
+                "title": "Jassy 称 AWS 五到十年内将成为万亿美元营收业务，2026 年 capex 约 2200 亿美元",
+                "summary": "Amazon CEO Andy Jassy 在周四的季度财报电话会议上表示，AWS 未来五到十年内可以成为年营收万亿美元的业务，2026 年现金 capex 预计约 2200 亿美元，大部分投向 AWS，2027 年还将大幅增加。",
+                "summary_len": 115,
+                "source_name": "TechCrunch：AI（RSS）",
+                "link_aihot": "https://aihot.news/items/fxmexzrmo7pw52vc5j6ej17kl",
+                "link_original": "https://techcrunch.com/2026/10/29/aws-will-be-a-1t-business-jassy-says-but-first-it-will-spend-big/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/fxmexzrmo7pw52vc5j6ej17kl"
+                }
+              },
+              {
+                "item_id": "fxxkgtzpf2pb8xjnhu4jtis0b",
+                "title": "科技巨头 AI 资本开支超 7400 亿美元，投资者担忧升温引发市场下跌",
+                "summary": "Alphabet、Amazon、Meta、Microsoft 今年计划资本开支合计超 7400 亿美元，投资者情绪从奖励大额投入转向担忧负自由现金流、债务攀升与回报不确定。",
+                "summary_len": 86,
+                "source_name": "TechCrunch：AI（RSS）",
+                "link_aihot": "https://aihot.news/items/fxxkgtzpf2pb8xjnhu4jtis0b",
+                "link_original": "https://techcrunch.com/2026/10/30/cracks-are-emerging-in-the-ai-spending-boom/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/fxxkgtzpf2pb8xjnhu4jtis0b"
+                }
+              },
+              {
+                "item_id": "jdx4wtubcty1d08sl87jqekp9",
+                "title": "Toyota 与 Waymo 深化自动驾驶合作，2027 年在日本测试自动驾驶 bZ4X 车队",
+                "summary": "Toyota 与 Waymo 宣布进入自动驾驶合作新阶段，在 2025 年 4 月初步协议基础上，将于 2027 年起在日本测试和验证自动驾驶 Toyota bZ4X 车队，后续计划部署到英国等其他 Waymo 服务市场。",
+                "summary_len": 111,
+                "source_name": "Waymo：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/jdx4wtubcty1d08sl87jqekp9",
+                "link_original": "https://waymo.com/blog/2026/10/toyota-bz4x-partnership",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/jdx4wtubcty1d08sl87jqekp9"
+                }
+              },
+              {
+                "item_id": "oas684tt9kpeds9cq7vgjvo1x",
+                "title": "OpenAI 汇编各方法庭之友意见，主张 AI 训练应适用合理使用原则",
+                "summary": "OpenAI 整理了在《纽约时报》诉讼中提交给法院的多份支持合理使用的法庭之友意见摘要，作者包括图书馆协会、法律学者、独立创作者和美国政府等。各意见书主张 AI 训练具有转换性、不构成版权法认可的市场损害，并警告限缩合理使用将阻碍科研进展与美国经济繁荣；完整文件可在法院公开卷宗查阅。",
+                "summary_len": 142,
+                "source_name": "OpenAI：官网动态（RSS · 排除企业/客户案例）",
+                "link_aihot": "https://aihot.news/items/oas684tt9kpeds9cq7vgjvo1x",
+                "link_original": "https://openai.com/index/fair-use-benefits-everyone",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/oas684tt9kpeds9cq7vgjvo1x"
+                }
+              },
+              {
+                "item_id": "hfhskyex3cjrs3huvpmi1z7bg",
+                "title": "Sierra 宣布 ARR 突破 4 亿美元，Q3 单季新增超 1.5 亿美元",
+                "summary": "Sierra 宣布本周 ARR 突破 4 亿美元，Q3 单季新增超 1.5 亿美元，从 2 亿到 4 亿仅用五个月，快于此前六个月的翻倍节奏。",
+                "summary_len": 71,
+                "source_name": "Sierra：Blog（RSS）",
+                "link_aihot": "https://aihot.news/items/hfhskyex3cjrs3huvpmi1z7bg",
+                "link_original": "https://sierra.ai/blog/our-customers-ambition-is-accelerating-our-growth",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/hfhskyex3cjrs3huvpmi1z7bg"
+                }
+              }
+            ]
+          },
+          {
+            "label": "论文研究",
+            "items": [
+              {
+                "item_id": "nxkr9ex5tfbhfhw1gvj9wsjuz",
+                "title": "Epoch AI 实验显示 GLM 5.3 可利用补丁窗口期自主攻击 Firefox",
+                "summary": "Epoch AI 实验发现，Z.ai 八月发布的开源权重模型 GLM 5.3 能利用 Mozilla 已发布但未推送给用户的安全补丁（patch gap），自主构建网页攻击，仅访问页面即可读取访客电脑文件，攻破 9 月 17 日至 10 月 26 日发布的全部六个 Firefox 版本。",
+                "summary_len": 144,
+                "source_name": "Epoch AI：Gradient Updates（RSS）",
+                "link_aihot": "https://aihot.news/items/nxkr9ex5tfbhfhw1gvj9wsjuz",
+                "link_original": "https://epochai.substack.com/p/glm-patch-gap-exploit-firefox",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/nxkr9ex5tfbhfhw1gvj9wsjuz"
+                }
+              }
+            ]
+          },
+          {
+            "label": "技巧与观点",
+            "items": [
+              {
+                "item_id": "ykvaq4vx3ydt23josezzan62r",
+                "title": "Kimi 官方教程：如何用 Kimi K3.1 Pro 创作 3D 作品",
+                "summary": "月之暗面（Kimi）发布官方教程，详解 Kimi K3.1 Pro 的 3D 创作工作流程，说明参数化建模与网格化建模两种方式及对应工具选择。文章分享了 4 个案例的具体操作，包括在 Unreal Engine 中构建东方天宫、制作可 3D 打印的台灯、纯代码调用 Blender 生成建筑、用 Tripo 和 Blender 搭建微缩城市，并给出图胜于言、先搭灰模再细化等 5 个使用技巧。",
+                "summary_len": 196,
+                "source_name": "公众号：月之暗面（Kimi）",
+                "link_aihot": "https://aihot.news/items/ykvaq4vx3ydt23josezzan62r",
+                "link_original": "https://mp.weixin.qq.com/s?__biz=MzkzMTY4NTIyNA%3D%3D&mid=2247484364&idx=1&sn=42491c3f098deb797ee8f2a17d147b3a",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/ykvaq4vx3ydt23josezzan62r"
+                }
+              }
+            ]
+          }
+        ],
+        "item_index": {
+          "pd3dehdyyhzkyrjsw4b6bmcyj": {
+            "section_label": "产品发布/更新",
+            "title": "Anthropic 将 Claude Max 套餐更名为 Max 与 Ultra，Ultra 认证账号取消 5 小时限制"
+          },
+          "qit1hgequ8pknedqqvuei5wfh": {
+            "section_label": "产品发布/更新",
+            "title": "Gemini API 的 Computer Use 工具正式开放（GA）"
+          },
+          "iu7xvjx1c2c5wqrpn0rwfxcb5": {
+            "section_label": "行业动态",
+            "title": "Cursor 披露 Claude Code VS Code 扩展被植入恶意软件事件，最多影响 5000 用户"
+          },
+          "yrdu4gxaoljhhbkvw1xlvzc3p": {
+            "section_label": "行业动态",
+            "title": "阿里巴巴：Apple 智能国行用户可自主选择是否开通千问集成功能"
+          },
+          "cms82puwtmpssdpbjmajoopr9": {
+            "section_label": "行业动态",
+            "title": "Project Suncatcher 在轨道卫星上运行 TPU，Gemma 模型首次在太空完成推理并回传回应"
+          },
+          "fxmexzrmo7pw52vc5j6ej17kl": {
+            "section_label": "行业动态",
+            "title": "Jassy 称 AWS 五到十年内将成为万亿美元营收业务，2026 年 capex 约 2200 亿美元"
+          },
+          "fxxkgtzpf2pb8xjnhu4jtis0b": {
+            "section_label": "行业动态",
+            "title": "科技巨头 AI 资本开支超 7400 亿美元，投资者担忧升温引发市场下跌"
+          },
+          "jdx4wtubcty1d08sl87jqekp9": {
+            "section_label": "行业动态",
+            "title": "Toyota 与 Waymo 深化自动驾驶合作，2027 年在日本测试自动驾驶 bZ4X 车队"
+          },
+          "oas684tt9kpeds9cq7vgjvo1x": {
+            "section_label": "行业动态",
+            "title": "OpenAI 汇编各方法庭之友意见，主张 AI 训练应适用合理使用原则"
+          },
+          "hfhskyex3cjrs3huvpmi1z7bg": {
+            "section_label": "行业动态",
+            "title": "Sierra 宣布 ARR 突破 4 亿美元，Q3 单季新增超 1.5 亿美元"
+          },
+          "nxkr9ex5tfbhfhw1gvj9wsjuz": {
+            "section_label": "论文研究",
+            "title": "Epoch AI 实验显示 GLM 5.3 可利用补丁窗口期自主攻击 Firefox"
+          },
+          "ykvaq4vx3ydt23josezzan62r": {
+            "section_label": "技巧与观点",
+            "title": "Kimi 官方教程：如何用 Kimi K3.1 Pro 创作 3D 作品"
+          }
+        }
+      }
+    }
+  }
+}
