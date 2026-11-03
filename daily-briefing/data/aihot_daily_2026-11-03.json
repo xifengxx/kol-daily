@@ -1,0 +1,153 @@
+{
+  "target_date": "2026-11-03",
+  "generated_at": "2026-11-03T08:31:17+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-11-03",
+      "detail": null,
+      "data": {
+        "report_date": "2026-11-03",
+        "generated_at_source": "2026-11-03T00:00:32.882Z",
+        "window_start": "2026-11-02T00:00:00.000Z",
+        "window_end": "2026-11-03T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-11-03",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-11-03"
+        },
+        "section_count": 4,
+        "item_count": 6,
+        "lead_present": true,
+        "flashes_count": 1,
+        "sections": [
+          {
+            "label": "产品发布/更新",
+            "items": [
+              {
+                "item_id": "sg5u3u91kw42j1grtyp3ny65n",
+                "title": "Claude Platform 推出 message threads 公测，降低长会话智能体延迟",
+                "summary": "Anthropic 在 Claude Platform 推出 message threads 公测，智能体每轮只需发送新增消息而无需重发全部对话历史，从而缩短首 token 时间。",
+                "summary_len": 90,
+                "source_name": "Claude：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/sg5u3u91kw42j1grtyp3ny65n",
+                "link_original": "https://claude.com/blog/message-threads",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/sg5u3u91kw42j1grtyp3ny65n"
+                }
+              },
+              {
+                "item_id": "l37ydaic43icz85huclc2io6c",
+                "title": "腾讯混元发布 Hyra 2.0：让通用 agent 研发可复用的科学工具与模型",
+                "summary": "腾讯混元发布 Hyra 2.0，将自动化科研重点从直接解题转向由 agent 研发和升级科学模型、工作流与软件工具。系统采用 Overall、Mission、Worker 三层分工，接入企业微信、计算平台和代码仓库的实际研发环境，成果已公开在 GitHub 仓库。",
+                "summary_len": 132,
+                "source_name": "公众号：腾讯混元",
+                "link_aihot": "https://aihot.news/items/l37ydaic43icz85huclc2io6c",
+                "link_original": "https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ%3D%3D&mid=2247498763&idx=1&sn=279f8fb4e43a987fdc0aa2af0b0f7958",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/l37ydaic43icz85huclc2io6c"
+                }
+              }
+            ]
+          },
+          {
+            "label": "行业动态",
+            "items": [
+              {
+                "item_id": "sxbs5a90fgybhyucacmzvrc6w",
+                "title": "OpenAI 推出 Grid Protectors 计划，从 Georgia 校园开始支持电网削峰",
+                "summary": "OpenAI 推出 Grid Protectors 计划，与电力公司、监管机构和政策制定者合作，让未来算力校园在电网紧张时降低用电需求，首站为 Effingham County 校园。",
+                "summary_len": 92,
+                "source_name": "OpenAI：官网动态（RSS · 排除企业/客户案例）",
+                "link_aihot": "https://aihot.news/items/sxbs5a90fgybhyucacmzvrc6w",
+                "link_original": "https://openai.com/index/grid-protectors-program",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/sxbs5a90fgybhyucacmzvrc6w"
+                }
+              },
+              {
+                "item_id": "owfopy087lszd1cpfp3c82pxv",
+                "title": "Anthropic 季度营收增长十二倍至近 170 亿美元，但净亏损达 233 亿美元",
+                "summary": "据 Bloomberg 与 The Information，Anthropic 该季度营收近 170 亿美元，为一年前的十二倍，但运营成本达 175 亿美元，季度净亏损 233 亿美元，高于去年同期的 121 亿美元。",
+                "summary_len": 109,
+                "source_name": "The Decoder：AI News（RSS）",
+                "link_aihot": "https://aihot.news/items/owfopy087lszd1cpfp3c82pxv",
+                "link_original": "https://the-decoder.com/anthropic-grows-revenue-twelvefold-but-posts-23-billion-loss/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/owfopy087lszd1cpfp3c82pxv"
+                }
+              }
+            ]
+          },
+          {
+            "label": "论文研究",
+            "items": [
+              {
+                "item_id": "wlmiqh13694tqabyvu6nzvlrs",
+                "title": "OpenAI 训练并部署激活分类器作为前沿模型安全监控层",
+                "summary": "OpenAI 自 GPT-5.6 起在其最强模型的内部和外部流量上部署激活分类器（probes），利用模型内部激活逐 token 实时评分，可在生成中途阻断违规回复和工具调用并交由推理模型复审。实验显示 probes 比更大的文本分类器对测试的越狱攻击更鲁棒，准确率随模型能力提升，且在后训练各检查点间迁移良好，但需为新基础模型重新训练，且只能检测可显式训练的已知违规类型。",
+                "summary_len": 187,
+                "source_name": "OpenAI：Alignment 研究博客（RSS）",
+                "link_aihot": "https://aihot.news/items/wlmiqh13694tqabyvu6nzvlrs",
+                "link_original": "https://alignment.openai.com/training-activation-classifiers/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/wlmiqh13694tqabyvu6nzvlrs"
+                }
+              }
+            ]
+          },
+          {
+            "label": "技巧与观点",
+            "items": [
+              {
+                "item_id": "dzwfvd9xp6v4qaj6olxezpier",
+                "title": "数字生命卡兹克分享折腾一年的Agent自动化系统架构",
+                "summary": "自媒体作者卡兹克分享自己搭建近一年的Agent自动化系统，核心是把任务起点从人身上移开，由事件触发Agent工作。系统分为自动化中台、Agent执行、CI中台和飞书决策四层：中台用rules.json统一管理事件触发和Agent调度，本地MacMini跑Agent任务，自建CI中台完成审查、检查、合并、发布、核实五步，只在删数据、花钱、改方向等关键决策时通过飞书卡片找作者拍板。",
+                "summary_len": 190,
+                "source_name": "公众号：数字生命卡兹克",
+                "link_aihot": "https://aihot.news/items/dzwfvd9xp6v4qaj6olxezpier",
+                "link_original": "https://mp.weixin.qq.com/s?__biz=MzIyMzA5NjEyMA%3D%3D&mid=2647688060&idx=1&sn=e00d7e57b6f0e3670f0e267e677047df",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/dzwfvd9xp6v4qaj6olxezpier"
+                }
+              }
+            ]
+          }
+        ],
+        "item_index": {
+          "sg5u3u91kw42j1grtyp3ny65n": {
+            "section_label": "产品发布/更新",
+            "title": "Claude Platform 推出 message threads 公测，降低长会话智能体延迟"
+          },
+          "l37ydaic43icz85huclc2io6c": {
+            "section_label": "产品发布/更新",
+            "title": "腾讯混元发布 Hyra 2.0：让通用 agent 研发可复用的科学工具与模型"
+          },
+          "sxbs5a90fgybhyucacmzvrc6w": {
+            "section_label": "行业动态",
+            "title": "OpenAI 推出 Grid Protectors 计划，从 Georgia 校园开始支持电网削峰"
+          },
+          "owfopy087lszd1cpfp3c82pxv": {
+            "section_label": "行业动态",
+            "title": "Anthropic 季度营收增长十二倍至近 170 亿美元，但净亏损达 233 亿美元"
+          },
+          "wlmiqh13694tqabyvu6nzvlrs": {
+            "section_label": "论文研究",
+            "title": "OpenAI 训练并部署激活分类器作为前沿模型安全监控层"
+          },
+          "dzwfvd9xp6v4qaj6olxezpier": {
+            "section_label": "技巧与观点",
+            "title": "数字生命卡兹克分享折腾一年的Agent自动化系统架构"
+          }
+        }
+      }
+    }
+  }
+}
