@@ -1,0 +1,53 @@
+{
+  "target_date": "2026-11-09",
+  "generated_at": "2026-11-09T08:31:54+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-11-09",
+      "detail": null,
+      "data": {
+        "report_date": "2026-11-09",
+        "generated_at_source": "2026-11-09T00:00:22.503Z",
+        "window_start": "2026-11-08T00:00:00.000Z",
+        "window_end": "2026-11-09T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-11-09",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-11-09"
+        },
+        "section_count": 1,
+        "item_count": 1,
+        "lead_present": true,
+        "flashes_count": 1,
+        "sections": [
+          {
+            "label": "行业动态",
+            "items": [
+              {
+                "item_id": "mg4znyraf1xbbwg1vd915wqoi",
+                "title": "NVIDIA 董事会宣布就 CEO 黄仁勋遭外国情报行动瞄准一事启动独立调查",
+                "summary": "NVIDIA 董事会于 11 月 8 日发布声明，就近期有关创始人兼 CEO 黄仁勋成为外国情报行动目标的报道启动独立调查。调查由独立董事组成的委员会在外部独立律师协助下监督，黄仁勋全力配合。董事会表示没有理由认为国家安全或 NVIDIA 机密已受损，但调查将审视所有可用信息，并表示对黄仁勋及其领导团队有信心。",
+                "summary_len": 156,
+                "source_name": "X：Rohan Paul (@rohanpaul_ai)",
+                "link_aihot": "https://aihot.news/items/mg4znyraf1xbbwg1vd915wqoi",
+                "link_original": "https://x.com/rohanpaul_ai/status/2119540787147059491",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/mg4znyraf1xbbwg1vd915wqoi"
+                }
+              }
+            ]
+          }
+        ],
+        "item_index": {
+          "mg4znyraf1xbbwg1vd915wqoi": {
+            "section_label": "行业动态",
+            "title": "NVIDIA 董事会宣布就 CEO 黄仁勋遭外国情报行动瞄准一事启动独立调查"
+          }
+        }
+      }
+    }
+  }
+}
