@@ -1,0 +1,87 @@
+{
+  "target_date": "2026-11-09",
+  "generated_at": "2026-11-10T07:15:58+08:00",
+  "modules": {
+    "price_news": {
+      "status": "ok",
+      "source": "Google News RSS",
+      "method": "固定查询组（AI 产业链价格敏感环节，中英各一条）→ 标题必须命中涨价词且不得命中干扰词 → 按标题去重 → 时间窗截断",
+      "data": {
+        "days_window": 3,
+        "cutoff_date": "2026-11-06",
+        "queries_total": 22,
+        "queries_failed": 0,
+        "errors": [],
+        "items_total": 4,
+        "items_by_category": {
+          "存储/HBM": 2,
+          "晶圆代工": 2
+        },
+        "filter_stats": {
+          "excluded": 12,
+          "no_keyword": 332,
+          "too_old": 358,
+          "undated": 0
+        },
+        "items": [
+          {
+            "category": "存储/HBM",
+            "lang": "zh",
+            "query": "HBM 存储 涨价",
+            "matched": "涨价",
+            "title": "白线观察｜AI 服务器争抢内存，涨价压力传向苹果和高通 - 吴说",
+            "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9faTJTbXZ6Qmk0cWFrcXJveDJSdU56bkQydWpmeUg3UFMwak5NRVhRUlhianllWU9HU20tZGdDR2t6TmlfdFc4VmlmaXN1TENDRlNIM1VXWG02bGRCZ0E?oc=5",
+            "source": "吴说",
+            "published": "Sun, 08 Nov 2026 11:41:00 GMT",
+            "pub_date": "2026-11-08",
+            "age_days": 1,
+            "also_matched": [
+              "服务器/整机"
+            ]
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "zh",
+            "query": "晶圆代工 涨价",
+            "matched": "涨价",
+            "title": "晶圆代工市场酝酿涨价，龙头获大资金加仓 - 凤凰网财经",
+            "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9mc0J1UXY0eDFsdzBoN0EtRHp4VE9PMVhzeHpHdVg4N2J1OXowY2p0OUR5ZnYxRjl2c3R1T2RqWEQ3eHU2ajc2RWt4Tk1YV2w4?oc=5",
+            "source": "凤凰网财经",
+            "published": "Sun, 08 Nov 2026 05:10:40 GMT",
+            "pub_date": "2026-11-08",
+            "age_days": 1,
+            "also_matched": []
+          },
+          {
+            "category": "晶圆代工",
+            "lang": "zh",
+            "query": "晶圆代工 涨价",
+            "matched": "涨价",
+            "title": "台积电先进制程代工或将全线涨价，半导体设备ETF、科创半导体设备ETF、芯片ETF涨超5% - 搜狐网",
+            "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQMDNVWGs1emw2Vl9FQjhvSWFmcmpxRzQzV3NHVjdpSFJFU19NcXRfT1FHd2RJaTgtRW12TE5DVW9nb1NMMXIzMjlFcE1rMlRvRjJJWEtEd2NKWEo0S0lYSUdBa3FRdUdsN1Y0UnB2QjVfaVh2VllZMU1SaVVsZEJvRlFFRU5ESDNw?oc=5",
+            "source": "搜狐网",
+            "published": "Sun, 08 Nov 2026 22:17:41 GMT",
+            "pub_date": "2026-11-08",
+            "age_days": 1,
+            "also_matched": [
+              "半导体设备"
+            ]
+          },
+          {
+            "category": "存储/HBM",
+            "lang": "zh",
+            "query": "HBM 存储 涨价",
+            "matched": "涨价",
+            "title": "突发！美光300亿工厂被迫停摆：罢工潮恐让内存涨价更猛 - 驱动之家",
+            "link": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBsUElQd29lZmlpeVd2czNvYlhFNnU1U1czSkJEaGxGZE1SZGtGX0xkLThnY2tZdnFyVlRLNmQwM1I1T1phdHBtOUVsRE94clV1WDlNZzlWcng?oc=5",
+            "source": "驱动之家",
+            "published": "Fri, 06 Nov 2026 01:43:00 GMT",
+            "pub_date": "2026-11-06",
+            "age_days": 3,
+            "also_matched": []
+          }
+        ]
+      }
+    }
+  }
+}

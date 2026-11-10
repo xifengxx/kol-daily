@@ -1,0 +1,1201 @@
+{
+ "target_date": "2026-11-09",
+ "entries": [
+  {
+   "type": "industry",
+   "key": "建筑施工",
+   "display": "建筑施工",
+   "confidence": "中",
+   "driver": "FMP 等权口径 +13.46%（n_exchanges=1，样本极小）。周一工业板块整体 +3.21%（FMP 等权）、XLI +3.82%，是「数据中心/基建暂停令」恐慌在摩根士丹利、UBS 称上周暴跌过度后的一次集中回补；建筑施工作为 AI 数据中心土建的直接承接方，弹性被放大。小样本读数，只作资金流向参考，不代表行业景气反转。",
+   "sources": [
+    "Reuters",
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "奢侈品",
+   "display": "奢侈品",
+   "confidence": "中",
+   "driver": "FMP 等权 +6.01%（n_exchanges=1，样本小）。周一是全市场风险偏好回补日（消费可选 XLY +2.92%），欧洲奢侈品 ADR 随之修复；无公司或行业单一公告，涨幅主要由 beta 驱动。",
+   "sources": [
+    "FMP",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "通信设备",
+   "display": "通信设备",
+   "confidence": "高",
+   "driver": "FMP 等权 +5.69%。AI 网络与光互联是昨夜最整齐的方向：Arista +9.00%、Cisco +5.11%（本周财报）、Broadcom +8.78%、Coherent +16.79%。驱动是费半 +6.85% 的板块性修复叠加 Marvell 1,150 亿美元收购 Lumentum 后「光互联定价权」叙事继续发酵。",
+   "sources": [
+    "Seeking Alpha",
+    "247wallst",
+    "Reuters"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "工程与建设",
+   "display": "工程与建设",
+   "confidence": "中",
+   "driver": "FMP 等权 +5.62%。与建筑施工同源：AI 数据中心土建与电力工程的「审批恐慌」回补。上周民主党横扫中期选举后市场担心数据中心限制立法，本周一摩根士丹利/UBS 判断极端监管风险低，工程类小票反弹最猛。",
+   "sources": [
+    "Reuters",
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "硬件、设备与零件",
+   "display": "硬件、设备与零件",
+   "confidence": "高",
+   "driver": "FMP 等权 +5.39%。AI 服务器与网络硬件同步修复：Dell +5.41%、HPE +6.19%、Arista +9.00%；背景是上周「AI 资本开支可持续性」抛售后的空头回补，以及 CoreWeave/Cisco 本周财报前的预期修复。",
+   "sources": [
+    "247wallst",
+    "MarketWatch",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "医疗设备与服务",
+   "display": "医疗设备与服务",
+   "confidence": "低",
+   "driver": "FMP 等权 +5.30%，但与市值加权口径明显背离（XLV 仅 +1.91%）。该行业 n_exchanges=1、成分以中小市值为主，涨幅更像小票普涨，而非医疗基本面事件；昨夜无重大医疗政策或并购新闻。",
+   "sources": [
+    "FMP",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "独立发电商",
+   "display": "独立发电商",
+   "confidence": "高",
+   "driver": "FMP 等权 +5.15%，是昨夜少数「有真实业绩驱动」的板块：Constellation Energy 三季度调整后 EPS 5.06 美元（去年同期 3.04）、营收约 95.5 亿美元同比 +45%，并年内第二次上调全年指引，CEG +10.46%；Vistra +7.31%、GE Vernova +7.13% 跟随。数据中心长期供电协议缓解了「监管掐断 AI 电力需求」的担忧。",
+   "sources": [
+    "Constellation 财报",
+    "Reuters",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "百货商店",
+   "display": "百货商店",
+   "confidence": "低",
+   "driver": "FMP 等权 +5.05%（n_exchanges=1，样本小）。消费可选 XLY +2.92%、零售随大盘修复；无公司公告，属高 beta 小票反弹，不宜读作消费景气信号。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "商业设备与耗材",
+   "display": "商业设备与耗材",
+   "confidence": "低",
+   "driver": "FMP 等权 -4.62%（n_exchanges=1，小样本）。在全市场普涨日逆势下跌，检索无对应公司事件；更可能是少数成分股（办公用品/打印耗材类）自身的业绩或评级扰动被等权放大。暂无明确公开原因。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "农业投入品",
+   "display": "农业投入品",
+   "confidence": "低",
+   "driver": "FMP 等权 -2.92%。化肥/农化在风险偏好回补日走弱，检索未见行业级新闻；可能与农产品价格与南美种植季预期有关，但无当日实证。暂无明确公开原因。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "铀",
+   "display": "铀",
+   "confidence": "低",
+   "driver": "FMP 等权 -2.78%。值得注意的是：同一天核电运营商 CEG +10.46%、VST +7.31% 大涨，而铀矿股下跌——资金买的是「有长期供电合同的运营商」，不是「燃料」；属板块内部结构分化。",
+   "sources": [
+    "Reuters",
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "太阳能",
+   "display": "太阳能",
+   "confidence": "低",
+   "driver": "FMP 等权 -2.23%。在民主党横扫中期选举（通常被视为利好清洁能源）的背景下逆势下跌，说明市场当前定价的是利率与项目融资成本，而非党派政策预期；无当日行业级新闻。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "酒庄与蒸馏酒",
+   "display": "酒庄与蒸馏酒",
+   "confidence": "低",
+   "driver": "FMP 等权 -2.16%。必需消费整体仅 +0.90%（XLP），酒类更弱；在 risk-on 日防御资产被卖出属正常轮动，无公司事件。",
+   "sources": [
+    "FMP",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "烟草",
+   "display": "烟草",
+   "confidence": "中",
+   "driver": "FMP 等权 -1.34%。防御型现金流资产在普涨日被减持，属典型 risk-on 轮动；无监管或公司层面的新增消息。",
+   "sources": [
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "软件服务",
+   "display": "软件服务",
+   "confidence": "中",
+   "driver": "FMP 等权 -1.33%，是科技内部唯一收跌的方向。昨夜资金明确从「软件/服务」流向「硬件/半导体」（XLK +3.73% vs 软件服务 -1.33%）：AI 交易的定价重心回到「卖铲子」的算力与设备，而不是应用层。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "保险经纪",
+   "display": "保险经纪",
+   "confidence": "低",
+   "driver": "FMP 等权 -1.28%。金融板块整体 -0.05%（FMP 等权）、XLF +1.45%，内部分化；保险经纪在利率高位与普涨日缺乏催化。暂无明确公开原因。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "计算机硬件",
+   "display": "计算机硬件",
+   "confidence": "高",
+   "driver": "FMP 等权 +4.54%。AI 服务器双雄 Dell +5.41%、HPE +6.19%，叠加存储涨价对整机 ASP 的推升；本周 CoreWeave、Cisco 财报是需求验证点。",
+   "sources": [
+    "MarketWatch",
+    "247wallst"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "科技分销",
+   "display": "科技分销",
+   "confidence": "中",
+   "driver": "FMP 等权 +3.81%。半导体与硬件普涨的分销端映射，属 beta 修复；无公司公告。",
+   "sources": [
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "半导体",
+   "display": "半导体",
+   "confidence": "高",
+   "driver": "FMP 等权 +3.16%，远低于费半 +6.85%——这是本期最重要的口径背离：市值加权的龙头（AMD +13.26%、Broadcom +8.78%、设备三巨头）大涨，而等权口径里大量中小芯片股涨幅有限，且英伟达 -4.27% 拖累。芯片内部是「龙头修复、小票跟涨乏力」。",
+   "sources": [
+    "Reuters",
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "电信服务",
+   "display": "电信服务",
+   "confidence": "低",
+   "driver": "FMP 等权 +1.95%。防御属性板块在普涨日小幅跟涨，无行业事件。",
+   "sources": [
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "基础软件",
+   "display": "基础软件",
+   "confidence": "中",
+   "driver": "FMP 等权 +1.71%。软件整体弱于硬件，但基础设施软件靠云资本开支叙事撑住；Snowflake +5.53%、Palantir +5.50% 属超跌反弹。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "应用软件",
+   "display": "应用软件",
+   "confidence": "低",
+   "driver": "FMP 等权 +1.21%。应用层继续跑输算力硬件，资金未回到「AI 变现」叙事。",
+   "sources": [
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "互联网内容与信息",
+   "display": "互联网内容与信息",
+   "confidence": "中",
+   "driver": "FMP 等权 +0.62%，被 Meta +5.12% 与 Alphabet +0.73% 的平均值拉平：Meta 因 Muse 智能体在英国上线的报道走强，Alphabet 在 AMD 拿下 Google Cloud TPU 8tx 主机 CPU 的消息里几乎没动。",
+   "sources": [
+    "Benzinga",
+    "AMD 公告"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "信息技术服务",
+   "display": "信息技术服务",
+   "confidence": "低",
+   "driver": "FMP 等权 +0.57%。IT 服务在本轮 AI 交易中被边缘化，无当日催化。",
+   "sources": [
+    "FMP"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "消费电子",
+   "display": "消费电子",
+   "confidence": "中",
+   "driver": "FMP 等权 +0.51%，明显弱于苹果 +2.43%：等权口径里中小消费电子股（存储成本承压方）没有跟上。存储涨价对终端 BOM 的挤压仍是这条链的核心矛盾。",
+   "sources": [
+    "FMP",
+    "吴说"
+   ]
+  },
+  {
+   "type": "industry",
+   "key": "电子游戏与多媒体",
+   "display": "电子游戏与多媒体",
+   "confidence": "低",
+   "driver": "FMP 等权 +0.16%。无行业事件，随大盘微涨。",
+   "sources": [
+    "FMP"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "DSP与光芯片",
+   "display": "DSP与光芯片",
+   "confidence": "高",
+   "driver": "等权 +11.27%、市值加权 +9.12%，两个口径同向且都强：Coherent +16.79%、Marvell +9.49%、Lumentum +10.69%、Broadcom +8.78% 全线大涨。驱动是光互联在 AI scale-up/scale-out 中的渗透叙事（Marvell 11/2 宣布以 1,150 亿美元企业价值全股票收购 Lumentum）叠加费半修复。",
+   "sources": [
+    "Marvell 公告",
+    "247wallst",
+    "Seeking Alpha"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "FPGA",
+   "display": "FPGA",
+   "confidence": "中",
+   "driver": "等权 +9.07%：AMD +13.26%（Google Cloud TPU 8tx 主机 CPU + Oppenheimer 上调至 600 美元目标价）、Intel +5.49%。是「定制加速器生态扩张」的直接受益段。",
+   "sources": [
+    "AMD 公告",
+    "CNBC",
+    "IBD"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "刻蚀设备",
+   "display": "刻蚀设备",
+   "confidence": "高",
+   "driver": "等权 +8.18%：应用材料 +11.37%、泛林 +10.41%（东京电子 +2.77% 为亚洲时段读数）。AMAT 将于 11/12 发布财报，资金提前押注设备景气；AMAT 目前约 18 倍前瞻市盈率，是四大设备龙头里最便宜的。",
+   "sources": [
+    "247wallst",
+    "Seeking Alpha"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "MEMS传感器",
+   "display": "MEMS传感器",
+   "confidence": "中",
+   "driver": "等权 +7.77%（仅 2 只有效样本）：Broadcom +8.78%、意法半导体 +6.76%。样本过少，涨幅更多反映两只成分股自身，不宜外推为 MEMS 行业景气。",
+   "sources": [
+    "FMP",
+    "247wallst"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "模拟芯片",
+   "display": "模拟芯片",
+   "confidence": "高",
+   "driver": "等权 +7.66%（8 只）：Monolithic Power +16.60%、onsemi +9.16%、ADI +8.55%、TI +6.62%、Macom +9.02%。模拟/功率芯片是「AI 电源」的直接受益环节（800V 直流供电、服务器电源管理），本日与电力设备同步走强。",
+   "sources": [
+    "Seeking Alpha",
+    "FinancialContent",
+    "247wallst"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "高速连接器与铜缆",
+   "display": "高速连接器与铜缆",
+   "confidence": "中",
+   "driver": "等权 +7.55%：Broadcom +8.78%、Amphenol +8.20%、TE Connectivity +5.67%。铜连接在 scale-up 机柜内仍是主方案，随 AI 硬件修复；无单一公司公告。",
+   "sources": [
+    "FinancialContent",
+    "GuruFocus"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "散热液冷系统",
+   "display": "散热液冷系统",
+   "confidence": "中",
+   "driver": "等权 +7.38%：Vertiv +9.63%、nVent +7.74%、Johnson Controls +4.78%。液冷渗透率提升的中期逻辑未变，本日属超跌修复（VRT 上周曾单日 -14%）。",
+   "sources": [
+    "Seeking Alpha",
+    "Simply Wall St"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "检测量测设备",
+   "display": "检测量测设备",
+   "confidence": "高",
+   "driver": "等权 +7.24%：Teradyne +12.73%、KLA +9.31%、Camtek +8.23%、Nova +6.41%。测试与量测是先进封装/HBM 扩产的「卖铲子」环节，设备股在 AMAT 财报前集体抢跑。",
+   "sources": [
+    "Seeking Alpha",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "PCB与IC载板",
+   "display": "PCB与IC载板",
+   "confidence": "中",
+   "driver": "等权 +1.56% 但市值加权 -0.69%：TTM Technologies +13.26% 领涨，而欧洲 AT&S -3.99%（11/6 读数）与亚洲载板厂分化，权重股拖累市值口径。等权/市值背离说明这是「个股行情」而非「板块行情」。",
+   "sources": [
+    "TradingView",
+    "FMP"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "EDA与IP核",
+   "display": "EDA与IP核",
+   "confidence": "高",
+   "driver": "等权 +1.53%、市值加权 -3.92%：Cadence +5.19%，但英伟达 -4.27% 作为该段成分把市值加权拉成负数。背离完全由英伟达的董事会调查事件造成，不代表 EDA 需求变化。",
+   "sources": [
+    "NVIDIA 公告",
+    "Reuters"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "高纯硅料与硅片",
+   "display": "高纯硅料与硅片",
+   "confidence": "低",
+   "driver": "等权 +1.53%：Soitec +2.95%、Siltronic +0.30%，欧洲标的为 11/6 读数。硅片环节在本轮 AI 反弹中始终滞后，反映的是成熟制程与消费需求疲弱，而非 AI 需求。",
+   "sources": [
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "封装基板材料",
+   "display": "封装基板材料",
+   "confidence": "中",
+   "driver": "等权 +1.47%：欣兴电子 +4.13%、Ibiden -3.50%（亚洲时段）。ABF 载板链在存储/先进封装涨价周期里受益，但日本厂商当日偏弱，段内分化。",
+   "sources": [
+    "FMP",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "AI开发者工具",
+   "display": "AI开发者工具",
+   "confidence": "中",
+   "driver": "等权 +1.41%：Meta +5.12%（Muse 智能体英国上线报道、收购 AI 编程公司 Conductor）、阿里巴巴 -3.72%（港股时段）。应用层继续跑输算力层。",
+   "sources": [
+    "Benzinga",
+    "InfoWorld"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "AI推理API服务",
+   "display": "AI推理API服务",
+   "confidence": "中",
+   "driver": "等权 +1.21%：同上，Meta 贡献主要涨幅，阿里巴巴在港股时段下跌；推理服务尚未成为本轮资金主线。",
+   "sources": [
+    "Benzinga",
+    "FMP"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "AI服务器",
+   "display": "AI服务器",
+   "confidence": "高",
+   "driver": "等权 +0.94%、市值加权 -3.45%：HPE +6.19%、Dell +5.41% 上涨，但英伟达 -4.27% 作为成分拖累市值口径。这是昨夜「指数大涨、NVDA 独跌」在产业链层面的直接投影。",
+   "sources": [
+    "Reuters",
+    "MarketWatch"
+   ]
+  },
+  {
+   "type": "segment",
+   "key": "CIS图像传感器",
+   "display": "CIS图像传感器",
+   "confidence": "中",
+   "driver": "等权 -0.88%、市值加权 -4.11%：Himax +1.41%，英伟达 -4.27% 再次主导市值口径。CIS 本身无行业级利空，跌幅是成分结构造成。",
+   "sources": [
+    "FMP",
+    "Reuters"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "COHR",
+   "display": "Coherent（COHR）",
+   "confidence": "高",
+   "driver": "Coherent +16.79%：AI 光互联反弹的最强标的，媒体口径盘中一度涨 19%，成交量约 2.2-2.4 倍均量。公司 11/4 已公布 Q1 FY2027 营收 23.7 亿美元、同比约 +50%，并给出 Q2 指引 25.5-27.5 亿美元；本日是业绩后的二次定价（2027 年产能已被订满的叙事），叠加 Marvell-Lumentum 交易抬升整条光链估值。",
+   "sources": [
+    "247wallst",
+    "Morningstar",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "MPWR",
+   "display": "Monolithic Power Systems (MPS)（MPWR）",
+   "confidence": "中",
+   "driver": "Monolithic Power +16.60%，七个交易日里第五次上涨。驱动是模拟/功率芯片的板块性重估（AI 服务器电源管理、800V 直流供电），叠加超跌反弹；检索未见公司单一公告，涨幅放大的部分是资金对「AI 电源」这一细分方向的集中买入。",
+   "sources": [
+    "Seeking Alpha",
+    "FinancialContent"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "AMD",
+   "display": "AMD（AMD）",
+   "confidence": "高",
+   "driver": "AMD +13.26%：双重催化——① 公司 11/9 公告第五代 EPYC 成为 Google Cloud TPU 8tx（首个硬件级机密计算 TPU 系统）的主机 CPU；② Oppenheimer 上调评级并给出 600 美元目标价。Reuters 口径 AMD 与 Broadcom 是当日费半两大上涨贡献者。",
+   "sources": [
+    "AMD 公告",
+    "CNBC",
+    "Reuters",
+    "IBD"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "TTMI",
+   "display": "TTM Technologies（TTMI）",
+   "confidence": "中",
+   "driver": "TTM Technologies +13.26%：PCB/射频板厂随 AI 硬件反弹，检索见「为何今日暴涨」类报道与董事 Franklin 以 61.92 美元买入 5,000 股（约 31 万美元）的内部人增持披露；无业绩公告。小市值高 beta，谨慎追高。",
+   "sources": [
+    "TradingView",
+    "Quantisnow"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "SMTC",
+   "display": "Semtech（SMTC）",
+   "confidence": "中",
+   "driver": "Semtech +12.83%：模拟/信号链芯片随板块修复，Q3 财报将于 11/23 盘后发布；检索以「超跌可关注」类卖方观点为主，无公司事件。",
+   "sources": [
+    "Zacks",
+    "Stock Titan",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "TER",
+   "display": "Teradyne（TER）",
+   "confidence": "中",
+   "driver": "Teradyne +12.73%：测试设备龙头，检索见「上调至强力买入」类评级动作，叠加检测量测段整体 +7.24%；同日 KLA +9.31%、Camtek +8.23%，属设备股在 AMAT 财报前的集体抢跑。",
+   "sources": [
+    "Yahoo Finance",
+    "Seeking Alpha"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ACMR",
+   "display": "盛美半导体（ACMR）",
+   "confidence": "中",
+   "driver": "盛美半导体 +11.52%：中国清洗设备厂，Q3 业绩后卖方给出「风险回报重新有吸引力」的判断（Seeking Alpha 11/6），本日随半导体设备段反弹；无新公告。",
+   "sources": [
+    "Seeking Alpha",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "AMAT",
+   "display": "应用材料(AMAT)（AMAT）",
+   "confidence": "高",
+   "driver": "应用材料 +11.37%：11/12 发布财报前抢跑，媒体口径为「财报前押注设备开支繁荣」；公司约 18 倍前瞻市盈率，是 AMAT/LRCX/KLAC/ASML 四家里最便宜的。风险在中国出口管制与洁净室产能限制。",
+   "sources": [
+    "247wallst",
+    "Seeking Alpha",
+    "TipRanks"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "LITE",
+   "display": "Lumentum（LITE）",
+   "confidence": "高",
+   "driver": "Lumentum +10.69%：Marvell 于 11/2 宣布以全股票方式收购 Lumentum（企业价值约 1,150 亿美元、换股比例 4.5 股 Marvell 换 1 股、较 10/28 未受影响收盘价溢价约 23.9%），本日并购双方同步大涨，市场在给「光互联整合」定价。交易尚需股东与监管批准。",
+   "sources": [
+    "Marvell 公告",
+    "IBD",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "LRCX",
+   "display": "泛林半导体(Lam)（LRCX）",
+   "confidence": "中",
+   "driver": "泛林半导体 +10.41%：设备段集体反弹（Seeking Alpha 明确写「半导体反弹带动」），无公司单一公告；上周该股随费半 -12% 重挫，本日属超跌修复。",
+   "sources": [
+    "Seeking Alpha",
+    "TradingKey"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "2344.TW",
+   "display": "Winbond (华邦)（2344.TW）",
+   "confidence": "中",
+   "driver": "华邦电子 +9.96%（台股 11/9 亚洲时段收盘，早于美股开盘）：DRAM/NOR 存储涨价周期的台股映射，涨幅逼近台股 10% 涨停上限；无公司公告，属存储链的板块性买盘。",
+   "sources": [
+    "TWSE",
+    "TrendForce"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "2308.TW",
+   "display": "Delta Electronics（2308.TW）",
+   "confidence": "中",
+   "driver": "台达电子 +9.95%（亚洲时段）：AI 服务器电源与散热龙头，随「AI 电力/电源」主题在亚洲时段走强，与美股 CEG/VRT/MPWR 同向；无公司公告。",
+   "sources": [
+    "TWSE",
+    "247wallst"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "2337.TW",
+   "display": "Macronix (旺宏)（2337.TW）",
+   "confidence": "中",
+   "driver": "旺宏 +9.89%（亚洲时段）：NOR/ROM 存储厂，涨幅逼近台股涨停，属存储涨价链的板块性行情；无公司公告。",
+   "sources": [
+    "TWSE",
+    "TrendForce"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "2454.TW",
+   "display": "MediaTek (联发科)（2454.TW）",
+   "confidence": "中",
+   "driver": "联发科 +9.88%（亚洲时段）：ASIC/边缘 AI 叙事叠加亚洲科技股普涨，涨幅接近台股涨停；无公司公告，需警惕情绪推动。[题材炒作，风险较高]",
+   "sources": [
+    "TWSE",
+    "Google News RSS"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "WDC",
+   "display": "Western Digital（WDC）",
+   "confidence": "高",
+   "driver": "西部数据 +9.86%：存储/HDD 双线受益——AI 数据中心近线硬盘需求与 NAND 涨价预期；媒体口径「存储股从 AI 抛售中反弹」，同业希捷 +9.79%、闪迪 +6.16%。",
+   "sources": [
+    "247wallst",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "6239.TW",
+   "display": "力成科技（6239.TW）",
+   "confidence": "中",
+   "driver": "力成科技 +9.83%（亚洲时段）：存储封测厂，随 DRAM 合约价上行与台股存储链普涨，涨幅逼近涨停；无公司公告。",
+   "sources": [
+    "TWSE",
+    "TrendForce"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "STX",
+   "display": "Seagate（STX）",
+   "confidence": "高",
+   "driver": "希捷 +9.79%：AI 数据中心近线硬盘（HAMR）需求叙事，媒体口径明确指出「AI 存储需求」是上涨主因；同业 WDC +9.86%、SNDK +6.16%，属存储硬件整体重估。",
+   "sources": [
+    "247wallst",
+    "Seeking Alpha",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "SITM",
+   "display": "SiTime（SITM）",
+   "confidence": "中",
+   "driver": "SiTime +9.63%：MEMS 精密时钟芯片，Q3 营收同比高增并宣布 3 比 1 拆股的余温延续，本日随模拟芯片段 +7.66% 反弹；无新公告。",
+   "sources": [
+    "GuruFocus",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "VRT",
+   "display": "Vertiv（VRT）",
+   "confidence": "中",
+   "driver": "Vertiv +9.63%：数据中心液冷/供电龙头，上周曾因「2028 年预期」担忧重挫，本日随 AI 基建修复；检索见「财报讲的是 2027、抛售讲的是 2028」的辩论，无新公告。",
+   "sources": [
+    "Seeking Alpha",
+    "Trefis"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "MRVL",
+   "display": "Marvell（MRVL）",
+   "confidence": "高",
+   "driver": "Marvell +9.49%：作为 Lumentum 收购方，与标的同步大涨（LITE +10.69%），市场认可「电互连+光互连」整合逻辑；此前股价距高点回撤约 58%，本日属超跌+并购重估。",
+   "sources": [
+    "Marvell 公告",
+    "Benzinga",
+    "Motley Fool"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ENTG",
+   "display": "Entegris（ENTG）",
+   "confidence": "中",
+   "driver": "Entegris +9.44%：半导体材料与过滤系统，随设备/材料段修复；无公司公告，属板块 beta。",
+   "sources": [
+    "FinancialContent",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "KLAC",
+   "display": "科磊(KLA)（KLAC）",
+   "confidence": "中",
+   "driver": "KLA +9.31%：检测量测龙头，随设备段集体反弹（Seeking Alpha：「半导体反弹带动 KLAC 上涨 9%」）；无公司公告。",
+   "sources": [
+    "Seeking Alpha",
+    "GuruFocus"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "NBIS",
+   "display": "Nebius（NBIS）",
+   "confidence": "中",
+   "driver": "Nebius +9.24%：AI 云（neocloud）本周将发布 Q3 财报，期权市场定价财报后约 17% 波动；本日反弹属超跌回补，基本面验证在财报。",
+   "sources": [
+    "TipRanks",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ON",
+   "display": "安森美(onsemi)（ON）",
+   "confidence": "中",
+   "driver": "onsemi +9.16%：功率/模拟芯片，随「AI 电源」主题反弹；此前公司披露 AI 数据中心相关销售同比增长约 175%（24/7 Wall St. 11/5），本日无新公告。",
+   "sources": [
+    "247wallst",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "MTSI",
+   "display": "Macom（MTSI）",
+   "confidence": "中",
+   "driver": "MACOM +9.02%：光通信/射频芯片，Q4 财报（11/6 前后）创纪录营收并给出强劲 2027 指引，本日随光互联段 +11.27% 继续上行。",
+   "sources": [
+    "Yahoo Finance",
+    "Simply Wall St"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ANET",
+   "display": "Arista（ANET）",
+   "confidence": "中",
+   "driver": "Arista +9.00%：AI 数据中心以太网交换机龙头，随通信设备段 +5.69% 与 Cisco 财报前的网络设备预期修复；无公司公告。",
+   "sources": [
+    "TradingKey",
+    "Trefis"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "AVGO",
+   "display": "Broadcom（AVGO）",
+   "confidence": "高",
+   "driver": "Broadcom +8.78%：Reuters 口径它是当日费半两大上涨贡献之一（与 AMD 并列）；定制 ASIC（含 Google TPU 生态）与网络芯片双主线，在「AMD 拿下 Google TPU 主机 CPU」的同一天被重新定价。此前股价距高点回撤近 40%。",
+   "sources": [
+    "Reuters",
+    "Seeking Alpha",
+    "TipRanks"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ASX",
+   "display": "日月光 (ASE)（ASX）",
+   "confidence": "中",
+   "driver": "日月光 ADR +8.63%：封测龙头，Q3 已超预期且产能满载（IBD 10/29），本日随半导体链修复；另有异常高的看涨期权买入（MarketBeat）。",
+   "sources": [
+    "IBD",
+    "MarketBeat"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "MTRN",
+   "display": "Materion（MTRN）",
+   "confidence": "低",
+   "driver": "Materion +8.61%：特种材料（铍/真空镀膜材料），小市值高 beta，随半导体材料段反弹；无公司公告，暂无明确公开原因。",
+   "sources": [
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ADI",
+   "display": "Analog Devices (ADI)（ADI）",
+   "confidence": "中",
+   "driver": "ADI +8.55%：模拟芯片龙头，随模拟段 +7.66% 修复；无公司公告，属板块重估。",
+   "sources": [
+    "Yahoo Finance",
+    "Simply Wall St"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ACLS",
+   "display": "Axcelis Technologies（ACLS）",
+   "confidence": "中",
+   "driver": "Axcelis +8.46%：离子注入设备，Q3 业绩超预期（11/5），本日随设备段反弹；无新公告。",
+   "sources": [
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "LSCC",
+   "display": "Lattice Semi（LSCC）",
+   "confidence": "中",
+   "driver": "Lattice +8.45%：低功耗 FPGA，随 FPGA 段 +9.07% 上行；检索以 ETF 资金流向类报道为主，无公司公告。",
+   "sources": [
+    "Yahoo Finance",
+    "FinancialContent"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "CAMT",
+   "display": "Camtek（CAMT）",
+   "confidence": "中",
+   "driver": "Camtek +8.23%：先进封装检测设备，Q3 财报（11/6）后目标价分化，本日随检测量测段 +7.24% 反弹。",
+   "sources": [
+    "Yahoo Finance",
+    "Seeking Alpha"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "APH",
+   "display": "安费诺(Amphenol)（APH）",
+   "confidence": "中",
+   "driver": "Amphenol +8.20%：连接器龙头，检索见「上调股息与指引」的报道，叠加高速连接器段 +7.55%；AI 机柜内铜连接需求是中期逻辑。",
+   "sources": [
+    "Yahoo Finance",
+    "GuruFocus"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "KLIC",
+   "display": "Kulicke & Soffa（KLIC）",
+   "confidence": "低",
+   "driver": "Kulicke & Soffa +7.75%：封装键合设备，随设备段反弹；同日 B. Riley 下调目标价，个股消息面偏中性，涨幅主要来自板块 beta。",
+   "sources": [
+    "MarketBeat",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "NVT",
+   "display": "nVent（NVT）",
+   "confidence": "中",
+   "driver": "nVent +7.74%：电气连接与液冷，Q3 后「工厂扩张是否已被定价」的讨论（Simply Wall St.），本日随散热/电力设备段上涨；无新公告。",
+   "sources": [
+    "Simply Wall St",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "2408.TW",
+   "display": "Nanya(南亚科)（2408.TW）",
+   "confidence": "中",
+   "driver": "南亚科 +7.71%（亚洲时段）：DRAM 厂，此前已通知客户再度调涨合约价（10/6 报道），本日随存储链普涨；无新公告。",
+   "sources": [
+    "TrendForce",
+    "TWSE"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "APLD",
+   "display": "Applied Digital（APLD）",
+   "confidence": "中",
+   "driver": "Applied Digital +7.52%：AIDC/数据中心运营商，过去一个月仍跌约 39%，本日属超跌反弹；商业模式对融资成本高度敏感，无公司公告。",
+   "sources": [
+    "247wallst",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "UMC",
+   "display": "联电（UMC）",
+   "confidence": "中",
+   "driver": "联电 +7.51%：10 月营收同比 +18.33%（11/5 披露），成熟制程景气边际改善叠加板块反弹。",
+   "sources": [
+    "Stock Titan",
+    "Globe and Mail"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "RNECF",
+   "display": "瑞萨电子(Renesas)（RNECF）",
+   "confidence": "低",
+   "driver": "瑞萨电子 ADR +7.50%：日本半导体厂，随全球芯片修复；检索无当日公司新闻，注意 ADR 流动性差、报价易偏离。",
+   "sources": [
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "6503.T",
+   "display": "Mitsubishi Electric（6503.T）",
+   "confidence": "低",
+   "driver": "三菱电机 +7.27%（东京 11/9 收盘）：日本工业与功率半导体，随 AI 电力/功率主题；无公司公告，属板块 beta。",
+   "sources": [
+    "TSE",
+    "Simply Wall St"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "OVH.PA",
+   "display": "OVHcloud（OVH.PA）",
+   "confidence": "低",
+   "driver": "OVHcloud +6.88%：注意该读数为巴黎 11/6 收盘（快照 date_mixed 的一部分），并非 11/9 行情；欧洲 AI 云厂，前期因股东减持 3% 重挫，本周反弹。",
+   "sources": [
+    "MarketScreener",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "6824.T",
+   "display": "Nissin Ion Equipment（6824.T）",
+   "confidence": "低",
+   "driver": "Nissin Ion Equipment +6.82%（东京 11/9 收盘）：离子注入设备小厂，检索候选 0 条，随日本设备股反弹；暂无明确公开原因。",
+   "sources": [
+    "TSE"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "STM",
+   "display": "意法半导体(ST)（STM）",
+   "confidence": "中",
+   "driver": "意法半导体 +6.76%：功率/模拟芯片，随「AI 电源」与欧洲半导体修复；无公司公告。",
+   "sources": [
+    "Yahoo Finance",
+    "247wallst"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ARM",
+   "display": "ARM Holdings（ARM）",
+   "confidence": "中",
+   "driver": "Arm +6.69%：IP 授权，随 AI 芯片设计与定制 ASIC 主题修复；无公司公告。",
+   "sources": [
+    "Motley Fool",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "AMKR",
+   "display": "Amkor Technology（AMKR）",
+   "confidence": "中",
+   "driver": "Amkor +6.64%：先进封装（美系 OSAT），随封测链修复；无公司公告。",
+   "sources": [
+    "Yahoo Finance",
+    "Trefis"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "TXN",
+   "display": "德州仪器(TI)（TXN）",
+   "confidence": "中",
+   "driver": "德州仪器 +6.62%：模拟芯片龙头，随模拟段 +7.66%；检索见「增长与现金流回归」类看多观点，无公司公告。",
+   "sources": [
+    "Seeking Alpha",
+    "Trefis"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "3711.TW",
+   "display": "日月光 (ASE)（3711.TW）",
+   "confidence": "中",
+   "driver": "日月光投控 +6.45%（亚洲时段）：封测龙头在台股的映射，随台股半导体普涨；无公司公告。",
+   "sources": [
+    "TWSE",
+    "IBD"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "NVMI",
+   "display": "Nova Measuring Instruments（NVMI）",
+   "confidence": "中",
+   "driver": "Nova +6.41%：量测设备，Q3 财报（11/5）后随检测量测段反弹；无新公告。",
+   "sources": [
+    "Quiver",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "MU",
+   "display": "Micron（MU）",
+   "confidence": "高",
+   "driver": "美光 +6.25%：存储链修复的核心之一。行业背景是 4Q26 存储合约价继续上涨（TrendForce）；个股层面媒体提到「压住美光的一个大威胁被推迟」（Barron's 标题，正文付费墙未取得，具体威胁内容 [待核实]），另有约 4 倍前瞻市盈率与 12/9 启动 350 亿美元回购的估值讨论。",
+   "sources": [
+    "Barron's",
+    "TrendForce",
+    "247wallst"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ASML",
+   "display": "ASML（ASML）",
+   "confidence": "中",
+   "driver": "ASML +6.21%：设备段反弹，媒体口径「为何 ASML 今日反弹」指向半导体板块整体修复；过去一个月仍跌约 20%，无公司公告。",
+   "sources": [
+    "Motley Fool",
+    "Investing.com"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "HPE",
+   "display": "HPE（HPE）",
+   "confidence": "中",
+   "driver": "HPE +6.19%：AI 服务器厂，本周与 Dell 一同被视作「AI 硬件盈利验证」的观察对象；无公司公告，属超跌修复。",
+   "sources": [
+    "247wallst",
+    "Trefis"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "6302.T",
+   "display": "Sumitomo Heavy Industries (住友重机械)（6302.T）",
+   "confidence": "低",
+   "driver": "住友重机械 +5.84%（东京 11/9）：日本工业设备，Q3 业绩强劲的余温；无公司公告，属板块 beta。",
+   "sources": [
+    "Simply Wall St",
+    "TSE"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "PLAB",
+   "display": "Photronics（PLAB）",
+   "confidence": "低",
+   "driver": "Photronics +5.70%：光罩厂，检索见「AI 数据中心需求」相关讨论；无公司公告，小市值高 beta。",
+   "sources": [
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "TEL",
+   "display": "泰科电子(TE)（TEL）",
+   "confidence": "中",
+   "driver": "TE Connectivity +5.67%：连接器，Q4 业绩强劲但此前股价回落，本日随高速连接器段修复；无新公告。",
+   "sources": [
+    "Yahoo Finance",
+    "MarketBeat"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "CRWV",
+   "display": "CoreWeave（CRWV）",
+   "confidence": "中",
+   "driver": "CoreWeave +5.56%：本周发布 Q3 财报，期权与卖方普遍预期大幅波动；本日属超跌反弹，基本面验证在财报。",
+   "sources": [
+    "TipRanks",
+    "Barchart"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "TSLA",
+   "display": "Tesla（TSLA）",
+   "confidence": "高",
+   "driver": "特斯拉 +5.54%：Musk 确认将在大约 8 个月内关停德州 Cybertruck 产线、转向 Cybercab 量产并将退还订金（Reuters/CNBC 转述其 X 帖文）。市场把这解读为「砍掉低效产品、资源转向自动驾驶」，叠加成长股整体反弹；上周该股曾跌 6%。",
+   "sources": [
+    "Reuters",
+    "CNBC",
+    "FinancialContent"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "SNOW",
+   "display": "Snowflake（SNOW）",
+   "confidence": "中",
+   "driver": "Snowflake +5.53%：软件板块整体偏弱（软件服务 -1.33%），该股属超跌反弹；检索见「上调展望与 AI 更新后估值是否合理」的讨论，无新公告。",
+   "sources": [
+    "Trefis",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "PLTR",
+   "display": "Palantir（PLTR）",
+   "confidence": "中",
+   "driver": "Palantir +5.50%：此前连跌 8 个交易日，本日随高 beta 软件反弹；检索见评级下调与「好公司、错时点」的争论，无公司公告。",
+   "sources": [
+    "Motley Fool",
+    "Benzinga"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "INTC",
+   "display": "Intel（INTC）",
+   "confidence": "中",
+   "driver": "Intel +5.49%：随半导体板块修复，检索以「8 年原地踏步后这次有何不同」类评论为主；无公司公告。费半当日唯一下跌的是英伟达，Intel 反而跟涨。",
+   "sources": [
+    "Yahoo Finance",
+    "Barchart"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "AUR",
+   "display": "Aurora（AUR）",
+   "confidence": "低",
+   "driver": "Aurora +5.44%：自动驾驶卡车，随 Tesla/自动驾驶主题反弹；检索同时见「指引下调后遭证券欺诈调查」的律所公告（BFA Law），消息面多空交织。[题材炒作，风险较高]",
+   "sources": [
+    "Yahoo Finance",
+    "BFA Law"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "DELL",
+   "display": "Dell（DELL）",
+   "confidence": "中",
+   "driver": "Dell +5.41%：AI 服务器订单叙事，媒体口径「回调即买点」；无公司公告。存储涨价对整机毛利是持续压力。",
+   "sources": [
+    "Trefis",
+    "Yahoo Finance",
+    "MarketWatch"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "CDNS",
+   "display": "Cadence（CDNS）",
+   "confidence": "中",
+   "driver": "Cadence +5.19%：EDA 龙头，Q3 已 beat-and-raise（10/26），本日随 EDA/IP 段反弹；段内市值加权为负完全是英伟达拖累。",
+   "sources": [
+    "IBD",
+    "Yahoo Finance"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "ETN",
+   "display": "Eaton（ETN）",
+   "confidence": "中",
+   "driver": "Eaton +5.14%：电气设备龙头，Q3 后执行担忧曾压制股价，本日随 AI 电力主题（CEG +10.46%）修复；Raymond James 维持 485 美元目标价。",
+   "sources": [
+    "Investing.com",
+    "Seeking Alpha"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "META",
+   "display": "Meta（META）",
+   "confidence": "中",
+   "driver": "Meta +5.12%：媒体口径「Meta 为何周一反弹」，指向 Muse 智能体在英国上线的报道，以及此前收购 AI 编程公司 Conductor（11/4）；广告现金流+自研模型的组合在 risk-on 日弹性更大。",
+   "sources": [
+    "Benzinga",
+    "Yahoo Finance",
+    "InfoWorld"
+   ]
+  },
+  {
+   "type": "anomaly",
+   "key": "CSCO",
+   "display": "Cisco（CSCO）",
+   "confidence": "中",
+   "driver": "Cisco +5.11%：本周发布财报（FQ1），卖方聚焦 AI 网络订单；本日随通信设备段上涨，属财报前预期修复。",
+   "sources": [
+    "TipRanks",
+    "Yahoo Finance"
+   ]
+  }
+ ]
+}
