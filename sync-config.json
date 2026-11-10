@@ -21,7 +21,7 @@
   "local_modules": [
     {
       "name": "daily-briefing",
-      "source_dir": "/Users/mac/每日简报实战/daily-briefing/",
+      "source_dir": "/Users/xifengxx/每日简报实战/daily-briefing/",
       "target_dir": "daily-briefing/",
       "exclude": [
         ".env",
