@@ -1,0 +1,255 @@
+{
+  "target_date": "2026-11-13",
+  "generated_at": "2026-11-13T08:30:19+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-11-13",
+      "detail": null,
+      "data": {
+        "report_date": "2026-11-13",
+        "generated_at_source": "2026-11-13T00:00:48.174Z",
+        "window_start": "2026-11-12T00:00:00.000Z",
+        "window_end": "2026-11-13T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-11-13",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-11-13"
+        },
+        "section_count": 4,
+        "item_count": 12,
+        "lead_present": true,
+        "flashes_count": 7,
+        "sections": [
+          {
+            "label": "模型发布/更新",
+            "items": [
+              {
+                "item_id": "uy1ayrrlqx1snqsv4lub7whsa",
+                "title": "Google DeepMind 发布 Gemini 4 Hydrogen",
+                "summary": "Google DeepMind 发布 Gemini 4 Hydrogen，定位快速执行日常编码与智能体工作流，面向 Gemini API、AI Studio、Gemini 应用、Google Search 等全层级开放。",
+                "summary_len": 110,
+                "source_name": "Google DeepMind：Blog（RSS）",
+                "link_aihot": "https://aihot.news/items/uy1ayrrlqx1snqsv4lub7whsa",
+                "link_original": "https://deepmind.google/blog/introducing-gemini-4-hydrogen/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/uy1ayrrlqx1snqsv4lub7whsa"
+                }
+              }
+            ]
+          },
+          {
+            "label": "产品发布/更新",
+            "items": [
+              {
+                "item_id": "l36ne5q2gsdx6thyia7fi10kn",
+                "title": "Anthropic 推出 Claude Meetings，Claude 以参会者身份加入视频会议",
+                "summary": "Anthropic 推出 Claude Meetings beta，Claude 可作为可见参会者加入视频通话，在会中回答提问、协作创建文档和白板，并生成笔记和行动项。",
+                "summary_len": 84,
+                "source_name": "Claude：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/l36ne5q2gsdx6thyia7fi10kn",
+                "link_original": "https://claude.com/blog/claude-meetings",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/l36ne5q2gsdx6thyia7fi10kn"
+                }
+              },
+              {
+                "item_id": "t5pucqx6ac58z0ed1b0875ci0",
+                "title": "Anthropic 建议把 Claude Opus 5.5 作为知识工作的日常主力模型",
+                "summary": "Anthropic 宣布 Claude Opus 5.5 成为 Pro、Max、Ultra 和 Team 套餐的默认模型，并推荐将其作为研究、分析和写作等知识工作的日常主力。",
+                "summary_len": 87,
+                "source_name": "Claude：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/t5pucqx6ac58z0ed1b0875ci0",
+                "link_original": "https://claude.com/blog/using-claude-opus-5-5-as-your-daily-driver-for-knowledge-work",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/t5pucqx6ac58z0ed1b0875ci0"
+                }
+              },
+              {
+                "item_id": "hjhcsj440ym8b7ynttcx4433j",
+                "title": "Google 智能眼镜开放预购，12 月 10 日发货",
+                "summary": "Josh Woodward 宣布 Google 智能眼镜开启预购，用户可在 https://glasses.google 下单，12 月 10 日发货。首批用户可到部分 Warby Parker、Gentle Monster 和 Google 门店试戴体验。",
+                "summary_len": 129,
+                "source_name": "X：Josh Woodward (@joshwoodward, Google Labs VP)",
+                "link_aihot": "https://aihot.news/items/hjhcsj440ym8b7ynttcx4433j",
+                "link_original": "https://x.com/joshwoodward/status/2120990821902397885",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/hjhcsj440ym8b7ynttcx4433j"
+                }
+              },
+              {
+                "item_id": "k7sfjumcmtq0zswb5yj5kmju1",
+                "title": "Replit Agent 新增代购能力和 Google Ads 投放功能",
+                "summary": "Replit 给 Replit Agent 新增两项能力：通过 Stripe Link 和 Visa 为企业代购物资，以及在 Replit 内直接创建和投放 Google Ads 覆盖 Search、YouTube 等渠道。",
+                "summary_len": 112,
+                "source_name": "Replit：Blog（RSS）",
+                "link_aihot": "https://aihot.news/items/k7sfjumcmtq0zswb5yj5kmju1",
+                "link_original": "https://replit.com/blog/replit-agent-ads-commerce",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/k7sfjumcmtq0zswb5yj5kmju1"
+                }
+              }
+            ]
+          },
+          {
+            "label": "行业动态",
+            "items": [
+              {
+                "item_id": "qsbjbz754aodhcijq56puh6va",
+                "title": "NVIDIA 宣布 CEO 变动：Jensen Huang 辞任，CFO Colette Kress 出任临时 CEO",
+                "summary": "NVIDIA 董事会宣布 Jensen Huang 即刻辞去总裁、CEO 及董事职务，CFO Colette Kress 被任命为临时 CEO，直至选定永久继任者，董事会已启动内外部人选遴选。",
+                "summary_len": 96,
+                "source_name": "NVIDIA：Newsroom（RSS）",
+                "link_aihot": "https://aihot.news/items/qsbjbz754aodhcijq56puh6va",
+                "link_original": "https://nvidianews.nvidia.com/news/nvidia-announces-ceo-transition",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/qsbjbz754aodhcijq56puh6va"
+                }
+              },
+              {
+                "item_id": "k99zjo9hbtous9r6vmmz7pxyh",
+                "title": "Anthropic 官宣首次公开募股（IPO）",
+                "summary": "Anthropic 官方宣布启动首次公开募股（IPO），并公布入口 ipo.anthropic.com。Anthropic 已向 SEC 提交注册声明及招股说明书，证券在注册声明生效前不得出售，初步招股说明书可经高盛与摩根士丹利获取。",
+                "summary_len": 117,
+                "source_name": "X：Anthropic (@AnthropicAI)",
+                "link_aihot": "https://aihot.news/items/k99zjo9hbtous9r6vmmz7pxyh",
+                "link_original": "https://x.com/AnthropicAI/status/2120841731302154708",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/k99zjo9hbtous9r6vmmz7pxyh"
+                }
+              },
+              {
+                "item_id": "ivpl9ziip8mpoa90avi3ke9pj",
+                "title": "Jensen Huang 辞任 Nvidia CEO 后对 AI 经济的五点影响分析",
+                "summary": "Tomasz Tunguz 分析 Jensen Huang 即日辞任 Nvidia 总裁、CEO 及董事后对 AI 行业的影响，CFO Colette Kress 出任临时 CEO。",
+                "summary_len": 91,
+                "source_name": "Tomasz Tunguz 博客（VC 分析）",
+                "link_aihot": "https://aihot.news/items/ivpl9ziip8mpoa90avi3ke9pj",
+                "link_original": "https://tomtunguz.com/the-impact-of-jensens-resignation/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/ivpl9ziip8mpoa90avi3ke9pj"
+                }
+              },
+              {
+                "item_id": "cfh0nazzl7eedgttz8n99fza4",
+                "title": "民主党对 Nvidia 对华芯片销售启动调查，致函质疑黄仁勋与特朗普的安排",
+                "summary": "民主党议员 Rep. Richard Neal 和 Sen. Ron Wyden 就特朗普政府处理 Nvidia 对华芯片销售一事开启调查，并致函商务部长 Howard Lutnick 要求保存相关记录。",
+                "summary_len": 102,
+                "source_name": "TechCrunch：AI（RSS）",
+                "link_aihot": "https://aihot.news/items/cfh0nazzl7eedgttz8n99fza4",
+                "link_original": "https://techcrunch.com/2026/11/12/democrats-launch-nvidia-investigation-write-scathing-letter-on-huangs-scheme-with-trump/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/cfh0nazzl7eedgttz8n99fza4"
+                }
+              },
+              {
+                "item_id": "k1kga19xtdab67lhplor8he8n",
+                "title": "Rohan Paul 类比乔布斯被逐，评 NVIDIA 放走黄仁勋",
+                "summary": "Lex Fridman 发文称 NVIDIA 让黄仁勋离开对美国和人类都是巨大错误，堪比 Apple 当年解雇 Steve Jobs 但影响更大，并为其品格辩护、回应间谍传闻。Rohan Paul 转引并列举 Atari 1978（Nolan Bushnell）、Apple 1985（Steve Jobs）、Uber 2017（Travis Kalanick）、OpenAI 2023（Sam Altman），称每隔几年董事会就会重新认识到创始人本身就是战略。",
+                "summary_len": 231,
+                "source_name": "X：Rohan Paul (@rohanpaul_ai)",
+                "link_aihot": "https://aihot.news/items/k1kga19xtdab67lhplor8he8n",
+                "link_original": "https://x.com/rohanpaul_ai/status/2120994977421705296",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/k1kga19xtdab67lhplor8he8n"
+                }
+              }
+            ]
+          },
+          {
+            "label": "技巧与观点",
+            "items": [
+              {
+                "item_id": "cve017k4le2q7l8x1bfr2xdjx",
+                "title": "OpenRouter 详解自纠错网站本地化流水线：GPT-6.1 Sol 翻译 7 种语言全站约 $460",
+                "summary": "OpenRouter 上线简体中文、日语等 7 种语言 Beta 本地化，并详解配套的自纠错翻译流水线：GPT-6.1 Sol 翻译 16,918 条字符串，经代码检查、同模型校验和每日 AI 审查重试，最坏情况每条约 20 次模型调用。全站重译 7 种语言约 $460，约为 Smartling 机器翻译牌价的 6%，错误报告会转化为术语规则、风格注释或评测用例。",
+                "summary_len": 183,
+                "source_name": "OpenRouter：Announcements（RSS）",
+                "link_aihot": "https://aihot.news/items/cve017k4le2q7l8x1bfr2xdjx",
+                "link_original": "https://openrouter.ai/blog/announcements/openrouter-in-8-languages/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/cve017k4le2q7l8x1bfr2xdjx"
+                }
+              },
+              {
+                "item_id": "vq9nwgwhtm31cgoliyb7ydyde",
+                "title": "OpenRouter 实测六模型并给出四层防护，解决 AI Agent 无限循环烧钱问题",
+                "summary": "OpenRouter 发布教程，讲解 AI Agent 因工具反复失败而陷入无限循环的成因，并给出四层防护：doom-loop 检测、loopKey 参数归一化、stopWhen 步数与成本上限、API key 信用额度。",
+                "summary_len": 111,
+                "source_name": "OpenRouter：Announcements（RSS）",
+                "link_aihot": "https://aihot.news/items/vq9nwgwhtm31cgoliyb7ydyde",
+                "link_original": "https://openrouter.ai/blog/tutorials/ai-agent-infinite-loop/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/vq9nwgwhtm31cgoliyb7ydyde"
+                }
+              }
+            ]
+          }
+        ],
+        "item_index": {
+          "uy1ayrrlqx1snqsv4lub7whsa": {
+            "section_label": "模型发布/更新",
+            "title": "Google DeepMind 发布 Gemini 4 Hydrogen"
+          },
+          "l36ne5q2gsdx6thyia7fi10kn": {
+            "section_label": "产品发布/更新",
+            "title": "Anthropic 推出 Claude Meetings，Claude 以参会者身份加入视频会议"
+          },
+          "t5pucqx6ac58z0ed1b0875ci0": {
+            "section_label": "产品发布/更新",
+            "title": "Anthropic 建议把 Claude Opus 5.5 作为知识工作的日常主力模型"
+          },
+          "hjhcsj440ym8b7ynttcx4433j": {
+            "section_label": "产品发布/更新",
+            "title": "Google 智能眼镜开放预购，12 月 10 日发货"
+          },
+          "k7sfjumcmtq0zswb5yj5kmju1": {
+            "section_label": "产品发布/更新",
+            "title": "Replit Agent 新增代购能力和 Google Ads 投放功能"
+          },
+          "qsbjbz754aodhcijq56puh6va": {
+            "section_label": "行业动态",
+            "title": "NVIDIA 宣布 CEO 变动：Jensen Huang 辞任，CFO Colette Kress 出任临时 CEO"
+          },
+          "k99zjo9hbtous9r6vmmz7pxyh": {
+            "section_label": "行业动态",
+            "title": "Anthropic 官宣首次公开募股（IPO）"
+          },
+          "ivpl9ziip8mpoa90avi3ke9pj": {
+            "section_label": "行业动态",
+            "title": "Jensen Huang 辞任 Nvidia CEO 后对 AI 经济的五点影响分析"
+          },
+          "cfh0nazzl7eedgttz8n99fza4": {
+            "section_label": "行业动态",
+            "title": "民主党对 Nvidia 对华芯片销售启动调查，致函质疑黄仁勋与特朗普的安排"
+          },
+          "k1kga19xtdab67lhplor8he8n": {
+            "section_label": "行业动态",
+            "title": "Rohan Paul 类比乔布斯被逐，评 NVIDIA 放走黄仁勋"
+          },
+          "cve017k4le2q7l8x1bfr2xdjx": {
+            "section_label": "技巧与观点",
+            "title": "OpenRouter 详解自纠错网站本地化流水线：GPT-6.1 Sol 翻译 7 种语言全站约 $460"
+          },
+          "vq9nwgwhtm31cgoliyb7ydyde": {
+            "section_label": "技巧与观点",
+            "title": "OpenRouter 实测六模型并给出四层防护，解决 AI Agent 无限循环烧钱问题"
+          }
+        }
+      }
+    }
+  }
+}
