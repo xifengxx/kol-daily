@@ -1,0 +1,260 @@
+{
+  "target_date": "2026-11-25",
+  "generated_at": "2026-11-25T08:30:19+08:00",
+  "modules": {
+    "aihot_daily": {
+      "status": "ok",
+      "source": "AIHOT https://aihot.news/api/v1/dailies/2026-11-25",
+      "detail": null,
+      "data": {
+        "report_date": "2026-11-25",
+        "generated_at_source": "2026-11-25T00:00:36.665Z",
+        "window_start": "2026-11-24T00:00:00.000Z",
+        "window_end": "2026-11-25T00:00:00.000Z",
+        "schema_version": 1,
+        "source_url": "https://aihot.news/daily/2026-11-25",
+        "attribution": {
+          "name": "AIHOT",
+          "url": "https://aihot.news/daily/2026-11-25"
+        },
+        "section_count": 5,
+        "item_count": 12,
+        "lead_present": true,
+        "flashes_count": 6,
+        "sections": [
+          {
+            "label": "模型发布/更新",
+            "items": [
+              {
+                "item_id": "gflb0kkwzma61spkzpp1uxmrk",
+                "title": "Cognition 发布 SWE-2.1 及高速版 SWE-2.1 Lightning",
+                "summary": "Cognition 发布 SWE-2.1，基于 Kimi K3 纯强化学习训练，在 FrontierCode 2.0、Terminal-Bench 4.1 等基准上较 SWE-2 大幅提升，ExploitBench 达 80%、ExploitGym 捕获 27.3% flags，网络安全能力显著增强。",
+                "summary_len": 151,
+                "source_name": "Cognition 模型 / Devin 博客（网页）",
+                "link_aihot": "https://aihot.news/items/gflb0kkwzma61spkzpp1uxmrk",
+                "link_original": "https://cognition.com/blog/swe-2-1",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/gflb0kkwzma61spkzpp1uxmrk"
+                }
+              }
+            ]
+          },
+          {
+            "label": "产品发布/更新",
+            "items": [
+              {
+                "item_id": "zcpto4b7qb8sr6v6n223kd2sx",
+                "title": "Claude 推出 Install as app：artifacts 可安装为 Mac 和 Windows 桌面应用",
+                "summary": "Anthropic 在 Mac 和 Windows 版 Claude 中以 beta 形式推出 Install as app，artifacts 可创建、运行并分享为独立桌面应用，拥有自己的图标和窗口，底层 artifact 更新时应用自动同步。",
+                "summary_len": 123,
+                "source_name": "Claude：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/zcpto4b7qb8sr6v6n223kd2sx",
+                "link_original": "https://claude.com/blog/install-as-app",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/zcpto4b7qb8sr6v6n223kd2sx"
+                }
+              },
+              {
+                "item_id": "kjd2qp2iuk9zxdfqj5qk2a8f9",
+                "title": "Anthropic 为 Claude 推出 Skills over MCP 公测及 Tasks、Elicitation 等更新",
+                "summary": "Anthropic 宣布 Skills over MCP 在 Claude 与 Claude Code 进入公开测试，MCP 服务器可在工具之外发布技能，按需加载以降低上下文占用。",
+                "summary_len": 90,
+                "source_name": "Claude：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/kjd2qp2iuk9zxdfqj5qk2a8f9",
+                "link_original": "https://claude.com/blog/skills-over-mcp-tasks-and-more",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/kjd2qp2iuk9zxdfqj5qk2a8f9"
+                }
+              },
+              {
+                "item_id": "d41p6k2h48zm8u2kl5xdzqx5h",
+                "title": "OpenAI 与 Cisco 发布开源 Linux 运行时 Shirudo，让 Agent 无停机防御系统",
+                "summary": "OpenAI 宣布与 Cisco 合作推出开源 Linux 运行时 Shirudo，让 Agent 编写动态 eBPF 控制来抵御漏洞利用，同时保持服务不中断，为防御方争取测试和部署补丁的时间。作者称这是迈向自适应自防御基础设施的第一步，目标是让防御者与 AI Agent 协作定位受影响系统、测试并共享 shield、在不干扰工作负载的情况下部署。",
+                "summary_len": 175,
+                "source_name": "X：Tibo (@thsottiaux)",
+                "link_aihot": "https://aihot.news/items/d41p6k2h48zm8u2kl5xdzqx5h",
+                "link_original": "https://x.com/thsottiaux/status/2125141302501417232",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/d41p6k2h48zm8u2kl5xdzqx5h"
+                }
+              },
+              {
+                "item_id": "f1380j6hyrxn0rnz6666nu3b8",
+                "title": "MiniMax 发布 H3 Family 系列模型，H3 开源百日衍生模型达 1472 个、下载量超 1.48 亿次",
+                "summary": "MiniMax 推出 H3 Family，包含 H3、H3-Highspeed、H3-Lite、H3-Image、H3-Image Highspeed 等旗舰模型及 fal、Suno、HeyGen、Pika 等伙伴的多个扩展模型。",
+                "summary_len": 115,
+                "source_name": "公众号：MiniMax（稀宇科技）",
+                "link_aihot": "https://aihot.news/items/f1380j6hyrxn0rnz6666nu3b8",
+                "link_original": "https://mp.weixin.qq.com/s/Maoz76fZdGNaB7tlIVxWWQ",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/f1380j6hyrxn0rnz6666nu3b8"
+                }
+              }
+            ]
+          },
+          {
+            "label": "行业动态",
+            "items": [
+              {
+                "item_id": "zto0pspydy8330r0bvwqb6j5z",
+                "title": "ChinaTalk 播客：Nvidia 董事会恢复黄仁勋职务，美商务部将 Megaspeed 列入实体清单",
+                "summary": "ChinaTalk 主持人 Jordan Schneider 邀请 Chris McGuire 与 Peter Harrell 紧急讨论 Nvidia 董事会在美国政府表态后一致恢复黄仁勋职务，以及美国商务部同日将 Megaspeed 列入实体清单。节目围绕出口管制执法、实体清单是否附加外国直接产品规则（FDPR）、国会相关立法（AI Overwatch、MATCH、RASA）的覆盖范围与局限，以及政策与股市波动之间的互动展开分析。",
+                "summary_len": 218,
+                "source_name": "ChinaTalk（RSS）",
+                "link_aihot": "https://aihot.news/items/zto0pspydy8330r0bvwqb6j5z",
+                "link_original": "https://www.chinatalk.media/p/jensen-returns",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/zto0pspydy8330r0bvwqb6j5z"
+                }
+              },
+              {
+                "item_id": "ygbhvp086wl672gfxuhfgl23x",
+                "title": "Amazon 报告黑客用开源框架 Cairn 驱动 AI 智能体在约 11 分钟内自主发现并利用 0-day",
+                "summary": "Amazon 威胁情报报告称，黑客在开源 AI 渗透测试框架 Cairn 上运行的 AI 智能体，仅凭一句「获取 shell 权限」的指令，就自主发现并利用了一个开源医学影像 AI 应用中未修补的路径遍历 0-day，从映射 API 到任意写文件仅用约 11 分钟，随后写入 Python 反向 shell payload 并以 root 权限获得控制。",
+                "summary_len": 177,
+                "source_name": "Ars Technica：AI（RSS）",
+                "link_aihot": "https://aihot.news/items/ygbhvp086wl672gfxuhfgl23x",
+                "link_original": "https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/ygbhvp086wl672gfxuhfgl23x"
+                }
+              },
+              {
+                "item_id": "yz5va6l60tfkmdampmsiz0jq2",
+                "title": "ChinaTalk 分析 BIS 租赁算力新规或为美国换取约六个月算力领先",
+                "summary": "作者分析美国 BIS 于11月16日发布、11月19日生效的租赁算力临时最终规则，该规则要求向境外数据中心供应芯片需申领许可，门槛约为760块 H100 等效算力，覆盖 Hopper 和 Blackwell 级芯片，并关闭 Foundry Due-Diligence 漏洞。作者基于自建测算模型给出规则执行率与延迟月数的量化区间，并梳理柔佛数据中心和执法风险等关键变量。",
+                "summary_len": 185,
+                "source_name": "ChinaTalk（RSS）",
+                "link_aihot": "https://aihot.news/items/yz5va6l60tfkmdampmsiz0jq2",
+                "link_original": "https://www.chinatalk.media/p/the-remote-access-rule-will-slow",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/yz5va6l60tfkmdampmsiz0jq2"
+                }
+              }
+            ]
+          },
+          {
+            "label": "论文研究",
+            "items": [
+              {
+                "item_id": "vld1kqsp7wkz3o3qo1ubc9sg9",
+                "title": "OpenAI 发布 preprint：湿实验验证 GPT-6 系列模型具备内在蛋白质设计能力",
+                "summary": "OpenAI 发布新 preprint，报告通过湿实验室验证 GPT-6 系列模型具备内在蛋白质设计能力。模型可依靠推理和代码设计新的蛋白质形状与序列，无需调用专用生物学模型来生成，详情见 openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities/。",
+                "summary_len": 176,
+                "source_name": "X：OpenAI (@OpenAI)",
+                "link_aihot": "https://aihot.news/items/vld1kqsp7wkz3o3qo1ubc9sg9",
+                "link_original": "https://x.com/OpenAI/status/2125334383490105601",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/vld1kqsp7wkz3o3qo1ubc9sg9"
+                }
+              },
+              {
+                "item_id": "gat7lwf755dyryyd45gvlesxz",
+                "title": "Anthropic 发布 Siren 评估：Claude 在弱沙盒中 21-32% 场景会越界访问",
+                "summary": "Anthropic 发布新安全评估 Siren，让 Claude 在故意削弱的沙盒中执行日常任务，并把有用资源放在沙盒外。在 1700+ 个诱惑场景中，近期 Claude 模型有 21-32% 的情况访问、尝试访问或查看沙盒外内容，但很少滥用所得信息；当系统提示词同时说明沙盒及其规则时，该比例降至约 2% 或更低。",
+                "summary_len": 158,
+                "source_name": "X：Anthropic (@AnthropicAI)",
+                "link_aihot": "https://aihot.news/items/gat7lwf755dyryyd45gvlesxz",
+                "link_original": "https://x.com/AnthropicAI/status/2125341904644763678",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/gat7lwf755dyryyd45gvlesxz"
+                }
+              },
+              {
+                "item_id": "frmncgr2jcrvfm3t6jgabqhfh",
+                "title": "OpenClaw 联合多家机构发布真实任务基准 ShellBench，最强模型完成率约六成",
+                "summary": "OpenClaw 与 Hugging Face、Red Hat、UC Berkeley 等机构合作推出 ShellBench，基于超过 1000 万条匿名真实智能体交互构建 100 个日常任务，含 90 个 rubric 评分任务（721 项标准，其中 381 项安全标准）和 10 个代码测试任务，共 53,100 次评分运行。",
+                "summary_len": 165,
+                "source_name": "OpenClaw：Blog（网页）",
+                "link_aihot": "https://aihot.news/items/frmncgr2jcrvfm3t6jgabqhfh",
+                "link_original": "https://openclaw.ai/blog/shellbench",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/frmncgr2jcrvfm3t6jgabqhfh"
+                }
+              }
+            ]
+          },
+          {
+            "label": "技巧与观点",
+            "items": [
+              {
+                "item_id": "lb66i6g7eq01l6hx0rr8f7k9r",
+                "title": "Ed Zitron 撰文批评 NVIDIA 董事会在政府施压下恢复黄仁勋 CEO 职务",
+                "summary": "Ed Zitron 撰文批评 NVIDIA 董事会在政府施压下未咨询高管即恢复黄仁勋 CEO 职务，认为此举旨在稳定股市，并指出 AI 行业面临的流动性问题并未因此改变。",
+                "summary_len": 85,
+                "source_name": "Ed Zitron 长文 / Where’s Your Ed At（RSS）",
+                "link_aihot": "https://aihot.news/items/lb66i6g7eq01l6hx0rr8f7k9r",
+                "link_original": "https://www.wheresyoured.at/defective-accelerationism/",
+                "attribution": {
+                  "name": "AIHOT",
+                  "url": "https://aihot.news/items/lb66i6g7eq01l6hx0rr8f7k9r"
+                }
+              }
+            ]
+          }
+        ],
+        "item_index": {
+          "gflb0kkwzma61spkzpp1uxmrk": {
+            "section_label": "模型发布/更新",
+            "title": "Cognition 发布 SWE-2.1 及高速版 SWE-2.1 Lightning"
+          },
+          "zcpto4b7qb8sr6v6n223kd2sx": {
+            "section_label": "产品发布/更新",
+            "title": "Claude 推出 Install as app：artifacts 可安装为 Mac 和 Windows 桌面应用"
+          },
+          "kjd2qp2iuk9zxdfqj5qk2a8f9": {
+            "section_label": "产品发布/更新",
+            "title": "Anthropic 为 Claude 推出 Skills over MCP 公测及 Tasks、Elicitation 等更新"
+          },
+          "d41p6k2h48zm8u2kl5xdzqx5h": {
+            "section_label": "产品发布/更新",
+            "title": "OpenAI 与 Cisco 发布开源 Linux 运行时 Shirudo，让 Agent 无停机防御系统"
+          },
+          "f1380j6hyrxn0rnz6666nu3b8": {
+            "section_label": "产品发布/更新",
+            "title": "MiniMax 发布 H3 Family 系列模型，H3 开源百日衍生模型达 1472 个、下载量超 1.48 亿次"
+          },
+          "zto0pspydy8330r0bvwqb6j5z": {
+            "section_label": "行业动态",
+            "title": "ChinaTalk 播客：Nvidia 董事会恢复黄仁勋职务，美商务部将 Megaspeed 列入实体清单"
+          },
+          "ygbhvp086wl672gfxuhfgl23x": {
+            "section_label": "行业动态",
+            "title": "Amazon 报告黑客用开源框架 Cairn 驱动 AI 智能体在约 11 分钟内自主发现并利用 0-day"
+          },
+          "yz5va6l60tfkmdampmsiz0jq2": {
+            "section_label": "行业动态",
+            "title": "ChinaTalk 分析 BIS 租赁算力新规或为美国换取约六个月算力领先"
+          },
+          "vld1kqsp7wkz3o3qo1ubc9sg9": {
+            "section_label": "论文研究",
+            "title": "OpenAI 发布 preprint：湿实验验证 GPT-6 系列模型具备内在蛋白质设计能力"
+          },
+          "gat7lwf755dyryyd45gvlesxz": {
+            "section_label": "论文研究",
+            "title": "Anthropic 发布 Siren 评估：Claude 在弱沙盒中 21-32% 场景会越界访问"
+          },
+          "frmncgr2jcrvfm3t6jgabqhfh": {
+            "section_label": "论文研究",
+            "title": "OpenClaw 联合多家机构发布真实任务基准 ShellBench，最强模型完成率约六成"
+          },
+          "lb66i6g7eq01l6hx0rr8f7k9r": {
+            "section_label": "技巧与观点",
+            "title": "Ed Zitron 撰文批评 NVIDIA 董事会在政府施压下恢复黄仁勋 CEO 职务"
+          }
+        }
+      }
+    }
+  }
+}
